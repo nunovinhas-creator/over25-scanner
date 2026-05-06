@@ -352,7 +352,7 @@ function calcScore(prob25, recommend, odds, movement, confidence) {
 
   // 1. Probabilidade ML (0–35 pts)
   if (prob25 != null) {
-    const pct = prob25 * 100;
+    const pct = prob25 > 1 ? prob25 : prob25 * 100;
     if (pct >= 70)      { score += 35; signals.push({ t: 'ML ' + pct.toFixed(0) + '%', c: 'green' }); }
     else if (pct >= 60) { score += 25; signals.push({ t: 'ML ' + pct.toFixed(0) + '%', c: 'green' }); }
     else if (pct >= 50) { score += 15; signals.push({ t: 'ML ' + pct.toFixed(0) + '%', c: 'amber' }); }
@@ -443,7 +443,7 @@ function matchCard(m) {
   const dt  = new Date(m.event_date);
   const dtStr = dt.toLocaleDateString('pt-PT', { weekday: 'short', day: '2-digit', month: '2-digit' }) + ' ' + dt.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
 
-  const mlPct   = m.prob25 != null ? (m.prob25 * 100).toFixed(0) + '%' : '—';
+  const mlPct = m.prob25 != null ? (m.prob25 > 1 ? m.prob25.toFixed(1) : (m.prob25 * 100).toFixed(1)) + '%' : '—';
   const mlColor = m.prob25 != null ? (m.prob25 >= 0.6 ? 'mv-green' : m.prob25 >= 0.45 ? 'mv-amber' : 'mv-red') : '';
   const odColor = m.over25odds ? (m.over25odds <= 1.65 ? 'mv-green' : m.over25odds <= 1.85 ? 'mv-amber' : '') : '';
   const mvColor = m.movement === 'SHORTENING' ? 'mv-green' : m.movement === 'DRIFTING' ? 'mv-red' : '';
