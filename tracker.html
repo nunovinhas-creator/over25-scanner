@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Over 2.5 Tracker — Resultados</title>
+<style>
+  :root {
+    --green:#1D9E75;--green-light:#E1F5EE;--green-dark:#085041;
+    --amber:#BA7517;--amber-light:#FAEEDA;--amber-dark:#633806;
+    --red:#993C1D;--red-light:#FAECE7;
+    --gray:#888780;--gray-light:#F1EFE8;
+    --blue:#185FA5;--blue-light:#E6F1FB;
+    --bg:#fff;--bg2:#f7f6f3;--bg3:#f0efe9;
+    --text:#1a1a18;--text2:#5f5e5a;--text3:#888780;
+    --border:rgba(0,0,0,0.1);--border2:rgba(0,0,0,0.18);
+    --r:8px;--rl:12px;
+  }
+  @media(prefers-color-scheme:dark){:root{
+    --bg:#1c1c1a;--bg2:#242422;--bg3:#2c2c2a;
+    --text:#f0efe9;--text2:#b4b2a9;--text3:#888780;
+    --border:rgba(255,255,255,0.1);--border2:rgba(255,255,255,0.18);
+    --green-light:#04342c;--green-dark:#9FE1CB;
+    --amber-light:#412402;--amber-dark:#FAC775;
+    --red-light:#501313;--red:#E24B4A;
+    --blue-light:#042C53;--blue:#85B7EB;
+  }}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);min-height:100vh}
+  .app{max-width:920px;margin:0 auto;padding:24px 16px}
+  .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+  .header h1{font-size:22px;font-weight:600}
+  .header p{font-size:13px;color:var(--text2);margin-top:3px}
+  .badge{display:inline-block;font-size:11px;padding:2px 9px;border-radius:999px;font-weight:600}
+  .bg{background:var(--green-light);color:var(--green-dark)}
+  .ba{background:var(--amber-light);color:var(--amber-dark)}
+  .br{background:var(--red-light);color:var(--red)}
+  .bn{background:var(--gray-light);color:var(--gray)}
+  .nav{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap}
+  .nav a{font-size:13px;padding:7px 14px;border-radius:var(--r);border:.5px solid var(--border2);background:var(--bg);color:var(--text2);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+  .nav a:hover{background:var(--bg2)}
+  .nav a.active{background:var(--blue-light);color:var(--blue);border-color:var(--blue);font-weight:500}
+  .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:24px}
+  .sc{background:var(--bg2);border-radius:var(--r);padding:14px 16px;border:.5px solid var(--border)}
+  .sl{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+  .sv{font-size:24px;font-weight:600;color:var(--text)}
+  .ss{font-size:11px;color:var(--text3);margin-top:2px}
+  .sv.green{color:var(--green)}.sv.red{color:var(--red)}.sv.amber{color:var(--amber)}
+  .section{margin-bottom:28px}
+  .section-title{font-size:13px;font-weight:600;color:var(--text2);margin-bottom:12px;display:flex;align-items:center;gap:8px;justify-content:space-between}
+  .btn{font-size:13px;padding:8px 16px;border-radius:var(--r);border:.5px solid var(--border2);background:var(--bg);color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-weight:500}
+  .btn:hover{background:var(--bg2)}
+  .btn-p{background:var(--green);color:#fff;border-color:var(--green)}
+  .btn-p:hover{background:#0F6E56}
+  .btn-r{background:var(--red-light);color:var(--red);border-color:var(--red)}
+  .pick-card{background:var(--bg);border:.5px solid var(--border);border-radius:var(--rl);padding:14px 16px;margin-bottom:8px}
+  .pick-card.win{border-left:3px solid var(--green)}
+  .pick-card.loss{border-left:3px solid var(--red)}
+  .pick-card.pending{border-left:3px solid var(--amber)}
+  .pick-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+  .pick-teams{font-size:14px;font-weight:600;color:var(--text)}
+  .pick-meta{font-size:11px;color:var(--text3);margin-top:2px}
+  .pick-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+  .pick-score{font-size:20px;font-weight:700}
+  .pick-score.green{color:var(--green-dark)}.pick-score.amber{color:var(--amber)}.pick-score.gray{color:var(--gray)}
+  .pick-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:8px;margin-top:10px;padding-top:10px;border-top:.5px solid var(--border)}
+  .mlb{font-size:11px;color:var(--text3);margin-bottom:2px}
+  .mvl{font-size:13px;font-weight:500;color:var(--text)}
+  .vg{color:var(--green)}.va{color:var(--amber)}.vr{color:var(--red)}
+  .result-row{display:flex;align-items:center;gap:10px;margin-top:10px;padding-top:10px;border-top:.5px solid var(--border);flex-wrap:wrap}
+  .result-input{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text2)}
+  .result-input input{width:48px;font-size:14px;font-weight:600;padding:5px 8px;border-radius:var(--r);border:.5px solid var(--border2);background:var(--bg);color:var(--text);text-align:center}
+  .result-input span{font-size:18px;font-weight:700;color:var(--text3)}
+  .empty{text-align:center;padding:48px 20px;color:var(--text2);font-size:14px}
+  .add-box{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--rl);padding:16px 20px;margin-bottom:20px}
+  .add-box h3{font-size:14px;font-weight:600;margin-bottom:12px;color:var(--text)}
+  .add-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:12px}
+  .field label{font-size:11px;color:var(--text3);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
+  .field input,.field select{width:100%;font-size:13px;padding:7px 10px;border-radius:var(--r);border:.5px solid var(--border2);background:var(--bg);color:var(--text)}
+  .api-box{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--rl);padding:14px 16px;margin-bottom:20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .api-box label{font-size:13px;color:var(--text2)}
+  .api-box input{flex:1;min-width:180px;font-size:13px;padding:6px 10px;border-radius:var(--r);border:.5px solid var(--border2);background:var(--bg);color:var(--text);font-family:monospace}
+  .chart-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:20px}
+  .chart-card{background:var(--bg2);border-radius:var(--r);padding:14px 16px;border:.5px solid var(--border)}
+  .bar-wrap{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+  .bar-row{display:flex;align-items:center;gap:8px;font-size:12px}
+  .bar-label{width:70px;color:var(--text2);text-align:right;flex-shrink:0}
+  .bar-bg{flex:1;height:16px;background:var(--border);border-radius:4px;overflow:hidden}
+  .bar-fill{height:100%;border-radius:4px;transition:width .4s}
+  .bar-val{width:36px;color:var(--text2);font-weight:500}
+  .tab-row{display:flex;gap:6px;margin-bottom:16px}
+  .tab{font-size:12px;padding:5px 12px;border-radius:999px;border:.5px solid var(--border2);background:var(--bg);color:var(--text2);cursor:pointer}
+  .tab.active{background:var(--blue-light);color:var(--blue);border-color:var(--blue);font-weight:500}
+  .errbox{background:var(--red-light);border:.5px solid var(--red);border-radius:var(--r);padding:10px 14px;color:var(--red);font-size:13px;margin-bottom:12px;display:none}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <div>
+      <h1>📊 Over 2.5 Tracker</h1>
+      <p>Registo e backtesting dos picks do sistema</p>
+    </div>
+  </div>
+
+  <div class="nav">
+    <a href="index.html">⚽ Scanner</a>
+    <a href="tracker.html" class="active">📊 Tracker</a>
+  </div>
+
+  <div class="api-box">
+    <label>🔑 API Key:</label>
+    <input type="password" id="apiKey" value="7546ea6a7ec7d581b1df628d6785d4e609ad660a">
+    <button class="btn btn-p" onclick="checkResults()">🔄 Verificar resultados</button>
+  </div>
+
+  <div id="errBox" class="errbox"></div>
+
+  <!-- Stats globais -->
+  <div class="stats-row" id="statsRow">
+    <div class="sc"><div class="sl">Total picks</div><div class="sv" id="stTotal">0</div></div>
+    <div class="sc"><div class="sl">Acertos</div><div class="sv green" id="stWin">0</div><div class="ss" id="stWinPct">—</div></div>
+    <div class="sc"><div class="sl">Falhas</div><div class="sv red" id="stLoss">0</div></div>
+    <div class="sc"><div class="sl">Pendentes</div><div class="sv amber" id="stPend">0</div></div>
+    <div class="sc"><div class="sl">ROI simulado</div><div class="sv" id="stROI">—</div><div class="ss">apostas iguais</div></div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tab-row">
+    <button class="tab active" onclick="setTab(this,'pending')">⏳ Pendentes</button>
+    <button class="tab" onclick="setTab(this,'resolved')">✅ Resolvidos</button>
+    <button class="tab" onclick="setTab(this,'stats')">📈 Estatísticas</button>
+    <button class="tab" onclick="setTab(this,'add')">➕ Adicionar</button>
+  </div>
+
+  <!-- Tab: Pendentes -->
+  <div id="tab-pending">
+    <div class="section-title">
+      <span>Picks pendentes</span>
+      <button class="btn" onclick="checkResults()" style="font-size:12px;padding:5px 10px">🔄 Verificar</button>
+    </div>
+    <div id="pendingList"></div>
+  </div>
+
+  <!-- Tab: Resolvidos -->
+  <div id="tab-resolved" style="display:none">
+    <div class="section-title">
+      <span>Histórico de resultados</span>
+      <button class="btn btn-r" onclick="clearAll()" style="font-size:12px;padding:5px 10px">🗑 Limpar tudo</button>
+    </div>
+    <div id="resolvedList"></div>
+  </div>
+
+  <!-- Tab: Estatísticas -->
+  <div id="tab-stats" style="display:none">
+    <div class="chart-row">
+      <div class="chart-card">
+        <div class="sl">Acerto por score tier</div>
+        <div class="bar-wrap" id="barTier"></div>
+      </div>
+      <div class="chart-card">
+        <div class="sl">Acerto por liga</div>
+        <div class="bar-wrap" id="barLeague"></div>
+      </div>
+    </div>
+    <div class="chart-card" style="margin-bottom:16px">
+      <div class="sl">Acerto por prob. ML</div>
+      <div class="bar-wrap" id="barProb"></div>
+    </div>
+  </div>
+
+  <!-- Tab: Adicionar pick manual -->
+  <div id="tab-add" style="display:none">
+    <div class="add-box">
+      <h3>Adicionar pick manualmente</h3>
+      <div class="add-grid">
+        <div class="field"><label>Casa</label><input id="fHome" placeholder="Ex: Benfica"></div>
+        <div class="field"><label>Fora</label><input id="fAway" placeholder="Ex: Porto"></div>
+        <div class="field"><label>Liga</label><input id="fLeague" placeholder="Ex: Primeira Liga"></div>
+        <div class="field"><label>Data/Hora</label><input id="fDate" type="datetime-local"></div>
+        <div class="field"><label>Score sistema</label><input id="fScore" type="number" min="0" max="100" placeholder="0-100"></div>
+        <div class="field"><label>Prob. ML Over 2.5</label><input id="fProb" type="number" min="0" max="100" placeholder="Ex: 72"></div>
+        <div class="field"><label>Odds Over 2.5</label><input id="fOdds" type="number" step="0.01" placeholder="Ex: 1.75"></div>
+        <div class="field"><label>Movimento</label>
+          <select id="fMov">
+            <option value="">—</option>
+            <option value="SHORTENING">↘ Shortening</option>
+            <option value="DRIFTING">↗ Drifting</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn btn-p" onclick="addManual()">➕ Adicionar pick</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyr7lHEPM7GvCmYosWrxiR0LkawUnoYnHEv40F3XsuoMry99PU5mPec5KI3iyGBIj19Nw/exec';
+let picks = [];
+let activeTab = 'pending';
+let loading = false;
+
+async function load() {
+  if (loading) return;
+  loading = true;
+  document.getElementById('stTotal').textContent = '...';
+  try {
+    const r = await fetch(SHEET_URL);
+    const res = await r.json();
+    if (res.ok && res.picks) {
+      picks = res.picks.map(p => ({
+        id: p.id,
+        eventId: p.eventId || p.event_id || '',
+        home: p.home || p.casa || '',
+        away: p.away || p.fora || '',
+        league: p.league || p.liga || '',
+        date: p.date || p.data || '',
+        score: parseFloat(p.score) || 0,
+        prob25: parseFloat(p.prob25 || p.prob_ml) || null,
+        odds: parseFloat(p.odds) || null,
+        movement: p.movement || p.movimento || null,
+        predScore: p.predScore || p.score_previsto || null,
+        result: p.resultado || null,
+        finalScore: p.golos ? '—' : null,
+        totalGoals: parseFloat(p.golos) || null
+      }));
+    }
+  } catch(e) {
+    console.error('Erro ao carregar picks:', e);
+  }
+  loading = false;
+  renderAll();
+}
+
+function save() {
+  // Dados guardados na Sheet — não usa localStorage
+}
+
+function setTab(btn, tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  ['pending','resolved','stats','add'].forEach(t => {
+    document.getElementById('tab-'+t).style.display = t === tab ? 'block' : 'none';
+  });
+  renderAll();
+}
+
+function renderAll() {
+  updateStats();
+  renderPending();
+  renderResolved();
+  renderStats();
+}
+
+function updateStats() {
+  const wins    = picks.filter(p => p.result === 'win').length;
+  const losses  = picks.filter(p => p.result === 'loss').length;
+  const pending = picks.filter(p => !p.result).length;
+  const resolved = wins + losses;
+  const winPct  = resolved > 0 ? (wins/resolved*100).toFixed(1) : '—';
+
+  // ROI simulado (apostas iguais de 1 unidade)
+  let roi = null;
+  if (resolved > 0) {
+    let profit = 0;
+    picks.filter(p => p.result).forEach(p => {
+      if (p.result === 'win') profit += (p.odds || 1.8) - 1;
+      else profit -= 1;
+    });
+    roi = (profit / resolved * 100).toFixed(1);
+  }
+
+  document.getElementById('stTotal').textContent = picks.length;
+  document.getElementById('stWin').textContent   = wins;
+  document.getElementById('stLoss').textContent  = losses;
+  document.getElementById('stPend').textContent  = pending;
+  document.getElementById('stWinPct').textContent = winPct !== '—' ? winPct + '% acerto' : '—';
+
+  const roiEl = document.getElementById('stROI');
+  if (roi !== null) {
+    roiEl.textContent = (roi >= 0 ? '+' : '') + roi + '%';
+    roiEl.className = 'sv ' + (roi >= 0 ? 'green' : 'red');
+  } else {
+    roiEl.textContent = '—';
+    roiEl.className = 'sv';
+  }
+}
+
+function renderPending() {
+  const list = picks.filter(p => !p.result).sort((a,b) => new Date(a.date) - new Date(b.date));
+  const el = document.getElementById('pendingList');
+  if (!list.length) { el.innerHTML = '<div class="empty">Sem picks pendentes.<br><small>Adiciona picks no Scanner ou no tab "Adicionar".</small></div>'; return; }
+  el.innerHTML = list.map(p => pickCard(p, true)).join('');
+}
+
+function renderResolved() {
+  const list = picks.filter(p => p.result).sort((a,b) => new Date(b.date) - new Date(a.date));
+  const el = document.getElementById('resolvedList');
+  if (!list.length) { el.innerHTML = '<div class="empty">Sem picks resolvidos ainda.</div>'; return; }
+  el.innerHTML = list.map(p => pickCard(p, false)).join('');
+}
+
+function pickCard(p, showResultInput) {
+  const dt = new Date(p.date);
+  const ds = dt.toLocaleDateString('pt-PT',{weekday:'short',day:'2-digit',month:'2-digit'}) + ' ' + dt.toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'});
+  const sc = p.score >= 70 ? 'green' : p.score >= 50 ? 'amber' : 'gray';
+  const tier = p.result === 'win' ? 'win' : p.result === 'loss' ? 'loss' : 'pending';
+  const tierBadge = p.result === 'win' ? '<span class="badge bg">✓ Over aconteceu</span>' : p.result === 'loss' ? '<span class="badge br">✗ Under aconteceu</span>' : '<span class="badge ba">⏳ A aguardar</span>';
+  const probStr = p.prob25 != null ? p.prob25.toFixed(1) + '%' : '—';
+  const oddsStr = p.odds != null ? p.odds.toFixed(2) : '—';
+  const mvStr = p.movement === 'SHORTENING' ? '↘ Short.' : p.movement === 'DRIFTING' ? '↗ Drift' : '—';
+  const mvCls = p.movement === 'SHORTENING' ? 'vg' : p.movement === 'DRIFTING' ? 'vr' : '';
+
+  const scoreStr = p.finalScore != null ? p.finalScore : '?';
+
+  const resultSection = showResultInput ? `
+    <div class="result-row">
+      <span style="font-size:13px;color:var(--text2)">Resultado:</span>
+      <div class="result-input">
+        <input type="number" min="0" max="20" placeholder="0" id="rh_${p.id}" style="width:44px">
+        <span>—</span>
+        <input type="number" min="0" max="20" placeholder="0" id="ra_${p.id}" style="width:44px">
+      </div>
+      <button class="btn btn-p" style="font-size:12px;padding:5px 12px" onclick="saveResult('${p.id}')">✓ Guardar</button>
+      <button class="btn" style="font-size:12px;padding:5px 10px" onclick="removePick('${p.id}')">🗑</button>
+    </div>` : `
+    <div style="margin-top:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      ${tierBadge}
+      ${p.finalScore != null ? '<span style="font-size:13px;color:var(--text2)">Resultado: <strong>' + p.finalScore + '</strong></span>' : ''}
+      <button class="btn" style="font-size:11px;padding:3px 8px;margin-left:auto" onclick="removePick('${p.id}')">🗑</button>
+    </div>`;
+
+  return `<div class="pick-card ${tier}">
+    <div class="pick-top">
+      <div>
+        <div class="pick-teams">${p.home} vs ${p.away}</div>
+        <div class="pick-meta">🏆 ${p.league || '—'} · 📅 ${ds}</div>
+      </div>
+      <div class="pick-right">
+        <div class="pick-score ${sc}">${p.score}</div>
+        <div style="font-size:10px;color:var(--text3)">score</div>
+      </div>
+    </div>
+    <div class="pick-grid">
+      <div><div class="mlb">Prob. ML</div><div class="mvl vg">${probStr}</div></div>
+      <div><div class="mlb">Odds Over 2.5</div><div class="mvl">${oddsStr}</div></div>
+      <div><div class="mlb">Movimento</div><div class="mvl ${mvCls}">${mvStr}</div></div>
+      <div><div class="mlb">Score previsto</div><div class="mvl">${p.predScore || '—'}</div></div>
+    </div>
+    ${resultSection}
+  </div>`;
+}
+
+async function saveResult(id) {
+  const ph = document.getElementById('rh_' + id);
+  const pa = document.getElementById('ra_' + id);
+  const h = parseInt(ph?.value);
+  const a = parseInt(pa?.value);
+  if (isNaN(h) || isNaN(a)) { alert('Introduz o resultado (ex: 2 — 1)'); return; }
+  const total = h + a;
+  const pick = picks.find(p => p.id === id);
+  if (pick) {
+    pick.result = total > 2 ? 'win' : 'loss';
+    pick.finalScore = h + '-' + a;
+    pick.totalGoals = total;
+    renderAll();
+    // Envia resultado para a Sheet
+    try {
+      await fetch(SHEET_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'save_result', eventId: pick.eventId, homeScore: h, awayScore: a })
+      });
+    } catch(e) { console.warn('Erro ao guardar resultado na Sheet:', e); }
+  }
+}
+
+function removePick(id) {
+  // Remove localmente (a Sheet mantém o registo histórico)
+  picks = picks.filter(p => p.id !== id);
+  renderAll();
+}
+
+function clearAll() {
+  if (confirm('Tens a certeza que queres apagar todo o histórico?')) {
+    picks = []; save(); renderAll();
+  }
+}
+
+function addManual() {
+  const home   = document.getElementById('fHome').value.trim();
+  const away   = document.getElementById('fAway').value.trim();
+  const league = document.getElementById('fLeague').value.trim();
+  const date   = document.getElementById('fDate').value;
+  const score  = parseInt(document.getElementById('fScore').value);
+  const prob   = parseFloat(document.getElementById('fProb').value);
+  const odds   = parseFloat(document.getElementById('fOdds').value);
+  const mov    = document.getElementById('fMov').value;
+
+  if (!home || !away || !date) { alert('Preenche pelo menos: casa, fora e data'); return; }
+
+  picks.push({
+    id: Date.now().toString(),
+    home, away, league,
+    date: new Date(date).toISOString(),
+    score: isNaN(score) ? 0 : score,
+    prob25: isNaN(prob) ? null : prob,
+    odds: isNaN(odds) ? null : odds,
+    movement: mov || null,
+    predScore: null,
+    result: null,
+    addedAt: new Date().toISOString()
+  });
+  save();
+
+  // Clear form
+  ['fHome','fAway','fLeague','fDate','fScore','fProb','fOdds'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('fMov').value = '';
+
+  alert('Pick adicionado! Vai ao tab "Pendentes" para ver.');
+  renderAll();
+}
+
+// Verifica resultados — pede ao Apps Script para verificar
+async function checkResults() {
+  showErr('');
+  const btn = document.querySelector('[onclick="checkResults()"]');
+  if (btn) { btn.textContent = '⏳ A verificar...'; btn.disabled = true; }
+  try {
+    const r = await fetch(SHEET_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'check_results' })
+    });
+    const res = await r.json();
+    if (res.ok) {
+      const msg = res.updated > 0 ? res.updated + ' resultado(s) atualizado(s)!' : 'Nenhum resultado novo.';
+      showErr(msg);
+      document.getElementById('errBox').style.background = 'var(--green-light)';
+      document.getElementById('errBox').style.color = 'var(--green-dark)';
+      document.getElementById('errBox').style.borderColor = 'var(--green)';
+      await load(); // recarrega picks da Sheet
+    } else {
+      showErr('Erro: ' + (res.error || 'desconhecido'));
+    }
+  } catch(e) {
+    showErr('Erro de ligação: ' + e.message);
+  } finally {
+    if (btn) { btn.textContent = '🔄 Verificar resultados'; btn.disabled = false; }
+  }
+}
+
+function showErr(msg) {
+  const el = document.getElementById('errBox');
+  el.textContent = msg; el.style.display = msg ? 'block' : 'none';
+}
+
+function renderStats() {
+  const resolved = picks.filter(p => p.result);
+  if (!resolved.length) {
+    document.getElementById('barTier').innerHTML = '<div style="font-size:13px;color:var(--text3);padding:8px 0">Sem dados ainda</div>';
+    document.getElementById('barLeague').innerHTML = '';
+    document.getElementById('barProb').innerHTML = '';
+    return;
+  }
+
+  // Por tier de score
+  const tiers = [
+    { label: '≥ 70', filter: p => p.score >= 70 },
+    { label: '50-69', filter: p => p.score >= 50 && p.score < 70 },
+    { label: '< 50', filter: p => p.score < 50 }
+  ];
+  document.getElementById('barTier').innerHTML = tiers.map(t => {
+    const g = resolved.filter(t.filter);
+    const w = g.filter(p => p.result === 'win').length;
+    const pct = g.length ? Math.round(w/g.length*100) : 0;
+    const color = pct >= 60 ? '#1D9E75' : pct >= 45 ? '#BA7517' : '#993C1D';
+    return barRow(t.label, pct, g.length, color);
+  }).join('');
+
+  // Por liga
+  const lgMap = {};
+  resolved.forEach(p => {
+    const k = p.league || 'Desconhecida';
+    if (!lgMap[k]) lgMap[k] = {w:0,t:0};
+    lgMap[k].t++;
+    if (p.result === 'win') lgMap[k].w++;
+  });
+  const lgArr = Object.entries(lgMap).sort((a,b) => b[1].t - a[1].t).slice(0, 6);
+  document.getElementById('barLeague').innerHTML = lgArr.map(([lg, d]) => {
+    const pct = Math.round(d.w/d.t*100);
+    const color = pct >= 60 ? '#1D9E75' : pct >= 45 ? '#BA7517' : '#993C1D';
+    return barRow(lg.length > 12 ? lg.slice(0,12)+'…' : lg, pct, d.t, color);
+  }).join('');
+
+  // Por prob ML
+  const probBuckets = [
+    { label: '≥ 75%', filter: p => p.prob25 >= 75 },
+    { label: '65-74%', filter: p => p.prob25 >= 65 && p.prob25 < 75 },
+    { label: '55-64%', filter: p => p.prob25 >= 55 && p.prob25 < 65 },
+    { label: '45-54%', filter: p => p.prob25 >= 45 && p.prob25 < 55 },
+    { label: '< 45%', filter: p => p.prob25 < 45 || p.prob25 == null }
+  ];
+  document.getElementById('barProb').innerHTML = probBuckets.map(b => {
+    const g = resolved.filter(b.filter);
+    const w = g.filter(p => p.result === 'win').length;
+    const pct = g.length ? Math.round(w/g.length*100) : 0;
+    const color = pct >= 60 ? '#1D9E75' : pct >= 45 ? '#BA7517' : '#993C1D';
+    return barRow(b.label, pct, g.length, color);
+  }).join('');
+}
+
+function barRow(label, pct, count, color) {
+  return `<div class="bar-row">
+    <div class="bar-label">${label}</div>
+    <div class="bar-bg"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div>
+    <div class="bar-val">${pct}% <span style="color:var(--text3);font-size:10px">(${count})</span></div>
+  </div>`;
+}
+
+// Expõe função para o scanner adicionar picks
+window.addPickFromScanner = function(pick) {
+  picks.push({ ...pick, id: Date.now().toString(), addedAt: new Date().toISOString(), result: null });
+  save();
+};
+
+// Init
+load();
+</script>
+</body>
+</html>
