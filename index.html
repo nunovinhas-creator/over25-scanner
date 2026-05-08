@@ -435,28 +435,52 @@ async function loadAll(){
 
     allSharp=sharpRaw.filter(s=>s.score>=SCORE_MIN).sort((a,b)=>new Date(a.start)-new Date(b.start));
 
-    // Alertas Telegram — envia top sinais STEAM/SHARP (sem sessionStorage — controla por score bucket)
-    if(tgTok()&&tgChat()){
-      const toAlert=allSharp
-        .filter(s=>s.label.includes('STEAM')||s.label.includes('SHARP'))
-        .slice(0,5);
-      let sent=0;
-      for(const s of toAlert){
-        // Chave única por jogo+mercado+outcome+hora (bucket de 30min para não repetir)
-        const bucket=Math.floor(Date.now()/(30*60*1000));
-        const k=`tg_${s.id}_${bucket}`;
-        if(localStorage.getItem(k)) continue;
-        const ok=await sendTG(formatTG(s));
-        if(ok){localStorage.setItem(k,'1'); sent++;}
-        await new Promise(r=>setTimeout(r,500)); // evita rate limit TG
-      }
-      if(sent>0) console.log(`TG: ${sent} alertas enviados`);
-    }
+    function calcScanScore({prob25,over25odds,movement,confidence,btts,xgHome,xgAway,hCoach,aCoach,hForm,aForm,h2h,homeInjured,awayInjured,recommend}){
+  let s=0; const sig=[];
+  
+  // 1. Sharp Money / Movimento (Peso: 25)
+  if(movement==='SHORTENING'){s+=25;sig.push({t:'↘ Sharp money',c:'g'});}
+  else if(movement==='DRIFTING'){s-=15;sig.push({t:'↗ Odds a subir',c:'r'});}
+  
+  // 2. Probabilidade ML (Peso: 20)
+  if(prob25!=null){
+    const p=prob25>1?prob25:prob25*100;
+    if(p>=70){s+=20;sig.push({t:'ML '+p.toFixed(0)+'%',c:'g'});}
+    else if(p>=60){s+=15;sig.push({t:'ML '+p.toFixed(0)+'%',c:'g'});}
+    else if(p>=50){s+=10;sig.push({t:'ML '+p.toFixed(0)+'%',c:'a'});}
+    else if(p<40) s-=5;
+  }
+  
+  // 3. xG Estimado (Peso: 15)
+  if(xgHome!=null&&xgAway!=null){
+    const xg=xgHome+xgAway;
+    if(xg>=3.0){s+=15;sig.push({t:'xG '+xg.toFixed(1),c:'g'});}
+    else if(xg>=2.5){s+=10;sig.push({t:'xG '+xg.toFixed(1),c:'a'});}
+    else if(xg<1.5) s-=5;
+  }
+  
+  // 4. H2H Histórico (Peso: 10)
+  if(h2h?.avg_total_goals!=null){
+    const avg=h2h.avg_total_goals;
+    if(avg>=3.0){s+=10;sig.push({t:'H2H '+avg.toFixed(1)+'g/j',c:'g'});}
+    else if(avg<=1.5){s-=5;sig.push({t:'H2H baixo',c:'r'});}
+  }
 
-    // Auto-save scanner para Sheet
-    autoSavePicks();
+  // 5. Valor de Odd (EV)
+  if(prob25!=null&&over25odds!=null){
+    const p=prob25>1?prob25/100:prob25;
+    const ev=(p*(over25odds-1))-(1-p);
+    if(ev>=0.10){s+=10;sig.push({t:'EV +'+(ev*100).toFixed(0)+'%',c:'g'});}
+  }
 
-    updateScanStats(); renderScan();
+  // 6. Penalização por Lesões
+  const injH=(homeInjured||[]).filter(p=>p.status==='injured'||p.status==='suspended').length;
+  const injA=(awayInjured||[]).filter(p=>p.status==='injured'||p.status==='suspended').length;
+  if(injH>=4 || injA>=4){s-=5;sig.push({t:'🤕 Muitas baixas',c:'r'});}
+
+  return {score:Math.max(0,Math.min(100,Math.round(s))), signals:sig};
+}
+
     updateSharpStats(); renderSharp();
 
     el('lu').textContent='Atualizado: '+new Date().toLocaleTimeString('pt-PT');
