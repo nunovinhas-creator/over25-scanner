@@ -572,8 +572,19 @@ select option{background:var(--bg3);color:var(--text)}
 
 <!-- ══ LIVE PANEL ══ -->
 <div class="panel" id="panel-live">
-  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;margin-bottom:12px;flex-wrap:wrap">
-    <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+  <!-- Sub-tabs Live -->
+  <div style="display:flex;gap:0;margin-top:12px;border-bottom:1px solid var(--border);align-items:center">
+    <button class="stab active" id="ltab-jogos" onclick="switchLiveTab('jogos')">⚡ Jogos</button>
+    <button class="stab" id="ltab-radar" onclick="switchLiveTab('radar')">📊 Radar</button>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:8px;padding-right:4px">
+      <span style="font-family:var(--mono);font-size:11px;color:var(--amber)" id="lTimer">—</span>
+      <button class="btn-sm" onclick="loadLive()">↻</button>
+    </div>
+  </div>
+
+  <!-- Sub-painel: Jogos -->
+  <div id="lpanel-jogos">
+    <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:12px;margin-bottom:12px">
       <div>
         <div style="font-family:var(--mono);font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em">Ao vivo</div>
         <div style="font-size:22px;font-weight:800;color:var(--red);font-variant-numeric:tabular-nums" id="lTotal">—</div>
@@ -587,12 +598,13 @@ select option{background:var(--bg3);color:var(--text)}
         <div style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums" id="lGolos">—</div>
       </div>
     </div>
-    <div style="display:flex;align-items:center;gap:8px">
-      <span style="font-family:var(--mono);font-size:11px;color:var(--amber)" id="lTimer">—</span>
-      <button class="btn-sm" onclick="loadLive()">↻</button>
-    </div>
+    <div id="liveList"><div class="empty">Abre esta tab para carregar jogos ao vivo</div></div>
   </div>
-  <div id="liveList"><div class="empty">Abre esta tab para carregar jogos ao vivo</div></div>
+
+  <!-- Sub-painel: Radar -->
+  <div id="lpanel-radar" style="display:none">
+    <div id="liveRadar"><div class="empty" style="padding:40px 20px">Carrega jogos ao vivo para ver o radar de padrões.</div></div>
+  </div>
 </div>
 
 <!-- ══ DASHBOARD PANEL ══ -->
@@ -1617,6 +1629,15 @@ function switchSharpTab(tab){
   if(tab==='dash1x2') loadDash1x2();
 }
 
+function switchLiveTab(tab){
+  ['jogos','radar'].forEach(t=>{
+    el('lpanel-'+t).style.display=t===tab?'':'none';
+    const b=el('ltab-'+t);
+    if(b) b.classList.toggle('active',t===tab);
+  });
+  if(tab==='radar') renderLiveRadar();
+}
+
 function setSharpFilter(btn,f){
   sharpFilter=f;
   document.querySelectorAll('#panel-sharp .fb').forEach(b=>b.classList.remove('active'));
@@ -2187,6 +2208,122 @@ function renderLive(){
     html+=watching.map(e=>liveCardCompact(e)).join('');
   }
   el('liveList').innerHTML=html;
+  // actualiza radar se estiver visível
+  if(el('lpanel-radar')?.style.display!=='none') renderLiveRadar();
+}
+
+function renderLiveRadar(){
+  const r=el('liveRadar'); if(!r) return;
+  if(!liveData.length){
+    r.innerHTML='<div class="empty" style="padding:40px 20px">Sem jogos ao vivo. Aguarda o próximo ciclo de actualização.</div>';
+    return;
+  }
+
+  const total=liveData.length;
+  const withPat=liveData.filter(e=>(e.patterns||[]).length>0).length;
+  const danger=liveData.filter(e=>e.isDanger).length;
+  const convCount=liveData.filter(e=>(e.patterns||[]).some(p=>p.id==='conv')).length;
+
+  const PATS=[
+    {id:'conv',   name:'Convergência', emoji:'🔮', rgba:'179,136,255'},
+    {id:'xg_pace',name:'xG Ritmo',     emoji:'⚡', rgba:'255,83,112'},
+    {id:'shots',  name:'Vol. Remates', emoji:'🎯', rgba:'255,179,0'},
+    {id:'open',   name:'Jogo Aberto',  emoji:'🎭', rgba:'120,120,160'},
+    {id:'mom',    name:'Momentum',     emoji:'💪', rgba:'68,138,255'},
+    {id:'late',   name:'Late Push',    emoji:'⏰', rgba:'255,179,0'},
+    {id:'mkt',    name:'Mercado',      emoji:'📈', rgba:'68,138,255'},
+  ];
+
+  let critTotal=0,highTotal=0,medTotal=0,mktTotal=0;
+  const pStats={};
+  for(const pt of PATS){
+    const games=liveData.filter(e=>(e.patterns||[]).some(p=>p.id===pt.id));
+    const lv={critical:0,conv:0,high:0,med:0,mkt:0};
+    for(const g of games){
+      const p=(g.patterns||[]).find(p=>p.id===pt.id);
+      if(p) lv[p.level]=(lv[p.level]||0)+1;
+    }
+    critTotal+=lv.critical+lv.conv;
+    highTotal+=lv.high;
+    medTotal+=lv.med;
+    mktTotal+=lv.mkt;
+    const top=[...games].sort((a,b)=>(b.patternScore||0)-(a.patternScore||0))[0];
+    pStats[pt.id]={count:games.length,lv,top};
+  }
+  const totalSigs=critTotal+highTotal+medTotal+mktTotal;
+
+  const top5=[...liveData].filter(e=>(e.patternScore||0)>0)
+    .sort((a,b)=>(b.patternScore||0)-(a.patternScore||0)).slice(0,5);
+
+  let html=`<div class="stats-bar" style="margin-top:14px;margin-bottom:16px">
+    <div class="stat-card"><div class="stat-label">Ao vivo</div><div class="stat-val" style="color:var(--red)">${total}</div></div>
+    <div class="stat-card"><div class="stat-label">Com padrões</div><div class="stat-val" style="color:var(--amber)">${withPat}</div></div>
+    <div class="stat-card"><div class="stat-label">Em perigo</div><div class="stat-val" style="color:${danger?'var(--red)':'var(--text3)'}">${danger}</div></div>
+    <div class="stat-card"><div class="stat-label">Convergência</div><div class="stat-val" style="color:${convCount?'var(--purple)':'var(--text3)'}">${convCount}</div></div>
+  </div>`;
+
+  if(totalSigs>0){
+    html+=`<div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:6px">Sinais activos — ${totalSigs} total</div>
+    <div style="display:flex;gap:5px;margin-bottom:18px;flex-wrap:wrap">
+      ${critTotal?`<span style="background:rgba(255,83,112,.15);color:var(--red);border:1px solid rgba(255,83,112,.35);border-radius:4px;font-family:var(--mono);font-size:10px;font-weight:700;padding:3px 10px;animation:dangerPulse 2s ease-in-out infinite">⚠ CRÍTICO ×${critTotal}</span>`:''}
+      ${highTotal?`<span style="background:rgba(255,83,112,.08);color:var(--red);border:1px solid rgba(255,83,112,.2);border-radius:4px;font-family:var(--mono);font-size:10px;padding:3px 10px">HIGH ×${highTotal}</span>`:''}
+      ${medTotal?`<span style="background:rgba(255,179,0,.08);color:var(--amber);border:1px solid rgba(255,179,0,.2);border-radius:4px;font-family:var(--mono);font-size:10px;padding:3px 10px">MED ×${medTotal}</span>`:''}
+      ${mktTotal?`<span style="background:rgba(68,138,255,.08);color:var(--blue);border:1px solid rgba(68,138,255,.2);border-radius:4px;font-family:var(--mono);font-size:10px;padding:3px 10px">MKT ×${mktTotal}</span>`:''}
+    </div>`;
+  }
+
+  const activePats=PATS.filter(pt=>pStats[pt.id].count>0);
+  if(activePats.length){
+    html+=`<div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:8px">Padrões activos</div>
+    <div class="bk-grid" style="margin-bottom:20px">`;
+    for(const pt of activePats){
+      const s=pStats[pt.id];
+      const crit=s.lv.critical+s.lv.conv;
+      const lvRow=[
+        crit?`<span style="color:var(--red);font-weight:700">${crit} ⚠</span>`:'',
+        s.lv.high?`<span style="color:var(--red)">${s.lv.high} H</span>`:'',
+        s.lv.med?`<span style="color:var(--amber)">${s.lv.med} M</span>`:'',
+        s.lv.mkt?`<span style="color:var(--blue)">${s.lv.mkt} MKT</span>`:'',
+      ].filter(Boolean).join('<span style="color:var(--text3);margin:0 2px">·</span>');
+      html+=`<div class="bk-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <span style="font-size:16px">${pt.emoji}</span>
+          <span style="background:rgba(${pt.rgba},.12);color:rgba(${pt.rgba},1);border-radius:4px;font-family:var(--mono);font-size:12px;font-weight:700;padding:2px 9px">${s.count}</span>
+        </div>
+        <div class="bk-name">${pt.name}</div>
+        <div style="font-family:var(--mono);font-size:10px;display:flex;gap:3px;flex-wrap:wrap;min-height:16px">${lvRow||'<span style="color:var(--text3)">—</span>'}</div>
+        ${s.top?`<div style="font-size:10px;color:var(--text2);border-top:1px solid var(--border);padding-top:5px;margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${esc(s.top.home)} vs ${esc(s.top.away)}">
+          <span class="min-badge">${s.top.min}'</span> ${esc(s.top.home)} vs ${esc(s.top.away)}</div>`:''}
+      </div>`;
+    }
+    html+=`</div>`;
+  } else {
+    html+=`<div class="empty" style="padding:30px 0">Sem padrões detectados nos jogos actuais.</div>`;
+  }
+
+  if(top5.length){
+    html+=`<div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:8px">Top jogos por score</div>
+    <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px">`;
+    for(const e of top5){
+      const sc=e.patternScore||0;
+      const scCol=sc>=10?'var(--red)':sc>=6?'var(--amber)':'var(--text2)';
+      const ptags=(e.patterns||[]).slice(0,4).map(p=>`<span class="ptag ${p.level}">${p.emoji} ${p.label}</span>`).join('');
+      html+=`<div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;display:flex;gap:10px;align-items:flex-start">
+        <div style="font-family:var(--mono);font-size:20px;font-weight:800;color:${scCol};min-width:30px;text-align:right;line-height:1.1">${sc}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(e.home)} vs ${esc(e.away)}</div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:2px">
+            <span class="min-badge">${e.min}'</span> ${e.hScore}-${e.aScore} · ${esc(e.league)}
+          </div>
+          ${ptags?`<div class="pattern-row" style="margin-top:5px">${ptags}</div>`:''}
+        </div>
+        ${e.isPick?`<span style="font-family:var(--mono);font-size:9px;background:var(--green-l);color:var(--green);border:1px solid rgba(0,230,118,.3);border-radius:3px;padding:2px 6px;flex-shrink:0">PICK</span>`:''}
+      </div>`;
+    }
+    html+=`</div>`;
+  }
+
+  r.innerHTML=html;
 }
 
 function liveCard(e){
