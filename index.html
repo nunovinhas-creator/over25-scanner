@@ -147,6 +147,22 @@ select{font-family:var(--sans);font-size:12px;padding:5px 10px;border-radius:6px
 .btn-sm:hover{background:var(--bg3)}
 .btn-sm.green{background:var(--green);color:#fff;border-color:var(--green)}
 .btn-sm.blue{background:var(--blue);color:#fff;border-color:var(--blue)}
+/* ── ReAct Trace Modal ── */
+.react-modal{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:300;display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto}
+.react-modal-box{background:var(--bg2);border-radius:var(--rl);width:100%;max-width:580px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.3)}
+.react-modal-head{background:var(--text);color:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.react-modal-title{font-weight:700;font-size:13px}
+.react-modal-sub{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.4)}
+.react-trace{padding:12px;max-height:72vh;overflow-y:auto}
+.rt-step{margin-bottom:7px;padding:9px 11px;border-radius:7px;border-left:3px solid;font-family:var(--mono);font-size:11px;line-height:1.55}
+.rt-thought{background:rgba(26,86,219,.06);border-color:var(--blue)}
+.rt-action{background:rgba(212,130,10,.07);border-color:var(--amber)}
+.rt-observation{background:rgba(0,135,90,.07);border-color:var(--green)}
+.rt-conclusion{background:rgba(0,135,90,.12);border-color:var(--green);font-weight:600}
+.rt-error{background:var(--red-l);border-color:var(--red)}
+.rt-timeout{background:var(--amber-l);border-color:var(--amber)}
+.rt-label{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;opacity:.6;margin-bottom:3px}
+.react-spinner{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px}
 .warn-banner{background:var(--amber-l);border:1px solid var(--amber);border-radius:8px;padding:10px 14px;font-family:var(--mono);font-size:11px;color:var(--amber);margin-bottom:12px;display:none}
 .phase-btn{font-family:var(--mono);font-size:11px;font-weight:600;padding:5px 10px;border-radius:5px;border:1px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.5);cursor:pointer}
 .phase-btn.active{background:rgba(0,255,136,.15);color:#00ff88;border-color:#00ff88}
@@ -328,6 +344,7 @@ select{font-family:var(--sans);font-size:12px;padding:5px 10px;border-radius:6px
   <div style="margin-top:12px;margin-bottom:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
     <button class="btn-sm green" onclick="loadDash()">↻ Actualizar</button>
     <button class="btn-sm" onclick="syncResults()" id="btnSync">🔄 Sincronizar resultados</button>
+    <button class="btn-sm" onclick="reactSync()" id="btnReactSync" style="background:var(--purple-l);border-color:var(--purple);color:var(--purple)">🧠 ReAct Sync</button>
     <button class="btn-sm blue" onclick="sendDailyReport()">📱 Relatório TG</button>
     <label style="display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--text2);cursor:pointer;margin-left:4px">
       <input type="checkbox" id="filterShortening" checked onchange="renderDash()" style="accent-color:var(--green);width:14px;height:14px">
@@ -359,6 +376,20 @@ select{font-family:var(--sans);font-size:12px;padding:5px 10px;border-radius:6px
   <div class="picks-table">
     <div class="pt-head"><span>Data</span><span>Jogo</span><span>Odds</span><span>Mov</span><span>Result</span></div>
     <div id="picksBody"><div class="loading" style="padding:20px"><div class="spinner"></div></div></div>
+  </div>
+</div>
+
+<!-- ══ ReAct Trace Modal ══ -->
+<div id="reactModal" class="react-modal" style="display:none" onclick="if(event.target===this)closeReactModal()">
+  <div class="react-modal-box">
+    <div class="react-modal-head">
+      <div>
+        <div class="react-modal-title" id="reactModalTitle">🧠 ReAct Agent</div>
+        <div class="react-modal-sub" id="reactModalSub">Thought → Action → Observation</div>
+      </div>
+      <button onclick="closeReactModal()" style="background:transparent;border:none;color:rgba(255,255,255,.6);font-size:20px;cursor:pointer;line-height:1">✕</button>
+    </div>
+    <div class="react-trace" id="reactTrace"></div>
   </div>
 </div>
 
@@ -1184,10 +1215,14 @@ function gameCard(g){
       </div>`:''}
       </div>
   </div>
-  <div style="padding:0 14px 12px">
+  <div style="padding:0 14px 12px;display:flex;flex-direction:column;gap:6px">
     <button class="btn-pick" id="pick_${g.id}" data-id="${g.id}" onclick="savePick(this)"
       ${isSaved(String(g.id))?'disabled style="background:#00875a"':''}>
       ${isSaved(String(g.id))?'✅ Guardado':'📌 Guardar pick'}
+    </button>
+    <button class="btn-sm" style="background:var(--purple-l);border-color:var(--purple);color:var(--purple);width:100%;padding:8px"
+      onclick="reactAnalyzeGame('${g.id}','${g.date}','${esc(g.home)} vs ${esc(g.away)}')">
+      🧠 Análise ReAct
     </button>
   </div>`;
 }
@@ -1704,15 +1739,19 @@ async function loadLive(){
     renderLive();
     startLiveCountdown();
 
-    // Alerta TG picks em perigo
-    for(const e of enriched){
-      if(e.isDanger){
-        const k='dng_'+e.id+'_'+Math.floor(e.min/10);
-        if(!localStorage.getItem(k)){
-          await sendTG(`⚠️ <b>OVER EM PERIGO</b>\n⚽ ${e.home} ${e.hScore}-${e.aScore} ${e.away}\n⏱ ${e.min}' · ${e.goals} golos\n💡 Precisa de ${3-e.goals} gol(os) em ${90-e.min} min`);
-          localStorage.setItem(k,'1');
+    // Agent C — alertas adaptativos via ReAct (picks em perigo)
+    const pickGames=enriched.filter(e=>e.isPick);
+    for(const e of pickGames){
+      reactLiveAlert(e).then(result=>{
+        if(!result) return;
+        const c=result.state?._conclusion||result.conclusion;
+        if(c?.type==='WIN'){
+          const k='over_ok_'+e.id;
+          if(!localStorage.getItem(k)){
+            sendTG(c.msg||`🎯 OVER! ${e.home} ${e.hScore}-${e.aScore} ${e.away}`).then(ok=>{ if(ok) localStorage.setItem(k,'1'); });
+          }
         }
-      }
+      }).catch(()=>{});
     }
   }catch(err){
     el('liveList').innerHTML='<div class="empty">⚠ '+err.message+'</div>';
@@ -2116,6 +2155,395 @@ ROI: ${withR.length?((roi/withR.length)*100).toFixed(1):'—'}%  (${roi>=0?'+':'
 
   const ok=await sendTG(msg);
   alert(ok?'✅ Relatório enviado!':'❌ Erro — verifica TG Token e Chat ID');
+}
+
+// ════════════════════════════════════════════════════════════════
+// REACT ENGINE — Thought → Action → Observation loop
+// ════════════════════════════════════════════════════════════════
+async function reactLoop(initialState, thinkFn, { maxSteps=15, onStep=null } = {}) {
+  const trace = [];
+  let state = { ...initialState, _step:0, _done:false };
+  const log = (type, text) => {
+    trace.push({ type, text, ts:Date.now() });
+    if(onStep) onStep([...trace]);
+  };
+  while(!state._done && state._step < maxSteps) {
+    let result;
+    try { result = thinkFn(state); }
+    catch(e) { log('error','Erro no think: '+e.message); break; }
+    log('thought', result.thought);
+    if(result.done) {
+      state._done=true;
+      state._conclusion=result.conclusion;
+      const c = typeof result.conclusion==='string' ? result.conclusion : JSON.stringify(result.conclusion,null,2);
+      log('conclusion', c);
+      break;
+    }
+    if(!result.action){ state._step++; continue; }
+    log('action', result.action.desc);
+    try {
+      const raw = await result.action.run();
+      const summary = result.action.observe(raw);
+      log('observation', summary);
+      const updates = result.action.update(raw);
+      state = { ...state, ...updates, _step: state._step+1 };
+    } catch(e) {
+      log('error', e.message);
+      state = { ...state, _step:state._step+1, _lastError:e.message };
+    }
+  }
+  if(state._step>=maxSteps && !state._done) log('timeout',`Limite de ${maxSteps} passos atingido`);
+  return { trace, conclusion:state._conclusion, state };
+}
+
+// ── Modal helpers ──
+function renderTrace(trace){
+  const icons={thought:'💭',action:'⚡',observation:'👁',conclusion:'✅',error:'❌',timeout:'⏰'};
+  return trace.map((t,i)=>`<div class="rt-step rt-${t.type}">
+    <div class="rt-label">${icons[t.type]||'·'} ${t.type} ${i+1}</div>
+    <div>${esc(t.text).replace(/\n/g,'<br>')}</div>
+  </div>`).join('');
+}
+function showReactModal(title, trace) {
+  el('reactModalTitle').textContent = '🧠 '+title;
+  el('reactTrace').innerHTML = renderTrace(trace);
+  el('reactModal').style.display='flex';
+  el('reactTrace').scrollTop=0;
+}
+function closeReactModal(){ el('reactModal').style.display='none'; }
+function updateReactModal(trace){
+  el('reactTrace').innerHTML = renderTrace(trace)+
+    '<div class="rt-step rt-action"><span class="react-spinner"></span>A pensar...</div>';
+  el('reactTrace').scrollTop=el('reactTrace').scrollHeight;
+}
+
+// ════════════════════════════════════════════════════════════════
+// REACT AGENT A — Análise de jogo (Scanner)
+// ════════════════════════════════════════════════════════════════
+async function reactAnalyzeGame(eventId, eventDate, label) {
+  el('reactModalTitle').textContent='🧠 Análise: '+(label||eventId);
+  el('reactModalSub').textContent='Thought → Action → Observation';
+  el('reactTrace').innerHTML='<div class="rt-step rt-action"><span class="react-spinner"></span>A iniciar análise...</div>';
+  el('reactModal').style.display='flex';
+
+  const think = state => {
+    // Step 1 — event detail
+    if(!state.detail) return {
+      thought:`Início para evento ${eventId}. Preciso de detalhes: H2H, coaches, liga.`,
+      action:{
+        desc:`BSD: GET /api/v2/events/${eventId}/`,
+        run:()=>get(`/api/v2/events/${eventId}/`),
+        observe:r=>`${r.home_team} vs ${r.away_team} · ${r.league_name||'?'} · H2H avg golos: ${r.h2h?.avg_total_goals??'N/A'}`,
+        update:r=>({detail:r})
+      }
+    };
+    // Step 2 — Pinnacle + recreational odds
+    if(!state.oddsData) return {
+      thought:`Tenho dados do jogo. Preciso de odds Pinnacle e recreativas para detectar sharp money e calcular divergência.`,
+      action:{
+        desc:`BSD: GET /api/v2/odds/?event_id=${eventId}&market=over_under_25&limit=30`,
+        run:()=>get(`/api/v2/odds/?event_id=${eventId}&market=over_under_25&limit=30`),
+        observe:r=>{
+          const rows=arr(r);
+          const pin=rows.find(o=>o.bookmaker_slug==='pinnacle'&&o.outcome==='over');
+          const recr=rows.filter(o=>RECR.includes(o.bookmaker_slug)&&o.outcome==='over').length;
+          return pin
+            ?`Pinnacle Over: ${pin.decimal_odds}${pin.previous_decimal_odds?' (abertura:'+pin.previous_decimal_odds+')':''} · ${recr} books recreativas`
+            :`Pinnacle não encontrado · ${recr} books recreativas`;
+        },
+        update:r=>({oddsData:arr(r)})
+      }
+    };
+    // Step 3 — predictions
+    if(!state.prediction) return {
+      thought:`Tenho odds. Preciso das predictions BSD: ML prob Over 2.5, xG, BTTS. Estes alimentam calcScore().`,
+      action:{
+        desc:`BSD: GET /api/v2/predictions/?event_id=${eventId}&limit=1`,
+        run:()=>get(`/api/v2/predictions/?event_id=${eventId}&limit=1`),
+        observe:r=>{
+          const p=arr(r)[0];
+          if(!p) return 'Sem predictions disponíveis para este evento';
+          const prob=p.markets?.over_under?.prob_over_25;
+          const xg=p.markets?.expected_goals;
+          const btts=p.markets?.btts?.prob_yes;
+          return [
+            prob!=null?`ML: ${(prob>1?prob:prob*100).toFixed(1)}%`:null,
+            xg?.home!=null&&xg?.away!=null?`xG: ${xg.home.toFixed(1)}+${xg.away.toFixed(1)}=${(xg.home+xg.away).toFixed(1)}`:null,
+            btts!=null?`BTTS: ${(btts>1?btts:btts*100).toFixed(1)}%`:null,
+          ].filter(Boolean).join(' · ')||'Dados incompletos';
+        },
+        update:r=>({prediction:arr(r)[0]||null})
+      }
+    };
+    // Step 4 — calcular score & concluir
+    const d=state.detail, pred=state.prediction, oddsData=state.oddsData;
+    const ou=pred?.markets?.over_under||{}, btts=pred?.markets?.btts||{};
+    const xg=pred?.markets?.expected_goals||{}, rec=pred?.recommendations||{}, mdl=pred?.model||{};
+    const prob25=ou.prob_over_25!=null?(ou.prob_over_25>1?ou.prob_over_25/100:ou.prob_over_25):null;
+    const bttsRaw=btts.prob_yes!=null?btts.prob_yes:null;
+    const bttsN=bttsRaw!=null?(bttsRaw>1?bttsRaw:bttsRaw*100):null;
+    const xgH=xg.home??null, xgA=xg.away??null;
+    const pinRow=oddsData.find(o=>o.bookmaker_slug==='pinnacle'&&o.outcome==='over');
+    const pinnNow=pinRow?parseFloat(pinRow.decimal_odds):null;
+    const pinnPrev=pinRow?.previous_decimal_odds?parseFloat(pinRow.previous_decimal_odds):null;
+    let movement=pinRow?.movement||null;
+    const recrOdds=oddsData.filter(o=>RECR.includes(o.bookmaker_slug)&&o.outcome==='over').map(o=>parseFloat(o.decimal_odds)||0).filter(v=>v>1);
+    const recrAvg=recrOdds.length?recrOdds.reduce((s,v)=>s+v,0)/recrOdds.length:null;
+    if(pinnNow&&pinnPrev&&Math.abs(pinnPrev-pinnNow)>0.01){
+      const mv=((pinnPrev-pinnNow)/pinnPrev)*100;
+      if(!movement) movement=mv>0?'SHORTENING':'DRIFTING';
+    }
+    let div=null;
+    if(pinnNow&&recrAvg) div=Math.abs(((recrAvg-pinnNow)/pinnNow)*100);
+    const hToKO=Math.max(0,(new Date(eventDate||d.event_date)-Date.now())/3600000);
+    let sharpLabel=null;
+    if(div!=null&&div>=DIV_MIN){
+      if(movement==='SHORTENING'&&div>=DIV_STEAM&&hToKO<=0.5) sharpLabel='STEAM';
+      else if(movement==='SHORTENING'&&div>=DIV_MIN) sharpLabel='SHARP';
+      else if(div>=DIV_MIN) sharpLabel='WATCH';
+    }
+    const {score,signals}=calcScore({prob25,bttsN,xgH,xgA,movement,div,sharpLabel,pinnNow,recrAvg,rec,mdl,h2h:d.h2h});
+    const rec2=score>=65?'📌 CANDIDATO FORTE':score>=50?'⭐ CANDIDATO':score>=35?'👁 MONITORAR':'⏭ SKIP';
+    const reasons=signals.map(s=>s.t).join(', ');
+    return {
+      thought:`Todos os dados disponíveis. Calculando score com calcScore()... ${reasons}`,
+      done:true,
+      conclusion:[
+        `${rec2} · Score ${score}/100`,
+        `Sinais: ${reasons||'nenhum'}`,
+        `Pinnacle: ${pinnNow?pinnNow.toFixed(2):'N/A'} | Mov: ${movement||'—'} | Div: ${div!=null?div.toFixed(1)+'%':'—'}`,
+        `ML: ${prob25!=null?(prob25*100).toFixed(1)+'%':'N/A'} | xG: ${xgH!=null&&xgA!=null?(xgH+xgA).toFixed(1):'N/A'} | BTTS: ${bttsN!=null?bttsN.toFixed(0)+'%':'N/A'}`,
+        `KO em ${hToKO.toFixed(1)}h | Sharp: ${sharpLabel||'nenhum'}`,
+      ].join('\n')
+    };
+  };
+
+  const { trace } = await reactLoop({ eventId, eventDate }, think, {
+    maxSteps:8,
+    onStep:t=>updateReactModal(t)
+  });
+  showReactModal('Análise: '+(label||eventId), trace);
+}
+
+// ════════════════════════════════════════════════════════════════
+// REACT AGENT B — Smart Sync (paralelo + CLV)
+// ════════════════════════════════════════════════════════════════
+function syncAgentThink(state) {
+  // Step 0 — carregar picks do GitHub
+  if(!state.picks) return {
+    thought:'Preciso de carregar todos os picks do GitHub para identificar os pendentes (sem resultado, data passada).',
+    action:{
+      desc:'ghRead(data/picks.json)',
+      run:()=>ghRead(PICKS_FILE),
+      observe:r=>{
+        const n=Array.isArray(r.data)?r.data.length:0;
+        const pend=Array.isArray(r.data)?r.data.filter(p=>p.id&&(!p.result_over25||p.result_over25==='')&&p.data&&new Date(p.data)<new Date()).length:0;
+        return `${n} picks · ${pend} pendentes sem resultado`;
+      },
+      update:r=>({picks:Array.isArray(r.data)?r.data:[]})
+    }
+  };
+
+  const pending=state.picks.filter(p=>
+    p.id&&(!p.result_over25||p.result_over25==='')&&p.data&&new Date(p.data)<new Date()
+  );
+
+  // Step 1 — buscar resultados em paralelo (Promise.all)
+  if(!state.fetched) {
+    if(!pending.length) return {thought:'Sem picks pendentes. Todos já têm resultado.',done:true,conclusion:'✅ Nada a sincronizar.'};
+    return {
+      thought:`${pending.length} picks pendentes. Vou buscar todos os eventos em paralelo — 1 round trip em vez de ${pending.length} sequenciais.`,
+      action:{
+        desc:`BSD: Promise.all(${pending.length}× GET /api/v2/events/{id}/)`,
+        run:async()=>{
+          return Promise.all(pending.map(async p=>{
+            const eid=p.id_base||String(p.id).split('_')[0];
+            if(!eid||isNaN(parseInt(eid))) return {id:p.id,skip:true};
+            try{ return {id:p.id,ev:await get(`/api/v2/events/${eid}/`)}; }
+            catch(e){ return {id:p.id,error:e.message}; }
+          }));
+        },
+        observe:results=>{
+          const fin=results.filter(r=>r.ev&&(r.ev.status==='finished'||r.ev.period==='FT')).length;
+          const run=results.filter(r=>r.ev&&r.ev.status!=='finished'&&r.ev.period!=='FT').length;
+          const err=results.filter(r=>r.error||r.skip).length;
+          return `${fin} terminados → resultado disponível · ${run} ainda em curso · ${err} erros/não encontrados`;
+        },
+        update:results=>{
+          let updated=0;
+          results.forEach(r=>{
+            if(!r.ev) return;
+            const ev=r.ev;
+            if(ev.status!=='finished'&&ev.period!=='FT') return;
+            const idx=state.picks.findIndex(p=>String(p.id)===String(r.id));
+            if(idx<0) return;
+            const h=ev.home_score??0,a=ev.away_score??0,total=h+a;
+            state.picks[idx].resultado=`${h}-${a}`;
+            state.picks[idx].golos_total=String(total);
+            state.picks[idx].result_over25=total>2.5?'WIN':'LOSS';
+            updated++;
+          });
+          return {picks:state.picks,updated,fetched:true};
+        }
+      }
+    };
+  }
+
+  // Step 2 — CLV: picks com resultado mas sem odds_over_close
+  if(!state.clvDone) {
+    const needCLV=state.picks.filter(p=>p.result_over25&&!p.odds_over_close&&p.odds_over&&parseFloat(p.odds_over)>1.01);
+    if(needCLV.length) return {
+      thought:`${needCLV.length} picks resolvidos ainda sem CLV. Vou buscar odds Pinnacle de fecho em paralelo para calcular edge real.`,
+      action:{
+        desc:`BSD: Promise.all(${needCLV.length}× GET Pinnacle closing odds)`,
+        run:async()=>Promise.all(needCLV.map(async p=>{
+          const eid=p.id_base||String(p.id).split('_')[0];
+          if(!eid) return {id:p.id,skip:true};
+          try{
+            const r=await get(`/api/v2/odds/?event_id=${eid}&market=over_under_25&outcome=over&limit=30`);
+            const pin=arr(r).find(o=>o.bookmaker_slug==='pinnacle');
+            return {id:p.id,closing:pin?parseFloat(pin.decimal_odds):null};
+          }catch(e){return {id:p.id,skip:true};}
+        })),
+        observe:results=>{
+          const found=results.filter(r=>r.closing>1.01).length;
+          const posClv=results.filter(r=>{
+            const p=needCLV.find(x=>String(x.id)===String(r.id));
+            return r.closing>1.01&&p&&parseFloat(p.odds_over)>r.closing;
+          }).length;
+          return `CLV calculado: ${found}/${needCLV.length} · ${posClv} com CLV positivo (bateu closing line)`;
+        },
+        update:results=>{
+          let clvUpdated=0;
+          results.forEach(r=>{
+            if(!r.closing||r.closing<=1.01) return;
+            const idx=state.picks.findIndex(p=>String(p.id)===String(r.id));
+            if(idx<0) return;
+            state.picks[idx].odds_over_close=String(r.closing);
+            const entry=parseFloat(state.picks[idx].odds_over||0);
+            if(entry>1.01){state.picks[idx].clv=((entry/r.closing-1)*100).toFixed(2);clvUpdated++;}
+          });
+          return {picks:state.picks,clvUpdated,clvDone:true};
+        }
+      }
+    };
+    return {thought:'Sem picks que precisem de CLV neste momento.',action:{desc:'skip CLV',run:async()=>({}),observe:()=>'OK',update:()=>({clvDone:true})},};
+  }
+
+  // Step 3 — escrever no GitHub (1 único write)
+  if(!state.written) {
+    const total=(state.updated||0)+(state.clvUpdated||0);
+    if(total===0) return {thought:'Sem alterações a guardar (nenhum jogo terminou ainda).',done:true,conclusion:'✅ Sem resultados novos disponíveis.'};
+    return {
+      thought:`${total} alterações (${state.updated||0} resultados + ${state.clvUpdated||0} CLV). Um único write ao GitHub — evita conflitos de SHA.`,
+      action:{
+        desc:`ghWrite(data/picks.json) — msg: "sync: ${state.updated||0} res, ${state.clvUpdated||0} CLV"`,
+        run:()=>ghWrite(PICKS_FILE,state.picks,`sync: ${state.updated||0} resultados, ${state.clvUpdated||0} CLV`),
+        observe:()=>'Escrito com sucesso no GitHub',
+        update:()=>({written:true})
+      }
+    };
+  }
+
+  return {
+    thought:`Sync concluído. ${state.updated||0} resultados + ${state.clvUpdated||0} CLV. Total de ${state.picks?.length||0} picks no ficheiro.`,
+    done:true,
+    conclusion:`✅ ${state.updated||0} resultados actualizados · ${state.clvUpdated||0} CLV calculados · ${state.picks?.length||0} picks total`
+  };
+}
+
+async function reactSync() {
+  const btn=el('btnReactSync');
+  if(btn){btn.disabled=true;btn.textContent='🧠 A pensar...';}
+  el('reactModalTitle').textContent='🧠 ReAct Sync';
+  el('reactModalSub').textContent='Smart sync: resultados + CLV em paralelo';
+  el('reactTrace').innerHTML='<div class="rt-step rt-action"><span class="react-spinner"></span>A iniciar...</div>';
+  el('reactModal').style.display='flex';
+
+  const result=await reactLoop({},syncAgentThink,{maxSteps:8,onStep:t=>updateReactModal(t)});
+  showReactModal('ReAct Sync',result.trace);
+  if(btn){btn.disabled=false;btn.textContent='🧠 ReAct Sync';}
+  if((result.state?.updated||0)>0) setTimeout(loadDash,600);
+}
+
+// ════════════════════════════════════════════════════════════════
+// REACT AGENT C — Alertas adaptativos (Live Monitor)
+// ════════════════════════════════════════════════════════════════
+async function reactLiveAlert(game) {
+  if(!game.isPick) return null;
+
+  const thinkFn = state => {
+    const g=state.game;
+    const goals=g.goals||0, min=g.min||0;
+
+    // Step 1 — buscar stats ao vivo
+    if(!state.stats) return {
+      thought:`${g.home} vs ${g.away} (${min}', ${goals}g). É um pick. Preciso de xG ao vivo e momentum para avaliar risco real.`,
+      action:{
+        desc:`BSD: GET /api/v2/events/${g.id}/stats/`,
+        run:()=>get(`/api/v2/events/${g.id}/stats/`).catch(()=>({})),
+        observe:r=>{
+          const xgH=r?.stats?.home?.xg?.actual??null,xgA=r?.stats?.away?.xg?.actual??null;
+          const mom=r?.momentum||[];
+          const lastMom=mom.length?mom[mom.length-1]?.v:0;
+          return `xG total: ${xgH!=null&&xgA!=null?(xgH+xgA).toFixed(2):'N/A'} · Momentum: ${lastMom>20?'Casa dom.':lastMom<-20?'Fora dom.':'Equilibrado'} (${lastMom})`;
+        },
+        update:r=>{
+          const xgH=r?.stats?.home?.xg?.actual||0,xgA=r?.stats?.away?.xg?.actual||0;
+          const mom=r?.momentum||[];
+          return {stats:r,xgLive:xgH+xgA,momentum:mom.length?mom[mom.length-1]?.v:0};
+        }
+      }
+    };
+
+    // Step 2 — raciocinar sobre risco
+    const xgLive=state.xgLive||0, mom=state.momentum||0;
+    const needGoals=3-goals, minsLeft=Math.max(0,95-min);
+
+    if(goals>=3) return {
+      thought:`OVER 2.5 confirmado (${goals} golos)! Verificar se já notifiquei para este jogo.`,
+      done:true,
+      conclusion:{type:'WIN',msg:`🎯 OVER 2.5! ${g.home} ${g.hScore||0}-${g.aScore||0} ${g.away} · ${goals} golos`}
+    };
+
+    // Score de risco multi-factor
+    let risk=0; const reasons=[];
+    if(needGoals>=3){risk+=3;reasons.push(`precisa ${needGoals}g`);}
+    else if(needGoals>=2&&minsLeft<45){risk+=2;reasons.push(`${needGoals}g em ${minsLeft}min`);}
+    else if(needGoals>=1&&minsLeft<20){risk+=2;reasons.push(`${needGoals}g em ${minsLeft}min`);}
+    if(xgLive<1.5&&min>30){risk+=1;reasons.push(`xG baixo (${xgLive.toFixed(1)})`);}
+    if(mom<-40){risk+=1;reasons.push('fora domina');}
+    if(minsLeft<12&&needGoals>=1){risk+=2;reasons.push(`últimos ${minsLeft}min críticos`);}
+
+    const alertKey=`rct_dng_${g.id}_${Math.floor(min/15)}`;
+    const alreadySent=!!localStorage.getItem(alertKey);
+
+    if(alreadySent) return {
+      thought:`Risco ${risk}/9 (${reasons.join(', ')||'baixo'}). Já alertei nesta janela de 15min — rate-limit activo.`,
+      done:true,conclusion:{type:'RATE_LIMITED',risk}
+    };
+
+    if(risk>=3){
+      const lvl=risk>=6?'🚨 CRÍTICO':'⚠️ PERIGO';
+      const msg=`${lvl}\n${g.home} ${g.hScore||0}-${g.aScore||0} ${g.away}\n⏱ ${min}' · Precisa ${needGoals} gol(os) em ${minsLeft}min\nxG: ${xgLive.toFixed(1)} · ${reasons.join(', ')}`;
+      return {
+        thought:`Risco ${risk}/9 (${reasons.join(', ')}). Nível ${lvl}. Enviar alerta TG.`,
+        action:{
+          desc:`sendTG: ${lvl} (risco ${risk}/9)`,
+          run:()=>sendTG(msg).then(ok=>{if(ok)localStorage.setItem(alertKey,'1');return ok;}),
+          observe:ok=>ok?`Alerta ${lvl} enviado com sucesso`:'Falha no envio TG',
+          update:ok=>({alertSent:ok,risk,alertLevel:lvl})
+        }
+      };
+    }
+
+    return {
+      thought:`Risco ${risk}/9 (${reasons.length?reasons.join(', '):'situação controlável'}). ${needGoals}g em ${minsLeft}min, xG=${xgLive.toFixed(1)}. Sem alerta.`,
+      done:true,conclusion:{type:'MONITOR',risk,reasons}
+    };
+  };
+
+  return reactLoop({game}, thinkFn, {maxSteps:5});
 }
 
 // ════════════════════════════════════════════════════════════════
