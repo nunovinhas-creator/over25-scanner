@@ -726,7 +726,7 @@ function saveCfg(){
     k:el('bsdKey').value,g:el('ghToken').value,
     t:el('tgToken').value,c:el('tgChat').value,
     e:el('emailTo')?.value||'',
-    autoLog:el('autoLogChk')?.checked||false,
+    autoLog:true,
     phase:currentPhase
   })); }catch(e){}
 }
@@ -738,8 +738,8 @@ function loadCfg(){
     if(c.t)el('tgToken').value=c.t;
     if(c.c)el('tgChat').value=c.c;
     if(c.e&&el('emailTo'))el('emailTo').value=c.e;
-    // auto-log sempre ON por defeito
-    if(el('autoLogChk')) el('autoLogChk').checked = c.autoLog!==false;
+    // auto-log sempre ON — força independentemente do valor guardado
+    if(el('autoLogChk')) el('autoLogChk').checked = true;
     if(c.phase) setCurrentPhase(c.phase);
     // Auto-carregar se API key já guardada
     if(c.k) setTimeout(()=>loadAll(), 300);
@@ -2901,9 +2901,9 @@ function generateProposals(sOver, sSharp, picks){
     }
   }
 
-  // 8. Auto-log desactivado
-  if(!el('autoLogChk')?.checked&&sOver.nTotal<10){
-    add('info','🤖','Active o Auto-log para eliminar selection bias',`Com save manual só guarda os jogos que "parecem bons" — o dataset fica enviesado. Auto-log regista todos os CANDIDATO automaticamente.`);
+  // 8. GitHub Token em falta
+  if(!el('ghToken')?.value.trim()){
+    add('critical','🔑','GitHub Token não configurado',`Sem token as picks e observações não são guardadas. Configure o token "🐙 GitHub Token" na barra de configuração.`);
   }
 
   if(!props.length){
