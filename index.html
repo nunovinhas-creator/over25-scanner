@@ -702,8 +702,11 @@ function loadCfg(){
     if(c.t)el('tgToken').value=c.t;
     if(c.c)el('tgChat').value=c.c;
     if(c.e&&el('emailTo'))el('emailTo').value=c.e;
-    if(c.autoLog&&el('autoLogChk')) el('autoLogChk').checked=c.autoLog;
+    // auto-log sempre ON por defeito
+    if(el('autoLogChk')) el('autoLogChk').checked = c.autoLog!==false;
     if(c.phase) setCurrentPhase(c.phase);
+    // Auto-carregar se API key já guardada
+    if(c.k) setTimeout(()=>loadAll(), 300);
   }catch(e){}
 }
 
@@ -1201,8 +1204,10 @@ async function loadAll(){
     updateScanStats();
     renderScan();
 
-    // Auto-log: guarda automaticamente candidatos se activado
+    // Auto-log Over 2.5 candidatos
     if(el('autoLogChk')?.checked) autoLogCandidatos().catch(()=>{});
+    // Auto-log Sharp 1X2 — guarda todos os sinais automaticamente
+    if(el('autoLogChk')?.checked) autoLogSharp1x2().catch(()=>{});
 
     // Actualizar stats Sharp
     el('sh1Total').textContent=allSharp1x2.length;
@@ -1474,14 +1479,13 @@ function gameCard(g){
       </div>`:''}
       </div>
   </div>
-  <div style="padding:0 14px 12px;display:flex;flex-direction:column;gap:6px">
-    <button class="btn-pick${isSaved(String(g.id))?' saved':''}" id="pick_${g.id}" data-id="${g.id}" onclick="savePick(this)"
-      ${isSaved(String(g.id))?'disabled':''}>
-      ${isSaved(String(g.id))?'✅ Guardado':'📌 Guardar pick'}
-    </button>
-    <button class="btn-sm" style="background:var(--purple-l);border-color:var(--purple);color:var(--purple);width:100%;padding:8px"
+  <div style="padding:0 14px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
+    <span style="font-family:var(--mono);font-size:10px;color:${isSaved(String(g.id))?'var(--green)':'var(--text3)'}">
+      ${isSaved(String(g.id))?'🤖 auto-guardado':'⏳ a guardar...'}
+    </span>
+    <button class="btn-sm" style="background:var(--purple-l);border-color:var(--purple);color:var(--purple);padding:6px 12px;font-size:11px"
       onclick="reactAnalyzeGame('${g.id}','${g.date}')">
-      🧠 Análise ReAct
+      🧠 ReAct
     </button>
   </div>`;
 }
@@ -1632,21 +1636,15 @@ function sharpCard1x2(s){
       <div style="display:flex;gap:6px;flex-wrap:wrap">${outCards}</div>
       ${overCtx}
     </div>
-    <div style="padding:0 14px 12px">
-      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-        ${(function(){
-          const best=s.sigs[0]||{};
-          const nvp=best.pin?(best.pin*0.975).toFixed(2):null;
-          return nvp?'<span style="font-family:var(--mono);font-size:10px;color:var(--amber)">NVP ~'+nvp+'</span>':'';
-        })()}
-        <button class="btn-pick${isSaved(s.id+'_sh')?' saved':''}" data-id="${s.id}" data-home="${s.home}" data-away="${s.away}" data-liga="${s.league}" data-date="${s.date}"
-          data-label="${s.label}" data-score="${s.totalScore}" data-hours="${s.hoursToKO}"
-          data-sig="${encodeURIComponent(JSON.stringify({...s.sigs[0]||{}, nvp:(s.sigs[0]?.pin?(s.sigs[0].pin*0.975):null)}))}"
-          onclick="saveSharpPick(this)"
-          ${isSaved(s.id+'_sh')?'disabled':''}>
-          ${isSaved(s.id+'_sh')?'✅ Guardado':'📌 Guardar pick 1X2'}
-        </button>
-      </div>
+    <div style="padding:0 14px 10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      ${(function(){
+        const best=s.sigs[0]||{};
+        const nvp=best.pin?(best.pin*0.975).toFixed(2):null;
+        return nvp?'<span style="font-family:var(--mono);font-size:10px;color:var(--amber)">NVP ~'+nvp+'</span>':'';
+      })()}
+      <span style="font-family:var(--mono);font-size:10px;color:${isSaved(s.id+'_sh')?'var(--green)':'var(--text3)'}">
+        ${isSaved(s.id+'_sh')?'🤖 auto-guardado':'⏳ a guardar...'}
+      </span>
     </div>
   </div>`;
 }
@@ -2161,6 +2159,40 @@ async function autoLogCandidatos(){
     sendTG(`🤖 AUTO-LOG: ${saved} candidatos\n${lines.join('\n')}`).catch(()=>{});
   }
   if(status) status.textContent=`Auto-log: ${saved} candidatos guardados`;
+}
+
+// AUTO-LOG Sharp 1X2 — guarda todos os sinais automaticamente
+async function autoLogSharp1x2(){
+  const unsaved=allSharp1x2.filter(s=>!isSaved(s.id+'_sh'));
+  if(!unsaved.length) return;
+  let saved=0;
+  for(const s of unsaved){
+    try{
+      const sig=s.sigs[0]||{};
+      await picks1x2Save({
+        id:String(s.id)+'_sh',
+        data:s.date||new Date().toISOString(),
+        casa:s.home||'', fora:s.away||'', liga:s.league||'',
+        outcome:sig.out||sig.outcome||'',
+        odds_entrada:sig.pin?sig.pin.toFixed(2):'',
+        nvp:sig.pin?(sig.pin*0.975).toFixed(3):'',
+        drop_pct:sig.pinnMove!=null?Math.abs(sig.pinnMove).toFixed(1):'',
+        timing_h:s.hoursToKO?.toFixed(1)||'',
+        label:s.label||'',
+        score:String(s.totalScore||0),
+        fonte:'auto-log',
+        phase:getCurrentPhase(),
+        resultado_jogo:'', resultado_outcome:'', clv:'', odds_fecho:''
+      });
+      markSaved(s.id+'_sh');
+      saved++;
+    }catch(e){}
+  }
+  if(saved>0){
+    const lines=unsaved.slice(0,saved).map(s=>`${s.home} vs ${s.away} [${s.label}]`);
+    sendTG(`🎯 AUTO-LOG Sharp 1X2: ${saved} sinais\n${lines.join('\n')}`).catch(()=>{});
+    renderSharp(); // atualiza UI
+  }
 }
 
 // ════════════════════════════════════════════════════════════════
