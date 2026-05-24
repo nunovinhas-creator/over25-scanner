@@ -147,6 +147,13 @@ select{font-family:var(--sans);font-size:12px;padding:5px 10px;border-radius:6px
 .btn-sm:hover{background:var(--bg3)}
 .btn-sm.green{background:var(--green);color:#fff;border-color:var(--green)}
 .btn-sm.blue{background:var(--blue);color:#fff;border-color:var(--blue)}
+.warn-banner{background:var(--amber-l);border:1px solid var(--amber);border-radius:8px;padding:10px 14px;font-family:var(--mono);font-size:11px;color:var(--amber);margin-bottom:12px;display:none}
+.phase-btn{font-family:var(--mono);font-size:11px;font-weight:600;padding:5px 10px;border-radius:5px;border:1px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.5);cursor:pointer}
+.phase-btn.active{background:rgba(0,255,136,.15);color:#00ff88;border-color:#00ff88}
+.stab{font-family:var(--sans);font-size:12px;font-weight:600;padding:8px 16px;border:none;border-bottom:2px solid transparent;background:transparent;color:var(--text3);cursor:pointer}
+.stab.active{color:var(--text);border-bottom-color:var(--text)}
+.dash-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:12px;margin-bottom:8px}
+.dash-card-title{font-family:var(--mono);font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
 @media(min-width:600px){.stats-bar{grid-template-columns:repeat(4,1fr)}.dash-kpi{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
@@ -172,7 +179,13 @@ select{font-family:var(--sans);font-size:12px;padding:5px 10px;border-radius:6px
   <input type="text"     id="tgChat"   placeholder="Chat ID" style="max-width:110px">
   <button class="btn-load" onclick="loadAll()">▶ Carregar</button>
   <button class="btn-tg"   onclick="testTG()">TG</button>
-  <span class="ts-label" id="autoLabel">Auto: off</span>
+  <button class="phase-btn active" id="phaseDevBtn" onclick="setCurrentPhase('dev')">DEV</button>
+  <button class="phase-btn" id="phaseLiveBtn" onclick="setCurrentPhase('live')">LIVE</button>
+  <label style="display:flex;align-items:center;gap:5px;cursor:pointer;color:rgba(255,255,255,.7);font-family:var(--mono);font-size:11px">
+    <input type="checkbox" id="autoLogChk" onchange="saveCfg()" style="accent-color:#00ff88;width:13px;height:13px">
+    Auto-log
+  </label>
+  <span class="ts-label" id="autoLabel">DEV</span>
 </div>
 
 <!-- ── Tabs ── -->
@@ -322,10 +335,18 @@ select{font-family:var(--sans);font-size:12px;padding:5px 10px;border-radius:6px
     </label>
   </div>
   <div id="syncStatus" style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:8px;display:none"></div>
+  <div id="nWarning" class="warn-banner"></div>
+  <div class="filters" style="margin-bottom:10px">
+    <span class="filter-label">Fase:</span>
+    <button class="fb active" id="dashPhaseAll" onclick="setDashPhase('all')">Todas</button>
+    <button class="fb" id="dashPhaseDev" onclick="setDashPhase('dev')">DEV</button>
+    <button class="fb" id="dashPhaseLive" onclick="setDashPhase('live')">LIVE</button>
+  </div>
   <div class="dash-kpi" id="dashKpi">
     <div class="kpi-card"><div class="kpi-label">Taxa acerto</div><div class="kpi-val" id="dWR">—</div><div class="kpi-sub" id="dWRsub"></div></div>
     <div class="kpi-card"><div class="kpi-label">ROI global</div><div class="kpi-val" id="dROI">—</div><div class="kpi-sub" id="dROIsub"></div></div>
     <div class="kpi-card"><div class="kpi-label">ROI 7 dias</div><div class="kpi-val" id="dROI7">—</div></div>
+    <div class="kpi-card"><div class="kpi-label">CLV médio</div><div class="kpi-val" id="dCLV">—</div><div class="kpi-sub" id="dCLVsub">vs closing line</div></div>
     <div class="kpi-card"><div class="kpi-label">Série</div><div class="kpi-val" id="dStreak">—</div><div class="kpi-sub" id="dStreakSub"></div></div>
   </div>
   <div class="roi-chart">
@@ -353,7 +374,8 @@ const GH_API        = 'https://api.github.com';
 const TH_MOVE       = 0.2;    // % movimento mínimo Pinnacle
 const DIV_MIN   = 2.0;    // % divergência mínima Pin vs recreativas
 const DIV_STEAM = 8.0;    // % threshold STEAM
-const RECR = ['bet365','bwin','unibet','williamhill','betfair','onexbet','betway','marathonbet','1xbet','betclic','ladbrokes','coral','paddypower'];
+// 1xbet/onexbet removidos — copiam preços sharp, distorcem divergência
+const RECR = ['bet365','bwin','unibet','williamhill','betfair','betway','marathonbet','betclic','ladbrokes','coral','paddypower'];
 
 // ════════════════════════════════════════════════════════════════
 // ESTADO
@@ -362,6 +384,7 @@ let allGames=[], scanFilter='all', lgNames={}, allSharp1x2=[];
 let sharp1x2Picks=[]; // picks guardados do Sharp 1X2 com resultados
 let liveData=[], liveFilter='all', liveTimer=null, liveActive=false;
 let allPicks=[];
+let dashPhase='all', currentPhase='dev';
 
 // ════════════════════════════════════════════════════════════════
 // HELPERS
@@ -377,7 +400,12 @@ async function get(path){
 }
 
 function saveCfg(){
-  try{ localStorage.setItem('ov_cfg',JSON.stringify({k:el('bsdKey').value,g:el('ghToken').value,t:el('tgToken').value,c:el('tgChat').value})); }catch(e){}
+  try{ localStorage.setItem('ov_cfg',JSON.stringify({
+    k:el('bsdKey').value,g:el('ghToken').value,
+    t:el('tgToken').value,c:el('tgChat').value,
+    autoLog:el('autoLogChk')?.checked||false,
+    phase:currentPhase
+  })); }catch(e){}
 }
 function loadCfg(){
   try{
@@ -386,7 +414,26 @@ function loadCfg(){
     if(c.g)el('ghToken').value=c.g;
     if(c.t)el('tgToken').value=c.t;
     if(c.c)el('tgChat').value=c.c;
+    if(c.autoLog&&el('autoLogChk')) el('autoLogChk').checked=c.autoLog;
+    if(c.phase) setCurrentPhase(c.phase);
   }catch(e){}
+}
+
+function getCurrentPhase(){ return currentPhase; }
+function setCurrentPhase(phase){
+  currentPhase=phase;
+  el('phaseDevBtn')?.classList.toggle('active',phase==='dev');
+  el('phaseLiveBtn')?.classList.toggle('active',phase==='live');
+  el('autoLabel').textContent=phase.toUpperCase();
+  saveCfg();
+}
+function setDashPhase(phase){
+  dashPhase=phase;
+  ['all','dev','live'].forEach(p=>{
+    const btn=el('dashPhase'+p.charAt(0).toUpperCase()+p.slice(1));
+    if(btn) btn.classList.toggle('active',p===phase);
+  });
+  renderDash();
 }
 
 async function sendTG(msg){
@@ -536,6 +583,9 @@ function normalizePick(p){
     prob_over25:  raw.prob_over25||raw.prob||'',
     fonte:        raw.fonte||raw.source||'',
     sharp_label:  raw.sharp_label||raw.sharplabel||'',
+    phase:        raw.phase||'',
+    odds_over_close: raw.odds_over_close||'',
+    clv:          raw.clv||'',
   };
 }
 
@@ -722,9 +772,10 @@ async function loadAll(){
         if(score<8) return;
 
         // ── Label ──
+        // STEAM: ≤30min ao KO (dinheiro sharp de alta certeza)
         let label;
-        if(pinnMovePct>=5&&hoursToKO<=6) label='STEAM';
-        else if(pinnMovePct>=5||( pinnMovePct>=2&&hoursToKO<=12)) label='SHARP';
+        if(pinnMovePct>=5&&hoursToKO<=0.5) label='STEAM';
+        else if(pinnMovePct>=5||(pinnMovePct>=2&&hoursToKO<=12)) label='SHARP';
         else label='WATCH';
 
         sigs.push({
@@ -821,9 +872,11 @@ async function loadAll(){
             div=Math.abs(((recrAvg-pinnNow)/pinnNow)*100);
           }
 
-          // Label sharp
+          // Label sharp — STEAM só ≤30min ao KO
+          const koMs=new Date(ev.event_date).getTime();
+          const hToKO=Math.max(0,(koMs-Date.now())/3600000);
           if(div!=null&&div>=DIV_MIN){
-            if(movement==='SHORTENING'&&div>=DIV_STEAM) sharpLabel='STEAM';
+            if(movement==='SHORTENING'&&div>=DIV_STEAM&&hToKO<=0.5) sharpLabel='STEAM';
             else if(movement==='SHORTENING'&&div>=DIV_MIN) sharpLabel='SHARP';
             else if(div>=DIV_MIN) sharpLabel='WATCH';
           }
@@ -858,6 +911,9 @@ async function loadAll(){
 
     updateScanStats();
     renderScan();
+
+    // Auto-log: guarda automaticamente candidatos se activado
+    if(el('autoLogChk')?.checked) autoLogCandidatos().catch(()=>{});
 
     // Actualizar stats Sharp
     el('sh1Total').textContent=allSharp1x2.length;
@@ -915,24 +971,30 @@ function calcScore({prob25,bttsN,xgH,xgA,movement,div,sharpLabel,pinnNow,recrAvg
     else{s+=3;}
   }else{s+=12;}
 
-  // 2. xG
+  // 2. xG — peso reduzido se ML disponível (já incorpora xG internamente)
   if(xgH!=null&&xgA!=null){
     const xg=xgH+xgA;
-    if(xg>=3.5){s+=20;sig.push({t:'⚡ xG '+xg.toFixed(1),c:'g'});}
-    else if(xg>=3.0){s+=16;sig.push({t:'⚡ xG '+xg.toFixed(1),c:'g'});}
-    else if(xg>=2.5){s+=12;sig.push({t:'xG '+xg.toFixed(1),c:'g'});}
-    else if(xg>=2.0){s+=8;sig.push({t:'xG '+xg.toFixed(1),c:'a'});}
-    else if(xg>=1.5){s+=3;}
-    else{s-=4;}
+    const m=prob25!=null?0.4:1.0; // ×0.4 quando ML presente: evita double-counting
+    let pts=0;
+    if(xg>=3.5){pts=20;sig.push({t:'⚡ xG '+xg.toFixed(1),c:'g'});}
+    else if(xg>=3.0){pts=16;sig.push({t:'⚡ xG '+xg.toFixed(1),c:'g'});}
+    else if(xg>=2.5){pts=12;sig.push({t:'xG '+xg.toFixed(1),c:'g'});}
+    else if(xg>=2.0){pts=8;sig.push({t:'xG '+xg.toFixed(1),c:'a'});}
+    else if(xg>=1.5){pts=3;}
+    else{pts=-4;}
+    s+=Math.round(pts*m);
   }
 
-  // 3. BTTS (bttsN já normalizado para 0-100)
+  // 3. BTTS — peso reduzido se ML disponível (já incorpora BTTS internamente)
   if(bttsN!=null){
-    if(bttsN>=70){s+=15;sig.push({t:'BTTS '+bttsN.toFixed(0)+'%',c:'g'});}
-    else if(bttsN>=60){s+=11;sig.push({t:'BTTS '+bttsN.toFixed(0)+'%',c:'g'});}
-    else if(bttsN>=50){s+=7;sig.push({t:'BTTS '+bttsN.toFixed(0)+'%',c:'a'});}
-    else if(bttsN>=40){s+=3;}
-    else{s-=2;}
+    const m=prob25!=null?0.3:1.0; // ×0.3 quando ML presente: evita double-counting
+    let pts=0;
+    if(bttsN>=70){pts=15;sig.push({t:'BTTS '+bttsN.toFixed(0)+'%',c:'g'});}
+    else if(bttsN>=60){pts=11;sig.push({t:'BTTS '+bttsN.toFixed(0)+'%',c:'g'});}
+    else if(bttsN>=50){pts=7;sig.push({t:'BTTS '+bttsN.toFixed(0)+'%',c:'a'});}
+    else if(bttsN>=40){pts=3;}
+    else{pts=-2;}
+    s+=Math.round(pts*m);
   }
 
   // 4. Sharp money
@@ -1156,6 +1218,7 @@ async function savePick(btn){
       movimento:g.movement||'', score_previsto:g.predScore||'',
       xg_total:xgt, btts_prob:g.bttsN!=null?g.bttsN.toFixed(0):'', fonte:'scanner',
       sharp_label:g.sharpLabel||'', div:g.div?g.div.toFixed(1):'',
+      phase:getCurrentPhase(),
       result_over25:'', golos_total:''
     });
     markSaved(id);
@@ -1314,6 +1377,7 @@ async function saveSharpPick(btn){
       label:d.label||'',
       score:d.score||'',
       fonte:'sharp_1x2',
+      phase:getCurrentPhase(),
       resultado_jogo:'', resultado_outcome:'', clv:'', odds_fecho:''
     });
     markSaved(saveId);
@@ -1749,6 +1813,54 @@ async function saveLivePick(btn){
 }
 
 // ════════════════════════════════════════════════════════════════
+// AUTO-LOG — guarda automaticamente todos os candidatos após loadAll
+// ════════════════════════════════════════════════════════════════
+async function autoLogCandidatos(){
+  const candidatos=allGames.filter(g=>{
+    const mov=(g.movement||'').toUpperCase();
+    const bttsN=g.bttsN||0;
+    const o=parseFloat(g.oddsOver||0);
+    return mov==='SHORTENING' && bttsN>=55 && o>=1.5 && o<=3.0 && !isSaved(String(g.id));
+  });
+  if(!candidatos.length) return;
+
+  const status=el('syncStatus');
+  if(status){status.style.display='block';status.textContent=`Auto-log: a guardar ${candidatos.length} candidatos...`;}
+
+  let saved=0;
+  for(const g of candidatos){
+    try{
+      const prob=g.prob25!=null?(g.prob25*100).toFixed(1):'';
+      const xgt=g.xgH!=null&&g.xgA!=null?(g.xgH+g.xgA).toFixed(2):'';
+      await picksSave({
+        id:String(g.id),
+        casa:g.home, fora:g.away, liga:g.league||'',
+        data:g.date, score_sistema:String(g.score||0),
+        prob_over25:prob,
+        odds_over:g.oddsOver?g.oddsOver.toFixed(4):'',
+        odds_under:g.oddsUnder?g.oddsUnder.toFixed(4):'',
+        movimento:g.movement||'', score_previsto:g.predScore||'',
+        xg_total:xgt, btts_prob:g.bttsN!=null?g.bttsN.toFixed(0):'',
+        fonte:'auto-log', sharp_label:g.sharpLabel||'',
+        div:g.div?g.div.toFixed(1):'',
+        phase:getCurrentPhase(),
+        result_over25:'', golos_total:''
+      });
+      markSaved(g.id);
+      saved++;
+    }catch(e){}
+  }
+
+  if(saved>0){
+    const lines=candidatos.slice(0,saved).map(g=>
+      `${g.home} vs ${g.away} @${g.oddsOver?g.oddsOver.toFixed(2):'-'}`
+    );
+    sendTG(`🤖 AUTO-LOG: ${saved} candidatos\n${lines.join('\n')}`).catch(()=>{});
+  }
+  if(status) status.textContent=`Auto-log: ${saved} candidatos guardados`;
+}
+
+// ════════════════════════════════════════════════════════════════
 // DASHBOARD
 // ════════════════════════════════════════════════════════════════
 async function loadDash(){
@@ -1762,14 +1874,26 @@ async function loadDash(){
 function renderDash(){
   const res=p=>p.result_over25==='WIN'||p.result_over25==='LOSS';
   const onlyShort=document.getElementById('filterShortening')?.checked!==false;
-  // Só picks válidos: com casa, fora e data legível
+  // Só picks válidos: com casa, fora e data legível, filtro de fase
   const validPicks=allPicks.filter(p=>
     (p.casa||'').length>1 &&
     (p.fora||'').length>1 &&
     p.data && !isNaN(new Date(p.data)) &&
-    (!onlyShort || (p.movimento||'').toUpperCase()==='SHORTENING')
+    (!onlyShort || (p.movimento||'').toUpperCase()==='SHORTENING') &&
+    (dashPhase==='all' || (p.phase||'dev')===dashPhase)
   );
   const withR=validPicks.filter(res);
+
+  // N warning
+  const nWarn=el('nWarning');
+  if(nWarn){
+    if(withR.length<200){
+      nWarn.textContent=`N=${withR.length} picks — resultados estatisticamente inconclusivos (mínimo 200 para validar edge)`;
+      nWarn.style.display='block';
+    } else {
+      nWarn.style.display='none';
+    }
+  }
   const wins=withR.filter(p=>p.result_over25==='WIN');
   const roiAll=withR.reduce((s,p)=>{
     const o=parseFloat(p.odds_over||0);
@@ -1798,6 +1922,15 @@ function renderDash(){
   el('dStreak').textContent=streak||'—';
   el('dStreakSub').textContent=stType;
   el('dStreak').parentElement.style.borderTop=stType==='WIN'?'3px solid var(--green)':stType==='LOSS'?'3px solid var(--red)':'';
+
+  // CLV médio
+  const withCLV=validPicks.filter(p=>p.clv&&parseFloat(p.clv)!==0);
+  const clvAvg=withCLV.length?withCLV.reduce((s,p)=>s+parseFloat(p.clv||0),0)/withCLV.length:null;
+  if(el('dCLV')){
+    el('dCLV').textContent=clvAvg!=null?(clvAvg>=0?'+':'')+clvAvg.toFixed(1)+'%':'—';
+    if(clvAvg!=null) el('dCLV').style.color=clvAvg>0?'var(--green)':'var(--red)';
+    el('dCLVsub').textContent=withCLV.length?withCLV.length+' picks c/CLV':'sem dados ainda';
+  }
 
   // ROI curve
   // Curva ROI usa só picks com odds válidas
@@ -1914,6 +2047,23 @@ async function syncResults(){
         pick.resultado    = `${h}-${a}`;
         pick.golos_total  = String(total);
         pick.result_over25 = total>2.5?'WIN':'LOSS';
+
+        // CLV: busca odds pinnacle de fecho para calcular edge
+        if(!pick.odds_over_close){
+          try{
+            const pr=await get('/api/v2/odds/?event_id='+eventId+'&market=over_under_25&outcome=over&limit=30').catch(()=>null);
+            const pinnRow=pr?.results?.find?.(o=>o.bookmaker_slug==='pinnacle');
+            if(pinnRow){
+              const closingOdds=parseFloat(pinnRow.decimal_odds||0);
+              if(closingOdds>1.01){
+                pick.odds_over_close=String(closingOdds);
+                const entryOdds=parseFloat(pick.odds_over||0);
+                if(entryOdds>1.01) pick.clv=((entryOdds/closingOdds-1)*100).toFixed(2);
+              }
+            }
+          }catch(e){}
+        }
+
         updated++;
         status.textContent=`✅ ${updated}/${pending.length} — ${pick.casa} vs ${pick.fora}: ${h}-${a} → ${pick.result_over25}`;
       }catch(e){ notFound++; }
