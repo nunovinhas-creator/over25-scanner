@@ -1221,7 +1221,7 @@ function gameCard(g){
       ${isSaved(String(g.id))?'✅ Guardado':'📌 Guardar pick'}
     </button>
     <button class="btn-sm" style="background:var(--purple-l);border-color:var(--purple);color:var(--purple);width:100%;padding:8px"
-      onclick="reactAnalyzeGame('${g.id}','${g.date}','${esc(g.home)} vs ${esc(g.away)}')">
+      onclick="reactAnalyzeGame('${g.id}','${g.date}')">
       🧠 Análise ReAct
     </button>
   </div>`;
@@ -1739,19 +1739,24 @@ async function loadLive(){
     renderLive();
     startLiveCountdown();
 
-    // Agent C — alertas adaptativos via ReAct (picks em perigo)
+    // Agent C — alertas adaptativos via ReAct (picks em perigo, max 3 em paralelo)
     const pickGames=enriched.filter(e=>e.isPick);
-    for(const e of pickGames){
-      reactLiveAlert(e).then(result=>{
-        if(!result) return;
-        const c=result.state?._conclusion||result.conclusion;
-        if(c?.type==='WIN'){
-          const k='over_ok_'+e.id;
-          if(!localStorage.getItem(k)){
-            sendTG(c.msg||`🎯 OVER! ${e.home} ${e.hScore}-${e.aScore} ${e.away}`).then(ok=>{ if(ok) localStorage.setItem(k,'1'); });
+    // Processa em batches de 3 para não sobrecarregar a BSD API
+    for(let i=0;i<pickGames.length;i+=3){
+      const batch=pickGames.slice(i,i+3);
+      Promise.all(batch.map(e=>reactLiveAlert(e).catch(()=>null))).then(results=>{
+        results.forEach((result,ri)=>{
+          if(!result) return;
+          const e=batch[ri];
+          const c=result.conclusion;
+          if(c?.type==='WIN'){
+            const k='over_ok_'+e.id;
+            if(!localStorage.getItem(k)){
+              sendTG(c.msg||`🎯 OVER! ${e.home} ${e.hScore||0}-${e.aScore||0} ${e.away}`).then(ok=>{ if(ok) localStorage.setItem(k,'1'); });
+            }
           }
-        }
-      }).catch(()=>{});
+        });
+      });
     }
   }catch(err){
     el('liveList').innerHTML='<div class="empty">⚠ '+err.message+'</div>';
@@ -2220,8 +2225,10 @@ function updateReactModal(trace){
 // ════════════════════════════════════════════════════════════════
 // REACT AGENT A — Análise de jogo (Scanner)
 // ════════════════════════════════════════════════════════════════
-async function reactAnalyzeGame(eventId, eventDate, label) {
-  el('reactModalTitle').textContent='🧠 Análise: '+(label||eventId);
+async function reactAnalyzeGame(eventId, eventDate) {
+  const cached=allGames.find(g=>String(g.id)===String(eventId));
+  const label=cached?`${cached.home} vs ${cached.away}`:String(eventId);
+  el('reactModalTitle').textContent='🧠 Análise: '+label;
   el('reactModalSub').textContent='Thought → Action → Observation';
   el('reactTrace').innerHTML='<div class="rt-step rt-action"><span class="react-spinner"></span>A iniciar análise...</div>';
   el('reactModal').style.display='flex';
@@ -2370,7 +2377,7 @@ function syncAgentThink(state) {
           return `${fin} terminados → resultado disponível · ${run} ainda em curso · ${err} erros/não encontrados`;
         },
         update:results=>{
-          let updated=0;
+          let delta=0;
           results.forEach(r=>{
             if(!r.ev) return;
             const ev=r.ev;
@@ -2381,9 +2388,9 @@ function syncAgentThink(state) {
             state.picks[idx].resultado=`${h}-${a}`;
             state.picks[idx].golos_total=String(total);
             state.picks[idx].result_over25=total>2.5?'WIN':'LOSS';
-            updated++;
+            delta++;
           });
-          return {picks:state.picks,updated,fetched:true};
+          return {picks:state.picks,updated:(state.updated||0)+delta,fetched:true};
         }
       }
     };
@@ -2414,16 +2421,16 @@ function syncAgentThink(state) {
           return `CLV calculado: ${found}/${needCLV.length} · ${posClv} com CLV positivo (bateu closing line)`;
         },
         update:results=>{
-          let clvUpdated=0;
+          let delta=0;
           results.forEach(r=>{
             if(!r.closing||r.closing<=1.01) return;
             const idx=state.picks.findIndex(p=>String(p.id)===String(r.id));
             if(idx<0) return;
             state.picks[idx].odds_over_close=String(r.closing);
             const entry=parseFloat(state.picks[idx].odds_over||0);
-            if(entry>1.01){state.picks[idx].clv=((entry/r.closing-1)*100).toFixed(2);clvUpdated++;}
+            if(entry>1.01){state.picks[idx].clv=((entry/r.closing-1)*100).toFixed(2);delta++;}
           });
-          return {picks:state.picks,clvUpdated,clvDone:true};
+          return {picks:state.picks,clvUpdated:(state.clvUpdated||0)+delta,clvDone:true};
         }
       }
     };
