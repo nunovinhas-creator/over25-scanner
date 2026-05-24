@@ -131,6 +131,7 @@ svg.roi-svg{width:100%;height:100%}
     <button class="btn btn-a" onclick="loadData()">↻ Actualizar</button>
     <button class="btn btn-tg" onclick="sendDailyReport()">📱 Relatório TG</button>
     <button class="btn" onclick="sendDailyReport(true)">📊 Relatório completo</button>
+    <span id="autoRefreshLabel" style="font-family:'Space Mono',monospace;font-size:10px;color:var(--text3);align-self:center"></span>
   </div>
 
   <!-- KPIs -->
@@ -533,10 +534,21 @@ function getSampleData(){
 
 // ── Init ──────────────────────────────────────────────────
 loadCfg();
-// Carrega automaticamente com dados de amostra
-render();
-// Tenta carregar do Sheet em background
-setTimeout(loadData, 500);
+render(); // mostra dados de amostra imediatamente
+setTimeout(loadData, 400); // carrega do GitHub em background
+
+// Auto-refresh a cada 5 minutos com countdown
+let _arCountdown = 300;
+const _arLabel = document.getElementById('autoRefreshLabel');
+function _arTick(){
+  _arCountdown--;
+  if(_arLabel) _arLabel.textContent = 'auto ↻ '+_arCountdown+'s';
+  if(_arCountdown <= 0){
+    _arCountdown = 300;
+    loadData();
+  }
+}
+setInterval(_arTick, 1000);
 </script>
 </body>
 </html>

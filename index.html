@@ -390,6 +390,18 @@ select option{background:var(--bg3);color:var(--text)}
 .stab:hover{color:var(--text2)}
 .stab.active{color:var(--text);border-bottom-color:var(--green)}
 
+/* Live sections */
+.live-sec{font-family:var(--mono);font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin:14px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.live-sec.picks{color:var(--green)}
+.live-sec.watch{color:var(--text3)}
+.live-compact{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;margin-bottom:8px;display:flex;align-items:center;gap:10px;transition:border-color .15s}
+.live-compact:hover{border-color:var(--border2)}
+.lc-teams{flex:1;min-width:0}
+.lc-home{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lc-away{font-size:11px;color:var(--text2);margin-top:1px}
+.lc-score{font-size:22px;font-weight:800;letter-spacing:-1px;font-variant-numeric:tabular-nums;text-align:right;min-width:44px}
+.lc-meta{font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:2px;text-align:right}
+
 /* Dash cards */
 .dash-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:12px;margin-bottom:8px}
 .dash-card-title{font-family:var(--mono);font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
@@ -552,17 +564,25 @@ select option{background:var(--bg3);color:var(--text)}
 
 <!-- ══ LIVE PANEL ══ -->
 <div class="panel" id="panel-live">
-  <div class="stats-bar" style="margin-top:12px">
-    <div class="stat-card"><div class="stat-label">Ao vivo</div><div class="stat-val" id="lTotal" style="color:var(--red)">—</div></div>
-    <div class="stat-card"><div class="stat-label">Picks</div><div class="stat-val" id="lPicks" style="color:var(--green)">—</div></div>
-    <div class="stat-card"><div class="stat-label">Golos</div><div class="stat-val" id="lGolos">—</div></div>
-    <div class="stat-card"><div class="stat-label">Refresh</div><div class="stat-val" id="lTimer" style="color:var(--amber);font-size:18px">—</div></div>
-  </div>
-  <div class="filters">
-    <button class="fb active" onclick="setLiveFilter(this,'all')">Todos</button>
-    <button class="fb" onclick="setLiveFilter(this,'picks')">📌 Picks</button>
-    <button class="fb" onclick="setLiveFilter(this,'danger')">🔥 Perigo</button>
-    <button class="btn-sm" onclick="loadLive()" style="margin-left:auto">↻ Actualizar</button>
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;margin-bottom:12px;flex-wrap:wrap">
+    <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+      <div>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em">Ao vivo</div>
+        <div style="font-size:22px;font-weight:800;color:var(--red);font-variant-numeric:tabular-nums" id="lTotal">—</div>
+      </div>
+      <div>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em">Picks</div>
+        <div style="font-size:22px;font-weight:800;color:var(--green);font-variant-numeric:tabular-nums" id="lPicks">—</div>
+      </div>
+      <div>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em">Golos</div>
+        <div style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums" id="lGolos">—</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span style="font-family:var(--mono);font-size:11px;color:var(--amber)" id="lTimer">—</span>
+      <button class="btn-sm" onclick="loadLive()">↻</button>
+    </div>
   </div>
   <div id="liveList"><div class="empty">Abre esta tab para carregar jogos ao vivo</div></div>
 </div>
@@ -891,7 +911,7 @@ function switchTab(name){
   });
   if(name==='sharp') renderSharp();
   if(name==='live'&&!liveActive){ liveActive=true; loadLive(); }
-  if(name==='dash') loadDash();
+  if(name==='dash'){ loadDash(); setTimeout(()=>syncResults().catch(()=>{}),2000); }
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -1944,12 +1964,7 @@ function renderDash1x2(){
 // ════════════════════════════════════════════════════════════════
 let liveCountdown=30;
 
-function setLiveFilter(btn,f){
-  liveFilter=f;
-  document.querySelectorAll('#panel-live .fb').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderLive();
-}
+// setLiveFilter removido — live usa secções automáticas (Picks / Em Observação)
 
 async function loadLive(){
   el('liveList').innerHTML='<div class="loading"><div class="spinner"></div>A carregar jogos ao vivo...</div>';
@@ -2035,20 +2050,25 @@ function startLiveCountdown(){
 }
 
 function renderLive(){
-  let list=liveData.filter(e=>{
-    if(liveFilter==='picks') return e.isPick;
-    if(liveFilter==='danger') return e.isDanger;
-    return true;
-  }).sort((a,b)=>{
+  const picks=liveData.filter(e=>e.isPick).sort((a,b)=>{
     if(a.isDanger&&!b.isDanger) return -1;
     if(!a.isDanger&&b.isDanger) return 1;
-    if(a.isPick&&!b.isPick) return -1;
-    if(!a.isPick&&b.isPick) return 1;
     return b.min-a.min;
   });
+  const watching=liveData.filter(e=>!e.isPick).sort((a,b)=>b.min-a.min);
 
-  if(!list.length){el('liveList').innerHTML='<div class="empty">Nenhum jogo ao vivo com estes filtros.</div>';return;}
-  el('liveList').innerHTML=list.map(liveCard).join('');
+  if(!liveData.length){el('liveList').innerHTML='<div class="empty">Nenhum jogo ao vivo.</div>';return;}
+
+  let html='';
+  if(picks.length){
+    html+=`<div class="live-sec picks">📌 Picks Activos <span style="background:rgba(0,230,118,.12);color:var(--green);border-radius:3px;padding:1px 6px">${picks.length}</span></div>`;
+    html+=picks.map(e=>liveCard(e)).join('');
+  }
+  if(watching.length){
+    html+=`<div class="live-sec watch" style="margin-top:${picks.length?16:0}px">👁 Em Observação <span style="font-size:10px">${watching.length}</span></div>`;
+    html+=watching.map(e=>liveCardCompact(e)).join('');
+  }
+  el('liveList').innerHTML=html;
 }
 
 function liveCard(e){
@@ -2056,42 +2076,65 @@ function liveCard(e){
   const goalCol=e.goals>=3?'var(--green)':e.goals>=2?'var(--amber)':'var(--red)';
   const momPct=e.lastMom!=null?Math.round((e.lastMom+100)/2):50;
   const momCol=e.lastMom!=null?(e.lastMom>20?'var(--green)':e.lastMom<-20?'var(--red)':'var(--amber)'):'var(--border)';
-  const momTxt=e.lastMom!=null?(e.lastMom>20?'🏠 Casa domina':e.lastMom<-20?'✈️ Fora domina':'⚖️ Equilibrado'):'—';
+  const momTxt=e.lastMom!=null?(e.lastMom>20?'Casa domina':e.lastMom<-20?'Fora domina':'Equilibrado'):'—';
   const probCol=e.probLive!=null?(e.probLive>=60?'var(--green)':e.probLive>=45?'var(--amber)':'var(--red)'):'var(--text3)';
-  const cls=e.isDanger?'danger-card':e.isPick?'pick-card':'';
-
-  const badges=[];
-  if(e.isPick) badges.push('<span class="badge bg">📌 Pick</span>');
-  if(e.isDanger) badges.push('<span class="badge br">⚠️ Em perigo</span>');
-  if(e.goals>=3) badges.push('<span class="badge bg">🎯 OVER!</span>');
-  if(e.isWatch&&!e.isPick) badges.push('<span class="badge bb">👁 Watch</span>');
+  const cls=e.isDanger?'danger-card':'pick-card';
 
   return `<div class="live-card ${cls}">
     <div class="live-head">
-      <div>
-        <div class="live-teams">${e.home} vs ${e.away}</div>
-        <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:2px">
-          🏆 ${e.league} &nbsp;·&nbsp; <span class="min-badge">${e.min}'</span>
+      <div style="flex:1;min-width:0">
+        <div class="live-teams">${esc(e.home)} <span style="color:var(--text3)">vs</span> ${esc(e.away)}</div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:3px;display:flex;gap:6px;align-items:center">
+          <span class="min-badge">${e.min}'</span>
+          <span>${esc(e.league)}</span>
         </div>
-        <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px">${badges.join('')}</div>
       </div>
-      <div>
+      <div style="text-align:right;flex-shrink:0">
         <div class="live-score ${e.goals>=3?'over':''}">${e.hScore}-${e.aScore}</div>
-        <div style="font-family:var(--mono);font-size:10px;color:${goalCol};text-align:right">${e.goals}/3 golos</div>
+        <div style="font-family:var(--mono);font-size:10px;color:${goalCol};margin-top:2px">${e.goals}/3 golos</div>
       </div>
     </div>
     <div class="goal-bar"><div class="goal-fill" style="width:${goalPct}%;background:${goalCol}"></div></div>
     <div class="live-grid">
-      <div class="lg-item"><div class="lg-label">Prob Over ao vivo</div><div class="lg-val" style="color:${probCol}">${e.probLive!=null?e.probLive+'%':'—'}</div></div>
-      <div class="lg-item"><div class="lg-label">Odd Over actual</div><div class="lg-val">${e.overOdds?e.overOdds.toFixed(2):'—'}</div></div>
+      <div class="lg-item"><div class="lg-label">Prob Over</div><div class="lg-val" style="color:${probCol}">${e.probLive!=null?e.probLive+'%':'—'}</div></div>
+      <div class="lg-item"><div class="lg-label">Odd Over</div><div class="lg-val">${e.overOdds?e.overOdds.toFixed(2):'—'}</div></div>
       <div class="lg-item"><div class="lg-label">xG total</div><div class="lg-val" style="color:${e.xgTotal>=2.5?'var(--green)':e.xgTotal>=2?'var(--amber)':'var(--text)'}">${e.xgTotal?e.xgTotal.toFixed(2):'—'}</div></div>
       <div class="lg-item"><div class="lg-label">Remates c/f</div><div class="lg-val">${e.shots.h??'—'} / ${e.shots.a??'—'}</div></div>
     </div>
-    ${e.lastMom!=null?`<div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:8px margin-bottom:3px"><span>Momentum</span><span>${momTxt}</span></div><div class="mom-bar"><div class="mom-fill" style="width:${momPct}%;background:${momCol}"></div></div>`:''}
-    ${e.isDanger?`<div style="background:var(--red-l);border:1px solid var(--red);border-radius:6px;padding:8px 10px;font-size:12px;color:var(--red);margin-top:8px">⚠️ Precisa de <strong>${3-e.goals} gol(os)</strong> em <strong>${90-e.min} min</strong></div>`:''}
-    ${e.goals>=3?`<div style="background:var(--green-l);border:1px solid var(--green);border-radius:6px;padding:8px 10px;font-size:12px;color:var(--green);margin-top:8px">🎯 <strong>OVER 2.5 ENTROU!</strong> ${e.hScore}-${e.aScore} · ${e.goals} golos</div>`:''}
-    <button class="btn-pick${isSaved(e.id+'_live')?' saved':''}" data-eid="${e.id}" data-home="${e.home}" data-away="${e.away}" data-liga="${e.league}" data-golos="${e.goals}" data-min="${e.min}" onclick="saveLivePick(this)" style="margin-top:10px" ${isSaved(e.id+'_live')?'disabled':''}>
-      ${isSaved(e.id+'_live')?'✅ Registado':'📌 Registar pick'}</button>
+    ${e.lastMom!=null?`
+    <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:8px;margin-bottom:3px">
+      <span>Momentum</span><span style="color:${momCol}">${momTxt}</span>
+    </div>
+    <div class="mom-bar"><div class="mom-fill" style="width:${momPct}%;background:${momCol}"></div></div>`:''}
+    ${e.isDanger?`<div style="background:var(--red-l);border:1px solid rgba(255,83,112,.3);border-radius:6px;padding:8px 10px;font-size:12px;color:var(--red);margin-top:8px;font-weight:600">
+      ⚠️ Precisa de ${3-e.goals} gol(os) em ${90-e.min} min</div>`:''}
+    ${e.goals>=3?`<div style="background:rgba(0,230,118,.1);border:1px solid rgba(0,230,118,.3);border-radius:6px;padding:8px 10px;font-size:13px;color:var(--green);margin-top:8px;font-weight:700;text-align:center">
+      🎯 OVER 2.5 ENTROU! &nbsp;${e.hScore}-${e.aScore}</div>`:''}
+  </div>`;
+}
+
+function liveCardCompact(e){
+  const goalCol=e.goals>=3?'var(--green)':e.goals>=2?'var(--amber)':'var(--red)';
+  const goalPct=Math.min((e.goals/3)*100,100);
+  const probCol=e.probLive!=null?(e.probLive>=60?'var(--green)':e.probLive>=45?'var(--amber)':'var(--text3)'):'var(--text3)';
+  return `<div class="live-compact">
+    <div class="lc-teams">
+      <div class="lc-home">${esc(e.home)}</div>
+      <div class="lc-away">vs ${esc(e.away)}</div>
+      <div style="margin-top:5px;display:flex;gap:6px;align-items:center">
+        <span class="min-badge">${e.min}'</span>
+        ${e.probLive!=null?`<span style="font-family:var(--mono);font-size:10px;color:${probCol}">${e.probLive}%</span>`:''}
+        ${e.overOdds?`<span style="font-family:var(--mono);font-size:10px;color:var(--text3)">@${e.overOdds.toFixed(2)}</span>`:''}
+      </div>
+      <div style="margin-top:5px;height:3px;background:var(--border);border-radius:2px;overflow:hidden">
+        <div style="width:${goalPct}%;height:100%;background:${goalCol};border-radius:2px;transition:width .3s"></div>
+      </div>
+    </div>
+    <div>
+      <div class="lc-score" style="color:${e.goals>=3?'var(--green)':'var(--text)'}">${e.hScore}-${e.aScore}</div>
+      <div class="lc-meta">${e.goals}/3 golos</div>
+      ${e.isWatch?`<div style="font-family:var(--mono);font-size:9px;color:var(--blue);text-align:right;margin-top:3px">👁 watch</div>`:''}
+    </div>
   </div>`;
 }
 
