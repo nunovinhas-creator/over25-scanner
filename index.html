@@ -166,9 +166,10 @@ select{font-family:var(--sans);font-size:12px;padding:5px 10px;border-radius:6px
 
 <!-- ── Config ── -->
 <div class="cfg-bar">
-  <input type="password" id="bsdKey" placeholder="🔑 BSD API Key">
-  <input type="password" id="tgToken" placeholder="📱 TG Token">
-  <input type="text"     id="tgChat"  placeholder="Chat ID" style="max-width:110px">
+  <input type="password" id="bsdKey"   placeholder="🔑 BSD API Key">
+  <input type="password" id="ghToken"  placeholder="🐙 GitHub Token">
+  <input type="password" id="tgToken"  placeholder="📱 TG Token">
+  <input type="text"     id="tgChat"   placeholder="Chat ID" style="max-width:110px">
   <button class="btn-load" onclick="loadAll()">▶ Carregar</button>
   <button class="btn-tg"   onclick="testTG()">TG</button>
   <span class="ts-label" id="autoLabel">Auto: off</span>
@@ -186,8 +187,8 @@ select{font-family:var(--sans);font-size:12px;padding:5px 10px;border-radius:6px
 <div class="panel active" id="panel-scan">
   <div class="stats-bar" style="margin-top:12px">
     <div class="stat-card"><div class="stat-label">Jogos</div><div class="stat-val" id="sTotal">—</div></div>
-    <div class="stat-card"><div class="stat-label">Shortening</div><div class="stat-val" id="sHigh" style="color:var(--green)">—</div></div>
-    <div class="stat-card"><div class="stat-label">BTTS≥55</div><div class="stat-val" id="sSharp" style="color:var(--amber)">—</div></div>
+    <div class="stat-card"><div class="stat-label">Score≥50</div><div class="stat-val" id="sHigh" style="color:var(--green)">—</div></div>
+    <div class="stat-card"><div class="stat-label">Sharp</div><div class="stat-val" id="sSharp" style="color:var(--amber)">—</div></div>
     <div class="stat-card"><div class="stat-label">Odds méd.</div><div class="stat-val" id="sOdds">—</div></div>
   </div>
   <div class="filters">
@@ -344,10 +345,12 @@ select{font-family:var(--sans);font-size:12px;padding:5px 10px;border-radius:6px
 // ════════════════════════════════════════════════════════════════
 // CONSTANTES
 // ════════════════════════════════════════════════════════════════
-const BASE      = 'https://sports.bzzoiro.com';
-const SHEET_URL     = 'https://script.google.com/macros/s/AKfycbwpF9si-Yy1HEpPgbnGXB1ht-TY0W8OTo3NqmbPMk3zW2g_a4rBPkZt8JUk8o_Tt7WE/exec';
-// Sharp 1X2 usa o mesmo SHEET_URL — distingue por fonte=sharp_1x2
-const TH_MOVE   = 0.2;    // % movimento mínimo Pinnacle
+const BASE          = 'https://sports.bzzoiro.com';
+const REPO          = 'nunovinhas-creator/over25-scanner';
+const PICKS_FILE    = 'data/picks.json';
+const PICKS1X2_FILE = 'data/picks_1x2.json';
+const GH_API        = 'https://api.github.com';
+const TH_MOVE       = 0.2;    // % movimento mínimo Pinnacle
 const DIV_MIN   = 2.0;    // % divergência mínima Pin vs recreativas
 const DIV_STEAM = 8.0;    // % threshold STEAM
 const RECR = ['bet365','bwin','unibet','williamhill','betfair','onexbet','betway','marathonbet','1xbet','betclic','ladbrokes','coral','paddypower'];
@@ -374,12 +377,13 @@ async function get(path){
 }
 
 function saveCfg(){
-  try{ localStorage.setItem('ov_cfg',JSON.stringify({k:el('bsdKey').value,t:el('tgToken').value,c:el('tgChat').value})); }catch(e){}
+  try{ localStorage.setItem('ov_cfg',JSON.stringify({k:el('bsdKey').value,g:el('ghToken').value,t:el('tgToken').value,c:el('tgChat').value})); }catch(e){}
 }
 function loadCfg(){
   try{
     const c=JSON.parse(localStorage.getItem('ov_cfg')||'{}');
     if(c.k)el('bsdKey').value=c.k;
+    if(c.g)el('ghToken').value=c.g;
     if(c.t)el('tgToken').value=c.t;
     if(c.c)el('tgChat').value=c.c;
   }catch(e){}
@@ -399,34 +403,82 @@ async function sendTG(msg){
 
 function testTG(){ sendTG('✅ Over 2.5 Scout — teste OK!').then(ok=>alert(ok?'TG OK':'TG Erro')); }
 
-async function sheetSave(p){
-  // Método 1: JSONP — funciona em todos os browsers se GAS responder
-  const jsonpOk = await new Promise(res=>{
-    const cb='sv'+Date.now();
-    const s=document.createElement('script');
-    const timer=setTimeout(()=>{res(false);try{s.remove();delete window[cb];}catch(e){}},7000);
-    window[cb]=(d)=>{clearTimeout(timer);res(true);s.remove();delete window[cb];};
-    s.onerror=()=>{clearTimeout(timer);res(false);s.remove();delete window[cb];};
-    s.src=SHEET_URL+'?'+new URLSearchParams({...p,callback:cb}).toString();
-    document.head.appendChild(s);
-  });
-  if(jsonpOk) return;
+// ════════════════════════════════════════════════════════════════
+// GITHUB API — persistência de picks no repositório
+// ════════════════════════════════════════════════════════════════
+const _sha = {};  // cache de SHA por ficheiro
 
-  // Método 2: Image pixel — funciona no Firefox/desktop sem CORS
-  // O GAS recebe o GET mesmo sem resposta legível
-  await new Promise(res=>{
-    const img=new Image();
-    img.onload=img.onerror=()=>res();
-    img.src=SHEET_URL+'?'+new URLSearchParams({...p}).toString();
-    setTimeout(res,3000);
+function ghToken(){ return el('ghToken')?.value?.trim()||''; }
+
+// Encode/decode UTF-8 ↔ base64 (suporta caracteres acentuados)
+const toB64   = str => btoa(unescape(encodeURIComponent(str)));
+const fromB64 = b64 => decodeURIComponent(escape(atob(b64.replace(/\s/g,''))));
+
+// Escape HTML para prevenir XSS em templates com dados da API
+const esc = s => String(s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+async function ghRead(file){
+  const r = await fetch(`${GH_API}/repos/${REPO}/contents/${file}`,{
+    headers:{ 'Authorization':'token '+ghToken(), 'Accept':'application/vnd.github.v3+json' }
   });
-  // Aguarda o GAS processar
-  await new Promise(r=>setTimeout(r,800));
+  if(!r.ok) return {data:[],sha:null};
+  const resp = await r.json();
+  _sha[file] = resp.sha;
+  try{ return {data:JSON.parse(fromB64(resp.content)), sha:resp.sha}; }
+  catch(e){ return {data:[],sha:resp.sha}; }
 }
 
-// IDs já guardados — persiste entre recarregamentos
-function getSavedIds(){ try{return new Set(JSON.parse(localStorage.getItem('saved_picks')||'[]'));}catch(e){return new Set();} }
-function markSaved(id){ try{const s=getSavedIds();s.add(String(id));localStorage.setItem('saved_picks',JSON.stringify([...s]));}catch(e){} }
+async function ghWrite(file, data, message){
+  const tok = ghToken();
+  if(!tok) throw new Error('GitHub Token em falta — preenche o campo GH Token');
+  const content = toB64(JSON.stringify(data, null, 2));
+  const body = { message, content, ...(_sha[file]?{sha:_sha[file]}:{}) };
+  const r = await fetch(`${GH_API}/repos/${REPO}/contents/${file}`,{
+    method:'PUT',
+    headers:{ 'Authorization':'token '+tok, 'Content-Type':'application/json', 'Accept':'application/vnd.github.v3+json' },
+    body:JSON.stringify(body)
+  });
+  if(r.status===409){
+    // SHA desactualizado — relê e tenta de novo
+    await ghRead(file);
+    return ghWrite(file, data, message);
+  }
+  if(!r.ok){ const e=await r.json().catch(()=>({})); throw new Error(e.message||'HTTP '+r.status); }
+  const resp = await r.json();
+  _sha[file] = resp.content.sha;
+}
+
+async function picksGet(){
+  const {data} = await ghRead(PICKS_FILE);
+  return Array.isArray(data) ? data.map(normalizePick) : [];
+}
+
+async function picksSave(pick){
+  const {data:current} = await ghRead(PICKS_FILE);
+  const picks = Array.isArray(current) ? current : [];
+  const normId = id => String(id||'').replace(/_sh$/,'').replace(/_live$/,'').split('_')[0];
+  const pid = normId(pick.id);
+  const idx = picks.findIndex(p => normId(p.id)===pid || String(p.id)===String(pick.id));
+  if(idx>=0) picks[idx]={...picks[idx],...pick};
+  else picks.push({...pick, saved_at:new Date().toISOString()});
+  const label = pick.casa&&pick.fora ? `${pick.casa} vs ${pick.fora}` : String(pick.id);
+  await ghWrite(PICKS_FILE, picks, `pick: ${label}`);
+}
+
+async function picks1x2Save(pick){
+  const {data:current} = await ghRead(PICKS1X2_FILE);
+  const picks = Array.isArray(current) ? current : [];
+  const idx = picks.findIndex(p => String(p.id)===String(pick.id));
+  if(idx>=0) picks[idx]={...picks[idx],...pick};
+  else picks.push({...pick, saved_at:new Date().toISOString()});
+  const label = pick.casa&&pick.fora ? `${pick.casa} vs ${pick.fora}` : String(pick.id);
+  await ghWrite(PICKS1X2_FILE, picks, `pick 1x2: ${label}`);
+}
+
+// IDs já guardados — Set em memória, sincronizado com localStorage
+let _savedSet = null;
+function getSavedIds(){ if(!_savedSet) _savedSet=new Set(JSON.parse(localStorage.getItem('saved_picks')||'[]').map(String)); return _savedSet; }
+function markSaved(id){ getSavedIds().add(String(id)); try{localStorage.setItem('saved_picks',JSON.stringify([...getSavedIds()]));}catch(e){} }
 function isSaved(id){ return getSavedIds().has(String(id)); }
 function setBtnSaved(btn){ btn.textContent='✅ Guardado';btn.style.background='#00875a';btn.disabled=true; }
 function setBtnError(btn){ btn.textContent='❌ Erro — tenta de novo';btn.disabled=false;setTimeout(()=>{btn.textContent='📌 Guardar pick';btn.style.background='var(--green)';btn.disabled=false;},3000); }
@@ -487,21 +539,6 @@ function normalizePick(p){
   };
 }
 
-function sheetGet(){
-  return new Promise((res,rej)=>{
-    const cb='sg'+Date.now();
-    const s=document.createElement('script');
-    window[cb]=(d)=>{
-      const picks=Array.isArray(d)?d:[];
-      res(picks.map(normalizePick));
-      s.remove();delete window[cb];
-    };
-    s.onerror=()=>{res([]);s.remove();};
-    s.src=SHEET_URL+'?action=get_picks&callback='+cb;
-    document.head.appendChild(s);
-    setTimeout(()=>{res([]);try{s.remove();}catch(e){}},8000);
-  });
-}
 
 // ════════════════════════════════════════════════════════════════
 // TABS
@@ -742,7 +779,9 @@ async function loadAll(){
           const mdl  = pred?.model||{};
 
           const prob25 = ou.prob_over_25!=null ? (ou.prob_over_25>1?ou.prob_over_25/100:ou.prob_over_25) : null;
-          const bttsN  = btts.prob_yes!=null   ? (btts.prob_yes>1?btts.prob_yes:btts.prob_yes) : null;
+          // normaliza bttsN para 0-100 uma única vez
+          const bttsRaw = btts.prob_yes!=null ? btts.prob_yes : null;
+          const bttsN  = bttsRaw!=null ? (bttsRaw>1?bttsRaw:bttsRaw*100) : null;
           const xgH    = xg.home??null;
           const xgA    = xg.away??null;
 
@@ -887,13 +926,12 @@ function calcScore({prob25,bttsN,xgH,xgA,movement,div,sharpLabel,pinnNow,recrAvg
     else{s-=4;}
   }
 
-  // 3. BTTS
+  // 3. BTTS (bttsN já normalizado para 0-100)
   if(bttsN!=null){
-    const b=bttsN>1?bttsN:bttsN*100;
-    if(b>=70){s+=15;sig.push({t:'BTTS '+b.toFixed(0)+'%',c:'g'});}
-    else if(b>=60){s+=11;sig.push({t:'BTTS '+b.toFixed(0)+'%',c:'g'});}
-    else if(b>=50){s+=7;sig.push({t:'BTTS '+b.toFixed(0)+'%',c:'a'});}
-    else if(b>=40){s+=3;}
+    if(bttsN>=70){s+=15;sig.push({t:'BTTS '+bttsN.toFixed(0)+'%',c:'g'});}
+    else if(bttsN>=60){s+=11;sig.push({t:'BTTS '+bttsN.toFixed(0)+'%',c:'g'});}
+    else if(bttsN>=50){s+=7;sig.push({t:'BTTS '+bttsN.toFixed(0)+'%',c:'a'});}
+    else if(bttsN>=40){s+=3;}
     else{s-=2;}
   }
 
@@ -942,7 +980,7 @@ function setScanFilter(btn,f){
 function renderScan(){
   let list=allGames.filter(g=>{
     if(scanFilter==='short') return (g.movement||'').toUpperCase()==='SHORTENING';
-    if(scanFilter==='btts') return parseFloat(g.btts||0)>=55;
+    if(scanFilter==='btts') return (g.bttsN||0)>=55;
     return true;
   });
 
@@ -973,7 +1011,7 @@ function gameCard(g){
 
   const cardClass=(g.sharpLabel?'sharp-flag ':'')+( sc>=60?'high-score':'');
 
-  const sigs=g.signals.map(s=>`<span class="badge ${s.c==='g'?'bg':s.c==='r'?'br':s.c==='p'?'bp':'ba'}">${s.t}</span>`).join(' ');
+  const sigs=g.signals.map(s=>`<span class="badge ${s.c==='g'?'bg':s.c==='r'?'br':s.c==='p'?'bp':'ba'}">${esc(s.t)}</span>`).join(' ');
 
   // Sharp info
   const xgTotal=g.xgH!=null&&g.xgA!=null?(g.xgH+g.xgA).toFixed(2):null;
@@ -984,13 +1022,16 @@ function gameCard(g){
   const pinnMove=g.pinnPrev&&g.pinnNow?
     ((g.pinnPrev-g.pinnNow)/g.pinnPrev*100).toFixed(1):null;
 
+  // bttsN já normalizado 0-100
+  const bttsN = g.bttsN||0;
+
   return `<div class="game-card ${cardClass}" id="gc_${g.id}">
     <div class="card-head" onclick="toggleCard(${g.id})">
       <div class="card-teams">
-        <div class="card-home">${g.home}</div>
-        <div class="card-away">vs ${g.away}</div>
+        <div class="card-home">${esc(g.home)}</div>
+        <div class="card-away">vs ${esc(g.away)}</div>
         <div class="card-meta">
-          🏆 ${g.league} &nbsp;·&nbsp; 📅 ${ds} ${soon}
+          🏆 ${esc(g.league)} &nbsp;·&nbsp; 📅 ${ds} ${soon}
           ${xgTotal?`&nbsp;·&nbsp; <span style="color:var(--amber)">⚡ xG ${xgTotal}</span>`:''}
         </div>
         <div style="margin-top:5px;display:flex;align-items:center;gap:6px;flex-wrap:wrap">
@@ -998,16 +1039,14 @@ function gameCard(g){
             APOSTAR: Over 2.5
           </span>
           ${g.oddsOver?`<span style="font-family:var(--mono);font-size:12px;font-weight:700">@${g.oddsOver.toFixed(2)}</span>`:''}
-          ${g.sharpLabel?`<span class="badge bp">${g.sharpLabel==='STEAM'?'🔥':g.sharpLabel==='SHARP'?'🎯':'👁'} ${g.sharpLabel}</span>`:''}
+          ${g.sharpLabel?`<span class="badge bp">${g.sharpLabel==='STEAM'?'🔥':g.sharpLabel==='SHARP'?'🎯':'👁'} ${esc(g.sharpLabel)}</span>`:''}
           ${(()=>{
             const xgt=g.xgH!=null&&g.xgA!=null?g.xgH+g.xgA:0;
             const o=parseFloat(g.oddsOver||0);
-            const btts=parseFloat(g.btts||0);
             const mov=(g.movement||'').toUpperCase();
-            // Candidato APOSTAR: SHORTENING actual + BTTS>=55 + odds 1.5-3.0
-            // (critério final é avaliado pelo GAS 15min antes com drop acumulado)
-            const candidato = mov==='SHORTENING' && btts>=55 && o>=1.5 && o<=3.0;
-            // Critério base: xG>=2.0 + odds 2.0-3.0
+            // Candidato: SHORTENING + BTTS≥55 + odds 1.5-3.0
+            const candidato = mov==='SHORTENING' && bttsN>=55 && o>=1.5 && o<=3.0;
+            // Critério base: xG≥2.0 + odds 2.0-3.0
             const criterio = xgt>=2.0 && o>=2.0 && o<=3.0;
             if(candidato) return '<span class="badge bg" style="font-size:10px;padding:3px 8px;background:var(--green);color:#fff;font-weight:700">📌 CANDIDATO</span>';
             if(criterio) return '<span class="badge bg" style="font-size:10px;padding:3px 8px">⭐ CRITÉRIO</span>';
@@ -1038,11 +1077,11 @@ function gameCard(g){
         </div>
         <div class="cg-item">
           <div class="cg-label">Score previsto</div>
-          <div class="cg-val">${g.predScore||'—'}</div>
+          <div class="cg-val">${esc(g.predScore||'—')}</div>
         </div>
         <div class="cg-item">
           <div class="cg-label">BTTS</div>
-          <div class="cg-val" style="color:${g.bttsN>=0.55?'var(--green)':g.bttsN>=0.45?'var(--amber)':'var(--text)'}">${g.bttsN?(g.bttsN>1?g.bttsN:g.bttsN*100).toFixed(0)+'%':'—'}</div>
+          <div class="cg-val" style="color:${bttsN>=55?'var(--green)':bttsN>=45?'var(--amber)':'var(--text)'}">${bttsN>0?bttsN.toFixed(0)+'%':'—'}</div>
         </div>
         <div class="cg-item">
           <div class="cg-label">Confiança ML</div>
@@ -1107,15 +1146,17 @@ async function savePick(btn){
   try{
     const prob=g.prob25!=null?(g.prob25*100).toFixed(1):'';
     const xgt=g.xgH!=null&&g.xgA!=null?(g.xgH+g.xgA).toFixed(2):'';
-    const btts=g.bttsN!=null?(g.bttsN>1?g.bttsN:g.bttsN*100).toFixed(0):'';
-    await sheetSave({
-      action:'save_pick', id:String(g.id),
+    await picksSave({
+      id:String(g.id),
       casa:g.home, fora:g.away, liga:g.league||'',
       data:g.date, score_sistema:String(g.score||0),
-      prob_over25:prob, odds_over:g.oddsOver?String(g.oddsOver).replace(',','.').replace(/[^0-9.]/g,''):'', odds_under:g.oddsUnder?String(g.oddsUnder).replace(',','.').replace(/[^0-9.]/g,''):'',
+      prob_over25:prob,
+      odds_over:g.oddsOver?String(g.oddsOver).replace(',','.').replace(/[^0-9.]/g,''):'',
+      odds_under:g.oddsUnder?String(g.oddsUnder).replace(',','.').replace(/[^0-9.]/g,''):'',
       movimento:g.movement||'', score_previsto:g.predScore||'',
-      xg_total:xgt, btts_prob:btts, fonte:'scanner',
-      sharp_label:g.sharpLabel||'', div:g.div?g.div.toFixed(1):''
+      xg_total:xgt, btts_prob:g.bttsN!=null?g.bttsN.toFixed(0):'', fonte:'scanner',
+      sharp_label:g.sharpLabel||'', div:g.div?g.div.toFixed(1):'',
+      result_over25:'', golos_total:''
     });
     markSaved(id);
     setBtnSaved(btn);
@@ -1162,7 +1203,7 @@ function setSharpFilter(btn,f){
 
 function renderSharp(){
   if(!allSharp1x2.length){
-    el('sharpList').innerHTML='<div class="empty">Carrega o Scanner primeiro para ver sinais 1X2.</div>';
+    el('sharpList').innerHTML='<div class="empty" style="padding:30px"><p style="margin-bottom:12px">Sem dados carregados.</p><button class="btn-load" onclick="loadAll()" style="font-size:13px;padding:8px 20px">▶ Carregar dados</button></div>';
     return;
   }
   let list=allSharp1x2.filter(s=>{
@@ -1260,9 +1301,8 @@ async function saveSharpPick(btn){
   btn.textContent='⏳ A guardar...';btn.disabled=true;
   try{
     const sig=d.sig?JSON.parse(decodeURIComponent(d.sig||'{}')):null;
-    // Guardar no Sheet 1X2 (sheet Sharp1X2)
-    await sheetSave1x2({
-      action:'save_1x2',
+    // Guardar no picks_1x2.json via GitHub API
+    await picks1x2Save({
       id:saveId,
       data:d.date||new Date().toISOString(),
       casa:d.home||'', fora:d.away||'', liga:d.liga||'',
@@ -1299,27 +1339,6 @@ async function saveSharpPick(btn){
   }catch(e){ setBtnError(btn); }
 }
 
-// Guardar no sheet Sharp1X2 (via GAS, action=save_1x2)
-async function sheetSave1x2(params){
-  const tgId=el('tgChat')?.value?.trim()||'';
-  const url=SHEET_URL+'?'+Object.entries({...params, tg_chat:tgId})
-    .filter(([,v])=>v!==undefined&&v!=='')
-    .map(([k,v])=>k+'='+encodeURIComponent(v)).join('&');
-  // JSONP
-  return new Promise((res,rej)=>{
-    const cb='cb_1x2_'+Date.now();
-    const s=document.createElement('script');
-    window[cb]=d=>{delete window[cb];s.remove();d.error?rej(new Error(d.error)):res(d);};
-    s.src=url+'&callback='+cb;
-    s.onerror=()=>{delete window[cb];s.remove();
-      // fallback image pixel
-      new Image().src=url;
-      res({status:'pixel'});
-    };
-    document.head.appendChild(s);
-    setTimeout(()=>{if(window[cb]){delete window[cb];s.remove();res({status:'timeout'});}},8000);
-  });
-}
 
 // ════════════════════════════════════════════════════════════════
 // SHARP 1X2 — DASHBOARD
@@ -1327,17 +1346,8 @@ async function sheetSave1x2(params){
 
 async function loadDash1x2(){
   try{
-    const all = await new Promise((res)=>{
-      const cb='cb1x2_'+Date.now();
-      const s=document.createElement('script');
-      window[cb]=d=>{delete window[cb];s.remove();res(Array.isArray(d)?d:[]);};
-      s.src=SHEET_URL+'?action=get_picks_1x2&callback='+cb;
-      s.onerror=()=>{delete window[cb];s.remove();res([]);};
-      document.head.appendChild(s);
-      setTimeout(()=>{if(window[cb]){delete window[cb];s.remove();res([]);}},8000);
-    });
-    // Filtrar só picks do Sharp 1X2
-    sharp1x2Picks=all; // Sharp1X2 sheet só tem picks 1x2
+    const {data} = await ghRead(PICKS1X2_FILE);
+    sharp1x2Picks = Array.isArray(data) ? data : [];
     renderDash1x2();
   }catch(e){
     console.error('loadDash1x2',e);
@@ -1346,23 +1356,48 @@ async function loadDash1x2(){
 
 async function syncResults1x2(){
   const btn=el('btnSync1x2');
+  const st=el('syncStatus1x2');
   if(btn){btn.disabled=true;btn.textContent='⏳...';}
+  if(st){st.style.display='block';st.textContent='A carregar picks 1X2...';}
   try{
-    const result = await new Promise((res)=>{
-      const cb='sync1x2_'+Date.now();
-      const s=document.createElement('script');
-      window[cb]=d=>{delete window[cb];s.remove();res(d);};
-      s.src=SHEET_URL+'?action=sync&callback='+cb;
-      s.onerror=()=>{delete window[cb];s.remove();res({updated:0});};
-      document.head.appendChild(s);
-      setTimeout(()=>{if(window[cb]){delete window[cb];s.remove();res({updated:0});}},10000);
-    });
-    const st=el('syncStatus1x2');
-    if(st){
-      st.style.display='block';
-      st.textContent='Sync: '+(result.updated||0)+' resultado(s) actualizado(s)';
+    const {data:picks} = await ghRead(PICKS1X2_FILE);
+    if(!Array.isArray(picks)||!picks.length){
+      if(st) st.textContent='Sem picks 1X2 para sincronizar.';
+      return;
     }
-    await loadDash1x2();
+    const pending = picks.filter(p=>
+      p.id && (!p.resultado_outcome||p.resultado_outcome==='') &&
+      p.data && new Date(p.data)<new Date()
+    );
+    if(!pending.length){
+      if(st) st.textContent='✅ Todos os picks 1X2 já têm resultado!';
+      return;
+    }
+    if(st) st.textContent=`A verificar ${pending.length} picks na BSD...`;
+    let updated=0, notFound=0;
+    for(const pick of pending){
+      try{
+        const eventId = String(pick.id||'').replace('_sh','').split('_')[0];
+        if(!eventId||isNaN(parseInt(eventId))){ notFound++; continue; }
+        const ev = await get('/api/v2/events/'+eventId+'/').catch(()=>null);
+        if(!ev||( ev.status!=='finished'&&ev.period!=='FT')) continue;
+        const h=ev.home_score??0, a=ev.away_score??0;
+        const out=(pick.outcome||'').toUpperCase();
+        const won = out==='HOME'?(h>a):out==='AWAY'?(a>h):out==='DRAW'?(h===a):null;
+        if(won===null){ notFound++; continue; }
+        pick.resultado_jogo = `${h}-${a}`;
+        pick.resultado_outcome = won?'WIN':'LOSS';
+        updated++;
+        if(st) st.textContent=`✅ ${updated} actualizados... (${pick.casa} vs ${pick.fora}: ${h}-${a} → ${pick.resultado_outcome})`;
+      }catch(e){ notFound++; }
+    }
+    if(updated>0){
+      await ghWrite(PICKS1X2_FILE, picks, `sync 1x2: ${updated} resultados actualizados`);
+    }
+    if(st) st.textContent=`✅ Sync completo: ${updated} actualizados, ${notFound} não encontrados`;
+    if(updated>0) await loadDash1x2();
+  }catch(e){
+    if(st) st.textContent='❌ Erro: '+esc(e.message);
   }finally{
     if(btn){btn.disabled=false;btn.textContent='🔄 Sincronizar';}
   }
@@ -1565,7 +1600,7 @@ async function loadLive(){
   try{
     const [liveRes, picks] = await Promise.all([
       get('/api/v2/events/live/').catch(()=>({events:[]})),
-      sheetGet().catch(()=>[])
+      picksGet().catch(()=>[])
     ]);
     const events = liveRes.events||[];
 
@@ -1697,17 +1732,20 @@ function liveCard(e){
 
 async function saveLivePick(btn){
   const d=btn.dataset;
+  const liveId=String(d.eid||'live')+'_live';
+  if(isSaved(liveId)){setBtnSaved(btn);return;}
   btn.textContent='⏳ A guardar...';btn.disabled=true;
   try{
     const result=parseInt(d.golos||0)>=3?'WIN':'';
-    await sheetSave({action:'save_pick',id:(d.eid||'live')+Date.now(),
+    await picksSave({id:liveId,
       casa:d.home||'',fora:d.away||'',liga:d.liga||'',
       data:new Date().toISOString(),golos_total:d.golos||'0',
       result_over25:result,fonte:'live',score_sistema:'0'});
+    markSaved(liveId);
     btn.textContent=result==='WIN'?'✅ WIN guardado!':'✅ Registado!';
     btn.style.background=result==='WIN'?'#00875a':'var(--blue)';
     btn.disabled=true;
-  }catch(e){btn.textContent='❌ Erro';btn.disabled=false;setTimeout(()=>{btn.textContent='📌 Registar pick';btn.style.background='var(--green)';},3000);}
+  }catch(e){btn.textContent='❌ Erro: '+esc(e.message);btn.disabled=false;setTimeout(()=>{btn.textContent='📌 Registar pick';btn.style.background='var(--green)';},3000);}
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -1716,15 +1754,9 @@ async function saveLivePick(btn){
 async function loadDash(){
   el('picksBody').innerHTML='<div class="loading"><div class="spinner"></div></div>';
   try{
-    allPicks=await sheetGet();
-    // Debug temporário: mostrar odds dos primeiros picks
-    if(allPicks.length){
-      el('syncStatus').style.display='block';
-      const sample = allPicks.filter(p=>p.result_over25==='WIN'||p.result_over25==='LOSS').slice(0,3);
-      el('syncStatus').textContent = sample.map(p=>p.casa+' odds='+p.odds_over+' res='+p.result_over25).join(' | ');
-    }
+    allPicks=await picksGet();
     renderDash();
-  }catch(e){el('picksBody').innerHTML='<div class="empty">Erro ao carregar picks</div>';}
+  }catch(e){el('picksBody').innerHTML='<div class="empty">Erro ao carregar picks: '+esc(e.message)+'</div>';}
 }
 
 function renderDash(){
@@ -1842,14 +1874,20 @@ async function syncResults(){
   const status=document.getElementById('syncStatus');
   btn.textContent='⏳ A sincronizar...';btn.disabled=true;
   status.style.display='block';
-  status.textContent='A carregar picks sem resultado...';
+  status.textContent='A carregar picks...';
 
   try{
-    // 1. Buscar picks sem resultado do Sheet
-    const picks = await sheetGet();
+    // 1. Lê array completo do GitHub — 1 único request
+    const {data:picks} = await ghRead(PICKS_FILE);
+    if(!Array.isArray(picks)){
+      status.textContent='❌ Erro a ler picks.json';
+      btn.textContent='🔄 Sincronizar resultados';btn.disabled=false;
+      return;
+    }
+
     const pending = picks.filter(p=>
       p.id && (!p.result_over25||p.result_over25==='') &&
-      p.data && new Date(p.data) < new Date() // só jogos já passados
+      p.data && new Date(p.data) < new Date()
     );
 
     if(!pending.length){
@@ -1861,64 +1899,37 @@ async function syncResults(){
     status.textContent=`A verificar ${pending.length} picks na BSD...`;
     let updated=0, notFound=0;
 
-    // 2. Para cada pick sem resultado, buscar evento na BSD
+    // 2. Actualiza em memória — consulta BSD para cada pick pendente
     for(const pick of pending){
       try{
         const eventId = pick.id_base||String(pick.id).split('_')[0];
-        if(!eventId||isNaN(parseInt(eventId))) { notFound++; continue; }
+        if(!eventId||isNaN(parseInt(eventId))){ notFound++; continue; }
 
-        // Buscar evento na BSD
         const ev = await get('/api/v2/events/'+eventId+'/').catch(()=>null);
-        if(!ev) { notFound++; continue; }
+        if(!ev){ notFound++; continue; }
+        if(ev.status!=='finished'&&ev.period!=='FT') continue;
 
-        // Só processa jogos terminados
-        if(ev.status!=='finished'&&ev.period!=='FT'){ continue; }
-
-        const homeGoals = ev.home_score??0;
-        const awayGoals = ev.away_score??0;
-        const totalGoals = homeGoals + awayGoals;
-        const result = totalGoals>2.5?'WIN':'LOSS';
-        const scoreStr = homeGoals+'-'+awayGoals;
-
-        // 3. Actualizar no Sheet via JSONP
-        await sheetSave({
-          action:'save_pick',
-          id: pick.id,
-          casa: pick.casa||'',
-          fora: pick.fora||'',
-          liga: pick.liga||'',
-          data: pick.data||'',
-          score_sistema: pick.score_sistema||'0',
-          odds_over: pick.odds_over||'',
-          odds_under: pick.odds_under||'',
-          movimento: pick.movimento||'',
-          prob_over25: pick.prob_over25||'',
-          xg_total: pick.xg_total||'',
-          btts_prob: pick.btts_prob||'',
-          fonte: pick.fonte||'',
-          sharp_label: pick.sharp_label||'',
-          resultado: scoreStr,
-          golos_total: String(totalGoals),
-          result_over25: result
-        });
-
+        const h=ev.home_score??0, a=ev.away_score??0;
+        const total=h+a;
+        pick.resultado    = `${h}-${a}`;
+        pick.golos_total  = String(total);
+        pick.result_over25 = total>2.5?'WIN':'LOSS';
         updated++;
-        status.textContent=`✅ ${updated} actualizados de ${pending.length}... (${pick.casa} vs ${pick.fora}: ${scoreStr} → ${result})`;
-
-        // Pequena pausa para não sobrecarregar
-        await new Promise(r=>setTimeout(r,300));
-
+        status.textContent=`✅ ${updated}/${pending.length} — ${pick.casa} vs ${pick.fora}: ${h}-${a} → ${pick.result_over25}`;
       }catch(e){ notFound++; }
     }
 
-    status.textContent=`✅ Sincronização completa: ${updated} actualizados, ${notFound} não encontrados`;
-    btn.textContent='🔄 Sincronizar resultados';btn.disabled=false;
+    // 3. Um único write ao GitHub com todos os resultados actualizados
+    if(updated>0){
+      await ghWrite(PICKS_FILE, picks, `sync: ${updated} resultados actualizados`);
+    }
 
-    // Recarregar dashboard com novos dados
-    if(updated>0) setTimeout(loadDash, 1000);
+    status.textContent=`✅ Sync completo: ${updated} actualizados, ${notFound} não encontrados`;
+    btn.textContent='🔄 Sincronizar resultados';btn.disabled=false;
+    if(updated>0) setTimeout(loadDash, 500);
 
   }catch(e){
-    status.textContent='❌ Erro: '+e.message;
+    status.textContent='❌ Erro: '+esc(e.message);
     btn.textContent='🔄 Sincronizar resultados';btn.disabled=false;
   }
 }
