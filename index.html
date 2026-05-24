@@ -1278,10 +1278,12 @@ async function loadAll(){
     updateScanStats();
     renderScan();
 
-    // Auto-log Over 2.5 candidatos
+    // Auto-log Over 2.5 candidatos (score≥55)
     if(el('autoLogChk')?.checked) autoLogCandidatos().catch(()=>{});
     // Auto-log Sharp 1X2 — guarda todos os sinais automaticamente
     if(el('autoLogChk')?.checked) autoLogSharp1x2().catch(()=>{});
+    // Captura odds Pinnacle de fecho para picks próximos do KO (≤2h)
+    captureClosingOdds().catch(()=>{});
 
     // Actualizar stats Sharp
     el('sh1Total').textContent=allSharp1x2.length;
@@ -2423,7 +2425,7 @@ async function autoLogCandidatos(){
     const mov=(g.movement||'').toUpperCase();
     const bttsN=g.bttsN||0;
     const o=parseFloat(g.oddsOver||0);
-    return mov==='SHORTENING' && bttsN>=55 && o>=1.5 && o<=3.0 && !isSaved(String(g.id));
+    return g.score>=55 && mov==='SHORTENING' && bttsN>=55 && o>=1.5 && o<=3.0 && !isSaved(String(g.id));
   });
   if(!candidatos.length) return;
 
@@ -2461,6 +2463,44 @@ async function autoLogCandidatos(){
     sendTG(`🤖 AUTO-LOG: ${saved} candidatos\n${lines.join('\n')}`).catch(()=>{});
   }
   if(status) status.textContent=`Auto-log: ${saved} candidatos guardados`;
+}
+
+// ════════════════════════════════════════════════════════════════
+// CLOSING ODDS — captura Pinnacle ≤2h antes do KO para CLV real
+// ════════════════════════════════════════════════════════════════
+async function captureClosingOdds(){
+  if(!el('ghToken')?.value.trim()) return;
+  // Só corre se houver jogos a menos de 2h do KO no scanner actual
+  const nearKO=allGames.filter(g=>{
+    const h=Math.max(0,(new Date(g.date).getTime()-Date.now())/3600000);
+    return h<=2 && h>=0 && g.pinnNow>1.01;
+  });
+  if(!nearKO.length) return;
+
+  const {data:picks}=await ghRead(PICKS_FILE);
+  if(!Array.isArray(picks)||!picks.length) return;
+
+  let updated=0;
+  for(const pick of picks){
+    if(pick.odds_over_close) continue;
+    const baseId=String(pick.id).split('_')[0];
+    const game=nearKO.find(g=>String(g.id)===baseId);
+    if(!game) continue;
+
+    pick.odds_over_close=game.pinnNow.toFixed(4);
+    const entry=parseFloat(pick.odds_over||0);
+    if(entry>1.01){
+      // CLV = (entrada/fecho - 1) × 100 — positivo = entraste antes do mercado
+      pick.clv=((entry/game.pinnNow-1)*100).toFixed(2);
+    }
+    updated++;
+  }
+
+  if(updated>0){
+    await ghWrite(PICKS_FILE,picks,`close odds: ${updated} picks`);
+    // actualiza cache local
+    allPicks=picks;
+  }
 }
 
 // ════════════════════════════════════════════════════════════════
