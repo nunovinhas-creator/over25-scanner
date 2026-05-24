@@ -147,6 +147,25 @@ select{font-family:var(--sans);font-size:12px;padding:5px 10px;border-radius:6px
 .btn-sm:hover{background:var(--bg3)}
 .btn-sm.green{background:var(--green);color:#fff;border-color:var(--green)}
 .btn-sm.blue{background:var(--blue);color:#fff;border-color:var(--blue)}
+/* ── Proposal cards ── */
+.proposal-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--border2);display:flex;gap:10px;align-items:flex-start}
+.proposal-card.positive{border-left-color:var(--green)}
+.proposal-card.warning{border-left-color:var(--amber)}
+.proposal-card.info{border-left-color:var(--blue)}
+.proposal-card.critical{border-left-color:var(--red)}
+.proposal-icon{font-size:18px;line-height:1;flex-shrink:0;margin-top:1px}
+.proposal-body{}
+.proposal-title{font-size:13px;font-weight:700;margin-bottom:3px}
+.proposal-detail{font-family:var(--mono);font-size:11px;color:var(--text2);line-height:1.55}
+/* ── Report Modal ── */
+.report-modal{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:300;display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto}
+.report-modal-box{background:var(--bg2);border-radius:var(--rl);width:100%;max-width:560px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.3)}
+.report-modal-head{background:var(--text);color:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
+.report-section{padding:12px 16px;border-bottom:1px solid var(--border)}
+.report-kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+.report-kpi{background:var(--bg3);border-radius:6px;padding:8px 10px;text-align:center}
+.report-kpi-val{font-size:18px;font-weight:800;letter-spacing:-0.5px}
+.report-kpi-lbl{font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:2px}
 /* ── ReAct Trace Modal ── */
 .react-modal{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:300;display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto}
 .react-modal-box{background:var(--bg2);border-radius:var(--rl);width:100%;max-width:580px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.3)}
@@ -193,6 +212,7 @@ select{font-family:var(--sans);font-size:12px;padding:5px 10px;border-radius:6px
   <input type="password" id="ghToken"  placeholder="🐙 GitHub Token">
   <input type="password" id="tgToken"  placeholder="📱 TG Token">
   <input type="text"     id="tgChat"   placeholder="Chat ID" style="max-width:110px">
+  <input type="email"    id="emailTo"  placeholder="✉️ Email" style="max-width:170px">
   <button class="btn-load" onclick="loadAll()">▶ Carregar</button>
   <button class="btn-tg"   onclick="testTG()">TG</button>
   <button class="phase-btn active" id="phaseDevBtn" onclick="setCurrentPhase('dev')">DEV</button>
@@ -345,7 +365,8 @@ select{font-family:var(--sans);font-size:12px;padding:5px 10px;border-radius:6px
     <button class="btn-sm green" onclick="loadDash()">↻ Actualizar</button>
     <button class="btn-sm" onclick="syncResults()" id="btnSync">🔄 Sincronizar resultados</button>
     <button class="btn-sm" onclick="reactSync()" id="btnReactSync" style="background:var(--purple-l);border-color:var(--purple);color:var(--purple)">🧠 ReAct Sync</button>
-    <button class="btn-sm blue" onclick="sendDailyReport()">📱 Relatório TG</button>
+    <button class="btn-sm blue" onclick="openReportModal()">📊 Relatório</button>
+    <button class="btn-sm" onclick="sendEmailReport()" title="Abre cliente de email com relatório pré-preenchido">📧 Email</button>
     <label style="display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--text2);cursor:pointer;margin-left:4px">
       <input type="checkbox" id="filterShortening" checked onchange="renderDash()" style="accent-color:var(--green);width:14px;height:14px">
       Só SHORTENING
@@ -372,10 +393,36 @@ select{font-family:var(--sans);font-size:12px;padding:5px 10px;border-radius:6px
   </div>
   <div class="sec-title">Por filtro</div>
   <div class="bk-grid" id="bkGrid"></div>
+  <div class="sec-title" style="display:flex;justify-content:space-between;align-items:center">
+    <span>💡 Propostas de melhoria</span>
+    <span style="font-family:var(--mono);font-size:9px;color:var(--text3)" id="proposalsMeta"></span>
+  </div>
+  <div id="proposalsGrid" style="margin-bottom:12px"></div>
   <div class="sec-title">Picks recentes</div>
   <div class="picks-table">
     <div class="pt-head"><span>Data</span><span>Jogo</span><span>Odds</span><span>Mov</span><span>Result</span></div>
     <div id="picksBody"><div class="loading" style="padding:20px"><div class="spinner"></div></div></div>
+  </div>
+</div>
+
+<!-- ══ Report Modal ══ -->
+<div id="reportModal" class="report-modal" style="display:none" onclick="if(event.target===this)el('reportModal').style.display='none'">
+  <div class="report-modal-box">
+    <div class="report-modal-head">
+      <div>
+        <div style="font-weight:700;font-size:14px">📊 Relatório completo</div>
+        <div style="font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.4)" id="reportDate"></div>
+      </div>
+      <button onclick="el('reportModal').style.display='none'" style="background:transparent;border:none;color:rgba(255,255,255,.6);font-size:20px;cursor:pointer">✕</button>
+    </div>
+    <div id="reportContent" style="max-height:80vh;overflow-y:auto">
+      <div style="padding:20px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--text3)">A gerar relatório...</div>
+    </div>
+    <div style="padding:12px 16px;background:var(--bg3);display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn-sm blue" onclick="sendCompleteTG()" id="btnSendTG">📱 Enviar TG</button>
+      <button class="btn-sm" onclick="sendEmailReport()">📧 Abrir Email</button>
+      <button class="btn-sm" onclick="copyReportText()" id="btnCopyReport">📋 Copiar texto</button>
+    </div>
   </div>
 </div>
 
@@ -434,6 +481,7 @@ function saveCfg(){
   try{ localStorage.setItem('ov_cfg',JSON.stringify({
     k:el('bsdKey').value,g:el('ghToken').value,
     t:el('tgToken').value,c:el('tgChat').value,
+    e:el('emailTo')?.value||'',
     autoLog:el('autoLogChk')?.checked||false,
     phase:currentPhase
   })); }catch(e){}
@@ -445,6 +493,7 @@ function loadCfg(){
     if(c.g)el('ghToken').value=c.g;
     if(c.t)el('tgToken').value=c.t;
     if(c.c)el('tgChat').value=c.c;
+    if(c.e&&el('emailTo'))el('emailTo').value=c.e;
     if(c.autoLog&&el('autoLogChk')) el('autoLogChk').checked=c.autoLog;
     if(c.phase) setCurrentPhase(c.phase);
   }catch(e){}
@@ -1910,7 +1959,12 @@ async function autoLogCandidatos(){
 async function loadDash(){
   el('picksBody').innerHTML='<div class="loading"><div class="spinner"></div></div>';
   try{
-    allPicks=await picksGet();
+    const [picks, s1x2] = await Promise.all([
+      picksGet(),
+      sharp1x2Picks.length ? Promise.resolve({data:sharp1x2Picks}) : ghRead(PICKS1X2_FILE).catch(()=>({data:[]}))
+    ]);
+    allPicks = picks;
+    if(!sharp1x2Picks.length) sharp1x2Picks = Array.isArray(s1x2.data)?s1x2.data:[];
     renderDash();
   }catch(e){el('picksBody').innerHTML='<div class="empty">Erro ao carregar picks: '+esc(e.message)+'</div>';}
 }
@@ -2041,6 +2095,9 @@ function renderDash(){
       <span>${resBadge}</span>
     </div>`;
   }).join(''):'<div class="empty" style="padding:20px">Nenhum pick guardado ainda</div>';
+
+  // Propostas de melhoria (renderiza com dados já em memória)
+  renderProposals(generateProposals(calcOverStats(allPicks), calcSharpStats(sharp1x2Picks), allPicks));
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -2126,6 +2183,352 @@ async function syncResults(){
     status.textContent='❌ Erro: '+esc(e.message);
     btn.textContent='🔄 Sincronizar resultados';btn.disabled=false;
   }
+}
+
+// ════════════════════════════════════════════════════════════════
+// SISTEMA DE REPORT — TG + Email + Propostas de melhoria
+// ════════════════════════════════════════════════════════════════
+
+// ── Estatísticas partilhadas (Over 2.5) ──
+function calcOverStats(picks){
+  const res=p=>p.result_over25==='WIN'||p.result_over25==='LOSS';
+  const valid=picks.filter(p=>(p.casa||'').length>1&&p.data&&!isNaN(new Date(p.data)));
+  const withR=valid.filter(res);
+  const wins=withR.filter(p=>p.result_over25==='WIN');
+  const withO=withR.filter(p=>parseFloat(p.odds_over||0)>=1.01);
+  const profit=withO.reduce((s,p)=>s+(p.result_over25==='WIN'?parseFloat(p.odds_over)-1:-1),0);
+  const roi=withO.length?profit/withO.length*100:null;
+  const wr=withR.length?wins.length/withR.length*100:null;
+  const withCLV=withR.filter(p=>parseFloat(p.clv||0)!==0);
+  const clvAvg=withCLV.length?withCLV.reduce((s,p)=>s+parseFloat(p.clv),0)/withCLV.length:null;
+  const d7=new Date();d7.setDate(d7.getDate()-7);
+  const w7=withO.filter(p=>new Date(p.data)>=d7);
+  const roi7=w7.length?w7.reduce((s,p)=>s+(p.result_over25==='WIN'?parseFloat(p.odds_over)-1:-1),0)/w7.length*100:null;
+  const today=new Date().toDateString();
+  const todayR=withR.filter(p=>new Date(p.data).toDateString()===today);
+  const todayW=todayR.filter(p=>p.result_over25==='WIN');
+  const todayROI=todayR.length?todayR.filter(p=>parseFloat(p.odds_over||0)>=1.01).reduce((s,p)=>s+(p.result_over25==='WIN'?parseFloat(p.odds_over)-1:-1),0)/Math.max(todayR.filter(p=>parseFloat(p.odds_over||0)>=1.01).length,1)*100:null;
+  const sorted=[...withR].sort((a,b)=>new Date(b.data)-new Date(a.data));
+  let streak=0,stType='';
+  for(const p of sorted){if(!streak){stType=p.result_over25;streak=1;}else if(p.result_over25===stType)streak++;else break;}
+  return {n:withR.length,nTotal:valid.length,wins:wins.length,wr,roi,profit,clvAvg,clvN:withCLV.length,roi7,streak,stType,todayN:todayR.length,todayW:todayW.length,todayROI};
+}
+
+// ── Estatísticas partilhadas (Sharp 1X2) ──
+function calcSharpStats(picks){
+  const res=p=>p.resultado_outcome==='WIN'||p.resultado_outcome==='LOSS';
+  const withR=picks.filter(res);
+  const withO=withR.filter(p=>parseFloat(p.odds_entrada||0)>=1.01);
+  const profit=withO.reduce((s,p)=>s+(p.resultado_outcome==='WIN'?parseFloat(p.odds_entrada)-1:-1),0);
+  const roi=withO.length?profit/withO.length*100:null;
+  const wr=withO.length?withO.filter(p=>p.resultado_outcome==='WIN').length/withO.length*100:null;
+  const withCLV=withR.filter(p=>parseFloat(p.clv||0)!==0);
+  const clvAvg=withCLV.length?withCLV.reduce((s,p)=>s+parseFloat(p.clv),0)/withCLV.length:null;
+  const byLabel={};
+  ['STEAM','SHARP','WATCH'].forEach(lbl=>{
+    const g=withO.filter(p=>(p.label||'').toUpperCase()===lbl);
+    if(!g.length) return;
+    const gw=g.filter(p=>p.resultado_outcome==='WIN');
+    const gp=g.reduce((s,p)=>s+(p.resultado_outcome==='WIN'?parseFloat(p.odds_entrada)-1:-1),0);
+    byLabel[lbl]={n:g.length,wr:gw.length/g.length*100,roi:gp/g.length*100};
+  });
+  const d7=new Date();d7.setDate(d7.getDate()-7);
+  const w7=withO.filter(p=>new Date(p.data)>=d7);
+  const roi7=w7.length?w7.reduce((s,p)=>s+(p.resultado_outcome==='WIN'?parseFloat(p.odds_entrada)-1:-1),0)/w7.length*100:null;
+  return {n:withR.length,nTotal:picks.length,wins:withO.filter(p=>p.resultado_outcome==='WIN').length,wr,roi,profit,clvAvg,clvN:withCLV.length,byLabel,roi7};
+}
+
+// ── Motor de propostas ──
+function generateProposals(sOver, sSharp, picks){
+  const props=[];
+  const add=(type,icon,title,detail)=>props.push({type,icon,title,detail});
+
+  // 1. Amostra
+  if(sOver.n<30){
+    add('critical','🚧','Sem dados suficientes',`N=${sOver.n} picks resolvidos. São necessários mínimo 30 para qualquer análise. Erro padrão actual: ±${sOver.n?Math.round(100/Math.sqrt(sOver.n)):99}pp.`);
+  } else if(sOver.n<200){
+    add('warning','📏',`Amostra insuficiente para validar edge (N=${sOver.n})`,`Intervalo de confiança actual: ±${Math.round(100/Math.sqrt(sOver.n))}pp no WR. São precisos ≥200 picks. Continue a registar sem ajustar parâmetros.`);
+  } else {
+    add('positive','✅',`Amostra estatisticamente relevante (N=${sOver.n})`,`Com ${sOver.n} picks o intervalo de confiança é ±${Math.round(100/Math.sqrt(sOver.n))}pp — resultados interpretáveis com confiança.`);
+  }
+
+  // 2. CLV Over
+  if(sOver.clvN>=10){
+    if(sOver.clvAvg>1.5){
+      add('positive','📈','Edge confirmado via CLV (Over 2.5)',`CLV médio ${sOver.clvAvg>=0?'+':''}${sOver.clvAvg.toFixed(1)}% sobre ${sOver.clvN} picks. Está a entrar consistentemente antes do mercado fechar — edge genuíno.`);
+    } else if(sOver.clvAvg>0){
+      add('info','〰️','CLV marginalmente positivo (Over 2.5)',`CLV ${sOver.clvAvg.toFixed(1)}% — edge fraco. Pode ser ruído. Confirmar com mais amostra.`);
+    } else {
+      add('warning','⚠️','CLV negativo — entradas após o movimento (Over 2.5)',`CLV médio ${sOver.clvAvg.toFixed(1)}%. Está a entrar depois do mercado já ter reagido. Considere entrar mais cedo (ex: Scanner logo após loadAll).`);
+    }
+  } else if(sOver.n>=20){
+    add('info','🕐','CLV ainda sem dados suficientes',`Só ${sOver.clvN} picks têm CLV calculado. Active o "Sync ReAct" após os jogos terminarem para calcular CLV em todos.`);
+  }
+
+  // 3. CLV Sharp
+  if(sSharp.clvN>=5){
+    const c=sSharp.clvAvg;
+    if(c>2){
+      add('positive','🎯','Edge Sharp 1X2 confirmado via CLV',`CLV médio +${c.toFixed(1)}% — movimento Pinnacle genuinamente preditivo. Entradas antes do mercado fechar.`);
+    } else if(c<-1){
+      add('warning','⚡','CLV Sharp negativo — entrar antes do movimento principal',`CLV ${c.toFixed(1)}%. Entradas demasiado tarde. Explore sinais WATCH antes de se tornarem SHARP.`);
+    }
+  }
+
+  // 4. ROI vs WR — análise de odds
+  if(sOver.n>=20&&sOver.roi!==null){
+    const overOdds=picks.filter(p=>{const o=parseFloat(p.odds_over||0);return o>=2.5&&(p.result_over25==='WIN'||p.result_over25==='LOSS');});
+    const lowOdds=picks.filter(p=>{const o=parseFloat(p.odds_over||0);return o>=1.5&&o<2.0&&(p.result_over25==='WIN'||p.result_over25==='LOSS');});
+    if(overOdds.length>=5&&lowOdds.length>=5){
+      const calcR=arr=>{
+        const withO=arr.filter(p=>parseFloat(p.odds_over||0)>=1.01);
+        return withO.length?withO.reduce((s,p)=>s+(p.result_over25==='WIN'?parseFloat(p.odds_over)-1:-1),0)/withO.length*100:null;
+      };
+      const rHigh=calcR(overOdds), rLow=calcR(lowOdds);
+      if(rHigh!==null&&rLow!==null&&Math.abs(rHigh-rLow)>5){
+        const better=rHigh>rLow?'>2.5':'1.5-2.0';
+        add('info','💰',`Gama de odds "${better}" tem melhor ROI`,`Odds >2.5: ROI ${rHigh.toFixed(1)}% (N=${overOdds.length}) · Odds 1.5-2.0: ROI ${rLow.toFixed(1)}% (N=${lowOdds.length}). Foque na gama mais rentável.`);
+      }
+    }
+  }
+
+  // 5. Shortening vs não-Shortening
+  if(sOver.n>=15){
+    const shortPicks=picks.filter(p=>p.movimento==='SHORTENING'&&(p.result_over25==='WIN'||p.result_over25==='LOSS'));
+    const driftPicks=picks.filter(p=>p.movimento==='DRIFTING'&&(p.result_over25==='WIN'||p.result_over25==='LOSS'));
+    const calcR=arr=>{
+      const withO=arr.filter(p=>parseFloat(p.odds_over||0)>=1.01);
+      return withO.length>=3?withO.reduce((s,p)=>s+(p.result_over25==='WIN'?parseFloat(p.odds_over)-1:-1),0)/withO.length*100:null;
+    };
+    const rShort=calcR(shortPicks), rDrift=calcR(driftPicks);
+    if(rShort!==null&&rDrift!==null){
+      if(rShort>rDrift+8){
+        add('positive','↘️','SHORTENING validado como filtro superior',`SHORTENING ROI: ${rShort.toFixed(1)}% (N=${shortPicks.length}) vs DRIFTING: ${rDrift.toFixed(1)}% (N=${driftPicks.length}). Filtro "Só SHORTENING" confirma edge.`);
+      } else if(rDrift>rShort+5){
+        add('warning','↗️','DRIFTING a superar SHORTENING — rever hipótese',`DRIFTING ROI: ${rDrift.toFixed(1)}% vs SHORTENING: ${rShort.toFixed(1)}%. Odds a afastar podem indicar value em mercados com overround.`);
+      }
+    }
+  }
+
+  // 6. DEV vs LIVE
+  const devP=picks.filter(p=>(p.phase||'dev')==='dev'&&(p.result_over25==='WIN'||p.result_over25==='LOSS'));
+  const liveP=picks.filter(p=>p.phase==='live'&&(p.result_over25==='WIN'||p.result_over25==='LOSS'));
+  if(devP.length>=10&&liveP.length>=10){
+    const calcR=arr=>{
+      const withO=arr.filter(p=>parseFloat(p.odds_over||0)>=1.01);
+      return withO.length?withO.reduce((s,p)=>s+(p.result_over25==='WIN'?parseFloat(p.odds_over)-1:-1),0)/withO.length*100:null;
+    };
+    const rDev=calcR(devP), rLive=calcR(liveP);
+    if(rDev!==null&&rLive!==null){
+      const diff=rLive-rDev;
+      if(diff<-8){
+        add('warning','🔬','Degradação DEV→LIVE detectada',`DEV ROI: ${rDev.toFixed(1)}% (N=${devP.length}) → LIVE ROI: ${rLive.toFixed(1)}% (N=${liveP.length}). Diferença ${diff.toFixed(1)}pp — possível overfitting. Reveja critérios sem olhar para o histórico.`);
+      } else if(diff>-3){
+        add('positive','🚀','Edge sustentado fora da amostra (DEV→LIVE)',`DEV: ${rDev.toFixed(1)}% → LIVE: ${rLive.toFixed(1)}%. Degradação mínima — edge real, não overfitting.`);
+      }
+    }
+  } else if(liveP.length<5&&sOver.n>=20){
+    add('info','🏁','Active a fase LIVE para validação out-of-sample',`Tem ${devP.length} picks DEV mas apenas ${liveP.length} LIVE. A validação fora da amostra é o único teste real de edge. Mude para LIVE no config.`);
+  }
+
+  // 7. Sharp timing
+  if(sSharp.n>=10){
+    const steam=sSharp.byLabel['STEAM']||null;
+    const sharp=sSharp.byLabel['SHARP']||null;
+    const watch=sSharp.byLabel['WATCH']||null;
+    const best=[['STEAM',steam],['SHARP',sharp],['WATCH',watch]].filter(([,v])=>v&&v.n>=3).sort((a,b)=>(b[1].roi||0)-(a[1].roi||0));
+    if(best.length>=2){
+      const [b1Name,b1]= best[0], [b2Name,b2]=best[1];
+      if(b1.roi-b2.roi>8){
+        add('positive','🏷️',`Label "${b1Name}" tem melhor ROI Sharp`,`${b1Name}: ${b1.roi.toFixed(1)}% WR ${b1.wr.toFixed(0)}% (N=${b1.n}) vs ${b2Name}: ${b2.roi.toFixed(1)}%. Foque em "${b1Name}".`);
+      }
+    }
+  }
+
+  // 8. Auto-log desactivado
+  if(!el('autoLogChk')?.checked&&sOver.nTotal<10){
+    add('info','🤖','Active o Auto-log para eliminar selection bias',`Com save manual só guarda os jogos que "parecem bons" — o dataset fica enviesado. Auto-log regista todos os CANDIDATO automaticamente.`);
+  }
+
+  if(!props.length){
+    add('info','📊','Sem dados suficientes para propostas','Sincronize os resultados e aguarde mais picks resolvidos.');
+  }
+  return props;
+}
+
+function renderProposals(props){
+  if(!el('proposalsGrid')) return;
+  const typeColor={positive:'var(--green)',warning:'var(--amber)',info:'var(--blue)',critical:'var(--red)'};
+  el('proposalsGrid').innerHTML=props.map((p,i)=>`
+    <div class="proposal-card ${p.type}">
+      <div class="proposal-icon">${p.icon}</div>
+      <div class="proposal-body">
+        <div class="proposal-title" style="color:${typeColor[p.type]||'var(--text)'}">${esc(p.title)}</div>
+        <div class="proposal-detail">${esc(p.detail)}</div>
+      </div>
+    </div>`).join('');
+  if(el('proposalsMeta')) el('proposalsMeta').textContent=`${props.length} análises`;
+}
+
+// ── Formatação TG ──
+function buildTGReport(sOver, sSharp, props){
+  const fmt=v=>v!==null&&!isNaN(v)?(v>=0?'+':'')+v.toFixed(1)+'%':'—';
+  const fmtN=(v,n)=>v!==null&&!isNaN(v)?(v>=0?'+':'')+v.toFixed(1)+'% ('+n+')':'—';
+  const lines=[
+    `📊 <b>SCOUT REPORT — ${new Date().toLocaleDateString('pt-PT')}</b>`,
+    '',
+    `<b>📌 OVER 2.5</b> (N=${sOver.n} resolvidos)`,
+    `WR: ${sOver.wr?sOver.wr.toFixed(1)+'%':'—'} · ROI: ${fmt(sOver.roi)} · CLV: ${fmt(sOver.clvAvg)}`,
+    `7d: ${fmt(sOver.roi7)} · Hoje: ${sOver.todayN?sOver.todayW+'/'+sOver.todayN+' ('+fmt(sOver.todayROI)+')':'—'}`,
+    `Série: ${sOver.streak||0}×${sOver.stType||'—'}`,
+  ];
+  if(sSharp.n>0){
+    lines.push('');
+    lines.push(`<b>🎯 SHARP 1X2</b> (N=${sSharp.n} resolvidos)`);
+    lines.push(`WR: ${sSharp.wr?sSharp.wr.toFixed(1)+'%':'—'} · ROI: ${fmt(sSharp.roi)} · CLV: ${fmt(sSharp.clvAvg)}`);
+    lines.push(`7d: ${fmt(sSharp.roi7)}`);
+    const byL=Object.entries(sSharp.byLabel).map(([k,v])=>`${k}: ${v.roi.toFixed(0)}%`).join(' · ');
+    if(byL) lines.push(byL);
+  }
+  const urgent=props.filter(p=>p.type==='critical'||p.type==='warning');
+  if(urgent.length){
+    lines.push('');
+    lines.push('<b>💡 Propostas</b>');
+    urgent.slice(0,3).forEach((p,i)=>lines.push(`${i+1}. ${p.icon} ${p.title}`));
+  }
+  return lines.join('\n');
+}
+
+// ── Formatação Email (texto puro) ──
+function buildEmailBody(sOver, sSharp, props){
+  const fmt=v=>v!==null&&!isNaN(v)?(v>=0?'+':'')+v.toFixed(1)+'%':'—';
+  const SEP='━━━━━━━━━━━━━━━━━━━━';
+  const lines=[
+    'OVER 2.5 SCOUT — RELATÓRIO',
+    `Data: ${new Date().toLocaleDateString('pt-PT')} ${new Date().toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'})}`,
+    SEP,
+    'MODELO OVER 2.5',
+    `Picks resolvidos: ${sOver.n}`,
+    `Win Rate: ${sOver.wr?sOver.wr.toFixed(1)+'%':'—'}`,
+    `ROI global: ${fmt(sOver.roi)}  (lucro: ${sOver.profit>=0?'+':''}${sOver.profit.toFixed(2)} unidades)`,
+    `ROI 7 dias: ${fmt(sOver.roi7)}`,
+    `CLV médio: ${fmt(sOver.clvAvg)} (${sOver.clvN} picks c/CLV)`,
+    `Série actual: ${sOver.streak||0}× ${sOver.stType||'—'}`,
+    `Hoje: ${sOver.todayN?sOver.todayW+'W/'+sOver.todayN+' · ROI '+fmt(sOver.todayROI):'sem resultados'}`,
+  ];
+  if(sSharp.n>0){
+    lines.push('');
+    lines.push(SEP);
+    lines.push('MODELO SHARP 1X2');
+    lines.push(`Picks resolvidos: ${sSharp.n}`);
+    lines.push(`Win Rate: ${sSharp.wr?sSharp.wr.toFixed(1)+'%':'—'}`);
+    lines.push(`ROI global: ${fmt(sSharp.roi)}`);
+    lines.push(`ROI 7 dias: ${fmt(sSharp.roi7)}`);
+    lines.push(`CLV médio: ${fmt(sSharp.clvAvg)}`);
+    Object.entries(sSharp.byLabel).forEach(([k,v])=>{
+      lines.push(`  ${k}: WR ${v.wr.toFixed(0)}% · ROI ${v.roi.toFixed(1)}% (N=${v.n})`);
+    });
+  }
+  if(props.length){
+    lines.push('');
+    lines.push(SEP);
+    lines.push('PROPOSTAS DE MELHORIA');
+    props.forEach((p,i)=>lines.push(`${i+1}. [${p.type.toUpperCase()}] ${p.title}\n   ${p.detail}`));
+  }
+  lines.push('');lines.push(SEP);
+  lines.push('Gerado por Over 2.5 Scout');
+  return lines.join('\n');
+}
+
+// ── Report Modal ──
+async function openReportModal(){
+  el('reportModal').style.display='flex';
+  el('reportDate').textContent=new Date().toLocaleString('pt-PT');
+  el('reportContent').innerHTML='<div style="padding:20px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--text3)"><div class="spinner" style="margin:0 auto 10px"></div>A calcular...</div>';
+
+  // Garantir que sharp1x2Picks está carregado
+  if(!sharp1x2Picks.length){
+    try{ const {data}=await ghRead(PICKS1X2_FILE); sharp1x2Picks=Array.isArray(data)?data:sharp1x2Picks; }catch(e){}
+  }
+
+  const sOver=calcOverStats(allPicks);
+  const sSharp=calcSharpStats(sharp1x2Picks);
+  const props=generateProposals(sOver,sSharp,allPicks);
+
+  // Guardar para uso dos botões de envio
+  window._reportCache={sOver,sSharp,props};
+
+  const fmt=v=>v!==null&&!isNaN(v)?(parseFloat(v)>=0?'+':'')+parseFloat(v).toFixed(1)+'%':'—';
+  const col=v=>parseFloat(v)>=0?'var(--green)':'var(--red)';
+  const typeColor={positive:'var(--green)',warning:'var(--amber)',info:'var(--blue)',critical:'var(--red)'};
+  const typeIcon={positive:'✅',warning:'⚠️',info:'ℹ️',critical:'🚨'};
+
+  el('reportContent').innerHTML=`
+    <div class="report-section">
+      <div style="font-family:var(--mono);font-size:9px;color:var(--text3);text-transform:uppercase;margin-bottom:10px">📌 Over 2.5 · N=${sOver.n} resolvidos</div>
+      <div class="report-kpi-row">
+        <div class="report-kpi"><div class="report-kpi-val" style="color:${sOver.wr?col(sOver.wr-55):'var(--text)'}">${sOver.wr?sOver.wr.toFixed(1)+'%':'—'}</div><div class="report-kpi-lbl">Win Rate</div></div>
+        <div class="report-kpi"><div class="report-kpi-val" style="color:${sOver.roi!==null?col(sOver.roi):'var(--text)'}">${fmt(sOver.roi)}</div><div class="report-kpi-lbl">ROI global</div></div>
+        <div class="report-kpi"><div class="report-kpi-val" style="color:${sOver.clvAvg!==null?col(sOver.clvAvg):'var(--text)'}">${fmt(sOver.clvAvg)}</div><div class="report-kpi-lbl">CLV médio</div></div>
+        <div class="report-kpi"><div class="report-kpi-val">${fmt(sOver.roi7)}</div><div class="report-kpi-lbl">ROI 7 dias</div></div>
+        <div class="report-kpi"><div class="report-kpi-val" style="color:${sOver.stType==='WIN'?'var(--green)':'var(--red)'}">${sOver.streak||0}×</div><div class="report-kpi-lbl">Série ${sOver.stType||''}</div></div>
+        <div class="report-kpi"><div class="report-kpi-val">${sOver.todayN?sOver.todayW+'/'+sOver.todayN:'—'}</div><div class="report-kpi-lbl">Hoje W/L</div></div>
+      </div>
+    </div>
+    ${sSharp.n>0?`
+    <div class="report-section">
+      <div style="font-family:var(--mono);font-size:9px;color:var(--text3);text-transform:uppercase;margin-bottom:10px">🎯 Sharp 1X2 · N=${sSharp.n} resolvidos</div>
+      <div class="report-kpi-row">
+        <div class="report-kpi"><div class="report-kpi-val" style="color:${sSharp.wr?col(sSharp.wr-52):'var(--text)'}">${sSharp.wr?sSharp.wr.toFixed(1)+'%':'—'}</div><div class="report-kpi-lbl">Win Rate</div></div>
+        <div class="report-kpi"><div class="report-kpi-val" style="color:${sSharp.roi!==null?col(sSharp.roi):'var(--text)'}">${fmt(sSharp.roi)}</div><div class="report-kpi-lbl">ROI global</div></div>
+        <div class="report-kpi"><div class="report-kpi-val" style="color:${sSharp.clvAvg!==null?col(sSharp.clvAvg):'var(--text)'}">${fmt(sSharp.clvAvg)}</div><div class="report-kpi-lbl">CLV médio</div></div>
+        ${Object.entries(sSharp.byLabel).map(([k,v])=>`<div class="report-kpi"><div class="report-kpi-val" style="color:${col(v.roi)}">${v.roi.toFixed(0)}%</div><div class="report-kpi-lbl">${k} ROI</div></div>`).join('')}
+      </div>
+    </div>`:''}
+    <div class="report-section">
+      <div style="font-family:var(--mono);font-size:9px;color:var(--text3);text-transform:uppercase;margin-bottom:10px">💡 Propostas de melhoria (${props.length})</div>
+      ${props.map(p=>`<div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+        <div style="font-size:16px;flex-shrink:0">${p.icon}</div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:${typeColor[p.type]||'var(--text)'};">${esc(p.title)}</div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--text2);margin-top:2px;line-height:1.5">${esc(p.detail)}</div>
+        </div>
+      </div>`).join('')}
+    </div>
+  `;
+
+  // Actualizar secção de propostas no dashboard também
+  renderProposals(props);
+}
+
+async function sendCompleteTG(){
+  const btn=el('btnSendTG');
+  if(btn){btn.disabled=true;btn.textContent='⏳...';}
+  const {sOver,sSharp,props}=window._reportCache||{sOver:calcOverStats(allPicks),sSharp:calcSharpStats(sharp1x2Picks),props:[]};
+  const msg=buildTGReport(sOver,sSharp,props);
+  const ok=await sendTG(msg);
+  if(btn){btn.disabled=false;btn.textContent=ok?'✅ Enviado!':'❌ Erro TG';}
+  setTimeout(()=>{if(btn)btn.textContent='📱 Enviar TG';},2500);
+}
+
+function sendEmailReport(){
+  const {sOver,sSharp,props}=window._reportCache||{sOver:calcOverStats(allPicks),sSharp:calcSharpStats(sharp1x2Picks),props:generateProposals(calcOverStats(allPicks),calcSharpStats(sharp1x2Picks),allPicks)};
+  const to=el('emailTo')?.value?.trim()||'';
+  const subject=encodeURIComponent(`Over 2.5 Scout — Relatório ${new Date().toLocaleDateString('pt-PT')}`);
+  const body=encodeURIComponent(buildEmailBody(sOver,sSharp,props));
+  // mailto tem limite de ~2000 chars no body; truncar se necessário
+  const maxBody=1800;
+  const bodyShort=body.length>maxBody?encodeURIComponent(buildEmailBody(sOver,sSharp,[]).substring(0,1500)+'...\n\n[Relatório truncado — ver app para propostas completas]'):body;
+  window.open(`mailto:${to}?subject=${subject}&body=${bodyShort}`,'_blank');
+}
+
+function copyReportText(){
+  const {sOver,sSharp,props}=window._reportCache||{sOver:calcOverStats(allPicks),sSharp:calcSharpStats(sharp1x2Picks),props:[]};
+  const text=buildEmailBody(sOver,sSharp,props);
+  navigator.clipboard?.writeText(text).then(()=>{
+    const btn=el('btnCopyReport');
+    if(btn){btn.textContent='✅ Copiado!';setTimeout(()=>btn.textContent='📋 Copiar texto',2000);}
+  }).catch(()=>alert('Não foi possível copiar — tente manualmente'));
 }
 
 async function sendDailyReport(){
