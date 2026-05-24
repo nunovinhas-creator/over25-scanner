@@ -653,6 +653,10 @@ select option{background:var(--bg3);color:var(--text)}
   <div id="obsGrid" style="margin-bottom:12px">
     <div class="empty" style="padding:14px">Sem observações ainda. Abre o módulo Live para começar a registar.</div>
   </div>
+  <div class="sec-title">🔗 Confluência de ferramentas</div>
+  <div id="confluenceGrid" style="margin-bottom:12px">
+    <div class="empty" style="padding:14px">Acumula picks com os novos campos para ver análise de confluência.</div>
+  </div>
   <div class="sec-title">Picks recentes</div>
   <div class="picks-table">
     <div class="pt-head"><span>Data</span><span>Jogo</span><span>Odds</span><span>Mov</span><span>Result</span></div>
@@ -951,6 +955,10 @@ function normalizePick(p){
     phase:        raw.phase||'',
     odds_over_close: raw.odds_over_close||'',
     clv:          raw.clv||'',
+    has_sharp:    raw.has_sharp||'',
+    sharp_co_label: raw.sharp_co_label||'',
+    score_band:   raw.score_band||'',
+    odds_band:    raw.odds_band||'',
   };
 }
 
@@ -2437,6 +2445,11 @@ async function autoLogCandidatos(){
     try{
       const prob=g.prob25!=null?(g.prob25*100).toFixed(1):'';
       const xgt=g.xgH!=null&&g.xgA!=null?(g.xgH+g.xgA).toFixed(2):'';
+      // Confluência: verifica se há sinal Sharp 1X2 para o mesmo jogo
+      const sharpSig=allSharp1x2.find(s=>s.id===g.id);
+      const scoreBand=g.score>=75?'75+':g.score>=65?'65-75':'55-65';
+      const ov=parseFloat(g.oddsOver||0);
+      const oddsBand=ov>=2.50?'2.50+':ov>=2.10?'2.10-2.50':ov>=1.80?'1.80-2.10':'1.50-1.80';
       await picksSave({
         id:String(g.id),
         casa:g.home, fora:g.away, liga:g.league||'',
@@ -2449,7 +2462,11 @@ async function autoLogCandidatos(){
         fonte:'auto-log', sharp_label:g.sharpLabel||'',
         div:g.div?g.div.toFixed(1):'',
         phase:getCurrentPhase(),
-        result_over25:'', golos_total:''
+        result_over25:'', golos_total:'',
+        has_sharp:   sharpSig?'1':'',
+        sharp_co_label: sharpSig?(sharpSig.label||'')+(sharpSig.sigs?.[0]?.out?' '+sharpSig.sigs[0].out:''):'',
+        score_band:  scoreBand,
+        odds_band:   oddsBand,
       });
       markSaved(g.id);
       saved++;
@@ -2532,11 +2549,16 @@ async function autoLogObservations(){
   const now = new Date().toISOString();
   const newObs = toSave.map(e=>{
     const obsId = `${e.id}_obs_${Date.now()}`;
-    // marca em localStorage para não guardar de novo no próximo refresh
     localStorage.setItem(LS_PREFIX+e.id, obsId);
+    // Confluência: verifica pick pre-game e sinal sharp para este jogo
+    const baseId=String(e.id);
+    const hasScanPick=isSaved(baseId)||allPicks.some(p=>String(p.id).split('_')[0]===baseId)?'1':'';
+    const scanPick=allPicks.find(p=>String(p.id).split('_')[0]===baseId);
+    const scanGame=allGames.find(g=>String(g.id)===baseId);
+    const hasScanSharp=allSharp1x2.some(s=>String(s.id)===baseId)?'1':'';
     return {
       id:         obsId,
-      event_id:   String(e.id),
+      event_id:   baseId,
       casa:       e.home,  fora: e.away,  liga: e.league,
       data:       new Date().toISOString().slice(0,10),
       detected_at: now,
@@ -2549,6 +2571,9 @@ async function autoLogObservations(){
       pattern_score: e.patternScore||0,
       patterns:   (e.patterns||[]).map(p=>p.id),
       pattern_labels: (e.patterns||[]).map(p=>p.emoji+' '+p.label),
+      has_scan_pick: hasScanPick,
+      scan_score:    scanPick?.score_sistema||scanGame?.score?.toString()||'',
+      has_sharp:     hasScanSharp,
       result_over25: '',
       final_score:   '',
       result_at_min: ''
@@ -2831,6 +2856,7 @@ function renderDash(){
 
   // Propostas de melhoria (renderiza com dados já em memória)
   renderProposals(generateProposals(calcOverStats(allPicks), calcSharpStats(sharp1x2Picks), allPicks));
+  renderConfluence();
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -3087,6 +3113,89 @@ function generateProposals(sOver, sSharp, picks){
     add('info','📊','Sem dados suficientes para propostas','Sincronize os resultados e aguarde mais picks resolvidos.');
   }
   return props;
+}
+
+function renderConfluence(){
+  const c=el('confluenceGrid'); if(!c) return;
+  const res=p=>p.result_over25==='WIN'||p.result_over25==='LOSS';
+  const resolved=allPicks.filter(res);
+
+  function stats(arr){
+    if(!arr.length) return null;
+    const wins=arr.filter(p=>p.result_over25==='WIN').length;
+    const wr=wins/arr.length*100;
+    const profit=arr.reduce((s,p)=>{
+      const o=parseFloat(p.odds_over||0);
+      return s+(o>=1.01?(p.result_over25==='WIN'?o-1:-1):0);
+    },0);
+    const roi=profit/arr.length*100;
+    return {n:arr.length,wins,wr,roi};
+  }
+
+  function card(label,desc,s,highlight){
+    if(!s) return '';
+    const roiCol=s.roi>5?'var(--green)':s.roi>-5?'var(--amber)':'var(--red)';
+    const border=highlight?`border-color:${roiCol};`:'';
+    return `<div class="bk-card" style="${border}">
+      <div class="bk-name">${label}</div>
+      <div style="font-size:10px;color:var(--text3);margin-bottom:6px">${desc}</div>
+      <div class="bk-wr">${s.wr.toFixed(0)}%</div>
+      <div class="bk-roi" style="color:${roiCol}">${s.roi>=0?'+':''}${s.roi.toFixed(1)}% ROI</div>
+      <div class="bk-n">N=${s.n} · ${s.wins}W/${s.n-s.wins}L</div>
+    </div>`;
+  }
+
+  let html='';
+
+  // Combinações Over + Sharp
+  const hasConf=resolved.some(p=>p.has_sharp!==undefined&&p.has_sharp!=='undefined');
+  if(hasConf){
+    const onlyOver=resolved.filter(p=>!p.has_sharp);
+    const withSharp=resolved.filter(p=>p.has_sharp==='1');
+    const withSteam=resolved.filter(p=>(p.sharp_co_label||'').startsWith('STEAM'));
+    html+=`<div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:8px">Combinação de sinais</div>
+    <div class="bk-grid">
+      ${card('Over only','Sem sinal Sharp 1X2',stats(onlyOver),false)}
+      ${card('Over + Sharp','Com sinal Sharp 1X2',stats(withSharp),true)}
+      ${card('Over + STEAM','Sharp label = STEAM',stats(withSteam),true)}
+    </div>`;
+  }
+
+  // Score bands
+  const hasBands=resolved.some(p=>p.score_band);
+  if(hasBands){
+    const b55=resolved.filter(p=>p.score_band==='55-65');
+    const b65=resolved.filter(p=>p.score_band==='65-75');
+    const b75=resolved.filter(p=>p.score_band==='75+');
+    html+=`<div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin:14px 0 8px">Por nível de convicção (score)</div>
+    <div class="bk-grid">
+      ${card('Score 55–65','Convicção baixa',stats(b55),false)}
+      ${card('Score 65–75','Convicção média',stats(b65),false)}
+      ${card('Score 75+','Convicção alta',stats(b75),true)}
+    </div>`;
+  }
+
+  // Odds bands
+  const hasOdds=resolved.some(p=>p.odds_band);
+  if(hasOdds){
+    const ob1=resolved.filter(p=>p.odds_band==='1.50-1.80');
+    const ob2=resolved.filter(p=>p.odds_band==='1.80-2.10');
+    const ob3=resolved.filter(p=>p.odds_band==='2.10-2.50');
+    const ob4=resolved.filter(p=>p.odds_band==='2.50+');
+    html+=`<div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin:14px 0 8px">Por faixa de odds</div>
+    <div class="bk-grid">
+      ${card('@1.50–1.80','Favoritos',stats(ob1),false)}
+      ${card('@1.80–2.10','Valor médio',stats(ob2),false)}
+      ${card('@2.10–2.50','Valor alto',stats(ob3),false)}
+      ${card('@2.50+','Longshots',stats(ob4),false)}
+    </div>`;
+  }
+
+  if(!html){
+    c.innerHTML='<div class="empty" style="padding:14px">Acumula picks com os novos campos para ver análise de confluência.</div>';
+    return;
+  }
+  c.innerHTML=html;
 }
 
 function renderProposals(props){
