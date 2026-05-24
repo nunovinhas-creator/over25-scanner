@@ -634,6 +634,13 @@ select option{background:var(--bg3);color:var(--text)}
     <span style="font-family:var(--mono);font-size:9px;color:var(--text3)" id="proposalsMeta"></span>
   </div>
   <div id="proposalsGrid" style="margin-bottom:12px"></div>
+  <div class="sec-title" style="display:flex;justify-content:space-between;align-items:center">
+    <span>📡 Observações live — accuracy por padrão</span>
+    <span style="font-family:var(--mono);font-size:9px;color:var(--text3)" id="obsMeta"></span>
+  </div>
+  <div id="obsGrid" style="margin-bottom:12px">
+    <div class="empty" style="padding:14px">Sem observações ainda. Abre o módulo Live para começar a registar.</div>
+  </div>
   <div class="sec-title">Picks recentes</div>
   <div class="picks-table">
     <div class="pt-head"><span>Data</span><span>Jogo</span><span>Odds</span><span>Mov</span><span>Result</span></div>
@@ -684,6 +691,7 @@ const BASE          = 'https://sports.bzzoiro.com';
 const REPO          = 'nunovinhas-creator/over25-scanner';
 const PICKS_FILE    = 'data/picks.json';
 const PICKS1X2_FILE = 'data/picks_1x2.json';
+const OBS_FILE      = 'data/observations.json';
 const GH_API        = 'https://api.github.com';
 const TH_MOVE       = 0.2;    // % movimento mínimo Pinnacle
 const DIV_MIN   = 2.0;    // % divergência mínima Pin vs recreativas
@@ -695,9 +703,9 @@ const RECR = ['bet365','bwin','unibet','williamhill','betfair','betway','maratho
 // ESTADO
 // ════════════════════════════════════════════════════════════════
 let allGames=[], scanFilter='all', lgNames={}, allSharp1x2=[];
-let sharp1x2Picks=[]; // picks guardados do Sharp 1X2 com resultados
+let sharp1x2Picks=[];
 let liveData=[], liveFilter='all', liveTimer=null, liveActive=false;
-let allPicks=[];
+let allPicks=[], allObs=[];
 let dashPhase='all', currentPhase='dev';
 
 // ════════════════════════════════════════════════════════════════
@@ -841,7 +849,33 @@ async function picks1x2Save(pick){
   await ghWrite(PICKS1X2_FILE, picks, `pick 1x2: ${label}`);
 }
 
-// IDs já guardados — Set em memória, sincronizado com localStorage
+// ── Observations persistence ──────────────────────────────────────
+async function obsRead(){
+  const {data} = await ghRead(OBS_FILE);
+  return Array.isArray(data) ? data : [];
+}
+
+async function obsBatchSave(newObs, updatedObs){
+  // newObs: array de novas observações, updatedObs: {id: patch}
+  const current = await obsRead();
+  const map = new Map(current.map(o=>[String(o.id),o]));
+  // aplicar updates de resultado
+  if(updatedObs){
+    for(const [id,patch] of Object.entries(updatedObs)){
+      if(map.has(id)) map.set(id,{...map.get(id),...patch});
+    }
+  }
+  // adicionar novas (sem duplicados)
+  let added=0;
+  for(const o of (newObs||[])){
+    if(!map.has(String(o.id))){ map.set(String(o.id),o); added++; }
+  }
+  if(added===0&&!updatedObs) return 0;
+  await ghWrite(OBS_FILE, [...map.values()], `obs: ${added} new, ${Object.keys(updatedObs||{}).length} updated`);
+  return added;
+}
+
+// ── IDs já guardados — Set em memória, sincronizado com localStorage
 let _savedSet = null;
 function getSavedIds(){ if(!_savedSet) _savedSet=new Set(JSON.parse(localStorage.getItem('saved_picks')||'[]').map(String)); return _savedSet; }
 function markSaved(id){ getSavedIds().add(String(id)); try{localStorage.setItem('saved_picks',JSON.stringify([...getSavedIds()]));}catch(e){} }
@@ -2091,6 +2125,9 @@ async function loadLive(){
     renderLive();
     startLiveCountdown();
 
+    // Auto-guardar observações com padrões fortes
+    autoLogObservations().catch(()=>{});
+
     // Agent C — alertas adaptativos via ReAct (picks em perigo, max 3 em paralelo)
     const pickGames=enriched.filter(e=>e.isPick);
     // Processa em batches de 3 para não sobrecarregar a BSD API
@@ -2289,6 +2326,69 @@ async function autoLogCandidatos(){
   if(status) status.textContent=`Auto-log: ${saved} candidatos guardados`;
 }
 
+// ════════════════════════════════════════════════════════════════
+// AUTO-LOG OBSERVATIONS — persiste jogos em observação com padrões fortes
+// ════════════════════════════════════════════════════════════════
+async function autoLogObservations(){
+  if(!el('ghToken')?.value.trim()) return; // sem token não consegue escrever
+  const THRESHOLD = 4; // patternScore mínimo para guardar
+  const LS_PREFIX = 'obs_saved_';
+
+  // Jogos novos com padrões fortes ainda não guardados
+  const toSave = liveData.filter(e=>
+    (e.patternScore||0) >= THRESHOLD &&
+    !localStorage.getItem(LS_PREFIX+e.id)
+  );
+
+  // Jogos que já guardámos mas ainda estão em campo — actualiza resultado se over entrou
+  const updates = {};
+  for(const e of liveData){
+    const k = LS_PREFIX+e.id;
+    const saved = localStorage.getItem(k);
+    if(saved && !saved.includes('result=')){
+      if(e.goals>=3) updates[saved] = {result_over25:'WIN', final_score:`${e.hScore}-${e.aScore}`, result_at_min:e.min};
+    }
+  }
+
+  if(!toSave.length && !Object.keys(updates).length) return;
+
+  const now = new Date().toISOString();
+  const newObs = toSave.map(e=>{
+    const obsId = `${e.id}_obs_${Date.now()}`;
+    // marca em localStorage para não guardar de novo no próximo refresh
+    localStorage.setItem(LS_PREFIX+e.id, obsId);
+    return {
+      id:         obsId,
+      event_id:   String(e.id),
+      casa:       e.home,  fora: e.away,  liga: e.league,
+      data:       new Date().toISOString().slice(0,10),
+      detected_at: now,
+      min:        e.min,
+      score:      `${e.hScore}-${e.aScore}`,
+      goals:      e.goals,
+      xg:         e.xgTotal!=null?e.xgTotal.toFixed(2):'',
+      odds_live:  e.overOdds?e.overOdds.toFixed(2):'',
+      prob_live:  e.probLive??'',
+      pattern_score: e.patternScore||0,
+      patterns:   (e.patterns||[]).map(p=>p.id),
+      pattern_labels: (e.patterns||[]).map(p=>p.emoji+' '+p.label),
+      result_over25: '',
+      final_score:   '',
+      result_at_min: ''
+    };
+  });
+
+  try{
+    const added = await obsBatchSave(newObs, Object.keys(updates).length?updates:null);
+    if(added>0){
+      sendTG(`👁 OBSERVAÇÕES: ${added} jogos guardados\n`+
+        toSave.map(e=>`${e.home} vs ${e.away} [score:${e.patternScore}] ${(e.patterns||[]).map(p=>p.emoji+p.label).join(' ')}`).join('\n')
+      ).catch(()=>{});
+    }
+    allObs = await obsRead(); // actualiza cache local
+  }catch(ex){ console.warn('autoLogObservations:',ex.message); }
+}
+
 // AUTO-LOG Sharp 1X2 — guarda todos os sinais automaticamente
 async function autoLogSharp1x2(){
   const unsaved=allSharp1x2.filter(s=>!isSaved(s.id+'_sh'));
@@ -2329,14 +2429,100 @@ async function autoLogSharp1x2(){
 async function loadDash(){
   el('picksBody').innerHTML='<div class="loading"><div class="spinner"></div></div>';
   try{
-    const [picks, s1x2] = await Promise.all([
+    const [picks, s1x2, obs] = await Promise.all([
       picksGet(),
-      sharp1x2Picks.length ? Promise.resolve({data:sharp1x2Picks}) : ghRead(PICKS1X2_FILE).catch(()=>({data:[]}))
+      sharp1x2Picks.length ? Promise.resolve({data:sharp1x2Picks}) : ghRead(PICKS1X2_FILE).catch(()=>({data:[]})),
+      obsRead().catch(()=>[])
     ]);
     allPicks = picks;
     if(!sharp1x2Picks.length) sharp1x2Picks = Array.isArray(s1x2.data)?s1x2.data:[];
+    allObs = Array.isArray(obs) ? obs : [];
     renderDash();
+    renderObsDashboard();
   }catch(e){el('picksBody').innerHTML='<div class="empty">Erro ao carregar picks: '+esc(e.message)+'</div>';}
+}
+
+function renderObsDashboard(){
+  const obs = allObs||[];
+  const withResult = obs.filter(o=>o.result_over25==='WIN'||o.result_over25==='LOSS');
+  const pending = obs.filter(o=>!o.result_over25);
+
+  if(!obs.length){
+    el('obsGrid').innerHTML='<div class="empty" style="padding:14px">Sem observações ainda. Abre o módulo Live para começar a registar.</div>';
+    el('obsMeta').textContent='';
+    return;
+  }
+
+  // Meta
+  el('obsMeta').textContent=`${obs.length} total · ${withResult.length} c/resultado · ${pending.length} pendentes`;
+
+  // Accuracy por padrão
+  const PATTERN_LABELS = {
+    conv:     '🔮 Convergência',
+    xg_pace:  '⚡ xG Ritmo',
+    shots:    '🎯 Vol. Remates',
+    open:     '🎭 Jogo Aberto',
+    mom:      '💪 Momentum',
+    late:     '⏰ Late Push',
+    mkt:      '📈 Mercado',
+  };
+
+  // Para cada padrão, calcular taxa de acerto
+  const patternStats = {};
+  for(const o of withResult){
+    for(const pid of (o.patterns||[])){
+      if(!patternStats[pid]) patternStats[pid]={n:0,win:0};
+      patternStats[pid].n++;
+      if(o.result_over25==='WIN') patternStats[pid].win++;
+    }
+  }
+  // Incluir padrões sem resultado ainda (para contar totais)
+  const patternTotal = {};
+  for(const o of obs){
+    for(const pid of (o.patterns||[])){
+      patternTotal[pid]=(patternTotal[pid]||0)+1;
+    }
+  }
+
+  // Render
+  const keys = Object.keys(patternTotal).sort((a,b)=>(patternTotal[b]||0)-(patternTotal[a]||0));
+  if(!keys.length){
+    el('obsGrid').innerHTML='<div class="empty" style="padding:14px">Sem padrões nos registos.</div>';
+    return;
+  }
+
+  const cards = keys.map(pid=>{
+    const st = patternStats[pid]||{n:0,win:0};
+    const total = patternTotal[pid]||0;
+    const wr = st.n ? Math.round(st.win/st.n*100) : null;
+    const wrCol = wr===null?'var(--text3)':wr>=60?'var(--green)':wr>=45?'var(--amber)':'var(--red)';
+    const label = PATTERN_LABELS[pid]||pid;
+    return `<div class="bk-card">
+      <div class="bk-name">${label}</div>
+      <div class="bk-wr" style="color:${wrCol}">${wr!==null?wr+'%':'—'}</div>
+      <div class="bk-roi" style="color:var(--text3)">${st.win}/${st.n} c/resultado</div>
+      <div class="bk-n">${total} observações totais</div>
+    </div>`;
+  });
+
+  // KPI global de observações
+  const globalWR = withResult.length ? Math.round(withResult.filter(o=>o.result_over25==='WIN').length/withResult.length*100) : null;
+  const globalCol = globalWR===null?'var(--text3)':globalWR>=60?'var(--green)':globalWR>=45?'var(--amber)':'var(--red)';
+
+  el('obsGrid').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+      <div class="kpi-card">
+        <div class="kpi-label">Taxa acerto geral</div>
+        <div class="kpi-val" style="color:${globalCol}">${globalWR!==null?globalWR+'%':'—'}</div>
+        <div class="kpi-sub">${withResult.length} observações c/resultado</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Threshold mín.</div>
+        <div class="kpi-val" style="font-size:20px">score ≥ 4</div>
+        <div class="kpi-sub">${pending.length} a aguardar resultado</div>
+      </div>
+    </div>
+    <div class="bk-grid">${cards.join('')}</div>`;
 }
 
 function renderDash(){
