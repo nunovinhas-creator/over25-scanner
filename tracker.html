@@ -125,8 +125,9 @@ svg.roi-svg{width:100%;height:100%}
 
   <!-- Config -->
   <div class="cfg">
-    <input type="password" id="tgToken" placeholder="TG Token" style="max-width:180px">
-    <input type="text" id="tgChat" placeholder="Chat ID" style="max-width:110px">
+    <input type="password" id="ghToken"  placeholder="🐙 GitHub Token" style="max-width:180px">
+    <input type="password" id="tgToken"  placeholder="TG Token" style="max-width:180px">
+    <input type="text"     id="tgChat"   placeholder="Chat ID" style="max-width:110px">
     <button class="btn btn-a" onclick="loadData()">↻ Actualizar</button>
     <button class="btn btn-tg" onclick="sendDailyReport()">📱 Relatório TG</button>
     <button class="btn" onclick="sendDailyReport(true)">📊 Relatório completo</button>
@@ -189,52 +190,39 @@ svg.roi-svg{width:100%;height:100%}
 </div>
 
 <script>
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxmVhBloV8uQldH-w7U5uLsVWuZrFKYm_rUElbeTY0nPbYbt6bmmYc8-H31E7_qIA-kBA/exec';
+const REPO       = 'nunovinhas-creator/over25-scanner';
+const PICKS_FILE = 'data/picks.json';
+const GH_API     = 'https://api.github.com';
 
 let allPicks = [], activeFilter = 'all';
 
-// ── Config persistente ────────────────────────────────────
-function saveCfg(){ try{localStorage.setItem('mon_cfg',JSON.stringify({tg:document.getElementById('tgToken').value,chat:document.getElementById('tgChat').value}));}catch(e){} }
-function loadCfg(){ try{const c=JSON.parse(localStorage.getItem('mon_cfg')||'{}');if(c.tg)document.getElementById('tgToken').value=c.tg;if(c.chat)document.getElementById('tgChat').value=c.chat;}catch(e){} }
+// ── Helpers ───────────────────────────────────────────────
+const esc = s => String(s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fromB64 = b64 => decodeURIComponent(escape(atob(b64.replace(/\s/g,''))));
+function ghToken(){ return document.getElementById('ghToken')?.value?.trim()||''; }
 
-// ── Carregar dados do Google Sheet ────────────────────────
+// ── Config persistente ────────────────────────────────────
+function saveCfg(){ try{localStorage.setItem('mon_cfg',JSON.stringify({gh:document.getElementById('ghToken').value,tg:document.getElementById('tgToken').value,chat:document.getElementById('tgChat').value}));}catch(e){} }
+function loadCfg(){ try{const c=JSON.parse(localStorage.getItem('mon_cfg')||'{}');if(c.gh)document.getElementById('ghToken').value=c.gh;if(c.tg)document.getElementById('tgToken').value=c.tg;if(c.chat)document.getElementById('tgChat').value=c.chat;}catch(e){} }
+
+// ── Carregar dados do GitHub ──────────────────────────────
 async function loadData(){
   saveCfg();
   document.getElementById('lastUpdate').textContent='A carregar...';
-  try {
-    const r = await fetch(SHEET_URL+'?action=get_picks', {mode:'no-cors'});
-    // no-cors não permite ler resposta — usa método alternativo
-    await loadFromSheet();
-  } catch(e) {
-    await loadFromSheet();
-  }
-}
-
-async function loadFromSheet(){
-  try {
-    // Tenta GET directo com JSONP-style via script tag
-    const data = await fetchSheetData();
-    allPicks = data;
+  try{
+    const r = await fetch(`${GH_API}/repos/${REPO}/contents/${PICKS_FILE}`,{
+      headers:{ 'Authorization':'token '+ghToken(), 'Accept':'application/vnd.github.v3+json' }
+    });
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const resp = await r.json();
+    allPicks = JSON.parse(fromB64(resp.content));
     render();
     document.getElementById('lastUpdate').textContent = 'Actualizado: '+new Date().toLocaleString('pt-PT');
-  } catch(e) {
+  }catch(e){
     console.error(e);
-    // Fallback: mostra dados de exemplo se Sheet não responder
-    document.getElementById('lastUpdate').textContent = '⚠ Sheet não responde — a mostrar dados locais';
+    document.getElementById('lastUpdate').textContent = '⚠ Erro ao carregar — a mostrar dados locais';
     render();
   }
-}
-
-function fetchSheetData(){
-  return new Promise((resolve, reject)=>{
-    const cb = 'cb_'+Date.now();
-    const script = document.createElement('script');
-    window[cb] = (data)=>{ resolve(data); script.remove(); delete window[cb]; };
-    script.src = SHEET_URL+'?action=get_picks&callback='+cb;
-    script.onerror = ()=>reject(new Error('Sheet error'));
-    document.head.appendChild(script);
-    setTimeout(()=>reject(new Error('timeout')), 8000);
-  });
 }
 
 // ── Filtro ────────────────────────────────────────────────

@@ -7,147 +7,397 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Barlow:wght@400;500;600;700;800&display=swap');
 :root{
-  --bg:#f4f3ef;--bg2:#fff;--bg3:#f0eff9;--card:#fff;
-  --text:#1a1a1a;--text2:#555;--text3:#999;
-  --green:#00875a;--green-l:rgba(0,135,90,.1);
-  --red:#c0392b;--red-l:rgba(192,57,43,.08);
-  --amber:#d4820a;--amber-l:rgba(212,130,10,.1);
-  --blue:#1a56db;--blue-l:rgba(26,86,219,.08);
-  --purple:#6d28d9;--purple-l:rgba(109,40,217,.08);
-  --border:#e2e1db;--border2:#d0cfc9;
+  --bg:#0c0c10;--bg2:#131318;--bg3:#1a1a21;--bg4:#20202a;
+  --text:#e8e8f0;--text2:#7878a0;--text3:#3e3e58;
+  --green:#00e676;--green-l:rgba(0,230,118,.1);--green-d:#00c160;
+  --red:#ff5370;--red-l:rgba(255,83,112,.1);
+  --amber:#ffb300;--amber-l:rgba(255,179,0,.1);
+  --blue:#448aff;--blue-l:rgba(68,138,255,.1);
+  --purple:#b388ff;--purple-l:rgba(179,136,255,.1);
+  --border:rgba(255,255,255,.055);--border2:rgba(255,255,255,.11);
   --r:8px;--rl:12px;
   --mono:'IBM Plex Mono',monospace;
   --sans:'Barlow',sans-serif;
+  --shadow:0 4px 24px rgba(0,0,0,.5);
+  --shadow-lg:0 12px 48px rgba(0,0,0,.7);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.2)}
+
 /* ── Header ── */
-.hdr{background:var(--text);color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:100}
-.hdr-title{font-size:16px;font-weight:800;letter-spacing:-.5px}
-.hdr-title span{color:#00ff88}
-.hdr-sub{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.4);margin-top:2px}
+.hdr{
+  background:rgba(13,13,18,.96);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;
+  position:sticky;top:0;z-index:100
+}
+.hdr-title{font-size:16px;font-weight:800;letter-spacing:-.5px;color:var(--text)}
+.hdr-title span{color:var(--green);text-shadow:0 0 16px rgba(0,230,118,.5)}
+.hdr-sub{font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:2px}
 .hdr-right{display:flex;align-items:center;gap:8px}
-.status-dot{width:8px;height:8px;border-radius:50%;background:#00ff88;animation:pulse2 2s infinite}
-@keyframes pulse2{0%,100%{opacity:1}50%{opacity:.3}}
+.status-dot{
+  width:8px;height:8px;border-radius:50%;background:var(--green);
+  animation:pulse2 2s infinite;
+  box-shadow:0 0 6px var(--green)
+}
+@keyframes pulse2{0%,100%{opacity:1;box-shadow:0 0 6px var(--green)}50%{opacity:.25;box-shadow:none}}
+
 /* ── Config ── */
-.cfg-bar{background:var(--text);border-top:1px solid rgba(255,255,255,.08);padding:10px 16px;display:flex;gap:8px;flex-wrap:wrap}
-.cfg-bar input{font-family:var(--mono);font-size:11px;padding:6px 10px;border-radius:6px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);color:#fff;min-width:120px;flex:1}
-.cfg-bar input::placeholder{color:rgba(255,255,255,.3)}
-.btn-load{font-family:var(--sans);font-size:13px;font-weight:700;padding:7px 18px;border-radius:6px;border:none;background:#00ff88;color:#000;cursor:pointer;white-space:nowrap}
-.btn-tg{font-family:var(--sans);font-size:12px;font-weight:600;padding:7px 14px;border-radius:6px;border:1px solid rgba(255,255,255,.2);background:transparent;color:#fff;cursor:pointer}
-.ts-label{font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.4);padding:6px 0;white-space:nowrap;align-self:center}
+.cfg-bar{
+  background:rgba(13,13,18,.96);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  padding:10px 16px;display:flex;gap:8px;flex-wrap:wrap
+}
+.cfg-bar input{
+  font-family:var(--mono);font-size:11px;padding:6px 10px;
+  border-radius:6px;border:1px solid rgba(255,255,255,.07);
+  background:rgba(255,255,255,.03);color:var(--text);
+  min-width:120px;flex:1;transition:border-color .15s,background .15s
+}
+.cfg-bar input:focus{outline:none;border-color:rgba(0,230,118,.5);background:rgba(0,230,118,.03)}
+.cfg-bar input::placeholder{color:var(--text3)}
+.btn-load{
+  font-family:var(--sans);font-size:13px;font-weight:700;
+  padding:7px 18px;border-radius:6px;border:none;
+  background:linear-gradient(135deg,var(--green) 0%,var(--green-d) 100%);
+  color:#000;cursor:pointer;white-space:nowrap;
+  box-shadow:0 2px 14px rgba(0,230,118,.35);
+  transition:transform .15s,box-shadow .15s
+}
+.btn-load:hover{transform:translateY(-1px);box-shadow:0 4px 22px rgba(0,230,118,.5)}
+.btn-load:active{transform:translateY(0);box-shadow:0 1px 8px rgba(0,230,118,.25)}
+.btn-tg{
+  font-family:var(--sans);font-size:12px;font-weight:600;
+  padding:7px 14px;border-radius:6px;
+  border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);
+  color:var(--text2);cursor:pointer;transition:all .15s
+}
+.btn-tg:hover{background:rgba(255,255,255,.08);color:var(--text);border-color:rgba(255,255,255,.18)}
+.ts-label{font-family:var(--mono);font-size:10px;color:var(--text3);padding:6px 0;white-space:nowrap;align-self:center}
+
 /* ── Tabs ── */
-.tabs{display:flex;background:var(--bg2);border-bottom:1px solid var(--border);padding:0 16px;gap:4px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-.tab{font-family:var(--sans);font-size:13px;font-weight:600;padding:12px 16px;border-bottom:2px solid transparent;color:var(--text3);cursor:pointer;white-space:nowrap;transition:all .15s}
-.tab.active{color:var(--text);border-bottom-color:var(--text)}
+.tabs{
+  display:flex;background:rgba(13,13,18,.96);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  padding:0 16px;gap:0;overflow-x:auto;-webkit-overflow-scrolling:touch
+}
+.tab{
+  font-family:var(--sans);font-size:13px;font-weight:600;
+  padding:12px 16px;border-bottom:2px solid transparent;
+  color:var(--text3);cursor:pointer;white-space:nowrap;transition:all .15s
+}
+.tab:hover{color:var(--text2)}
+.tab.active{color:var(--text);border-bottom-color:var(--green)}
+
 /* ── Panel ── */
 .panel{display:none;padding:12px 16px;min-height:60vh}
 .panel.active{display:block}
+
 /* ── Stats bar ── */
-.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
-.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px}
-.stat-label{font-family:var(--mono);font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
-.stat-val{font-size:20px;font-weight:800;letter-spacing:-1px;line-height:1}
+.stats-bar{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}
+.stat-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);
+  padding:10px 12px;transition:border-color .15s
+}
+.stat-card:hover{border-color:var(--border2)}
+.stat-label{font-family:var(--mono);font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.stat-val{font-size:20px;font-weight:800;letter-spacing:-1px;line-height:1;font-variant-numeric:tabular-nums}
 .stat-sub{font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:2px}
+
 /* ── Filters ── */
 .filters{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
 .filter-label{font-family:var(--mono);font-size:10px;color:var(--text3)}
-.fb{font-family:var(--sans);font-size:11px;font-weight:600;padding:5px 12px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;transition:all .15s;white-space:nowrap}
-.fb.active{background:var(--text);color:#fff;border-color:var(--text)}
-.fb.g.active{background:var(--green);border-color:var(--green)}
-select{font-family:var(--sans);font-size:12px;padding:5px 10px;border-radius:6px;border:1px solid var(--border2);background:var(--bg2);color:var(--text);cursor:pointer}
-.dbg{font-family:var(--mono);font-size:10px;color:var(--text3);background:var(--bg3);border-radius:6px;padding:8px 12px;margin-bottom:10px;line-height:1.5}
+.fb{
+  font-family:var(--sans);font-size:11px;font-weight:600;
+  padding:5px 12px;border-radius:20px;
+  border:1px solid rgba(255,255,255,.09);background:transparent;
+  color:var(--text3);cursor:pointer;transition:all .15s;white-space:nowrap
+}
+.fb:hover{color:var(--text2);border-color:rgba(255,255,255,.16)}
+.fb.active{background:var(--bg3);color:var(--text);border-color:rgba(255,255,255,.16)}
+.fb.g.active{background:rgba(0,230,118,.1);color:var(--green);border-color:rgba(0,230,118,.4)}
+select{
+  font-family:var(--sans);font-size:12px;padding:5px 10px;
+  border-radius:6px;border:1px solid var(--border);
+  background:var(--bg2);color:var(--text);cursor:pointer
+}
+select option{background:var(--bg3);color:var(--text)}
+.dbg{
+  font-family:var(--mono);font-size:10px;color:var(--text3);
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:6px;padding:8px 12px;margin-bottom:10px;line-height:1.6
+}
+
 /* ── Game Card ── */
-.game-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:10px;overflow:hidden;transition:box-shadow .15s}
-.game-card:hover{box-shadow:0 2px 12px rgba(0,0,0,.08)}
+.game-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);
+  margin-bottom:10px;overflow:hidden;transition:transform .18s,border-color .18s,box-shadow .18s
+}
+.game-card:hover{transform:translateY(-1px);border-color:var(--border2);box-shadow:var(--shadow)}
 .game-card.sharp-flag{border-left:3px solid var(--purple)}
 .game-card.high-score{border-left:3px solid var(--green)}
 .card-head{padding:12px 14px 10px;cursor:pointer;display:flex;align-items:flex-start;gap:10px}
 .card-teams{flex:1;min-width:0}
 .card-home{font-size:15px;font-weight:700;line-height:1.2}
-.card-away{font-size:13px;color:var(--text2);margin-top:1px}
-.card-meta{font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:4px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.card-away{font-size:13px;color:var(--text2);margin-top:2px}
+.card-meta{font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:5px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .card-score{min-width:52px;text-align:center}
-.score-num{font-size:26px;font-weight:800;letter-spacing:-1px;line-height:1;color:var(--text)}
-.score-num.high{color:var(--green)}
+.score-num{font-size:26px;font-weight:800;letter-spacing:-1px;line-height:1;font-variant-numeric:tabular-nums}
+.score-num.high{color:var(--green);text-shadow:0 0 10px rgba(0,230,118,.3)}
 .score-num.med{color:var(--amber)}
 .score-num.low{color:var(--text3)}
 .score-lbl{font-family:var(--mono);font-size:9px;color:var(--text3)}
+
 /* Badges */
-.badge{display:inline-flex;align-items:center;font-family:var(--mono);font-size:9px;font-weight:600;padding:2px 6px;border-radius:3px;letter-spacing:.03em}
+.badge{display:inline-flex;align-items:center;font-family:var(--mono);font-size:9px;font-weight:600;padding:2px 6px;border-radius:3px;letter-spacing:.04em}
 .bg{background:var(--green-l);color:var(--green)}
 .br{background:var(--red-l);color:var(--red)}
 .ba{background:var(--amber-l);color:var(--amber)}
 .bb{background:var(--blue-l);color:var(--blue)}
 .bp{background:var(--purple-l);color:var(--purple)}
-/* Progress bar score */
+
+/* Score bar */
 .score-bar{height:3px;background:var(--border);border-radius:2px;margin:6px 0 8px}
-.score-bar-fill{height:100%;border-radius:2px;transition:width .4s}
-/* Card body (collapsible) */
+.score-bar-fill{height:100%;border-radius:2px;transition:width .4s ease}
+
+/* Card body */
 .card-body{display:none;padding:0 14px 14px;border-top:1px solid var(--border)}
 .card-body.open{display:block}
 .card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0}
 .cg-item{background:var(--bg3);border-radius:6px;padding:8px 10px}
 .cg-label{font-family:var(--mono);font-size:9px;color:var(--text3);margin-bottom:3px}
-.cg-val{font-size:14px;font-weight:700}
-/* Sharp section dentro do card */
-.sharp-section{background:var(--purple-l);border:1px solid rgba(109,40,217,.15);border-radius:8px;padding:10px 12px;margin:8px 0}
-.sharp-section-title{font-family:var(--mono);font-size:9px;color:var(--purple);font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
+.cg-val{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
+
+/* Sharp section */
+.sharp-section{background:rgba(179,136,255,.05);border:1px solid rgba(179,136,255,.14);border-radius:8px;padding:10px 12px;margin:8px 0}
+.sharp-section-title{font-family:var(--mono);font-size:9px;color:var(--purple);font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em}
 .sharp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-.sharp-item .cg-label{color:rgba(109,40,217,.6)}
+.sharp-item .cg-label{color:rgba(179,136,255,.5)}
 .sharp-item .cg-val{color:var(--purple);font-size:13px}
-/* Botão pick */
-.btn-pick{width:100%;padding:10px;border-radius:8px;border:none;background:var(--green);color:#fff;font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer;margin-top:10px;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px}
-.btn-pick:disabled{opacity:.6;cursor:default}
-.btn-pick.saved{background:#00875a}
-/* ── Loading / Empty ── */
+
+/* Pick button */
+.btn-pick{
+  width:100%;padding:10px;border-radius:8px;border:none;
+  background:linear-gradient(135deg,var(--green) 0%,var(--green-d) 100%);
+  color:#000;font-family:var(--sans);font-size:13px;font-weight:700;
+  cursor:pointer;margin-top:10px;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  box-shadow:0 2px 12px rgba(0,230,118,.2);
+  transition:transform .15s,box-shadow .15s
+}
+.btn-pick:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(0,230,118,.4)}
+.btn-pick:active{transform:translateY(0)}
+.btn-pick:disabled{opacity:.35;cursor:default;transform:none;box-shadow:none}
+.btn-pick.saved{
+  background:transparent;border:1px solid rgba(0,230,118,.4);
+  color:var(--green);box-shadow:none
+}
+.btn-pick.saved:hover{background:rgba(0,230,118,.06);transform:none}
+
+/* Loading / Empty */
 .loading{text-align:center;padding:40px 20px;font-family:var(--mono);font-size:12px;color:var(--text3)}
-.spinner{width:24px;height:24px;border:2px solid var(--border);border-top-color:var(--text);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px}
+.spinner{width:24px;height:24px;border:2px solid rgba(255,255,255,.08);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px}
 @keyframes spin{to{transform:rotate(360deg)}}
 .empty{text-align:center;padding:40px 20px;color:var(--text3);font-size:13px}
+
 /* ── Live card ── */
-.live-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:14px;margin-bottom:10px}
+.live-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);
+  padding:14px;margin-bottom:10px;transition:border-color .2s
+}
 .live-card.pick-card{border-left:3px solid var(--green)}
-.live-card.danger-card{border-left:3px solid var(--red)}
+.live-card.danger-card{
+  border-left:3px solid var(--red);
+  animation:dangerPulse 2.5s ease-in-out infinite
+}
+@keyframes dangerPulse{
+  0%,100%{box-shadow:0 0 0 rgba(255,83,112,0)}
+  50%{box-shadow:0 0 22px rgba(255,83,112,.18)}
+}
 .live-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px}
 .live-teams{font-size:15px;font-weight:700}
-.live-score{font-size:28px;font-weight:800;letter-spacing:-2px;text-align:right}
-.live-score.over{color:var(--green)}
-.min-badge{font-family:var(--mono);font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;background:var(--red-l);color:var(--red);display:inline-block}
+.live-score{
+  font-size:28px;font-weight:800;letter-spacing:-2px;text-align:right;
+  font-variant-numeric:tabular-nums
+}
+.live-score.over{color:var(--green);text-shadow:0 0 12px rgba(0,230,118,.4)}
+.min-badge{font-family:var(--mono);font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;background:rgba(255,83,112,.1);color:var(--red);display:inline-block}
 .goal-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin:8px 0}
-.goal-fill{height:100%;border-radius:3px;transition:width .5s}
+.goal-fill{height:100%;border-radius:3px;transition:width .5s ease}
 .live-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin:8px 0}
 .lg-item{background:var(--bg3);border-radius:6px;padding:7px 10px}
 .lg-label{font-family:var(--mono);font-size:9px;color:var(--text3);margin-bottom:2px}
-.lg-val{font-size:14px;font-weight:700}
+.lg-val{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
 .mom-bar{height:8px;background:var(--border);border-radius:4px;overflow:hidden;margin-top:8px}
-.mom-fill{height:100%;border-radius:4px;transition:width .5s}
+.mom-fill{height:100%;border-radius:4px;transition:width .5s ease}
+
 /* ── Dashboard ── */
 .dash-kpi{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}
-.kpi-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:14px}
-.kpi-label{font-family:var(--mono);font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
-.kpi-val{font-size:28px;font-weight:800;letter-spacing:-1px;line-height:1}
+.kpi-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);
+  padding:14px;transition:border-color .15s
+}
+.kpi-card:hover{border-color:var(--border2)}
+.kpi-label{font-family:var(--mono);font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.kpi-val{font-size:28px;font-weight:800;letter-spacing:-1px;line-height:1;font-variant-numeric:tabular-nums}
 .kpi-sub{font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:4px}
 .roi-chart{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:14px;margin-bottom:12px}
-.roi-title{font-family:var(--mono);font-size:10px;color:var(--text3);text-transform:uppercase;margin-bottom:10px}
+.roi-title{font-family:var(--mono);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
 .bk-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
-.bk-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:12px}
-.bk-name{font-family:var(--mono);font-size:9px;color:var(--text3);margin-bottom:6px;text-transform:uppercase}
-.bk-wr{font-size:20px;font-weight:800}
+.bk-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);
+  padding:12px;transition:border-color .15s
+}
+.bk-card:hover{border-color:var(--border2)}
+.bk-name{font-family:var(--mono);font-size:9px;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}
+.bk-wr{font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}
 .bk-roi{font-family:var(--mono);font-size:11px;margin-top:2px}
 .bk-n{font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:4px}
+
 /* ── Picks table ── */
 .picks-table{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:12px}
-.pt-head{display:grid;grid-template-columns:70px 1fr 50px 50px 50px;gap:4px;padding:8px 12px;background:var(--bg3);font-family:var(--mono);font-size:9px;color:var(--text3);text-transform:uppercase}
-.pt-row{display:grid;grid-template-columns:70px 1fr 50px 50px 50px;gap:4px;padding:9px 12px;border-top:1px solid var(--border);font-size:12px;align-items:center}
+.pt-head{
+  display:grid;grid-template-columns:70px 1fr 50px 50px 50px;gap:4px;
+  padding:8px 12px;background:var(--bg3);
+  font-family:var(--mono);font-size:9px;color:var(--text3);
+  text-transform:uppercase;letter-spacing:.05em
+}
+.pt-row{
+  display:grid;grid-template-columns:70px 1fr 50px 50px 50px;gap:4px;
+  padding:9px 12px;border-top:1px solid var(--border);
+  font-size:12px;align-items:center;transition:background .1s;
+  font-variant-numeric:tabular-nums
+}
 .pt-row:hover{background:var(--bg3)}
+
 /* ── Util ── */
-.sec-title{font-family:var(--mono);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
-.btn-sm{font-family:var(--sans);font-size:12px;font-weight:600;padding:6px 14px;border-radius:6px;border:1px solid var(--border2);background:var(--bg2);color:var(--text);cursor:pointer}
-.btn-sm:hover{background:var(--bg3)}
-.btn-sm.green{background:var(--green);color:#fff;border-color:var(--green)}
-.btn-sm.blue{background:var(--blue);color:#fff;border-color:var(--blue)}
-@media(min-width:600px){.stats-bar{grid-template-columns:repeat(4,1fr)}.dash-kpi{grid-template-columns:repeat(3,1fr)}}
+.sec-title{
+  font-family:var(--mono);font-size:10px;color:var(--text3);
+  text-transform:uppercase;letter-spacing:.06em;
+  margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)
+}
+.btn-sm{
+  font-family:var(--sans);font-size:12px;font-weight:600;
+  padding:6px 14px;border-radius:6px;
+  border:1px solid rgba(255,255,255,.1);background:var(--bg3);
+  color:var(--text2);cursor:pointer;transition:all .15s
+}
+.btn-sm:hover{background:var(--bg4);color:var(--text);border-color:rgba(255,255,255,.18)}
+.btn-sm.green{background:rgba(0,230,118,.1);color:var(--green);border-color:rgba(0,230,118,.3)}
+.btn-sm.green:hover{background:rgba(0,230,118,.18)}
+.btn-sm.blue{background:rgba(68,138,255,.1);color:var(--blue);border-color:rgba(68,138,255,.3)}
+.btn-sm.blue:hover{background:rgba(68,138,255,.18)}
+
+/* ── Proposal cards ── */
+.proposal-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);
+  padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--border2);
+  display:flex;gap:10px;align-items:flex-start;transition:border-color .15s
+}
+.proposal-card.positive{border-left-color:var(--green)}
+.proposal-card.warning{border-left-color:var(--amber)}
+.proposal-card.info{border-left-color:var(--blue)}
+.proposal-card.critical{border-left-color:var(--red)}
+.proposal-icon{font-size:18px;line-height:1;flex-shrink:0;margin-top:1px}
+.proposal-body{}
+.proposal-title{font-size:13px;font-weight:700;margin-bottom:3px}
+.proposal-detail{font-family:var(--mono);font-size:11px;color:var(--text2);line-height:1.6}
+
+/* ── Report Modal ── */
+.report-modal{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  z-index:300;display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto
+}
+.report-modal-box{
+  background:var(--bg2);border:1px solid var(--border2);border-radius:var(--rl);
+  width:100%;max-width:560px;overflow:hidden;box-shadow:var(--shadow-lg)
+}
+.report-modal-head{
+  background:var(--bg3);border-bottom:1px solid var(--border);
+  padding:12px 16px;display:flex;justify-content:space-between;align-items:center
+}
+.report-section{padding:12px 16px;border-bottom:1px solid var(--border)}
+.report-kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+.report-kpi{
+  background:var(--bg3);border:1px solid var(--border);border-radius:6px;
+  padding:8px 10px;text-align:center
+}
+.report-kpi-val{font-size:18px;font-weight:800;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
+.report-kpi-lbl{font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:2px}
+
+/* ── ReAct Trace Modal ── */
+.react-modal{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  z-index:300;display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto
+}
+.react-modal-box{
+  background:var(--bg2);border:1px solid var(--border2);border-radius:var(--rl);
+  width:100%;max-width:580px;overflow:hidden;box-shadow:var(--shadow-lg)
+}
+.react-modal-head{
+  background:var(--bg3);border-bottom:1px solid var(--border);
+  padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px
+}
+.react-modal-title{font-weight:700;font-size:13px}
+.react-modal-sub{font-family:var(--mono);font-size:9px;color:var(--text3)}
+.react-trace{padding:12px;max-height:72vh;overflow-y:auto}
+.rt-step{margin-bottom:7px;padding:9px 11px;border-radius:7px;border-left:3px solid;font-family:var(--mono);font-size:11px;line-height:1.6}
+.rt-thought{background:var(--blue-l);border-color:var(--blue)}
+.rt-action{background:var(--amber-l);border-color:var(--amber)}
+.rt-observation{background:var(--green-l);border-color:var(--green)}
+.rt-conclusion{background:rgba(0,230,118,.12);border-color:var(--green);font-weight:600}
+.rt-error{background:var(--red-l);border-color:var(--red)}
+.rt-timeout{background:var(--amber-l);border-color:var(--amber)}
+.rt-label{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;opacity:.5;margin-bottom:3px}
+.react-spinner{
+  display:inline-block;width:12px;height:12px;
+  border:2px solid rgba(255,255,255,.1);border-top-color:var(--green);
+  border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px
+}
+
+/* Warning banner */
+.warn-banner{
+  background:rgba(255,179,0,.07);border:1px solid rgba(255,179,0,.22);
+  border-radius:8px;padding:10px 14px;font-family:var(--mono);font-size:11px;
+  color:var(--amber);margin-bottom:12px;display:none
+}
+
+/* Phase buttons */
+.phase-btn{
+  font-family:var(--mono);font-size:11px;font-weight:600;
+  padding:5px 10px;border-radius:5px;
+  border:1px solid rgba(255,255,255,.1);background:transparent;
+  color:var(--text3);cursor:pointer;transition:all .15s
+}
+.phase-btn:hover{color:var(--text2);border-color:rgba(255,255,255,.18)}
+.phase-btn.active{background:rgba(0,230,118,.1);color:var(--green);border-color:rgba(0,230,118,.4)}
+
+/* Sharp sub-tabs */
+.stab{
+  font-family:var(--sans);font-size:12px;font-weight:600;
+  padding:8px 16px;border:none;border-bottom:2px solid transparent;
+  background:transparent;color:var(--text3);cursor:pointer;transition:all .15s
+}
+.stab:hover{color:var(--text2)}
+.stab.active{color:var(--text);border-bottom-color:var(--green)}
+
+/* Dash cards */
+.dash-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:12px;margin-bottom:8px}
+.dash-card-title{font-family:var(--mono);font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+
+/* Responsive */
+@media(min-width:480px){.stats-bar{grid-template-columns:repeat(4,1fr)}}
+@media(min-width:600px){.dash-kpi{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:900px){body{max-width:900px;margin:0 auto}.hdr,.cfg-bar,.tabs{max-width:900px;margin-left:auto;margin-right:auto}}
 </style>
 </head>
 <body>
@@ -159,19 +409,27 @@ select{font-family:var(--sans);font-size:12px;padding:5px 10px;border-radius:6px
     <div class="hdr-sub" id="tsLabel">Nunca carregado</div>
   </div>
   <div class="hdr-right">
-    <div class="status-dot" id="statusDot" style="background:#666"></div>
-    <span style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.5)" id="statusTxt">offline</span>
+    <div class="status-dot" id="statusDot" style="background:var(--text3)"></div>
+    <span style="font-family:var(--mono);font-size:10px;color:var(--text3)" id="statusTxt">offline</span>
   </div>
 </div>
 
 <!-- ── Config ── -->
 <div class="cfg-bar">
-  <input type="password" id="bsdKey" placeholder="🔑 BSD API Key">
-  <input type="password" id="tgToken" placeholder="📱 TG Token">
-  <input type="text"     id="tgChat"  placeholder="Chat ID" style="max-width:110px">
+  <input type="password" id="bsdKey"   placeholder="🔑 BSD API Key">
+  <input type="password" id="ghToken"  placeholder="🐙 GitHub Token">
+  <input type="password" id="tgToken"  placeholder="📱 TG Token">
+  <input type="text"     id="tgChat"   placeholder="Chat ID" style="max-width:110px">
+  <input type="email"    id="emailTo"  placeholder="✉️ Email" style="max-width:170px">
   <button class="btn-load" onclick="loadAll()">▶ Carregar</button>
   <button class="btn-tg"   onclick="testTG()">TG</button>
-  <span class="ts-label" id="autoLabel">Auto: off</span>
+  <button class="phase-btn active" id="phaseDevBtn" onclick="setCurrentPhase('dev')">DEV</button>
+  <button class="phase-btn" id="phaseLiveBtn" onclick="setCurrentPhase('live')">LIVE</button>
+  <label style="display:flex;align-items:center;gap:5px;cursor:pointer;color:rgba(255,255,255,.7);font-family:var(--mono);font-size:11px">
+    <input type="checkbox" id="autoLogChk" onchange="saveCfg()" style="accent-color:var(--green);width:13px;height:13px">
+    Auto-log
+  </label>
+  <span class="ts-label" id="autoLabel">DEV</span>
 </div>
 
 <!-- ── Tabs ── -->
@@ -186,8 +444,8 @@ select{font-family:var(--sans);font-size:12px;padding:5px 10px;border-radius:6px
 <div class="panel active" id="panel-scan">
   <div class="stats-bar" style="margin-top:12px">
     <div class="stat-card"><div class="stat-label">Jogos</div><div class="stat-val" id="sTotal">—</div></div>
-    <div class="stat-card"><div class="stat-label">Shortening</div><div class="stat-val" id="sHigh" style="color:var(--green)">—</div></div>
-    <div class="stat-card"><div class="stat-label">BTTS≥55</div><div class="stat-val" id="sSharp" style="color:var(--amber)">—</div></div>
+    <div class="stat-card"><div class="stat-label">Score≥50</div><div class="stat-val" id="sHigh" style="color:var(--green)">—</div></div>
+    <div class="stat-card"><div class="stat-label">Sharp</div><div class="stat-val" id="sSharp" style="color:var(--amber)">—</div></div>
     <div class="stat-card"><div class="stat-label">Odds méd.</div><div class="stat-val" id="sOdds">—</div></div>
   </div>
   <div class="filters">
@@ -314,17 +572,27 @@ select{font-family:var(--sans);font-size:12px;padding:5px 10px;border-radius:6px
   <div style="margin-top:12px;margin-bottom:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
     <button class="btn-sm green" onclick="loadDash()">↻ Actualizar</button>
     <button class="btn-sm" onclick="syncResults()" id="btnSync">🔄 Sincronizar resultados</button>
-    <button class="btn-sm blue" onclick="sendDailyReport()">📱 Relatório TG</button>
+    <button class="btn-sm" onclick="reactSync()" id="btnReactSync" style="background:var(--purple-l);border-color:var(--purple);color:var(--purple)">🧠 ReAct Sync</button>
+    <button class="btn-sm blue" onclick="openReportModal()">📊 Relatório</button>
+    <button class="btn-sm" onclick="sendEmailReport()" title="Abre cliente de email com relatório pré-preenchido">📧 Email</button>
     <label style="display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--text2);cursor:pointer;margin-left:4px">
       <input type="checkbox" id="filterShortening" checked onchange="renderDash()" style="accent-color:var(--green);width:14px;height:14px">
       Só SHORTENING
     </label>
   </div>
   <div id="syncStatus" style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:8px;display:none"></div>
+  <div id="nWarning" class="warn-banner"></div>
+  <div class="filters" style="margin-bottom:10px">
+    <span class="filter-label">Fase:</span>
+    <button class="fb active" id="dashPhaseAll" onclick="setDashPhase('all')">Todas</button>
+    <button class="fb" id="dashPhaseDev" onclick="setDashPhase('dev')">DEV</button>
+    <button class="fb" id="dashPhaseLive" onclick="setDashPhase('live')">LIVE</button>
+  </div>
   <div class="dash-kpi" id="dashKpi">
     <div class="kpi-card"><div class="kpi-label">Taxa acerto</div><div class="kpi-val" id="dWR">—</div><div class="kpi-sub" id="dWRsub"></div></div>
     <div class="kpi-card"><div class="kpi-label">ROI global</div><div class="kpi-val" id="dROI">—</div><div class="kpi-sub" id="dROIsub"></div></div>
     <div class="kpi-card"><div class="kpi-label">ROI 7 dias</div><div class="kpi-val" id="dROI7">—</div></div>
+    <div class="kpi-card"><div class="kpi-label">CLV médio</div><div class="kpi-val" id="dCLV">—</div><div class="kpi-sub" id="dCLVsub">vs closing line</div></div>
     <div class="kpi-card"><div class="kpi-label">Série</div><div class="kpi-val" id="dStreak">—</div><div class="kpi-sub" id="dStreakSub"></div></div>
   </div>
   <div class="roi-chart">
@@ -333,6 +601,11 @@ select{font-family:var(--sans);font-size:12px;padding:5px 10px;border-radius:6px
   </div>
   <div class="sec-title">Por filtro</div>
   <div class="bk-grid" id="bkGrid"></div>
+  <div class="sec-title" style="display:flex;justify-content:space-between;align-items:center">
+    <span>💡 Propostas de melhoria</span>
+    <span style="font-family:var(--mono);font-size:9px;color:var(--text3)" id="proposalsMeta"></span>
+  </div>
+  <div id="proposalsGrid" style="margin-bottom:12px"></div>
   <div class="sec-title">Picks recentes</div>
   <div class="picks-table">
     <div class="pt-head"><span>Data</span><span>Jogo</span><span>Odds</span><span>Mov</span><span>Result</span></div>
@@ -340,17 +613,55 @@ select{font-family:var(--sans);font-size:12px;padding:5px 10px;border-radius:6px
   </div>
 </div>
 
+<!-- ══ Report Modal ══ -->
+<div id="reportModal" class="report-modal" style="display:none" onclick="if(event.target===this)el('reportModal').style.display='none'">
+  <div class="report-modal-box">
+    <div class="report-modal-head">
+      <div>
+        <div style="font-weight:700;font-size:14px">📊 Relatório completo</div>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--text3)" id="reportDate"></div>
+      </div>
+      <button onclick="el('reportModal').style.display='none'" style="background:transparent;border:none;color:var(--text2);font-size:20px;cursor:pointer;line-height:1">✕</button>
+    </div>
+    <div id="reportContent" style="max-height:80vh;overflow-y:auto">
+      <div style="padding:20px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--text3)">A gerar relatório...</div>
+    </div>
+    <div style="padding:12px 16px;background:var(--bg3);display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn-sm blue" onclick="sendCompleteTG()" id="btnSendTG">📱 Enviar TG</button>
+      <button class="btn-sm" onclick="sendEmailReport()">📧 Abrir Email</button>
+      <button class="btn-sm" onclick="copyReportText()" id="btnCopyReport">📋 Copiar texto</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ReAct Trace Modal ══ -->
+<div id="reactModal" class="react-modal" style="display:none" onclick="if(event.target===this)closeReactModal()">
+  <div class="react-modal-box">
+    <div class="react-modal-head">
+      <div>
+        <div class="react-modal-title" id="reactModalTitle">🧠 ReAct Agent</div>
+        <div class="react-modal-sub" id="reactModalSub">Thought → Action → Observation</div>
+      </div>
+      <button onclick="closeReactModal()" style="background:transparent;border:none;color:var(--text2);font-size:20px;cursor:pointer;line-height:1">✕</button>
+    </div>
+    <div class="react-trace" id="reactTrace"></div>
+  </div>
+</div>
+
 <script>
 // ════════════════════════════════════════════════════════════════
 // CONSTANTES
 // ════════════════════════════════════════════════════════════════
-const BASE      = 'https://sports.bzzoiro.com';
-const SHEET_URL     = 'https://script.google.com/macros/s/AKfycbwpF9si-Yy1HEpPgbnGXB1ht-TY0W8OTo3NqmbPMk3zW2g_a4rBPkZt8JUk8o_Tt7WE/exec';
-// Sharp 1X2 usa o mesmo SHEET_URL — distingue por fonte=sharp_1x2
-const TH_MOVE   = 0.2;    // % movimento mínimo Pinnacle
+const BASE          = 'https://sports.bzzoiro.com';
+const REPO          = 'nunovinhas-creator/over25-scanner';
+const PICKS_FILE    = 'data/picks.json';
+const PICKS1X2_FILE = 'data/picks_1x2.json';
+const GH_API        = 'https://api.github.com';
+const TH_MOVE       = 0.2;    // % movimento mínimo Pinnacle
 const DIV_MIN   = 2.0;    // % divergência mínima Pin vs recreativas
 const DIV_STEAM = 8.0;    // % threshold STEAM
-const RECR = ['bet365','bwin','unibet','williamhill','betfair','onexbet','betway','marathonbet','1xbet','betclic','ladbrokes','coral','paddypower'];
+// 1xbet/onexbet removidos — copiam preços sharp, distorcem divergência
+const RECR = ['bet365','bwin','unibet','williamhill','betfair','betway','marathonbet','betclic','ladbrokes','coral','paddypower'];
 
 // ════════════════════════════════════════════════════════════════
 // ESTADO
@@ -359,6 +670,7 @@ let allGames=[], scanFilter='all', lgNames={}, allSharp1x2=[];
 let sharp1x2Picks=[]; // picks guardados do Sharp 1X2 com resultados
 let liveData=[], liveFilter='all', liveTimer=null, liveActive=false;
 let allPicks=[];
+let dashPhase='all', currentPhase='dev';
 
 // ════════════════════════════════════════════════════════════════
 // HELPERS
@@ -374,15 +686,42 @@ async function get(path){
 }
 
 function saveCfg(){
-  try{ localStorage.setItem('ov_cfg',JSON.stringify({k:el('bsdKey').value,t:el('tgToken').value,c:el('tgChat').value})); }catch(e){}
+  try{ localStorage.setItem('ov_cfg',JSON.stringify({
+    k:el('bsdKey').value,g:el('ghToken').value,
+    t:el('tgToken').value,c:el('tgChat').value,
+    e:el('emailTo')?.value||'',
+    autoLog:el('autoLogChk')?.checked||false,
+    phase:currentPhase
+  })); }catch(e){}
 }
 function loadCfg(){
   try{
     const c=JSON.parse(localStorage.getItem('ov_cfg')||'{}');
     if(c.k)el('bsdKey').value=c.k;
+    if(c.g)el('ghToken').value=c.g;
     if(c.t)el('tgToken').value=c.t;
     if(c.c)el('tgChat').value=c.c;
+    if(c.e&&el('emailTo'))el('emailTo').value=c.e;
+    if(c.autoLog&&el('autoLogChk')) el('autoLogChk').checked=c.autoLog;
+    if(c.phase) setCurrentPhase(c.phase);
   }catch(e){}
+}
+
+function getCurrentPhase(){ return currentPhase; }
+function setCurrentPhase(phase){
+  currentPhase=phase;
+  el('phaseDevBtn')?.classList.toggle('active',phase==='dev');
+  el('phaseLiveBtn')?.classList.toggle('active',phase==='live');
+  el('autoLabel').textContent=phase.toUpperCase();
+  saveCfg();
+}
+function setDashPhase(phase){
+  dashPhase=phase;
+  ['all','dev','live'].forEach(p=>{
+    const btn=el('dashPhase'+p.charAt(0).toUpperCase()+p.slice(1));
+    if(btn) btn.classList.toggle('active',p===phase);
+  });
+  renderDash();
 }
 
 async function sendTG(msg){
@@ -399,37 +738,85 @@ async function sendTG(msg){
 
 function testTG(){ sendTG('✅ Over 2.5 Scout — teste OK!').then(ok=>alert(ok?'TG OK':'TG Erro')); }
 
-async function sheetSave(p){
-  // Método 1: JSONP — funciona em todos os browsers se GAS responder
-  const jsonpOk = await new Promise(res=>{
-    const cb='sv'+Date.now();
-    const s=document.createElement('script');
-    const timer=setTimeout(()=>{res(false);try{s.remove();delete window[cb];}catch(e){}},7000);
-    window[cb]=(d)=>{clearTimeout(timer);res(true);s.remove();delete window[cb];};
-    s.onerror=()=>{clearTimeout(timer);res(false);s.remove();delete window[cb];};
-    s.src=SHEET_URL+'?'+new URLSearchParams({...p,callback:cb}).toString();
-    document.head.appendChild(s);
-  });
-  if(jsonpOk) return;
+// ════════════════════════════════════════════════════════════════
+// GITHUB API — persistência de picks no repositório
+// ════════════════════════════════════════════════════════════════
+const _sha = {};  // cache de SHA por ficheiro
 
-  // Método 2: Image pixel — funciona no Firefox/desktop sem CORS
-  // O GAS recebe o GET mesmo sem resposta legível
-  await new Promise(res=>{
-    const img=new Image();
-    img.onload=img.onerror=()=>res();
-    img.src=SHEET_URL+'?'+new URLSearchParams({...p}).toString();
-    setTimeout(res,3000);
+function ghToken(){ return el('ghToken')?.value?.trim()||''; }
+
+// Encode/decode UTF-8 ↔ base64 (suporta caracteres acentuados)
+const toB64   = str => btoa(unescape(encodeURIComponent(str)));
+const fromB64 = b64 => decodeURIComponent(escape(atob(b64.replace(/\s/g,''))));
+
+// Escape HTML para prevenir XSS em templates com dados da API
+const esc = s => String(s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+async function ghRead(file){
+  const r = await fetch(`${GH_API}/repos/${REPO}/contents/${file}`,{
+    headers:{ 'Authorization':'token '+ghToken(), 'Accept':'application/vnd.github.v3+json' }
   });
-  // Aguarda o GAS processar
-  await new Promise(r=>setTimeout(r,800));
+  if(!r.ok) return {data:[],sha:null};
+  const resp = await r.json();
+  _sha[file] = resp.sha;
+  try{ return {data:JSON.parse(fromB64(resp.content)), sha:resp.sha}; }
+  catch(e){ return {data:[],sha:resp.sha}; }
 }
 
-// IDs já guardados — persiste entre recarregamentos
-function getSavedIds(){ try{return new Set(JSON.parse(localStorage.getItem('saved_picks')||'[]'));}catch(e){return new Set();} }
-function markSaved(id){ try{const s=getSavedIds();s.add(String(id));localStorage.setItem('saved_picks',JSON.stringify([...s]));}catch(e){} }
+async function ghWrite(file, data, message){
+  const tok = ghToken();
+  if(!tok) throw new Error('GitHub Token em falta — preenche o campo GH Token');
+  const content = toB64(JSON.stringify(data, null, 2));
+  const body = { message, content, ...(_sha[file]?{sha:_sha[file]}:{}) };
+  const r = await fetch(`${GH_API}/repos/${REPO}/contents/${file}`,{
+    method:'PUT',
+    headers:{ 'Authorization':'token '+tok, 'Content-Type':'application/json', 'Accept':'application/vnd.github.v3+json' },
+    body:JSON.stringify(body)
+  });
+  if(r.status===409){
+    // SHA desactualizado — relê e tenta de novo
+    await ghRead(file);
+    return ghWrite(file, data, message);
+  }
+  if(!r.ok){ const e=await r.json().catch(()=>({})); throw new Error(e.message||'HTTP '+r.status); }
+  const resp = await r.json();
+  _sha[file] = resp.content.sha;
+}
+
+async function picksGet(){
+  const {data} = await ghRead(PICKS_FILE);
+  return Array.isArray(data) ? data.map(normalizePick) : [];
+}
+
+async function picksSave(pick){
+  const {data:current} = await ghRead(PICKS_FILE);
+  const picks = Array.isArray(current) ? current : [];
+  const normId = id => String(id||'').replace(/_sh$/,'').replace(/_live$/,'').split('_')[0];
+  const pid = normId(pick.id);
+  const idx = picks.findIndex(p => normId(p.id)===pid || String(p.id)===String(pick.id));
+  if(idx>=0) picks[idx]={...picks[idx],...pick};
+  else picks.push({...pick, saved_at:new Date().toISOString()});
+  const label = pick.casa&&pick.fora ? `${pick.casa} vs ${pick.fora}` : String(pick.id);
+  await ghWrite(PICKS_FILE, picks, `pick: ${label}`);
+}
+
+async function picks1x2Save(pick){
+  const {data:current} = await ghRead(PICKS1X2_FILE);
+  const picks = Array.isArray(current) ? current : [];
+  const idx = picks.findIndex(p => String(p.id)===String(pick.id));
+  if(idx>=0) picks[idx]={...picks[idx],...pick};
+  else picks.push({...pick, saved_at:new Date().toISOString()});
+  const label = pick.casa&&pick.fora ? `${pick.casa} vs ${pick.fora}` : String(pick.id);
+  await ghWrite(PICKS1X2_FILE, picks, `pick 1x2: ${label}`);
+}
+
+// IDs já guardados — Set em memória, sincronizado com localStorage
+let _savedSet = null;
+function getSavedIds(){ if(!_savedSet) _savedSet=new Set(JSON.parse(localStorage.getItem('saved_picks')||'[]').map(String)); return _savedSet; }
+function markSaved(id){ getSavedIds().add(String(id)); try{localStorage.setItem('saved_picks',JSON.stringify([...getSavedIds()]));}catch(e){} }
 function isSaved(id){ return getSavedIds().has(String(id)); }
-function setBtnSaved(btn){ btn.textContent='✅ Guardado';btn.style.background='#00875a';btn.disabled=true; }
-function setBtnError(btn){ btn.textContent='❌ Erro — tenta de novo';btn.disabled=false;setTimeout(()=>{btn.textContent='📌 Guardar pick';btn.style.background='var(--green)';btn.disabled=false;},3000); }
+function setBtnSaved(btn){ btn.textContent='✅ Guardado';btn.classList.add('saved');btn.disabled=true; }
+function setBtnError(btn){ btn.textContent='❌ Erro — tenta de novo';btn.disabled=false;setTimeout(()=>{btn.textContent='📌 Guardar pick';btn.classList.remove('saved');btn.disabled=false;},3000); }
 
 function normalizePick(p){
   // Normaliza data — trata ISO, Date.toString(), timestamps
@@ -484,24 +871,12 @@ function normalizePick(p){
     prob_over25:  raw.prob_over25||raw.prob||'',
     fonte:        raw.fonte||raw.source||'',
     sharp_label:  raw.sharp_label||raw.sharplabel||'',
+    phase:        raw.phase||'',
+    odds_over_close: raw.odds_over_close||'',
+    clv:          raw.clv||'',
   };
 }
 
-function sheetGet(){
-  return new Promise((res,rej)=>{
-    const cb='sg'+Date.now();
-    const s=document.createElement('script');
-    window[cb]=(d)=>{
-      const picks=Array.isArray(d)?d:[];
-      res(picks.map(normalizePick));
-      s.remove();delete window[cb];
-    };
-    s.onerror=()=>{res([]);s.remove();};
-    s.src=SHEET_URL+'?action=get_picks&callback='+cb;
-    document.head.appendChild(s);
-    setTimeout(()=>{res([]);try{s.remove();}catch(e){}},8000);
-  });
-}
 
 // ════════════════════════════════════════════════════════════════
 // TABS
@@ -543,7 +918,8 @@ async function fetchAll1x2(df){
 
 async function loadAll(){
   saveCfg();
-  el('statusDot').style.background='#ffb800';
+  el('statusDot').style.background='var(--amber)';
+  el('statusDot').style.boxShadow='none';
   el('statusTxt').textContent='a carregar';
   el('scanList').innerHTML='<div class="loading"><div class="spinner"></div>A carregar eventos...</div>';
   el('dbgScan').style.display='none';
@@ -685,9 +1061,10 @@ async function loadAll(){
         if(score<8) return;
 
         // ── Label ──
+        // STEAM: ≤30min ao KO (dinheiro sharp de alta certeza)
         let label;
-        if(pinnMovePct>=5&&hoursToKO<=6) label='STEAM';
-        else if(pinnMovePct>=5||( pinnMovePct>=2&&hoursToKO<=12)) label='SHARP';
+        if(pinnMovePct>=5&&hoursToKO<=0.5) label='STEAM';
+        else if(pinnMovePct>=5||(pinnMovePct>=2&&hoursToKO<=12)) label='SHARP';
         else label='WATCH';
 
         sigs.push({
@@ -742,7 +1119,9 @@ async function loadAll(){
           const mdl  = pred?.model||{};
 
           const prob25 = ou.prob_over_25!=null ? (ou.prob_over_25>1?ou.prob_over_25/100:ou.prob_over_25) : null;
-          const bttsN  = btts.prob_yes!=null   ? (btts.prob_yes>1?btts.prob_yes:btts.prob_yes) : null;
+          // normaliza bttsN para 0-100 uma única vez
+          const bttsRaw = btts.prob_yes!=null ? btts.prob_yes : null;
+          const bttsN  = bttsRaw!=null ? (bttsRaw>1?bttsRaw:bttsRaw*100) : null;
           const xgH    = xg.home??null;
           const xgA    = xg.away??null;
 
@@ -782,9 +1161,11 @@ async function loadAll(){
             div=Math.abs(((recrAvg-pinnNow)/pinnNow)*100);
           }
 
-          // Label sharp
+          // Label sharp — STEAM só ≤30min ao KO
+          const koMs=new Date(ev.event_date).getTime();
+          const hToKO=Math.max(0,(koMs-Date.now())/3600000);
           if(div!=null&&div>=DIV_MIN){
-            if(movement==='SHORTENING'&&div>=DIV_STEAM) sharpLabel='STEAM';
+            if(movement==='SHORTENING'&&div>=DIV_STEAM&&hToKO<=0.5) sharpLabel='STEAM';
             else if(movement==='SHORTENING'&&div>=DIV_MIN) sharpLabel='SHARP';
             else if(div>=DIV_MIN) sharpLabel='WATCH';
           }
@@ -820,6 +1201,9 @@ async function loadAll(){
     updateScanStats();
     renderScan();
 
+    // Auto-log: guarda automaticamente candidatos se activado
+    if(el('autoLogChk')?.checked) autoLogCandidatos().catch(()=>{});
+
     // Actualizar stats Sharp
     el('sh1Total').textContent=allSharp1x2.length;
     el('sh1Steam').textContent=allSharp1x2.filter(s=>s.label==='STEAM').length;
@@ -835,7 +1219,8 @@ async function loadAll(){
     el('dbgSharp').textContent=totalOdds1x2+' odds 1X2 · '+eventsWithPin+' c/Pinnacle · '+
       allSharp1x2.length+' sinais · '+steamCount+' STEAM · '+sharpCount+' SHARP · '+lt6h+' <6h KO';
 
-    el('statusDot').style.background='#00ff88';
+    el('statusDot').style.background='var(--green)';
+    el('statusDot').style.boxShadow='0 0 6px var(--green)';
     el('statusTxt').textContent='live';
     el('tsLabel').textContent='Actualizado: '+new Date().toLocaleTimeString('pt-PT');
     el('dbgScan').style.display='block';
@@ -876,25 +1261,30 @@ function calcScore({prob25,bttsN,xgH,xgA,movement,div,sharpLabel,pinnNow,recrAvg
     else{s+=3;}
   }else{s+=12;}
 
-  // 2. xG
+  // 2. xG — peso reduzido se ML disponível (já incorpora xG internamente)
   if(xgH!=null&&xgA!=null){
     const xg=xgH+xgA;
-    if(xg>=3.5){s+=20;sig.push({t:'⚡ xG '+xg.toFixed(1),c:'g'});}
-    else if(xg>=3.0){s+=16;sig.push({t:'⚡ xG '+xg.toFixed(1),c:'g'});}
-    else if(xg>=2.5){s+=12;sig.push({t:'xG '+xg.toFixed(1),c:'g'});}
-    else if(xg>=2.0){s+=8;sig.push({t:'xG '+xg.toFixed(1),c:'a'});}
-    else if(xg>=1.5){s+=3;}
-    else{s-=4;}
+    const m=prob25!=null?0.4:1.0; // ×0.4 quando ML presente: evita double-counting
+    let pts=0;
+    if(xg>=3.5){pts=20;sig.push({t:'⚡ xG '+xg.toFixed(1),c:'g'});}
+    else if(xg>=3.0){pts=16;sig.push({t:'⚡ xG '+xg.toFixed(1),c:'g'});}
+    else if(xg>=2.5){pts=12;sig.push({t:'xG '+xg.toFixed(1),c:'g'});}
+    else if(xg>=2.0){pts=8;sig.push({t:'xG '+xg.toFixed(1),c:'a'});}
+    else if(xg>=1.5){pts=3;}
+    else{pts=-4;}
+    s+=Math.round(pts*m);
   }
 
-  // 3. BTTS
+  // 3. BTTS — peso reduzido se ML disponível (já incorpora BTTS internamente)
   if(bttsN!=null){
-    const b=bttsN>1?bttsN:bttsN*100;
-    if(b>=70){s+=15;sig.push({t:'BTTS '+b.toFixed(0)+'%',c:'g'});}
-    else if(b>=60){s+=11;sig.push({t:'BTTS '+b.toFixed(0)+'%',c:'g'});}
-    else if(b>=50){s+=7;sig.push({t:'BTTS '+b.toFixed(0)+'%',c:'a'});}
-    else if(b>=40){s+=3;}
-    else{s-=2;}
+    const m=prob25!=null?0.3:1.0; // ×0.3 quando ML presente: evita double-counting
+    let pts=0;
+    if(bttsN>=70){pts=15;sig.push({t:'BTTS '+bttsN.toFixed(0)+'%',c:'g'});}
+    else if(bttsN>=60){pts=11;sig.push({t:'BTTS '+bttsN.toFixed(0)+'%',c:'g'});}
+    else if(bttsN>=50){pts=7;sig.push({t:'BTTS '+bttsN.toFixed(0)+'%',c:'a'});}
+    else if(bttsN>=40){pts=3;}
+    else{pts=-2;}
+    s+=Math.round(pts*m);
   }
 
   // 4. Sharp money
@@ -942,7 +1332,7 @@ function setScanFilter(btn,f){
 function renderScan(){
   let list=allGames.filter(g=>{
     if(scanFilter==='short') return (g.movement||'').toUpperCase()==='SHORTENING';
-    if(scanFilter==='btts') return parseFloat(g.btts||0)>=55;
+    if(scanFilter==='btts') return (g.bttsN||0)>=55;
     return true;
   });
 
@@ -973,7 +1363,7 @@ function gameCard(g){
 
   const cardClass=(g.sharpLabel?'sharp-flag ':'')+( sc>=60?'high-score':'');
 
-  const sigs=g.signals.map(s=>`<span class="badge ${s.c==='g'?'bg':s.c==='r'?'br':s.c==='p'?'bp':'ba'}">${s.t}</span>`).join(' ');
+  const sigs=g.signals.map(s=>`<span class="badge ${s.c==='g'?'bg':s.c==='r'?'br':s.c==='p'?'bp':'ba'}">${esc(s.t)}</span>`).join(' ');
 
   // Sharp info
   const xgTotal=g.xgH!=null&&g.xgA!=null?(g.xgH+g.xgA).toFixed(2):null;
@@ -984,13 +1374,16 @@ function gameCard(g){
   const pinnMove=g.pinnPrev&&g.pinnNow?
     ((g.pinnPrev-g.pinnNow)/g.pinnPrev*100).toFixed(1):null;
 
+  // bttsN já normalizado 0-100
+  const bttsN = g.bttsN||0;
+
   return `<div class="game-card ${cardClass}" id="gc_${g.id}">
     <div class="card-head" onclick="toggleCard(${g.id})">
       <div class="card-teams">
-        <div class="card-home">${g.home}</div>
-        <div class="card-away">vs ${g.away}</div>
+        <div class="card-home">${esc(g.home)}</div>
+        <div class="card-away">vs ${esc(g.away)}</div>
         <div class="card-meta">
-          🏆 ${g.league} &nbsp;·&nbsp; 📅 ${ds} ${soon}
+          🏆 ${esc(g.league)} &nbsp;·&nbsp; 📅 ${ds} ${soon}
           ${xgTotal?`&nbsp;·&nbsp; <span style="color:var(--amber)">⚡ xG ${xgTotal}</span>`:''}
         </div>
         <div style="margin-top:5px;display:flex;align-items:center;gap:6px;flex-wrap:wrap">
@@ -998,16 +1391,14 @@ function gameCard(g){
             APOSTAR: Over 2.5
           </span>
           ${g.oddsOver?`<span style="font-family:var(--mono);font-size:12px;font-weight:700">@${g.oddsOver.toFixed(2)}</span>`:''}
-          ${g.sharpLabel?`<span class="badge bp">${g.sharpLabel==='STEAM'?'🔥':g.sharpLabel==='SHARP'?'🎯':'👁'} ${g.sharpLabel}</span>`:''}
+          ${g.sharpLabel?`<span class="badge bp">${g.sharpLabel==='STEAM'?'🔥':g.sharpLabel==='SHARP'?'🎯':'👁'} ${esc(g.sharpLabel)}</span>`:''}
           ${(()=>{
             const xgt=g.xgH!=null&&g.xgA!=null?g.xgH+g.xgA:0;
             const o=parseFloat(g.oddsOver||0);
-            const btts=parseFloat(g.btts||0);
             const mov=(g.movement||'').toUpperCase();
-            // Candidato APOSTAR: SHORTENING actual + BTTS>=55 + odds 1.5-3.0
-            // (critério final é avaliado pelo GAS 15min antes com drop acumulado)
-            const candidato = mov==='SHORTENING' && btts>=55 && o>=1.5 && o<=3.0;
-            // Critério base: xG>=2.0 + odds 2.0-3.0
+            // Candidato: SHORTENING + BTTS≥55 + odds 1.5-3.0
+            const candidato = mov==='SHORTENING' && bttsN>=55 && o>=1.5 && o<=3.0;
+            // Critério base: xG≥2.0 + odds 2.0-3.0
             const criterio = xgt>=2.0 && o>=2.0 && o<=3.0;
             if(candidato) return '<span class="badge bg" style="font-size:10px;padding:3px 8px;background:var(--green);color:#fff;font-weight:700">📌 CANDIDATO</span>';
             if(criterio) return '<span class="badge bg" style="font-size:10px;padding:3px 8px">⭐ CRITÉRIO</span>';
@@ -1038,11 +1429,11 @@ function gameCard(g){
         </div>
         <div class="cg-item">
           <div class="cg-label">Score previsto</div>
-          <div class="cg-val">${g.predScore||'—'}</div>
+          <div class="cg-val">${esc(g.predScore||'—')}</div>
         </div>
         <div class="cg-item">
           <div class="cg-label">BTTS</div>
-          <div class="cg-val" style="color:${g.bttsN>=0.55?'var(--green)':g.bttsN>=0.45?'var(--amber)':'var(--text)'}">${g.bttsN?(g.bttsN>1?g.bttsN:g.bttsN*100).toFixed(0)+'%':'—'}</div>
+          <div class="cg-val" style="color:${bttsN>=55?'var(--green)':bttsN>=45?'var(--amber)':'var(--text)'}">${bttsN>0?bttsN.toFixed(0)+'%':'—'}</div>
         </div>
         <div class="cg-item">
           <div class="cg-label">Confiança ML</div>
@@ -1083,10 +1474,14 @@ function gameCard(g){
       </div>`:''}
       </div>
   </div>
-  <div style="padding:0 14px 12px">
-    <button class="btn-pick" id="pick_${g.id}" data-id="${g.id}" onclick="savePick(this)"
-      ${isSaved(String(g.id))?'disabled style="background:#00875a"':''}>
+  <div style="padding:0 14px 12px;display:flex;flex-direction:column;gap:6px">
+    <button class="btn-pick${isSaved(String(g.id))?' saved':''}" id="pick_${g.id}" data-id="${g.id}" onclick="savePick(this)"
+      ${isSaved(String(g.id))?'disabled':''}>
       ${isSaved(String(g.id))?'✅ Guardado':'📌 Guardar pick'}
+    </button>
+    <button class="btn-sm" style="background:var(--purple-l);border-color:var(--purple);color:var(--purple);width:100%;padding:8px"
+      onclick="reactAnalyzeGame('${g.id}','${g.date}')">
+      🧠 Análise ReAct
     </button>
   </div>`;
 }
@@ -1107,15 +1502,18 @@ async function savePick(btn){
   try{
     const prob=g.prob25!=null?(g.prob25*100).toFixed(1):'';
     const xgt=g.xgH!=null&&g.xgA!=null?(g.xgH+g.xgA).toFixed(2):'';
-    const btts=g.bttsN!=null?(g.bttsN>1?g.bttsN:g.bttsN*100).toFixed(0):'';
-    await sheetSave({
-      action:'save_pick', id:String(g.id),
+    await picksSave({
+      id:String(g.id),
       casa:g.home, fora:g.away, liga:g.league||'',
       data:g.date, score_sistema:String(g.score||0),
-      prob_over25:prob, odds_over:g.oddsOver?String(g.oddsOver).replace(',','.').replace(/[^0-9.]/g,''):'', odds_under:g.oddsUnder?String(g.oddsUnder).replace(',','.').replace(/[^0-9.]/g,''):'',
+      prob_over25:prob,
+      odds_over:g.oddsOver?String(g.oddsOver).replace(',','.').replace(/[^0-9.]/g,''):'',
+      odds_under:g.oddsUnder?String(g.oddsUnder).replace(',','.').replace(/[^0-9.]/g,''):'',
       movimento:g.movement||'', score_previsto:g.predScore||'',
-      xg_total:xgt, btts_prob:btts, fonte:'scanner',
-      sharp_label:g.sharpLabel||'', div:g.div?g.div.toFixed(1):''
+      xg_total:xgt, btts_prob:g.bttsN!=null?g.bttsN.toFixed(0):'', fonte:'scanner',
+      sharp_label:g.sharpLabel||'', div:g.div?g.div.toFixed(1):'',
+      phase:getCurrentPhase(),
+      result_over25:'', golos_total:''
     });
     markSaved(id);
     setBtnSaved(btn);
@@ -1162,7 +1560,7 @@ function setSharpFilter(btn,f){
 
 function renderSharp(){
   if(!allSharp1x2.length){
-    el('sharpList').innerHTML='<div class="empty">Carrega o Scanner primeiro para ver sinais 1X2.</div>';
+    el('sharpList').innerHTML='<div class="empty" style="padding:30px"><p style="margin-bottom:12px">Sem dados carregados.</p><button class="btn-load" onclick="loadAll()" style="font-size:13px;padding:8px 20px">▶ Carregar dados</button></div>';
     return;
   }
   let list=allSharp1x2.filter(s=>{
@@ -1241,11 +1639,11 @@ function sharpCard1x2(s){
           const nvp=best.pin?(best.pin*0.975).toFixed(2):null;
           return nvp?'<span style="font-family:var(--mono);font-size:10px;color:var(--amber)">NVP ~'+nvp+'</span>':'';
         })()}
-        <button class="btn-pick" data-id="${s.id}" data-home="${s.home}" data-away="${s.away}" data-liga="${s.league}" data-date="${s.date}"
+        <button class="btn-pick${isSaved(s.id+'_sh')?' saved':''}" data-id="${s.id}" data-home="${s.home}" data-away="${s.away}" data-liga="${s.league}" data-date="${s.date}"
           data-label="${s.label}" data-score="${s.totalScore}" data-hours="${s.hoursToKO}"
           data-sig="${encodeURIComponent(JSON.stringify({...s.sigs[0]||{}, nvp:(s.sigs[0]?.pin?(s.sigs[0].pin*0.975):null)}))}"
           onclick="saveSharpPick(this)"
-          ${isSaved(s.id+'_sh')?'disabled style="background:#00875a"':''}>
+          ${isSaved(s.id+'_sh')?'disabled':''}>
           ${isSaved(s.id+'_sh')?'✅ Guardado':'📌 Guardar pick 1X2'}
         </button>
       </div>
@@ -1260,9 +1658,8 @@ async function saveSharpPick(btn){
   btn.textContent='⏳ A guardar...';btn.disabled=true;
   try{
     const sig=d.sig?JSON.parse(decodeURIComponent(d.sig||'{}')):null;
-    // Guardar no Sheet 1X2 (sheet Sharp1X2)
-    await sheetSave1x2({
-      action:'save_1x2',
+    // Guardar no picks_1x2.json via GitHub API
+    await picks1x2Save({
       id:saveId,
       data:d.date||new Date().toISOString(),
       casa:d.home||'', fora:d.away||'', liga:d.liga||'',
@@ -1274,6 +1671,7 @@ async function saveSharpPick(btn){
       label:d.label||'',
       score:d.score||'',
       fonte:'sharp_1x2',
+      phase:getCurrentPhase(),
       resultado_jogo:'', resultado_outcome:'', clv:'', odds_fecho:''
     });
     markSaved(saveId);
@@ -1299,27 +1697,6 @@ async function saveSharpPick(btn){
   }catch(e){ setBtnError(btn); }
 }
 
-// Guardar no sheet Sharp1X2 (via GAS, action=save_1x2)
-async function sheetSave1x2(params){
-  const tgId=el('tgChat')?.value?.trim()||'';
-  const url=SHEET_URL+'?'+Object.entries({...params, tg_chat:tgId})
-    .filter(([,v])=>v!==undefined&&v!=='')
-    .map(([k,v])=>k+'='+encodeURIComponent(v)).join('&');
-  // JSONP
-  return new Promise((res,rej)=>{
-    const cb='cb_1x2_'+Date.now();
-    const s=document.createElement('script');
-    window[cb]=d=>{delete window[cb];s.remove();d.error?rej(new Error(d.error)):res(d);};
-    s.src=url+'&callback='+cb;
-    s.onerror=()=>{delete window[cb];s.remove();
-      // fallback image pixel
-      new Image().src=url;
-      res({status:'pixel'});
-    };
-    document.head.appendChild(s);
-    setTimeout(()=>{if(window[cb]){delete window[cb];s.remove();res({status:'timeout'});}},8000);
-  });
-}
 
 // ════════════════════════════════════════════════════════════════
 // SHARP 1X2 — DASHBOARD
@@ -1327,17 +1704,8 @@ async function sheetSave1x2(params){
 
 async function loadDash1x2(){
   try{
-    const all = await new Promise((res)=>{
-      const cb='cb1x2_'+Date.now();
-      const s=document.createElement('script');
-      window[cb]=d=>{delete window[cb];s.remove();res(Array.isArray(d)?d:[]);};
-      s.src=SHEET_URL+'?action=get_picks_1x2&callback='+cb;
-      s.onerror=()=>{delete window[cb];s.remove();res([]);};
-      document.head.appendChild(s);
-      setTimeout(()=>{if(window[cb]){delete window[cb];s.remove();res([]);}},8000);
-    });
-    // Filtrar só picks do Sharp 1X2
-    sharp1x2Picks=all; // Sharp1X2 sheet só tem picks 1x2
+    const {data} = await ghRead(PICKS1X2_FILE);
+    sharp1x2Picks = Array.isArray(data) ? data : [];
     renderDash1x2();
   }catch(e){
     console.error('loadDash1x2',e);
@@ -1346,23 +1714,48 @@ async function loadDash1x2(){
 
 async function syncResults1x2(){
   const btn=el('btnSync1x2');
+  const st=el('syncStatus1x2');
   if(btn){btn.disabled=true;btn.textContent='⏳...';}
+  if(st){st.style.display='block';st.textContent='A carregar picks 1X2...';}
   try{
-    const result = await new Promise((res)=>{
-      const cb='sync1x2_'+Date.now();
-      const s=document.createElement('script');
-      window[cb]=d=>{delete window[cb];s.remove();res(d);};
-      s.src=SHEET_URL+'?action=sync&callback='+cb;
-      s.onerror=()=>{delete window[cb];s.remove();res({updated:0});};
-      document.head.appendChild(s);
-      setTimeout(()=>{if(window[cb]){delete window[cb];s.remove();res({updated:0});}},10000);
-    });
-    const st=el('syncStatus1x2');
-    if(st){
-      st.style.display='block';
-      st.textContent='Sync: '+(result.updated||0)+' resultado(s) actualizado(s)';
+    const {data:picks} = await ghRead(PICKS1X2_FILE);
+    if(!Array.isArray(picks)||!picks.length){
+      if(st) st.textContent='Sem picks 1X2 para sincronizar.';
+      return;
     }
-    await loadDash1x2();
+    const pending = picks.filter(p=>
+      p.id && (!p.resultado_outcome||p.resultado_outcome==='') &&
+      p.data && new Date(p.data)<new Date()
+    );
+    if(!pending.length){
+      if(st) st.textContent='✅ Todos os picks 1X2 já têm resultado!';
+      return;
+    }
+    if(st) st.textContent=`A verificar ${pending.length} picks na BSD...`;
+    let updated=0, notFound=0;
+    for(const pick of pending){
+      try{
+        const eventId = String(pick.id||'').replace('_sh','').split('_')[0];
+        if(!eventId||isNaN(parseInt(eventId))){ notFound++; continue; }
+        const ev = await get('/api/v2/events/'+eventId+'/').catch(()=>null);
+        if(!ev||( ev.status!=='finished'&&ev.period!=='FT')) continue;
+        const h=ev.home_score??0, a=ev.away_score??0;
+        const out=(pick.outcome||'').toUpperCase();
+        const won = out==='HOME'?(h>a):out==='AWAY'?(a>h):out==='DRAW'?(h===a):null;
+        if(won===null){ notFound++; continue; }
+        pick.resultado_jogo = `${h}-${a}`;
+        pick.resultado_outcome = won?'WIN':'LOSS';
+        updated++;
+        if(st) st.textContent=`✅ ${updated} actualizados... (${pick.casa} vs ${pick.fora}: ${h}-${a} → ${pick.resultado_outcome})`;
+      }catch(e){ notFound++; }
+    }
+    if(updated>0){
+      await ghWrite(PICKS1X2_FILE, picks, `sync 1x2: ${updated} resultados actualizados`);
+    }
+    if(st) st.textContent=`✅ Sync completo: ${updated} actualizados, ${notFound} não encontrados`;
+    if(updated>0) await loadDash1x2();
+  }catch(e){
+    if(st) st.textContent='❌ Erro: '+esc(e.message);
   }finally{
     if(btn){btn.disabled=false;btn.textContent='🔄 Sincronizar';}
   }
@@ -1565,7 +1958,7 @@ async function loadLive(){
   try{
     const [liveRes, picks] = await Promise.all([
       get('/api/v2/events/live/').catch(()=>({events:[]})),
-      sheetGet().catch(()=>[])
+      picksGet().catch(()=>[])
     ]);
     const events = liveRes.events||[];
 
@@ -1605,15 +1998,24 @@ async function loadLive(){
     renderLive();
     startLiveCountdown();
 
-    // Alerta TG picks em perigo
-    for(const e of enriched){
-      if(e.isDanger){
-        const k='dng_'+e.id+'_'+Math.floor(e.min/10);
-        if(!localStorage.getItem(k)){
-          await sendTG(`⚠️ <b>OVER EM PERIGO</b>\n⚽ ${e.home} ${e.hScore}-${e.aScore} ${e.away}\n⏱ ${e.min}' · ${e.goals} golos\n💡 Precisa de ${3-e.goals} gol(os) em ${90-e.min} min`);
-          localStorage.setItem(k,'1');
-        }
-      }
+    // Agent C — alertas adaptativos via ReAct (picks em perigo, max 3 em paralelo)
+    const pickGames=enriched.filter(e=>e.isPick);
+    // Processa em batches de 3 para não sobrecarregar a BSD API
+    for(let i=0;i<pickGames.length;i+=3){
+      const batch=pickGames.slice(i,i+3);
+      Promise.all(batch.map(e=>reactLiveAlert(e).catch(()=>null))).then(results=>{
+        results.forEach((result,ri)=>{
+          if(!result) return;
+          const e=batch[ri];
+          const c=result.conclusion;
+          if(c?.type==='WIN'){
+            const k='over_ok_'+e.id;
+            if(!localStorage.getItem(k)){
+              sendTG(c.msg||`🎯 OVER! ${e.home} ${e.hScore||0}-${e.aScore||0} ${e.away}`).then(ok=>{ if(ok) localStorage.setItem(k,'1'); });
+            }
+          }
+        });
+      });
     }
   }catch(err){
     el('liveList').innerHTML='<div class="empty">⚠ '+err.message+'</div>';
@@ -1690,24 +2092,75 @@ function liveCard(e){
     ${e.lastMom!=null?`<div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:8px margin-bottom:3px"><span>Momentum</span><span>${momTxt}</span></div><div class="mom-bar"><div class="mom-fill" style="width:${momPct}%;background:${momCol}"></div></div>`:''}
     ${e.isDanger?`<div style="background:var(--red-l);border:1px solid var(--red);border-radius:6px;padding:8px 10px;font-size:12px;color:var(--red);margin-top:8px">⚠️ Precisa de <strong>${3-e.goals} gol(os)</strong> em <strong>${90-e.min} min</strong></div>`:''}
     ${e.goals>=3?`<div style="background:var(--green-l);border:1px solid var(--green);border-radius:6px;padding:8px 10px;font-size:12px;color:var(--green);margin-top:8px">🎯 <strong>OVER 2.5 ENTROU!</strong> ${e.hScore}-${e.aScore} · ${e.goals} golos</div>`:''}
-    <button class="btn-pick" data-eid="${e.id}" data-home="${e.home}" data-away="${e.away}" data-liga="${e.league}" data-golos="${e.goals}" data-min="${e.min}" onclick="saveLivePick(this)" style="margin-top:10px${isSaved(e.id+'_live')?';background:#00875a':''}" ${isSaved(e.id+'_live')?'disabled':''}>
+    <button class="btn-pick${isSaved(e.id+'_live')?' saved':''}" data-eid="${e.id}" data-home="${e.home}" data-away="${e.away}" data-liga="${e.league}" data-golos="${e.goals}" data-min="${e.min}" onclick="saveLivePick(this)" style="margin-top:10px" ${isSaved(e.id+'_live')?'disabled':''}>
       ${isSaved(e.id+'_live')?'✅ Registado':'📌 Registar pick'}</button>
   </div>`;
 }
 
 async function saveLivePick(btn){
   const d=btn.dataset;
+  const liveId=String(d.eid||'live')+'_live';
+  if(isSaved(liveId)){setBtnSaved(btn);return;}
   btn.textContent='⏳ A guardar...';btn.disabled=true;
   try{
     const result=parseInt(d.golos||0)>=3?'WIN':'';
-    await sheetSave({action:'save_pick',id:(d.eid||'live')+Date.now(),
+    await picksSave({id:liveId,
       casa:d.home||'',fora:d.away||'',liga:d.liga||'',
       data:new Date().toISOString(),golos_total:d.golos||'0',
       result_over25:result,fonte:'live',score_sistema:'0'});
+    markSaved(liveId);
     btn.textContent=result==='WIN'?'✅ WIN guardado!':'✅ Registado!';
     btn.style.background=result==='WIN'?'#00875a':'var(--blue)';
     btn.disabled=true;
-  }catch(e){btn.textContent='❌ Erro';btn.disabled=false;setTimeout(()=>{btn.textContent='📌 Registar pick';btn.style.background='var(--green)';},3000);}
+  }catch(e){btn.textContent='❌ Erro: '+esc(e.message);btn.disabled=false;setTimeout(()=>{btn.textContent='📌 Registar pick';btn.style.background='var(--green)';},3000);}
+}
+
+// ════════════════════════════════════════════════════════════════
+// AUTO-LOG — guarda automaticamente todos os candidatos após loadAll
+// ════════════════════════════════════════════════════════════════
+async function autoLogCandidatos(){
+  const candidatos=allGames.filter(g=>{
+    const mov=(g.movement||'').toUpperCase();
+    const bttsN=g.bttsN||0;
+    const o=parseFloat(g.oddsOver||0);
+    return mov==='SHORTENING' && bttsN>=55 && o>=1.5 && o<=3.0 && !isSaved(String(g.id));
+  });
+  if(!candidatos.length) return;
+
+  const status=el('syncStatus');
+  if(status){status.style.display='block';status.textContent=`Auto-log: a guardar ${candidatos.length} candidatos...`;}
+
+  let saved=0;
+  for(const g of candidatos){
+    try{
+      const prob=g.prob25!=null?(g.prob25*100).toFixed(1):'';
+      const xgt=g.xgH!=null&&g.xgA!=null?(g.xgH+g.xgA).toFixed(2):'';
+      await picksSave({
+        id:String(g.id),
+        casa:g.home, fora:g.away, liga:g.league||'',
+        data:g.date, score_sistema:String(g.score||0),
+        prob_over25:prob,
+        odds_over:g.oddsOver?g.oddsOver.toFixed(4):'',
+        odds_under:g.oddsUnder?g.oddsUnder.toFixed(4):'',
+        movimento:g.movement||'', score_previsto:g.predScore||'',
+        xg_total:xgt, btts_prob:g.bttsN!=null?g.bttsN.toFixed(0):'',
+        fonte:'auto-log', sharp_label:g.sharpLabel||'',
+        div:g.div?g.div.toFixed(1):'',
+        phase:getCurrentPhase(),
+        result_over25:'', golos_total:''
+      });
+      markSaved(g.id);
+      saved++;
+    }catch(e){}
+  }
+
+  if(saved>0){
+    const lines=candidatos.slice(0,saved).map(g=>
+      `${g.home} vs ${g.away} @${g.oddsOver?g.oddsOver.toFixed(2):'-'}`
+    );
+    sendTG(`🤖 AUTO-LOG: ${saved} candidatos\n${lines.join('\n')}`).catch(()=>{});
+  }
+  if(status) status.textContent=`Auto-log: ${saved} candidatos guardados`;
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -1716,28 +2169,39 @@ async function saveLivePick(btn){
 async function loadDash(){
   el('picksBody').innerHTML='<div class="loading"><div class="spinner"></div></div>';
   try{
-    allPicks=await sheetGet();
-    // Debug temporário: mostrar odds dos primeiros picks
-    if(allPicks.length){
-      el('syncStatus').style.display='block';
-      const sample = allPicks.filter(p=>p.result_over25==='WIN'||p.result_over25==='LOSS').slice(0,3);
-      el('syncStatus').textContent = sample.map(p=>p.casa+' odds='+p.odds_over+' res='+p.result_over25).join(' | ');
-    }
+    const [picks, s1x2] = await Promise.all([
+      picksGet(),
+      sharp1x2Picks.length ? Promise.resolve({data:sharp1x2Picks}) : ghRead(PICKS1X2_FILE).catch(()=>({data:[]}))
+    ]);
+    allPicks = picks;
+    if(!sharp1x2Picks.length) sharp1x2Picks = Array.isArray(s1x2.data)?s1x2.data:[];
     renderDash();
-  }catch(e){el('picksBody').innerHTML='<div class="empty">Erro ao carregar picks</div>';}
+  }catch(e){el('picksBody').innerHTML='<div class="empty">Erro ao carregar picks: '+esc(e.message)+'</div>';}
 }
 
 function renderDash(){
   const res=p=>p.result_over25==='WIN'||p.result_over25==='LOSS';
   const onlyShort=document.getElementById('filterShortening')?.checked!==false;
-  // Só picks válidos: com casa, fora e data legível
+  // Só picks válidos: com casa, fora e data legível, filtro de fase
   const validPicks=allPicks.filter(p=>
     (p.casa||'').length>1 &&
     (p.fora||'').length>1 &&
     p.data && !isNaN(new Date(p.data)) &&
-    (!onlyShort || (p.movimento||'').toUpperCase()==='SHORTENING')
+    (!onlyShort || (p.movimento||'').toUpperCase()==='SHORTENING') &&
+    (dashPhase==='all' || (p.phase||'dev')===dashPhase)
   );
   const withR=validPicks.filter(res);
+
+  // N warning
+  const nWarn=el('nWarning');
+  if(nWarn){
+    if(withR.length<200){
+      nWarn.textContent=`N=${withR.length} picks — resultados estatisticamente inconclusivos (mínimo 200 para validar edge)`;
+      nWarn.style.display='block';
+    } else {
+      nWarn.style.display='none';
+    }
+  }
   const wins=withR.filter(p=>p.result_over25==='WIN');
   const roiAll=withR.reduce((s,p)=>{
     const o=parseFloat(p.odds_over||0);
@@ -1766,6 +2230,15 @@ function renderDash(){
   el('dStreak').textContent=streak||'—';
   el('dStreakSub').textContent=stType;
   el('dStreak').parentElement.style.borderTop=stType==='WIN'?'3px solid var(--green)':stType==='LOSS'?'3px solid var(--red)':'';
+
+  // CLV médio
+  const withCLV=validPicks.filter(p=>p.clv&&parseFloat(p.clv)!==0);
+  const clvAvg=withCLV.length?withCLV.reduce((s,p)=>s+parseFloat(p.clv||0),0)/withCLV.length:null;
+  if(el('dCLV')){
+    el('dCLV').textContent=clvAvg!=null?(clvAvg>=0?'+':'')+clvAvg.toFixed(1)+'%':'—';
+    if(clvAvg!=null) el('dCLV').style.color=clvAvg>0?'var(--green)':'var(--red)';
+    el('dCLVsub').textContent=withCLV.length?withCLV.length+' picks c/CLV':'sem dados ainda';
+  }
 
   // ROI curve
   // Curva ROI usa só picks com odds válidas
@@ -1832,6 +2305,9 @@ function renderDash(){
       <span>${resBadge}</span>
     </div>`;
   }).join(''):'<div class="empty" style="padding:20px">Nenhum pick guardado ainda</div>';
+
+  // Propostas de melhoria (renderiza com dados já em memória)
+  renderProposals(generateProposals(calcOverStats(allPicks), calcSharpStats(sharp1x2Picks), allPicks));
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -1842,14 +2318,20 @@ async function syncResults(){
   const status=document.getElementById('syncStatus');
   btn.textContent='⏳ A sincronizar...';btn.disabled=true;
   status.style.display='block';
-  status.textContent='A carregar picks sem resultado...';
+  status.textContent='A carregar picks...';
 
   try{
-    // 1. Buscar picks sem resultado do Sheet
-    const picks = await sheetGet();
+    // 1. Lê array completo do GitHub — 1 único request
+    const {data:picks} = await ghRead(PICKS_FILE);
+    if(!Array.isArray(picks)){
+      status.textContent='❌ Erro a ler picks.json';
+      btn.textContent='🔄 Sincronizar resultados';btn.disabled=false;
+      return;
+    }
+
     const pending = picks.filter(p=>
       p.id && (!p.result_over25||p.result_over25==='') &&
-      p.data && new Date(p.data) < new Date() // só jogos já passados
+      p.data && new Date(p.data) < new Date()
     );
 
     if(!pending.length){
@@ -1861,66 +2343,402 @@ async function syncResults(){
     status.textContent=`A verificar ${pending.length} picks na BSD...`;
     let updated=0, notFound=0;
 
-    // 2. Para cada pick sem resultado, buscar evento na BSD
+    // 2. Actualiza em memória — consulta BSD para cada pick pendente
     for(const pick of pending){
       try{
         const eventId = pick.id_base||String(pick.id).split('_')[0];
-        if(!eventId||isNaN(parseInt(eventId))) { notFound++; continue; }
+        if(!eventId||isNaN(parseInt(eventId))){ notFound++; continue; }
 
-        // Buscar evento na BSD
         const ev = await get('/api/v2/events/'+eventId+'/').catch(()=>null);
-        if(!ev) { notFound++; continue; }
+        if(!ev){ notFound++; continue; }
+        if(ev.status!=='finished'&&ev.period!=='FT') continue;
 
-        // Só processa jogos terminados
-        if(ev.status!=='finished'&&ev.period!=='FT'){ continue; }
+        const h=ev.home_score??0, a=ev.away_score??0;
+        const total=h+a;
+        pick.resultado    = `${h}-${a}`;
+        pick.golos_total  = String(total);
+        pick.result_over25 = total>2.5?'WIN':'LOSS';
 
-        const homeGoals = ev.home_score??0;
-        const awayGoals = ev.away_score??0;
-        const totalGoals = homeGoals + awayGoals;
-        const result = totalGoals>2.5?'WIN':'LOSS';
-        const scoreStr = homeGoals+'-'+awayGoals;
-
-        // 3. Actualizar no Sheet via JSONP
-        await sheetSave({
-          action:'save_pick',
-          id: pick.id,
-          casa: pick.casa||'',
-          fora: pick.fora||'',
-          liga: pick.liga||'',
-          data: pick.data||'',
-          score_sistema: pick.score_sistema||'0',
-          odds_over: pick.odds_over||'',
-          odds_under: pick.odds_under||'',
-          movimento: pick.movimento||'',
-          prob_over25: pick.prob_over25||'',
-          xg_total: pick.xg_total||'',
-          btts_prob: pick.btts_prob||'',
-          fonte: pick.fonte||'',
-          sharp_label: pick.sharp_label||'',
-          resultado: scoreStr,
-          golos_total: String(totalGoals),
-          result_over25: result
-        });
+        // CLV: busca odds pinnacle de fecho para calcular edge
+        if(!pick.odds_over_close){
+          try{
+            const pr=await get('/api/v2/odds/?event_id='+eventId+'&market=over_under_25&outcome=over&limit=30').catch(()=>null);
+            const pinnRow=pr?.results?.find?.(o=>o.bookmaker_slug==='pinnacle');
+            if(pinnRow){
+              const closingOdds=parseFloat(pinnRow.decimal_odds||0);
+              if(closingOdds>1.01){
+                pick.odds_over_close=String(closingOdds);
+                const entryOdds=parseFloat(pick.odds_over||0);
+                if(entryOdds>1.01) pick.clv=((entryOdds/closingOdds-1)*100).toFixed(2);
+              }
+            }
+          }catch(e){}
+        }
 
         updated++;
-        status.textContent=`✅ ${updated} actualizados de ${pending.length}... (${pick.casa} vs ${pick.fora}: ${scoreStr} → ${result})`;
-
-        // Pequena pausa para não sobrecarregar
-        await new Promise(r=>setTimeout(r,300));
-
+        status.textContent=`✅ ${updated}/${pending.length} — ${pick.casa} vs ${pick.fora}: ${h}-${a} → ${pick.result_over25}`;
       }catch(e){ notFound++; }
     }
 
-    status.textContent=`✅ Sincronização completa: ${updated} actualizados, ${notFound} não encontrados`;
-    btn.textContent='🔄 Sincronizar resultados';btn.disabled=false;
+    // 3. Um único write ao GitHub com todos os resultados actualizados
+    if(updated>0){
+      await ghWrite(PICKS_FILE, picks, `sync: ${updated} resultados actualizados`);
+    }
 
-    // Recarregar dashboard com novos dados
-    if(updated>0) setTimeout(loadDash, 1000);
+    status.textContent=`✅ Sync completo: ${updated} actualizados, ${notFound} não encontrados`;
+    btn.textContent='🔄 Sincronizar resultados';btn.disabled=false;
+    if(updated>0) setTimeout(loadDash, 500);
 
   }catch(e){
-    status.textContent='❌ Erro: '+e.message;
+    status.textContent='❌ Erro: '+esc(e.message);
     btn.textContent='🔄 Sincronizar resultados';btn.disabled=false;
   }
+}
+
+// ════════════════════════════════════════════════════════════════
+// SISTEMA DE REPORT — TG + Email + Propostas de melhoria
+// ════════════════════════════════════════════════════════════════
+
+// ── Estatísticas partilhadas (Over 2.5) ──
+function calcOverStats(picks){
+  const res=p=>p.result_over25==='WIN'||p.result_over25==='LOSS';
+  const valid=picks.filter(p=>(p.casa||'').length>1&&p.data&&!isNaN(new Date(p.data)));
+  const withR=valid.filter(res);
+  const wins=withR.filter(p=>p.result_over25==='WIN');
+  const withO=withR.filter(p=>parseFloat(p.odds_over||0)>=1.01);
+  const profit=withO.reduce((s,p)=>s+(p.result_over25==='WIN'?parseFloat(p.odds_over)-1:-1),0);
+  const roi=withO.length?profit/withO.length*100:null;
+  const wr=withR.length?wins.length/withR.length*100:null;
+  const withCLV=withR.filter(p=>parseFloat(p.clv||0)!==0);
+  const clvAvg=withCLV.length?withCLV.reduce((s,p)=>s+parseFloat(p.clv),0)/withCLV.length:null;
+  const d7=new Date();d7.setDate(d7.getDate()-7);
+  const w7=withO.filter(p=>new Date(p.data)>=d7);
+  const roi7=w7.length?w7.reduce((s,p)=>s+(p.result_over25==='WIN'?parseFloat(p.odds_over)-1:-1),0)/w7.length*100:null;
+  const today=new Date().toDateString();
+  const todayR=withR.filter(p=>new Date(p.data).toDateString()===today);
+  const todayW=todayR.filter(p=>p.result_over25==='WIN');
+  const todayROI=todayR.length?todayR.filter(p=>parseFloat(p.odds_over||0)>=1.01).reduce((s,p)=>s+(p.result_over25==='WIN'?parseFloat(p.odds_over)-1:-1),0)/Math.max(todayR.filter(p=>parseFloat(p.odds_over||0)>=1.01).length,1)*100:null;
+  const sorted=[...withR].sort((a,b)=>new Date(b.data)-new Date(a.data));
+  let streak=0,stType='';
+  for(const p of sorted){if(!streak){stType=p.result_over25;streak=1;}else if(p.result_over25===stType)streak++;else break;}
+  return {n:withR.length,nTotal:valid.length,wins:wins.length,wr,roi,profit,clvAvg,clvN:withCLV.length,roi7,streak,stType,todayN:todayR.length,todayW:todayW.length,todayROI};
+}
+
+// ── Estatísticas partilhadas (Sharp 1X2) ──
+function calcSharpStats(picks){
+  const res=p=>p.resultado_outcome==='WIN'||p.resultado_outcome==='LOSS';
+  const withR=picks.filter(res);
+  const withO=withR.filter(p=>parseFloat(p.odds_entrada||0)>=1.01);
+  const profit=withO.reduce((s,p)=>s+(p.resultado_outcome==='WIN'?parseFloat(p.odds_entrada)-1:-1),0);
+  const roi=withO.length?profit/withO.length*100:null;
+  const wr=withO.length?withO.filter(p=>p.resultado_outcome==='WIN').length/withO.length*100:null;
+  const withCLV=withR.filter(p=>parseFloat(p.clv||0)!==0);
+  const clvAvg=withCLV.length?withCLV.reduce((s,p)=>s+parseFloat(p.clv),0)/withCLV.length:null;
+  const byLabel={};
+  ['STEAM','SHARP','WATCH'].forEach(lbl=>{
+    const g=withO.filter(p=>(p.label||'').toUpperCase()===lbl);
+    if(!g.length) return;
+    const gw=g.filter(p=>p.resultado_outcome==='WIN');
+    const gp=g.reduce((s,p)=>s+(p.resultado_outcome==='WIN'?parseFloat(p.odds_entrada)-1:-1),0);
+    byLabel[lbl]={n:g.length,wr:gw.length/g.length*100,roi:gp/g.length*100};
+  });
+  const d7=new Date();d7.setDate(d7.getDate()-7);
+  const w7=withO.filter(p=>new Date(p.data)>=d7);
+  const roi7=w7.length?w7.reduce((s,p)=>s+(p.resultado_outcome==='WIN'?parseFloat(p.odds_entrada)-1:-1),0)/w7.length*100:null;
+  return {n:withR.length,nTotal:picks.length,wins:withO.filter(p=>p.resultado_outcome==='WIN').length,wr,roi,profit,clvAvg,clvN:withCLV.length,byLabel,roi7};
+}
+
+// ── Motor de propostas ──
+function generateProposals(sOver, sSharp, picks){
+  const props=[];
+  const add=(type,icon,title,detail)=>props.push({type,icon,title,detail});
+
+  // 1. Amostra
+  if(sOver.n<30){
+    add('critical','🚧','Sem dados suficientes',`N=${sOver.n} picks resolvidos. São necessários mínimo 30 para qualquer análise. Erro padrão actual: ±${sOver.n?Math.round(100/Math.sqrt(sOver.n)):99}pp.`);
+  } else if(sOver.n<200){
+    add('warning','📏',`Amostra insuficiente para validar edge (N=${sOver.n})`,`Intervalo de confiança actual: ±${Math.round(100/Math.sqrt(sOver.n))}pp no WR. São precisos ≥200 picks. Continue a registar sem ajustar parâmetros.`);
+  } else {
+    add('positive','✅',`Amostra estatisticamente relevante (N=${sOver.n})`,`Com ${sOver.n} picks o intervalo de confiança é ±${Math.round(100/Math.sqrt(sOver.n))}pp — resultados interpretáveis com confiança.`);
+  }
+
+  // 2. CLV Over
+  if(sOver.clvN>=10){
+    if(sOver.clvAvg>1.5){
+      add('positive','📈','Edge confirmado via CLV (Over 2.5)',`CLV médio ${sOver.clvAvg>=0?'+':''}${sOver.clvAvg.toFixed(1)}% sobre ${sOver.clvN} picks. Está a entrar consistentemente antes do mercado fechar — edge genuíno.`);
+    } else if(sOver.clvAvg>0){
+      add('info','〰️','CLV marginalmente positivo (Over 2.5)',`CLV ${sOver.clvAvg.toFixed(1)}% — edge fraco. Pode ser ruído. Confirmar com mais amostra.`);
+    } else {
+      add('warning','⚠️','CLV negativo — entradas após o movimento (Over 2.5)',`CLV médio ${sOver.clvAvg.toFixed(1)}%. Está a entrar depois do mercado já ter reagido. Considere entrar mais cedo (ex: Scanner logo após loadAll).`);
+    }
+  } else if(sOver.n>=20){
+    add('info','🕐','CLV ainda sem dados suficientes',`Só ${sOver.clvN} picks têm CLV calculado. Active o "Sync ReAct" após os jogos terminarem para calcular CLV em todos.`);
+  }
+
+  // 3. CLV Sharp
+  if(sSharp.clvN>=5){
+    const c=sSharp.clvAvg;
+    if(c>2){
+      add('positive','🎯','Edge Sharp 1X2 confirmado via CLV',`CLV médio +${c.toFixed(1)}% — movimento Pinnacle genuinamente preditivo. Entradas antes do mercado fechar.`);
+    } else if(c<-1){
+      add('warning','⚡','CLV Sharp negativo — entrar antes do movimento principal',`CLV ${c.toFixed(1)}%. Entradas demasiado tarde. Explore sinais WATCH antes de se tornarem SHARP.`);
+    }
+  }
+
+  // 4. ROI vs WR — análise de odds
+  if(sOver.n>=20&&sOver.roi!==null){
+    const overOdds=picks.filter(p=>{const o=parseFloat(p.odds_over||0);return o>=2.5&&(p.result_over25==='WIN'||p.result_over25==='LOSS');});
+    const lowOdds=picks.filter(p=>{const o=parseFloat(p.odds_over||0);return o>=1.5&&o<2.0&&(p.result_over25==='WIN'||p.result_over25==='LOSS');});
+    if(overOdds.length>=5&&lowOdds.length>=5){
+      const calcR=arr=>{
+        const withO=arr.filter(p=>parseFloat(p.odds_over||0)>=1.01);
+        return withO.length?withO.reduce((s,p)=>s+(p.result_over25==='WIN'?parseFloat(p.odds_over)-1:-1),0)/withO.length*100:null;
+      };
+      const rHigh=calcR(overOdds), rLow=calcR(lowOdds);
+      if(rHigh!==null&&rLow!==null&&Math.abs(rHigh-rLow)>5){
+        const better=rHigh>rLow?'>2.5':'1.5-2.0';
+        add('info','💰',`Gama de odds "${better}" tem melhor ROI`,`Odds >2.5: ROI ${rHigh.toFixed(1)}% (N=${overOdds.length}) · Odds 1.5-2.0: ROI ${rLow.toFixed(1)}% (N=${lowOdds.length}). Foque na gama mais rentável.`);
+      }
+    }
+  }
+
+  // 5. Shortening vs não-Shortening
+  if(sOver.n>=15){
+    const shortPicks=picks.filter(p=>p.movimento==='SHORTENING'&&(p.result_over25==='WIN'||p.result_over25==='LOSS'));
+    const driftPicks=picks.filter(p=>p.movimento==='DRIFTING'&&(p.result_over25==='WIN'||p.result_over25==='LOSS'));
+    const calcR=arr=>{
+      const withO=arr.filter(p=>parseFloat(p.odds_over||0)>=1.01);
+      return withO.length>=3?withO.reduce((s,p)=>s+(p.result_over25==='WIN'?parseFloat(p.odds_over)-1:-1),0)/withO.length*100:null;
+    };
+    const rShort=calcR(shortPicks), rDrift=calcR(driftPicks);
+    if(rShort!==null&&rDrift!==null){
+      if(rShort>rDrift+8){
+        add('positive','↘️','SHORTENING validado como filtro superior',`SHORTENING ROI: ${rShort.toFixed(1)}% (N=${shortPicks.length}) vs DRIFTING: ${rDrift.toFixed(1)}% (N=${driftPicks.length}). Filtro "Só SHORTENING" confirma edge.`);
+      } else if(rDrift>rShort+5){
+        add('warning','↗️','DRIFTING a superar SHORTENING — rever hipótese',`DRIFTING ROI: ${rDrift.toFixed(1)}% vs SHORTENING: ${rShort.toFixed(1)}%. Odds a afastar podem indicar value em mercados com overround.`);
+      }
+    }
+  }
+
+  // 6. DEV vs LIVE
+  const devP=picks.filter(p=>(p.phase||'dev')==='dev'&&(p.result_over25==='WIN'||p.result_over25==='LOSS'));
+  const liveP=picks.filter(p=>p.phase==='live'&&(p.result_over25==='WIN'||p.result_over25==='LOSS'));
+  if(devP.length>=10&&liveP.length>=10){
+    const calcR=arr=>{
+      const withO=arr.filter(p=>parseFloat(p.odds_over||0)>=1.01);
+      return withO.length?withO.reduce((s,p)=>s+(p.result_over25==='WIN'?parseFloat(p.odds_over)-1:-1),0)/withO.length*100:null;
+    };
+    const rDev=calcR(devP), rLive=calcR(liveP);
+    if(rDev!==null&&rLive!==null){
+      const diff=rLive-rDev;
+      if(diff<-8){
+        add('warning','🔬','Degradação DEV→LIVE detectada',`DEV ROI: ${rDev.toFixed(1)}% (N=${devP.length}) → LIVE ROI: ${rLive.toFixed(1)}% (N=${liveP.length}). Diferença ${diff.toFixed(1)}pp — possível overfitting. Reveja critérios sem olhar para o histórico.`);
+      } else if(diff>-3){
+        add('positive','🚀','Edge sustentado fora da amostra (DEV→LIVE)',`DEV: ${rDev.toFixed(1)}% → LIVE: ${rLive.toFixed(1)}%. Degradação mínima — edge real, não overfitting.`);
+      }
+    }
+  } else if(liveP.length<5&&sOver.n>=20){
+    add('info','🏁','Active a fase LIVE para validação out-of-sample',`Tem ${devP.length} picks DEV mas apenas ${liveP.length} LIVE. A validação fora da amostra é o único teste real de edge. Mude para LIVE no config.`);
+  }
+
+  // 7. Sharp timing
+  if(sSharp.n>=10){
+    const steam=sSharp.byLabel['STEAM']||null;
+    const sharp=sSharp.byLabel['SHARP']||null;
+    const watch=sSharp.byLabel['WATCH']||null;
+    const best=[['STEAM',steam],['SHARP',sharp],['WATCH',watch]].filter(([,v])=>v&&v.n>=3).sort((a,b)=>(b[1].roi||0)-(a[1].roi||0));
+    if(best.length>=2){
+      const [b1Name,b1]= best[0], [b2Name,b2]=best[1];
+      if(b1.roi-b2.roi>8){
+        add('positive','🏷️',`Label "${b1Name}" tem melhor ROI Sharp`,`${b1Name}: ${b1.roi.toFixed(1)}% WR ${b1.wr.toFixed(0)}% (N=${b1.n}) vs ${b2Name}: ${b2.roi.toFixed(1)}%. Foque em "${b1Name}".`);
+      }
+    }
+  }
+
+  // 8. Auto-log desactivado
+  if(!el('autoLogChk')?.checked&&sOver.nTotal<10){
+    add('info','🤖','Active o Auto-log para eliminar selection bias',`Com save manual só guarda os jogos que "parecem bons" — o dataset fica enviesado. Auto-log regista todos os CANDIDATO automaticamente.`);
+  }
+
+  if(!props.length){
+    add('info','📊','Sem dados suficientes para propostas','Sincronize os resultados e aguarde mais picks resolvidos.');
+  }
+  return props;
+}
+
+function renderProposals(props){
+  if(!el('proposalsGrid')) return;
+  const typeColor={positive:'var(--green)',warning:'var(--amber)',info:'var(--blue)',critical:'var(--red)'};
+  el('proposalsGrid').innerHTML=props.map((p,i)=>`
+    <div class="proposal-card ${p.type}">
+      <div class="proposal-icon">${p.icon}</div>
+      <div class="proposal-body">
+        <div class="proposal-title" style="color:${typeColor[p.type]||'var(--text)'}">${esc(p.title)}</div>
+        <div class="proposal-detail">${esc(p.detail)}</div>
+      </div>
+    </div>`).join('');
+  if(el('proposalsMeta')) el('proposalsMeta').textContent=`${props.length} análises`;
+}
+
+// ── Formatação TG ──
+function buildTGReport(sOver, sSharp, props){
+  const fmt=v=>v!==null&&!isNaN(v)?(v>=0?'+':'')+v.toFixed(1)+'%':'—';
+  const fmtN=(v,n)=>v!==null&&!isNaN(v)?(v>=0?'+':'')+v.toFixed(1)+'% ('+n+')':'—';
+  const lines=[
+    `📊 <b>SCOUT REPORT — ${new Date().toLocaleDateString('pt-PT')}</b>`,
+    '',
+    `<b>📌 OVER 2.5</b> (N=${sOver.n} resolvidos)`,
+    `WR: ${sOver.wr?sOver.wr.toFixed(1)+'%':'—'} · ROI: ${fmt(sOver.roi)} · CLV: ${fmt(sOver.clvAvg)}`,
+    `7d: ${fmt(sOver.roi7)} · Hoje: ${sOver.todayN?sOver.todayW+'/'+sOver.todayN+' ('+fmt(sOver.todayROI)+')':'—'}`,
+    `Série: ${sOver.streak||0}×${sOver.stType||'—'}`,
+  ];
+  if(sSharp.n>0){
+    lines.push('');
+    lines.push(`<b>🎯 SHARP 1X2</b> (N=${sSharp.n} resolvidos)`);
+    lines.push(`WR: ${sSharp.wr?sSharp.wr.toFixed(1)+'%':'—'} · ROI: ${fmt(sSharp.roi)} · CLV: ${fmt(sSharp.clvAvg)}`);
+    lines.push(`7d: ${fmt(sSharp.roi7)}`);
+    const byL=Object.entries(sSharp.byLabel).map(([k,v])=>`${k}: ${v.roi.toFixed(0)}%`).join(' · ');
+    if(byL) lines.push(byL);
+  }
+  const urgent=props.filter(p=>p.type==='critical'||p.type==='warning');
+  if(urgent.length){
+    lines.push('');
+    lines.push('<b>💡 Propostas</b>');
+    urgent.slice(0,3).forEach((p,i)=>lines.push(`${i+1}. ${p.icon} ${p.title}`));
+  }
+  return lines.join('\n');
+}
+
+// ── Formatação Email (texto puro) ──
+function buildEmailBody(sOver, sSharp, props){
+  const fmt=v=>v!==null&&!isNaN(v)?(v>=0?'+':'')+v.toFixed(1)+'%':'—';
+  const SEP='━━━━━━━━━━━━━━━━━━━━';
+  const lines=[
+    'OVER 2.5 SCOUT — RELATÓRIO',
+    `Data: ${new Date().toLocaleDateString('pt-PT')} ${new Date().toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'})}`,
+    SEP,
+    'MODELO OVER 2.5',
+    `Picks resolvidos: ${sOver.n}`,
+    `Win Rate: ${sOver.wr?sOver.wr.toFixed(1)+'%':'—'}`,
+    `ROI global: ${fmt(sOver.roi)}  (lucro: ${sOver.profit>=0?'+':''}${sOver.profit.toFixed(2)} unidades)`,
+    `ROI 7 dias: ${fmt(sOver.roi7)}`,
+    `CLV médio: ${fmt(sOver.clvAvg)} (${sOver.clvN} picks c/CLV)`,
+    `Série actual: ${sOver.streak||0}× ${sOver.stType||'—'}`,
+    `Hoje: ${sOver.todayN?sOver.todayW+'W/'+sOver.todayN+' · ROI '+fmt(sOver.todayROI):'sem resultados'}`,
+  ];
+  if(sSharp.n>0){
+    lines.push('');
+    lines.push(SEP);
+    lines.push('MODELO SHARP 1X2');
+    lines.push(`Picks resolvidos: ${sSharp.n}`);
+    lines.push(`Win Rate: ${sSharp.wr?sSharp.wr.toFixed(1)+'%':'—'}`);
+    lines.push(`ROI global: ${fmt(sSharp.roi)}`);
+    lines.push(`ROI 7 dias: ${fmt(sSharp.roi7)}`);
+    lines.push(`CLV médio: ${fmt(sSharp.clvAvg)}`);
+    Object.entries(sSharp.byLabel).forEach(([k,v])=>{
+      lines.push(`  ${k}: WR ${v.wr.toFixed(0)}% · ROI ${v.roi.toFixed(1)}% (N=${v.n})`);
+    });
+  }
+  if(props.length){
+    lines.push('');
+    lines.push(SEP);
+    lines.push('PROPOSTAS DE MELHORIA');
+    props.forEach((p,i)=>lines.push(`${i+1}. [${p.type.toUpperCase()}] ${p.title}\n   ${p.detail}`));
+  }
+  lines.push('');lines.push(SEP);
+  lines.push('Gerado por Over 2.5 Scout');
+  return lines.join('\n');
+}
+
+// ── Report Modal ──
+async function openReportModal(){
+  el('reportModal').style.display='flex';
+  el('reportDate').textContent=new Date().toLocaleString('pt-PT');
+  el('reportContent').innerHTML='<div style="padding:20px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--text3)"><div class="spinner" style="margin:0 auto 10px"></div>A calcular...</div>';
+
+  // Garantir que sharp1x2Picks está carregado
+  if(!sharp1x2Picks.length){
+    try{ const {data}=await ghRead(PICKS1X2_FILE); sharp1x2Picks=Array.isArray(data)?data:sharp1x2Picks; }catch(e){}
+  }
+
+  const sOver=calcOverStats(allPicks);
+  const sSharp=calcSharpStats(sharp1x2Picks);
+  const props=generateProposals(sOver,sSharp,allPicks);
+
+  // Guardar para uso dos botões de envio
+  window._reportCache={sOver,sSharp,props};
+
+  const fmt=v=>v!==null&&!isNaN(v)?(parseFloat(v)>=0?'+':'')+parseFloat(v).toFixed(1)+'%':'—';
+  const col=v=>parseFloat(v)>=0?'var(--green)':'var(--red)';
+  const typeColor={positive:'var(--green)',warning:'var(--amber)',info:'var(--blue)',critical:'var(--red)'};
+  const typeIcon={positive:'✅',warning:'⚠️',info:'ℹ️',critical:'🚨'};
+
+  el('reportContent').innerHTML=`
+    <div class="report-section">
+      <div style="font-family:var(--mono);font-size:9px;color:var(--text3);text-transform:uppercase;margin-bottom:10px">📌 Over 2.5 · N=${sOver.n} resolvidos</div>
+      <div class="report-kpi-row">
+        <div class="report-kpi"><div class="report-kpi-val" style="color:${sOver.wr?col(sOver.wr-55):'var(--text)'}">${sOver.wr?sOver.wr.toFixed(1)+'%':'—'}</div><div class="report-kpi-lbl">Win Rate</div></div>
+        <div class="report-kpi"><div class="report-kpi-val" style="color:${sOver.roi!==null?col(sOver.roi):'var(--text)'}">${fmt(sOver.roi)}</div><div class="report-kpi-lbl">ROI global</div></div>
+        <div class="report-kpi"><div class="report-kpi-val" style="color:${sOver.clvAvg!==null?col(sOver.clvAvg):'var(--text)'}">${fmt(sOver.clvAvg)}</div><div class="report-kpi-lbl">CLV médio</div></div>
+        <div class="report-kpi"><div class="report-kpi-val">${fmt(sOver.roi7)}</div><div class="report-kpi-lbl">ROI 7 dias</div></div>
+        <div class="report-kpi"><div class="report-kpi-val" style="color:${sOver.stType==='WIN'?'var(--green)':'var(--red)'}">${sOver.streak||0}×</div><div class="report-kpi-lbl">Série ${sOver.stType||''}</div></div>
+        <div class="report-kpi"><div class="report-kpi-val">${sOver.todayN?sOver.todayW+'/'+sOver.todayN:'—'}</div><div class="report-kpi-lbl">Hoje W/L</div></div>
+      </div>
+    </div>
+    ${sSharp.n>0?`
+    <div class="report-section">
+      <div style="font-family:var(--mono);font-size:9px;color:var(--text3);text-transform:uppercase;margin-bottom:10px">🎯 Sharp 1X2 · N=${sSharp.n} resolvidos</div>
+      <div class="report-kpi-row">
+        <div class="report-kpi"><div class="report-kpi-val" style="color:${sSharp.wr?col(sSharp.wr-52):'var(--text)'}">${sSharp.wr?sSharp.wr.toFixed(1)+'%':'—'}</div><div class="report-kpi-lbl">Win Rate</div></div>
+        <div class="report-kpi"><div class="report-kpi-val" style="color:${sSharp.roi!==null?col(sSharp.roi):'var(--text)'}">${fmt(sSharp.roi)}</div><div class="report-kpi-lbl">ROI global</div></div>
+        <div class="report-kpi"><div class="report-kpi-val" style="color:${sSharp.clvAvg!==null?col(sSharp.clvAvg):'var(--text)'}">${fmt(sSharp.clvAvg)}</div><div class="report-kpi-lbl">CLV médio</div></div>
+        ${Object.entries(sSharp.byLabel).map(([k,v])=>`<div class="report-kpi"><div class="report-kpi-val" style="color:${col(v.roi)}">${v.roi.toFixed(0)}%</div><div class="report-kpi-lbl">${k} ROI</div></div>`).join('')}
+      </div>
+    </div>`:''}
+    <div class="report-section">
+      <div style="font-family:var(--mono);font-size:9px;color:var(--text3);text-transform:uppercase;margin-bottom:10px">💡 Propostas de melhoria (${props.length})</div>
+      ${props.map(p=>`<div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+        <div style="font-size:16px;flex-shrink:0">${p.icon}</div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:${typeColor[p.type]||'var(--text)'};">${esc(p.title)}</div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--text2);margin-top:2px;line-height:1.5">${esc(p.detail)}</div>
+        </div>
+      </div>`).join('')}
+    </div>
+  `;
+
+  // Actualizar secção de propostas no dashboard também
+  renderProposals(props);
+}
+
+async function sendCompleteTG(){
+  const btn=el('btnSendTG');
+  if(btn){btn.disabled=true;btn.textContent='⏳...';}
+  const {sOver,sSharp,props}=window._reportCache||{sOver:calcOverStats(allPicks),sSharp:calcSharpStats(sharp1x2Picks),props:[]};
+  const msg=buildTGReport(sOver,sSharp,props);
+  const ok=await sendTG(msg);
+  if(btn){btn.disabled=false;btn.textContent=ok?'✅ Enviado!':'❌ Erro TG';}
+  setTimeout(()=>{if(btn)btn.textContent='📱 Enviar TG';},2500);
+}
+
+function sendEmailReport(){
+  const {sOver,sSharp,props}=window._reportCache||{sOver:calcOverStats(allPicks),sSharp:calcSharpStats(sharp1x2Picks),props:generateProposals(calcOverStats(allPicks),calcSharpStats(sharp1x2Picks),allPicks)};
+  const to=el('emailTo')?.value?.trim()||'';
+  const subject=encodeURIComponent(`Over 2.5 Scout — Relatório ${new Date().toLocaleDateString('pt-PT')}`);
+  const body=encodeURIComponent(buildEmailBody(sOver,sSharp,props));
+  // mailto tem limite de ~2000 chars no body; truncar se necessário
+  const maxBody=1800;
+  const bodyShort=body.length>maxBody?encodeURIComponent(buildEmailBody(sOver,sSharp,[]).substring(0,1500)+'...\n\n[Relatório truncado — ver app para propostas completas]'):body;
+  window.open(`mailto:${to}?subject=${subject}&body=${bodyShort}`,'_blank');
+}
+
+function copyReportText(){
+  const {sOver,sSharp,props}=window._reportCache||{sOver:calcOverStats(allPicks),sSharp:calcSharpStats(sharp1x2Picks),props:[]};
+  const text=buildEmailBody(sOver,sSharp,props);
+  navigator.clipboard?.writeText(text).then(()=>{
+    const btn=el('btnCopyReport');
+    if(btn){btn.textContent='✅ Copiado!';setTimeout(()=>btn.textContent='📋 Copiar texto',2000);}
+  }).catch(()=>alert('Não foi possível copiar — tente manualmente'));
 }
 
 async function sendDailyReport(){
@@ -1955,6 +2773,397 @@ ROI: ${withR.length?((roi/withR.length)*100).toFixed(1):'—'}%  (${roi>=0?'+':'
 
   const ok=await sendTG(msg);
   alert(ok?'✅ Relatório enviado!':'❌ Erro — verifica TG Token e Chat ID');
+}
+
+// ════════════════════════════════════════════════════════════════
+// REACT ENGINE — Thought → Action → Observation loop
+// ════════════════════════════════════════════════════════════════
+async function reactLoop(initialState, thinkFn, { maxSteps=15, onStep=null } = {}) {
+  const trace = [];
+  let state = { ...initialState, _step:0, _done:false };
+  const log = (type, text) => {
+    trace.push({ type, text, ts:Date.now() });
+    if(onStep) onStep([...trace]);
+  };
+  while(!state._done && state._step < maxSteps) {
+    let result;
+    try { result = thinkFn(state); }
+    catch(e) { log('error','Erro no think: '+e.message); break; }
+    log('thought', result.thought);
+    if(result.done) {
+      state._done=true;
+      state._conclusion=result.conclusion;
+      const c = typeof result.conclusion==='string' ? result.conclusion : JSON.stringify(result.conclusion,null,2);
+      log('conclusion', c);
+      break;
+    }
+    if(!result.action){ state._step++; continue; }
+    log('action', result.action.desc);
+    try {
+      const raw = await result.action.run();
+      const summary = result.action.observe(raw);
+      log('observation', summary);
+      const updates = result.action.update(raw);
+      state = { ...state, ...updates, _step: state._step+1 };
+    } catch(e) {
+      log('error', e.message);
+      state = { ...state, _step:state._step+1, _lastError:e.message };
+    }
+  }
+  if(state._step>=maxSteps && !state._done) log('timeout',`Limite de ${maxSteps} passos atingido`);
+  return { trace, conclusion:state._conclusion, state };
+}
+
+// ── Modal helpers ──
+function renderTrace(trace){
+  const icons={thought:'💭',action:'⚡',observation:'👁',conclusion:'✅',error:'❌',timeout:'⏰'};
+  return trace.map((t,i)=>`<div class="rt-step rt-${t.type}">
+    <div class="rt-label">${icons[t.type]||'·'} ${t.type} ${i+1}</div>
+    <div>${esc(t.text).replace(/\n/g,'<br>')}</div>
+  </div>`).join('');
+}
+function showReactModal(title, trace) {
+  el('reactModalTitle').textContent = '🧠 '+title;
+  el('reactTrace').innerHTML = renderTrace(trace);
+  el('reactModal').style.display='flex';
+  el('reactTrace').scrollTop=0;
+}
+function closeReactModal(){ el('reactModal').style.display='none'; }
+function updateReactModal(trace){
+  el('reactTrace').innerHTML = renderTrace(trace)+
+    '<div class="rt-step rt-action"><span class="react-spinner"></span>A pensar...</div>';
+  el('reactTrace').scrollTop=el('reactTrace').scrollHeight;
+}
+
+// ════════════════════════════════════════════════════════════════
+// REACT AGENT A — Análise de jogo (Scanner)
+// ════════════════════════════════════════════════════════════════
+async function reactAnalyzeGame(eventId, eventDate) {
+  const cached=allGames.find(g=>String(g.id)===String(eventId));
+  const label=cached?`${cached.home} vs ${cached.away}`:String(eventId);
+  el('reactModalTitle').textContent='🧠 Análise: '+label;
+  el('reactModalSub').textContent='Thought → Action → Observation';
+  el('reactTrace').innerHTML='<div class="rt-step rt-action"><span class="react-spinner"></span>A iniciar análise...</div>';
+  el('reactModal').style.display='flex';
+
+  const think = state => {
+    // Step 1 — event detail
+    if(!state.detail) return {
+      thought:`Início para evento ${eventId}. Preciso de detalhes: H2H, coaches, liga.`,
+      action:{
+        desc:`BSD: GET /api/v2/events/${eventId}/`,
+        run:()=>get(`/api/v2/events/${eventId}/`),
+        observe:r=>`${r.home_team} vs ${r.away_team} · ${r.league_name||'?'} · H2H avg golos: ${r.h2h?.avg_total_goals??'N/A'}`,
+        update:r=>({detail:r})
+      }
+    };
+    // Step 2 — Pinnacle + recreational odds
+    if(!state.oddsData) return {
+      thought:`Tenho dados do jogo. Preciso de odds Pinnacle e recreativas para detectar sharp money e calcular divergência.`,
+      action:{
+        desc:`BSD: GET /api/v2/odds/?event_id=${eventId}&market=over_under_25&limit=30`,
+        run:()=>get(`/api/v2/odds/?event_id=${eventId}&market=over_under_25&limit=30`),
+        observe:r=>{
+          const rows=arr(r);
+          const pin=rows.find(o=>o.bookmaker_slug==='pinnacle'&&o.outcome==='over');
+          const recr=rows.filter(o=>RECR.includes(o.bookmaker_slug)&&o.outcome==='over').length;
+          return pin
+            ?`Pinnacle Over: ${pin.decimal_odds}${pin.previous_decimal_odds?' (abertura:'+pin.previous_decimal_odds+')':''} · ${recr} books recreativas`
+            :`Pinnacle não encontrado · ${recr} books recreativas`;
+        },
+        update:r=>({oddsData:arr(r)})
+      }
+    };
+    // Step 3 — predictions
+    if(!state.prediction) return {
+      thought:`Tenho odds. Preciso das predictions BSD: ML prob Over 2.5, xG, BTTS. Estes alimentam calcScore().`,
+      action:{
+        desc:`BSD: GET /api/v2/predictions/?event_id=${eventId}&limit=1`,
+        run:()=>get(`/api/v2/predictions/?event_id=${eventId}&limit=1`),
+        observe:r=>{
+          const p=arr(r)[0];
+          if(!p) return 'Sem predictions disponíveis para este evento';
+          const prob=p.markets?.over_under?.prob_over_25;
+          const xg=p.markets?.expected_goals;
+          const btts=p.markets?.btts?.prob_yes;
+          return [
+            prob!=null?`ML: ${(prob>1?prob:prob*100).toFixed(1)}%`:null,
+            xg?.home!=null&&xg?.away!=null?`xG: ${xg.home.toFixed(1)}+${xg.away.toFixed(1)}=${(xg.home+xg.away).toFixed(1)}`:null,
+            btts!=null?`BTTS: ${(btts>1?btts:btts*100).toFixed(1)}%`:null,
+          ].filter(Boolean).join(' · ')||'Dados incompletos';
+        },
+        update:r=>({prediction:arr(r)[0]||null})
+      }
+    };
+    // Step 4 — calcular score & concluir
+    const d=state.detail, pred=state.prediction, oddsData=state.oddsData;
+    const ou=pred?.markets?.over_under||{}, btts=pred?.markets?.btts||{};
+    const xg=pred?.markets?.expected_goals||{}, rec=pred?.recommendations||{}, mdl=pred?.model||{};
+    const prob25=ou.prob_over_25!=null?(ou.prob_over_25>1?ou.prob_over_25/100:ou.prob_over_25):null;
+    const bttsRaw=btts.prob_yes!=null?btts.prob_yes:null;
+    const bttsN=bttsRaw!=null?(bttsRaw>1?bttsRaw:bttsRaw*100):null;
+    const xgH=xg.home??null, xgA=xg.away??null;
+    const pinRow=oddsData.find(o=>o.bookmaker_slug==='pinnacle'&&o.outcome==='over');
+    const pinnNow=pinRow?parseFloat(pinRow.decimal_odds):null;
+    const pinnPrev=pinRow?.previous_decimal_odds?parseFloat(pinRow.previous_decimal_odds):null;
+    let movement=pinRow?.movement||null;
+    const recrOdds=oddsData.filter(o=>RECR.includes(o.bookmaker_slug)&&o.outcome==='over').map(o=>parseFloat(o.decimal_odds)||0).filter(v=>v>1);
+    const recrAvg=recrOdds.length?recrOdds.reduce((s,v)=>s+v,0)/recrOdds.length:null;
+    if(pinnNow&&pinnPrev&&Math.abs(pinnPrev-pinnNow)>0.01){
+      const mv=((pinnPrev-pinnNow)/pinnPrev)*100;
+      if(!movement) movement=mv>0?'SHORTENING':'DRIFTING';
+    }
+    let div=null;
+    if(pinnNow&&recrAvg) div=Math.abs(((recrAvg-pinnNow)/pinnNow)*100);
+    const hToKO=Math.max(0,(new Date(eventDate||d.event_date)-Date.now())/3600000);
+    let sharpLabel=null;
+    if(div!=null&&div>=DIV_MIN){
+      if(movement==='SHORTENING'&&div>=DIV_STEAM&&hToKO<=0.5) sharpLabel='STEAM';
+      else if(movement==='SHORTENING'&&div>=DIV_MIN) sharpLabel='SHARP';
+      else if(div>=DIV_MIN) sharpLabel='WATCH';
+    }
+    const {score,signals}=calcScore({prob25,bttsN,xgH,xgA,movement,div,sharpLabel,pinnNow,recrAvg,rec,mdl,h2h:d.h2h});
+    const rec2=score>=65?'📌 CANDIDATO FORTE':score>=50?'⭐ CANDIDATO':score>=35?'👁 MONITORAR':'⏭ SKIP';
+    const reasons=signals.map(s=>s.t).join(', ');
+    return {
+      thought:`Todos os dados disponíveis. Calculando score com calcScore()... ${reasons}`,
+      done:true,
+      conclusion:[
+        `${rec2} · Score ${score}/100`,
+        `Sinais: ${reasons||'nenhum'}`,
+        `Pinnacle: ${pinnNow?pinnNow.toFixed(2):'N/A'} | Mov: ${movement||'—'} | Div: ${div!=null?div.toFixed(1)+'%':'—'}`,
+        `ML: ${prob25!=null?(prob25*100).toFixed(1)+'%':'N/A'} | xG: ${xgH!=null&&xgA!=null?(xgH+xgA).toFixed(1):'N/A'} | BTTS: ${bttsN!=null?bttsN.toFixed(0)+'%':'N/A'}`,
+        `KO em ${hToKO.toFixed(1)}h | Sharp: ${sharpLabel||'nenhum'}`,
+      ].join('\n')
+    };
+  };
+
+  const { trace } = await reactLoop({ eventId, eventDate }, think, {
+    maxSteps:8,
+    onStep:t=>updateReactModal(t)
+  });
+  showReactModal('Análise: '+(label||eventId), trace);
+}
+
+// ════════════════════════════════════════════════════════════════
+// REACT AGENT B — Smart Sync (paralelo + CLV)
+// ════════════════════════════════════════════════════════════════
+function syncAgentThink(state) {
+  // Step 0 — carregar picks do GitHub
+  if(!state.picks) return {
+    thought:'Preciso de carregar todos os picks do GitHub para identificar os pendentes (sem resultado, data passada).',
+    action:{
+      desc:'ghRead(data/picks.json)',
+      run:()=>ghRead(PICKS_FILE),
+      observe:r=>{
+        const n=Array.isArray(r.data)?r.data.length:0;
+        const pend=Array.isArray(r.data)?r.data.filter(p=>p.id&&(!p.result_over25||p.result_over25==='')&&p.data&&new Date(p.data)<new Date()).length:0;
+        return `${n} picks · ${pend} pendentes sem resultado`;
+      },
+      update:r=>({picks:Array.isArray(r.data)?r.data:[]})
+    }
+  };
+
+  const pending=state.picks.filter(p=>
+    p.id&&(!p.result_over25||p.result_over25==='')&&p.data&&new Date(p.data)<new Date()
+  );
+
+  // Step 1 — buscar resultados em paralelo (Promise.all)
+  if(!state.fetched) {
+    if(!pending.length) return {thought:'Sem picks pendentes. Todos já têm resultado.',done:true,conclusion:'✅ Nada a sincronizar.'};
+    return {
+      thought:`${pending.length} picks pendentes. Vou buscar todos os eventos em paralelo — 1 round trip em vez de ${pending.length} sequenciais.`,
+      action:{
+        desc:`BSD: Promise.all(${pending.length}× GET /api/v2/events/{id}/)`,
+        run:async()=>{
+          return Promise.all(pending.map(async p=>{
+            const eid=p.id_base||String(p.id).split('_')[0];
+            if(!eid||isNaN(parseInt(eid))) return {id:p.id,skip:true};
+            try{ return {id:p.id,ev:await get(`/api/v2/events/${eid}/`)}; }
+            catch(e){ return {id:p.id,error:e.message}; }
+          }));
+        },
+        observe:results=>{
+          const fin=results.filter(r=>r.ev&&(r.ev.status==='finished'||r.ev.period==='FT')).length;
+          const run=results.filter(r=>r.ev&&r.ev.status!=='finished'&&r.ev.period!=='FT').length;
+          const err=results.filter(r=>r.error||r.skip).length;
+          return `${fin} terminados → resultado disponível · ${run} ainda em curso · ${err} erros/não encontrados`;
+        },
+        update:results=>{
+          let delta=0;
+          results.forEach(r=>{
+            if(!r.ev) return;
+            const ev=r.ev;
+            if(ev.status!=='finished'&&ev.period!=='FT') return;
+            const idx=state.picks.findIndex(p=>String(p.id)===String(r.id));
+            if(idx<0) return;
+            const h=ev.home_score??0,a=ev.away_score??0,total=h+a;
+            state.picks[idx].resultado=`${h}-${a}`;
+            state.picks[idx].golos_total=String(total);
+            state.picks[idx].result_over25=total>2.5?'WIN':'LOSS';
+            delta++;
+          });
+          return {picks:state.picks,updated:(state.updated||0)+delta,fetched:true};
+        }
+      }
+    };
+  }
+
+  // Step 2 — CLV: picks com resultado mas sem odds_over_close
+  if(!state.clvDone) {
+    const needCLV=state.picks.filter(p=>p.result_over25&&!p.odds_over_close&&p.odds_over&&parseFloat(p.odds_over)>1.01);
+    if(needCLV.length) return {
+      thought:`${needCLV.length} picks resolvidos ainda sem CLV. Vou buscar odds Pinnacle de fecho em paralelo para calcular edge real.`,
+      action:{
+        desc:`BSD: Promise.all(${needCLV.length}× GET Pinnacle closing odds)`,
+        run:async()=>Promise.all(needCLV.map(async p=>{
+          const eid=p.id_base||String(p.id).split('_')[0];
+          if(!eid) return {id:p.id,skip:true};
+          try{
+            const r=await get(`/api/v2/odds/?event_id=${eid}&market=over_under_25&outcome=over&limit=30`);
+            const pin=arr(r).find(o=>o.bookmaker_slug==='pinnacle');
+            return {id:p.id,closing:pin?parseFloat(pin.decimal_odds):null};
+          }catch(e){return {id:p.id,skip:true};}
+        })),
+        observe:results=>{
+          const found=results.filter(r=>r.closing>1.01).length;
+          const posClv=results.filter(r=>{
+            const p=needCLV.find(x=>String(x.id)===String(r.id));
+            return r.closing>1.01&&p&&parseFloat(p.odds_over)>r.closing;
+          }).length;
+          return `CLV calculado: ${found}/${needCLV.length} · ${posClv} com CLV positivo (bateu closing line)`;
+        },
+        update:results=>{
+          let delta=0;
+          results.forEach(r=>{
+            if(!r.closing||r.closing<=1.01) return;
+            const idx=state.picks.findIndex(p=>String(p.id)===String(r.id));
+            if(idx<0) return;
+            state.picks[idx].odds_over_close=String(r.closing);
+            const entry=parseFloat(state.picks[idx].odds_over||0);
+            if(entry>1.01){state.picks[idx].clv=((entry/r.closing-1)*100).toFixed(2);delta++;}
+          });
+          return {picks:state.picks,clvUpdated:(state.clvUpdated||0)+delta,clvDone:true};
+        }
+      }
+    };
+    return {thought:'Sem picks que precisem de CLV neste momento.',action:{desc:'skip CLV',run:async()=>({}),observe:()=>'OK',update:()=>({clvDone:true})},};
+  }
+
+  // Step 3 — escrever no GitHub (1 único write)
+  if(!state.written) {
+    const total=(state.updated||0)+(state.clvUpdated||0);
+    if(total===0) return {thought:'Sem alterações a guardar (nenhum jogo terminou ainda).',done:true,conclusion:'✅ Sem resultados novos disponíveis.'};
+    return {
+      thought:`${total} alterações (${state.updated||0} resultados + ${state.clvUpdated||0} CLV). Um único write ao GitHub — evita conflitos de SHA.`,
+      action:{
+        desc:`ghWrite(data/picks.json) — msg: "sync: ${state.updated||0} res, ${state.clvUpdated||0} CLV"`,
+        run:()=>ghWrite(PICKS_FILE,state.picks,`sync: ${state.updated||0} resultados, ${state.clvUpdated||0} CLV`),
+        observe:()=>'Escrito com sucesso no GitHub',
+        update:()=>({written:true})
+      }
+    };
+  }
+
+  return {
+    thought:`Sync concluído. ${state.updated||0} resultados + ${state.clvUpdated||0} CLV. Total de ${state.picks?.length||0} picks no ficheiro.`,
+    done:true,
+    conclusion:`✅ ${state.updated||0} resultados actualizados · ${state.clvUpdated||0} CLV calculados · ${state.picks?.length||0} picks total`
+  };
+}
+
+async function reactSync() {
+  const btn=el('btnReactSync');
+  if(btn){btn.disabled=true;btn.textContent='🧠 A pensar...';}
+  el('reactModalTitle').textContent='🧠 ReAct Sync';
+  el('reactModalSub').textContent='Smart sync: resultados + CLV em paralelo';
+  el('reactTrace').innerHTML='<div class="rt-step rt-action"><span class="react-spinner"></span>A iniciar...</div>';
+  el('reactModal').style.display='flex';
+
+  const result=await reactLoop({},syncAgentThink,{maxSteps:8,onStep:t=>updateReactModal(t)});
+  showReactModal('ReAct Sync',result.trace);
+  if(btn){btn.disabled=false;btn.textContent='🧠 ReAct Sync';}
+  if((result.state?.updated||0)>0) setTimeout(loadDash,600);
+}
+
+// ════════════════════════════════════════════════════════════════
+// REACT AGENT C — Alertas adaptativos (Live Monitor)
+// ════════════════════════════════════════════════════════════════
+async function reactLiveAlert(game) {
+  if(!game.isPick) return null;
+
+  const thinkFn = state => {
+    const g=state.game;
+    const goals=g.goals||0, min=g.min||0;
+
+    // Step 1 — buscar stats ao vivo
+    if(!state.stats) return {
+      thought:`${g.home} vs ${g.away} (${min}', ${goals}g). É um pick. Preciso de xG ao vivo e momentum para avaliar risco real.`,
+      action:{
+        desc:`BSD: GET /api/v2/events/${g.id}/stats/`,
+        run:()=>get(`/api/v2/events/${g.id}/stats/`).catch(()=>({})),
+        observe:r=>{
+          const xgH=r?.stats?.home?.xg?.actual??null,xgA=r?.stats?.away?.xg?.actual??null;
+          const mom=r?.momentum||[];
+          const lastMom=mom.length?mom[mom.length-1]?.v:0;
+          return `xG total: ${xgH!=null&&xgA!=null?(xgH+xgA).toFixed(2):'N/A'} · Momentum: ${lastMom>20?'Casa dom.':lastMom<-20?'Fora dom.':'Equilibrado'} (${lastMom})`;
+        },
+        update:r=>{
+          const xgH=r?.stats?.home?.xg?.actual||0,xgA=r?.stats?.away?.xg?.actual||0;
+          const mom=r?.momentum||[];
+          return {stats:r,xgLive:xgH+xgA,momentum:mom.length?mom[mom.length-1]?.v:0};
+        }
+      }
+    };
+
+    // Step 2 — raciocinar sobre risco
+    const xgLive=state.xgLive||0, mom=state.momentum||0;
+    const needGoals=3-goals, minsLeft=Math.max(0,95-min);
+
+    if(goals>=3) return {
+      thought:`OVER 2.5 confirmado (${goals} golos)! Verificar se já notifiquei para este jogo.`,
+      done:true,
+      conclusion:{type:'WIN',msg:`🎯 OVER 2.5! ${g.home} ${g.hScore||0}-${g.aScore||0} ${g.away} · ${goals} golos`}
+    };
+
+    // Score de risco multi-factor
+    let risk=0; const reasons=[];
+    if(needGoals>=3){risk+=3;reasons.push(`precisa ${needGoals}g`);}
+    else if(needGoals>=2&&minsLeft<45){risk+=2;reasons.push(`${needGoals}g em ${minsLeft}min`);}
+    else if(needGoals>=1&&minsLeft<20){risk+=2;reasons.push(`${needGoals}g em ${minsLeft}min`);}
+    if(xgLive<1.5&&min>30){risk+=1;reasons.push(`xG baixo (${xgLive.toFixed(1)})`);}
+    if(mom<-40){risk+=1;reasons.push('fora domina');}
+    if(minsLeft<12&&needGoals>=1){risk+=2;reasons.push(`últimos ${minsLeft}min críticos`);}
+
+    const alertKey=`rct_dng_${g.id}_${Math.floor(min/15)}`;
+    const alreadySent=!!localStorage.getItem(alertKey);
+
+    if(alreadySent) return {
+      thought:`Risco ${risk}/9 (${reasons.join(', ')||'baixo'}). Já alertei nesta janela de 15min — rate-limit activo.`,
+      done:true,conclusion:{type:'RATE_LIMITED',risk}
+    };
+
+    if(risk>=3){
+      const lvl=risk>=6?'🚨 CRÍTICO':'⚠️ PERIGO';
+      const msg=`${lvl}\n${g.home} ${g.hScore||0}-${g.aScore||0} ${g.away}\n⏱ ${min}' · Precisa ${needGoals} gol(os) em ${minsLeft}min\nxG: ${xgLive.toFixed(1)} · ${reasons.join(', ')}`;
+      return {
+        thought:`Risco ${risk}/9 (${reasons.join(', ')}). Nível ${lvl}. Enviar alerta TG.`,
+        action:{
+          desc:`sendTG: ${lvl} (risco ${risk}/9)`,
+          run:()=>sendTG(msg).then(ok=>{if(ok)localStorage.setItem(alertKey,'1');return ok;}),
+          observe:ok=>ok?`Alerta ${lvl} enviado com sucesso`:'Falha no envio TG',
+          update:ok=>({alertSent:ok,risk,alertLevel:lvl})
+        }
+      };
+    }
+
+    return {
+      thought:`Risco ${risk}/9 (${reasons.length?reasons.join(', '):'situação controlável'}). ${needGoals}g em ${minsLeft}min, xG=${xgLive.toFixed(1)}. Sem alerta.`,
+      done:true,conclusion:{type:'MONITOR',risk,reasons}
+    };
+  };
+
+  return reactLoop({game}, thinkFn, {maxSteps:5});
 }
 
 // ════════════════════════════════════════════════════════════════
