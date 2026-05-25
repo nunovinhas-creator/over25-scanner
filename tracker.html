@@ -144,6 +144,7 @@ svg.roi-svg{width:100%;height:100%}
     <div class="kpi green"><div class="kpi-label">Picks hoje</div><div class="kpi-val" id="kToday">—</div><div class="kpi-sub" id="kTodaySub">com resultado</div></div>
     <div class="kpi amber"><div class="kpi-label">Yield / aposta</div><div class="kpi-val" id="kYield">—</div><div class="kpi-sub">unidades por pick</div></div>
     <div class="kpi green"><div class="kpi-label">Profit Factor</div><div class="kpi-val" id="kPF">—</div><div class="kpi-sub">lucro / perda bruta</div></div>
+    <div class="kpi red"><div class="kpi-label">Max Drawdown</div><div class="kpi-val" id="kDD">—</div><div class="kpi-sub">pior pico→vale em u</div></div>
   </div>
 
   <!-- ROI Curve -->
@@ -334,6 +335,13 @@ function updateKPIs(all, withResult){
     document.getElementById('kPF').textContent = pf!=='—'?pf:'—';
     if(pf!=='—') document.getElementById('kPF').style.color=parseFloat(pf)>=1.2?'var(--accent)':parseFloat(pf)>=1.0?'var(--accent3)':'var(--accent2)';
   }
+  // Max Drawdown
+  const ddSorted=[...withResult].sort((a,b)=>new Date(a.data)-new Date(b.data));
+  const maxDD=calcMaxDrawdown(ddSorted);
+  if(document.getElementById('kDD')){
+    document.getElementById('kDD').textContent=maxDD>0?'-'+maxDD.toFixed(2)+'u':'—';
+    document.getElementById('kDD').style.color=maxDD>3?'var(--accent2)':maxDD>1?'var(--accent3)':'var(--text)';
+  }
   if(document.getElementById('kCLV')){
     document.getElementById('kCLV').textContent = clvAvg!=='—'?(parseFloat(clvAvg)>=0?'+':'')+clvAvg+'%':clvAvg;
     document.getElementById('kCLVsub').textContent = withCLV.length+' picks c/ closing odds';
@@ -377,6 +385,19 @@ function drawROICurve(withResult){
     <circle cx="${x(points.length-1)}" cy="${y(lastV)}" r="4" fill="${col}"/>
   </svg>`;
   document.getElementById('roiRange').textContent=`${points.length-1} apostas · min ${minV.toFixed(2)}u · max ${maxV.toFixed(2)}u · actual ${lastV>=0?'+':''}${lastV.toFixed(2)}u`;
+}
+
+function calcMaxDrawdown(picks){
+  let peak=0,maxDD=0,cum=0;
+  for(const p of picks){
+    const o=parseFloat(p.odds_over||0);
+    if(o<1.01) continue;
+    cum+=p.result_over25==='WIN'?o-1:-1;
+    if(cum>peak) peak=cum;
+    const dd=peak-cum;
+    if(dd>maxDD) maxDD=dd;
+  }
+  return maxDD;
 }
 
 function renderBreakdown(picks){

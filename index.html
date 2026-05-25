@@ -629,6 +629,7 @@ select option{background:var(--bg3);color:var(--text)}
     <div class="kpi-card"><div class="kpi-label">ROI 7 dias</div><div class="kpi-val" id="dROI7">—</div></div>
     <div class="kpi-card"><div class="kpi-label">CLV médio</div><div class="kpi-val" id="dCLV">—</div><div class="kpi-sub" id="dCLVsub">vs closing line</div></div>
     <div class="kpi-card"><div class="kpi-label">Profit Factor</div><div class="kpi-val" id="dPF">—</div><div class="kpi-sub">lucro bruto / perda</div></div>
+    <div class="kpi-card"><div class="kpi-label">Max Drawdown</div><div class="kpi-val" id="dDD">—</div><div class="kpi-sub">pior período pico→vale</div></div>
     <div class="kpi-card"><div class="kpi-label">Série</div><div class="kpi-val" id="dStreak">—</div><div class="kpi-sub" id="dStreakSub"></div></div>
   </div>
   <div class="roi-chart">
@@ -2084,11 +2085,16 @@ function detectPatterns(e){
     else if(pace>=2.5) p.push({id:'xg_pace',label:'xG '+pace.toFixed(1)+'/90',emoji:'⚡',level:'med',   detail:`xG a ritmo de ${pace.toFixed(1)} por 90min`});
   }
 
-  // 2. VOLUME DE REMATES — shots/90min acima da média
+  // 2. VOLUME DE REMATES — shots/90min, mas só válido com contexto favorável
   if(totalShots>0&&min>0){
     const sRate=(totalShots/min)*90;
-    if(sRate>=28)      p.push({id:'shots',label:totalShots+' remates',emoji:'🎯',level:'high',detail:`${sRate.toFixed(0)} remates/90min (muito alto)`});
-    else if(sRate>=20) p.push({id:'shots',label:totalShots+' remates',emoji:'🎯',level:'med', detail:`${sRate.toFixed(0)} remates/90min (acima da média)`});
+    const prob=e.probLive||0;
+    // Jogo tardio (>55min) sem golos e probabilidade <35%: remates não predizem Over — ignora
+    if(min>55&&e.goals===0&&prob<35) {/* não adiciona */}
+    else{
+      if(sRate>=28)      p.push({id:'shots',label:totalShots+' remates',emoji:'🎯',level:'high',detail:`${sRate.toFixed(0)} remates/90min (muito alto)`});
+      else if(sRate>=22) p.push({id:'shots',label:totalShots+' remates',emoji:'🎯',level:'med', detail:`${sRate.toFixed(0)} remates/90min (acima da média)`});
+    }
   }
 
   // 3. JOGO ABERTO — score fechado + minutos avançados + momentum de ataque
@@ -2108,11 +2114,11 @@ function detectPatterns(e){
     else if(abs>=45) p.push({id:'mom',label:side+' pressiona',emoji:'💪',level:'med',detail:`Momentum ${side.toLowerCase()} ${abs.toFixed(0)}`});
   }
 
-  // 5. LATE PUSH — últimos 20min com golos em falta
-  if(min>=68&&e.goals<3){
-    const need=3-e.goals;
-    if(need===1)      p.push({id:'late',label:'1 gol em '+remaining+'min',emoji:'⏰',level:'high',detail:`Falta 1 golo — equipas abertas para contra-ataque`});
-    else if(need===2) p.push({id:'late',label:'2 golos em '+remaining+'min',emoji:'⏰',level:'med', detail:`Faltam 2 golos — alta incerteza`});
+  // 5. LATE PUSH — últimos 20min, só com 1 golo em falta E mercado a confirmar (prob≥28%)
+  // need===2 removido: 2 golos em <22min tem <8% de probabilidade histórica
+  if(min>=68&&e.goals===2){
+    const prob=e.probLive||0;
+    if(prob>=28) p.push({id:'late',label:'1 gol em '+remaining+'min',emoji:'⏰',level:'high',detail:`Falta 1 golo · mercado ${prob}% · ${remaining}min`});
   }
 
   // 6. MERCADO ao vivo — odds a cair (dinheiro smart a entrar)
@@ -2596,14 +2602,19 @@ async function captureClosingOdds(){
 // ════════════════════════════════════════════════════════════════
 async function autoLogObservations(){
   if(!el('ghToken')?.value.trim()) return; // sem token não consegue escrever
-  const THRESHOLD = 4; // patternScore mínimo para guardar
+  const THRESHOLD = 6; // patternScore mínimo para guardar (era 4 — muito permissivo)
   const LS_PREFIX = 'obs_saved_';
 
   // Jogos novos com padrões fortes ainda não guardados
-  const toSave = liveData.filter(e=>
-    (e.patternScore||0) >= THRESHOLD &&
-    !localStorage.getItem(LS_PREFIX+e.id)
-  );
+  const toSave = liveData.filter(e=>{
+    if((e.patternScore||0) < THRESHOLD) return false;
+    if(localStorage.getItem(LS_PREFIX+e.id)) return false;
+    // Odds implícitas <25% (>4.0): mercado já descartou — não regista
+    if(e.probLive!=null&&e.probLive<25) return false;
+    // Jogo >75min com menos de 2 golos: matematicamente improvável
+    if(e.min>=75&&e.goals<2) return false;
+    return true;
+  });
 
   // Jogos que já guardámos — actualiza resultado quando disponível
   const updates = {};
@@ -2815,6 +2826,20 @@ function renderObsDashboard(){
     <div class="bk-grid">${cards.join('')}</div>`;
 }
 
+// Max Drawdown = maior queda pico-para-vale na curva ROI acumulada
+function calcMaxDrawdown(sortedPicks){
+  let peak=0,maxDD=0,cum=0;
+  for(const p of sortedPicks){
+    const o=parseFloat(p.odds_over||0);
+    if(o<1.01) continue;
+    cum+=p.result_over25==='WIN'?o-1:-1;
+    if(cum>peak) peak=cum;
+    const dd=peak-cum;
+    if(dd>maxDD) maxDD=dd;
+  }
+  return maxDD;
+}
+
 // Intervalo de confiança de Wilson para proporções (z=1.96 → 95% CI)
 function wilsonCI(n, wins){
   if(!n||n<5) return null;
@@ -2889,6 +2914,14 @@ function renderDash(){
   el('dStreakSub').textContent=stType;
   el('dStreak').parentElement.style.borderTop=stType==='WIN'?'3px solid var(--green)':stType==='LOSS'?'3px solid var(--red)':'';
 
+  // Max Drawdown
+  const ddPicks=[...withROdds].sort((a,b)=>new Date(a.data)-new Date(b.data));
+  const maxDD=calcMaxDrawdown(ddPicks);
+  if(el('dDD')){
+    el('dDD').textContent=maxDD>0?'-'+maxDD.toFixed(2)+'u':'—';
+    el('dDD').style.color=maxDD>3?'var(--red)':maxDD>1?'var(--amber)':'var(--text)';
+  }
+
   // Profit Factor
   const pf=calcProfitFactor(withR);
   if(el('dPF')){
@@ -2930,13 +2963,16 @@ function renderDash(){
     '<div class="empty" style="padding:10px">Sem dados com resultado</div>';
 
   // Breakdown
+  // Grupos mutuamente exclusivos onde possível — evita confusão de atribuição
+  const isShort=p=>(p.movimento||'').toUpperCase()==='SHORTENING';
+  const isSharp=p=>!!(p.sharp_label);
   const bkGroups=[
-    ['SHORTENING',allPicks.filter(p=>p.movimento==='SHORTENING'&&res(p))],
-    ['DRIFTING',allPicks.filter(p=>p.movimento==='DRIFTING'&&res(p))],
-    ['Sharp',allPicks.filter(p=>p.sharp_label&&res(p))],
-    ['xG≥2.0',allPicks.filter(p=>parseFloat(p.xg_total||0)>=2.0&&res(p))],
-    ['BTTS≥55',allPicks.filter(p=>parseFloat(p.btts_prob||0)>=55&&res(p))],
-    ['Scanner',allPicks.filter(p=>p.fonte==='scanner'&&res(p))],
+    ['↘ Só Shortening', allPicks.filter(p=>isShort(p)&&!isSharp(p)&&res(p))],
+    ['↘+🎯 Short+Sharp', allPicks.filter(p=>isShort(p)&&isSharp(p)&&res(p))],
+    ['🎯 Só Sharp',     allPicks.filter(p=>!isShort(p)&&isSharp(p)&&res(p))],
+    ['↗ Drifting',      allPicks.filter(p=>p.movimento==='DRIFTING'&&res(p))],
+    ['⚡ xG≥2.0',       allPicks.filter(p=>parseFloat(p.xg_total||0)>=2.0&&res(p))],
+    ['🔵 BTTS≥55',      allPicks.filter(p=>parseFloat(p.btts_prob||0)>=55&&res(p))],
   ];
   el('bkGrid').innerHTML=bkGroups.map(([name,grp])=>{
     if(grp.length<2)return '';
@@ -3848,6 +3884,7 @@ async function silentSync(){
         try{
           const eid=String(pick.id_base||pick.id).split('_')[0];
           if(!eid||isNaN(+eid)) continue;
+          await new Promise(r=>setTimeout(r,200));
           const ev=await get('/api/v2/events/'+eid+'/').catch(()=>null);
           if(!ev||(ev.status!=='finished'&&ev.period!=='FT')) continue;
           const h=ev.home_score??0,a=ev.away_score??0,total=h+a;
@@ -3909,6 +3946,7 @@ async function silentSync(){
         try{
           const eid=String(pick.id||'').replace('_sh','').split('_')[0];
           if(!eid||isNaN(+eid)) continue;
+          await new Promise(r=>setTimeout(r,200));
           const ev=await get('/api/v2/events/'+eid+'/').catch(()=>null);
           if(!ev||(ev.status!=='finished'&&ev.period!=='FT')) continue;
           const h=ev.home_score??0,a=ev.away_score??0;
