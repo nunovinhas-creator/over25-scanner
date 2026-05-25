@@ -704,11 +704,19 @@ const PICKS_FILE    = 'data/picks.json';
 const PICKS1X2_FILE = 'data/picks_1x2.json';
 const OBS_FILE      = 'data/observations.json';
 const GH_API        = 'https://api.github.com';
-const TH_MOVE       = 0.2;    // % movimento mínimo Pinnacle
+const TH_MOVE       = 1.0;    // % movimento mínimo Pinnacle (ruído <1% filtrado)
 const DIV_MIN   = 2.0;    // % divergência mínima Pin vs recreativas
 const DIV_STEAM = 8.0;    // % threshold STEAM
 // 1xbet/onexbet removidos — copiam preços sharp, distorcem divergência
 const RECR = ['bet365','bwin','unibet','williamhill','betfair','betway','marathonbet','betclic','ladbrokes','coral','paddypower'];
+// Taxa histórica Over 2.5 por liga — referência para normalização de score (liga neutra ≈ 0.55)
+const LEAGUE_BASE = {
+  'Eredivisie':0.67,'Bundesliga':0.63,'Belgian First Division A':0.62,'Belgium First Division A':0.62,
+  'Scottish Premiership':0.61,'Championship':0.60,'2. Bundesliga':0.60,'Czech First League':0.59,
+  'Premier League':0.58,'Ligue 1':0.56,'La Liga':0.52,'Serie A':0.50,
+  'Liga Portugal':0.52,'Primeira Liga':0.52,'Süper Lig':0.49,'Turkish Süper Lig':0.49,
+  'Greek Super League':0.48,'Serie B':0.48
+};
 
 // ════════════════════════════════════════════════════════════════
 // ESTADO
@@ -1253,7 +1261,8 @@ async function loadAll(){
           // Score
           const {score,signals}=calcScore({prob25,bttsN,xgH,xgA,movement,div,sharpLabel,
             pinnNow,recrAvg,rec,mdl,
-            h2h:det?.h2h, hCoach:det?.home_coach, aCoach:det?.away_coach});
+            h2h:det?.h2h, hCoach:det?.home_coach, aCoach:det?.away_coach,
+            league:ev.league_name||lgNames[ev.league_id]||''});
 
           enriched.push({
             id:ev.id, home:ev.home_team, away:ev.away_team,
@@ -1339,7 +1348,7 @@ async function loadAll(){
 // ════════════════════════════════════════════════════════════════
 // SCORE — Over 2.5 com BSD ML como base
 // ════════════════════════════════════════════════════════════════
-function calcScore({prob25,bttsN,xgH,xgA,movement,div,sharpLabel,pinnNow,recrAvg,rec,mdl,h2h,hCoach,aCoach}){
+function calcScore({prob25,bttsN,xgH,xgA,movement,div,sharpLabel,pinnNow,recrAvg,rec,mdl,h2h,hCoach,aCoach,league}){
   let s=0; const sig=[];
 
   // 1. ML BSD (base)
@@ -1390,16 +1399,28 @@ function calcScore({prob25,bttsN,xgH,xgA,movement,div,sharpLabel,pinnNow,recrAvg
   // 5. Divergência
   if(div!=null&&div>=5){s+=5;sig.push({t:'div '+div.toFixed(1)+'%',c:'a'});}
 
-  // 6. H2H
+  // 6. H2H (mínimo 4 jogos — H2H com poucos dados tem alta variância)
   if(h2h?.avg_total_goals!=null){
-    const avg=parseFloat(h2h.avg_total_goals);
-    if(avg>=3.5){s+=6;sig.push({t:'H2H '+avg.toFixed(1)+'g',c:'g'});}
-    else if(avg>=3.0){s+=4;}
-    else if(avg<=1.5){s-=4;}
+    const n=h2h.total_matches??h2h.total??h2h.count??h2h.n??null;
+    if(n===null||n>=4){
+      const avg=parseFloat(h2h.avg_total_goals);
+      if(avg>=3.5){s+=6;sig.push({t:'H2H '+avg.toFixed(1)+'g',c:'g'});}
+      else if(avg>=3.0){s+=4;}
+      else if(avg<=1.5){s-=4;}
+    }
   }
 
   // 7. ML recomenda
   if(rec?.over_25){s+=5;sig.push({t:'ML rec.',c:'g'});}
+
+  // 8. Normalização por liga — ajusta ±5 pts conforme taxa base histórica O2.5
+  if(league){
+    const base=LEAGUE_BASE[league]??0.55;
+    const adj=Math.round((base-0.55)*20); // ±10 pts para ligas extremas (ex: +2.4 Eredivisie, -1 Serie A)
+    s+=adj;
+    if(adj>=3) sig.push({t:'liga+',c:'a'});
+    else if(adj<=-3) sig.push({t:'liga−',c:'r'});
+  }
 
   return{score:Math.max(0,Math.min(100,Math.round(s))),signals:sig};
 }
@@ -2520,37 +2541,52 @@ async function autoLogCandidatos(){
 // CLOSING ODDS — captura Pinnacle ≤2h antes do KO para CLV real
 // ════════════════════════════════════════════════════════════════
 async function captureClosingOdds(){
-  if(!el('ghToken')?.value.trim()) return;
-  // Só corre se houver jogos a menos de 2h do KO no scanner actual
-  const nearKO=allGames.filter(g=>{
-    const h=Math.max(0,(new Date(g.date).getTime()-Date.now())/3600000);
-    return h<=2 && h>=0 && g.pinnNow>1.01;
-  });
-  if(!nearKO.length) return;
-
+  if(!el('ghToken')?.value.trim()||!el('bsdKey')?.value.trim()) return;
+  // Lê todos os picks e trata os que estão dentro da janela ≤2h do KO (ou até 1h após KO)
   const {data:picks}=await ghRead(PICKS_FILE);
   if(!Array.isArray(picks)||!picks.length) return;
 
-  let updated=0;
-  for(const pick of picks){
-    if(pick.odds_over_close) continue;
-    const baseId=String(pick.id).split('_')[0];
-    const game=nearKO.find(g=>String(g.id)===baseId);
-    if(!game) continue;
+  const now=Date.now();
+  const toUpdate=picks.filter(p=>{
+    if(p.odds_over_close) return false; // já tem closing odds
+    const ko=new Date(p.data).getTime();
+    const h=(ko-now)/3600000; // negativo se já começou
+    return h>=-1.5 && h<=2; // janela: até 1.5h após KO ou até 2h antes do KO
+  });
+  if(!toUpdate.length) return;
 
-    pick.odds_over_close=game.pinnNow.toFixed(4);
-    const entry=parseFloat(pick.odds_over||0);
-    if(entry>1.01){
-      // CLV = (entrada/fecho - 1) × 100 — positivo = entraste antes do mercado
-      pick.clv=((entry/game.pinnNow-1)*100).toFixed(2);
-    }
-    updated++;
+  // Primeiro tenta usar allGames (já em memória, sem API extra)
+  const gameMap=new Map(allGames.map(g=>[String(g.id),g]));
+
+  let updated=0;
+  for(const pick of toUpdate){
+    try{
+      const eid=String(pick.id_base||pick.id).split('_')[0];
+      if(!eid||isNaN(+eid)) continue;
+
+      let co=null;
+      const cached=gameMap.get(eid);
+      if(cached?.pinnNow>1.01){
+        co=cached.pinnNow;
+      } else {
+        // Vai buscar à BSD directamente (pick não está no scanner actual)
+        const pr=await get('/api/v2/odds/?event_id='+eid+'&market=over_under_25&outcome=over&limit=30').catch(()=>null);
+        const pinnRow=pr?.results?.find?.(o=>o.bookmaker_slug==='pinnacle');
+        if(!pinnRow) continue;
+        co=parseFloat(pinnRow.decimal_odds||0);
+        if(co<1.01) continue;
+      }
+
+      pick.odds_over_close=co.toFixed(4);
+      const eo=parseFloat(pick.odds_over||0);
+      if(eo>1.01) pick.clv=((eo/(co*1.01)-1)*100).toFixed(2); // devigged
+      updated++;
+    }catch(e){}
   }
 
   if(updated>0){
     await ghWrite(PICKS_FILE,picks,`close odds: ${updated} picks`);
-    // actualiza cache local
-    allPicks=picks;
+    allPicks=picks.map(normalizePick);
   }
 }
 
@@ -2971,7 +3007,7 @@ async function syncResults(){
               if(closingOdds>1.01){
                 pick.odds_over_close=String(closingOdds);
                 const entryOdds=parseFloat(pick.odds_over||0);
-                if(entryOdds>1.01) pick.clv=((entryOdds/closingOdds-1)*100).toFixed(2);
+                if(entryOdds>1.01) pick.clv=((entryOdds/(closingOdds*1.01)-1)*100).toFixed(2); // devigged
               }
             }
           }catch(e){}
@@ -3785,7 +3821,8 @@ async function silentSync(){
           if(!pick.odds_over_close){
             const pr=await get('/api/v2/odds/?event_id='+eid+'&market=over_under_25&outcome=over&limit=30').catch(()=>null);
             const pin=pr?.results?.find?.(o=>o.bookmaker_slug==='pinnacle');
-            if(pin){const co=parseFloat(pin.decimal_odds||0);if(co>1.01){pick.odds_over_close=String(co);const eo=parseFloat(pick.odds_over||0);if(eo>1.01)pick.clv=((eo/co-1)*100).toFixed(2);}}
+            if(pin){const co=parseFloat(pin.decimal_odds||0);if(co>1.01){pick.odds_over_close=String(co);const eo=parseFloat(pick.odds_over||0);if(eo>1.01)pick.clv=((eo/(co*1.01)-1)*100).toFixed(2); // devigged
+}}
           }
           upd++;
         }catch(e){}
