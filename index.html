@@ -612,6 +612,7 @@ select option{background:var(--bg3);color:var(--text)}
   <div style="margin-top:12px;margin-bottom:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
     <button class="btn-sm green" onclick="loadDash()">↻ Actualizar</button>
     <button class="btn-sm" onclick="syncResults()" id="btnSync">🔄 Sincronizar resultados</button>
+    <button class="btn-sm" onclick="syncObservations()" id="btnSyncObs">👁 Sync observações</button>
     <button class="btn-sm" onclick="reactSync()" id="btnReactSync" style="background:var(--purple-l);border-color:var(--purple);color:var(--purple)">🧠 ReAct Sync</button>
     <button class="btn-sm blue" onclick="openReportModal()">📊 Relatório</button>
     <button class="btn-sm" onclick="sendEmailReport()" title="Abre cliente de email com relatório pré-preenchido">📧 Email</button>
@@ -973,7 +974,7 @@ function switchTab(name){
   });
   if(name==='sharp') renderSharp();
   if(name==='live'&&!liveActive){ liveActive=true; loadLive(); }
-  if(name==='dash'){ loadDash(); setTimeout(()=>syncResults().catch(()=>{}),2000); }
+  if(name==='dash'){ loadDash(); setTimeout(()=>{ syncResults().catch(()=>{}); syncObservations().catch(()=>{}); },2000); }
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -2533,13 +2534,18 @@ async function autoLogObservations(){
     !localStorage.getItem(LS_PREFIX+e.id)
   );
 
-  // Jogos que já guardámos mas ainda estão em campo — actualiza resultado se over entrou
+  // Jogos que já guardámos — actualiza resultado quando disponível
   const updates = {};
   for(const e of liveData){
     const k = LS_PREFIX+e.id;
     const saved = localStorage.getItem(k);
     if(saved && !saved.includes('result=')){
-      if(e.goals>=3) updates[saved] = {result_over25:'WIN', final_score:`${e.hScore}-${e.aScore}`, result_at_min:e.min};
+      if(e.goals>=3){
+        updates[saved]={result_over25:'WIN',final_score:`${e.hScore}-${e.aScore}`,result_at_min:e.min};
+      } else if(e.min>=90||(e.period&&String(e.period).toUpperCase()==='FT')){
+        // Jogo terminou sem Over — LOSS
+        updates[saved]={result_over25:'LOSS',final_score:`${e.hScore}-${e.aScore}`,result_at_min:e.min};
+      }
     }
   }
 
@@ -3703,6 +3709,57 @@ function syncAgentThink(state) {
     done:true,
     conclusion:`✅ ${state.updated||0} resultados actualizados · ${state.clvUpdated||0} CLV calculados · ${state.picks?.length||0} picks total`
   };
+}
+
+async function syncObservations(){
+  const btn=el('btnSyncObs');
+  const status=el('syncStatus');
+  if(btn){btn.disabled=true;btn.textContent='⏳...';}
+  if(status){status.style.display='block';status.textContent='A carregar observações...';}
+  try{
+    const {data:obs}=await ghRead(OBS_FILE);
+    if(!Array.isArray(obs)||!obs.length){
+      if(status) status.textContent='Sem observações guardadas.';
+      if(btn){btn.disabled=false;btn.textContent='👁 Sync observações';}
+      return;
+    }
+    const pending=obs.filter(o=>
+      o.event_id && (!o.result_over25||o.result_over25==='') &&
+      o.data && new Date(o.data)<new Date()
+    );
+    if(!pending.length){
+      if(status) status.textContent='✅ Todas as observações já têm resultado!';
+      if(btn){btn.disabled=false;btn.textContent='👁 Sync observações';}
+      return;
+    }
+    if(status) status.textContent=`A verificar ${pending.length} observações na BSD...`;
+    let updated=0, notFound=0;
+    for(const ob of pending){
+      try{
+        const eventId=String(ob.event_id).split('_')[0];
+        if(!eventId||isNaN(parseInt(eventId))){ notFound++; continue; }
+        const ev=await get('/api/v2/events/'+eventId+'/').catch(()=>null);
+        if(!ev){ notFound++; continue; }
+        if(ev.status!=='finished'&&ev.period!=='FT') continue;
+        const h=ev.home_score??0, a=ev.away_score??0;
+        const total=h+a;
+        ob.result_over25=total>2.5?'WIN':'LOSS';
+        ob.final_score=`${h}-${a}`;
+        updated++;
+        if(status) status.textContent=`✅ ${updated}/${pending.length} — ${ob.casa} vs ${ob.fora}: ${h}-${a} → ${ob.result_over25}`;
+      }catch(e){ notFound++; }
+    }
+    if(updated>0){
+      await ghWrite(OBS_FILE,obs,`obs sync: ${updated} resultados`);
+      allObs=obs;
+      renderObsDashboard();
+    }
+    if(status) status.textContent=`✅ Sync obs: ${updated} actualizadas, ${notFound} não encontradas`;
+    if(btn){btn.disabled=false;btn.textContent='👁 Sync observações';}
+  }catch(e){
+    if(status) status.textContent='❌ Erro: '+esc(e.message);
+    if(btn){btn.disabled=false;btn.textContent='👁 Sync observações';}
+  }
 }
 
 async function reactSync() {
