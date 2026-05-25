@@ -628,6 +628,7 @@ select option{background:var(--bg3);color:var(--text)}
     <div class="kpi-card"><div class="kpi-label">ROI global</div><div class="kpi-val" id="dROI">—</div><div class="kpi-sub" id="dROIsub"></div></div>
     <div class="kpi-card"><div class="kpi-label">ROI 7 dias</div><div class="kpi-val" id="dROI7">—</div></div>
     <div class="kpi-card"><div class="kpi-label">CLV médio</div><div class="kpi-val" id="dCLV">—</div><div class="kpi-sub" id="dCLVsub">vs closing line</div></div>
+    <div class="kpi-card"><div class="kpi-label">Profit Factor</div><div class="kpi-val" id="dPF">—</div><div class="kpi-sub">lucro bruto / perda</div></div>
     <div class="kpi-card"><div class="kpi-label">Série</div><div class="kpi-val" id="dStreak">—</div><div class="kpi-sub" id="dStreakSub"></div></div>
   </div>
   <div class="roi-chart">
@@ -2814,6 +2815,27 @@ function renderObsDashboard(){
     <div class="bk-grid">${cards.join('')}</div>`;
 }
 
+// Intervalo de confiança de Wilson para proporções (z=1.96 → 95% CI)
+function wilsonCI(n, wins){
+  if(!n||n<5) return null;
+  const p=wins/n, z=1.96, z2=z*z;
+  const denom=1+z2/n;
+  const center=(p+z2/(2*n))/denom;
+  const margin=z*Math.sqrt(p*(1-p)/n+z2/(4*n*n))/denom;
+  const lo=(Math.max(0,center-margin)*100).toFixed(1);
+  const hi=(Math.min(1,center+margin)*100).toFixed(1);
+  return {lo,hi,str:`IC95: ${lo}–${hi}%`};
+}
+
+// Profit Factor = lucro bruto / perda bruta (>1 = sistema rentável)
+function calcProfitFactor(picks){
+  const res=picks.filter(p=>p.result_over25==='WIN'||p.result_over25==='LOSS');
+  if(!res.length) return null;
+  const grossWins=res.filter(p=>p.result_over25==='WIN').reduce((s,p)=>s+(parseFloat(p.odds_over||0)-1),0);
+  const grossLosses=res.filter(p=>p.result_over25==='LOSS').length;
+  return grossLosses>0?(grossWins/grossLosses):null;
+}
+
 function renderDash(){
   const res=p=>p.result_over25==='WIN'||p.result_over25==='LOSS';
   const onlyShort=document.getElementById('filterShortening')?.checked!==false;
@@ -2847,7 +2869,8 @@ function renderDash(){
 
   // KPIs
   el('dWR').textContent=withR.length?(wins.length/withR.length*100).toFixed(1)+'%':'—';
-  el('dWRsub').textContent=withR.length+' apostas';
+  const ci=withR.length>=5?wilsonCI(withR.length,wins.length):null;
+  el('dWRsub').textContent=ci?`${withR.length} apostas · ${ci.str}`:withR.length+' apostas';
   const roiPct=withROdds.length?(roiAll/withROdds.length*100).toFixed(1):'—';
   el('dROI').textContent=roiPct!=='—'?(parseFloat(roiPct)>=0?'+':'')+roiPct+'%':roiPct;
   el('dROIsub').textContent=(roiAll>=0?'+':'')+roiAll.toFixed(2)+'u ('+withROdds.length+' c/odds)';
@@ -2865,6 +2888,13 @@ function renderDash(){
   el('dStreak').textContent=streak||'—';
   el('dStreakSub').textContent=stType;
   el('dStreak').parentElement.style.borderTop=stType==='WIN'?'3px solid var(--green)':stType==='LOSS'?'3px solid var(--red)':'';
+
+  // Profit Factor
+  const pf=calcProfitFactor(withR);
+  if(el('dPF')){
+    el('dPF').textContent=pf!=null?pf.toFixed(2):'—';
+    if(pf!=null) el('dPF').style.color=pf>=1.2?'var(--green)':pf>=1.0?'var(--amber)':'var(--red)';
+  }
 
   // CLV médio
   const withCLV=validPicks.filter(p=>p.clv&&parseFloat(p.clv)!==0);
@@ -2932,11 +2962,16 @@ function renderDash(){
     const resBadge=res2==='WIN'?'<span class="badge bg">WIN</span>':res2==='LOSS'?'<span class="badge br">LOSS</span>':'<span class="badge ba">—</span>';
     const mov=p.movimento==='SHORTENING'?'<span style="color:var(--green)">↘</span>':p.movimento==='DRIFTING'?'<span style="color:var(--red)">↗</span>':'—';
     const jogo=`${p.casa||'?'} vs ${p.fora||'?'}`;
+    const prob=parseFloat(p.prob_over25||0)/100;
+    const oddsV=parseFloat(p.odds_over||0);
+    const ev=(prob>0.1&&oddsV>1.01)?((prob*oddsV-1)*100):null;
+    const evStr=ev!=null?`<span style="font-family:var(--mono);font-size:9px;color:${ev>=0?'var(--green)':'var(--red)'}">${ev>=0?'+':''}${ev.toFixed(1)}%</span>`:
+      `<span style="font-family:var(--mono);font-size:9px;color:var(--text3)">${p.prob_over25?Math.round(parseFloat(p.prob_over25))+'%':p.fonte||'—'}</span>`;
     return `<div class="pt-row">
       <span style="font-family:var(--mono);font-size:10px;color:var(--text3)">${dt}</span>
       <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px" title="${jogo}">${jogo}</span>
-      <span style="font-family:var(--mono);font-size:11px">${parseFloat(p.odds_over||0)>0?parseFloat(p.odds_over).toFixed(2):'—'}</span>
-      <span style="font-family:var(--mono);font-size:9px;color:var(--text3)">${p.prob_over25?Math.round(parseFloat(p.prob_over25))+'%':p.fonte||'—'}</span>
+      <span style="font-family:var(--mono);font-size:11px">${oddsV>0?oddsV.toFixed(2):'—'}</span>
+      ${evStr}
       <span>${resBadge}</span>
     </div>`;
   }).join(''):'<div class="empty" style="padding:20px">Nenhum pick guardado ainda</div>';
@@ -3861,6 +3896,8 @@ async function silentSync(){
       }
     }
   }catch(e){}
+  // 3. Captura closing odds para picks na janela ≤2h do KO
+  try{ await captureClosingOdds(); }catch(e){}
 }
 
 async function reactSync() {
