@@ -1330,8 +1330,15 @@ async function loadAll(){
     el('statusTxt').textContent='erro';
     console.error('loadAll error:', err);
   }
-  // Sync silencioso 90s após carregar (jogos anteriores podem já ter terminado)
-  setTimeout(()=>silentSync().catch(()=>{}), 90000);
+  // Sync silencioso 90s após carregar + relatório diário se for após as 22h
+  setTimeout(async()=>{
+    await silentSync().catch(()=>{});
+    const todayKey='daily_report_'+new Date().toDateString();
+    if(new Date().getHours()>=22 && !localStorage.getItem(todayKey)){
+      localStorage.setItem(todayKey,'1');
+      sendDailyReport().catch(()=>{});
+    }
+  }, 90000);
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -2112,9 +2119,10 @@ function detectPatterns(e){
 async function loadLive(){
   el('liveList').innerHTML='<div class="loading"><div class="spinner"></div>A carregar jogos ao vivo...</div>';
   try{
+    // Usa cache allPicks se disponível — evita hit ao GitHub a cada 30s
     const [liveRes, picks] = await Promise.all([
       get('/api/v2/events/live/').catch(()=>({events:[]})),
-      picksGet().catch(()=>[])
+      allPicks.length ? Promise.resolve(allPicks) : picksGet().catch(()=>[])
     ]);
     const events = liveRes.events||[];
 
@@ -2182,6 +2190,8 @@ async function loadLive(){
     }
   }catch(err){
     el('liveList').innerHTML='<div class="empty">⚠ '+err.message+'</div>';
+    liveActive=false; // permite re-arranque na próxima vez que a tab for aberta
+    startLiveCountdown(); // tenta de novo em 30s
   }
 }
 
@@ -3382,37 +3392,38 @@ function copyReportText(){
 }
 
 async function sendDailyReport(){
-  const picks=allPicks;
+  // Garante picks actualizados — usa cache ou vai ao GitHub
+  const picks=allPicks.length ? allPicks : (await picksGet().catch(()=>[]));
+  if(!picks.length) return;
   const res=p=>p.result_over25==='WIN'||p.result_over25==='LOSS';
   const withR=picks.filter(res);
+  if(!withR.length) return; // sem resultados, relatório não tem utilidade
   const wins=withR.filter(p=>p.result_over25==='WIN');
-  const roi=withR.reduce((s,p)=>s+(p.result_over25==='WIN'?parseFloat(p.odds_over||0)-1:-1),0);
+  const roi=withR.reduce((s,p)=>{const o=parseFloat(p.odds_over||0);return s+(o>=1.01?(p.result_over25==='WIN'?o-1:-1):0);},0);
   const today=new Date().toDateString();
   const todayR=picks.filter(p=>new Date(p.data).toDateString()===today&&res(p));
   const todayW=todayR.filter(p=>p.result_over25==='WIN');
-  const todayROI=todayR.reduce((s,p)=>s+(p.result_over25==='WIN'?parseFloat(p.odds_over||0)-1:-1),0);
+  const todayROI=todayR.reduce((s,p)=>{const o=parseFloat(p.odds_over||0);return s+(o>=1.01?(p.result_over25==='WIN'?o-1:-1):0);},0);
   const d7=new Date();d7.setDate(d7.getDate()-7);
   const w7=withR.filter(p=>new Date(p.data)>=d7);
   const wins7=w7.filter(p=>p.result_over25==='WIN');
-  const roi7=w7.reduce((s,p)=>s+(p.result_over25==='WIN'?parseFloat(p.odds_over||0)-1:-1),0);
+  const roi7=w7.reduce((s,p)=>{const o=parseFloat(p.odds_over||0);return s+(o>=1.01?(p.result_over25==='WIN'?o-1:-1):0);},0);
+  const withCLV=withR.filter(p=>parseFloat(p.clv||0)!==0);
+  const clvAvg=withCLV.length?withCLV.reduce((s,p)=>s+parseFloat(p.clv),0)/withCLV.length:null;
 
-  const msg=`📊 <b>OVER 2.5 SCOUT — RELATÓRIO</b>
+  const msg=`📊 *OVER 2.5 SCOUT — RELATÓRIO DIÁRIO*
 📅 ${new Date().toLocaleDateString('pt-PT')}
-━━━━━━━━━━━━━━━━
-<b>HOJE (${todayR.length} apostas)</b>
-✅ ${todayW.length}W / ❌ ${todayR.length-todayW.length}L
-ROI: ${todayR.length?((todayROI/todayR.length)*100).toFixed(1):'—'}%
-━━━━━━━━━━━━━━━━
-<b>7 DIAS (${w7.length} apostas)</b>
-WR: ${w7.length?(wins7.length/w7.length*100).toFixed(1):'—'}%
-ROI: ${w7.length?((roi7/w7.length)*100).toFixed(1):'—'}%
-━━━━━━━━━━━━━━━━
-<b>GLOBAL (${withR.length} apostas)</b>
-WR: ${withR.length?(wins.length/withR.length*100).toFixed(1):'—'}%
-ROI: ${withR.length?((roi/withR.length)*100).toFixed(1):'—'}%  (${roi>=0?'+':''}${roi.toFixed(2)}u)`;
+━━━━━━━━━━━━━━
+*HOJE (${todayR.length} apostas)*
+${todayW.length}W / ${todayR.length-todayW.length}L · ROI: ${todayR.length?((todayROI/todayR.length)*100).toFixed(1):'—'}%
+━━━━━━━━━━━━━━
+*7 DIAS (${w7.length} apostas)*
+WR: ${w7.length?(wins7.length/w7.length*100).toFixed(1):'—'}% · ROI: ${w7.length?((roi7/w7.length)*100).toFixed(1):'—'}%
+━━━━━━━━━━━━━━
+*GLOBAL (${withR.length} apostas)*
+WR: ${withR.length?(wins.length/withR.length*100).toFixed(1):'—'}% · ROI: ${withR.length?((roi/withR.length)*100).toFixed(1):'—'}%${clvAvg!=null?' · CLV '+(clvAvg>=0?'+':'')+clvAvg.toFixed(1)+'%':''}`;
 
-  const ok=await sendTG(msg);
-  alert(ok?'✅ Relatório enviado!':'❌ Erro — verifica TG Token e Chat ID');
+  sendTG(msg).catch(()=>{});
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -3876,8 +3887,17 @@ async function reactLiveAlert(game) {
 // INIT
 // ════════════════════════════════════════════════════════════════
 loadCfg();
-// Sync automático de 2 em 2 horas — fecha loop de resultados sem interacção
-setInterval(()=>silentSync().catch(()=>{}), 2*60*60*1000);
+// Guard: garante apenas um interval activo mesmo com page reload
+if(window._syncInterval) clearInterval(window._syncInterval);
+window._syncInterval = setInterval(async()=>{
+  await silentSync().catch(()=>{});
+  // Relatório diário automático às 22h — uma vez por dia
+  const todayKey='daily_report_'+new Date().toDateString();
+  if(new Date().getHours()>=22 && !localStorage.getItem(todayKey)){
+    localStorage.setItem(todayKey,'1');
+    sendDailyReport().catch(()=>{});
+  }
+}, 2*60*60*1000);
 </script>
 </body>
 </html>
