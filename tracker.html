@@ -408,16 +408,17 @@ function renderBreakdown(picks){
   };
 
   const res = p=>p.result_over25==='WIN'||p.result_over25==='LOSS';
+  const isSh=p=>(p.movimento||'').toUpperCase()==='SHORTENING';
+  const isSp=p=>!!(p.sharp_label);
   const groups = [
-    {label:'SHORTENING',items:picks.filter(p=>p.movimento==='SHORTENING'&&res(p))},
-    {label:'DRIFTING',items:picks.filter(p=>p.movimento==='DRIFTING'&&res(p))},
-    {label:'xG ≥ 2.0',items:picks.filter(p=>parseFloat(p.xg_total||0)>=2.0&&res(p))},
-    {label:'xG ≥ 2.5',items:picks.filter(p=>parseFloat(p.xg_total||0)>=2.5&&res(p))},
-    {label:'BTTS ≥ 55',items:picks.filter(p=>parseFloat(p.btts_prob||0)>=55&&res(p))},
-    {label:'BTTS ≥ 65',items:picks.filter(p=>parseFloat(p.btts_prob||0)>=65&&res(p))},
-    {label:'SHORT+xG≥2',items:picks.filter(p=>p.movimento==='SHORTENING'&&parseFloat(p.xg_total||0)>=2.0&&res(p))},
-    {label:'odds 1.6-1.9',items:picks.filter(p=>parseFloat(p.odds_over||0)>=1.6&&parseFloat(p.odds_over||0)<1.9&&res(p))},
-    {label:'odds ≥ 2.0',items:picks.filter(p=>parseFloat(p.odds_over||0)>=2.0&&res(p))},
+    {label:'↘ Só Short',    items:picks.filter(p=>isSh(p)&&!isSp(p)&&res(p))},
+    {label:'↘+🎯 Short+Sharp',items:picks.filter(p=>isSh(p)&&isSp(p)&&res(p))},
+    {label:'🎯 Só Sharp',   items:picks.filter(p=>!isSh(p)&&isSp(p)&&res(p))},
+    {label:'↗ Drifting',    items:picks.filter(p=>p.movimento==='DRIFTING'&&res(p))},
+    {label:'⚡ xG ≥ 2.0',  items:picks.filter(p=>parseFloat(p.xg_total||0)>=2.0&&res(p))},
+    {label:'🔵 BTTS ≥ 55', items:picks.filter(p=>parseFloat(p.btts_prob||0)>=55&&res(p))},
+    {label:'@1.60–1.90',   items:picks.filter(p=>parseFloat(p.odds_over||0)>=1.6&&parseFloat(p.odds_over||0)<1.9&&res(p))},
+    {label:'@2.00+',       items:picks.filter(p=>parseFloat(p.odds_over||0)>=2.0&&res(p))},
   ];
 
   document.getElementById('bkGrid').innerHTML = groups.map(g=>{
