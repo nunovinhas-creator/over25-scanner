@@ -2430,10 +2430,9 @@ async function saveLivePick(btn){
 // ════════════════════════════════════════════════════════════════
 async function autoLogCandidatos(){
   const candidatos=allGames.filter(g=>{
-    const mov=(g.movement||'').toUpperCase();
-    const bttsN=g.bttsN||0;
     const o=parseFloat(g.oddsOver||0);
-    return g.score>=55 && mov==='SHORTENING' && bttsN>=55 && o>=1.5 && o<=3.0 && !isSaved(String(g.id));
+    // Score já incorpora BTTS, movimento, xG — não duplicar filtros manuais
+    return g.score>=55 && o>=1.3 && o<=4.0 && !isSaved(String(g.id));
   });
   if(!candidatos.length) return;
 
@@ -2884,7 +2883,9 @@ async function syncResults(){
     );
 
     if(!pending.length){
-      status.textContent='✅ Todos os picks já têm resultado!';
+      status.textContent = picks.length===0
+        ? '⚠ Sem picks guardados — carrega o Scanner para auto-log começar'
+        : '✅ Todos os picks já têm resultado!';
       btn.textContent='🔄 Sincronizar resultados';btn.disabled=false;
       return;
     }
