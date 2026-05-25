@@ -142,6 +142,7 @@ svg.roi-svg{width:100%;height:100%}
     <div class="kpi red"><div class="kpi-label">Série actual</div><div class="kpi-val" id="kStreak">—</div><div class="kpi-sub" id="kStreakSub">consecutivos</div></div>
     <div class="kpi green"><div class="kpi-label">Picks hoje</div><div class="kpi-val" id="kToday">—</div><div class="kpi-sub" id="kTodaySub">com resultado</div></div>
     <div class="kpi amber"><div class="kpi-label">Yield médio</div><div class="kpi-val" id="kYield">—</div><div class="kpi-sub">por aposta</div></div>
+    <div class="kpi blue"><div class="kpi-label">CLV médio</div><div class="kpi-val" id="kCLV">—</div><div class="kpi-sub" id="kCLVsub">vs closing line</div></div>
   </div>
 
   <!-- ROI Curve -->
@@ -300,6 +301,10 @@ function updateKPIs(all, withResult){
   // Yield
   const yieldVal = withResult.length ? (roiTotal).toFixed(2) : '—';
 
+  const yieldPerBet = withResult.length ? (roiTotal/withResult.length).toFixed(3) : '—';
+  const withCLV = withResult.filter(p=>p.clv&&parseFloat(p.clv)!==0);
+  const clvAvg = withCLV.length ? (withCLV.reduce((s,p)=>s+parseFloat(p.clv),0)/withCLV.length).toFixed(1) : '—';
+
   document.getElementById('kWR').textContent = wr;
   document.getElementById('kWRsub').textContent = withResult.length+' jogos com resultado';
   document.getElementById('kROI').textContent = roiPct!=='—'?(parseFloat(roiPct)>=0?'+':'')+roiPct+'%':roiPct;
@@ -309,6 +314,11 @@ function updateKPIs(all, withResult){
   document.getElementById('kStreakSub').textContent = streakType||'—';
   document.getElementById('kToday').textContent = todayPicks.length;
   document.getElementById('kTodaySub').textContent = todayResult.length+' com resultado';
+  document.getElementById('kYield').textContent = yieldPerBet!=='—'?(parseFloat(yieldPerBet)>=0?'+':'')+yieldPerBet+'u':yieldPerBet;
+  if(document.getElementById('kCLV')){
+    document.getElementById('kCLV').textContent = clvAvg!=='—'?(parseFloat(clvAvg)>=0?'+':'')+clvAvg+'%':clvAvg;
+    document.getElementById('kCLVsub').textContent = withCLV.length+' picks c/ closing odds';
+  }
 
   // Cor KPI ROI
   const roiKpi = document.querySelector('.kpi.amber');

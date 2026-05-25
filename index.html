@@ -659,7 +659,7 @@ select option{background:var(--bg3);color:var(--text)}
   </div>
   <div class="sec-title">Picks recentes</div>
   <div class="picks-table">
-    <div class="pt-head"><span>Data</span><span>Jogo</span><span>Odds</span><span>Mov</span><span>Result</span></div>
+    <div class="pt-head"><span>Data</span><span>Jogo</span><span>Odds</span><span>Prob</span><span>Result</span></div>
     <div id="picksBody"><div class="loading" style="padding:20px"><div class="spinner"></div></div></div>
   </div>
 </div>
@@ -2609,6 +2609,7 @@ async function autoLogObservations(){
 
 // AUTO-LOG Sharp 1X2 — guarda todos os sinais automaticamente
 async function autoLogSharp1x2(){
+  if(!el('ghToken')?.value.trim()) return;
   const unsaved=allSharp1x2.filter(s=>!isSaved(s.id+'_sh'));
   if(!unsaved.length) return;
   let saved=0;
@@ -2759,8 +2760,8 @@ function renderDash(){
   // N warning
   const nWarn=el('nWarning');
   if(nWarn){
-    if(withR.length<200){
-      nWarn.textContent=`N=${withR.length} picks — resultados estatisticamente inconclusivos (mínimo 200 para validar edge)`;
+    if(withR.length<30){
+      nWarn.textContent=`N=${withR.length} picks — a acumular dados (mínimo 30 para sinal inicial, 200 para validar edge)`;
       nWarn.style.display='block';
     } else {
       nWarn.style.display='none';
@@ -2865,7 +2866,7 @@ function renderDash(){
       <span style="font-family:var(--mono);font-size:10px;color:var(--text3)">${dt}</span>
       <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px" title="${jogo}">${jogo}</span>
       <span style="font-family:var(--mono);font-size:11px">${parseFloat(p.odds_over||0)>0?parseFloat(p.odds_over).toFixed(2):'—'}</span>
-      <span style="font-family:var(--mono);font-size:9px;color:var(--text3)">${p.fonte||'—'}</span>
+      <span style="font-family:var(--mono);font-size:9px;color:var(--text3)">${p.prob_over25?Math.round(parseFloat(p.prob_over25))+'%':p.fonte||'—'}</span>
       <span>${resBadge}</span>
     </div>`;
   }).join(''):'<div class="empty" style="padding:20px">Nenhum pick guardado ainda</div>';
