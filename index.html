@@ -3896,7 +3896,38 @@ async function silentSync(){
       }
     }
   }catch(e){}
-  // 3. Captura closing odds para picks na janela ≤2h do KO
+  // 3. Sync picks Sharp 1X2 — resultados de jogos terminados
+  try{
+    const {data:picks1x2}=await ghRead(PICKS1X2_FILE);
+    if(Array.isArray(picks1x2)&&picks1x2.length){
+      const pending1x2=picks1x2.filter(p=>
+        p.id&&(!p.resultado_outcome||p.resultado_outcome==='')&&
+        p.data&&new Date(p.data)<new Date()
+      );
+      let upd1x2=0;
+      for(const pick of pending1x2){
+        try{
+          const eid=String(pick.id||'').replace('_sh','').split('_')[0];
+          if(!eid||isNaN(+eid)) continue;
+          const ev=await get('/api/v2/events/'+eid+'/').catch(()=>null);
+          if(!ev||(ev.status!=='finished'&&ev.period!=='FT')) continue;
+          const h=ev.home_score??0,a=ev.away_score??0;
+          const out=(pick.outcome||'').toUpperCase();
+          const won=out==='HOME'?(h>a):out==='AWAY'?(a>h):out==='DRAW'?(h===a):null;
+          if(won===null) continue;
+          pick.resultado_jogo=`${h}-${a}`;
+          pick.resultado_outcome=won?'WIN':'LOSS';
+          upd1x2++;
+        }catch(e){}
+      }
+      if(upd1x2>0){
+        await ghWrite(PICKS1X2_FILE,picks1x2,`auto-sync 1x2: ${upd1x2} resultados`);
+        sharp1x2Picks=picks1x2;
+        if(el('spanel-dash1x2')?.style.display!=='none') renderDash1x2();
+      }
+    }
+  }catch(e){}
+  // 4. Captura closing odds para picks na janela ≤2h do KO
   try{ await captureClosingOdds(); }catch(e){}
 }
 
