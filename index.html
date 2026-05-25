@@ -2125,7 +2125,13 @@ async function loadLive(){
     const pickIds=new Set(picks.filter(p=>new Date(p.data).toDateString()===today&&!p.result_over25).map(p=>String(p.id)));
     const watchIds=new Set(allGames.filter(g=>g.score>=40).map(g=>String(g.id)));
 
-    const enriched=await Promise.all(events.slice(0,20).map(async ev=>{
+    // Prioritize events that are tracked picks or high-score candidates, then limit
+    const sortedEvents=events.slice().sort((a,b)=>{
+      const aP=pickIds.has(String(a.id))?2:watchIds.has(String(a.id))?1:0;
+      const bP=pickIds.has(String(b.id))?2:watchIds.has(String(b.id))?1:0;
+      return bP-aP;
+    });
+    const enriched=await Promise.all(sortedEvents.slice(0,50).map(async ev=>{
       const [stats,odds]=await Promise.all([
         get('/api/v2/events/'+ev.id+'/stats/').catch(()=>({})),
         get('/api/v2/events/'+ev.id+'/odds/').catch(()=>({})),
@@ -2458,17 +2464,23 @@ async function autoLogCandidatos(){
   const status=el('syncStatus');
   if(status){status.style.display='block';status.textContent=`Auto-log: a guardar ${candidatos.length} candidatos...`;}
 
-  let saved=0;
-  for(const g of candidatos){
-    try{
+  try{
+    // Batch: single read → append all new → single write (avoids N+1 GitHub API calls)
+    const {data:currentPicks}=await ghRead(PICKS_FILE);
+    const picks=Array.isArray(currentPicks)?currentPicks:[];
+    const normId=id=>String(id||'').replace(/_sh$/,'').replace(/_live$/,'').split('_')[0];
+    let saved=0;
+    const savedGames=[];
+    for(const g of candidatos){
+      // Skip if already present in the file (double-check beyond localStorage)
+      if(picks.some(p=>normId(p.id)===String(g.id))){ markSaved(g.id); continue; }
       const prob=g.prob25!=null?(g.prob25*100).toFixed(1):'';
       const xgt=g.xgH!=null&&g.xgA!=null?(g.xgH+g.xgA).toFixed(2):'';
-      // Confluência: verifica se há sinal Sharp 1X2 para o mesmo jogo
       const sharpSig=allSharp1x2.find(s=>s.id===g.id);
       const scoreBand=g.score>=75?'75+':g.score>=65?'65-75':g.score>=55?'55-65':'40-55';
       const ov=parseFloat(g.oddsOver||0);
       const oddsBand=ov>=2.50?'2.50+':ov>=2.10?'2.10-2.50':ov>=1.80?'1.80-2.10':'1.50-1.80';
-      await picksSave({
+      picks.push({
         id:String(g.id),
         casa:g.home, fora:g.away, liga:g.league||'',
         data:g.date, score_sistema:String(g.score||0),
@@ -2481,24 +2493,27 @@ async function autoLogCandidatos(){
         div:g.div?g.div.toFixed(1):'',
         phase:getCurrentPhase(),
         result_over25:'', golos_total:'',
-        has_sharp:   sharpSig?'1':'',
-        sharp_co_label: sharpSig?(sharpSig.label||'')+(sharpSig.sigs?.[0]?.out?' '+sharpSig.sigs[0].out:''):'',
-        score_band:  scoreBand,
-        odds_band:   oddsBand,
+        has_sharp:sharpSig?'1':'',
+        sharp_co_label:sharpSig?(sharpSig.label||'')+(sharpSig.sigs?.[0]?.out?' '+sharpSig.sigs[0].out:''):'',
+        score_band:scoreBand,
+        odds_band:oddsBand,
+        saved_at:new Date().toISOString()
       });
       markSaved(g.id);
+      savedGames.push(g);
       saved++;
-    }catch(e){}
+    }
+    if(saved>0){
+      await ghWrite(PICKS_FILE, picks, `auto-log: ${saved} candidato${saved>1?'s':''}`);
+      allPicks=picks.map(normalizePick);
+      const lines=savedGames.map(g=>`${g.home} vs ${g.away} @${g.oddsOver?g.oddsOver.toFixed(2):'-'} (score ${g.score})`);
+      sendTG(`🤖 AUTO-LOG: ${saved} candidatos\n${lines.join('\n')}`).catch(()=>{});
+      if(diag) diag.innerHTML+=` · <strong style="color:var(--green)">✓ ${saved} guardados</strong>`;
+    }
+    if(status) status.textContent=`Auto-log: ${saved} candidatos guardados`;
+  }catch(e){
+    if(status) status.textContent=`Auto-log: erro — ${e.message}`;
   }
-
-  if(saved>0){
-    const lines=candidatos.slice(0,saved).map(g=>
-      `${g.home} vs ${g.away} @${g.oddsOver?g.oddsOver.toFixed(2):'-'} (score ${g.score})`
-    );
-    sendTG(`🤖 AUTO-LOG: ${saved} candidatos\n${lines.join('\n')}`).catch(()=>{});
-    if(diag) diag.innerHTML+=` · <strong style="color:var(--green)">✓ ${saved} guardados</strong>`;
-  }
-  if(status) status.textContent=`Auto-log: ${saved} candidatos guardados`;
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -2620,12 +2635,19 @@ async function autoLogSharp1x2(){
   if(!el('ghToken')?.value.trim()) return;
   const unsaved=allSharp1x2.filter(s=>!isSaved(s.id+'_sh'));
   if(!unsaved.length) return;
-  let saved=0;
-  for(const s of unsaved){
-    try{
+
+  try{
+    // Batch: single read → append all new → single write
+    const {data:current}=await ghRead(PICKS1X2_FILE);
+    const picks=Array.isArray(current)?current:[];
+    let saved=0;
+    const savedSigs=[];
+    for(const s of unsaved){
+      const sid=String(s.id)+'_sh';
+      if(picks.some(p=>String(p.id)===sid)){ markSaved(sid); continue; }
       const sig=s.sigs[0]||{};
-      await picks1x2Save({
-        id:String(s.id)+'_sh',
+      picks.push({
+        id:sid,
         data:s.date||new Date().toISOString(),
         casa:s.home||'', fora:s.away||'', liga:s.league||'',
         outcome:sig.out||sig.outcome||'',
@@ -2637,17 +2659,21 @@ async function autoLogSharp1x2(){
         score:String(s.totalScore||0),
         fonte:'auto-log',
         phase:getCurrentPhase(),
-        resultado_jogo:'', resultado_outcome:'', clv:'', odds_fecho:''
+        resultado_jogo:'', resultado_outcome:'', clv:'', odds_fecho:'',
+        saved_at:new Date().toISOString()
       });
-      markSaved(s.id+'_sh');
+      markSaved(sid);
+      savedSigs.push(s);
       saved++;
-    }catch(e){}
-  }
-  if(saved>0){
-    const lines=unsaved.slice(0,saved).map(s=>`${s.home} vs ${s.away} [${s.label}]`);
-    sendTG(`🎯 AUTO-LOG Sharp 1X2: ${saved} sinais\n${lines.join('\n')}`).catch(()=>{});
-    renderSharp(); // atualiza UI
-  }
+    }
+    if(saved>0){
+      await ghWrite(PICKS1X2_FILE, picks, `auto-log 1x2: ${saved} sinal${saved>1?'is':''}`);
+      sharp1x2Picks=picks;
+      const lines=savedSigs.map(s=>`${s.home} vs ${s.away} [${s.label}]`);
+      sendTG(`🎯 AUTO-LOG Sharp 1X2: ${saved} sinais\n${lines.join('\n')}`).catch(()=>{});
+      renderSharp();
+    }
+  }catch(e){}
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -3908,7 +3934,7 @@ window._syncInterval = setInterval(async()=>{
     localStorage.setItem(todayKey,'1');
     sendDailyReport().catch(()=>{});
   }
-}, 2*60*60*1000);
+}, 30*60*1000);
 </script>
 </body>
 </html>
