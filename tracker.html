@@ -7,10 +7,10 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap');
 :root {
-  --bg:#0a0a0f;--bg2:#111118;--bg3:#1a1a24;--bg4:#22222e;
-  --accent:#00ff88;--accent2:#ff3d6e;--accent3:#ffb800;--accent4:#3d9eff;
-  --text:#f0efe9;--text2:#8a8a9a;--text3:#4a4a5a;
-  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.12);
+  --bg:#f4f5f9;--bg2:#ffffff;--bg3:#eef0f7;--bg4:#e6e8f2;
+  --accent:#0aaa53;--accent2:#e03050;--accent3:#c97f0a;--accent4:#2563eb;
+  --text:#0f1117;--text2:#5a5a7a;--text3:#9898b8;
+  --border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.13);
   --r:6px;--rl:10px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -32,8 +32,8 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .cfg input{font-family:'Space Mono',monospace;font-size:12px;padding:7px 12px;border-radius:var(--r);border:.5px solid var(--border2);background:var(--bg3);color:var(--text);min-width:140px}
 .btn{font-family:'Syne',sans-serif;font-size:12px;font-weight:600;padding:7px 16px;border-radius:var(--r);border:.5px solid var(--border2);background:var(--bg3);color:var(--text);cursor:pointer;transition:all .15s;white-space:nowrap}
 .btn:hover{background:var(--bg4)}
-.btn-a{background:var(--accent);color:#000;border-color:var(--accent)}
-.btn-a:hover{background:#00e07a}
+.btn-a{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-a:hover{background:#088f45}
 .btn-tg{background:var(--accent4);color:#fff;border-color:var(--accent4)}
 
 /* KPI grid */
@@ -62,8 +62,8 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .chart-label{font-family:'Space Mono',monospace;font-size:10px;color:var(--text2);min-width:80px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .chart-track{flex:1;height:20px;background:var(--bg3);border-radius:3px;overflow:hidden;position:relative}
 .chart-fill{height:100%;border-radius:3px;transition:width .6s cubic-bezier(.4,0,.2,1)}
-.chart-fill.win{background:linear-gradient(90deg,var(--accent),#00cc6a)}
-.chart-fill.loss{background:linear-gradient(90deg,var(--accent2),#cc2040)}
+.chart-fill.win{background:linear-gradient(90deg,var(--accent),#088f45)}
+.chart-fill.loss{background:linear-gradient(90deg,var(--accent2),#b52040)}
 .chart-val{font-family:'Space Mono',monospace;font-size:10px;min-width:40px;text-align:right}
 
 /* Timeline */
@@ -80,14 +80,14 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .tbl tr:last-child td{border-bottom:none}
 .tbl tr:hover td{background:var(--bg3)}
 .badge{display:inline-block;font-size:9px;font-family:'Space Mono',monospace;padding:2px 6px;border-radius:3px;font-weight:700}
-.bg{background:rgba(0,255,136,.12);color:var(--accent)}
-.br{background:rgba(255,61,110,.12);color:var(--accent2)}
-.ba{background:rgba(255,184,0,.12);color:var(--accent3)}
+.bg{background:rgba(10,170,83,.1);color:var(--accent)}
+.br{background:rgba(224,48,80,.1);color:var(--accent2)}
+.ba{background:rgba(201,127,10,.1);color:var(--accent3)}
 
 /* Filtros tabs */
 .ftabs{display:flex;gap:4px;margin-bottom:14px;flex-wrap:wrap}
 .ftab{font-family:'Space Mono',monospace;font-size:10px;padding:5px 10px;border-radius:var(--r);border:.5px solid var(--border2);background:var(--bg3);color:var(--text2);cursor:pointer;transition:all .15s}
-.ftab.active{background:var(--accent);color:#000;border-color:var(--accent)}
+.ftab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 
 /* Loading / empty */
 .loading{text-align:center;padding:40px;font-family:'Space Mono',monospace;font-size:12px;color:var(--text2)}
@@ -350,10 +350,10 @@ function drawROICurve(withResult){
   const pts=points.map(p=>`${x(p.i).toFixed(1)},${y(p.v).toFixed(1)}`).join(' ');
   const zeroY=y(0).toFixed(1);
   const lastV=points[points.length-1].v;
-  const col=lastV>=0?'#00ff88':'#ff3d6e';
+  const col=lastV>=0?'#0aaa53':'#e03050';
 
   el.innerHTML=`<svg class="roi-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
-    <line x1="0" y1="${zeroY}" x2="${W}" y2="${zeroY}" class="roi-zero" stroke="rgba(255,255,255,0.1)" stroke-dasharray="4,4"/>
+    <line x1="0" y1="${zeroY}" x2="${W}" y2="${zeroY}" class="roi-zero" stroke="rgba(0,0,0,0.15)" stroke-dasharray="4,4"/>
     <polyline points="${pts}" fill="none" stroke="${col}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
     <circle cx="${x(points.length-1)}" cy="${y(lastV)}" r="4" fill="${col}"/>
   </svg>`;
