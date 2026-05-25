@@ -462,7 +462,7 @@ select option{background:var(--bg3);color:var(--text)}
 <div class="panel active" id="panel-scan">
   <div class="stats-bar" style="margin-top:12px">
     <div class="stat-card"><div class="stat-label">Jogos</div><div class="stat-val" id="sTotal">—</div></div>
-    <div class="stat-card"><div class="stat-label">Score≥55</div><div class="stat-val" id="sHigh" style="color:var(--green)">—</div></div>
+    <div class="stat-card"><div class="stat-label">Score≥40</div><div class="stat-val" id="sHigh" style="color:var(--green)">—</div></div>
     <div class="stat-card"><div class="stat-label">Sharp</div><div class="stat-val" id="sSharp" style="color:var(--amber)">—</div></div>
     <div class="stat-card"><div class="stat-label">Odds méd.</div><div class="stat-val" id="sOdds">—</div></div>
   </div>
@@ -477,6 +477,7 @@ select option{background:var(--bg3);color:var(--text)}
     </select>
   </div>
   <div class="dbg" id="dbgScan" style="display:none"></div>
+  <div id="autoLogStatus" style="display:none;font-family:var(--mono);font-size:11px;padding:8px 12px;border-radius:6px;margin-bottom:10px;border:1px solid var(--border)"></div>
   <div id="scanList"><div class="loading"><div class="spinner"></div>Clica em Carregar</div></div>
 </div>
 
@@ -1408,7 +1409,7 @@ function calcScore({prob25,bttsN,xgH,xgA,movement,div,sharpLabel,pinnNow,recrAvg
 // ════════════════════════════════════════════════════════════════
 function updateScanStats(){
   el('sTotal').textContent=allGames.length;
-  el('sHigh').textContent=allGames.filter(g=>g.score>=50).length;
+  el('sHigh').textContent=allGames.filter(g=>g.score>=40).length;
   el('sSharp').textContent=allGames.filter(g=>g.sharpLabel).length;
   const odds=allGames.filter(g=>g.oddsOver).map(g=>g.oddsOver);
   el('sOdds').textContent=odds.length?(odds.reduce((s,v)=>s+v,0)/odds.length).toFixed(2):'—';
@@ -2435,11 +2436,23 @@ async function saveLivePick(btn){
 // AUTO-LOG — guarda automaticamente todos os candidatos após loadAll
 // ════════════════════════════════════════════════════════════════
 async function autoLogCandidatos(){
+  if(!el('ghToken')?.value.trim()) return;
   const candidatos=allGames.filter(g=>{
     const o=parseFloat(g.oddsOver||0);
-    // Score já incorpora BTTS, movimento, xG — não duplicar filtros manuais
-    return g.score>=55 && o>=1.3 && o<=4.0 && !isSaved(String(g.id));
+    return g.score>=40 && o>=1.3 && o<=4.0 && !isSaved(String(g.id));
   });
+
+  // Diagnóstico visível no Scanner
+  const diag=el('autoLogStatus');
+  if(diag){
+    const total=allGames.length;
+    const dist={40:allGames.filter(g=>g.score>=40).length, 55:allGames.filter(g=>g.score>=55).length, 65:allGames.filter(g=>g.score>=65).length};
+    const withML=allGames.filter(g=>g.prob25!=null).length;
+    diag.style.display='block';
+    diag.style.color='var(--text2)';
+    diag.innerHTML=`🤖 Auto-log: <strong style="color:var(--green)">${candidatos.length} candidatos</strong> (score≥40 c/ odds) · jogos c/ ML: ${withML}/${total} · score≥55: ${dist[55]} · score≥65: ${dist[65]}`;
+  }
+
   if(!candidatos.length) return;
 
   const status=el('syncStatus');
@@ -2452,7 +2465,7 @@ async function autoLogCandidatos(){
       const xgt=g.xgH!=null&&g.xgA!=null?(g.xgH+g.xgA).toFixed(2):'';
       // Confluência: verifica se há sinal Sharp 1X2 para o mesmo jogo
       const sharpSig=allSharp1x2.find(s=>s.id===g.id);
-      const scoreBand=g.score>=75?'75+':g.score>=65?'65-75':'55-65';
+      const scoreBand=g.score>=75?'75+':g.score>=65?'65-75':g.score>=55?'55-65':'40-55';
       const ov=parseFloat(g.oddsOver||0);
       const oddsBand=ov>=2.50?'2.50+':ov>=2.10?'2.10-2.50':ov>=1.80?'1.80-2.10':'1.50-1.80';
       await picksSave({
@@ -2480,9 +2493,10 @@ async function autoLogCandidatos(){
 
   if(saved>0){
     const lines=candidatos.slice(0,saved).map(g=>
-      `${g.home} vs ${g.away} @${g.oddsOver?g.oddsOver.toFixed(2):'-'}`
+      `${g.home} vs ${g.away} @${g.oddsOver?g.oddsOver.toFixed(2):'-'} (score ${g.score})`
     );
     sendTG(`🤖 AUTO-LOG: ${saved} candidatos\n${lines.join('\n')}`).catch(()=>{});
+    if(diag) diag.innerHTML+=` · <strong style="color:var(--green)">✓ ${saved} guardados</strong>`;
   }
   if(status) status.textContent=`Auto-log: ${saved} candidatos guardados`;
 }
