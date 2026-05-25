@@ -136,13 +136,13 @@ svg.roi-svg{width:100%;height:100%}
 
   <!-- KPIs -->
   <div class="kpi-grid">
-    <div class="kpi green"><div class="kpi-label">Taxa de acerto</div><div class="kpi-val" id="kWR">—</div><div class="kpi-sub" id="kWRsub">jogos</div></div>
-    <div class="kpi amber"><div class="kpi-label">ROI global</div><div class="kpi-val" id="kROI">—</div><div class="kpi-sub" id="kROIsub">unidades</div></div>
-    <div class="kpi blue"><div class="kpi-label">ROI últimos 7d</div><div class="kpi-val" id="kROI7">—</div><div class="kpi-sub">últimos 7 dias</div></div>
+    <div class="kpi green"><div class="kpi-label">Taxa de acerto</div><div class="kpi-val" id="kWR">—</div><div class="kpi-sub" id="kWRsub">picks resolvidos</div></div>
+    <div class="kpi amber"><div class="kpi-label">ROI global</div><div class="kpi-val" id="kROI">—</div><div class="kpi-sub" id="kROIsub">lucro acumulado</div></div>
+    <div class="kpi blue"><div class="kpi-label">Edge (CLV)</div><div class="kpi-val" id="kCLV">—</div><div class="kpi-sub" id="kCLVsub">vs closing line</div></div>
     <div class="kpi red"><div class="kpi-label">Série actual</div><div class="kpi-val" id="kStreak">—</div><div class="kpi-sub" id="kStreakSub">consecutivos</div></div>
+    <div class="kpi blue"><div class="kpi-label">ROI últimos 7d</div><div class="kpi-val" id="kROI7">—</div><div class="kpi-sub">últimos 7 dias</div></div>
     <div class="kpi green"><div class="kpi-label">Picks hoje</div><div class="kpi-val" id="kToday">—</div><div class="kpi-sub" id="kTodaySub">com resultado</div></div>
-    <div class="kpi amber"><div class="kpi-label">Yield médio</div><div class="kpi-val" id="kYield">—</div><div class="kpi-sub">por aposta</div></div>
-    <div class="kpi blue"><div class="kpi-label">CLV médio</div><div class="kpi-val" id="kCLV">—</div><div class="kpi-sub" id="kCLVsub">vs closing line</div></div>
+    <div class="kpi amber"><div class="kpi-label">Yield / aposta</div><div class="kpi-val" id="kYield">—</div><div class="kpi-sub">unidades por pick</div></div>
   </div>
 
   <!-- ROI Curve -->
@@ -157,8 +157,6 @@ svg.roi-svg{width:100%;height:100%}
     <button class="ftab active" onclick="setFilter(this,'all')">Todos</button>
     <button class="ftab" onclick="setFilter(this,'short')">↘ Shortening</button>
     <button class="ftab" onclick="setFilter(this,'drift')">↗ Drifting</button>
-    <button class="ftab" onclick="setFilter(this,'win')">✅ WIN</button>
-    <button class="ftab" onclick="setFilter(this,'loss')">❌ LOSS</button>
     <button class="ftab" onclick="setFilter(this,'xg')">⚡ xG≥2.0</button>
     <button class="ftab" onclick="setFilter(this,'btts')">🔵 BTTS≥55</button>
   </div>
@@ -182,9 +180,9 @@ svg.roi-svg{width:100%;height:100%}
     <div style="overflow-x:auto">
       <table class="tbl">
         <thead><tr>
-          <th>Data</th><th>Jogo</th><th>Liga</th><th>Odds</th><th>Mov</th><th>xG</th><th>BTTS</th><th>Score</th><th>Resultado</th>
+          <th>Data</th><th>Jogo</th><th>Odds</th><th>Mov</th><th>xG</th><th>BTTS</th><th>Score</th><th>Resultado</th>
         </tr></thead>
-        <tbody id="tblBody"><tr><td colspan="9"><div class="loading"><span class="spin"></span>A carregar...</div></td></tr></tbody>
+        <tbody id="tblBody"><tr><td colspan="8"><div class="loading"><span class="spin"></span>A carregar...</div></td></tr></tbody>
       </table>
     </div>
   </div>
@@ -426,15 +424,15 @@ function renderTimeline(withResult){
 
 function renderTable(picks){
   if(!picks.length){
-    document.getElementById('tblBody').innerHTML='<tr><td colspan="9"><div class="empty">Sem picks com estes filtros</div></td></tr>';
+    document.getElementById('tblBody').innerHTML='<tr><td colspan="8"><div class="empty">Sem picks com estes filtros</div></td></tr>';
     return;
   }
   document.getElementById('tblBody').innerHTML=picks.map(p=>{
     const dt=new Date(p.data);
-    const ds=dt.toLocaleDateString('pt-PT',{day:'2-digit',month:'2-digit'})+' '+dt.toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'});
+    const ds=dt.toLocaleDateString('pt-PT',{day:'2-digit',month:'2-digit'});
     const res=p.result_over25;
     const resBadge=res==='WIN'?'<span class="badge bg">WIN</span>':res==='LOSS'?'<span class="badge br">LOSS</span>':'<span class="badge ba">—</span>';
-    const movBadge=p.movimento==='SHORTENING'?'<span style="color:var(--accent);font-size:10px">↘</span>':'<span style="color:var(--accent2);font-size:10px">↗</span>';
+    const movBadge=p.movimento==='SHORTENING'?'<span style="color:var(--accent);font-weight:700">↘</span>':p.movimento==='DRIFTING'?'<span style="color:var(--accent2);font-weight:700">↗</span>':'<span style="color:var(--text3)">—</span>';
     const xg=parseFloat(p.xg_total||0);
     const xgStr=xg>0?`<span style="color:${xg>=2.5?'var(--accent)':xg>=2.0?'var(--accent3)':'var(--text2)'}">${xg.toFixed(1)}</span>`:'—';
     const btts=parseFloat(p.btts_prob||0);
@@ -442,10 +440,9 @@ function renderTable(picks){
     const sc=parseInt(p.score_sistema||0);
     return `<tr>
       <td style="font-family:'Space Mono',monospace;font-size:10px;color:var(--text2)">${ds}</td>
-      <td style="font-weight:600;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.casa||''} vs ${p.fora||''}</td>
-      <td style="font-size:10px;color:var(--text2);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.liga||''}</td>
+      <td style="font-weight:600;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${p.liga||''}">${p.casa||''} vs ${p.fora||''}</td>
       <td style="font-family:'Space Mono',monospace">${parseFloat(p.odds_over||0).toFixed(2)}</td>
-      <td>${movBadge} <span style="font-size:10px;color:var(--text2)">${p.movimento||'—'}</span></td>
+      <td style="text-align:center">${movBadge}</td>
       <td>${xgStr}</td>
       <td>${bttsStr}</td>
       <td style="font-family:'Space Mono',monospace;color:${sc>=50?'var(--accent)':sc>=30?'var(--accent3)':'var(--text2)'}">${sc||'—'}</td>

@@ -445,11 +445,9 @@ select option{background:var(--bg3);color:var(--text)}
   <button class="btn-tg"   onclick="testTG()">TG</button>
   <button class="phase-btn active" id="phaseDevBtn" onclick="setCurrentPhase('dev')">DEV</button>
   <button class="phase-btn" id="phaseLiveBtn" onclick="setCurrentPhase('live')">LIVE</button>
-  <label style="display:flex;align-items:center;gap:5px;cursor:pointer;color:var(--text2);font-family:var(--mono);font-size:11px">
-    <input type="checkbox" id="autoLogChk" onchange="saveCfg()" style="accent-color:var(--green);width:13px;height:13px">
-    Auto-log
-  </label>
-  <span class="ts-label" id="autoLabel">DEV</span>
+  <!-- auto-log sempre activo — mantém elemento no DOM para JS -->
+  <input type="checkbox" id="autoLogChk" checked style="display:none">
+  <span id="autoLabel" style="display:none">DEV</span>
 </div>
 
 <!-- ── Tabs ── -->
@@ -464,7 +462,7 @@ select option{background:var(--bg3);color:var(--text)}
 <div class="panel active" id="panel-scan">
   <div class="stats-bar" style="margin-top:12px">
     <div class="stat-card"><div class="stat-label">Jogos</div><div class="stat-val" id="sTotal">—</div></div>
-    <div class="stat-card"><div class="stat-label">Score≥50</div><div class="stat-val" id="sHigh" style="color:var(--green)">—</div></div>
+    <div class="stat-card"><div class="stat-label">Score≥55</div><div class="stat-val" id="sHigh" style="color:var(--green)">—</div></div>
     <div class="stat-card"><div class="stat-label">Sharp</div><div class="stat-val" id="sSharp" style="color:var(--amber)">—</div></div>
     <div class="stat-card"><div class="stat-label">Odds méd.</div><div class="stat-val" id="sOdds">—</div></div>
   </div>
@@ -515,13 +513,13 @@ select option{background:var(--bg3);color:var(--text)}
   <!-- Sub-painel: Dashboard 1X2 -->
   <div id="spanel-dash1x2" style="display:none">
     <div style="margin-top:12px;margin-bottom:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-      <button class="btn-sm green" onclick="loadDash1x2()">↻ Actualizar</button>
-      <button class="btn-sm" onclick="syncResults1x2()" id="btnSync1x2">🔄 Sincronizar</button>
-      <label style="display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--text2);cursor:pointer;margin-left:4px">
+      <label style="display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--text2);cursor:pointer">
         <input type="checkbox" id="filter1x2Home" checked onchange="renderDash1x2()" style="accent-color:var(--green);width:14px;height:14px">
         Só HOME
       </label>
     </div>
+    <!-- mantém IDs no DOM para JS -->
+    <button id="btnSync1x2" style="display:none"></button>
     <div id="syncStatus1x2" style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:8px;display:none"></div>
 
     <!-- KPIs -->
@@ -609,24 +607,20 @@ select option{background:var(--bg3);color:var(--text)}
 
 <!-- ══ DASHBOARD PANEL ══ -->
 <div class="panel" id="panel-dash">
-  <div style="margin-top:12px;margin-bottom:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-    <button class="btn-sm green" onclick="loadDash()">↻ Actualizar</button>
-    <button class="btn-sm" onclick="syncResults()" id="btnSync">🔄 Sincronizar resultados</button>
-    <button class="btn-sm" onclick="reactSync()" id="btnReactSync" style="background:var(--purple-l);border-color:var(--purple);color:var(--purple)">🧠 ReAct Sync</button>
-    <button class="btn-sm blue" onclick="openReportModal()">📊 Relatório</button>
-    <button class="btn-sm" onclick="sendEmailReport()" title="Abre cliente de email com relatório pré-preenchido">📧 Email</button>
-    <label style="display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--text2);cursor:pointer;margin-left:4px">
-      <input type="checkbox" id="filterShortening" checked onchange="renderDash()" style="accent-color:var(--green);width:14px;height:14px">
-      Só SHORTENING
-    </label>
-  </div>
-  <div id="syncStatus" style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:8px;display:none"></div>
+  <!-- elementos mantidos no DOM para JS -->
+  <button id="btnSync" style="display:none"></button>
+  <button id="btnReactSync" style="display:none"></button>
+  <input type="checkbox" id="filterShortening" checked style="display:none" onchange="renderDash()">
+  <div id="syncStatus" style="display:none;font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:8px"></div>
+
   <div id="nWarning" class="warn-banner"></div>
-  <div class="filters" style="margin-bottom:10px">
-    <span class="filter-label">Fase:</span>
+  <div class="filters" style="margin-top:12px;margin-bottom:12px">
+    <span class="filter-label">Fase</span>
     <button class="fb active" id="dashPhaseAll" onclick="setDashPhase('all')">Todas</button>
     <button class="fb" id="dashPhaseDev" onclick="setDashPhase('dev')">DEV</button>
     <button class="fb" id="dashPhaseLive" onclick="setDashPhase('live')">LIVE</button>
+    <button class="fb g active" id="filterShorteningBtn" onclick="el('filterShortening').checked=!el('filterShortening').checked;this.classList.toggle('active',el('filterShortening').checked);renderDash()">↘ Shortening</button>
+    <button class="btn-sm blue" onclick="openReportModal()" style="margin-left:auto">📊 Relatório</button>
   </div>
   <div class="dash-kpi" id="dashKpi">
     <div class="kpi-card"><div class="kpi-label">Taxa acerto</div><div class="kpi-val" id="dWR">—</div><div class="kpi-sub" id="dWRsub"></div></div>
@@ -639,23 +633,23 @@ select option{background:var(--bg3);color:var(--text)}
     <div class="roi-title">Curva ROI acumulado</div>
     <div id="roiChart" style="height:70px"><div class="empty" style="padding:10px">Sem dados</div></div>
   </div>
-  <div class="sec-title">Por filtro</div>
+  <div class="sec-title">Resultados por filtro</div>
   <div class="bk-grid" id="bkGrid"></div>
   <div class="sec-title" style="display:flex;justify-content:space-between;align-items:center">
-    <span>💡 Propostas de melhoria</span>
+    <span>💡 Análise e sugestões</span>
     <span style="font-family:var(--mono);font-size:9px;color:var(--text3)" id="proposalsMeta"></span>
   </div>
   <div id="proposalsGrid" style="margin-bottom:12px"></div>
   <div class="sec-title" style="display:flex;justify-content:space-between;align-items:center">
-    <span>📡 Observações live — accuracy por padrão</span>
+    <span>📡 Padrões ao vivo</span>
     <span style="font-family:var(--mono);font-size:9px;color:var(--text3)" id="obsMeta"></span>
   </div>
   <div id="obsGrid" style="margin-bottom:12px">
     <div class="empty" style="padding:14px">Sem observações ainda. Abre o módulo Live para começar a registar.</div>
   </div>
-  <div class="sec-title">🔗 Confluência de ferramentas</div>
-  <div id="confluenceGrid" style="margin-bottom:12px">
-    <div class="empty" style="padding:14px">Acumula picks com os novos campos para ver análise de confluência.</div>
+  <div id="confluenceSection" style="display:none">
+    <div class="sec-title">🔗 Confluência Scanner + Sharp</div>
+    <div id="confluenceGrid" style="margin-bottom:12px"></div>
   </div>
   <div class="sec-title">Picks recentes</div>
   <div class="picks-table">
@@ -3210,10 +3204,12 @@ function renderConfluence(){
     </div>`;
   }
 
+  const section=el('confluenceSection');
   if(!html){
-    c.innerHTML='<div class="empty" style="padding:14px">Acumula picks com os novos campos para ver análise de confluência.</div>';
+    if(section) section.style.display='none';
     return;
   }
+  if(section) section.style.display='block';
   c.innerHTML=html;
 }
 
