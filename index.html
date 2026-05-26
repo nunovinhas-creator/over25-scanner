@@ -1266,6 +1266,7 @@ async function loadAll(){
             h2h:det?.h2h, hCoach:det?.home_coach, aCoach:det?.away_coach,
             league:ev.league_name||lgNames[ev.league_id]||''});
 
+          const edgeVsMarket=(prob25!=null&&pinnNow!=null)?(prob25-(1/pinnNow)):null;
           enriched.push({
             id:ev.id, home:ev.home_team, away:ev.away_team,
             date:ev.event_date, league:ev.league_name||lgNames[ev.league_id]||'',
@@ -1276,6 +1277,7 @@ async function loadAll(){
             predScore:pred?.markets?.score?.most_likely||null,
             recommend:rec.over_25||false,
             conf:mdl.confidence||null,
+            edgeVsMarket,
             det
           });
         }catch(e){ /* skip */ }
@@ -1477,7 +1479,10 @@ function gameCard(g){
   const barW=sc+'%';
   const barCol=sc>=70?'var(--green)':sc>=50?'var(--amber)':'var(--border2)';
 
-  const cardClass=(g.sharpLabel?'sharp-flag ':'')+( sc>=60?'high-score':'');
+  const edgePct=g.edgeVsMarket!=null?(g.edgeVsMarket*100):null;
+  const edgeBadge=edgePct!=null?`<span style="font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:4px;border:1px solid ${edgePct>= 2?'rgba(22,163,74,.4)':edgePct>=-2?'rgba(100,116,139,.3)':'rgba(220,38,38,.4)'};background:${edgePct>= 2?'rgba(22,163,74,.08)':edgePct>=-2?'rgba(100,116,139,.06)':'rgba(220,38,38,.07)'};color:${edgePct>= 2?'var(--green)':edgePct>=-2?'var(--text3)':'var(--red)'}">${edgePct>=0?'+':''}${edgePct.toFixed(1)}% edge</span>`:'';
+  const negEdge=edgePct!=null&&edgePct<-2; // downgrade visual quando edge muito negativo
+  const cardClass=(g.sharpLabel?'sharp-flag ':'')+( sc>=60&&!negEdge?'high-score':'');
 
   const sigs=g.signals.map(s=>`<span class="badge ${s.c==='g'?'bg':s.c==='r'?'br':s.c==='p'?'bp':'ba'}">${esc(s.t)}</span>`).join(' ');
 
@@ -1508,6 +1513,7 @@ function gameCard(g){
           </span>
           ${g.oddsOver?`<span style="font-family:var(--mono);font-size:12px;font-weight:700">@${g.oddsOver.toFixed(2)}</span>`:''}
           ${g.sharpLabel?`<span class="badge bp">${g.sharpLabel==='STEAM'?'🔥':g.sharpLabel==='SHARP'?'🎯':'👁'} ${esc(g.sharpLabel)}</span>`:''}
+          ${edgeBadge}
           ${(()=>{
             const xgt=g.xgH!=null&&g.xgA!=null?g.xgH+g.xgA:0;
             const o=parseFloat(g.oddsOver||0);
@@ -1521,6 +1527,7 @@ function gameCard(g){
             return '';
           })()}
         </div>
+        ${negEdge?`<div style="font-size:10px;color:var(--red);background:rgba(220,38,38,.06);border:1px solid rgba(220,38,38,.2);border-radius:4px;padding:3px 8px;margin-top:3px">⚠ Edge negativo vs Pinnacle — modelo diverge do mercado sharp</div>`:''}
         <div class="score-bar"><div class="score-bar-fill" style="width:${barW};background:${barCol}"></div></div>
         <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">${sigs}</div>
       </div>
@@ -1581,9 +1588,9 @@ function gameCard(g){
             <div class="cg-val">${g.pinnPrev?g.pinnPrev.toFixed(2):'—'}</div>
           </div>
           <div class="sharp-item cg-item">
-            <div class="cg-label">No-vig edge</div>
-            <div class="cg-val" style="color:${g.oddsOver&&g.prob25&&(g.prob25-(1/g.oddsOver))>=0?'var(--green)':'var(--red)'}">
-              ${g.oddsOver&&g.prob25?((g.prob25-(1/g.oddsOver))*100).toFixed(1)+'%':'—'}
+            <div class="cg-label">Edge vs Pinn</div>
+            <div class="cg-val" style="color:${g.edgeVsMarket!=null?(g.edgeVsMarket>=0?'var(--green)':'var(--red)'):'var(--text3)'}">
+              ${g.edgeVsMarket!=null?(g.edgeVsMarket>=0?'+':'')+( g.edgeVsMarket*100).toFixed(1)+'%':'—'}
             </div>
           </div>
         </div>
@@ -2127,7 +2134,7 @@ function detectPatterns(e){
   if(e.overOdds&&prev>0){
     const drop=(prev-e.overOdds)/prev*100;
     if(drop>=6)      p.push({id:'mkt',label:'Odds −'+drop.toFixed(1)+'%',emoji:'📈',level:'critical',detail:`Mercado caiu de ${prev.toFixed(2)} → ${e.overOdds.toFixed(2)} (sharp money)`});
-    else if(drop>=3) p.push({id:'mkt',label:'Odds −'+drop.toFixed(1)+'%',emoji:'📈',level:'mkt',   detail:`Mercado caiu de ${prev.toFixed(2)} → ${e.overOdds.toFixed(2)}`});
+    else if(drop>=4) p.push({id:'mkt',label:'Odds −'+drop.toFixed(1)+'%',emoji:'📈',level:'mkt',   detail:`Mercado caiu de ${prev.toFixed(2)} → ${e.overOdds.toFixed(2)}`});
   }
   if(e.overOdds) localStorage.setItem(ck,e.overOdds.toFixed(3));
 
@@ -2508,6 +2515,11 @@ async function autoLogCandidatos(){
       const scoreBand=g.score>=75?'75+':g.score>=65?'65-75':g.score>=55?'55-65':'40-55';
       const ov=parseFloat(g.oddsOver||0);
       const oddsBand=ov>=2.50?'2.50+':ov>=2.10?'2.10-2.50':ov>=1.80?'1.80-2.10':'1.50-1.80';
+      const impliedProb=ov>1?(1/ov*100).toFixed(1):'';
+      const evEntry=g.prob25!=null&&ov>1?((g.prob25*ov)-1).toFixed(3):'';
+      const timingToKo=g.date?((new Date(g.date)-Date.now())/3600000).toFixed(2):'';
+      const leagueBaseRate=(LEAGUE_BASE[g.league]??0.55).toFixed(2);
+      const edgeVsMkt=g.edgeVsMarket!=null?g.edgeVsMarket.toFixed(3):'';
       picks.push({
         id:String(g.id),
         casa:g.home, fora:g.away, liga:g.league||'',
@@ -2525,6 +2537,11 @@ async function autoLogCandidatos(){
         sharp_co_label:sharpSig?(sharpSig.label||'')+(sharpSig.sigs?.[0]?.out?' '+sharpSig.sigs[0].out:''):'',
         score_band:scoreBand,
         odds_band:oddsBand,
+        implied_prob_entry:impliedProb,
+        ev_entry:evEntry,
+        timing_to_ko_h:timingToKo,
+        league_base_rate:leagueBaseRate,
+        edge_vs_market:edgeVsMkt,
         saved_at:new Date().toISOString()
       });
       markSaved(g.id);
@@ -2602,7 +2619,7 @@ async function captureClosingOdds(){
 // ════════════════════════════════════════════════════════════════
 async function autoLogObservations(){
   if(!el('ghToken')?.value.trim()) return; // sem token não consegue escrever
-  const THRESHOLD = 6; // patternScore mínimo para guardar (era 4 — muito permissivo)
+  const THRESHOLD = 6; // patternScore mínimo base
   const LS_PREFIX = 'obs_saved_';
 
   // Jogos novos com padrões fortes ainda não guardados
@@ -2613,6 +2630,9 @@ async function autoLogObservations(){
     if(e.probLive!=null&&e.probLive<25) return false;
     // Jogo >75min com menos de 2 golos: matematicamente improvável
     if(e.min>=75&&e.goals<2) return false;
+    // Gate de qualidade: exige sinal de mercado (mkt/critical) OU patternScore muito alto
+    const hasMkt=(e.patterns||[]).some(p=>p.id==='mkt'||p.level==='critical');
+    if(!hasMkt&&(e.patternScore||0)<10) return false;
     return true;
   });
 
