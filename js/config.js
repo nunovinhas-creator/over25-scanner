@@ -2,7 +2,6 @@
  * Global Configuration & Constants
  * Centralized configuration for API endpoints, thresholds, and constants
  */
-
 const CONFIG = {
   // API Endpoints
   API: {
@@ -11,21 +10,18 @@ const CONFIG = {
     TG_API: 'https://api.telegram.org',
     REPO: 'nunovinhas-creator/over25-scanner',
   },
-
   // File Paths
   FILES: {
     PICKS: 'data/picks.json',
     PICKS_1X2: 'data/picks_1x2.json',
     OBS: 'data/observations.json',
   },
-
   // Sharp Detection Thresholds
   SHARP: {
     TH_MOVE: 1.0,
     DIV_MIN: 2.0,
     DIV_STEAM: 8.0,
   },
-
   // Scoring Weights
   SCORE: {
     ML_PROBABILITY: 40,
@@ -33,23 +29,38 @@ const CONFIG = {
     BTTS: 15,
     SHARP_MONEY: 15,
   },
-
   // Timeouts & Limits
   TIMEOUTS: {
     API_CALL: 10000,
     GITHUB_CALL: 15000,
   },
-
   // Pagination
   PAGINATION: {
     ODDS_LIMIT: 200,
     MAX_PAGES: 20,
   },
-
   // Storage
   STORAGE: {
     CONFIG_KEY: 'ov_cfg',
     CACHE_TTL: 60000,
+  },
+  // Mapeamento de league_id → nome da liga (BSD API)
+  LEAGUE_NAMES: {
+    6:  'Liga Portugal',
+    7:  'La Liga',
+    9:  'Serie A',
+    22: 'Eliteserien',
+    23: 'Allsvenskan',
+    26: 'Veikkausliiga',
+    31: 'USL Championship',
+    34: 'MLS',
+    38: 'Ekstraklasa',
+    49: 'Brasileirao',
+    52: 'Copa Sudamericana',
+    53: 'Copa Libertadores',
+    54: 'Liga Profesional Argentina',
+    55: 'Ligue 1',
+    57: 'USL League One',
   },
 };
 
