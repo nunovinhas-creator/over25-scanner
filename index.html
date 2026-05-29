@@ -819,6 +819,9 @@ async function ghRead(file){
   if(!r.ok) return {data:[],sha:null};
   const resp = await r.json();
   _sha[file] = resp.sha;
+  if(typeof GitHubAPI !== 'undefined' && GitHubAPI._shaCache){
+    GitHubAPI._shaCache[file] = resp.sha;
+  }
   try{ return {data:JSON.parse(fromB64(resp.content)), sha:resp.sha}; }
   catch(e){ return {data:[],sha:resp.sha}; }
 }
