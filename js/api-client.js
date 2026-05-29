@@ -115,3 +115,111 @@ const APIClient = (function () {
     if (!bypassCache && _isCacheValid(CACHE[key])) {
       if (typeof Logger !== 'undefined') {
         Logger.info('APIClient', 'Cache hit: ' + url);
+      }
+      return Promise.resolve(CACHE[key].data);
+    }
+
+    // Deduplicação — se já há pedido igual em curso, reutiliza
+    if (PENDING[key]) {
+      if (typeof Logger !== 'undefined') {
+        Logger.info('APIClient', 'Pedido duplicado deduplicated: ' + url);
+      }
+      return PENDING[key];
+    }
+
+    const fetchOptions = Object.assign({ method: 'GET' }, options || {});
+
+    PENDING[key] = _fetchWithRetry(url, fetchOptions).then(function (data) {
+      CACHE[key] = { data: data, ts: Date.now() };
+      delete PENDING[key];
+      return data;
+    }).catch(function (err) {
+      delete PENDING[key];
+      return Promise.reject(err);
+    });
+
+    return PENDING[key];
+  }
+
+  /**
+   * POST sem cache
+   * @param {string} url
+   * @param {object} body
+   * @param {object} headers
+   */
+  function post(url, body, headers) {
+    const options = {
+      method: 'POST',
+      headers: Object.assign({ 'Content-Type': 'application/json' }, headers || {}),
+      body: JSON.stringify(body),
+    };
+    return _fetchWithRetry(url, options);
+  }
+
+  /**
+   * PUT sem cache
+   */
+  function put(url, body, headers) {
+    const options = {
+      method: 'PUT',
+      headers: Object.assign({ 'Content-Type': 'application/json' }, headers || {}),
+      body: JSON.stringify(body),
+    };
+    return _fetchWithRetry(url, options);
+  }
+
+  /**
+   * Invalida cache para um URL específico
+   */
+  function invalidateCache(url) {
+    Object.keys(CACHE).forEach(function (k) {
+      if (k.indexOf(url) === 0) delete CACHE[k];
+    });
+  }
+
+  /**
+   * Limpa toda a cache
+   */
+  function clearCache() {
+    Object.keys(CACHE).forEach(function (k) { delete CACHE[k]; });
+  }
+
+  /**
+   * Fetch paralelo com controlo de concorrência
+   * @param {Array} requests - array de { url, options }
+   * @param {number} concurrency - máximo em paralelo (default 4)
+   */
+  function batchGet(requests, concurrency) {
+    concurrency = concurrency || 4;
+    const results = [];
+    let index = 0;
+
+    function next() {
+      if (index >= requests.length) return Promise.resolve();
+      const req = requests[index++];
+      return get(req.url, req.options).then(function (data) {
+        results.push({ url: req.url, data: data, error: null });
+        return next();
+      }).catch(function (err) {
+        results.push({ url: req.url, data: null, error: err.message });
+        return next();
+      });
+    }
+
+    const workers = [];
+    for (let i = 0; i < Math.min(concurrency, requests.length); i++) {
+      workers.push(next());
+    }
+
+    return Promise.all(workers).then(function () { return results; });
+  }
+
+  return {
+    get,
+    post,
+    put,
+    invalidateCache,
+    clearCache,
+    batchGet,
+  };
+})();
