@@ -58,7 +58,7 @@ const CONFIG = {
     49: 'Brasileirao',
     52: 'Copa Sudamericana',
     53: 'Copa Libertadores',
-    54: 'Liga Profesional Argentina',
+    54: 'Eliteserien',
     55: 'Ligue 1',
     57: 'USL League One',
   },
