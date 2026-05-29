@@ -972,6 +972,7 @@ function normalizePick(p){
     timing_to_ko_h:       raw.timing_to_ko_h||'',
     league_base_rate:     raw.league_base_rate||'',
     edge_vs_market:       raw.edge_vs_market||'',
+    pinn_actual:          raw.pinn_actual||'',
   };
 }
 
@@ -1654,7 +1655,8 @@ async function savePick(btn){
       ev_entry:g.prob25!=null&&_ovSave>1?(((g.prob25*_ovSave)-1)*100).toFixed(1):'',
       timing_to_ko_h:isNaN(_koMsSave)?'':((_koMsSave-Date.now())/3600000).toFixed(2),
       league_base_rate:(LEAGUE_BASE[g.league]??0.55).toFixed(2),
-      edge_vs_market:g.edgeVsMarket!=null?g.edgeVsMarket.toFixed(3):''
+      edge_vs_market:g.edgeVsMarket!=null?(g.edgeVsMarket*100).toFixed(1):'',
+      pinn_actual:g.pinnActual?'1':''
     });
     markSaved(id);
     setBtnSaved(btn);
@@ -2542,7 +2544,7 @@ async function autoLogCandidatos(){
       const _koMs=g.date?new Date(g.date).getTime():NaN;
       const timingToKo=isNaN(_koMs)?'':((_koMs-Date.now())/3600000).toFixed(2);
       const leagueBaseRate=(LEAGUE_BASE[g.league]??0.55).toFixed(2);
-      const edgeVsMkt=g.edgeVsMarket!=null?g.edgeVsMarket.toFixed(3):'';
+      const edgeVsMkt=g.edgeVsMarket!=null?(g.edgeVsMarket*100).toFixed(1):'';
       picks.push({
         id:String(g.id),
         casa:g.home, fora:g.away, liga:g.det?(CONFIG.LEAGUE_NAMES&&CONFIG.LEAGUE_NAMES[g.det.league_id])||'Liga_'+g.det.league_id:'',
@@ -2565,6 +2567,7 @@ async function autoLogCandidatos(){
         timing_to_ko_h:timingToKo,
         league_base_rate:leagueBaseRate,
         edge_vs_market:edgeVsMkt,
+        pinn_actual:g.pinnActual?'1':'',
         saved_at:new Date().toISOString()
       });
       markSaved(g.id);
