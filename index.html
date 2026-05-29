@@ -2526,7 +2526,7 @@ async function autoLogCandidatos(){
       const edgeVsMkt=g.edgeVsMarket!=null?g.edgeVsMarket.toFixed(3):'';
       picks.push({
         id:String(g.id),
-        casa:g.home, fora:g.away, liga:g.det?lgNames[g.det.league_id]||'Liga_'+g.det.league_id:'',
+        casa:g.home, fora:g.away, liga:g.det?(CONFIG.LEAGUE_NAMES&&CONFIG.LEAGUE_NAMES[g.det.league_id])||'Liga_'+g.det.league_id:'',
         data:g.date, score_sistema:String(g.score||0),
         prob_over25:prob,
         odds_over:g.oddsOver?g.oddsOver.toFixed(4):'',
