@@ -965,8 +965,13 @@ function normalizePick(p){
     clv:          raw.clv||'',
     has_sharp:    raw.has_sharp||'',
     sharp_co_label: raw.sharp_co_label||'',
-    score_band:   raw.score_band||'',
-    odds_band:    raw.odds_band||'',
+    score_band:           raw.score_band||'',
+    odds_band:            raw.odds_band||'',
+    implied_prob_entry:   raw.implied_prob_entry||'',
+    ev_entry:             raw.ev_entry||'',
+    timing_to_ko_h:       raw.timing_to_ko_h||'',
+    league_base_rate:     raw.league_base_rate||'',
+    edge_vs_market:       raw.edge_vs_market||'',
   };
 }
 
@@ -1221,7 +1226,7 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
 
           // ── Sharp: pinnacle vs recreativas via odds endpoint ──
           let pinnNow=null, recrAvg=null, movement=movMap[ev.id]||null, div=null, sharpLabel=null;
-          let pinnPrev=prevMap[ev.id]||null;
+          let pinnPrev=prevMap[ev.id]||null, pinnActual=false;
 
           const oddsRows = arr(pinnOdds).filter(o=>o.outcome==='over');
           oddsRows.forEach(o=>{
@@ -1231,6 +1236,7 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
             if(!price) return;
             if(slug==='pinnacle'){
               pinnNow=price;
+              pinnActual=true;
               if(prev&&prev!==price) pinnPrev=prev;
               if(o.movement) movement=o.movement;
             } else if(RECR.includes(slug)){
@@ -1281,7 +1287,7 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
             predScore:pred?.markets?.score?.most_likely||null,
             recommend:rec.over_25||false,
             conf:mdl.confidence||null,
-            edgeVsMarket,
+            edgeVsMarket, pinnActual,
             det
           });
         }catch(e){ /* skip */ }
@@ -1484,7 +1490,9 @@ function gameCard(g){
   const barCol=sc>=70?'var(--green)':sc>=50?'var(--amber)':'var(--border2)';
 
   const edgePct=g.edgeVsMarket!=null?(g.edgeVsMarket*100):null;
-  const edgeBadge=edgePct!=null?`<span style="font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:4px;border:1px solid ${edgePct>= 2?'rgba(22,163,74,.4)':edgePct>=-2?'rgba(100,116,139,.3)':'rgba(220,38,38,.4)'};background:${edgePct>= 2?'rgba(22,163,74,.08)':edgePct>=-2?'rgba(100,116,139,.06)':'rgba(220,38,38,.07)'};color:${edgePct>= 2?'var(--green)':edgePct>=-2?'var(--text3)':'var(--red)'}">${edgePct>=0?'+':''}${edgePct.toFixed(1)}% edge</span>`:'';
+  const edgeRef=g.pinnActual?'Pinn':'mkt';
+  const edgeSty=edgePct==null?null:edgePct>=2?{bdr:'rgba(22,163,74,.4)',bg:'rgba(22,163,74,.08)',col:'var(--green)'}:edgePct>=-2?{bdr:'rgba(100,116,139,.3)',bg:'rgba(100,116,139,.06)',col:'var(--text3)'}:{bdr:'rgba(220,38,38,.4)',bg:'rgba(220,38,38,.07)',col:'var(--red)'};
+  const edgeBadge=edgeSty?`<span style="font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:4px;border:1px solid ${edgeSty.bdr};background:${edgeSty.bg};color:${edgeSty.col}">${edgePct>=0?'+':''}${edgePct.toFixed(1)}% vs ${edgeRef}</span>`:'';
   const negEdge=edgePct!=null&&edgePct<-2; // downgrade visual quando edge muito negativo
   const cardClass=(g.sharpLabel?'sharp-flag ':'')+( sc>=60&&!negEdge?'high-score':'');
 
@@ -1531,7 +1539,7 @@ function gameCard(g){
             return '';
           })()}
         </div>
-        ${negEdge?`<div style="font-size:10px;color:var(--red);background:rgba(220,38,38,.06);border:1px solid rgba(220,38,38,.2);border-radius:4px;padding:3px 8px;margin-top:3px">⚠ Edge negativo vs Pinnacle — modelo diverge do mercado sharp</div>`:''}
+        ${negEdge?`<div style="font-size:10px;color:var(--red);background:rgba(220,38,38,.06);border:1px solid rgba(220,38,38,.2);border-radius:4px;padding:3px 8px;margin-top:3px">⚠ Edge negativo vs ${edgeRef} — modelo diverge do mercado${g.pinnActual?' sharp':''}</div>`:''}
         <div class="score-bar"><div class="score-bar-fill" style="width:${barW};background:${barCol}"></div></div>
         <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">${sigs}</div>
       </div>
@@ -1592,7 +1600,7 @@ function gameCard(g){
             <div class="cg-val">${g.pinnPrev?g.pinnPrev.toFixed(2):'—'}</div>
           </div>
           <div class="sharp-item cg-item">
-            <div class="cg-label">Edge vs Pinn</div>
+            <div class="cg-label">Edge vs ${g.pinnActual?'Pinn':'Mkt'}</div>
             <div class="cg-val" style="color:${g.edgeVsMarket!=null?(g.edgeVsMarket>=0?'var(--green)':'var(--red)'):'var(--text3)'}">
               ${g.edgeVsMarket!=null?(g.edgeVsMarket>=0?'+':'')+( g.edgeVsMarket*100).toFixed(1)+'%':'—'}
             </div>
@@ -1628,6 +1636,8 @@ async function savePick(btn){
   try{
     const prob=g.prob25!=null?(g.prob25*100).toFixed(1):'';
     const xgt=g.xgH!=null&&g.xgA!=null?(g.xgH+g.xgA).toFixed(2):'';
+    const _ovSave=g.oddsOver||0;
+    const _koMsSave=g.date?new Date(g.date).getTime():NaN;
     await picksSave({
       id:String(g.id),
       casa:g.home, fora:g.away, liga:g.league||'',
@@ -1639,7 +1649,12 @@ async function savePick(btn){
       xg_total:xgt, btts_prob:g.bttsN!=null?g.bttsN.toFixed(0):'', fonte:'scanner',
       sharp_label:g.sharpLabel||'', div:g.div?g.div.toFixed(1):'',
       phase:getCurrentPhase(),
-      result_over25:'', golos_total:''
+      result_over25:'', golos_total:'',
+      implied_prob_entry:_ovSave>1?(1/_ovSave*100).toFixed(1):'',
+      ev_entry:g.prob25!=null&&_ovSave>1?(((g.prob25*_ovSave)-1)*100).toFixed(1):'',
+      timing_to_ko_h:isNaN(_koMsSave)?'':((_koMsSave-Date.now())/3600000).toFixed(2),
+      league_base_rate:(LEAGUE_BASE[g.league]??0.55).toFixed(2),
+      edge_vs_market:g.edgeVsMarket!=null?g.edgeVsMarket.toFixed(3):''
     });
     markSaved(id);
     setBtnSaved(btn);
@@ -2139,8 +2154,11 @@ function detectPatterns(e){
     const drop=(prev-e.overOdds)/prev*100;
     if(drop>=6)      p.push({id:'mkt',label:'Odds −'+drop.toFixed(1)+'%',emoji:'📈',level:'critical',detail:`Mercado caiu de ${prev.toFixed(2)} → ${e.overOdds.toFixed(2)} (sharp money)`});
     else if(drop>=4) p.push({id:'mkt',label:'Odds −'+drop.toFixed(1)+'%',emoji:'📈',level:'mkt',   detail:`Mercado caiu de ${prev.toFixed(2)} → ${e.overOdds.toFixed(2)}`});
+    // Only reset reference when pattern fires or odds increase (preserve for cumulative detection)
+    if(drop>=4||e.overOdds>=prev) localStorage.setItem(ck,e.overOdds.toFixed(3));
+  } else if(e.overOdds) {
+    localStorage.setItem(ck,e.overOdds.toFixed(3)); // initialize reference
   }
-  if(e.overOdds) localStorage.setItem(ck,e.overOdds.toFixed(3));
 
   // 7. CONVERGÊNCIA — 3+ padrões independentes apontam para over
   const strong=p.filter(x=>x.level==='high'||x.level==='critical'||x.level==='mkt');
@@ -2520,8 +2538,9 @@ async function autoLogCandidatos(){
       const ov=parseFloat(g.oddsOver||0);
       const oddsBand=ov>=2.50?'2.50+':ov>=2.10?'2.10-2.50':ov>=1.80?'1.80-2.10':'1.50-1.80';
       const impliedProb=ov>1?(1/ov*100).toFixed(1):'';
-      const evEntry=g.prob25!=null&&ov>1?((g.prob25*ov)-1).toFixed(3):'';
-      const timingToKo=g.date?((new Date(g.date)-Date.now())/3600000).toFixed(2):'';
+      const evEntry=g.prob25!=null&&ov>1?(((g.prob25*ov)-1)*100).toFixed(1):'';
+      const _koMs=g.date?new Date(g.date).getTime():NaN;
+      const timingToKo=isNaN(_koMs)?'':((_koMs-Date.now())/3600000).toFixed(2);
       const leagueBaseRate=(LEAGUE_BASE[g.league]??0.55).toFixed(2);
       const edgeVsMkt=g.edgeVsMarket!=null?g.edgeVsMarket.toFixed(3):'';
       picks.push({
@@ -2635,7 +2654,7 @@ async function autoLogObservations(){
     // Jogo >75min com menos de 2 golos: matematicamente improvável
     if(e.min>=75&&e.goals<2) return false;
     // Gate de qualidade: exige sinal de mercado (mkt/critical) OU patternScore muito alto
-    const hasMkt=(e.patterns||[]).some(p=>p.id==='mkt'||p.level==='critical');
+    const hasMkt=(e.patterns||[]).some(p=>p.id==='mkt');
     if(!hasMkt&&(e.patternScore||0)<10) return false;
     return true;
   });
@@ -2695,7 +2714,7 @@ async function autoLogObservations(){
     const added = await obsBatchSave(newObs, Object.keys(updates).length?updates:null);
     if(added>0){
       sendTG(`👁 OBSERVAÇÕES: ${added} jogos guardados\n`+
-        toSave.map(e=>`${e.home} vs ${e.away} [score:${e.patternScore}] ${(e.patterns||[]).map(p=>p.emoji+p.label).join(' ')}`).join('\n')
+        toSave.slice(0,added).map(e=>`${e.home} vs ${e.away} [score:${e.patternScore}] ${(e.patterns||[]).map(p=>p.emoji+p.label).join(' ')}`).join('\n')
       ).catch(()=>{});
     }
     allObs = await obsRead(); // actualiza cache local
