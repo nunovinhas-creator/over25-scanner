@@ -2105,23 +2105,56 @@ function detectPatterns(e){
   const totalShots=(e.shots?.h??0)+(e.shots?.a??0);
   const remaining=Math.max(0,90-min);
 
-  // 1. RITMO xG — pace de xG extrapolado para 90min
-  if(e.xgTotal!=null&&min>0){
-    const pace=(e.xgTotal/min)*90;
-    if(pace>=4.0)      p.push({id:'xg_pace',label:'xG '+pace.toFixed(1)+'/90',emoji:'⚡',level:'critical',detail:`xG a ritmo de ${pace.toFixed(1)} por 90min`});
-    else if(pace>=3.0) p.push({id:'xg_pace',label:'xG '+pace.toFixed(1)+'/90',emoji:'⚡',level:'high',  detail:`xG a ritmo de ${pace.toFixed(1)} por 90min`});
-    else if(pace>=2.5) p.push({id:'xg_pace',label:'xG '+pace.toFixed(1)+'/90',emoji:'⚡',level:'med',   detail:`xG a ritmo de ${pace.toFixed(1)} por 90min`});
+  // ── HALF-AWARENESS: separar estatísticas da 1ª e 2ª parte ──
+  // Estatísticas (remates, xG) são cumulativas desde o início — na 2ª parte
+  // representam o total de ambas as partes, não apenas a corrente.
+  const periodRaw=String(e.period||e.status||'').toLowerCase().replace(/[_\s-]/g,'');
+  const isHT = periodRaw==='halftime'||periodRaw==='ht'||e.status==='half_time';
+  const is2H = !isHT && min>=46 && min<=95;
+  const htKey = 'ht_'+e.id;
+
+  // Gravar baseline no intervalo (detectado pelo status ou pelos minutos)
+  if(isHT){
+    // Armazena sempre ao detectar HT — sobrepõe valores anteriores
+    localStorage.setItem(htKey,JSON.stringify({shots:totalShots,xg:e.xgTotal||0,min}));
+  } else if(is2H&&min<=52){
+    // Janela de transição: guarda baseline se ainda não existe
+    if(!localStorage.getItem(htKey)){
+      localStorage.setItem(htKey,JSON.stringify({shots:totalShots,xg:e.xgTotal||0,min}));
+    }
+  }
+  // Limpa baseline depois de Over resolvido (≥3 golos) ou fim do jogo
+  if(e.goals>=3||min>=90) localStorage.removeItem(htKey);
+
+  // Estatísticas ajustadas para a parte actual
+  let htBase=null;
+  if(is2H){ try{ htBase=JSON.parse(localStorage.getItem(htKey)||'null'); }catch{} }
+  const adjShots = (is2H&&htBase) ? Math.max(0,totalShots-htBase.shots) : totalShots;
+  const adjXg    = (is2H&&htBase) ? Math.max(0,(e.xgTotal||0)-htBase.xg) : (e.xgTotal||0);
+  const adjMin   = is2H ? Math.max(1,min-45) : min;
+  // Durante o intervalo ou nos primeiros minutos da 2ª parte sem baseline:
+  // estatísticas não reflectem o jogo actual — suprimir padrões baseados em volume
+  const suppressVolume = isHT || (is2H&&min<=50&&!htBase);
+
+  // 1. RITMO xG — pace de xG extrapolado para 90min (usa stats da parte actual)
+  if(!suppressVolume&&adjXg>0&&adjMin>0){
+    const pace=(adjXg/adjMin)*90;
+    const halfLabel=is2H?'(2ªP)':'';
+    if(pace>=4.0)      p.push({id:'xg_pace',label:'xG '+pace.toFixed(1)+'/90'+halfLabel,emoji:'⚡',level:'critical',detail:`xG a ritmo de ${pace.toFixed(1)} por 90min${is2H?' na 2ª parte':''}`});
+    else if(pace>=3.0) p.push({id:'xg_pace',label:'xG '+pace.toFixed(1)+'/90'+halfLabel,emoji:'⚡',level:'high',  detail:`xG a ritmo de ${pace.toFixed(1)} por 90min${is2H?' na 2ª parte':''}`});
+    else if(pace>=2.5) p.push({id:'xg_pace',label:'xG '+pace.toFixed(1)+'/90'+halfLabel,emoji:'⚡',level:'med',   detail:`xG a ritmo de ${pace.toFixed(1)} por 90min${is2H?' na 2ª parte':''}`});
   }
 
-  // 2. VOLUME DE REMATES — shots/90min, mas só válido com contexto favorável
-  if(totalShots>0&&min>0){
-    const sRate=(totalShots/min)*90;
+  // 2. VOLUME DE REMATES — usa remates da parte actual, não o total acumulado
+  if(!suppressVolume&&adjShots>0&&adjMin>0){
+    const sRate=(adjShots/adjMin)*90;
     const prob=e.probLive||0;
+    const shotLabel=(is2H&&htBase)?adjShots+'r 2ªP':totalShots+' remates';
     // Jogo tardio (>55min) sem golos e probabilidade <35%: remates não predizem Over — ignora
     if(min>55&&e.goals===0&&prob<35) {/* não adiciona */}
     else{
-      if(sRate>=28)      p.push({id:'shots',label:totalShots+' remates',emoji:'🎯',level:'high',detail:`${sRate.toFixed(0)} remates/90min (muito alto)`});
-      else if(sRate>=22) p.push({id:'shots',label:totalShots+' remates',emoji:'🎯',level:'med', detail:`${sRate.toFixed(0)} remates/90min (acima da média)`});
+      if(sRate>=28)      p.push({id:'shots',label:shotLabel,emoji:'🎯',level:'high',detail:`${sRate.toFixed(0)} remates/90min${is2H?' (2ª parte)':''} (muito alto)`});
+      else if(sRate>=22) p.push({id:'shots',label:shotLabel,emoji:'🎯',level:'med', detail:`${sRate.toFixed(0)} remates/90min${is2H?' (2ª parte)':''} (acima da média)`});
     }
   }
 
@@ -2151,8 +2184,10 @@ function detectPatterns(e){
 
   // 6. MERCADO ao vivo — odds a cair (dinheiro smart a entrar)
   const ck='lprev_'+e.id;
+  // No intervalo: reset da referência de odds (mercado ajusta ao HT)
+  if(isHT&&e.overOdds) { localStorage.setItem(ck,e.overOdds.toFixed(3)); }
   const prev=parseFloat(localStorage.getItem(ck)||0);
-  if(e.overOdds&&prev>0){
+  if(!isHT&&e.overOdds&&prev>0){
     const drop=(prev-e.overOdds)/prev*100;
     if(drop>=6)      p.push({id:'mkt',label:'Odds −'+drop.toFixed(1)+'%',emoji:'📈',level:'critical',detail:`Mercado caiu de ${prev.toFixed(2)} → ${e.overOdds.toFixed(2)} (sharp money)`});
     else if(drop>=4) p.push({id:'mkt',label:'Odds −'+drop.toFixed(1)+'%',emoji:'📈',level:'mkt',   detail:`Mercado caiu de ${prev.toFixed(2)} → ${e.overOdds.toFixed(2)}`});
@@ -2209,7 +2244,7 @@ async function loadLive(){
       const xgTotal=xgH!=null&&xgA!=null?xgH+xgA:null;
       const evObj={id:ev.id,home:ev.home_team,away:ev.away_team,
         hScore:ev.home_score||0,aScore:ev.away_score||0,
-        min,status:ev.status,league:ev.league_name||'',
+        min,status:ev.status,period:ev.period||null,league:ev.league_name||'',
         goals,xgH,xgA,xgTotal,
         lastMom,overOdds,probLive,shots,
         isPick,isWatch:watchIds.has(String(ev.id)),isDanger};
