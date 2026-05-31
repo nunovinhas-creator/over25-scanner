@@ -2100,107 +2100,177 @@ let liveCountdown=30;
 function detectPatterns(e){
   const p=[];
   const min=e.min||0;
-  if(min<8) return p; // muito cedo para padrões fiáveis
+  if(min<8) return p;
 
-  const totalShots=(e.shots?.h??0)+(e.shots?.a??0);
   const remaining=Math.max(0,90-min);
-
-  // ── HALF-AWARENESS: separar estatísticas da 1ª e 2ª parte ──
-  // Estatísticas (remates, xG) são cumulativas desde o início — na 2ª parte
-  // representam o total de ambas as partes, não apenas a corrente.
   const periodRaw=String(e.period||e.status||'').toLowerCase().replace(/[_\s-]/g,'');
-  const isHT = periodRaw==='halftime'||periodRaw==='ht'||e.status==='half_time';
-  const is2H = !isHT && min>=46 && min<=95;
-  const htKey = 'ht_'+e.id;
+  const isHT=periodRaw==='halftime'||periodRaw==='ht'||e.status==='half_time';
+  const is2H=!isHT&&min>=46&&min<=95;
+  const htKey='ht_'+e.id;
 
-  // Gravar baseline no intervalo (detectado pelo status ou pelos minutos)
+  const totalShots  =(e.shots?.h??0)+(e.shots?.a??0);
+  const totalSoT    =(e.sot?.h??0)+(e.sot?.a??0);
+  const totalDA     =(e.da?.h??0)+(e.da?.a??0);
+  const totalCorners=(e.corners?.h??0)+(e.corners?.a??0);
+
   if(isHT){
-    // Armazena sempre ao detectar HT — sobrepõe valores anteriores
-    localStorage.setItem(htKey,JSON.stringify({shots:totalShots,xg:e.xgTotal||0,min}));
+    localStorage.setItem(htKey,JSON.stringify({shots:totalShots,xg:e.xgTotal||0,da:totalDA,sot:totalSoT,corners:totalCorners,min}));
   } else if(is2H&&min<=52){
-    // Janela de transição: guarda baseline se ainda não existe
-    if(!localStorage.getItem(htKey)){
-      localStorage.setItem(htKey,JSON.stringify({shots:totalShots,xg:e.xgTotal||0,min}));
-    }
+    if(!localStorage.getItem(htKey))
+      localStorage.setItem(htKey,JSON.stringify({shots:totalShots,xg:e.xgTotal||0,da:totalDA,sot:totalSoT,corners:totalCorners,min}));
   }
-  // Limpa baseline depois de Over resolvido (≥3 golos) ou fim do jogo
   if(e.goals>=3||min>=90) localStorage.removeItem(htKey);
 
-  // Estatísticas ajustadas para a parte actual
   let htBase=null;
   if(is2H){ try{ htBase=JSON.parse(localStorage.getItem(htKey)||'null'); }catch{} }
-  const adjShots = (is2H&&htBase) ? Math.max(0,totalShots-htBase.shots) : totalShots;
-  const adjXg    = (is2H&&htBase) ? Math.max(0,(e.xgTotal||0)-htBase.xg) : (e.xgTotal||0);
-  const adjMin   = is2H ? Math.max(1,min-45) : min;
-  // Durante o intervalo ou nos primeiros minutos da 2ª parte sem baseline:
-  // estatísticas não reflectem o jogo actual — suprimir padrões baseados em volume
-  const suppressVolume = isHT || (is2H&&min<=50&&!htBase);
 
-  // 1. RITMO xG — pace de xG extrapolado para 90min (usa stats da parte actual)
+  const adjShots  =(is2H&&htBase)?Math.max(0,totalShots  -htBase.shots       ):totalShots;
+  const adjXg     =(is2H&&htBase)?Math.max(0,(e.xgTotal||0)-htBase.xg        ):(e.xgTotal||0);
+  const adjDA     =(is2H&&htBase)?Math.max(0,totalDA      -(htBase.da||0)     ):totalDA;
+  const adjSoT    =(is2H&&htBase)?Math.max(0,totalSoT     -(htBase.sot||0)    ):totalSoT;
+  const adjCorners=(is2H&&htBase)?Math.max(0,totalCorners -(htBase.corners||0)):totalCorners;
+  const adjMin    =is2H?Math.max(1,min-45):min;
+  const suppressVolume=isHT||(is2H&&min<=50&&!htBase);
+  const halfSfx=is2H?' (2ªP)':'';
+
+  // 1. PRESSÃO (DA) — ataques perigosos/min: sinal primário dos sistemas profissionais
+  if(!suppressVolume&&adjDA>0&&adjMin>0){
+    const daRate=(adjDA/adjMin)*90;
+    const pi=Math.round(daRate+(adjSoT*5));
+    if(daRate>=60)
+      p.push({id:'pressure',label:`Pressão ${pi}${halfSfx}`,emoji:'🔥',level:'critical',
+        detail:`${adjDA} atq. perigosos · ${adjSoT} ao alvo${halfSfx}`});
+    else if(daRate>=40)
+      p.push({id:'pressure',label:`Pressão ${pi}${halfSfx}`,emoji:'🔥',level:'high',
+        detail:`${adjDA} atq. perigosos · ${adjSoT} ao alvo${halfSfx}`});
+    else if(daRate>=24)
+      p.push({id:'pressure',label:`DA ${daRate.toFixed(0)}/90${halfSfx}`,emoji:'🔥',level:'med',
+        detail:`${adjDA} ataques perigosos · ${adjSoT} ao alvo${halfSfx}`});
+  }
+
+  // 2. xG OVERDUE — xG muito acima do score (mercado a subvalorizar o Over)
+  if(e.xgTotal!=null&&min>=40&&e.goals<3){
+    const delta=e.xgTotal-e.goals;
+    if(delta>=2.5)
+      p.push({id:'xg_delta',label:`xG +${delta.toFixed(1)} acima`,emoji:'🎲',level:'critical',
+        detail:`xG ${e.xgTotal.toFixed(2)} vs ${e.goals} golos — golo(s) em dívida`});
+    else if(delta>=1.8)
+      p.push({id:'xg_delta',label:`xG +${delta.toFixed(1)} acima`,emoji:'🎲',level:'high',
+        detail:`xG ${e.xgTotal.toFixed(2)} vs ${e.goals} golos`});
+    else if(delta>=1.2&&min>=55)
+      p.push({id:'xg_delta',label:'xG sobrevaloriza',emoji:'🎲',level:'med',
+        detail:`xG ${e.xgTotal.toFixed(2)} vs ${e.goals} golos`});
+  }
+
+  // 3. xG RITMO — pace extrapolado para 90min (parte actual)
   if(!suppressVolume&&adjXg>0&&adjMin>0){
     const pace=(adjXg/adjMin)*90;
-    const halfLabel=is2H?'(2ªP)':'';
-    if(pace>=4.0)      p.push({id:'xg_pace',label:'xG '+pace.toFixed(1)+'/90'+halfLabel,emoji:'⚡',level:'critical',detail:`xG a ritmo de ${pace.toFixed(1)} por 90min${is2H?' na 2ª parte':''}`});
-    else if(pace>=3.0) p.push({id:'xg_pace',label:'xG '+pace.toFixed(1)+'/90'+halfLabel,emoji:'⚡',level:'high',  detail:`xG a ritmo de ${pace.toFixed(1)} por 90min${is2H?' na 2ª parte':''}`});
-    else if(pace>=2.5) p.push({id:'xg_pace',label:'xG '+pace.toFixed(1)+'/90'+halfLabel,emoji:'⚡',level:'med',   detail:`xG a ritmo de ${pace.toFixed(1)} por 90min${is2H?' na 2ª parte':''}`});
+    if(pace>=4.0)
+      p.push({id:'xg_pace',label:`xG ${pace.toFixed(1)}/90${halfSfx}`,emoji:'⚡',level:'critical',
+        detail:`xG a ritmo de ${pace.toFixed(1)} por 90min${halfSfx}`});
+    else if(pace>=3.0)
+      p.push({id:'xg_pace',label:`xG ${pace.toFixed(1)}/90${halfSfx}`,emoji:'⚡',level:'high',
+        detail:`xG a ritmo de ${pace.toFixed(1)} por 90min${halfSfx}`});
+    else if(pace>=2.5)
+      p.push({id:'xg_pace',label:`xG ${pace.toFixed(1)}/90${halfSfx}`,emoji:'⚡',level:'med',
+        detail:`xG a ritmo de ${pace.toFixed(1)} por 90min${halfSfx}`});
   }
 
-  // 2. VOLUME DE REMATES — usa remates da parte actual, não o total acumulado
+  // 4. CANTOS — pressão de área
+  if(!suppressVolume&&adjCorners>0&&adjMin>0){
+    const cRate=(adjCorners/adjMin)*90;
+    if(adjCorners>=8||(cRate>=12&&adjMin>=20))
+      p.push({id:'corners',label:`${adjCorners} cantos${halfSfx}`,emoji:'🚩',level:'high',
+        detail:`${cRate.toFixed(1)}/90min — pressão de área elevada${halfSfx}`});
+    else if(adjCorners>=5||(cRate>=8&&adjMin>=15))
+      p.push({id:'corners',label:`${adjCorners} cantos${halfSfx}`,emoji:'🚩',level:'med',
+        detail:`${cRate.toFixed(1)}/90min${halfSfx}`});
+  }
+
+  // 5. VOLUME DE REMATES — validado por contexto
   if(!suppressVolume&&adjShots>0&&adjMin>0){
     const sRate=(adjShots/adjMin)*90;
-    const prob=e.probLive||0;
-    const shotLabel=(is2H&&htBase)?adjShots+'r 2ªP':totalShots+' remates';
-    // Jogo tardio (>55min) sem golos e probabilidade <35%: remates não predizem Over — ignora
-    if(min>55&&e.goals===0&&prob<35) {/* não adiciona */}
-    else{
-      if(sRate>=28)      p.push({id:'shots',label:shotLabel,emoji:'🎯',level:'high',detail:`${sRate.toFixed(0)} remates/90min${is2H?' (2ª parte)':''} (muito alto)`});
-      else if(sRate>=22) p.push({id:'shots',label:shotLabel,emoji:'🎯',level:'med', detail:`${sRate.toFixed(0)} remates/90min${is2H?' (2ª parte)':''} (acima da média)`});
-    }
+    const shotLabel=(is2H&&htBase)?`${adjShots}r 2ªP`:`${totalShots} remates`;
+    if(min>55&&e.goals===0&&(e.probLive||0)<35){/* ignora: volume sem conversão */}
+    else if(sRate>=28)
+      p.push({id:'shots',label:shotLabel,emoji:'🎯',level:'high',
+        detail:`${sRate.toFixed(0)} remates/90min${halfSfx} (muito alto)`});
+    else if(sRate>=22)
+      p.push({id:'shots',label:shotLabel,emoji:'🎯',level:'med',
+        detail:`${sRate.toFixed(0)} remates/90min${halfSfx}`});
   }
 
-  // 3. JOGO ABERTO — score fechado + minutos avançados + momentum de ataque
+  // 6. JOGO ABERTO — score fechado + minutos avançados + pressão de perder
   if(min>=55&&e.goals<3){
     const diff=Math.abs((e.hScore||0)-(e.aScore||0));
-    const bothNeedGoals=e.goals<=1&&diff<=1;
-    const losingTeamPushing=(e.hScore<e.aScore&&e.lastMom<-15)||(e.hScore>e.aScore&&e.lastMom>15);
-    if(bothNeedGoals&&(losingTeamPushing||e.goals===0))
-      p.push({id:'open',label:'JOGO ABERTO',emoji:'🎭',level:'med',detail:`${remaining}min, ${e.goals===0?'0-0 — ambas precisam':'equipa a perder ataca'}`});
+    const bothNeed=e.goals<=1&&diff<=1;
+    const losingPush=(e.hScore<e.aScore&&e.lastMom<-15)||(e.hScore>e.aScore&&e.lastMom>15);
+    if(bothNeed&&(losingPush||e.goals===0))
+      p.push({id:'open',label:'JOGO ABERTO',emoji:'🎭',level:'med',
+        detail:`${remaining}min, ${e.goals===0?'0-0 — ambas precisam':'equipa a perder ataca'}`});
   }
 
-  // 4. MOMENTUM EXTREMO — dominância clara de uma equipa
+  // 7. MOMENTUM — dominância de uma equipa
   if(e.lastMom!=null){
     const abs=Math.abs(e.lastMom);
     const side=e.lastMom>0?'Casa':'Fora';
-    if(abs>=70)      p.push({id:'mom',label:side+' domina',emoji:'💥',level:'high',detail:`Momentum ${side.toLowerCase()} ${abs.toFixed(0)} — controlo total`});
-    else if(abs>=45) p.push({id:'mom',label:side+' pressiona',emoji:'💪',level:'med',detail:`Momentum ${side.toLowerCase()} ${abs.toFixed(0)}`});
+    if(abs>=70)
+      p.push({id:'mom',label:`${side} domina`,emoji:'💥',level:'high',
+        detail:`Momentum ${side.toLowerCase()} ${abs.toFixed(0)} — controlo total`});
+    else if(abs>=45)
+      p.push({id:'mom',label:`${side} pressiona`,emoji:'💪',level:'med',
+        detail:`Momentum ${side.toLowerCase()} ${abs.toFixed(0)}`});
   }
 
-  // 5. LATE PUSH — últimos 20min, só com 1 golo em falta E mercado a confirmar (prob≥28%)
-  // need===2 removido: 2 golos em <22min tem <8% de probabilidade histórica
+  // 8. LATE PUSH — últimos 20min, 1 golo em falta E mercado confirma
   if(min>=68&&e.goals===2){
     const prob=e.probLive||0;
-    if(prob>=28) p.push({id:'late',label:'1 gol em '+remaining+'min',emoji:'⏰',level:'high',detail:`Falta 1 golo · mercado ${prob}% · ${remaining}min`});
+    if(prob>=28)
+      p.push({id:'late',label:`1 gol em ${remaining}min`,emoji:'⏰',level:'high',
+        detail:`Falta 1 golo · mercado ${prob}% · ${remaining}min`});
   }
 
-  // 6. MERCADO ao vivo — odds a cair (dinheiro smart a entrar)
+  // 9. MERCADO AO VIVO — odds a cair (sharp money a entrar)
   const ck='lprev_'+e.id;
-  // No intervalo: reset da referência de odds (mercado ajusta ao HT)
-  if(isHT&&e.overOdds) { localStorage.setItem(ck,e.overOdds.toFixed(3)); }
+  if(isHT&&e.overOdds) localStorage.setItem(ck,e.overOdds.toFixed(3));
   const prev=parseFloat(localStorage.getItem(ck)||0);
   if(!isHT&&e.overOdds&&prev>0){
     const drop=(prev-e.overOdds)/prev*100;
-    if(drop>=6)      p.push({id:'mkt',label:'Odds −'+drop.toFixed(1)+'%',emoji:'📈',level:'critical',detail:`Mercado caiu de ${prev.toFixed(2)} → ${e.overOdds.toFixed(2)} (sharp money)`});
-    else if(drop>=4) p.push({id:'mkt',label:'Odds −'+drop.toFixed(1)+'%',emoji:'📈',level:'mkt',   detail:`Mercado caiu de ${prev.toFixed(2)} → ${e.overOdds.toFixed(2)}`});
-    // Only reset reference when pattern fires or odds increase (preserve for cumulative detection)
+    if(drop>=6)
+      p.push({id:'mkt',label:`Odds −${drop.toFixed(1)}%`,emoji:'📈',level:'critical',
+        detail:`Mercado caiu de ${prev.toFixed(2)} → ${e.overOdds.toFixed(2)} (sharp money)`});
+    else if(drop>=4)
+      p.push({id:'mkt',label:`Odds −${drop.toFixed(1)}%`,emoji:'📈',level:'mkt',
+        detail:`Mercado caiu de ${prev.toFixed(2)} → ${e.overOdds.toFixed(2)}`});
     if(drop>=4||e.overOdds>=prev) localStorage.setItem(ck,e.overOdds.toFixed(3));
-  } else if(e.overOdds) {
-    localStorage.setItem(ck,e.overOdds.toFixed(3)); // initialize reference
+  } else if(e.overOdds) localStorage.setItem(ck,e.overOdds.toFixed(3));
+
+  // 10. POSSE DOMINANTE — desequilíbrio ≥70%
+  if(e.possession?.h!=null&&e.possession?.a!=null){
+    const domH=e.possession.h, domA=e.possession.a;
+    const dom=Math.max(domH,domA);
+    const side=domH>domA?'Casa':'Fora';
+    if(dom>=70)
+      p.push({id:'possession',label:`Posse ${side} ${Math.round(dom)}%`,emoji:'⚽',level:'med',
+        detail:`${side} domina com ${Math.round(dom)}% de posse`});
   }
 
-  // 7. CONVERGÊNCIA — 3+ padrões independentes apontam para over
-  const strong=p.filter(x=>x.level==='high'||x.level==='critical'||x.level==='mkt');
-  if(p.length>=3&&strong.length>=2)
-    p.unshift({id:'conv',label:'CONVERGÊNCIA',emoji:'🔮',level:'conv',detail:`${p.length} padrões em simultâneo — sinal forte`});
+  // 11. VANTAGEM NUMÉRICA — cartão vermelho
+  const rH=e.redCards?.h??0, rA=e.redCards?.a??0;
+  if(rH!==rA){
+    const adv=rH<rA?'Casa':'Fora';
+    const nCards=Math.max(rH,rA);
+    p.push({id:'numerical',label:`${adv} +1 homem`,emoji:'🟥',level:'med',
+      detail:`${adv==='Casa'?'Fora':'Casa'} com ${nCards} vermelho(s) — ${adv} em vantagem numérica`});
+  }
+
+  // 12. CONVERGÊNCIA — múltiplos padrões fortes simultâneos
+  const strong=p.filter(x=>['critical','high','mkt'].includes(x.level));
+  const hasPressure=p.some(x=>x.id==='pressure');
+  const hasXgDelta=p.some(x=>x.id==='xg_delta');
+  if((p.length>=3&&strong.length>=2)||(hasPressure&&hasXgDelta&&p.length>=3))
+    p.unshift({id:'conv',label:'CONVERGÊNCIA',emoji:'🔮',level:'conv',
+      detail:`${p.length} padrões em simultâneo — sinal forte`});
 
   return p;
 }
@@ -2231,33 +2301,42 @@ async function loadLive(){
         get('/api/v2/events/'+ev.id+'/odds/').catch(()=>({})),
       ]);
       const goals=(ev.home_score||0)+(ev.away_score||0);
-      const xgH=stats?.stats?.home?.xg?.actual??null;
-      const xgA=stats?.stats?.away?.xg?.actual??null;
+      const sh=stats?.stats?.home||{}, sa=stats?.stats?.away||{};
+      const xgH=sh.xg?.actual??null;
+      const xgA=sa.xg?.actual??null;
       const mom=stats?.momentum||[];
       const lastMom=mom.length?mom[mom.length-1]?.v:null;
       const overOdds=odds?.odds?.over_25_goals??null;
       const probLive=overOdds?Math.round((1/overOdds)*100):null;
-      const shots={h:stats?.stats?.home?.total_shots??null,a:stats?.stats?.away?.total_shots??null};
+      const shots   ={h:sh.total_shots     ??null, a:sa.total_shots     ??null};
+      const sot     ={h:sh.shots_on_target ??null, a:sa.shots_on_target ??null};
+      const da      ={h:sh.dangerous_attack??null, a:sa.dangerous_attack??null};
+      const corners ={h:sh.corners         ??null, a:sa.corners         ??null};
+      const possession={h:sh.possession    ??null, a:sa.possession      ??null};
+      const attacks ={h:sh.attack          ??null, a:sa.attack          ??null};
+      const ballSafe={h:sh.ball_safe       ??null, a:sa.ball_safe       ??null};
+      const redCards={h:sh.red_cards       ??null, a:sa.red_cards       ??null};
       const min=ev.current_minute||0;
-      const isPick=pickIds.has(String(ev.id));
-      const isDanger=isPick&&goals<3&&min>60;
+      const isSavedPick=pickIds.has(String(ev.id));
+      const isDanger=isSavedPick&&goals<3&&min>60;
       const xgTotal=xgH!=null&&xgA!=null?xgH+xgA:null;
       const evObj={id:ev.id,home:ev.home_team,away:ev.away_team,
         hScore:ev.home_score||0,aScore:ev.away_score||0,
         min,status:ev.status,period:ev.period||null,league:ev.league_name||'',
-        goals,xgH,xgA,xgTotal,
-        lastMom,overOdds,probLive,shots,
-        isPick,isWatch:watchIds.has(String(ev.id)),isDanger};
+        goals,xgH,xgA,xgTotal,lastMom,overOdds,probLive,
+        shots,sot,da,corners,possession,attacks,ballSafe,redCards,
+        isSavedPick,isWatch:watchIds.has(String(ev.id)),isDanger};
       evObj.patterns=detectPatterns(evObj);
-      evObj.patternScore=evObj.patterns.reduce((s,p)=>s+(p.level==='critical'?10:p.level==='high'?4:p.level==='med'?2:1),0);
+      evObj.patternScore=evObj.patterns.reduce((s,p)=>s+(p.level==='critical'?10:p.level==='high'?4:p.level==='med'?2:p.level==='conv'?0:1),0);
+      evObj.isLivePick=evObj.patternScore>=8||(evObj.patterns||[]).some(p=>p.id==='conv');
       return evObj;
     }));
 
     liveData=enriched;
-    const picks2=enriched.filter(e=>e.isPick);
+    const savedPicks=enriched.filter(e=>e.isSavedPick);
     el('lTotal').textContent=enriched.length;
-    el('lPicks').textContent=picks2.length;
-    el('lGolos').textContent=picks2.reduce((s,e)=>s+e.goals,0);
+    el('lPicks').textContent=savedPicks.length;
+    el('lGolos').textContent=savedPicks.reduce((s,e)=>s+e.goals,0);
     renderLive();
     startLiveCountdown();
 
@@ -2265,7 +2344,7 @@ async function loadLive(){
     autoLogObservations().catch(()=>{});
 
     // Agent C — alertas adaptativos via ReAct (picks em perigo, max 3 em paralelo)
-    const pickGames=enriched.filter(e=>e.isPick);
+    const pickGames=enriched.filter(e=>e.isSavedPick);
     // Processa em batches de 3 para não sobrecarregar a BSD API
     for(let i=0;i<pickGames.length;i+=3){
       const batch=pickGames.slice(i,i+3);
@@ -2305,27 +2384,34 @@ function startLiveCountdown(){
 }
 
 function renderLive(){
-  const picks=liveData.filter(e=>e.isPick).sort((a,b)=>{
+  const savedPicks=liveData.filter(e=>e.isSavedPick).sort((a,b)=>{
     if(a.isDanger&&!b.isDanger) return -1;
     if(!a.isDanger&&b.isDanger) return 1;
     return (b.patternScore||0)-(a.patternScore||0)||b.min-a.min;
   });
-  // watching: ordenar por patternScore desc, só mostrar com algo relevante primeiro
-  const watching=liveData.filter(e=>!e.isPick).sort((a,b)=>(b.patternScore||0)-(a.patternScore||0)||b.min-a.min);
+  const liveSignals=liveData.filter(e=>!e.isSavedPick&&e.isLivePick)
+    .sort((a,b)=>(b.patternScore||0)-(a.patternScore||0)||b.min-a.min);
+  const watching=liveData.filter(e=>!e.isSavedPick&&!e.isLivePick)
+    .sort((a,b)=>(b.patternScore||0)-(a.patternScore||0)||b.min-a.min);
 
   if(!liveData.length){el('liveList').innerHTML='<div class="empty">Nenhum jogo ao vivo.</div>';return;}
 
-  let html='';
-  if(picks.length){
-    html+=`<div class="live-sec picks">📌 Picks Activos <span style="background:rgba(10,170,83,.12);color:var(--green);border-radius:3px;padding:1px 6px">${picks.length}</span></div>`;
-    html+=picks.map(e=>liveCard(e)).join('');
+  let html='', sec=0;
+  if(savedPicks.length){
+    html+=`<div class="live-sec picks">⭐ Apostas Guardadas <span style="background:rgba(10,170,83,.12);color:var(--green);border-radius:3px;padding:1px 6px">${savedPicks.length}</span></div>`;
+    html+=savedPicks.map(e=>liveCard(e)).join('');
+    sec++;
+  }
+  if(liveSignals.length){
+    html+=`<div class="live-sec" style="color:var(--red);margin-top:${sec?16:0}px">🔥 Sinais Live <span style="background:rgba(224,48,80,.12);color:var(--red);border-radius:3px;padding:1px 6px">${liveSignals.length}</span></div>`;
+    html+=liveSignals.map(e=>liveCardCompact(e)).join('');
+    sec++;
   }
   if(watching.length){
-    html+=`<div class="live-sec watch" style="margin-top:${picks.length?16:0}px">👁 Em Observação <span style="font-size:10px">${watching.length}</span></div>`;
+    html+=`<div class="live-sec watch" style="margin-top:${sec?16:0}px">👁 Em Observação <span style="font-size:10px">${watching.length}</span></div>`;
     html+=watching.map(e=>liveCardCompact(e)).join('');
   }
   el('liveList').innerHTML=html;
-  // actualiza radar se estiver visível
   if(el('lpanel-radar')?.style.display!=='none') renderLiveRadar();
 }
 
@@ -2337,18 +2423,23 @@ function renderLiveRadar(){
   }
 
   const total=liveData.length;
-  const withPat=liveData.filter(e=>(e.patterns||[]).length>0).length;
+  const livePicks=liveData.filter(e=>e.isLivePick).length;
   const danger=liveData.filter(e=>e.isDanger).length;
   const convCount=liveData.filter(e=>(e.patterns||[]).some(p=>p.id==='conv')).length;
 
   const PATS=[
-    {id:'conv',   name:'Convergência', emoji:'🔮', rgba:'124,58,237'},
-    {id:'xg_pace',name:'xG Ritmo',     emoji:'⚡', rgba:'224,48,80'},
-    {id:'shots',  name:'Vol. Remates', emoji:'🎯', rgba:'201,127,10'},
-    {id:'open',   name:'Jogo Aberto',  emoji:'🎭', rgba:'120,120,160'},
-    {id:'mom',    name:'Momentum',     emoji:'💪', rgba:'37,99,235'},
-    {id:'late',   name:'Late Push',    emoji:'⏰', rgba:'201,127,10'},
-    {id:'mkt',    name:'Mercado',      emoji:'📈', rgba:'37,99,235'},
+    {id:'conv',      name:'Convergência',  emoji:'🔮', rgba:'124,58,237'},
+    {id:'pressure',  name:'Pressão (DA)',  emoji:'🔥', rgba:'224,48,80'},
+    {id:'xg_delta',  name:'xG Overdue',   emoji:'🎲', rgba:'224,48,80'},
+    {id:'xg_pace',   name:'xG Ritmo',     emoji:'⚡', rgba:'201,127,10'},
+    {id:'mkt',       name:'Mercado',      emoji:'📈', rgba:'37,99,235'},
+    {id:'late',      name:'Late Push',    emoji:'⏰', rgba:'201,127,10'},
+    {id:'corners',   name:'Cantos',       emoji:'🚩', rgba:'201,127,10'},
+    {id:'mom',       name:'Momentum',     emoji:'💪', rgba:'37,99,235'},
+    {id:'open',      name:'Jogo Aberto',  emoji:'🎭', rgba:'120,120,160'},
+    {id:'shots',     name:'Remates',      emoji:'🎯', rgba:'201,127,10'},
+    {id:'possession',name:'Posse',        emoji:'⚽', rgba:'120,120,160'},
+    {id:'numerical', name:'Vantagem Num.',emoji:'🟥', rgba:'224,48,80'},
   ];
 
   let critTotal=0,highTotal=0,medTotal=0,mktTotal=0;
@@ -2374,7 +2465,7 @@ function renderLiveRadar(){
 
   let html=`<div class="stats-bar" style="margin-top:14px;margin-bottom:16px">
     <div class="stat-card"><div class="stat-label">Ao vivo</div><div class="stat-val" style="color:var(--red)">${total}</div></div>
-    <div class="stat-card"><div class="stat-label">Com padrões</div><div class="stat-val" style="color:var(--amber)">${withPat}</div></div>
+    <div class="stat-card"><div class="stat-label">Sinais Live</div><div class="stat-val" style="color:${livePicks?'var(--red)':'var(--text3)'}">${livePicks}</div></div>
     <div class="stat-card"><div class="stat-label">Em perigo</div><div class="stat-val" style="color:${danger?'var(--red)':'var(--text3)'}">${danger}</div></div>
     <div class="stat-card"><div class="stat-label">Convergência</div><div class="stat-val" style="color:${convCount?'var(--purple)':'var(--text3)'}">${convCount}</div></div>
   </div>`;
@@ -2434,7 +2525,8 @@ function renderLiveRadar(){
           </div>
           ${ptags?`<div class="pattern-row" style="margin-top:5px">${ptags}</div>`:''}
         </div>
-        ${e.isPick?`<span style="font-family:var(--mono);font-size:9px;background:var(--green-l);color:var(--green);border:1px solid rgba(10,170,83,.3);border-radius:3px;padding:2px 6px;flex-shrink:0">PICK</span>`:''}
+        ${e.isSavedPick?`<span style="font-family:var(--mono);font-size:9px;background:var(--green-l);color:var(--green);border:1px solid rgba(10,170,83,.3);border-radius:3px;padding:2px 6px;flex-shrink:0">⭐</span>`:''}
+        ${e.isLivePick&&!e.isSavedPick?`<span style="font-family:var(--mono);font-size:9px;background:rgba(224,48,80,.12);color:var(--red);border:1px solid rgba(224,48,80,.3);border-radius:3px;padding:2px 6px;flex-shrink:0">LIVE</span>`:''}
       </div>`;
     }
     html+=`</div>`;
@@ -2451,14 +2543,20 @@ function liveCard(e){
   const momTxt=e.lastMom!=null?(e.lastMom>20?'Casa domina':e.lastMom<-20?'Fora domina':'Equilibrado'):'—';
   const probCol=e.probLive!=null?(e.probLive>=60?'var(--green)':e.probLive>=45?'var(--amber)':'var(--red)'):'var(--text3)';
   const cls=e.isDanger?'danger-card':'pick-card';
+  const xgDelta=e.xgTotal!=null?(e.xgTotal-e.goals):null;
+  const xgDeltaCol=xgDelta>=2?'var(--red)':xgDelta>=1?'var(--amber)':'var(--text)';
+  const totalDA=(e.da?.h??0)+(e.da?.a??0);
+  const totalCorners=(e.corners?.h??0)+(e.corners?.a??0);
 
   return `<div class="live-card ${cls}">
     <div class="live-head">
       <div style="flex:1;min-width:0">
         <div class="live-teams">${esc(e.home)} <span style="color:var(--text3)">vs</span> ${esc(e.away)}</div>
-        <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:3px;display:flex;gap:6px;align-items:center">
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:3px;display:flex;gap:6px;align-items:center;flex-wrap:wrap">
           <span class="min-badge">${e.min}'</span>
           <span>${esc(e.league)}</span>
+          ${e.isLivePick?`<span style="font-family:var(--mono);font-size:9px;background:rgba(224,48,80,.12);color:var(--red);border:1px solid rgba(224,48,80,.3);border-radius:3px;padding:1px 5px;font-weight:700">LIVE</span>`:''}
+          <span style="font-family:var(--mono);font-size:9px;background:var(--green-l);color:var(--green);border:1px solid rgba(10,170,83,.3);border-radius:3px;padding:1px 5px">⭐ Aposta</span>
         </div>
       </div>
       <div style="text-align:right;flex-shrink:0">
@@ -2470,9 +2568,17 @@ function liveCard(e){
     <div class="live-grid">
       <div class="lg-item"><div class="lg-label">Prob Over</div><div class="lg-val" style="color:${probCol}">${e.probLive!=null?e.probLive+'%':'—'}</div></div>
       <div class="lg-item"><div class="lg-label">Odd Over</div><div class="lg-val">${e.overOdds?e.overOdds.toFixed(2):'—'}</div></div>
-      <div class="lg-item"><div class="lg-label">xG total</div><div class="lg-val" style="color:${e.xgTotal>=2.5?'var(--green)':e.xgTotal>=2?'var(--amber)':'var(--text)'}">${e.xgTotal?e.xgTotal.toFixed(2):'—'}</div></div>
-      <div class="lg-item"><div class="lg-label">Remates c/f</div><div class="lg-val">${e.shots.h??'—'} / ${e.shots.a??'—'}</div></div>
+      <div class="lg-item"><div class="lg-label">xG total</div><div class="lg-val" style="color:${e.xgTotal>=2.5?'var(--green)':e.xgTotal>=2?'var(--amber)':'var(--text)'}">${e.xgTotal!=null?e.xgTotal.toFixed(2):'—'}</div></div>
+      <div class="lg-item"><div class="lg-label">xG − Golos</div><div class="lg-val" style="color:${xgDeltaCol}">${xgDelta!=null?(xgDelta>=0?'+':'')+xgDelta.toFixed(2):'—'}</div></div>
     </div>
+    ${(e.da?.h!=null||e.sot?.h!=null||e.corners?.h!=null||e.possession?.h!=null)?`<div class="live-grid" style="margin-top:6px">
+      ${e.da?.h!=null?`<div class="lg-item"><div class="lg-label">Atq. Perigosos</div><div class="lg-val" style="color:${totalDA>=20?'var(--amber)':'var(--text)'}">${e.da.h} / ${e.da.a}</div></div>`:''}
+      ${e.sot?.h!=null?`<div class="lg-item"><div class="lg-label">Remates ao alvo</div><div class="lg-val">${e.sot.h} / ${e.sot.a}</div></div>`:''}
+      ${e.corners?.h!=null?`<div class="lg-item"><div class="lg-label">Cantos</div><div class="lg-val" style="color:${totalCorners>=8?'var(--amber)':'var(--text)'}">${e.corners.h} / ${e.corners.a}</div></div>`:''}
+      ${e.possession?.h!=null?`<div class="lg-item"><div class="lg-label">Posse</div><div class="lg-val">${Math.round(e.possession.h)}% / ${Math.round(e.possession.a)}%</div></div>`:''}
+    </div>`:''}
+    ${e.shots?.h!=null?`<div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:4px">Remates: ${e.shots.h} casa · ${e.shots.a} fora</div>`:''}
+
     ${e.lastMom!=null?`
     <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:8px;margin-bottom:3px">
       <span>Momentum</span><span style="color:${momCol}">${momTxt}</span>
@@ -2490,17 +2596,25 @@ function liveCardCompact(e){
   const goalCol=e.goals>=3?'var(--green)':e.goals>=2?'var(--amber)':'var(--red)';
   const goalPct=Math.min((e.goals/3)*100,100);
   const probCol=e.probLive!=null?(e.probLive>=60?'var(--green)':e.probLive>=45?'var(--amber)':'var(--text3)'):'var(--text3)';
-  const hasPatterns=(e.patterns||[]).length>0;
   const topPattern=(e.patterns||[])[0];
-  const cardBorder=topPattern?.level==='conv'?'border-color:var(--purple)':topPattern?.level==='critical'||topPattern?.level==='high'?'border-color:rgba(224,48,80,.3)':topPattern?.level==='mkt'?'border-color:rgba(37,99,235,.3)':'';
+  const sc=e.patternScore||0;
+  const scCol=sc>=10?'var(--red)':sc>=6?'var(--amber)':'var(--text3)';
+  const cardBorder=e.isLivePick&&topPattern?.level==='conv'?'border-color:var(--purple);border-left-width:3px':e.isLivePick?'border-color:rgba(224,48,80,.4);border-left-width:3px':topPattern?.level==='mkt'?'border-color:rgba(37,99,235,.3)':'';
+  const totalDA=(e.da?.h??0)+(e.da?.a??0);
   return `<div class="live-compact" style="${cardBorder}">
     <div class="lc-teams">
-      <div class="lc-home">${esc(e.home)}</div>
+      <div style="display:flex;align-items:baseline;gap:6px">
+        <div class="lc-home">${esc(e.home)}</div>
+        ${e.isLivePick?`<span style="font-family:var(--mono);font-size:9px;background:rgba(224,48,80,.12);color:var(--red);border:1px solid rgba(224,48,80,.3);border-radius:3px;padding:1px 5px;font-weight:700">LIVE</span>`:''}
+        ${e.isSavedPick?`<span style="font-family:var(--mono);font-size:9px;background:var(--green-l);color:var(--green);border:1px solid rgba(10,170,83,.3);border-radius:3px;padding:1px 5px">⭐</span>`:''}
+      </div>
       <div class="lc-away">vs ${esc(e.away)}</div>
       <div style="margin-top:5px;display:flex;gap:6px;align-items:center;flex-wrap:wrap">
         <span class="min-badge">${e.min}'</span>
+        ${sc>0?`<span style="font-family:var(--mono);font-size:10px;font-weight:700;color:${scCol}">${sc}pts</span>`:''}
         ${e.probLive!=null?`<span style="font-family:var(--mono);font-size:10px;color:${probCol}">${e.probLive}%</span>`:''}
         ${e.overOdds?`<span style="font-family:var(--mono);font-size:10px;color:var(--text3)">@${e.overOdds.toFixed(2)}</span>`:''}
+        ${totalDA>0?`<span style="font-family:var(--mono);font-size:10px;color:var(--text3)">🔥${totalDA}DA</span>`:''}
         ${(e.patterns||[]).map(pt=>`<span class="ptag ${pt.level}" title="${pt.detail}">${pt.emoji} ${pt.label}</span>`).join('')}
       </div>
       <div style="margin-top:5px;height:3px;background:var(--border);border-radius:2px;overflow:hidden">
@@ -4068,7 +4182,7 @@ async function reactSync() {
 // REACT AGENT C — Alertas adaptativos (Live Monitor)
 // ════════════════════════════════════════════════════════════════
 async function reactLiveAlert(game) {
-  if(!game.isPick) return null;
+  if(!game.isSavedPick) return null;
 
   const thinkFn = state => {
     const g=state.game;
