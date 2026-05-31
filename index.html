@@ -2166,8 +2166,8 @@ function detectPatterns(e){
         detail:`xG ${e.xgTotal.toFixed(2)} vs ${e.goals} golos`});
   }
 
-  // 3. xG RITMO — pace extrapolado para 90min (parte actual)
-  if(!suppressVolume&&adjXg>0&&adjMin>0){
+  // 3. xG RITMO — pace extrapolado para 90min (só com intervalo suficiente para ser fiável)
+  if(!suppressVolume&&adjXg>0&&adjMin>=20){
     const pace=(adjXg/adjMin)*90;
     if(pace>=4.0)
       p.push({id:'xg_pace',label:`xG ${pace.toFixed(1)}/90${halfSfx}`,emoji:'⚡',level:'critical',
@@ -4192,22 +4192,26 @@ async function reactLiveAlert(game) {
     const g=state.game;
     const goals=g.goals||0, min=g.min||0;
 
-    // Step 1 — buscar stats ao vivo
+    // Step 1 — usar stats já enriquecidas pelo loadLive; só faz fetch se em falta
     if(!state.stats) return {
-      thought:`${g.home} vs ${g.away} (${min}', ${goals}g). É um pick. Preciso de xG ao vivo e momentum para avaliar risco real.`,
+      thought:`${g.home} vs ${g.away} (${min}', ${goals}g). ${state.xgLive!=null?'Stats em cache.':'Stats em falta — fetch BSD.'}`,
       action:{
-        desc:`BSD: GET /api/v2/events/${g.id}/stats/`,
-        run:()=>get(`/api/v2/events/${g.id}/stats/`).catch(()=>({})),
+        desc: state.xgLive!=null?'Stats em cache — sem fetch':`BSD: GET /api/v2/events/${g.id}/stats/`,
+        run:()=>state.xgLive!=null
+          ?Promise.resolve(null)
+          :get(`/api/v2/events/${g.id}/stats/`).catch(()=>({})),
         observe:r=>{
+          if(state.xgLive!=null) return `xG: ${state.xgLive.toFixed(2)} · Mom: ${state.momentum}`;
           const xgH=r?.stats?.home?.xg?.actual??null,xgA=r?.stats?.away?.xg?.actual??null;
           const mom=r?.momentum||[];
           const lastMom=mom.length?mom[mom.length-1]?.v:0;
           return `xG total: ${xgH!=null&&xgA!=null?(xgH+xgA).toFixed(2):'N/A'} · Momentum: ${lastMom>20?'Casa dom.':lastMom<-20?'Fora dom.':'Equilibrado'} (${lastMom})`;
         },
         update:r=>{
+          if(state.xgLive!=null) return {stats:true};
           const xgH=r?.stats?.home?.xg?.actual||0,xgA=r?.stats?.away?.xg?.actual||0;
           const mom=r?.momentum||[];
-          return {stats:r,xgLive:xgH+xgA,momentum:mom.length?mom[mom.length-1]?.v:0};
+          return {stats:true,xgLive:xgH+xgA,momentum:mom.length?mom[mom.length-1]?.v:0};
         }
       }
     };
@@ -4259,7 +4263,11 @@ async function reactLiveAlert(game) {
     };
   };
 
-  return reactLoop({game}, thinkFn, {maxSteps:5});
+  const initState={game,
+    xgLive: game.xgTotal??null,
+    momentum: game.lastMom??null
+  };
+  return reactLoop(initState, thinkFn, {maxSteps:5});
 }
 
 // ════════════════════════════════════════════════════════════════
