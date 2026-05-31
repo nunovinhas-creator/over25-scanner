@@ -740,6 +740,31 @@ let _dashLoaded=false;
 // ════════════════════════════════════════════════════════════════
 const el = id => document.getElementById(id);
 const arr = r => Array.isArray(r)?r:(r?.results||r?.events||[]);
+const normId = id => String(id||'').replace(/_sh$/,'').replace(/_live_\d+$/,'').split('_')[0];
+const calcCLV = (entry, closing) =>
+  entry>1.01&&closing>1.01 ? ((entry/(closing*CLV_DEVIG)-1)*100).toFixed(2) : '';
+const pinnacleRow = (rows, outcome=null) =>
+  arr(rows).find(o=>o.bookmaker_slug==='pinnacle'&&(!outcome||o.outcome===outcome));
+const pickProfit  = p => p.result_over25==='WIN'     ? parseFloat(p.odds_over    ||0)-1 : -1;
+const sharpProfit = p => p.resultado_outcome==='WIN'  ? parseFloat(p.odds_entrada||0)-1 : -1;
+const LSKEY = {
+  htBase:  id => 'ht_'        +id,
+  mktPrev: id => 'lprev_'     +id,
+  danger:  (id,min) => 'rct_dng_'+id+'_'+Math.floor(min/15),
+  winSent: id => 'over_ok_'   +id,
+  obs:     id => 'obs_saved_' +id,
+};
+const isToday = dateStr => !!dateStr && new Date(dateStr).toDateString()===new Date().toDateString();
+const calcCLVAvg = picks => {
+  const w=picks.filter(p=>parseFloat(p.clv||0)!==0);
+  return w.length ? w.reduce((s,p)=>s+parseFloat(p.clv),0)/w.length : null;
+};
+function calcROI(picks, isWinFn, getOddsFn){
+  const valid=picks.filter(p=>parseFloat(getOddsFn(p)||0)>=1.01);
+  if(!valid.length) return null;
+  return valid.reduce((s,p)=>s+(isWinFn(p)?parseFloat(getOddsFn(p))-1:-1),0)/valid.length*100;
+}
+
 
 function h(){ return {'Authorization':'Token '+(el('bsdKey').value.trim())}; }
 async function get(path){
@@ -859,7 +884,6 @@ async function picksGet(){
 async function picksSave(pick){
   const {data:current} = await ghRead(PICKS_FILE);
   const picks = Array.isArray(current) ? current : [];
-  const normId = id => String(id||'').replace(/_sh$/,'').replace(/_live$/,'').split('_')[0];
   const pid = normId(pick.id);
   const idx = picks.findIndex(p => normId(p.id)===pid || String(p.id)===String(pick.id));
   if(idx>=0) picks[idx]={...picks[idx],...pick};
@@ -1976,7 +2000,7 @@ function renderDash1x2(){
 
   // CLV médio
   const withCLV=withOdds.filter(p=>parseFloat(p.clv||0)!==0);
-  const clvAvg=withCLV.length?withCLV.reduce((s,p)=>s+parseFloat(p.clv||0),0)/withCLV.length:null;
+  const clvAvg=calcCLVAvg(withOdds);
   el('d1x2CLV').textContent=clvAvg!=null?(clvAvg>=0?'+':'')+clvAvg.toFixed(1)+'%':'—';
   if(clvAvg!=null) el('d1x2CLV').style.color=clvAvg>0?'var(--green)':'var(--red)';
 
@@ -2114,7 +2138,7 @@ function detectPatterns(e){
   const periodRaw=String(e.period||e.status||'').toLowerCase().replace(/[_\s-]/g,'');
   const isHT=periodRaw==='halftime'||periodRaw==='ht'||e.status==='half_time';
   const is2H=!isHT&&min>=46&&min<=95;
-  const htKey='ht_'+e.id;
+  const htKey=LSKEY.htBase(e.id);
 
   const totalShots  =(e.shots?.h??0)+(e.shots?.a??0);
   const totalSoT    =(e.sot?.h??0)+(e.sot?.a??0);
@@ -2243,7 +2267,7 @@ function detectPatterns(e){
   }
 
   // 9. MERCADO AO VIVO — odds a cair (sharp money a entrar)
-  const ck='lprev_'+e.id;
+  const ck=LSKEY.mktPrev(e.id);
   if(isHT&&e.overOdds) localStorage.setItem(ck,e.overOdds.toFixed(3));
   const prev=parseFloat(localStorage.getItem(ck)||0);
   if(!isHT&&e.overOdds&&prev>0){
@@ -2299,8 +2323,7 @@ async function loadLive(){
     ]);
     const events = liveRes.events||[];
 
-    const today=new Date().toDateString();
-    const pickIds=new Set(picks.filter(p=>new Date(p.data).toDateString()===today&&!p.result_over25).map(p=>String(p.id)));
+    const pickIds=new Set(picks.filter(p=>isToday(p.data)&&!p.result_over25).map(p=>String(p.id)));
     const watchIds=new Set(allGames.filter(g=>g.score>=40).map(g=>String(g.id)));
 
     // Prioritize events that are tracked picks or high-score candidates, then limit
@@ -2366,7 +2389,7 @@ async function loadLive(){
           const e=batch[ri];
           const c=result.conclusion;
           if(c?.type==='WIN'){
-            const k='over_ok_'+e.id;
+            const k=LSKEY.winSent(e.id);
             if(!localStorage.getItem(k)){
               sendTG(c.msg||`🎯 OVER! ${e.home} ${e.hScore||0}-${e.aScore||0} ${e.away}`).then(ok=>{ if(ok) localStorage.setItem(k,'1'); });
             }
@@ -2688,7 +2711,6 @@ async function autoLogCandidatos(){
     // Batch: single read → append all new → single write (avoids N+1 GitHub API calls)
     const {data:currentPicks}=await ghRead(PICKS_FILE);
     const picks=Array.isArray(currentPicks)?currentPicks:[];
-    const normId=id=>String(id||'').replace(/_sh$/,'').replace(/_live$/,'').split('_')[0];
     let saved=0;
     const savedGames=[];
     for(const g of candidatos){
@@ -2782,7 +2804,7 @@ async function captureClosingOdds(){
       } else {
         // Vai buscar à BSD directamente (pick não está no scanner actual)
         const pr=await get('/api/v2/odds/?event_id='+eid+'&market=over_under_25&outcome=over&limit=30').catch(()=>null);
-        const pinnRow=pr?.results?.find?.(o=>o.bookmaker_slug==='pinnacle');
+        const pinnRow=pinnacleRow(pr?.results);
         if(!pinnRow) continue;
         co=parseFloat(pinnRow.decimal_odds||0);
         if(co<1.01) continue;
@@ -2790,7 +2812,7 @@ async function captureClosingOdds(){
 
       pick.odds_over_close=co.toFixed(4);
       const eo=parseFloat(pick.odds_over||0);
-      if(eo>1.01) pick.clv=((eo/(co*1.01)-1)*100).toFixed(2); // devigged
+      if(eo>1.01) pick.clv=calcCLV(eo,co);
       updated++;
     }catch(e){}
   }
@@ -2807,12 +2829,10 @@ async function captureClosingOdds(){
 async function autoLogObservations(){
   if(!el('ghToken')?.value.trim()) return; // sem token não consegue escrever
   const THRESHOLD = 6; // patternScore mínimo base
-  const LS_PREFIX = 'obs_saved_';
-
   // Jogos novos com padrões fortes ainda não guardados
   const toSave = liveData.filter(e=>{
     if((e.patternScore||0) < THRESHOLD) return false;
-    if(localStorage.getItem(LS_PREFIX+e.id)) return false;
+    if(localStorage.getItem(LSKEY.obs(e.id))) return false;
     // Odds implícitas <25% (>4.0): mercado já descartou — não regista
     if(e.probLive!=null&&e.probLive<25) return false;
     // Jogo >75min com menos de 2 golos: matematicamente improvável
@@ -2826,7 +2846,7 @@ async function autoLogObservations(){
   // Jogos que já guardámos — actualiza resultado quando disponível
   const updates = {};
   for(const e of liveData){
-    const k = LS_PREFIX+e.id;
+    const k = LSKEY.obs(e.id);
     const saved = localStorage.getItem(k);
     if(saved && !saved.includes('result=')){
       if(e.goals>=3){
@@ -2843,7 +2863,7 @@ async function autoLogObservations(){
   const now = new Date().toISOString();
   const newObs = toSave.map(e=>{
     const obsId = `${e.id}_obs_${Date.now()}`;
-    localStorage.setItem(LS_PREFIX+e.id, obsId);
+    localStorage.setItem(LSKEY.obs(e.id), obsId);
     // Confluência: verifica pick pre-game e sinal sharp para este jogo
     const baseId=String(e.id);
     const hasScanPick=isSaved(baseId)||allPicks.some(p=>String(p.id).split('_')[0]===baseId)?'1':'';
@@ -3144,7 +3164,7 @@ function renderDash(){
 
   // CLV médio
   const withCLV=validPicks.filter(p=>p.clv&&parseFloat(p.clv)!==0);
-  const clvAvg=withCLV.length?withCLV.reduce((s,p)=>s+parseFloat(p.clv||0),0)/withCLV.length:null;
+  const clvAvg=calcCLVAvg(validPicks);
   if(el('dCLV')){
     el('dCLV').textContent=clvAvg!=null?(clvAvg>=0?'+':'')+clvAvg.toFixed(1)+'%':'—';
     if(clvAvg!=null) el('dCLV').style.color=clvAvg>0?'var(--green)':'var(--red)';
@@ -3285,13 +3305,13 @@ async function syncResults(){
         if(!pick.odds_over_close){
           try{
             const pr=await get('/api/v2/odds/?event_id='+eventId+'&market=over_under_25&outcome=over&limit=30').catch(()=>null);
-            const pinnRow=pr?.results?.find?.(o=>o.bookmaker_slug==='pinnacle');
+            const pinnRow=pinnacleRow(pr?.results);
             if(pinnRow){
               const closingOdds=parseFloat(pinnRow.decimal_odds||0);
               if(closingOdds>1.01){
                 pick.odds_over_close=String(closingOdds);
                 const entryOdds=parseFloat(pick.odds_over||0);
-                if(entryOdds>1.01) pick.clv=((entryOdds/(closingOdds*1.01)-1)*100).toFixed(2); // devigged
+                if(entryOdds>1.01) pick.clv=calcCLV(entryOdds,closingOdds);
               }
             }
           }catch(e){}
@@ -3328,16 +3348,15 @@ function calcOverStats(picks){
   const withR=valid.filter(res);
   const wins=withR.filter(p=>p.result_over25==='WIN');
   const withO=withR.filter(p=>parseFloat(p.odds_over||0)>=1.01);
-  const profit=withO.reduce((s,p)=>s+(p.result_over25==='WIN'?parseFloat(p.odds_over)-1:-1),0);
-  const roi=withO.length?profit/withO.length*100:null;
+  const profit=withO.reduce((s,p)=>s+pickProfit(p),0);
+  const roi=calcROI(withR,p=>p.result_over25==='WIN',p=>p.odds_over);
   const wr=withR.length?wins.length/withR.length*100:null;
   const withCLV=withR.filter(p=>parseFloat(p.clv||0)!==0);
-  const clvAvg=withCLV.length?withCLV.reduce((s,p)=>s+parseFloat(p.clv),0)/withCLV.length:null;
+  const clvAvg=calcCLVAvg(withR);
   const d7=new Date();d7.setDate(d7.getDate()-7);
   const w7=withO.filter(p=>new Date(p.data)>=d7);
-  const roi7=w7.length?w7.reduce((s,p)=>s+(p.result_over25==='WIN'?parseFloat(p.odds_over)-1:-1),0)/w7.length*100:null;
-  const today=new Date().toDateString();
-  const todayR=withR.filter(p=>new Date(p.data).toDateString()===today);
+  const roi7=calcROI(w7,p=>p.result_over25==='WIN',p=>p.odds_over);
+  const todayR=withR.filter(p=>isToday(p.data));
   const todayW=todayR.filter(p=>p.result_over25==='WIN');
   const todayROI=todayR.length?todayR.filter(p=>parseFloat(p.odds_over||0)>=1.01).reduce((s,p)=>s+(p.result_over25==='WIN'?parseFloat(p.odds_over)-1:-1),0)/Math.max(todayR.filter(p=>parseFloat(p.odds_over||0)>=1.01).length,1)*100:null;
   const sorted=[...withR].sort((a,b)=>new Date(b.data)-new Date(a.data));
@@ -3351,11 +3370,11 @@ function calcSharpStats(picks){
   const res=p=>p.resultado_outcome==='WIN'||p.resultado_outcome==='LOSS';
   const withR=picks.filter(res);
   const withO=withR.filter(p=>parseFloat(p.odds_entrada||0)>=1.01);
-  const profit=withO.reduce((s,p)=>s+(p.resultado_outcome==='WIN'?parseFloat(p.odds_entrada)-1:-1),0);
-  const roi=withO.length?profit/withO.length*100:null;
+  const profit=withO.reduce((s,p)=>s+sharpProfit(p),0);
+  const roi=calcROI(withR,p=>p.resultado_outcome==='WIN',p=>p.odds_entrada);
   const wr=withO.length?withO.filter(p=>p.resultado_outcome==='WIN').length/withO.length*100:null;
   const withCLV=withR.filter(p=>parseFloat(p.clv||0)!==0);
-  const clvAvg=withCLV.length?withCLV.reduce((s,p)=>s+parseFloat(p.clv),0)/withCLV.length:null;
+  const clvAvg=calcCLVAvg(withR);
   const byLabel={};
   ['STEAM','SHARP','WATCH'].forEach(lbl=>{
     const g=withO.filter(p=>(p.label||'').toUpperCase()===lbl);
@@ -3366,7 +3385,7 @@ function calcSharpStats(picks){
   });
   const d7=new Date();d7.setDate(d7.getDate()-7);
   const w7=withO.filter(p=>new Date(p.data)>=d7);
-  const roi7=w7.length?w7.reduce((s,p)=>s+(p.resultado_outcome==='WIN'?parseFloat(p.odds_entrada)-1:-1),0)/w7.length*100:null;
+  const roi7=calcROI(w7,p=>p.resultado_outcome==='WIN',p=>p.odds_entrada);
   return {n:withR.length,nTotal:picks.length,wins:withO.filter(p=>p.resultado_outcome==='WIN').length,wr,roi,profit,clvAvg,clvN:withCLV.length,byLabel,roi7};
 }
 
@@ -3757,8 +3776,7 @@ async function sendDailyReport(){
   if(!withR.length) return; // sem resultados, relatório não tem utilidade
   const wins=withR.filter(p=>p.result_over25==='WIN');
   const roi=withR.reduce((s,p)=>{const o=parseFloat(p.odds_over||0);return s+(o>=1.01?(p.result_over25==='WIN'?o-1:-1):0);},0);
-  const today=new Date().toDateString();
-  const todayR=picks.filter(p=>new Date(p.data).toDateString()===today&&res(p));
+  const todayR=picks.filter(p=>isToday(p.data)&&res(p));
   const todayW=todayR.filter(p=>p.result_over25==='WIN');
   const todayROI=todayR.reduce((s,p)=>{const o=parseFloat(p.odds_over||0);return s+(o>=1.01?(p.result_over25==='WIN'?o-1:-1):0);},0);
   const d7=new Date();d7.setDate(d7.getDate()-7);
@@ -3766,7 +3784,7 @@ async function sendDailyReport(){
   const wins7=w7.filter(p=>p.result_over25==='WIN');
   const roi7=w7.reduce((s,p)=>{const o=parseFloat(p.odds_over||0);return s+(o>=1.01?(p.result_over25==='WIN'?o-1:-1):0);},0);
   const withCLV=withR.filter(p=>parseFloat(p.clv||0)!==0);
-  const clvAvg=withCLV.length?withCLV.reduce((s,p)=>s+parseFloat(p.clv),0)/withCLV.length:null;
+  const clvAvg=calcCLVAvg(withR);
 
   const msg=`📊 *OVER 2.5 SCOUT — RELATÓRIO DIÁRIO*
 📅 ${new Date().toLocaleDateString('pt-PT')}
@@ -3873,7 +3891,7 @@ async function reactAnalyzeGame(eventId, eventDate) {
         run:()=>get(`/api/v2/odds/?event_id=${eventId}&market=over_under_25&limit=30`),
         observe:r=>{
           const rows=arr(r);
-          const pin=rows.find(o=>o.bookmaker_slug==='pinnacle'&&o.outcome==='over');
+          const pin=pinnacleRow(rows,'over');
           const recr=rows.filter(o=>RECR.includes(o.bookmaker_slug)&&o.outcome==='over').length;
           return pin
             ?`Pinnacle Over: ${pin.decimal_odds}${pin.previous_decimal_odds?' (abertura:'+pin.previous_decimal_odds+')':''} · ${recr} books recreativas`
@@ -3911,7 +3929,7 @@ async function reactAnalyzeGame(eventId, eventDate) {
     const bttsRaw=btts.prob_yes!=null?btts.prob_yes:null;
     const bttsN=bttsRaw!=null?(bttsRaw>1?bttsRaw:bttsRaw*100):null;
     const xgH=xg.home??null, xgA=xg.away??null;
-    const pinRow=oddsData.find(o=>o.bookmaker_slug==='pinnacle'&&o.outcome==='over');
+    const pinRow=pinnacleRow(oddsData,'over');
     const pinnNow=pinRow?parseFloat(pinRow.decimal_odds):null;
     const pinnPrev=pinRow?.previous_decimal_odds?parseFloat(pinRow.previous_decimal_odds):null;
     let movement=pinRow?.movement||null;
@@ -4029,7 +4047,7 @@ function syncAgentThink(state) {
           if(!eid) return {id:p.id,skip:true};
           try{
             const r=await get(`/api/v2/odds/?event_id=${eid}&market=over_under_25&outcome=over&limit=30`);
-            const pin=arr(r).find(o=>o.bookmaker_slug==='pinnacle');
+            const pin=pinnacleRow(arr(r));
             return {id:p.id,closing:pin?parseFloat(pin.decimal_odds):null};
           }catch(e){return {id:p.id,skip:true};}
         })),
@@ -4050,7 +4068,7 @@ function syncAgentThink(state) {
             if(idx<0) return;
             const entry=parseFloat(newPicks[idx].odds_over||0);
             const updated={...newPicks[idx],odds_over_close:String(r.closing)};
-            if(entry>1.01){updated.clv=((entry/(r.closing*CLV_DEVIG)-1)*100).toFixed(2);delta++;}
+            if(entry>1.01){updated.clv=calcCLV(entry,r.closing);delta++;}
             newPicks[idx]=updated;
           });
           return {picks:newPicks,clvUpdated:(state.clvUpdated||0)+delta,clvDone:true};
@@ -4106,8 +4124,8 @@ async function silentSync(){
           pick.result_over25=total>2.5?'WIN':'LOSS';
           if(!pick.odds_over_close){
             const pr=await get('/api/v2/odds/?event_id='+eid+'&market=over_under_25&outcome=over&limit=30').catch(()=>null);
-            const pin=pr?.results?.find?.(o=>o.bookmaker_slug==='pinnacle');
-            if(pin){const co=parseFloat(pin.decimal_odds||0);if(co>1.01){pick.odds_over_close=String(co);const eo=parseFloat(pick.odds_over||0);if(eo>1.01)pick.clv=((eo/(co*CLV_DEVIG)-1)*100).toFixed(2);}}
+            const pin=pinnacleRow(pr?.results);
+            if(pin){const co=parseFloat(pin.decimal_odds||0);if(co>1.01){pick.odds_over_close=String(co);const eo=parseFloat(pick.odds_over||0);if(eo>1.01)pick.clv=calcCLV(eo,co);}}
           }
           return true;
         }catch(e){return null;}
@@ -4250,7 +4268,7 @@ async function reactLiveAlert(game) {
     if(mom<-40){risk+=1;reasons.push('fora domina');}
     if(minsLeft<12&&needGoals>=1){risk+=2;reasons.push(`últimos ${minsLeft}min críticos`);}
 
-    const alertKey=`rct_dng_${g.id}_${Math.floor(min/15)}`;
+    const alertKey=LSKEY.danger(g.id,min);
     const alreadySent=!!localStorage.getItem(alertKey);
 
     if(alreadySent) return {
