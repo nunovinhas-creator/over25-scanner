@@ -932,12 +932,18 @@ async function obsBatchSave(newObs, updatedObs){
 let _savedSet = null;
 function getSavedIds(){
   if(!_savedSet){
-    const raw=JSON.parse(localStorage.getItem('saved_picks')||'[]');
-    _savedSet=new Set(raw.map(String));
+    try{
+      const raw=JSON.parse(localStorage.getItem('saved_picks')||'[]');
+      _savedSet=new Set(raw.map(String));
+    }catch(e){
+      console.warn('saved_picks corrompido — a reiniciar',e.message);
+      localStorage.removeItem('saved_picks');
+      _savedSet=new Set();
+    }
   }
   return _savedSet;
 }
-function markSaved(id){ getSavedIds().add(String(id)); try{localStorage.setItem('saved_picks',JSON.stringify([...getSavedIds()]));}catch(e){} }
+function markSaved(id){ getSavedIds().add(String(id)); try{localStorage.setItem('saved_picks',JSON.stringify([...getSavedIds()]));}catch(e){console.warn('saved_picks: quota excedida, estado em memória pode divergir');} }
 function isSaved(id){ return getSavedIds().has(String(id)); }
 function setBtnSaved(btn){ btn.textContent='✅ Guardado';btn.classList.add('saved');btn.disabled=true; }
 function setBtnError(btn){ btn.textContent='❌ Erro — tenta de novo';btn.disabled=false;setTimeout(()=>{btn.textContent='📌 Guardar pick';btn.classList.remove('saved');btn.disabled=false;},3000); }
@@ -1345,9 +1351,9 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
 
     // Auto-log serializado — candidatos → sharp → closing odds (evita conflitos de SHA no mesmo ficheiro)
     const _autoLog=el('autoLogChk')?.checked;
-    (_autoLog ? autoLogCandidatos().catch(()=>{}) : Promise.resolve())
-      .then(()=>_autoLog ? autoLogSharp1x2().catch(()=>{}) : Promise.resolve())
-      .then(()=>captureClosingOdds().catch(()=>{}));
+    (_autoLog ? autoLogCandidatos().catch(e=>{console.warn('autoLogCandidatos:',e.message);}) : Promise.resolve())
+      .then(()=>_autoLog ? autoLogSharp1x2().catch(e=>{console.warn('autoLogSharp1x2:',e.message);}) : Promise.resolve())
+      .then(()=>captureClosingOdds().catch(e=>{console.warn('captureClosingOdds:',e.message);}));
 
     // Actualizar stats Sharp
     el('sh1Total').textContent=allSharp1x2.length;
@@ -1388,11 +1394,11 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
   }
   // Sync silencioso 90s após carregar + relatório diário se for após as 22h
   setTimeout(async()=>{
-    await silentSync().catch(()=>{});
+    await silentSync().catch(e=>{console.warn('silentSync:',e.message);});
     const todayKey='daily_report_'+new Date().toDateString();
     if(new Date().getHours()>=22 && !localStorage.getItem(todayKey)){
       localStorage.setItem(todayKey,'1');
-      sendDailyReport().catch(()=>{});
+      sendDailyReport().catch(e=>{console.warn('sendDailyReport:',e.message);});
     }
   }, 90000);
 }
@@ -1502,7 +1508,7 @@ function renderScan(){
     return true;
   });
 
-  const so=el('sortSel').value;
+  const so=el('sortSel')?.value||'score';
   if(so==='score') list.sort((a,b)=>b.score-a.score);
   else if(so==='date') list.sort((a,b)=>new Date(a.date)-new Date(b.date));
   else if(so==='odds') list.sort((a,b)=>(b.oddsOver||0)-(a.oddsOver||0));
@@ -1665,8 +1671,9 @@ function toggleCard(id){
 // SAVE PICK
 // ════════════════════════════════════════════════════════════════
 async function savePick(btn){
-  const id=parseInt(btn.dataset.id)||btn.dataset.id;
-  const g=allGames.find(x=>x.id===id||String(x.id)===String(id));
+  const _rawId=btn.dataset.id;
+  const id=isNaN(Number(_rawId))?_rawId:Number(_rawId);
+  const g=allGames.find(x=>String(x.id)===String(id));
   if(!g){btn.textContent='❌ Não encontrado';return;}
   btn.textContent='⏳ A guardar...';btn.disabled=true;
   try{
@@ -1836,7 +1843,8 @@ async function saveSharpPick(btn){
   if(isSaved(saveId)){setBtnSaved(btn);return;}
   btn.textContent='⏳ A guardar...';btn.disabled=true;
   try{
-    const sig=d.sig?JSON.parse(decodeURIComponent(d.sig||'{}')):null;
+    let sig=null;
+    try{ sig=d.sig?JSON.parse(decodeURIComponent(d.sig)):null; }catch(e){ console.warn('sig decode:',e.message); }
     // Guardar no picks_1x2.json via GitHub API
     await picks1x2Save({
       id:saveId,
@@ -2383,18 +2391,17 @@ async function loadLive(){
     // Processa em batches de 3 para não sobrecarregar a BSD API
     for(let i=0;i<pickGames.length;i+=3){
       const batch=pickGames.slice(i,i+3);
-      Promise.all(batch.map(e=>reactLiveAlert(e).catch(()=>null))).then(results=>{
-        results.forEach((result,ri)=>{
-          if(!result) return;
-          const e=batch[ri];
-          const c=result.conclusion;
-          if(c?.type==='WIN'){
-            const k=LSKEY.winSent(e.id);
-            if(!localStorage.getItem(k)){
-              sendTG(c.msg||`🎯 OVER! ${e.home} ${e.hScore||0}-${e.aScore||0} ${e.away}`).then(ok=>{ if(ok) localStorage.setItem(k,'1'); });
-            }
+      const results=await Promise.all(batch.map(e=>reactLiveAlert(e).catch(()=>null)));
+      results.forEach((result,ri)=>{
+        if(!result) return;
+        const e=batch[ri];
+        const c=result.conclusion;
+        if(c?.type==='WIN'){
+          const k=LSKEY.winSent(e.id);
+          if(!localStorage.getItem(k)){
+            sendTG(c.msg||`🎯 OVER! ${e.home} ${e.hScore||0}-${e.aScore||0} ${e.away}`).then(ok=>{ if(ok) localStorage.setItem(k,'1'); });
           }
-        });
+        }
       });
     }
   }catch(err){
@@ -2863,7 +2870,6 @@ async function autoLogObservations(){
   const now = new Date().toISOString();
   const newObs = toSave.map(e=>{
     const obsId = `${e.id}_obs_${Date.now()}`;
-    localStorage.setItem(LSKEY.obs(e.id), obsId);
     // Confluência: verifica pick pre-game e sinal sharp para este jogo
     const baseId=String(e.id);
     const hasScanPick=isSaved(baseId)||allPicks.some(p=>String(p.id).split('_')[0]===baseId)?'1':'';
@@ -2896,6 +2902,8 @@ async function autoLogObservations(){
 
   try{
     const added = await obsBatchSave(newObs, Object.keys(updates).length?updates:null);
+    // Só marca localStorage após write bem-sucedido — evita state desincronizado
+    toSave.slice(0,added).forEach((e,i)=>localStorage.setItem(LSKEY.obs(e.id),newObs[i].id));
     if(added>0){
       sendTG(`👁 OBSERVAÇÕES: ${added} jogos guardados\n`+
         toSave.slice(0,added).map(e=>`${e.home} vs ${e.away} [score:${e.patternScore}] ${(e.patterns||[]).map(p=>p.emoji+p.label).join(' ')}`).join('\n')
@@ -4017,19 +4025,18 @@ function syncAgentThink(state) {
         },
         update:results=>{
           let delta=0;
+          const newPicks=[...state.picks];
           results.forEach(r=>{
             if(!r.ev) return;
             const ev=r.ev;
             if(ev.status!=='finished'&&ev.period!=='FT') return;
-            const idx=state.picks.findIndex(p=>String(p.id)===String(r.id));
+            const idx=newPicks.findIndex(p=>String(p.id)===String(r.id));
             if(idx<0) return;
             const h=ev.home_score??0,a=ev.away_score??0,total=h+a;
-            state.picks[idx].resultado=`${h}-${a}`;
-            state.picks[idx].golos_total=String(total);
-            state.picks[idx].result_over25=total>2.5?'WIN':'LOSS';
+            newPicks[idx]={...newPicks[idx],resultado:`${h}-${a}`,golos_total:String(total),result_over25:total>2.5?'WIN':'LOSS'};
             delta++;
           });
-          return {picks:state.picks,updated:(state.updated||0)+delta,fetched:true};
+          return {picks:newPicks,updated:(state.updated||0)+delta,fetched:true};
         }
       }
     };
@@ -4310,12 +4317,12 @@ loadCfg();
 // Guard: garante apenas um interval activo mesmo com page reload
 if(window._syncInterval) clearInterval(window._syncInterval);
 window._syncInterval = setInterval(async()=>{
-  await silentSync().catch(()=>{});
+  await silentSync().catch(e=>{console.warn('silentSync:',e.message);});
   // Relatório diário automático às 22h — uma vez por dia
   const todayKey='daily_report_'+new Date().toDateString();
   if(new Date().getHours()>=22 && !localStorage.getItem(todayKey)){
     localStorage.setItem(todayKey,'1');
-    sendDailyReport().catch(()=>{});
+    sendDailyReport().catch(e=>{console.warn('sendDailyReport:',e.message);});
   }
 }, 30*60*1000);
 </script>
