@@ -707,8 +707,9 @@ const PICKS1X2_FILE = 'data/picks_1x2.json';
 const OBS_FILE      = 'data/observations.json';
 const GH_API        = 'https://api.github.com';
 const TH_MOVE       = 1.0;    // % movimento mínimo Pinnacle (ruído <1% filtrado)
-const DIV_MIN   = 2.0;    // % divergência mínima Pin vs recreativas
-const DIV_STEAM = 8.0;    // % threshold STEAM
+const DIV_MIN        = 2.0;    // % divergência mínima Pin vs recreativas
+const DIV_STEAM      = 8.0;    // % threshold STEAM
+const TH_LIVE_PICK   = 8;      // patternScore mínimo para classificar como sinal live
 // 1xbet/onexbet removidos — copiam preços sharp, distorcem divergência
 const RECR = ['bet365','bwin','unibet','williamhill','betfair','betway','marathonbet','betclic','ladbrokes','coral','paddypower'];
 // Taxa histórica Over 2.5 por liga — referência para normalização de score (liga neutra ≈ 0.55)
@@ -2122,7 +2123,11 @@ function detectPatterns(e){
   if(e.goals>=3||min>=90) localStorage.removeItem(htKey);
 
   let htBase=null;
-  if(is2H){ try{ htBase=JSON.parse(localStorage.getItem(htKey)||'null'); }catch{} }
+  if(is2H){ try{
+    const raw=JSON.parse(localStorage.getItem(htKey)||'null');
+    // Rejeita baseline sem campos da/sot/corners (entrada antiga pré-rebuild)
+    if(raw&&raw.da!=null&&raw.sot!=null&&raw.corners!=null) htBase=raw;
+  }catch{} }
 
   const adjShots  =(is2H&&htBase)?Math.max(0,totalShots  -htBase.shots       ):totalShots;
   const adjXg     =(is2H&&htBase)?Math.max(0,(e.xgTotal||0)-htBase.xg        ):(e.xgTotal||0);
@@ -2136,16 +2141,15 @@ function detectPatterns(e){
   // 1. PRESSÃO (DA) — ataques perigosos/min: sinal primário dos sistemas profissionais
   if(!suppressVolume&&adjDA>0&&adjMin>0){
     const daRate=(adjDA/adjMin)*90;
-    const pi=Math.round(daRate+(adjSoT*5));
+    const pi=Math.min(100,Math.round(daRate+(adjSoT*5)));
+    const pressLabel=`Pressão ${pi}${halfSfx}`;
+    const pressDetail=`${adjDA} atq. perigosos · ${adjSoT} ao alvo${halfSfx}`;
     if(daRate>=60)
-      p.push({id:'pressure',label:`Pressão ${pi}${halfSfx}`,emoji:'🔥',level:'critical',
-        detail:`${adjDA} atq. perigosos · ${adjSoT} ao alvo${halfSfx}`});
+      p.push({id:'pressure',label:pressLabel,emoji:'🔥',level:'critical',detail:pressDetail});
     else if(daRate>=40)
-      p.push({id:'pressure',label:`Pressão ${pi}${halfSfx}`,emoji:'🔥',level:'high',
-        detail:`${adjDA} atq. perigosos · ${adjSoT} ao alvo${halfSfx}`});
+      p.push({id:'pressure',label:pressLabel,emoji:'🔥',level:'high',detail:pressDetail});
     else if(daRate>=24)
-      p.push({id:'pressure',label:`DA ${daRate.toFixed(0)}/90${halfSfx}`,emoji:'🔥',level:'med',
-        detail:`${adjDA} ataques perigosos · ${adjSoT} ao alvo${halfSfx}`});
+      p.push({id:'pressure',label:pressLabel,emoji:'🔥',level:'med',detail:pressDetail});
   }
 
   // 2. xG OVERDUE — xG muito acima do score (mercado a subvalorizar o Over)
@@ -2243,32 +2247,34 @@ function detectPatterns(e){
       p.push({id:'mkt',label:`Odds −${drop.toFixed(1)}%`,emoji:'📈',level:'mkt',
         detail:`Mercado caiu de ${prev.toFixed(2)} → ${e.overOdds.toFixed(2)}`});
     if(drop>=4||e.overOdds>=prev) localStorage.setItem(ck,e.overOdds.toFixed(3));
-  } else if(e.overOdds) localStorage.setItem(ck,e.overOdds.toFixed(3));
+  } else if(!isHT&&e.overOdds) localStorage.setItem(ck,e.overOdds.toFixed(3));
 
-  // 10. POSSE DOMINANTE — desequilíbrio ≥70%
+  // 10. POSSE DOMINANTE — desequilíbrio ≥70% com actividade confirmada (evita posse estéril)
   if(e.possession?.h!=null&&e.possession?.a!=null){
     const domH=e.possession.h, domA=e.possession.a;
     const dom=Math.max(domH,domA);
     const side=domH>domA?'Casa':'Fora';
-    if(dom>=70)
+    const hasActivity=adjDA>0||adjSoT>0||adjCorners>=3;
+    if(dom>=70&&hasActivity)
       p.push({id:'possession',label:`Posse ${side} ${Math.round(dom)}%`,emoji:'⚽',level:'med',
         detail:`${side} domina com ${Math.round(dom)}% de posse`});
   }
 
-  // 11. VANTAGEM NUMÉRICA — cartão vermelho
+  // 11. VANTAGEM NUMÉRICA — cartão vermelho (só relevante após min.30; antes suprime golos)
   const rH=e.redCards?.h??0, rA=e.redCards?.a??0;
-  if(rH!==rA){
+  if(rH!==rA&&min>=30){
     const adv=rH<rA?'Casa':'Fora';
-    const nCards=Math.max(rH,rA);
-    p.push({id:'numerical',label:`${adv} +1 homem`,emoji:'🟥',level:'med',
-      detail:`${adv==='Casa'?'Fora':'Casa'} com ${nCards} vermelho(s) — ${adv} em vantagem numérica`});
+    const diff=Math.abs(rH-rA);
+    const advLabel=diff===1?`${adv} +1 homem`:`${adv} +${diff} homens`;
+    p.push({id:'numerical',label:advLabel,emoji:'🟥',level:'med',
+      detail:`${adv==='Casa'?'Fora':'Casa'} com ${Math.max(rH,rA)} vermelho(s) — ${adv} em vantagem numérica`});
   }
 
   // 12. CONVERGÊNCIA — múltiplos padrões fortes simultâneos
   const strong=p.filter(x=>['critical','high','mkt'].includes(x.level));
   const hasPressure=p.some(x=>x.id==='pressure');
   const hasXgDelta=p.some(x=>x.id==='xg_delta');
-  if((p.length>=3&&strong.length>=2)||(hasPressure&&hasXgDelta&&p.length>=3))
+  if((p.length>=3&&strong.length>=2)||(hasPressure&&hasXgDelta&&p.length>=3&&strong.length>=1))
     p.unshift({id:'conv',label:'CONVERGÊNCIA',emoji:'🔮',level:'conv',
       detail:`${p.length} padrões em simultâneo — sinal forte`});
 
@@ -2313,8 +2319,6 @@ async function loadLive(){
       const da      ={h:sh.dangerous_attack??null, a:sa.dangerous_attack??null};
       const corners ={h:sh.corners         ??null, a:sa.corners         ??null};
       const possession={h:sh.possession    ??null, a:sa.possession      ??null};
-      const attacks ={h:sh.attack          ??null, a:sa.attack          ??null};
-      const ballSafe={h:sh.ball_safe       ??null, a:sa.ball_safe       ??null};
       const redCards={h:sh.red_cards       ??null, a:sa.red_cards       ??null};
       const min=ev.current_minute||0;
       const isSavedPick=pickIds.has(String(ev.id));
@@ -2324,11 +2328,11 @@ async function loadLive(){
         hScore:ev.home_score||0,aScore:ev.away_score||0,
         min,status:ev.status,period:ev.period||null,league:ev.league_name||'',
         goals,xgH,xgA,xgTotal,lastMom,overOdds,probLive,
-        shots,sot,da,corners,possession,attacks,ballSafe,redCards,
+        shots,sot,da,corners,possession,redCards,
         isSavedPick,isWatch:watchIds.has(String(ev.id)),isDanger};
       evObj.patterns=detectPatterns(evObj);
       evObj.patternScore=evObj.patterns.reduce((s,p)=>s+(p.level==='critical'?10:p.level==='high'?4:p.level==='med'?2:p.level==='conv'?0:1),0);
-      evObj.isLivePick=evObj.patternScore>=8||(evObj.patterns||[]).some(p=>p.id==='conv');
+      evObj.isLivePick=evObj.patternScore>=TH_LIVE_PICK||(evObj.patterns||[]).some(p=>p.id==='conv');
       return evObj;
     }));
 
