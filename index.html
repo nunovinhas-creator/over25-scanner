@@ -710,6 +710,9 @@ const TH_MOVE       = 1.0;    // % movimento mínimo Pinnacle (ruído <1% filtra
 const DIV_MIN        = 2.0;    // % divergência mínima Pin vs recreativas
 const DIV_STEAM      = 8.0;    // % threshold STEAM
 const TH_LIVE_PICK   = 8;      // patternScore mínimo para classificar como sinal live
+const CLV_DEVIG      = 1.01;   // overround assumido para devigging do CLV (1%)
+const TH_SCORE_HIGH  = 70;     // score ≥70 = candidato forte (verde)
+const TH_SCORE_MED   = 50;     // score ≥50 = candidato (âmbar)
 // 1xbet/onexbet removidos — copiam preços sharp, distorcem divergência
 const RECR = ['bet365','bwin','unibet','williamhill','betfair','betway','marathonbet','betclic','ladbrokes','coral','paddypower'];
 // Taxa histórica Over 2.5 por liga — referência para normalização de score (liga neutra ≈ 0.55)
@@ -727,8 +730,10 @@ const LEAGUE_BASE = {
 let allGames=[], scanFilter='all', lgNames={}, allSharp1x2=[];
 let sharp1x2Picks=[];
 let liveData=[], liveFilter='all', liveTimer=null, liveActive=false;
+let liveCountdown=30;
 let allPicks=[], allObs=[];
 let dashPhase='all', currentPhase='dev';
+let _dashLoaded=false;
 
 // ════════════════════════════════════════════════════════════════
 // HELPERS
@@ -760,8 +765,7 @@ function loadCfg(){
     if(c.t)el('tgToken').value=c.t;
     if(c.c)el('tgChat').value=c.c;
     if(c.e&&el('emailTo'))el('emailTo').value=c.e;
-    // auto-log sempre ON — força independentemente do valor guardado
-    if(el('autoLogChk')) el('autoLogChk').checked = true;
+    if(el('autoLogChk')) el('autoLogChk').checked = c.autoLog!==false;
     if(c.phase) setCurrentPhase(c.phase);
     // Auto-carregar se API key já guardada
     if(c.k) setTimeout(()=>loadAll(), 300);
@@ -827,7 +831,7 @@ async function ghRead(file){
   catch(e){ return {data:[],sha:resp.sha}; }
 }
 
-async function ghWrite(file, data, message){
+async function ghWrite(file, data, message, _retry=0){
   const tok = ghToken();
   if(!tok) throw new Error('GitHub Token em falta — preenche o campo GH Token');
   const content = toB64(JSON.stringify(data, null, 2));
@@ -838,9 +842,9 @@ async function ghWrite(file, data, message){
     body:JSON.stringify(body)
   });
   if(r.status===409){
-    // SHA desactualizado — relê e tenta de novo
+    if(_retry>=3) throw new Error('Conflito SHA em '+file+' após 3 tentativas — outra aba pode estar a escrever em simultâneo');
     await ghRead(file);
-    return ghWrite(file, data, message);
+    return ghWrite(file, data, message, _retry+1);
   }
   if(!r.ok){ const e=await r.json().catch(()=>({})); throw new Error(e.message||'HTTP '+r.status); }
   const resp = await r.json();
@@ -902,7 +906,13 @@ async function obsBatchSave(newObs, updatedObs){
 
 // ── IDs já guardados — Set em memória, sincronizado com localStorage
 let _savedSet = null;
-function getSavedIds(){ if(!_savedSet) _savedSet=new Set(JSON.parse(localStorage.getItem('saved_picks')||'[]').map(String)); return _savedSet; }
+function getSavedIds(){
+  if(!_savedSet){
+    const raw=JSON.parse(localStorage.getItem('saved_picks')||'[]');
+    _savedSet=new Set(raw.map(String));
+  }
+  return _savedSet;
+}
 function markSaved(id){ getSavedIds().add(String(id)); try{localStorage.setItem('saved_picks',JSON.stringify([...getSavedIds()]));}catch(e){} }
 function isSaved(id){ return getSavedIds().has(String(id)); }
 function setBtnSaved(btn){ btn.textContent='✅ Guardado';btn.classList.add('saved');btn.disabled=true; }
@@ -988,7 +998,7 @@ function switchTab(name){
   });
   if(name==='sharp') renderSharp();
   if(name==='live'&&!liveActive){ liveActive=true; loadLive(); }
-  if(name==='dash'){ loadDash(); }
+  if(name==='dash'&&!_dashLoaded){ loadDash(); }
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -996,12 +1006,13 @@ function switchTab(name){
 // ════════════════════════════════════════════════════════════════
 // Busca todas as páginas de odds 1X2 (a BSD tem limite de ~200 por página)
 async function fetchAll1x2(df){
-  var all=[];
-  var url='/api/v2/odds/?market=1x2&limit=200&updated_after='+df+'T00:00:00Z';
-  var pages=0;
-  while(url&&pages<10){
+  let all=[];
+  let url='/api/v2/odds/?market=1x2&limit=200&updated_after='+df+'T00:00:00Z';
+  let pages=0;
+  const MAX_PAGES=10;
+  while(url&&pages<MAX_PAGES){
     try{
-      var d=await get(url);
+      let d=await get(url);
       if(d&&d.results) all=all.concat(d.results);
       // next é URL relativo ou absoluto
       if(d&&d.next){
@@ -1013,6 +1024,7 @@ async function fetchAll1x2(df){
       pages++;
     }catch(e){ url=null; }
   }
+  if(pages>=MAX_PAGES&&url) console.warn('fetchAll1x2: limite de '+MAX_PAGES+' páginas atingido — odds 1X2 podem estar truncadas');
   return {results:all,count:all.length};
 }
 
@@ -1075,7 +1087,7 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
     // Critério 4 (bonus):      Múltiplos books a mover na mesma direcção
     //
     // Labels:
-    //   🔥 STEAM  — Pin moveu ≥5% + timing ≤6h (move muito forte e recente)
+    //   🔥 STEAM  — Pin moveu ≥5% + timing ≤30min (move muito forte e imediato)
     //   🎯 SHARP  — Pin moveu ≥2% + timing ≤12h
     //   👁 WATCH  — Pin moveu ≥1% ou divergência ≥5% sem movimento claro
 
@@ -1231,6 +1243,7 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
           let pinnPrev=prevMap[ev.id]||null, pinnActual=false;
 
           const oddsRows = arr(pinnOdds).filter(o=>o.outcome==='over');
+          let recrSum=0, recrCnt=0;
           oddsRows.forEach(o=>{
             const slug=o.bookmaker_slug||'';
             const price=parseFloat(o.decimal_odds||0);
@@ -1242,10 +1255,10 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
               if(prev&&prev!==price) pinnPrev=prev;
               if(o.movement) movement=o.movement;
             } else if(RECR.includes(slug)){
-              if(!recrAvg) recrAvg=price;
-              else recrAvg=(recrAvg+price)/2;
+              recrSum+=price; recrCnt++;
             }
           });
+          if(recrCnt>0) recrAvg=recrSum/recrCnt;
 
           // Fallbacks do mapa global
           if(!pinnNow) pinnNow=oddsOver[ev.id]||null;
@@ -1275,7 +1288,7 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
           // Score
           const {score,signals}=calcScore({prob25,bttsN,xgH,xgA,movement,div,sharpLabel,
             pinnNow,recrAvg,rec,mdl,
-            h2h:det?.h2h, hCoach:det?.home_coach, aCoach:det?.away_coach,
+            h2h:det?.h2h,
             league:ev.league_name||lgNames[ev.league_id]||''});
 
           const edgeVsMarket=(prob25!=null&&pinnNow!=null)?(prob25-(1/pinnNow)):null;
@@ -1306,12 +1319,11 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
     updateScanStats();
     renderScan();
 
-    // Auto-log Over 2.5 candidatos (score≥55)
-    if(el('autoLogChk')?.checked) autoLogCandidatos().catch(()=>{});
-    // Auto-log Sharp 1X2 — guarda todos os sinais automaticamente
-    if(el('autoLogChk')?.checked) autoLogSharp1x2().catch(()=>{});
-    // Captura odds Pinnacle de fecho para picks próximos do KO (≤2h)
-    captureClosingOdds().catch(()=>{});
+    // Auto-log serializado — candidatos → sharp → closing odds (evita conflitos de SHA no mesmo ficheiro)
+    const _autoLog=el('autoLogChk')?.checked;
+    (_autoLog ? autoLogCandidatos().catch(()=>{}) : Promise.resolve())
+      .then(()=>_autoLog ? autoLogSharp1x2().catch(()=>{}) : Promise.resolve())
+      .then(()=>captureClosingOdds().catch(()=>{}));
 
     // Actualizar stats Sharp
     el('sh1Total').textContent=allSharp1x2.length;
@@ -1364,7 +1376,7 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
 // ════════════════════════════════════════════════════════════════
 // SCORE — Over 2.5 com BSD ML como base
 // ════════════════════════════════════════════════════════════════
-function calcScore({prob25,bttsN,xgH,xgA,movement,div,sharpLabel,pinnNow,recrAvg,rec,mdl,h2h,hCoach,aCoach,league}){
+function calcScore({prob25,bttsN,xgH,xgA,movement,div,sharpLabel,pinnNow,recrAvg,rec,mdl,h2h,league}){
   let s=0; const sig=[];
 
   // 1. ML BSD (base)
@@ -1486,10 +1498,10 @@ function gameCard(g){
   const soon=minsToKO<120?`<span class="badge ba">${minsToKO<60?minsToKO+'min':Math.round(minsToKO/60)+'h'}</span>`:'';
 
   const sc=g.score;
-  const scCol=sc>=70?'var(--green)':sc>=50?'var(--amber)':'var(--text3)';
-  const scClass=sc>=70?'high':sc>=50?'med':'low';
+  const scCol=sc>=TH_SCORE_HIGH?'var(--green)':sc>=TH_SCORE_MED?'var(--amber)':'var(--text3)';
+  const scClass=sc>=TH_SCORE_HIGH?'high':sc>=TH_SCORE_MED?'med':'low';
   const barW=sc+'%';
-  const barCol=sc>=70?'var(--green)':sc>=50?'var(--amber)':'var(--border2)';
+  const barCol=sc>=TH_SCORE_HIGH?'var(--green)':sc>=TH_SCORE_MED?'var(--amber)':'var(--border2)';
 
   const edgePct=g.edgeVsMarket!=null?(g.edgeVsMarket*100):null;
   const edgeRef=g.pinnActual?'Pinn':'mkt';
@@ -1512,6 +1524,15 @@ function gameCard(g){
   // bttsN já normalizado 0-100
   const bttsN = g.bttsN||0;
 
+  const _xgtB=g.xgH!=null&&g.xgA!=null?g.xgH+g.xgA:0;
+  const _oB=parseFloat(g.oddsOver||0);
+  const _movB=(g.movement||'').toUpperCase();
+  const _isCandidato=_movB==='SHORTENING'&&bttsN>=55&&_oB>=1.5&&_oB<=3.0;
+  const _isCriterio=_xgtB>=2.0&&_oB>=2.0&&_oB<=3.0;
+  const pickBadge=_isCandidato
+    ?'<span class="badge bg" style="font-size:10px;padding:3px 8px;background:var(--green);color:#fff;font-weight:700">📌 CANDIDATO</span>'
+    :_isCriterio?'<span class="badge bg" style="font-size:10px;padding:3px 8px">⭐ CRITÉRIO</span>':'';
+
   return `<div class="game-card ${cardClass}" id="gc_${g.id}">
     <div class="card-head" onclick="toggleCard(${g.id})">
       <div class="card-teams">
@@ -1528,18 +1549,7 @@ function gameCard(g){
           ${g.oddsOver?`<span style="font-family:var(--mono);font-size:12px;font-weight:700">@${g.oddsOver.toFixed(2)}</span>`:''}
           ${g.sharpLabel?`<span class="badge bp">${g.sharpLabel==='STEAM'?'🔥':g.sharpLabel==='SHARP'?'🎯':'👁'} ${esc(g.sharpLabel)}</span>`:''}
           ${edgeBadge}
-          ${(()=>{
-            const xgt=g.xgH!=null&&g.xgA!=null?g.xgH+g.xgA:0;
-            const o=parseFloat(g.oddsOver||0);
-            const mov=(g.movement||'').toUpperCase();
-            // Candidato: SHORTENING + BTTS≥55 + odds 1.5-3.0
-            const candidato = mov==='SHORTENING' && bttsN>=55 && o>=1.5 && o<=3.0;
-            // Critério base: xG≥2.0 + odds 2.0-3.0
-            const criterio = xgt>=2.0 && o>=2.0 && o<=3.0;
-            if(candidato) return '<span class="badge bg" style="font-size:10px;padding:3px 8px;background:var(--green);color:#fff;font-weight:700">📌 CANDIDATO</span>';
-            if(criterio) return '<span class="badge bg" style="font-size:10px;padding:3px 8px">⭐ CRITÉRIO</span>';
-            return '';
-          })()}
+          ${pickBadge}
         </div>
         ${negEdge?`<div style="font-size:10px;color:var(--red);background:rgba(220,38,38,.06);border:1px solid rgba(220,38,38,.2);border-radius:4px;padding:3px 8px;margin-top:3px">⚠ Edge negativo vs ${edgeRef} — modelo diverge do mercado${g.pinnActual?' sharp':''}</div>`:''}
         <div class="score-bar"><div class="score-bar-fill" style="width:${barW};background:${barCol}"></div></div>
@@ -1616,7 +1626,7 @@ function gameCard(g){
       ${isSaved(String(g.id))?'🤖 auto-guardado':'⏳ a guardar...'}
     </span>
     <button class="btn-sm" style="background:var(--purple-l);border-color:var(--purple);color:var(--purple);padding:6px 12px;font-size:11px"
-      onclick="reactAnalyzeGame('${g.id}','${g.date}')">
+      data-gid="${g.id}" data-gdate="${esc(g.date)}" onclick="reactAnalyzeGame(this.dataset.gid,this.dataset.gdate)">
       🧠 ReAct
     </button>
   </div>`;
@@ -1650,6 +1660,7 @@ async function savePick(btn){
       movimento:g.movement||'', score_previsto:g.predScore||'',
       xg_total:xgt, btts_prob:g.bttsN!=null?g.bttsN.toFixed(0):'', fonte:'scanner',
       sharp_label:g.sharpLabel||'', div:g.div?g.div.toFixed(1):'',
+      has_sharp:allSharp1x2.some(s=>String(s.id)===String(g.id))?'1':'',
       phase:getCurrentPhase(),
       result_over25:'', golos_total:'',
       implied_prob_entry:_ovSave>1?(1/_ovSave*100).toFixed(1):'',
@@ -1661,6 +1672,7 @@ async function savePick(btn){
     });
     markSaved(id);
     setBtnSaved(btn);
+    _dashLoaded=false;
     // Enviar para TG
     const tgXgt=g.xgH!=null&&g.xgA!=null?(g.xgH+g.xgA).toFixed(2):null;
     const tgProb=g.prob25!=null?(g.prob25*100).toFixed(0)+'%':null;
@@ -1786,11 +1798,7 @@ function sharpCard1x2(s){
       ${overCtx}
     </div>
     <div style="padding:0 14px 10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-      ${(function(){
-        const best=s.sigs[0]||{};
-        const nvp=best.pin?(best.pin*0.975).toFixed(2):null;
-        return nvp?'<span style="font-family:var(--mono);font-size:10px;color:var(--amber)">NVP ~'+nvp+'</span>':'';
-      })()}
+      ${s.sigs[0]?.pin?'<span style="font-family:var(--mono);font-size:10px;color:var(--amber)">NVP ~'+(s.sigs[0].pin*0.975).toFixed(2)+'</span>':''}
       <span style="font-family:var(--mono);font-size:10px;color:${isSaved(s.id+'_sh')?'var(--green)':'var(--text3)'}">
         ${isSaved(s.id+'_sh')?'🤖 auto-guardado':'⏳ a guardar...'}
       </span>
@@ -2091,7 +2099,6 @@ function renderDash1x2(){
 // ════════════════════════════════════════════════════════════════
 // LIVE MONITOR
 // ════════════════════════════════════════════════════════════════
-let liveCountdown=30;
 
 // setLiveFilter removido — live usa secções automáticas (Picks / Em Observação)
 
@@ -2114,19 +2121,20 @@ function detectPatterns(e){
   const totalDA     =(e.da?.h??0)+(e.da?.a??0);
   const totalCorners=(e.corners?.h??0)+(e.corners?.a??0);
 
+  const _htEntry=JSON.stringify({shots:totalShots,xg:e.xgTotal||0,da:totalDA,sot:totalSoT,corners:totalCorners,min,date:new Date().toDateString()});
   if(isHT){
-    localStorage.setItem(htKey,JSON.stringify({shots:totalShots,xg:e.xgTotal||0,da:totalDA,sot:totalSoT,corners:totalCorners,min}));
+    localStorage.setItem(htKey,_htEntry);
   } else if(is2H&&min<=52){
     if(!localStorage.getItem(htKey))
-      localStorage.setItem(htKey,JSON.stringify({shots:totalShots,xg:e.xgTotal||0,da:totalDA,sot:totalSoT,corners:totalCorners,min}));
+      localStorage.setItem(htKey,_htEntry);
   }
   if(e.goals>=3||min>=90) localStorage.removeItem(htKey);
 
   let htBase=null;
   if(is2H){ try{
     const raw=JSON.parse(localStorage.getItem(htKey)||'null');
-    // Rejeita baseline sem campos da/sot/corners (entrada antiga pré-rebuild)
-    if(raw&&raw.da!=null&&raw.sot!=null&&raw.corners!=null) htBase=raw;
+    // Rejeita baseline sem campos obrigatórios ou de dia diferente (sessão anterior)
+    if(raw&&raw.da!=null&&raw.sot!=null&&raw.corners!=null&&(!raw.date||raw.date===new Date().toDateString())) htBase=raw;
   }catch{} }
 
   const adjShots  =(is2H&&htBase)?Math.max(0,totalShots  -htBase.shots       ):totalShots;
@@ -2367,7 +2375,7 @@ async function loadLive(){
       });
     }
   }catch(err){
-    el('liveList').innerHTML='<div class="empty">⚠ '+err.message+'</div>';
+    el('liveList').innerHTML='<div class="empty">⚠ '+esc(err.message)+'</div>';
     liveActive=false; // permite re-arranque na próxima vez que a tab for aberta
     startLiveCountdown(); // tenta de novo em 30s
   }
@@ -2700,7 +2708,7 @@ async function autoLogCandidatos(){
       const edgeVsMkt=g.edgeVsMarket!=null?(g.edgeVsMarket*100).toFixed(1):'';
       picks.push({
         id:String(g.id),
-        casa:g.home, fora:g.away, liga:g.det?(CONFIG.LEAGUE_NAMES&&CONFIG.LEAGUE_NAMES[g.det.league_id])||'Liga_'+g.det.league_id:'',
+        casa:g.home, fora:g.away, liga:g.league||'',
         data:g.date, score_sistema:String(g.score||0),
         prob_over25:prob,
         odds_over:g.oddsOver?g.oddsOver.toFixed(4):'',
@@ -2937,6 +2945,7 @@ async function loadDash(){
     allPicks = picks;
     if(!sharp1x2Picks.length) sharp1x2Picks = Array.isArray(s1x2.data)?s1x2.data:[];
     allObs = Array.isArray(obs) ? obs : [];
+    _dashLoaded=true;
     renderDash();
     renderObsDashboard();
   }catch(e){el('picksBody').innerHTML='<div class="empty">Erro ao carregar picks: '+esc(e.message)+'</div>';}
@@ -3061,6 +3070,11 @@ function calcProfitFactor(picks){
 }
 
 function renderDash(){
+  // Calculados uma vez e reutilizados em proposals e reportCache (evita triple-call)
+  const _dashOver=calcOverStats(allPicks);
+  const _dashSharp=calcSharpStats(sharp1x2Picks);
+  window._reportCache={sOver:_dashOver,sSharp:_dashSharp,props:generateProposals(_dashOver,_dashSharp,allPicks)};
+
   const res=p=>p.result_over25==='WIN'||p.result_over25==='LOSS';
   const onlyShort=document.getElementById('filterShortening')?.checked!==false;
   // Só picks válidos: com casa, fora e data legível, filtro de fase
@@ -3212,7 +3226,7 @@ function renderDash(){
   }).join(''):'<div class="empty" style="padding:20px">Nenhum pick guardado ainda</div>';
 
   // Propostas de melhoria (renderiza com dados já em memória)
-  renderProposals(generateProposals(calcOverStats(allPicks), calcSharpStats(sharp1x2Picks), allPicks));
+  renderProposals(window._reportCache.props);
   renderConfluence();
 }
 
@@ -3654,11 +3668,11 @@ async function openReportModal(){
     try{ const {data}=await ghRead(PICKS1X2_FILE); sharp1x2Picks=Array.isArray(data)?data:sharp1x2Picks; }catch(e){}
   }
 
-  const sOver=calcOverStats(allPicks);
-  const sSharp=calcSharpStats(sharp1x2Picks);
-  const props=generateProposals(sOver,sSharp,allPicks);
-
-  // Guardar para uso dos botões de envio
+  // Usa cache de renderDash quando disponível; recomputa se stale
+  const cached=window._reportCache;
+  const sOver=cached?.sOver||calcOverStats(allPicks);
+  const sSharp=cached?.sSharp||calcSharpStats(sharp1x2Picks);
+  const props=cached?.props||generateProposals(sOver,sSharp,allPicks);
   window._reportCache={sOver,sSharp,props};
 
   const fmt=v=>v!==null&&!isNaN(v)?(parseFloat(v)>=0?'+':'')+parseFloat(v).toFixed(1)+'%':'—';
@@ -4029,15 +4043,17 @@ function syncAgentThink(state) {
         },
         update:results=>{
           let delta=0;
+          const newPicks=[...state.picks];
           results.forEach(r=>{
             if(!r.closing||r.closing<=1.01) return;
-            const idx=state.picks.findIndex(p=>String(p.id)===String(r.id));
+            const idx=newPicks.findIndex(p=>String(p.id)===String(r.id));
             if(idx<0) return;
-            state.picks[idx].odds_over_close=String(r.closing);
-            const entry=parseFloat(state.picks[idx].odds_over||0);
-            if(entry>1.01){state.picks[idx].clv=((entry/r.closing-1)*100).toFixed(2);delta++;}
+            const entry=parseFloat(newPicks[idx].odds_over||0);
+            const updated={...newPicks[idx],odds_over_close:String(r.closing)};
+            if(entry>1.01){updated.clv=((entry/(r.closing*CLV_DEVIG)-1)*100).toFixed(2);delta++;}
+            newPicks[idx]=updated;
           });
-          return {picks:state.picks,clvUpdated:(state.clvUpdated||0)+delta,clvDone:true};
+          return {picks:newPicks,clvUpdated:(state.clvUpdated||0)+delta,clvDone:true};
         }
       }
     };
@@ -4078,26 +4094,25 @@ async function silentSync(){
         p.id&&(!p.result_over25||p.result_over25==='')&&
         p.data&&new Date(p.data)<new Date()
       );
-      let upd=0;
-      for(const pick of pending){
+      // Fetches em paralelo — sem delay artificial sequencial
+      const results=await Promise.all(pending.map(async pick=>{
         try{
           const eid=String(pick.id_base||pick.id).split('_')[0];
-          if(!eid||isNaN(+eid)) continue;
-          await new Promise(r=>setTimeout(r,200));
+          if(!eid||isNaN(+eid)) return null;
           const ev=await get('/api/v2/events/'+eid+'/').catch(()=>null);
-          if(!ev||(ev.status!=='finished'&&ev.period!=='FT')) continue;
+          if(!ev||(ev.status!=='finished'&&ev.period!=='FT')) return null;
           const h=ev.home_score??0,a=ev.away_score??0,total=h+a;
           pick.resultado=`${h}-${a}`;pick.golos_total=String(total);
           pick.result_over25=total>2.5?'WIN':'LOSS';
           if(!pick.odds_over_close){
             const pr=await get('/api/v2/odds/?event_id='+eid+'&market=over_under_25&outcome=over&limit=30').catch(()=>null);
             const pin=pr?.results?.find?.(o=>o.bookmaker_slug==='pinnacle');
-            if(pin){const co=parseFloat(pin.decimal_odds||0);if(co>1.01){pick.odds_over_close=String(co);const eo=parseFloat(pick.odds_over||0);if(eo>1.01)pick.clv=((eo/(co*1.01)-1)*100).toFixed(2); // devigged
-}}
+            if(pin){const co=parseFloat(pin.decimal_odds||0);if(co>1.01){pick.odds_over_close=String(co);const eo=parseFloat(pick.odds_over||0);if(eo>1.01)pick.clv=((eo/(co*CLV_DEVIG)-1)*100).toFixed(2);}}
           }
-          upd++;
-        }catch(e){}
-      }
+          return true;
+        }catch(e){return null;}
+      }));
+      const upd=results.filter(Boolean).length;
       if(upd>0){
         await ghWrite(PICKS_FILE,picks,`auto-sync: ${upd} resultados`);
         allPicks=picks.map(normalizePick);
