@@ -1176,7 +1176,7 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
 
       const sigs=[];
 
-      ['HOME','DRAW','AWAY'].forEach(out=>{
+      ['HOME','AWAY'].forEach(out=>{
         const o=d[out]; if(!o||!o.pin) return;
 
         // ── Critério 1: Movimento Pinnacle desde abertura ──
