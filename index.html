@@ -722,6 +722,8 @@ const DIV_MIN        = 2.0;    // % divergência mínima Pin vs recreativas
 const DIV_STEAM      = 8.0;    // % threshold STEAM
 const TH_LIVE_PICK   = 8;      // patternScore mínimo para classificar como sinal live
 const CLV_DEVIG      = 1.01;   // overround assumido para devigging do CLV (1%)
+// Calibração Bayesiana — actualizar N e WR após cada análise de backtest
+const CALIB = { N:44, WR:0.591, K:10 };
 const TH_SCORE_HIGH  = 70;     // score ≥70 = candidato forte (verde)
 const TH_SCORE_MED   = 50;     // score ≥50 = candidato (âmbar)
 // 1xbet/onexbet removidos — copiam preços sharp, distorcem divergência
@@ -775,6 +777,7 @@ function calcROI(picks, isWinFn, getOddsFn){
   if(!valid.length) return null;
   return valid.reduce((s,p)=>s+(isWinFn(p)?parseFloat(getOddsFn(p))-1:-1),0)/valid.length*100;
 }
+const bayesCalib = p => p==null ? null : (CALIB.N*p + CALIB.K*CALIB.WR)/(CALIB.N+CALIB.K);
 
 
 function h(){ return {'Authorization':'Token '+(el('bsdKey').value.trim())}; }
@@ -1420,9 +1423,9 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
 function calcScore({prob25,bttsN,xgH,xgA,movement,div,sharpLabel,pinnNow,recrAvg,rec,mdl,h2h,league}){
   let s=0; const sig=[];
 
-  // 1. ML BSD (base)
+  // 1. ML BSD (base) — calibração Bayesiana aplicada antes das bandas
   if(prob25!=null){
-    const p=prob25*100;
+    const p=bayesCalib(prob25)*100;
     if(p>=70){s+=40;sig.push({t:'ML '+p.toFixed(0)+'%',c:'g'});}
     else if(p>=60){s+=32;sig.push({t:'ML '+p.toFixed(0)+'%',c:'g'});}
     else if(p>=55){s+=26;sig.push({t:'ML '+p.toFixed(0)+'%',c:'g'});}
@@ -1555,7 +1558,7 @@ function gameCard(g){
 
   // Sharp info
   const xgTotal=g.xgH!=null&&g.xgA!=null?(g.xgH+g.xgA).toFixed(2):null;
-  const probPct=g.prob25!=null?(g.prob25*100).toFixed(0)+'%':null;
+  const probPct=g.prob25!=null?(bayesCalib(g.prob25)*100).toFixed(0)+'%':null;
   const movCol=g.movement==='SHORTENING'?'var(--green)':g.movement==='DRIFTING'?'var(--red)':'var(--text3)';
   const movTxt=g.movement==='SHORTENING'?'↘ Shortening':g.movement==='DRIFTING'?'↗ Drifting':'—';
 
