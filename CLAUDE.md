@@ -2,6 +2,19 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Deployment Rule (mandatory)
+
+After **every implementation** — no matter how small — always complete this pipeline without waiting to be asked:
+
+1. `git add` the changed files
+2. `git commit` with a descriptive message
+3. `git push origin HEAD:claude/claude-md-docs-AUJLa`
+4. Create a PR from `claude/claude-md-docs-AUJLa` → `main` via `mcp__github__create_pull_request`
+5. Merge the PR immediately via `mcp__github__merge_pull_request` (squash method)
+6. If there are merge conflicts: `git checkout --theirs data/` for data files, `git checkout --ours index.html` for app code
+
+The Stop hook (`/home/user/over25-scanner/.claude/auto-push.sh`) handles commit+push for anything left uncommitted at session end, but step 4–5 (PR + merge) must be done by Claude during the session.
+
 ## Overview
 
 This is a static, no-build sports betting scanner for Over 2.5 goals markets. It consists of two standalone HTML files — no framework, no bundler, no package manager.
