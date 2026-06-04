@@ -200,12 +200,24 @@ let allPicks = [], activeFilter = 'all';
 
 // ── Helpers ───────────────────────────────────────────────
 const esc = s => String(s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const fromB64 = b64 => decodeURIComponent(escape(atob(b64.replace(/\s/g,''))));
+const fromB64 = b64 => decodeURIComponent(atob(b64.replace(/\s/g,'')).split('').map(c=>'%'+c.charCodeAt(0).toString(16).padStart(2,'0')).join(''));
 function ghToken(){ return document.getElementById('ghToken')?.value?.trim()||''; }
 
 // ── Config persistente ────────────────────────────────────
 function saveCfg(){ try{localStorage.setItem('mon_cfg',JSON.stringify({gh:document.getElementById('ghToken').value,tg:document.getElementById('tgToken').value,chat:document.getElementById('tgChat').value}));}catch(e){} }
-function loadCfg(){ try{const c=JSON.parse(localStorage.getItem('mon_cfg')||'{}');if(c.gh)document.getElementById('ghToken').value=c.gh;if(c.tg)document.getElementById('tgToken').value=c.tg;if(c.chat)document.getElementById('tgChat').value=c.chat;}catch(e){} }
+function loadCfg(){
+  try{
+    const c=JSON.parse(localStorage.getItem('mon_cfg')||'{}');
+    // Fallback para ov_cfg do index.html (partilha de config)
+    const main=JSON.parse(localStorage.getItem('ov_cfg')||'{}');
+    const gh=c.gh||main.g||'';
+    const tg=c.tg||main.t||'';
+    const chat=c.chat||main.c||'';
+    if(gh)document.getElementById('ghToken').value=gh;
+    if(tg)document.getElementById('tgToken').value=tg;
+    if(chat)document.getElementById('tgChat').value=chat;
+  }catch(e){}
+}
 
 // ── Carregar dados do GitHub ──────────────────────────────
 async function loadData(){
@@ -347,13 +359,13 @@ function updateKPIs(all, withResult){
     document.getElementById('kCLVsub').textContent = withCLV.length+' picks c/ closing odds';
   }
 
-  // Cor KPI ROI
-  const roiKpi = document.querySelector('.kpi.amber');
-  if(roiPct!=='—') roiKpi.className = 'kpi '+(parseFloat(roiPct)>=0?'green':'red');
+  // Cor KPI ROI — seleccionamos pelo id do elemento em vez de classe dinâmica
+  const roiKpi = document.getElementById('kROI')?.closest('.kpi');
+  if(roiKpi&&roiPct!=='—') roiKpi.className = 'kpi '+(parseFloat(roiPct)>=0?'green':'red');
 
-  // Cor streak
-  const stKpi = document.querySelector('.kpi.red');
-  if(streakType) stKpi.className = 'kpi '+(streakType==='WIN'?'green':'red');
+  // Cor streak — seleccionamos pelo id do elemento
+  const stKpi = document.getElementById('kStreak')?.closest('.kpi');
+  if(stKpi&&streakType) stKpi.className = 'kpi '+(streakType==='WIN'?'green':'red');
 }
 
 function drawROICurve(withResult){
@@ -444,23 +456,24 @@ function renderBreakdown(picks){
 function renderTimeline(withResult){
   const byDay={};
   withResult.forEach(p=>{
-    const d=new Date(p.data).toLocaleDateString('pt-PT',{day:'2-digit',month:'2-digit'});
-    if(!byDay[d])byDay[d]={wins:0,losses:0,roi:0,odds:[]};
-    if(p.result_over25==='WIN'){byDay[d].wins++;byDay[d].roi+=parseFloat(p.odds_over||0)-1;}
-    else{byDay[d].losses++;byDay[d].roi-=1;}
+    // Usamos a data ISO como chave de agrupamento para sort correcto
+    const iso=new Date(p.data).toISOString().slice(0,10);
+    if(!byDay[iso])byDay[iso]={wins:0,losses:0,roi:0,label:new Date(p.data).toLocaleDateString('pt-PT',{day:'2-digit',month:'2-digit'})};
+    if(p.result_over25==='WIN'){byDay[iso].wins++;byDay[iso].roi+=parseFloat(p.odds_over||0)-1;}
+    else{byDay[iso].losses++;byDay[iso].roi-=1;}
   });
 
-  const days=Object.entries(byDay).sort((a,b)=>new Date(a[0].split('/').reverse().join('-'))-new Date(b[0].split('/').reverse().join('-')));
+  const days=Object.entries(byDay).sort((a,b)=>a[0].localeCompare(b[0]));
   const maxN=Math.max(...days.map(([,v])=>v.wins+v.losses),1);
 
-  document.getElementById('timeline').innerHTML=days.map(([d,v])=>{
+  document.getElementById('timeline').innerHTML=days.map(([,v])=>{
     const total=v.wins+v.losses;
     const h=Math.max(Math.round((total/maxN)*48),6);
     const col=v.roi>=0?'var(--accent)':'var(--accent2)';
     const wr=total?(v.wins/total*100).toFixed(0):'0';
-    return `<div class="tl-day" title="${d}: ${v.wins}W/${v.losses}L WR${wr}% ROI${v.roi>=0?'+':''}${(v.roi/total*100).toFixed(1)}%">
+    return `<div class="tl-day" title="${v.label}: ${v.wins}W/${v.losses}L WR${wr}% ROI${v.roi>=0?'+':''}${(v.roi/total*100).toFixed(1)}%">
       <div class="tl-bar" style="height:${h}px;background:${col}"></div>
-      <div class="tl-date">${d}</div>
+      <div class="tl-date">${v.label}</div>
     </div>`;
   }).join('');
 }
