@@ -480,6 +480,75 @@ select option{background:var(--laq-3);color:var(--text)}
 @media(min-width:480px){.stats-bar{grid-template-columns:repeat(4,1fr)}}
 @media(min-width:600px){.dash-kpi{grid-template-columns:repeat(3,1fr)}}
 @media(min-width:900px){body{max-width:900px;margin:0 auto}.hdr,.cfg-bar,.tabs{max-width:900px;margin-left:auto;margin-right:auto}}
+
+/* ── Help Modal ── */
+.help-modal{
+  position:fixed;inset:0;background:oklch(0% 0 0/.85);
+  z-index:400;display:flex;align-items:flex-start;justify-content:center;
+  padding:16px;overflow-y:auto;animation:fadeIn .15s ease
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.help-box{
+  background:var(--laq-2);border:1px solid var(--border2);border-radius:var(--rl);
+  width:100%;max-width:580px;overflow:hidden;margin:auto 0
+}
+.help-head{
+  background:var(--laq-3);border-bottom:1px solid var(--border);
+  padding:14px 16px;display:flex;justify-content:space-between;align-items:center;
+  position:sticky;top:0;z-index:1
+}
+.help-head-title{font-size:14px;font-weight:700;letter-spacing:.01em}
+.help-head-sub{font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:2px}
+.help-close{
+  background:transparent;border:1px solid var(--border);border-radius:var(--r);
+  color:var(--text2);font-size:16px;width:28px;height:28px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0
+}
+.help-close:hover{border-color:var(--border2);color:var(--text)}
+.help-body{padding:0 16px 20px}
+.help-section{margin-top:20px}
+.help-section-title{
+  font-family:var(--mono);font-size:9px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.1em;color:var(--gold);margin-bottom:10px;
+  padding-bottom:6px;border-bottom:1px solid var(--border)
+}
+.help-row{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:8px 10px;border-radius:var(--r);margin-bottom:4px;
+  background:var(--laq-3);border:1px solid var(--border)
+}
+.help-row-icon{font-size:16px;line-height:1;flex-shrink:0;margin-top:1px;width:22px;text-align:center}
+.help-row-body{flex:1;min-width:0}
+.help-row-title{font-size:12px;font-weight:600;margin-bottom:2px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.help-row-desc{font-family:var(--mono);font-size:11px;color:var(--text2);line-height:1.55}
+.help-tag{
+  display:inline-block;font-family:var(--mono);font-size:9px;font-weight:700;
+  padding:1px 6px;border-radius:3px;line-height:1.6
+}
+.help-tag.green {background:var(--green-l);color:var(--green);border:1px solid oklch(70% 0.12 188/.3)}
+.help-tag.amber {background:var(--amber-l);color:var(--amber);border:1px solid oklch(76% 0.16 78/.3)}
+.help-tag.red   {background:var(--red-l);  color:var(--red);  border:1px solid oklch(62% 0.22 25/.3)}
+.help-tag.blue  {background:var(--blue-l); color:var(--blue); border:1px solid oklch(65% 0.16 255/.3)}
+.help-tag.gold  {background:var(--gold-dim);color:var(--gold);border:1px solid oklch(84% 0.19 80.46/.35)}
+.help-score-bar{
+  margin:10px 0 4px;display:flex;gap:2px;align-items:stretch;border-radius:4px;overflow:hidden;height:6px
+}
+.help-score-bar div{height:100%}
+.help-score-legend{display:flex;gap:12px;flex-wrap:wrap}
+.help-score-dot{
+  display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:middle
+}
+.help-intro{
+  font-family:var(--mono);font-size:12px;color:var(--text2);line-height:1.65;
+  margin-top:16px;padding:12px 14px;background:var(--laq-3);border-radius:var(--r);
+  border-left:3px solid var(--gold)
+}
+.btn-help{
+  background:transparent;border:1px solid var(--border);border-radius:var(--r);
+  color:var(--text3);font-family:var(--mono);font-size:11px;font-weight:600;
+  padding:4px 9px;cursor:pointer;transition:all .15s;letter-spacing:.02em
+}
+.btn-help:hover{color:var(--text);border-color:var(--border2)}
 </style></head>
 <body>
 
@@ -490,6 +559,7 @@ select option{background:var(--laq-3);color:var(--text)}
     <div class="hdr-sub" id="tsLabel">Nunca carregado</div>
   </div>
   <div class="hdr-right">
+    <button class="btn-help" onclick="openHelp()" title="Como funciona?">?</button>
     <div class="status-dot" id="statusDot" style="background:var(--text3)"></div>
     <span style="font-family:var(--mono);font-size:10px;color:var(--text3)" id="statusTxt">offline</span>
   </div>
@@ -4583,6 +4653,19 @@ async function reactLiveAlert(game) {
 }
 
 // ════════════════════════════════════════════════════════════════
+// HELP MODAL
+// ════════════════════════════════════════════════════════════════
+function openHelp(){
+  const m=el('helpModal');
+  if(m){m.style.display='flex';document.body.style.overflow='hidden';}
+}
+function closeHelp(){
+  const m=el('helpModal');
+  if(m){m.style.display='none';document.body.style.overflow='';}
+}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeHelp();});
+
+// ════════════════════════════════════════════════════════════════
 // INIT
 // ════════════════════════════════════════════════════════════════
 loadCfg();
@@ -4598,6 +4681,218 @@ window._syncInterval = setInterval(async()=>{
   }
 }, 30*60*1000);
 </script>
+<!-- ── Help Modal ── -->
+<div class="help-modal" id="helpModal" style="display:none" onclick="if(event.target===this)closeHelp()">
+  <div class="help-box">
+    <div class="help-head">
+      <div>
+        <div class="help-head-title">📖 Como funciona o Over 2.5 Scout</div>
+        <div class="help-head-sub">Guia completo de métricas, sinais e badges</div>
+      </div>
+      <button class="help-close" onclick="closeHelp()">✕</button>
+    </div>
+    <div class="help-body">
+
+      <p class="help-intro">O Scout combina dados de <strong>modelo de Machine Learning</strong>, <strong>xG (golos esperados)</strong> e <strong>movimentos de mercado da Pinnacle</strong> (a bookmaker mais sharp do mundo) para identificar jogos com valor real no mercado Over 2.5 golos.</p>
+
+      <!-- SCORE -->
+      <div class="help-section">
+        <div class="help-section-title">Score 0–100</div>
+        <div class="help-row">
+          <div class="help-row-icon">🧮</div>
+          <div class="help-row-body">
+            <div class="help-row-title">Como se calcula o score?</div>
+            <div class="help-row-desc">É uma pontuação composta que soma contribuições de várias fontes independentes:</div>
+            <div style="margin-top:8px">
+              <div class="help-score-bar">
+                <div style="width:40%;background:var(--blue)"></div>
+                <div style="width:20%;background:var(--green)"></div>
+                <div style="width:15%;background:var(--amber)"></div>
+                <div style="width:15%;background:var(--purple)"></div>
+                <div style="width:10%;background:var(--red)"></div>
+              </div>
+              <div class="help-score-legend" style="margin-top:6px;font-family:var(--mono);font-size:10px;color:var(--text2)">
+                <span><span class="help-score-dot" style="background:var(--blue)"></span>ML prob até 40 pts</span>
+                <span><span class="help-score-dot" style="background:var(--green)"></span>xG até 20 pts</span>
+                <span><span class="help-score-dot" style="background:var(--amber)"></span>BTTS até 15 pts</span>
+                <span><span class="help-score-dot" style="background:var(--purple)"></span>Sharp money até 15 pts</span>
+                <span><span class="help-score-dot" style="background:var(--red)"></span>Divergência + H2H</span>
+              </div>
+            </div>
+            <div style="margin-top:8px;font-family:var(--mono);font-size:11px;color:var(--text2)">
+              <span class="help-tag green">≥65</span> Forte candidato &nbsp;
+              <span class="help-tag amber">45–64</span> Interessante &nbsp;
+              <span class="help-tag red">≤44</span> Abaixo do threshold
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MÉTRICAS -->
+      <div class="help-section">
+        <div class="help-section-title">Métricas dos jogos</div>
+        <div class="help-row">
+          <div class="help-row-icon">⚡</div>
+          <div class="help-row-body">
+            <div class="help-row-title">xG — Expected Goals</div>
+            <div class="help-row-desc">Golos esperados com base nas estatísticas de remate (posição, qualidade, tipo). Um xG total ≥ 2.5 indica alta probabilidade de Over. Valores acima de 3.0 são muito fortes.</div>
+          </div>
+        </div>
+        <div class="help-row">
+          <div class="help-row-icon">🧠</div>
+          <div class="help-row-body">
+            <div class="help-row-title">ML% — Machine Learning</div>
+            <div class="help-row-desc">Probabilidade estimada por modelo de ML para ocorrer Over 2.5 golos. Acima de 60% já é relevante; acima de 70% é um sinal forte.</div>
+          </div>
+        </div>
+        <div class="help-row">
+          <div class="help-row-icon">⚽</div>
+          <div class="help-row-body">
+            <div class="help-row-title">BTTS% — Ambas marcam</div>
+            <div class="help-row-desc">Probabilidade de ambas as equipas marcarem. Correlaciona com Over 2.5: quando BTTS ≥ 55% o jogo tende a ser mais aberto.</div>
+          </div>
+        </div>
+        <div class="help-row">
+          <div class="help-row-icon">📊</div>
+          <div class="help-row-body">
+            <div class="help-row-title">vs Pinn — Diferença vs Pinnacle</div>
+            <div class="help-row-desc">Compara as odds das casas recreativas com a Pinnacle (referência sharp).<br>
+              <span class="help-tag green">+%</span> Casas recreativas estão a dar melhor preço — há value.<br>
+              <span class="help-tag red">−%</span> Pinnacle já baixou — mercado corrigido, edge evaporou.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SINAIS DE MERCADO -->
+      <div class="help-section">
+        <div class="help-section-title">Sinais de mercado sharp</div>
+        <div class="help-row">
+          <div class="help-row-icon">🔥</div>
+          <div class="help-row-body">
+            <div class="help-row-title"><span class="help-tag red">STEAM</span> Movimento de vapor</div>
+            <div class="help-row-desc">Pinnacle a encurtar as odds ≥ 5% e a menos de 30 minutos do início. É o sinal mais urgente — apostadores profissionais estão a entrar com volumes altos mesmo em cima do jogo.</div>
+          </div>
+        </div>
+        <div class="help-row">
+          <div class="help-row-icon">🎯</div>
+          <div class="help-row-body">
+            <div class="help-row-title"><span class="help-tag amber">SHARP</span> Dinheiro sharp</div>
+            <div class="help-row-desc">Movimento ≥ 5% (ou ≥ 2% nas últimas 12h). Indica apostadores profissionais a entrar de forma consistente antes do jogo.</div>
+          </div>
+        </div>
+        <div class="help-row">
+          <div class="help-row-icon">👁</div>
+          <div class="help-row-body">
+            <div class="help-row-title"><span class="help-tag blue">WATCH</span> Monitorizar</div>
+            <div class="help-row-desc">Divergência entre Pinnacle e casas recreativas ≥ 2% mas sem movimento pronunciado. Vale monitorizar — pode evoluir para SHARP próximo do KO.</div>
+          </div>
+        </div>
+        <div class="help-row">
+          <div class="help-row-icon">↘</div>
+          <div class="help-row-body">
+            <div class="help-row-title"><span class="help-tag green">Shortening</span> Odds a encurtar</div>
+            <div class="help-row-desc">As odds do Over 2.5 na Pinnacle estão a descer (= o mercado está a precificar maior probabilidade de Over). O sinal mais valioso quando combinado com SHARP ou STEAM.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BADGES -->
+      <div class="help-section">
+        <div class="help-section-title">Badges nos jogos</div>
+        <div class="help-row">
+          <div class="help-row-icon">⭐</div>
+          <div class="help-row-body">
+            <div class="help-row-title"><span class="help-tag gold">CRITÉRIO</span></div>
+            <div class="help-row-desc">O jogo cumpre critérios estatísticos básicos: xG total ≥ 2.0 <strong>e</strong> odds entre 2.0–3.0. Indica value pelo modelo, sem exigir movimento de mercado.</div>
+          </div>
+        </div>
+        <div class="help-row">
+          <div class="help-row-icon">📌</div>
+          <div class="help-row-body">
+            <div class="help-row-title"><span class="help-tag green">CANDIDATO</span></div>
+            <div class="help-row-desc">Condição mais forte: Pinnacle a encurtar as odds <strong>e</strong> BTTS ≥ 55% <strong>e</strong> odds entre 1.5–3.0. Combina sinal de mercado com evidência de jogo aberto.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TABS -->
+      <div class="help-section">
+        <div class="help-section-title">Abas da aplicação</div>
+        <div class="help-row">
+          <div class="help-row-icon">🔍</div>
+          <div class="help-row-body">
+            <div class="help-row-title">Scanner</div>
+            <div class="help-row-desc">Todos os jogos do dia ordenados por score. Usa os filtros <strong>↓ Shortening</strong> e <strong>BTTS≥55</strong> para reduzir ao essencial.</div>
+          </div>
+        </div>
+        <div class="help-row">
+          <div class="help-row-icon">📌</div>
+          <div class="help-row-body">
+            <div class="help-row-title">Picks</div>
+            <div class="help-row-desc">Jogos que cumprem as duas condições em simultâneo: <em>Shortening + Sharp/STEAM + score ≥ 45</em>. É o filtro com melhor histórico: 67% win rate e ROI +24% no backtest.</div>
+          </div>
+        </div>
+        <div class="help-row">
+          <div class="help-row-icon">🎯</div>
+          <div class="help-row-body">
+            <div class="help-row-title">Sharp 1X2</div>
+            <div class="help-row-desc">Sinais de sharp money no mercado de resultado (quem ganha). Mercado diferente do Over/Under — útil para complementar análise.</div>
+          </div>
+        </div>
+        <div class="help-row">
+          <div class="help-row-icon">⚡</div>
+          <div class="help-row-body">
+            <div class="help-row-title">Live</div>
+            <div class="help-row-desc">Monitorização em tempo real dos jogos activos. Alerta automático via Telegram quando um pick guardado está em jogo aos 60'+ com menos de 3 golos.</div>
+          </div>
+        </div>
+        <div class="help-row">
+          <div class="help-row-icon">📊</div>
+          <div class="help-row-body">
+            <div class="help-row-title">Dashboard</div>
+            <div class="help-row-desc">Histórico de resultados, curva de ROI e breakdown por filtro (Shortening, xG, BTTS, Sharp). Mostra quais os critérios com melhor retorno histórico.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMO USAR -->
+      <div class="help-section">
+        <div class="help-section-title">Fluxo recomendado</div>
+        <div class="help-row">
+          <div class="help-row-icon">1️⃣</div>
+          <div class="help-row-body">
+            <div class="help-row-title">Carregar os dados</div>
+            <div class="help-row-desc">Clica <strong>▶ Carregar</strong>. A aplicação vai buscar todos os jogos do dia, enriquecer com odds Pinnacle e calcular os scores (~30 segundos).</div>
+          </div>
+        </div>
+        <div class="help-row">
+          <div class="help-row-icon">2️⃣</div>
+          <div class="help-row-body">
+            <div class="help-row-title">Ver a aba 📌 Picks</div>
+            <div class="help-row-desc">Se o número de picks aparecer no badge, há jogos Short+Sharp qualificados hoje. Esses são os picks de maior confiança.</div>
+          </div>
+        </div>
+        <div class="help-row">
+          <div class="help-row-icon">3️⃣</div>
+          <div class="help-row-body">
+            <div class="help-row-title">Filtrar o Scanner</div>
+            <div class="help-row-desc">Usa o filtro <strong>↓ Shortening</strong> para ver só jogos com odds a encurtar. Ordena por score e foca nos que têm CANDIDATO ou score ≥ 55.</div>
+          </div>
+        </div>
+        <div class="help-row">
+          <div class="help-row-icon">4️⃣</div>
+          <div class="help-row-body">
+            <div class="help-row-title">Confirmar com vs Pinn</div>
+            <div class="help-row-desc">Verifica se o valor <em>vs Pinn</em> é positivo. Se for negativo, as odds já desceram demasiado e o edge pode ter evaporado.</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /help-body -->
+  </div><!-- /help-box -->
+</div><!-- /help-modal -->
+
 <!-- ═══ Módulos JS ═══ -->
 <script src="js/config.js"></script>
 <script src="js/logger.js"></script>
