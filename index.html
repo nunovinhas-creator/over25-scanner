@@ -792,7 +792,7 @@ function saveCfg(){
     k:el('bsdKey').value,g:el('ghToken').value,
     t:el('tgToken').value,c:el('tgChat').value,
     e:el('emailTo')?.value||'',
-    autoLog:true,
+    autoLog:el('autoLogChk')?el('autoLogChk').checked:true,
     phase:currentPhase
   })); }catch(e){}
 }
@@ -850,8 +850,8 @@ const _sha = {};  // cache de SHA por ficheiro
 function ghToken(){ return el('ghToken')?.value?.trim()||''; }
 
 // Encode/decode UTF-8 ↔ base64 (suporta caracteres acentuados)
-const toB64   = str => btoa(unescape(encodeURIComponent(str)));
-const fromB64 = b64 => decodeURIComponent(escape(atob(b64.replace(/\s/g,''))));
+const toB64   = str => btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,(_,p)=>String.fromCharCode('0x'+p)));
+const fromB64 = b64 => decodeURIComponent(atob(b64.replace(/\s/g,'')).split('').map(c=>'%'+c.charCodeAt(0).toString(16).padStart(2,'0')).join(''));
 
 // Escape HTML para prevenir XSS em templates com dados da API
 const esc = s => String(s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -860,7 +860,12 @@ async function ghRead(file){
   const r = await fetch(`${GH_API}/repos/${REPO}/contents/${file}`,{
     headers:{ 'Authorization':'token '+ghToken(), 'Accept':'application/vnd.github.v3+json' }
   });
-  if(!r.ok) return {data:[],sha:null};
+  if(!r.ok){
+    if(r.status===401||r.status===403) console.error('ghRead: autenticação GitHub falhou ('+r.status+') — verifica o token');
+    else if(r.status===404) console.warn('ghRead: ficheiro não encontrado:', file);
+    else console.warn('ghRead: HTTP', r.status, file);
+    return {data:[],sha:null};
+  }
   const resp = await r.json();
   _sha[file] = resp.sha;
   if(typeof GitHubAPI !== 'undefined' && GitHubAPI._shaCache){
@@ -1349,7 +1354,7 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
             edgeVsMarket, pinnActual,
             det
           });
-        }catch(e){ /* skip */ }
+        }catch(e){ console.warn('enrich game', ev?.id, e.message); }
       }));
     }
 
@@ -1367,7 +1372,7 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
     const _autoLog=el('autoLogChk')?.checked;
     (_autoLog ? autoLogCandidatos().catch(e=>{console.warn('autoLogCandidatos:',e.message);}) : Promise.resolve())
       .then(()=>_autoLog ? autoLogSharp1x2().catch(e=>{console.warn('autoLogSharp1x2:',e.message);}) : Promise.resolve())
-      .then(()=>captureClosingOdds().catch(e=>{console.warn('captureClosingOdds:',e.message);}));
+      .then(()=>_autoLog ? captureClosingOdds().catch(e=>{console.warn('captureClosingOdds:',e.message);}) : Promise.resolve());
 
     // Actualizar stats Sharp
     el('sh1Total').textContent=allSharp1x2.length;
@@ -1377,7 +1382,7 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
     el('dbgSharp').style.display='block';
     const totalOdds1x2=arr(odds1x2Data).length;
     const eventsWithPin=Object.keys(sh1x2).filter(k=>
-      sh1x2[k].HOME?.pin||sh1x2[k].DRAW?.pin||sh1x2[k].AWAY?.pin).length;
+      sh1x2[k].HOME?.pin||sh1x2[k].AWAY?.pin).length;
     const steamCount=allSharp1x2.filter(s=>s.label==='STEAM').length;
     const sharpCount=allSharp1x2.filter(s=>s.label==='SHARP').length;
     const lt6h=allSharp1x2.filter(s=>s.hoursToKO<=6).length;

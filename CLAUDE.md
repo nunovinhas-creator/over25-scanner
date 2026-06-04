@@ -64,11 +64,11 @@ Defined inside `loadAll()` — the `sharpRaw` build loop scores each 1X2 outcome
 - Shortening direction: +5 pts
 - Minimum score threshold: 8 pts to appear
 
-Labels: `STEAM` = movement ≥5% and ≤6h to KO; `SHARP` = movement ≥5% or (≥2% and ≤12h); `WATCH` = anything above threshold.
+Labels: `STEAM` = movement ≥5% and ≤30min to KO; `SHARP` = movement ≥5% or (≥2% and ≤12h); `WATCH` = anything above threshold.
 
 ### Key Constants (index.html)
 ```js
-TH_MOVE   = 0.2   // minimum % Pinnacle movement
+TH_MOVE   = 1.0   // minimum % Pinnacle movement
 DIV_MIN   = 2.0   // minimum % Pin vs recreational divergence
 DIV_STEAM = 8.0   // % threshold for STEAM classification
 RECR = ['bet365','bwin','unibet', ...]  // recreational bookmaker slugs
