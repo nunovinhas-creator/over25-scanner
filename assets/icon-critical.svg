@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none">
+  <defs>
+    <linearGradient id="shield-grad" x1="30%" y1="0%" x2="70%" y2="100%">
+      <stop offset="0%" stop-color="#FF5555"/>
+      <stop offset="50%" stop-color="#CC1111"/>
+      <stop offset="100%" stop-color="#880000"/>
+    </linearGradient>
+    <linearGradient id="shield-shine" x1="0%" y1="0%" x2="60%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="shield-glow">
+      <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="#FF3B3B" flood-opacity="0.7"/>
+    </filter>
+    <linearGradient id="bolt-grad" x1="30%" y1="0%" x2="70%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#FFD0D0"/>
+    </linearGradient>
+  </defs>
+  <!-- Shield base -->
+  <path d="M12 1.5 L21 5 L21 12 C21 16.8 17 20.8 12 22.5 C7 20.8 3 16.8 3 12 L3 5 Z"
+        fill="url(#shield-grad)" filter="url(#shield-glow)"/>
+  <!-- Shield shine overlay -->
+  <path d="M12 1.5 L21 5 L21 12 C21 16.8 17 20.8 12 22.5 C7 20.8 3 16.8 3 12 L3 5 Z"
+        fill="url(#shield-shine)"/>
+  <!-- Shield border -->
+  <path d="M12 1.5 L21 5 L21 12 C21 16.8 17 20.8 12 22.5 C7 20.8 3 16.8 3 12 L3 5 Z"
+        fill="none" stroke="#FF7070" stroke-width="0.6" stroke-linejoin="round"/>
+  <!-- Lightning bolt -->
+  <path d="M13.5 4.5 L9 12.5 L12.5 12.5 L10.5 19.5 L16 10.5 L12 10.5 Z"
+        fill="url(#bolt-grad)"/>
+  <!-- Bolt inner edge highlight -->
+  <path d="M13.5 4.5 L10 11.5 L13 11.5"
+        fill="none" stroke="#FFFFFF" stroke-width="0.3" stroke-opacity="0.5"/>
+</svg>

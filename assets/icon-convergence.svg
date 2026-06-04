@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none">
+  <defs>
+    <linearGradient id="crystal-main" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#A78BFA"/>
+      <stop offset="40%" stop-color="#7C3AED"/>
+      <stop offset="100%" stop-color="#4C1D95"/>
+    </linearGradient>
+    <linearGradient id="crystal-face1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C4B5FD" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#7C3AED" stop-opacity="0.7"/>
+    </linearGradient>
+    <linearGradient id="crystal-face2" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#7C3AED" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#3B0764" stop-opacity="0.9"/>
+    </linearGradient>
+    <filter id="crystal-glow">
+      <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="#7C3AED" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+  <!-- Light rays converging (behind crystal) -->
+  <line x1="2" y1="2" x2="12" y2="10" stroke="#A78BFA" stroke-width="0.6" stroke-opacity="0.5" stroke-linecap="round"/>
+  <line x1="12" y1="2" x2="12" y2="10" stroke="#C4B5FD" stroke-width="0.6" stroke-opacity="0.45" stroke-linecap="round"/>
+  <line x1="22" y1="2" x2="12" y2="10" stroke="#A78BFA" stroke-width="0.6" stroke-opacity="0.5" stroke-linecap="round"/>
+  <line x1="1" y1="7" x2="12" y2="12" stroke="#7C3AED" stroke-width="0.5" stroke-opacity="0.4" stroke-linecap="round"/>
+  <line x1="23" y1="7" x2="12" y2="12" stroke="#7C3AED" stroke-width="0.5" stroke-opacity="0.4" stroke-linecap="round"/>
+  <!-- Crystal / prism shape -->
+  <!-- Top pyramid -->
+  <path d="M12 2 L18 10 L12 8 L6 10 Z"
+        fill="url(#crystal-face1)" filter="url(#crystal-glow)"/>
+  <!-- Bottom body -->
+  <path d="M6 10 L12 8 L18 10 L15 22 L9 22 Z"
+        fill="url(#crystal-main)"/>
+  <!-- Left face of bottom body (darker) -->
+  <path d="M6 10 L12 8 L9 22 Z"
+        fill="url(#crystal-face2)" opacity="0.7"/>
+  <!-- Crystal border lines -->
+  <path d="M12 2 L18 10 L15 22 L9 22 L6 10 Z"
+        fill="none" stroke="#C4B5FD" stroke-width="0.6" stroke-linejoin="round"/>
+  <line x1="12" y1="2" x2="12" y2="8" stroke="#FFFFFF" stroke-width="0.4" stroke-opacity="0.3"/>
+  <line x1="6" y1="10" x2="18" y2="10" stroke="#C4B5FD" stroke-width="0.5" stroke-opacity="0.6"/>
+  <!-- Interior edge lines -->
+  <line x1="12" y1="8" x2="12" y2="22" stroke="#C4B5FD" stroke-width="0.4" stroke-opacity="0.35"/>
+  <!-- Bright refraction spot -->
+  <circle cx="13.5" cy="7" r="0.8" fill="#FFFFFF" opacity="0.55"/>
+  <!-- Light rays coming out below (dispersion) -->
+  <line x1="9" y1="22" x2="5" y2="24" stroke="#A78BFA" stroke-width="0.5" stroke-opacity="0.4" stroke-linecap="round"/>
+  <line x1="12" y1="22" x2="12" y2="24" stroke="#C4B5FD" stroke-width="0.5" stroke-opacity="0.4" stroke-linecap="round"/>
+  <line x1="15" y1="22" x2="19" y2="24" stroke="#7C3AED" stroke-width="0.5" stroke-opacity="0.4" stroke-linecap="round"/>
+</svg>

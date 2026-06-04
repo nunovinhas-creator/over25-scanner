@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 48" width="200" height="48" fill="none">
+  <defs>
+    <linearGradient id="logo-gold" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#E8CB5A"/>
+      <stop offset="50%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#B8941E"/>
+    </linearGradient>
+    <filter id="logo-glow">
+      <feDropShadow dx="0" dy="0" stdDeviation="2.5" flood-color="#D4AF37" flood-opacity="0.4"/>
+    </filter>
+    <filter id="reticle-logo-glow">
+      <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="#D4AF37" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Targeting reticle icon (left side) -->
+  <g transform="translate(22, 24)" filter="url(#reticle-logo-glow)">
+    <!-- Outer ring -->
+    <circle cx="0" cy="0" r="13" fill="none" stroke="#D4AF37" stroke-width="0.8" stroke-opacity="0.5"/>
+    <!-- Inner ring -->
+    <circle cx="0" cy="0" r="8" fill="none" stroke="#D4AF37" stroke-width="1" stroke-opacity="0.8"/>
+    <!-- Center dot -->
+    <circle cx="0" cy="0" r="2.5" fill="#D4AF37"/>
+    <!-- Crosshair arms -->
+    <line x1="-13" y1="0" x2="-10" y2="0" stroke="#D4AF37" stroke-width="1" stroke-linecap="round"/>
+    <line x1="10" y1="0" x2="13" y2="0" stroke="#D4AF37" stroke-width="1" stroke-linecap="round"/>
+    <line x1="0" y1="-13" x2="0" y2="-10" stroke="#D4AF37" stroke-width="1" stroke-linecap="round"/>
+    <line x1="0" y1="10" x2="0" y2="13" stroke="#D4AF37" stroke-width="1" stroke-linecap="round"/>
+  </g>
+
+  <!-- Thin vertical separator after icon -->
+  <line x1="42" y1="10" x2="42" y2="38" stroke="#2A2D33" stroke-width="1"/>
+
+  <!-- "OVER 2.5" text in white -->
+  <text x="50" y="20"
+        font-family="'Arial Black', 'Impact', sans-serif"
+        font-size="17" font-weight="900"
+        fill="#FFFFFF"
+        letter-spacing="-0.3"
+        dominant-baseline="auto">OVER 2.5</text>
+
+  <!-- "SCOUT" in gold (bottom line) -->
+  <text x="51" y="39"
+        font-family="'Arial Black', 'Impact', sans-serif"
+        font-size="15" font-weight="900"
+        fill="url(#logo-gold)"
+        letter-spacing="5"
+        filter="url(#logo-glow)"
+        dominant-baseline="auto">SCOUT</text>
+</svg>
