@@ -1762,8 +1762,14 @@ function isShortSharp(g){
 const PICKS_MIN_SCORE = 45;
 
 function getQualifiedPicks(){
+  const now = Date.now();
   return allGames
-    .filter(g => isShortSharp(g) && g.score >= PICKS_MIN_SCORE)
+    .filter(g => {
+      if(!isShortSharp(g) || g.score < PICKS_MIN_SCORE) return false;
+      // Remove jogos terminados (>115 min após KO = 90min jogo + desconto + margem)
+      const elapsed = (now - new Date(g.date).getTime()) / 60000;
+      return elapsed < 115;
+    })
     .sort((a,b) => b.score - a.score);
 }
 
@@ -1797,10 +1803,12 @@ function pickPubCard(g){
   const dt = new Date(g.date);
   const ds = dt.toLocaleDateString('pt-PT',{weekday:'short',day:'2-digit',month:'2-digit'})+
     ' '+dt.toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'});
-  const minsToKO = Math.max(0,Math.round((dt-Date.now())/60000));
-  const soon = minsToKO < 120
-    ? `<span class="pick-pub-badge" style="background:var(--amber-l);color:var(--amber);border:1px solid rgba(255,184,0,.28)">${minsToKO<60?minsToKO+'min':Math.round(minsToKO/60)+'h'} ao KO</span>`
-    : `<span style="font-family:var(--mono);font-size:10px;color:var(--text3)">${Math.round(minsToKO/60)}h ao KO</span>`;
+  const rawMins = Math.round((dt-Date.now())/60000);
+  const soon = rawMins <= 0
+    ? `<span class="pick-pub-badge" style="background:var(--red-l);color:var(--red);border:1px solid rgba(255,59,59,.3)">⚡ EM JOGO ${-rawMins>0?-rawMins+'min':''}${rawMins<0?' decorridos':''}</span>`
+    : rawMins < 120
+      ? `<span class="pick-pub-badge" style="background:var(--amber-l);color:var(--amber);border:1px solid rgba(255,184,0,.28)">${rawMins<60?rawMins+'min':Math.round(rawMins/60)+'h'} ao KO</span>`
+      : `<span style="font-family:var(--mono);font-size:10px;color:var(--text3)">${Math.round(rawMins/60)}h ao KO</span>`;
 
   const sharpBadge = g.sharpLabel==='STEAM'
     ? '<span class="pick-pub-badge sharp">🔥 STEAM</span>'
@@ -1898,8 +1906,8 @@ async function publishAllPicks(){
 function buildPickMsg(g){
   const dt = new Date(g.date);
   const ds = dt.toLocaleDateString('pt-PT',{weekday:'short',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
-  const minsToKO = Math.max(0,Math.round((dt-Date.now())/60000));
-  const timing = minsToKO<60?minsToKO+'min ao KO':Math.round(minsToKO/60)+'h ao KO';
+  const minsToKO = Math.round((dt-Date.now())/60000);
+  const timing = minsToKO<=0?`⚡ EM JOGO${minsToKO<0?' ('+(-minsToKO)+'min)':''}`:minsToKO<60?minsToKO+'min ao KO':Math.round(minsToKO/60)+'h ao KO';
   const probPct  = g.prob25!=null?(bayesCalib(g.prob25)*100).toFixed(0)+'%':null;
   const xgTotal  = g.xgH!=null&&g.xgA!=null?(g.xgH+g.xgA).toFixed(1):null;
   const bttsStr  = g.bttsN!=null&&g.bttsN>0?g.bttsN.toFixed(0)+'%':null;
