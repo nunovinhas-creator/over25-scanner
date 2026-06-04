@@ -461,6 +461,30 @@ select option{background:var(--laq-3);color:var(--text)}
 .ptag.mkt     {background:var(--blue-l);color:var(--blue);border:1px solid oklch(65% 0.16 255/.25)}
 .ptag.conv    {background:var(--purple-l);color:var(--purple);border:1px solid var(--purple);animation:dangerPulse 2.5s ease-in-out infinite}
 
+/* Live Legend */
+.live-legend{margin-top:14px;border-radius:var(--r);overflow:hidden;border:1px solid var(--border)}
+.live-legend-toggle{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:9px 12px;cursor:pointer;background:var(--laq-3);border:none;width:100%;text-align:left;
+  font-family:var(--mono);font-size:10px;font-weight:600;color:var(--text3);
+  letter-spacing:.04em;transition:color .15s
+}
+.live-legend-toggle:hover{color:var(--text2)}
+.live-legend-toggle-arrow{transition:transform .2s;font-size:9px}
+.live-legend-body{background:var(--laq-2);padding:10px 12px;display:flex;flex-direction:column;gap:4px}
+.live-legend-group-title{
+  font-family:var(--mono);font-size:8px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.1em;color:var(--text3);margin:8px 0 4px;padding-bottom:4px;
+  border-bottom:1px solid var(--border)
+}
+.live-legend-group-title:first-child{margin-top:0}
+.live-legend-row{
+  display:flex;align-items:flex-start;gap:8px;
+  padding:5px 8px;border-radius:var(--r);background:var(--laq-3);border:1px solid var(--border)
+}
+.live-legend-label{min-width:120px;flex-shrink:0;display:flex;align-items:center;gap:5px}
+.live-legend-desc{font-family:var(--mono);font-size:10px;color:var(--text2);line-height:1.5;flex:1}
+
 /* Live sections */
 .live-sec{font-family:var(--mono);font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin:14px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
 .live-sec.picks{color:var(--green)}
@@ -753,6 +777,87 @@ select option{background:var(--laq-3);color:var(--text)}
       </div>
     </div>
     <div id="liveList"><div class="empty">Abre esta tab para carregar jogos ao vivo</div></div>
+
+    <!-- Legenda dos sinais live -->
+    <div class="live-legend" id="liveLegend">
+      <button class="live-legend-toggle" onclick="toggleLiveLegend()">
+        <span>ℹ Legenda dos sinais detectados</span>
+        <span class="live-legend-toggle-arrow" id="liveLegendArrow">▼</span>
+      </button>
+      <div class="live-legend-body" id="liveLegendBody" style="display:none">
+
+        <!-- Métricas da linha de resumo -->
+        <div class="live-legend-group-title">Métricas do card</div>
+        <div class="live-legend-row">
+          <div class="live-legend-label"><span style="font-family:var(--mono);font-size:10px;font-weight:700;color:var(--amber)">Xpts</span></div>
+          <div class="live-legend-desc">Score de padrões activos. ≥8pts = Sinal Live · ≥10pts = nível crítico (vermelho).</div>
+        </div>
+        <div class="live-legend-row">
+          <div class="live-legend-label"><span style="font-family:var(--mono);font-size:10px;font-weight:700;color:var(--green)">X%</span></div>
+          <div class="live-legend-desc">Probabilidade ao vivo de Over 2.5 calculada pela API em tempo real com base no estado actual do jogo.</div>
+        </div>
+        <div class="live-legend-row">
+          <div class="live-legend-label"><span style="font-family:var(--mono);font-size:10px;font-weight:700;color:var(--text)">@X.XX</span></div>
+          <div class="live-legend-desc">Odds actuais do Over 2.5 ao vivo. Se estiverem a descer, há sharp money a entrar em tempo real.</div>
+        </div>
+        <div class="live-legend-row">
+          <div class="live-legend-label"><span style="font-size:12px">🔥</span><span style="font-family:var(--mono);font-size:10px;font-weight:700"> XXDA</span></div>
+          <div class="live-legend-desc">Total de ataques perigosos (Dangerous Attacks) acumulados. Sinal primário dos sistemas profissionais de análise live.</div>
+        </div>
+        <div class="live-legend-row">
+          <div class="live-legend-label"><span style="font-size:10px">▬▬▬</span> <span style="font-family:var(--mono);font-size:10px">barra</span></div>
+          <div class="live-legend-desc">Progresso de golos: <span style="color:var(--red)">vermelho</span> 0–1 golos · <span style="color:var(--amber)">âmbar</span> 2 golos · <span style="color:var(--green)">verde</span> 3+ Over entrou.</div>
+        </div>
+
+        <!-- Sinais / Padrões -->
+        <div class="live-legend-group-title">Sinais detectados (badges coloridos)</div>
+        <div class="live-legend-row">
+          <div class="live-legend-label"><span class="ptag conv">🔮 CONVERGÊNCIA</span></div>
+          <div class="live-legend-desc">≥3 padrões fortes em simultâneo. Sinal mais fiável — exige co-ocorrência de múltiplos indicadores independentes.</div>
+        </div>
+        <div class="live-legend-row">
+          <div class="live-legend-label"><span class="ptag critical">🔥 Pressão</span></div>
+          <div class="live-legend-desc">Taxa de ataques perigosos por minuto extrapolada para 90'. ≥60 DA/90 = crítico · ≥40 = alto · ≥24 = médio. Melhor indicador de pressão ofensiva real.</div>
+        </div>
+        <div class="live-legend-row">
+          <div class="live-legend-label"><span class="ptag high">🎲 xG Overdue</span></div>
+          <div class="live-legend-desc">xG total muito acima do número de golos. O mercado está a subvalorizar o Over — os "golos em dívida" aumentam a probabilidade de Over entrar.</div>
+        </div>
+        <div class="live-legend-row">
+          <div class="live-legend-label"><span class="ptag high">⚡ xG Ritmo</span></div>
+          <div class="live-legend-desc">Ritmo de xG por minuto acima do esperado para o momento do jogo. Indica criação de ocasiões acima da média.</div>
+        </div>
+        <div class="live-legend-row">
+          <div class="live-legend-label"><span class="ptag mkt">📈 Mercado</span></div>
+          <div class="live-legend-desc">Odds do Over 2.5 ao vivo a cair de forma pronunciada. Sharp money a entrar em tempo real — bookmakers a ajustar à pressão.</div>
+        </div>
+        <div class="live-legend-row">
+          <div class="live-legend-label"><span class="ptag high">⏰ Late Push</span></div>
+          <div class="live-legend-desc">Padrão de pressão intensa nos últimos minutos (60'+ ou 2ºP tardia). Equipas a arriscar mais para marcar.</div>
+        </div>
+        <div class="live-legend-row">
+          <div class="live-legend-label"><span class="ptag med">🚩 Cantos</span></div>
+          <div class="live-legend-desc">Taxa de cantos por minuto extrapolada para 90' acima de 10. Indicador de pressão ofensiva contínua e situações de perigo dentro da área.</div>
+        </div>
+        <div class="live-legend-row">
+          <div class="live-legend-label"><span class="ptag mkt">💪 Momentum</span></div>
+          <div class="live-legend-desc">Trajectória crescente de ataques e posse nos últimos minutos. Uma equipa a ganhar terreno de forma consistente.</div>
+        </div>
+        <div class="live-legend-row">
+          <div class="live-legend-label"><span class="ptag mkt">🎭 Jogo Aberto</span></div>
+          <div class="live-legend-desc">Ambas as equipas a criar ocasiões — partida equilibrada. Jogos abertos têm maior probabilidade de mais golos do que jogos controlados.</div>
+        </div>
+        <div class="live-legend-row">
+          <div class="live-legend-label"><span class="ptag med">🎯 Remates</span></div>
+          <div class="live-legend-desc">Alta taxa de remates enquadrados (SoT) por minuto. Correlaciona directamente com probabilidade de golo.</div>
+        </div>
+        <div class="live-legend-row">
+          <div class="live-legend-label"><span class="ptag high">🟥 Vantagem Num.</span></div>
+          <div class="live-legend-desc">Equipa com superioridade numérica por cartão vermelho adversário. Pressão ofensiva concentrada num lado.</div>
+        </div>
+
+      </div>
+    </div>
   </div>
 
   <!-- Sub-painel: Radar -->
@@ -4650,6 +4755,18 @@ async function reactLiveAlert(game) {
     momentum: game.lastMom??null
   };
   return reactLoop(initState, thinkFn, {maxSteps:5});
+}
+
+// ════════════════════════════════════════════════════════════════
+// LIVE LEGEND TOGGLE
+// ════════════════════════════════════════════════════════════════
+function toggleLiveLegend(){
+  const body=el('liveLegendBody');
+  const arrow=el('liveLegendArrow');
+  if(!body) return;
+  const open=body.style.display==='none';
+  body.style.display=open?'flex':'none';
+  if(arrow) arrow.style.transform=open?'rotate(180deg)':'';
 }
 
 // ════════════════════════════════════════════════════════════════
