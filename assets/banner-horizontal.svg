@@ -1,0 +1,176 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" width="1200" height="300">
+  <defs>
+    <!-- Carbon fiber: diagonal grid pattern -->
+    <pattern id="carbon" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse">
+      <rect width="8" height="8" fill="none"/>
+      <line x1="0" y1="8" x2="8" y2="0" stroke="#FFFFFF" stroke-width="0.4" opacity="0.025"/>
+      <line x1="-1" y1="5" x2="5" y2="-1" stroke="#FFFFFF" stroke-width="0.4" opacity="0.018"/>
+    </pattern>
+    <!-- Gold gradients -->
+    <linearGradient id="gold-line-h" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#D4AF37" stop-opacity="0"/>
+      <stop offset="15%" stop-color="#D4AF37" stop-opacity="0.8"/>
+      <stop offset="50%" stop-color="#E8CB5A" stop-opacity="1"/>
+      <stop offset="85%" stop-color="#D4AF37" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#D4AF37" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="gold-sep" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#D4AF37" stop-opacity="0"/>
+      <stop offset="25%" stop-color="#D4AF37" stop-opacity="0.9"/>
+      <stop offset="75%" stop-color="#D4AF37" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#D4AF37" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="gold-text" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#E8CB5A"/>
+      <stop offset="50%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#A08020"/>
+    </linearGradient>
+    <!-- Radial vignette on background -->
+    <radialGradient id="bg-vignette" cx="50%" cy="50%" r="65%">
+      <stop offset="0%" stop-color="#141418"/>
+      <stop offset="100%" stop-color="#0A0A0C"/>
+    </radialGradient>
+    <!-- Green for WR stat -->
+    <linearGradient id="green-text" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#5FFF3A"/>
+      <stop offset="100%" stop-color="#25CC00"/>
+    </linearGradient>
+    <!-- Live red glow -->
+    <radialGradient id="live-dot-bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF3B3B" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#FF3B3B" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="text-glow-gold">
+      <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#D4AF37" flood-opacity="0.35"/>
+    </filter>
+    <filter id="text-glow-green">
+      <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#39FF14" flood-opacity="0.4"/>
+    </filter>
+    <filter id="text-glow-red">
+      <feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#FF3B3B" flood-opacity="0.5"/>
+    </filter>
+    <filter id="reticle-glow">
+      <feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#D4AF37" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="300" fill="url(#bg-vignette)"/>
+  <!-- Carbon fiber texture overlay -->
+  <rect width="1200" height="300" fill="url(#carbon)"/>
+
+  <!-- Subtle inner border frame -->
+  <rect x="12" y="12" width="1176" height="276" fill="none" stroke="#2A2D33" stroke-width="1"/>
+
+  <!-- TOP-LEFT corner bracket decoration -->
+  <path d="M14 50 L14 14 L50 14" fill="none" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+  <!-- TOP-RIGHT corner bracket -->
+  <path d="M1186 50 L1186 14 L1150 14" fill="none" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+  <!-- BOTTOM-LEFT corner bracket -->
+  <path d="M14 250 L14 286 L50 286" fill="none" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+  <!-- BOTTOM-RIGHT corner bracket -->
+  <path d="M1186 250 L1186 286 L1150 286" fill="none" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.3"/>
+
+  <!-- === LEFT SIDE === -->
+  <!-- Reticle icon (targeting circle) -->
+  <g transform="translate(55, 100)" filter="url(#reticle-glow)">
+    <circle cx="0" cy="0" r="28" fill="none" stroke="#D4AF37" stroke-width="1.2" stroke-opacity="0.5"/>
+    <circle cx="0" cy="0" r="18" fill="none" stroke="#D4AF37" stroke-width="1.5" stroke-opacity="0.7"/>
+    <circle cx="0" cy="0" r="5" fill="#D4AF37" opacity="0.9"/>
+    <line x1="-28" y1="0" x2="-22" y2="0" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="22" y1="0" x2="28" y2="0" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="0" y1="-28" x2="0" y2="-22" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="0" y1="22" x2="0" y2="28" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- Main headline "OVER 2.5" -->
+  <text x="105" y="130"
+        font-family="'Arial Black', 'Impact', sans-serif"
+        font-size="82" font-weight="900"
+        fill="#FFFFFF"
+        letter-spacing="-2"
+        style="font-stretch: condensed">OVER 2.5</text>
+
+  <!-- "SCOUT" in gold -->
+  <text x="108" y="196"
+        font-family="'Arial Black', 'Impact', sans-serif"
+        font-size="72" font-weight="900"
+        fill="url(#gold-text)"
+        letter-spacing="16"
+        filter="url(#text-glow-gold)">SCOUT</text>
+
+  <!-- Subtitle -->
+  <text x="110" y="232"
+        font-family="'Arial', sans-serif"
+        font-size="16" font-weight="400"
+        fill="#8A8D95"
+        letter-spacing="3">Sharp Analysis  ·  Live Signals  ·  Real Edge</text>
+
+  <!-- === CENTER SEPARATOR === -->
+  <line x1="640" y1="40" x2="640" y2="260" stroke="url(#gold-sep)" stroke-width="1"/>
+
+  <!-- === RIGHT SIDE: stat blocks === -->
+  <!-- Stat 1: 67% WR -->
+  <g transform="translate(720, 110)">
+    <text x="0" y="0"
+          font-family="'Arial Black', sans-serif"
+          font-size="13" font-weight="700"
+          fill="#5A5E66"
+          letter-spacing="3">WIN RATE</text>
+    <text x="0" y="56"
+          font-family="'Arial Black', sans-serif"
+          font-size="58" font-weight="900"
+          fill="url(#green-text)"
+          filter="url(#text-glow-green)"
+          letter-spacing="-1">67%</text>
+    <rect x="0" y="62" width="80" height="2" fill="#39FF14" opacity="0.4" rx="1"/>
+  </g>
+
+  <!-- Stat 2: ROI +24% -->
+  <g transform="translate(900, 110)">
+    <text x="0" y="0"
+          font-family="'Arial Black', sans-serif"
+          font-size="13" font-weight="700"
+          fill="#5A5E66"
+          letter-spacing="3">ROI</text>
+    <text x="0" y="56"
+          font-family="'Arial Black', sans-serif"
+          font-size="58" font-weight="900"
+          fill="url(#gold-text)"
+          filter="url(#text-glow-gold)"
+          letter-spacing="-1">+24%</text>
+    <rect x="0" y="62" width="105" height="2" fill="#D4AF37" opacity="0.4" rx="1"/>
+  </g>
+
+  <!-- Stat 3: LIVE with dot -->
+  <g transform="translate(1070, 110)">
+    <text x="10" y="0"
+          font-family="'Arial Black', sans-serif"
+          font-size="13" font-weight="700"
+          fill="#5A5E66"
+          letter-spacing="3">STATUS</text>
+    <!-- Live dot cluster -->
+    <circle cx="12" cy="35" r="22" fill="url(#live-dot-bg)"/>
+    <circle cx="12" cy="35" r="14" stroke="#FF3B3B" stroke-width="0.8" fill="none" stroke-opacity="0.4"/>
+    <circle cx="12" cy="35" r="9" fill="#FF3B3B" opacity="0.85"/>
+    <circle cx="12" cy="35" r="5.5" fill="#FF6060"/>
+    <circle cx="9.5" cy="32.5" r="2" fill="#FFFFFF" opacity="0.4"/>
+    <!-- LIVE text -->
+    <text x="32" y="44"
+          font-family="'Arial Black', sans-serif"
+          font-size="34" font-weight="900"
+          fill="#FF3B3B"
+          filter="url(#text-glow-red)"
+          letter-spacing="2">LIVE</text>
+    <rect x="10" y="52" width="80" height="2" fill="#FF3B3B" opacity="0.4" rx="1"/>
+  </g>
+
+  <!-- === BOTTOM GOLD LINE === -->
+  <line x1="0" y1="292" x2="1200" y2="292" stroke="url(#gold-line-h)" stroke-width="1.5"/>
+
+  <!-- Tiny version tag bottom right -->
+  <text x="1174" y="285"
+        font-family="'Arial', sans-serif"
+        font-size="10" fill="#3A3D45"
+        text-anchor="end">v2.5</text>
+</svg>

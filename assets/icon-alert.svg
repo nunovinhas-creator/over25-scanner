@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none">
+  <defs>
+    <linearGradient id="alert-fill" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#FF5C5C"/>
+      <stop offset="100%" stop-color="#CC1A1A"/>
+    </linearGradient>
+    <filter id="alert-glow">
+      <feDropShadow dx="0" dy="0" stdDeviation="1.5" flood-color="#FF3B3B" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+  <!-- Triangle body -->
+  <path d="M12 2.5 L22 20.5 L2 20.5 Z"
+        fill="url(#alert-fill)" stroke="#FF3B3B" stroke-width="0.5" stroke-linejoin="round"
+        filter="url(#alert-glow)"/>
+  <!-- Inner bevel/border -->
+  <path d="M12 5.5 L20 19.5 L4 19.5 Z"
+        fill="none" stroke="#FF7070" stroke-width="0.4" stroke-linejoin="round" opacity="0.5"/>
+  <!-- Exclamation mark stem -->
+  <rect x="11" y="9" width="2" height="6.5" rx="1" fill="#FFFFFF"/>
+  <!-- Exclamation mark dot -->
+  <circle cx="12" cy="17.8" r="1.2" fill="#FFFFFF"/>
+</svg>

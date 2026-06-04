@@ -1,0 +1,178 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" width="400" height="600">
+  <defs>
+    <!-- Carbon fiber diagonal grid -->
+    <pattern id="carbon-v" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse">
+      <rect width="8" height="8" fill="none"/>
+      <line x1="0" y1="8" x2="8" y2="0" stroke="#FFFFFF" stroke-width="0.4" opacity="0.022"/>
+    </pattern>
+    <!-- Background gradient -->
+    <radialGradient id="bg-v" cx="50%" cy="40%" r="65%">
+      <stop offset="0%" stop-color="#161618"/>
+      <stop offset="100%" stop-color="#0A0A0C"/>
+    </radialGradient>
+    <!-- Gold gradients -->
+    <linearGradient id="gold-v" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#E8CB5A"/>
+      <stop offset="50%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#A08020"/>
+    </linearGradient>
+    <linearGradient id="gold-line-top" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#D4AF37" stop-opacity="0"/>
+      <stop offset="20%" stop-color="#D4AF37" stop-opacity="0.9"/>
+      <stop offset="80%" stop-color="#D4AF37" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#D4AF37" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="gold-line-bot" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#D4AF37" stop-opacity="0"/>
+      <stop offset="20%" stop-color="#D4AF37" stop-opacity="0.7"/>
+      <stop offset="80%" stop-color="#D4AF37" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#D4AF37" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="green-v" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#5FFF3A"/>
+      <stop offset="100%" stop-color="#25CC00"/>
+    </linearGradient>
+    <linearGradient id="stat-divider" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2A2D33" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#2A2D33" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#2A2D33" stop-opacity="0"/>
+    </linearGradient>
+    <!-- Live dot glow -->
+    <radialGradient id="live-bg-v" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF3B3B" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#FF3B3B" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow-gold-v">
+      <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#D4AF37" flood-opacity="0.4"/>
+    </filter>
+    <filter id="glow-green-v">
+      <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#39FF14" flood-opacity="0.45"/>
+    </filter>
+    <filter id="glow-red-v">
+      <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#FF3B3B" flood-opacity="0.55"/>
+    </filter>
+    <filter id="reticle-glow-v">
+      <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#D4AF37" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="400" height="600" fill="url(#bg-v)"/>
+  <rect width="400" height="600" fill="url(#carbon-v)"/>
+
+  <!-- Frame border -->
+  <rect x="10" y="10" width="380" height="580" fill="none" stroke="#2A2D33" stroke-width="1"/>
+
+  <!-- TOP corner brackets -->
+  <path d="M12 55 L12 12 L55 12" fill="none" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.75"/>
+  <path d="M388 55 L388 12 L345 12" fill="none" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.75"/>
+  <!-- BOTTOM corner brackets -->
+  <path d="M12 545 L12 588 L55 588" fill="none" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+  <path d="M388 545 L388 588 L345 588" fill="none" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+
+  <!-- === TOP GOLD LINE === -->
+  <line x1="0" y1="30" x2="400" y2="30" stroke="url(#gold-line-top)" stroke-width="1.5"/>
+
+  <!-- === LOGO AREA === -->
+  <!-- Reticle -->
+  <g transform="translate(200, 95)" filter="url(#reticle-glow-v)">
+    <circle cx="0" cy="0" r="30" fill="none" stroke="#D4AF37" stroke-width="1" stroke-opacity="0.4"/>
+    <circle cx="0" cy="0" r="20" fill="none" stroke="#D4AF37" stroke-width="1.3" stroke-opacity="0.65"/>
+    <circle cx="0" cy="0" r="6" fill="#D4AF37" opacity="0.9"/>
+    <line x1="-30" y1="0" x2="-24" y2="0" stroke="#D4AF37" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="24" y1="0" x2="30" y2="0" stroke="#D4AF37" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="0" y1="-30" x2="0" y2="-24" stroke="#D4AF37" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="0" y1="24" x2="0" y2="30" stroke="#D4AF37" stroke-width="1.4" stroke-linecap="round"/>
+  </g>
+
+  <!-- "OVER 2.5" -->
+  <text x="200" y="165"
+        font-family="'Arial Black', 'Impact', sans-serif"
+        font-size="52" font-weight="900"
+        fill="#FFFFFF"
+        text-anchor="middle"
+        letter-spacing="-1">OVER 2.5</text>
+
+  <!-- "SCOUT" in gold -->
+  <text x="200" y="218"
+        font-family="'Arial Black', 'Impact', sans-serif"
+        font-size="46" font-weight="900"
+        fill="url(#gold-v)"
+        text-anchor="middle"
+        letter-spacing="12"
+        filter="url(#glow-gold-v)">SCOUT</text>
+
+  <!-- Thin divider line under logo -->
+  <line x1="60" y1="240" x2="340" y2="240" stroke="url(#stat-divider)" stroke-width="1"/>
+
+  <!-- === STATS SECTION (stacked vertically) === -->
+  <!-- Stat 1: WR -->
+  <g transform="translate(200, 290)">
+    <text x="0" y="-20"
+          font-family="'Arial', sans-serif"
+          font-size="11" font-weight="600"
+          fill="#5A5E66"
+          text-anchor="middle"
+          letter-spacing="4">WIN RATE</text>
+    <text x="0" y="42"
+          font-family="'Arial Black', sans-serif"
+          font-size="72" font-weight="900"
+          fill="url(#green-v)"
+          text-anchor="middle"
+          filter="url(#glow-green-v)"
+          letter-spacing="-2">67%</text>
+    <rect x="-50" y="50" width="100" height="2" fill="#39FF14" opacity="0.35" rx="1"/>
+  </g>
+
+  <!-- Divider -->
+  <line x1="60" y1="360" x2="340" y2="360" stroke="url(#stat-divider)" stroke-width="1"/>
+
+  <!-- Stat 2: ROI -->
+  <g transform="translate(200, 420)">
+    <text x="0" y="-22"
+          font-family="'Arial', sans-serif"
+          font-size="11" font-weight="600"
+          fill="#5A5E66"
+          text-anchor="middle"
+          letter-spacing="4">RETURN ON INV.</text>
+    <text x="0" y="42"
+          font-family="'Arial Black', sans-serif"
+          font-size="62" font-weight="900"
+          fill="url(#gold-v)"
+          text-anchor="middle"
+          filter="url(#glow-gold-v)"
+          letter-spacing="-2">+24%</text>
+    <rect x="-55" y="50" width="110" height="2" fill="#D4AF37" opacity="0.35" rx="1"/>
+  </g>
+
+  <!-- Divider -->
+  <line x1="60" y1="490" x2="340" y2="490" stroke="url(#stat-divider)" stroke-width="1"/>
+
+  <!-- Stat 3: LIVE indicator -->
+  <g transform="translate(200, 530)">
+    <!-- Live dot -->
+    <circle cx="-44" cy="-4" r="16" fill="url(#live-bg-v)"/>
+    <circle cx="-44" cy="-4" r="9" stroke="#FF3B3B" stroke-width="0.8" fill="none" stroke-opacity="0.5"/>
+    <circle cx="-44" cy="-4" r="5.5" fill="#FF3B3B"/>
+    <circle cx="-44" cy="-4" r="3" fill="#FF6060"/>
+    <circle cx="-46" cy="-6" r="1.2" fill="#FFFFFF" opacity="0.45"/>
+    <!-- LIVE text -->
+    <text x="-28" y="8"
+          font-family="'Arial Black', sans-serif"
+          font-size="30" font-weight="900"
+          fill="#FF3B3B"
+          filter="url(#glow-red-v)"
+          letter-spacing="3">LIVE</text>
+  </g>
+
+  <!-- === TAGLINE === -->
+  <text x="200" y="572"
+        font-family="'Arial', sans-serif"
+        font-size="12" font-weight="500"
+        fill="#5A5E66"
+        text-anchor="middle"
+        letter-spacing="4">SHARP · LIVE · EDGE</text>
+
+  <!-- === BOTTOM GOLD LINE === -->
+  <line x1="0" y1="590" x2="400" y2="590" stroke="url(#gold-line-bot)" stroke-width="1.5"/>
+</svg>
