@@ -362,6 +362,56 @@ select option{background:var(--laq-3);color:var(--text)}
 .react-modal-title{font-weight:600;font-size:13px}
 .react-modal-sub{font-family:var(--mono);font-size:9px;color:var(--text3)}
 .react-trace{padding:12px;max-height:72vh;overflow-y:auto}
+
+/* ── Picks Públicos ── */
+.pick-pub-card{
+  background:var(--laq-2);border:1px solid oklch(70% 0.12 188/.3);border-radius:var(--rl);
+  margin-bottom:10px;overflow:hidden
+}
+.pick-pub-head{
+  padding:12px 14px 10px;display:flex;align-items:flex-start;gap:10px
+}
+.pick-pub-info{flex:1;min-width:0}
+.pick-pub-teams{font-size:14px;font-weight:700;line-height:1.25}
+.pick-pub-meta{font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:3px}
+.pick-pub-footer{
+  padding:8px 14px;border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap
+}
+.pick-pub-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  padding:3px 9px;border-radius:20px
+}
+.pick-pub-badge.ss{
+  background:oklch(70% 0.12 188/.15);color:var(--green);
+  border:1px solid oklch(70% 0.12 188/.35)
+}
+.pick-pub-badge.sharp{
+  background:oklch(65% 0.18 295/.12);color:var(--purple);
+  border:1px solid oklch(65% 0.18 295/.3)
+}
+.pick-pub-stat{font-family:var(--mono);font-size:11px;color:var(--text2)}
+.pick-pub-stat strong{color:var(--text);font-weight:700}
+.btn-pub{
+  font-family:var(--sans);font-size:11px;font-weight:600;
+  padding:5px 14px;border-radius:var(--r);cursor:pointer;transition:all .15s;white-space:nowrap
+}
+.btn-pub.send{
+  background:oklch(65% 0.16 255/.15);color:var(--blue);
+  border:1px solid oklch(65% 0.16 255/.3)
+}
+.btn-pub.send:hover{background:oklch(65% 0.16 255/.25)}
+.btn-pub.sent{background:var(--green-l);color:var(--green);border:1px solid oklch(70% 0.12 188/.3);cursor:default}
+.picks-pub-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:14px;flex-wrap:wrap;gap:8px
+}
+.picks-pub-count{
+  font-family:var(--display);font-size:32px;font-weight:400;color:var(--green);
+  letter-spacing:.01em;line-height:1
+}
+.picks-pub-subtitle{font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:2px}
 .rt-step{margin-bottom:6px;padding:8px 11px;border-radius:var(--r);border-top:2px solid;font-family:var(--mono);font-size:11px;line-height:1.6}
 .rt-thought    {background:var(--blue-l);  border-color:var(--blue)}
 .rt-action     {background:var(--amber-l); border-color:var(--amber)}
@@ -464,9 +514,33 @@ select option{background:var(--laq-3);color:var(--text)}
 <!-- ── Tabs ── -->
 <div class="tabs">
   <div class="tab active" id="tab-scan" onclick="switchTab('scan')">🔍 Scanner</div>
+  <div class="tab" id="tab-picks" onclick="switchTab('picks')">📌 Picks</div>
   <div class="tab" id="tab-sharp" onclick="switchTab('sharp')">🎯 Sharp 1X2</div>
   <div class="tab" id="tab-live" onclick="switchTab('live')" style="color:var(--red)">⚡ Live</div>
   <div class="tab" id="tab-dash" onclick="switchTab('dash')">📊 Dashboard</div>
+</div>
+
+<!-- ══ PICKS PÚBLICOS PANEL ══ -->
+<div class="panel" id="panel-picks">
+  <div style="margin-top:12px">
+    <div class="picks-pub-header">
+      <div>
+        <div class="picks-pub-count" id="picksCount">—</div>
+        <div class="picks-pub-subtitle">picks SHORT + SHARP hoje</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="btn-pub send" id="btnPubAll" onclick="publishAllPicks()" style="padding:7px 16px;font-size:12px">
+          📢 Publicar todos no TG
+        </button>
+      </div>
+    </div>
+    <div class="dbg" id="picksInfo" style="margin-bottom:12px;display:none"></div>
+    <div id="picksPubList"><div class="empty" style="padding:40px;text-align:center">
+      <div style="font-size:28px;margin-bottom:8px">📌</div>
+      <div style="font-weight:600;margin-bottom:4px">Nenhum pick Short+Sharp</div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--text3)">Clica em Carregar para analisar os jogos do dia</div>
+    </div></div>
+  </div>
 </div>
 
 <!-- ══ SCANNER PANEL ══ -->
@@ -1041,10 +1115,11 @@ function normalizePick(p){
 // TABS
 // ════════════════════════════════════════════════════════════════
 function switchTab(name){
-  ['scan','sharp','live','dash'].forEach(t=>{
+  ['scan','picks','sharp','live','dash'].forEach(t=>{
     el('tab-'+t).classList.toggle('active',t===name);
     el('panel-'+t).classList.toggle('active',t===name);
   });
+  if(name==='picks') renderPicksPub();
   if(name==='sharp') renderSharp();
   if(name==='live'&&!liveActive){ liveActive=true; loadLive(); }
   if(name==='dash'&&!_dashLoaded){ loadDash(); }
@@ -1398,6 +1473,11 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
       enriched.filter(g=>g.sharpLabel).length+' sinais sharp · '+
       enriched.filter(g=>g.prob25).length+' com ML';
 
+    // Actualizar badge do tab Picks com número de picks qualificados
+    const _qCount = getQualifiedPicks().length;
+    el('tab-picks').textContent = _qCount > 0 ? `📌 Picks (${_qCount})` : '📌 Picks';
+    if(el('panel-picks').classList.contains('active')) renderPicksPub();
+
   }catch(err){
     const msg = err.message||'Erro desconhecido';
     const is401 = msg.includes('401');
@@ -1420,6 +1500,179 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
       sendDailyReport().catch(e=>{console.warn('sendDailyReport:',e.message);});
     }
   }, 90000);
+}
+
+// ════════════════════════════════════════════════════════════════
+// PICKS PÚBLICOS — Short + Sharp
+// ════════════════════════════════════════════════════════════════
+
+// Critério de qualificação: Shortening no Over 2.5 + sinal Sharp
+function isShortSharp(g){
+  return (g.movement||'').toUpperCase()==='SHORTENING' && !!g.sharpLabel;
+}
+
+// Threshold de score mínimo para publicar (evita ruído)
+const PICKS_MIN_SCORE = 45;
+
+function getQualifiedPicks(){
+  return allGames
+    .filter(g => isShortSharp(g) && g.score >= PICKS_MIN_SCORE)
+    .sort((a,b) => b.score - a.score);
+}
+
+function renderPicksPub(){
+  const picks = getQualifiedPicks();
+  el('picksCount').textContent = picks.length;
+
+  const info = el('picksInfo');
+  const total = allGames.length;
+  if(total > 0){
+    const shortening = allGames.filter(g=>(g.movement||'').toUpperCase()==='SHORTENING').length;
+    const withSharp  = allGames.filter(g=>g.sharpLabel).length;
+    info.style.display = 'block';
+    info.textContent = total+' jogos analisados · '+shortening+' shortening · '+withSharp+' c/ sharp · '+picks.length+' qualificam (Short+Sharp score≥'+PICKS_MIN_SCORE+')';
+  }
+
+  const list = el('picksPubList');
+  if(!picks.length){
+    list.innerHTML = `<div class="empty" style="padding:40px;text-align:center">
+      <div style="font-size:28px;margin-bottom:8px">📌</div>
+      <div style="font-weight:600;margin-bottom:4px">Nenhum pick Short+Sharp ${total?'neste momento':''}</div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--text3)">${total?'Nenhum jogo cumpre simultaneamente Shortening + Sharp + score≥'+PICKS_MIN_SCORE:'Clica em Carregar para analisar os jogos do dia'}</div>
+    </div>`;
+    return;
+  }
+
+  list.innerHTML = picks.map(g => pickPubCard(g)).join('');
+}
+
+function pickPubCard(g){
+  const dt = new Date(g.date);
+  const ds = dt.toLocaleDateString('pt-PT',{weekday:'short',day:'2-digit',month:'2-digit'})+
+    ' '+dt.toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'});
+  const minsToKO = Math.max(0,Math.round((dt-Date.now())/60000));
+  const soon = minsToKO < 120
+    ? `<span class="pick-pub-badge" style="background:var(--amber-l);color:var(--amber);border:1px solid oklch(76% 0.16 78/.3)">${minsToKO<60?minsToKO+'min':Math.round(minsToKO/60)+'h'} ao KO</span>`
+    : `<span style="font-family:var(--mono);font-size:10px;color:var(--text3)">${Math.round(minsToKO/60)}h ao KO</span>`;
+
+  const sharpBadge = g.sharpLabel==='STEAM'
+    ? '<span class="pick-pub-badge sharp">🔥 STEAM</span>'
+    : g.sharpLabel==='SHARP'
+      ? '<span class="pick-pub-badge sharp">🎯 SHARP</span>'
+      : '<span class="pick-pub-badge sharp">👁 WATCH</span>';
+
+  const probPct  = g.prob25!=null?(bayesCalib(g.prob25)*100).toFixed(0)+'%':null;
+  const xgTotal  = g.xgH!=null&&g.xgA!=null?(g.xgH+g.xgA).toFixed(1):null;
+  const bttsStr  = g.bttsN!=null&&g.bttsN>0?g.bttsN.toFixed(0)+'%':null;
+  const divStr   = g.div!=null&&g.div>0?g.div.toFixed(1)+'%':null;
+  const published = _pubSent.has(String(g.id));
+
+  return `<div class="pick-pub-card" id="ppc_${g.id}">
+    <div class="pick-pub-head">
+      <div class="pick-pub-info">
+        <div class="pick-pub-teams">${esc(g.home)} <span style="color:var(--text3);font-weight:400">vs</span> ${esc(g.away)}</div>
+        <div class="pick-pub-meta">🏆 ${esc(g.league)} &nbsp;·&nbsp; 📅 ${ds}</div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:8px">
+          <span class="pick-pub-badge ss">↘ SHORT + ${sharpBadge.replace(/.*>(.+)<.*/,'$1').replace('🔥 ','').replace('🎯 ','').replace('👁 ','')}</span>
+          ${sharpBadge}
+          ${soon}
+        </div>
+      </div>
+      <div style="text-align:right;min-width:52px">
+        <div style="font-family:var(--display);font-size:30px;color:var(--green);line-height:1">${g.score}</div>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--text3)">score</div>
+        ${g.oddsOver?`<div style="font-family:var(--mono);font-size:11px;font-weight:700;margin-top:4px;color:var(--amber)">@${g.oddsOver.toFixed(2)}</div>`:''}
+      </div>
+    </div>
+    <div style="padding:0 14px 10px;display:flex;gap:10px;flex-wrap:wrap">
+      ${probPct?`<span class="pick-pub-stat">🧠 ML <strong>${probPct}</strong></span>`:''}
+      ${xgTotal?`<span class="pick-pub-stat">⚡ xG <strong>${xgTotal}</strong></span>`:''}
+      ${bttsStr?`<span class="pick-pub-stat">⚽ BTTS <strong>${bttsStr}</strong></span>`:''}
+      ${divStr?`<span class="pick-pub-stat">div <strong>${divStr}</strong></span>`:''}
+    </div>
+    <div class="pick-pub-footer">
+      <div style="font-family:var(--mono);font-size:10px;color:var(--text3)">
+        Over 2.5 · Pinnacle shortening · sinal sharp confirmado
+      </div>
+      <button class="btn-pub ${published?'sent':'send'}" id="btnpub_${g.id}" onclick="publishPick(${g.id})" ${published?'disabled':''}>
+        ${published?'✅ Publicado':'📤 Publicar TG'}
+      </button>
+    </div>
+  </div>`;
+}
+
+// Set de IDs já publicados nesta sessão (em memória)
+const _pubSent = new Set();
+
+async function publishPick(id){
+  const g = allGames.find(x=>x.id===id);
+  if(!g) return;
+  const btn = el('btnpub_'+id);
+  if(btn){ btn.textContent='⏳ A enviar...'; btn.disabled=true; }
+
+  const msg = buildPickMsg(g);
+  const ok  = await sendTG(msg);
+  if(ok){
+    _pubSent.add(String(id));
+    if(btn){ btn.textContent='✅ Publicado'; btn.classList.replace('send','sent'); }
+  } else {
+    if(btn){ btn.textContent='❌ Erro'; btn.disabled=false;
+      setTimeout(()=>{ btn.textContent='📤 Publicar TG'; btn.classList.replace('sent','send'); },3000); }
+  }
+}
+
+async function publishAllPicks(){
+  const picks = getQualifiedPicks();
+  if(!picks.length){ alert('Nenhum pick Short+Sharp para publicar.'); return; }
+
+  const btn = el('btnPubAll');
+  btn.disabled=true; btn.textContent='⏳ A enviar...';
+
+  // Cabeçalho resumo
+  const dt = new Date().toLocaleDateString('pt-PT',{weekday:'long',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+  const intro = `📌 <b>SHORT + SHARP PICKS — ${dt.toUpperCase()}</b>\n${picks.length} pick${picks.length>1?'s':''} qualificado${picks.length>1?'s':''} hoje\n━━━━━━━━━━━━━━━━━━`;
+  await sendTG(intro);
+  await new Promise(r=>setTimeout(r,400));
+
+  // Um pick de cada vez com delay (evita flood)
+  let sent=0;
+  for(const g of picks){
+    const ok = await sendTG(buildPickMsg(g));
+    if(ok){ _pubSent.add(String(g.id)); sent++; }
+    await new Promise(r=>setTimeout(r,500));
+  }
+
+  btn.textContent = sent===picks.length ? '✅ Todos publicados' : `✅ ${sent}/${picks.length} publicados`;
+  btn.classList.replace('send','sent');
+  setTimeout(()=>{ btn.textContent='📢 Publicar todos no TG'; btn.classList.replace('sent','send'); btn.disabled=false; },5000);
+  renderPicksPub(); // actualiza badges
+}
+
+function buildPickMsg(g){
+  const dt = new Date(g.date);
+  const ds = dt.toLocaleDateString('pt-PT',{weekday:'short',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+  const minsToKO = Math.max(0,Math.round((dt-Date.now())/60000));
+  const timing = minsToKO<60?minsToKO+'min ao KO':Math.round(minsToKO/60)+'h ao KO';
+  const probPct  = g.prob25!=null?(bayesCalib(g.prob25)*100).toFixed(0)+'%':null;
+  const xgTotal  = g.xgH!=null&&g.xgA!=null?(g.xgH+g.xgA).toFixed(1):null;
+  const bttsStr  = g.bttsN!=null&&g.bttsN>0?g.bttsN.toFixed(0)+'%':null;
+  const sharpIcon= g.sharpLabel==='STEAM'?'🔥':g.sharpLabel==='SHARP'?'🎯':'👁';
+  const lines = [
+    `📌 <b>SHORT + SHARP PICK</b>`,
+    `━━━━━━━━━━━━━━━━━━`,
+    `⚽ <b>${g.home} vs ${g.away}</b>`,
+    `🏆 ${g.league}`,
+    `📅 ${ds} · ${timing}`,
+    `💰 <b>Over 2.5 @${g.oddsOver?g.oddsOver.toFixed(2):'?'}</b>`,
+    `📊 Score: <b>${g.score}/100</b>`,
+    `↘ Shortening · ${sharpIcon} ${g.sharpLabel}`,
+    xgTotal?`⚡ xG ${xgTotal}`:'',
+    bttsStr?`⚽ BTTS ${bttsStr}`:'',
+    probPct?`🧠 ML ${probPct}`:'',
+    `━━━━━━━━━━━━━━━━━━`,
+    `#over25 #shortsharp`,
+  ].filter(Boolean).join('\n');
+  return lines;
 }
 
 // ════════════════════════════════════════════════════════════════
