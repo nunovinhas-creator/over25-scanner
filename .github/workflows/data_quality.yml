@@ -1,0 +1,91 @@
+name: Data Quality & Schema Validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Daily at 07:00 UTC
+    - cron: "0 7 * * *"
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Job 1: validate — schema checks + data quality tests
+  # ---------------------------------------------------------------------------
+  validate:
+    name: Schema & Data Quality
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install \
+            pandas>=2.0.0 \
+            numpy>=1.24.0 \
+            scikit-learn>=1.3.0 \
+            pandera>=0.17.0 \
+            pytest>=7.4.0
+
+      - name: Run ETL validation
+        run: python pipeline/etl.py --validate
+
+      - name: Run data quality tests
+        run: pytest tests/data_quality/ -v --tb=short
+
+  # ---------------------------------------------------------------------------
+  # Job 2: backtest — walk-forward backtesting across all strategies
+  # ---------------------------------------------------------------------------
+  backtest:
+    name: Backtesting
+    runs-on: ubuntu-latest
+    needs: validate
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install \
+            pandas>=2.0.0 \
+            numpy>=1.24.0 \
+            scipy>=1.11.0 \
+            scikit-learn>=1.3.0 \
+            pandera>=0.17.0 \
+            pytest>=7.4.0
+
+      - name: Create reports directory
+        run: mkdir -p backtesting/reports
+
+      - name: Run backtests (all strategies)
+        run: |
+          python backtesting/run_backtest.py \
+            --strategy all \
+            --format json \
+            --output backtesting/reports/
+
+      - name: Upload backtest reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: backtest-reports-${{ github.run_number }}
+          path: backtesting/reports/
+          retention-days: 30
+          if-no-files-found: warn
