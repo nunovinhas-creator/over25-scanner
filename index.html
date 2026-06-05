@@ -4944,6 +4944,7 @@ window._syncInterval = setInterval(async()=>{
               <span class="help-tag amber">45–64</span> Interessante &nbsp;
               <span class="help-tag red">≤44</span> Abaixo do threshold
             </div>
+            <div style="margin-top:6px;font-family:var(--mono);font-size:10px;color:var(--text3)">No histórico: score 55–65 → 71% win rate · score 45–55 → 52% win rate</div>
           </div>
         </div>
       </div>
@@ -4962,7 +4963,7 @@ window._syncInterval = setInterval(async()=>{
           <div class="help-row-icon">🧠</div>
           <div class="help-row-body">
             <div class="help-row-title">ML% — Machine Learning</div>
-            <div class="help-row-desc">Probabilidade estimada por modelo de ML para ocorrer Over 2.5 golos. Acima de 60% já é relevante; acima de 70% é um sinal forte.</div>
+            <div class="help-row-desc">Probabilidade estimada por modelo de ML para ocorrer Over 2.5 golos. Acima de 60% já é relevante. <strong>Atenção:</strong> na banda 70–80% o modelo tende a sobrestimar — o histórico mostra win rate real de ~50% quando o ML indica 73%. O Scout aplica calibração Bayesiana para compensar este viés. Usa sempre o ML em conjunto com xG e o sinal de mercado, nunca isolado.</div>
           </div>
         </div>
         <div class="help-row">
@@ -5032,7 +5033,7 @@ window._syncInterval = setInterval(async()=>{
           <div class="help-row-icon">↘</div>
           <div class="help-row-body">
             <div class="help-row-title"><span class="help-tag green">Shortening</span> Odds a encurtar</div>
-            <div class="help-row-desc">As odds do Over 2.5 na Pinnacle estão a descer (= o mercado está a precificar maior probabilidade de Over). O sinal mais valioso quando combinado com SHARP ou STEAM.</div>
+            <div class="help-row-desc">As odds do Over 2.5 na Pinnacle estão a descer (= o mercado está a precificar maior probabilidade de Over). O sinal mais valioso quando combinado com SHARP ou STEAM.<br><span style="font-family:var(--mono);font-size:10px;color:var(--text3)">No histórico: Shortening → 67% WR e +23% ROI · Drifting → 52% WR e −7% ROI</span></div>
           </div>
         </div>
       </div>
@@ -5070,7 +5071,7 @@ window._syncInterval = setInterval(async()=>{
           <div class="help-row-icon">📌</div>
           <div class="help-row-body">
             <div class="help-row-title">Picks</div>
-            <div class="help-row-desc">Jogos que cumprem as duas condições em simultâneo: <em>Shortening + Sharp/STEAM + score ≥ 45</em>. É o filtro com melhor histórico: 67% win rate e ROI +24% no backtest.</div>
+            <div class="help-row-desc">Jogos que cumprem as duas condições em simultâneo: <em>Shortening + Sharp/STEAM + score ≥ 45</em>. Cada pick mostra o EV% e o Kelly recomendado para dimensionar a aposta. Um pick desaparece automaticamente 115 minutos após o KO.<br><span style="font-family:var(--mono);font-size:10px;color:var(--text3)">No histórico (N=46): Shortening → 67% WR · +23% ROI · score≥55 → 71% WR · +28% ROI</span></div>
           </div>
         </div>
         <div class="help-row">
