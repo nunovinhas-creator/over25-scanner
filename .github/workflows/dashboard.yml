@@ -16,6 +16,8 @@ jobs:
   update-dashboard:
     name: Generate Analytics Dashboard
     runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: ${{ github.workspace }}
 
     permissions:
       contents: write  # needed to push the generated HTML back to the repo

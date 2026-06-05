@@ -226,10 +226,10 @@ def plot_calibration(picks_df: pd.DataFrame) -> go.Figure:
     fig.update_layout(
         **PLOTLY_DARK,
         title=dict(text="Diagrama de Calibração (Predicted vs Actual Win Rate)", font=dict(color=GOLD, size=16)),
-        xaxis=dict(title="Probabilidade Prevista (%)", range=[40, 100], gridcolor=GRID_COL),
-        yaxis=dict(title="Win Rate Real", tickformat=".0%", range=[0, 1.05], gridcolor=GRID_COL),
         legend=dict(bgcolor="rgba(0,0,0,0)", font=dict(color=TEXT_MAIN)),
     )
+    fig.update_xaxes(title="Probabilidade Prevista (%)", range=[40, 100], gridcolor=GRID_COL)
+    fig.update_yaxes(title="Win Rate Real", tickformat=".0%", range=[0, 1.05], gridcolor=GRID_COL)
     return fig
 
 
