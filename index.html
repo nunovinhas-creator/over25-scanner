@@ -1100,6 +1100,19 @@ function calcROI(picks, isWinFn, getOddsFn){
 }
 const bayesCalib = p => p==null ? null : (CALIB.N*p + CALIB.K*CALIB.WR)/(CALIB.N+CALIB.K);
 
+// EV = prob × odds - 1, em percentagem
+function calcEV(prob, decimalOdds){
+  if(prob==null||decimalOdds==null||decimalOdds<=1) return null;
+  return (prob * decimalOdds - 1) * 100;
+}
+// Kelly Criterion: f* = (b×p - q) / b  onde b = odds-1
+// Devolve half-Kelly (mais conservador) já pronto a usar
+function halfKelly(prob, decimalOdds){
+  if(prob==null||decimalOdds==null||decimalOdds<=1) return null;
+  const b = decimalOdds - 1;
+  const f = (b * prob - (1 - prob)) / b;
+  return Math.max(0, f / 2);
+}
 
 function h(){ return {'Authorization':'Token '+(el('bsdKey').value.trim())}; }
 async function get(path){
@@ -1816,10 +1829,13 @@ function pickPubCard(g){
       ? '<span class="pick-pub-badge sharp">🎯 SHARP</span>'
       : '<span class="pick-pub-badge sharp">👁 WATCH</span>';
 
-  const probPct  = g.prob25!=null?(bayesCalib(g.prob25)*100).toFixed(0)+'%':null;
+  const calibProb = g.prob25!=null ? bayesCalib(g.prob25) : null;
+  const probPct  = calibProb!=null?(calibProb*100).toFixed(0)+'%':null;
   const xgTotal  = g.xgH!=null&&g.xgA!=null?(g.xgH+g.xgA).toFixed(1):null;
   const bttsStr  = g.bttsN!=null&&g.bttsN>0?g.bttsN.toFixed(0)+'%':null;
   const divStr   = g.div!=null&&g.div>0?g.div.toFixed(1)+'%':null;
+  const evVal    = calcEV(calibProb, g.oddsOver);
+  const hkVal    = halfKelly(calibProb, g.oddsOver);
   const published = _pubSent.has(String(g.id));
 
   return `<div class="pick-pub-card" id="ppc_${g.id}">
@@ -1844,6 +1860,8 @@ function pickPubCard(g){
       ${xgTotal?`<span class="pick-pub-stat">⚡ xG <strong>${xgTotal}</strong></span>`:''}
       ${bttsStr?`<span class="pick-pub-stat">⚽ BTTS <strong>${bttsStr}</strong></span>`:''}
       ${divStr?`<span class="pick-pub-stat">div <strong>${divStr}</strong></span>`:''}
+      ${evVal!=null?`<span class="pick-pub-stat" style="color:${evVal>0?'var(--green)':'var(--red)'}">EV <strong>${evVal>0?'+':''}${evVal.toFixed(1)}%</strong></span>`:''}
+      ${hkVal!=null&&hkVal>0?`<span class="pick-pub-stat" style="color:var(--text2)">Kelly <strong>${(hkVal*100).toFixed(1)}% bk</strong></span>`:''}
     </div>
     <div class="pick-pub-footer">
       <div style="font-family:var(--mono);font-size:10px;color:var(--text3)">
@@ -1908,10 +1926,13 @@ function buildPickMsg(g){
   const ds = dt.toLocaleDateString('pt-PT',{weekday:'short',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
   const minsToKO = Math.round((dt-Date.now())/60000);
   const timing = minsToKO<=0?`⚡ EM JOGO${minsToKO<0?' ('+(-minsToKO)+'min)':''}`:minsToKO<60?minsToKO+'min ao KO':Math.round(minsToKO/60)+'h ao KO';
-  const probPct  = g.prob25!=null?(bayesCalib(g.prob25)*100).toFixed(0)+'%':null;
+  const calibProb = g.prob25!=null ? bayesCalib(g.prob25) : null;
+  const probPct  = calibProb!=null?(calibProb*100).toFixed(0)+'%':null;
   const xgTotal  = g.xgH!=null&&g.xgA!=null?(g.xgH+g.xgA).toFixed(1):null;
   const bttsStr  = g.bttsN!=null&&g.bttsN>0?g.bttsN.toFixed(0)+'%':null;
   const sharpIcon= g.sharpLabel==='STEAM'?'🔥':g.sharpLabel==='SHARP'?'🎯':'👁';
+  const evVal    = calcEV(calibProb, g.oddsOver);
+  const hkVal    = halfKelly(calibProb, g.oddsOver);
   const lines = [
     `📌 <b>SHORT + SHARP PICK</b>`,
     `━━━━━━━━━━━━━━━━━━`,
@@ -1924,6 +1945,8 @@ function buildPickMsg(g){
     xgTotal?`⚡ xG ${xgTotal}`:'',
     bttsStr?`⚽ BTTS ${bttsStr}`:'',
     probPct?`🧠 ML ${probPct}`:'',
+    evVal!=null?`📈 EV ${evVal>0?'+':''}${evVal.toFixed(1)}%`:'',
+    hkVal!=null&&hkVal>0?`🎯 Kelly ½: ${(hkVal*100).toFixed(1)}% bankroll`:'',
     `━━━━━━━━━━━━━━━━━━`,
     `#over25 #shortsharp`,
   ].filter(Boolean).join('\n');
