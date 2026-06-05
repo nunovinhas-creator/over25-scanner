@@ -1,0 +1,19 @@
+# Local Claude Code settings
+.claude/settings.local.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+.env
+
+# Reports (generated output)
+backtesting/reports/*.json
+backtesting/reports/*.txt
+
+# OS
+.DS_Store
