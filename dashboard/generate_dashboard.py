@@ -412,10 +412,9 @@ def plot_movement_matrix(picks_df: pd.DataFrame) -> go.Figure:
         zmin=0,
         zmax=1,
         colorbar=dict(
-            title="Win Rate",
+            title=dict(text="Win Rate", font=dict(color=GOLD)),
             tickformat=".0%",
             tickfont=dict(color=TEXT_MAIN),
-            titlefont=dict(color=GOLD),
         ),
         hovertemplate="<b>%{y} × %{x}</b><br>Win Rate: %{z:.1%}<extra></extra>",
     ))
