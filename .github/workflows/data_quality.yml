@@ -16,6 +16,8 @@ jobs:
   validate:
     name: Schema & Data Quality
     runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: ${{ github.workspace }}
 
     steps:
       - name: Checkout repository
@@ -50,6 +52,8 @@ jobs:
     name: Backtesting
     runs-on: ubuntu-latest
     needs: validate
+    env:
+      PYTHONPATH: ${{ github.workspace }}
 
     steps:
       - name: Checkout repository
