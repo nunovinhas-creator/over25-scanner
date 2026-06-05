@@ -4982,6 +4982,26 @@ window._syncInterval = setInterval(async()=>{
             </div>
           </div>
         </div>
+        <div class="help-row">
+          <div class="help-row-icon">📈</div>
+          <div class="help-row-body">
+            <div class="help-row-title">EV — Valor Esperado</div>
+            <div class="help-row-desc">Retorno médio esperado por unidade apostada, calculado como <em>prob × odds − 1</em>.<br>
+              <span class="help-tag green">+EV</span> A probabilidade do modelo supera a implícita nas odds — a aposta tem valor matemático.<br>
+              <span class="help-tag red">−EV</span> As odds não compensam a probabilidade estimada — sem edge.<br>
+              Exemplo: ML 65% + odds 1.90 → EV = 65% × 1.90 − 1 = <strong>+23.5%</strong>
+            </div>
+          </div>
+        </div>
+        <div class="help-row">
+          <div class="help-row-icon">🎯</div>
+          <div class="help-row-body">
+            <div class="help-row-title">Kelly — Dimensionamento de stake</div>
+            <div class="help-row-desc">Percentagem ótima do bankroll a arriscar, derivada do Critério de Kelly: <em>f = (b×p − q) / b</em>. O Scout mostra o <strong>Half-Kelly</strong> (metade do Kelly pleno) — uma abordagem mais conservadora que reduz a volatilidade a longo prazo.<br>
+              Exemplo: ML 65% + odds 1.90 → Half-Kelly = <strong>13.1% do bankroll</strong>. Nunca apostar mais do que o Kelly sugere.
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- SINAIS DE MERCADO -->
