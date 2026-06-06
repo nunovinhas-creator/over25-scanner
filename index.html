@@ -1724,6 +1724,8 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
     el('dbgSharp').textContent=totalOdds1x2+' odds 1X2 · '+eventsWithPin+' c/Pinnacle · '+
       allSharp1x2.length+' sinais · '+steamCount+' STEAM · '+sharpCount+' SHARP · '+lt6h+' <6h KO';
 
+    renderSharp();
+
     el('statusDot').style.background='var(--green)';
     el('statusDot').style.boxShadow='0 0 6px var(--green)';
     el('statusTxt').textContent='live';
