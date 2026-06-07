@@ -867,19 +867,17 @@ select option{background:var(--laq-3);color:var(--text)}
 
   <!-- Sub-painel: Jogos -->
   <div id="lpanel-jogos">
-    <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:12px;margin-bottom:12px">
+    <div style="display:flex;gap:16px;align-items:center;margin-top:12px;margin-bottom:12px">
       <div>
         <div style="font-family:var(--mono);font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em">Ao vivo</div>
         <div style="font-size:22px;font-weight:800;color:var(--red);font-variant-numeric:tabular-nums" id="lTotal">—</div>
       </div>
       <div>
-        <div style="font-family:var(--mono);font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em">Picks</div>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em">Qualificados</div>
         <div style="font-size:22px;font-weight:800;color:var(--green);font-variant-numeric:tabular-nums" id="lPicks">—</div>
       </div>
-      <div>
-        <div style="font-family:var(--mono);font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em">Golos</div>
-        <div style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums" id="lGolos">—</div>
-      </div>
+      <!-- lGolos mantido no DOM para JS mas oculto -->
+      <div style="display:none" id="lGolos"></div>
     </div>
     <div id="liveList"><div class="empty">Abre esta tab para carregar jogos ao vivo</div></div>
 
@@ -3155,7 +3153,7 @@ async function loadLive(){
     liveData=enriched;
     const savedPicks=enriched.filter(e=>e.isSavedPick);
     el('lTotal').textContent=enriched.length;
-    el('lPicks').textContent=savedPicks.length;
+    el('lPicks').textContent=enriched.filter(e=>e.isLivePick&&!e.isSavedPick).length||'—';
     el('lGolos').textContent=savedPicks.reduce((s,e)=>s+e.goals,0);
     renderLive();
     startLiveCountdown();
@@ -3217,7 +3215,7 @@ function renderLive(){
 
   let html='', sec=0;
 
-  // ── 1. SINAIS LIVE — acção imediata, vem sempre primeiro ──
+  // ── 1. APOSTAR AGORA — só aparece quando há sinais qualificados ──
   if(liveSignals.length){
     html+=`<div class="live-sec" style="color:var(--red);border-bottom-color:rgba(224,48,80,.35)">
       🔥 APOSTAR AGORA
@@ -3226,22 +3224,22 @@ function renderLive(){
     html+=liveSignals.map(e=>liveCard(e)).join('');
     sec++;
   } else {
-    html+=`<div style="border:1px dashed rgba(255,59,59,.2);border-radius:8px;padding:12px 16px;margin-bottom:12px;font-family:var(--mono);font-size:11px;color:var(--text3);text-align:center">
-      Nenhum sinal live qualificado — aguarda padrão + golo marcado
+    html+=`<div style="border:1px dashed rgba(255,59,59,.2);border-radius:8px;padding:10px 14px;margin-bottom:10px;font-family:var(--mono);font-size:11px;color:var(--text3);text-align:center">
+      Nenhum sinal live qualificado
     </div>`;
   }
 
-  // ── 2. APOSTAS EM CURSO — monitorização ──
-  if(savedPicks.length){
-    html+=`<div class="live-sec picks" style="margin-top:${sec?16:0}px">📌 Picks Pré-Jogo em Curso <span style="background:rgba(10,170,83,.12);color:var(--green);border-radius:3px;padding:1px 6px">${savedPicks.length}</span></div>`;
-    html+=savedPicks.map(e=>liveCard(e)).join('');
+  // ── 2. EM OBSERVAÇÃO ──
+  if(watching.length){
+    html+=`<div class="live-sec watch" style="margin-top:${sec?14:0}px">👁 Em Observação <span style="font-size:10px">${watching.length}</span></div>`;
+    html+=watching.map(e=>liveCardCompact(e)).join('');
     sec++;
   }
 
-  // ── 3. EM OBSERVAÇÃO ──
-  if(watching.length){
-    html+=`<div class="live-sec watch" style="margin-top:${sec?16:0}px">👁 Em Observação <span style="font-size:10px">${watching.length}</span></div>`;
-    html+=watching.map(e=>liveCardCompact(e)).join('');
+  // ── 3. PICKS PRÉ-JOGO — sempre no fundo (monitorização secundária) ──
+  if(savedPicks.length){
+    html+=`<div class="live-sec picks" style="margin-top:${sec?14:0}px">📌 Picks Pré-Jogo em Curso <span style="background:rgba(10,170,83,.12);color:var(--green);border-radius:3px;padding:1px 6px">${savedPicks.length}</span></div>`;
+    html+=savedPicks.map(e=>liveCard(e)).join('');
   }
   el('liveList').innerHTML=html;
   if(el('lpanel-radar')?.style.display!=='none') renderLiveRadar();
