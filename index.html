@@ -3491,8 +3491,6 @@ async function autoLogObservations(){
     // Jogo >75min com menos de 2 golos: matematicamente improvável
     if(e.min>=75&&e.goals<2) return false;
     // Gate de qualidade: exige sinal de mercado (mkt/critical) OU patternScore muito alto
-    const hasMkt=(e.patterns||[]).some(p=>p.id==='mkt');
-    if(!hasMkt&&(e.patternScore||0)<10) return false;
     return true;
   });
 
@@ -3621,7 +3619,7 @@ async function loadDash(){
     allObs = Array.isArray(obs) ? obs : [];
     _dashLoaded=true;
     renderDash();
-    renderObsDashboard();
+    fillObsResults().then(()=>renderObsDashboard()).catch(()=>renderObsDashboard());
   }catch(e){el('picksBody').innerHTML='<div class="empty">Erro ao carregar picks: '+esc(e.message)+'</div>';}
 }
 
@@ -3692,20 +3690,58 @@ function renderObsDashboard(){
   const globalWR = withResult.length ? Math.round(withResult.filter(o=>o.result_over25==='WIN').length/withResult.length*100) : null;
   const globalCol = globalWR===null?'var(--text3)':globalWR>=60?'var(--green)':globalWR>=45?'var(--amber)':'var(--red)';
 
+  // Score-bucket breakdown — valida calibração dos thresholds
+  const BUCKETS = [{lo:0,hi:7,lbl:'< 8'},{lo:8,hi:11,lbl:'8–11'},{lo:12,hi:15,lbl:'12–15'},{lo:16,hi:999,lbl:'≥ 16'}];
+  const bucketCards = BUCKETS.map(b=>{
+    const bObs = withResult.filter(o=>{ const s=o.pattern_score||0; return s>=b.lo&&s<=b.hi; });
+    const bWR = bObs.length ? Math.round(bObs.filter(o=>o.result_over25==='WIN').length/bObs.length*100) : null;
+    const bCol = bWR===null?'var(--text3)':bWR>=55?'var(--green)':bWR>=40?'var(--amber)':'var(--red)';
+    const isActive = b.lo>=12; // threshold actual
+    return `<div class="bk-card" style="${isActive?'border-color:var(--green)':''}">
+      <div class="bk-name" style="${isActive?'color:var(--green)':''}">Score ${b.lbl}${isActive?' ✓':''}</div>
+      <div class="bk-wr" style="color:${bCol}">${bWR!==null?bWR+'%':'—'}</div>
+      <div class="bk-roi">${bObs.filter(o=>o.result_over25==='WIN').length}/${bObs.length} c/resultado</div>
+    </div>`;
+  }).join('');
+
   el('obsGrid').innerHTML=`
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
       <div class="kpi-card">
         <div class="kpi-label">Taxa acerto geral</div>
         <div class="kpi-val" style="color:${globalCol}">${globalWR!==null?globalWR+'%':'—'}</div>
-        <div class="kpi-sub">${withResult.length} observações c/resultado</div>
+        <div class="kpi-sub">${withResult.length} resolvidas · ${pending.length} pendentes</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">Threshold mín.</div>
-        <div class="kpi-val" style="font-size:20px">score ≥ 4</div>
-        <div class="kpi-sub">${pending.length} a aguardar resultado</div>
+        <div class="kpi-label">Threshold activo</div>
+        <div class="kpi-val" style="font-size:20px;color:var(--green)">score ≥ ${TH_LIVE_PICK}</div>
+        <div class="kpi-sub">log a partir de score ≥ 6</div>
       </div>
     </div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">WR por bucket de score</div>
+    <div class="bk-grid" style="margin-bottom:12px">${bucketCards}</div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">WR por padrão</div>
     <div class="bk-grid">${cards.join('')}</div>`;
+}
+
+async function fillObsResults(){
+  // Cross-referencia observações pendentes com allPicks para preencher resultados
+  // automaticamente quando o Dashboard abre — não precisa de ter o Live aberto até ao FT
+  if(!el('ghToken')?.value.trim()) return;
+  const pending = (allObs||[]).filter(o=>!o.result_over25);
+  if(!pending.length) return;
+  const updates = {};
+  for(const obs of pending){
+    const match = allPicks.find(p=>String(p.id).split('_')[0]===String(obs.event_id)
+      && (p.result_over25==='WIN'||p.result_over25==='LOSS'));
+    if(match){
+      updates[String(obs.id)]={result_over25: match.result_over25, result_at_min: 90};
+    }
+  }
+  if(!Object.keys(updates).length) return;
+  try{
+    await obsBatchSave(null, updates);
+    allObs = await obsRead();
+  }catch(ex){ console.warn('fillObsResults:',ex.message); }
 }
 
 // Max Drawdown = maior queda pico-para-vale na curva ROI acumulada
