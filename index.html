@@ -680,34 +680,11 @@ select option{background:var(--laq-3);color:var(--text)}
 <!-- ── Tabs ── -->
 <div class="tabs">
   <div class="tab active" id="tab-scan" onclick="switchTab('scan')">🔍 Scanner</div>
-  <div class="tab" id="tab-picks" onclick="switchTab('picks')">📌 Picks</div>
   <div class="tab" id="tab-sharp" onclick="switchTab('sharp')">🎯 Sharp 1X2</div>
   <div class="tab" id="tab-live" onclick="switchTab('live')" style="color:var(--red)">⚡ Live</div>
   <div class="tab" id="tab-dash" onclick="switchTab('dash')">📊 Dashboard</div>
 </div>
 
-<!-- ══ PICKS PÚBLICOS PANEL ══ -->
-<div class="panel" id="panel-picks">
-  <div style="margin-top:12px">
-    <div class="picks-pub-header">
-      <div>
-        <div class="picks-pub-count" id="picksCount">—</div>
-        <div class="picks-pub-subtitle">picks SHORT + SHARP hoje</div>
-      </div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap">
-        <button class="btn-pub send" id="btnPubAll" onclick="publishAllPicks()" style="padding:7px 16px;font-size:12px">
-          📢 Publicar todos no TG
-        </button>
-      </div>
-    </div>
-    <div class="dbg" id="picksInfo" style="margin-bottom:12px;display:none"></div>
-    <div id="picksPubList"><div class="empty" style="padding:40px;text-align:center">
-      <div style="font-size:28px;margin-bottom:8px">📌</div>
-      <div style="font-weight:600;margin-bottom:4px">Nenhum pick Short+Sharp</div>
-      <div style="font-family:var(--mono);font-size:11px;color:var(--text3)">Clica em Carregar para analisar os jogos do dia</div>
-    </div></div>
-  </div>
-</div>
 
 <!-- ══ SCANNER PANEL ══ -->
 <div class="panel active" id="panel-scan">
@@ -721,6 +698,7 @@ select option{background:var(--laq-3);color:var(--text)}
     <button class="fb active" onclick="setScanFilter(this,'all')">Todos</button>
     <button class="fb g" onclick="setScanFilter(this,'short')">↓ Shortening</button>
     <button class="fb" onclick="setScanFilter(this,'btts')">⚽ BTTS≥55</button>
+    <button class="fb" id="picksFb" onclick="setScanFilter(this,'picks')" style="border-color:var(--amber)">📌 Picks</button>
     <select id="sortSel" onchange="renderScan()" style="margin-left:auto">
       <option value="score">Por score</option>
       <option value="date">Por data</option>
@@ -730,6 +708,23 @@ select option{background:var(--laq-3);color:var(--text)}
   <div class="dbg" id="dbgScan" style="display:none"></div>
   <div id="autoLogStatus" style="display:none;font-family:var(--mono);font-size:11px;padding:8px 12px;border-radius:6px;margin-bottom:10px;border:1px solid var(--border)"></div>
   <div id="scanList"><div class="loading"><div class="spinner"></div>Clica em Carregar</div></div>
+
+  <!-- Picks mode — visível quando scanFilter='picks' -->
+  <div id="picksModeSection" style="display:none">
+    <div class="picks-pub-header">
+      <div>
+        <div class="picks-pub-count" id="picksCount">—</div>
+        <div class="picks-pub-subtitle">picks SHORT + SHARP hoje</div>
+      </div>
+      <button class="btn-pub send" id="btnPubAll" onclick="publishAllPicks()" style="padding:7px 16px;font-size:12px">📢 Publicar todos no TG</button>
+    </div>
+    <div class="dbg" id="picksInfo" style="margin-bottom:12px;display:none"></div>
+    <div id="picksPubList"><div class="empty" style="padding:40px;text-align:center">
+      <div style="font-size:28px;margin-bottom:8px">📌</div>
+      <div style="font-weight:600;margin-bottom:4px">Nenhum pick Short+Sharp</div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--text3)">Clica em Carregar para analisar os jogos do dia</div>
+    </div></div>
+  </div>
 </div>
 
 <!-- ══ SHARP 1X2 PANEL ══ -->
@@ -906,10 +901,6 @@ select option{background:var(--laq-3);color:var(--text)}
   <div id="dpanel-over25">
     <div id="nWarning" class="warn-banner"></div>
     <div class="filters" style="margin-top:12px;margin-bottom:12px">
-      <span class="filter-label">Fase</span>
-      <button class="fb active" id="dashPhaseAll" onclick="setDashPhase('all')">Todas</button>
-      <button class="fb" id="dashPhaseDev" onclick="setDashPhase('dev')">DEV</button>
-      <button class="fb" id="dashPhaseLive" onclick="setDashPhase('live')">LIVE</button>
       <button class="fb g active" id="filterShorteningBtn" onclick="el('filterShortening').checked=!el('filterShortening').checked;this.classList.toggle('active',el('filterShortening').checked);renderDash()">↘ Shortening</button>
     </div>
     <div class="dash-kpi" id="dashKpi">
@@ -1387,11 +1378,10 @@ function normalizePick(p){
 // TABS
 // ════════════════════════════════════════════════════════════════
 function switchTab(name){
-  ['scan','picks','sharp','live','dash'].forEach(t=>{
-    el('tab-'+t).classList.toggle('active',t===name);
-    el('panel-'+t).classList.toggle('active',t===name);
+  ['scan','sharp','live','dash'].forEach(t=>{
+    el('tab-'+t)?.classList.toggle('active',t===name);
+    el('panel-'+t)?.classList.toggle('active',t===name);
   });
-  if(name==='picks') renderPicksPub();
   if(name==='sharp') renderSharp();
   if(name==='live'&&!liveActive){ liveActive=true; loadLive(); }
   if(name==='dash'){
@@ -1757,10 +1747,11 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
       enriched.filter(g=>g.sharpLabel).length+' sinais sharp · '+
       enriched.filter(g=>g.prob25).length+' com ML';
 
-    // Actualizar badge do tab Picks com número de picks qualificados
+    // Actualizar badge do filtro Picks com número de picks qualificados
     const _qCount = getQualifiedPicks().length;
-    el('tab-picks').textContent = _qCount > 0 ? `📌 Picks (${_qCount})` : '📌 Picks';
-    if(el('panel-picks').classList.contains('active')) renderPicksPub();
+    const _pFb = el('picksFb');
+    if(_pFb) _pFb.textContent = _qCount > 0 ? `📌 Picks (${_qCount})` : '📌 Picks';
+    if(scanFilter==='picks') renderPicksPub();
 
   }catch(err){
     const msg = err.message||'Erro desconhecido';
@@ -2079,7 +2070,10 @@ function setScanFilter(btn,f){
   scanFilter=f;
   document.querySelectorAll('#panel-scan .fb').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  renderScan();
+  const isPicksMode = f==='picks';
+  el('scanList').style.display       = isPicksMode?'none':'';
+  el('picksModeSection').style.display = isPicksMode?'':'none';
+  isPicksMode ? renderPicksPub() : renderScan();
 }
 
 function renderScan(){
