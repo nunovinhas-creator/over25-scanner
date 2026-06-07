@@ -850,6 +850,16 @@ select option{background:var(--laq-3);color:var(--text)}
     </div>
     <div id="liveList"><div class="empty">Abre esta tab para carregar jogos ao vivo</div></div>
 
+    <!-- Calibração live — N=35 observações históricas -->
+    <div style="margin:12px 0;padding:10px 12px;background:var(--card);border:1px solid var(--border);border-radius:8px;font-family:var(--mono);font-size:11px;color:var(--text3)">
+      <div style="color:var(--amber);font-weight:700;margin-bottom:6px">📊 Calibração Live (N=35 observações)</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px 20px">
+        <span><span style="color:var(--green);font-weight:700">Score≥12</span> → 46% WR &nbsp;|&nbsp; <span style="color:var(--red);font-weight:700">Score&lt;12</span> → 24% WR</span>
+        <span><span style="color:var(--green);font-weight:700">Goals≥1</span> → 44% WR &nbsp;|&nbsp; <span style="color:var(--red);font-weight:700">Goals=0</span> → 6.7% WR</span>
+        <span><span style="color:var(--green);font-weight:700">pressure</span> → 43.5% &nbsp;|&nbsp; <span style="color:var(--red);font-weight:700">late/open</span> → 0% WR</span>
+      </div>
+    </div>
+
     <!-- Legenda dos sinais live -->
     <div class="live-legend" id="liveLegend">
       <button class="live-legend-toggle" onclick="toggleLiveLegend()">
@@ -862,7 +872,7 @@ select option{background:var(--laq-3);color:var(--text)}
         <div class="live-legend-group-title">Métricas do card</div>
         <div class="live-legend-row">
           <div class="live-legend-label"><span style="font-family:var(--mono);font-size:10px;font-weight:700;color:var(--amber)">Xpts</span></div>
-          <div class="live-legend-desc">Score de padrões activos. ≥8pts = Sinal Live · ≥10pts = nível crítico (vermelho).</div>
+          <div class="live-legend-desc">Score de padrões activos. ≥12pts = Sinal Live (calibrado: 46% WR) · ≥10pts = nível crítico (vermelho). 0-0 bloqueado para novos sinais (6.7% WR histórico).</div>
         </div>
         <div class="live-legend-row">
           <div class="live-legend-label"><span style="font-family:var(--mono);font-size:10px;font-weight:700;color:var(--green)">X%</span></div>
@@ -1041,7 +1051,7 @@ const GH_API        = 'https://api.github.com';
 const TH_MOVE       = 1.0;    // % movimento mínimo Pinnacle (ruído <1% filtrado)
 const DIV_MIN        = 2.0;    // % divergência mínima Pin vs recreativas
 const DIV_STEAM      = 8.0;    // % threshold STEAM
-const TH_LIVE_PICK   = 8;      // patternScore mínimo para classificar como sinal live
+const TH_LIVE_PICK   = 12;     // patternScore mínimo para classificar como sinal live (calibrado: N=35, score≥12→46% WR vs score<12→24% WR)
 // ── Pick qualification gates (baseados em análise de ROI dos dados históricos) ──
 const PICKS_MIN_ODDS = 1.65;   // odds mínimas — abaixo destroem ROI apesar do WR
 const PICKS_MAX_PROB = 0.73;   // prob máxima — acima é overconfidence (modelo perde edge)
@@ -2885,9 +2895,9 @@ function detectPatterns(e){
     const diff=Math.abs((e.hScore||0)-(e.aScore||0));
     const bothNeed=e.goals<=1&&diff<=1;
     const losingPush=(e.hScore<e.aScore&&e.lastMom<-15)||(e.hScore>e.aScore&&e.lastMom>15);
-    if(bothNeed&&(losingPush||e.goals===0))
-      p.push({id:'open',label:'JOGO ABERTO',emoji:'🎭',level:'med',
-        detail:`${remaining}min, ${e.goals===0?'0-0 — ambas precisam':'equipa a perder ataca'}`});
+    if(bothNeed&&losingPush&&e.goals>=1)
+      p.push({id:'open',label:'JOGO ABERTO',emoji:'🎭',level:'low',
+        detail:`${remaining}min, equipa a perder ataca`});
   }
 
   // 7. MOMENTUM — dominância de uma equipa
@@ -2906,7 +2916,7 @@ function detectPatterns(e){
   if(min>=68&&e.goals===2){
     const prob=e.probLive||0;
     if(prob>=28)
-      p.push({id:'late',label:`1 gol em ${remaining}min`,emoji:'⏰',level:'high',
+      p.push({id:'late',label:`1 gol em ${remaining}min`,emoji:'⏰',level:'low',
         detail:`Falta 1 golo · mercado ${prob}% · ${remaining}min`});
   }
 
@@ -3007,7 +3017,7 @@ async function loadLive(){
         isSavedPick,isWatch:watchIds.has(String(ev.id)),isDanger};
       evObj.patterns=detectPatterns(evObj);
       evObj.patternScore=evObj.patterns.reduce((s,p)=>s+(p.level==='critical'?10:p.level==='high'?4:p.level==='med'?2:p.level==='conv'?0:1),0);
-      evObj.isLivePick=evObj.patternScore>=TH_LIVE_PICK||(evObj.patterns||[]).some(p=>p.id==='conv');
+      evObj.isLivePick=(evObj.patternScore>=TH_LIVE_PICK&&(evObj.isSavedPick||evObj.goals>=1))||(evObj.patterns||[]).some(p=>p.id==='conv');
       return evObj;
     }));
 
