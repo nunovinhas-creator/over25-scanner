@@ -3216,16 +3216,29 @@ function renderLive(){
   if(!liveData.length){el('liveList').innerHTML='<div class="empty">Nenhum jogo ao vivo.</div>';return;}
 
   let html='', sec=0;
+
+  // ── 1. SINAIS LIVE — acção imediata, vem sempre primeiro ──
+  if(liveSignals.length){
+    html+=`<div class="live-sec" style="color:var(--red);border-bottom-color:rgba(224,48,80,.35)">
+      🔥 APOSTAR AGORA
+      <span style="background:rgba(224,48,80,.14);color:var(--red);border:1px solid rgba(224,48,80,.35);border-radius:3px;padding:1px 7px;font-size:11px;font-weight:700">${liveSignals.length}</span>
+    </div>`;
+    html+=liveSignals.map(e=>liveCard(e)).join('');
+    sec++;
+  } else {
+    html+=`<div style="border:1px dashed rgba(255,59,59,.2);border-radius:8px;padding:12px 16px;margin-bottom:12px;font-family:var(--mono);font-size:11px;color:var(--text3);text-align:center">
+      Nenhum sinal live qualificado — aguarda padrão + golo marcado
+    </div>`;
+  }
+
+  // ── 2. APOSTAS EM CURSO — monitorização ──
   if(savedPicks.length){
-    html+=`<div class="live-sec picks">⭐ Apostas Guardadas <span style="background:rgba(10,170,83,.12);color:var(--green);border-radius:3px;padding:1px 6px">${savedPicks.length}</span></div>`;
+    html+=`<div class="live-sec picks" style="margin-top:${sec?16:0}px">📌 Apostas em Curso <span style="background:rgba(10,170,83,.12);color:var(--green);border-radius:3px;padding:1px 6px">${savedPicks.length}</span></div>`;
     html+=savedPicks.map(e=>liveCard(e)).join('');
     sec++;
   }
-  if(liveSignals.length){
-    html+=`<div class="live-sec" style="color:var(--red);margin-top:${sec?16:0}px">🔥 Sinais Live <span style="background:rgba(224,48,80,.12);color:var(--red);border-radius:3px;padding:1px 6px">${liveSignals.length}</span></div>`;
-    html+=liveSignals.map(e=>liveCardCompact(e)).join('');
-    sec++;
-  }
+
+  // ── 3. EM OBSERVAÇÃO ──
   if(watching.length){
     html+=`<div class="live-sec watch" style="margin-top:${sec?16:0}px">👁 Em Observação <span style="font-size:10px">${watching.length}</span></div>`;
     html+=watching.map(e=>liveCardCompact(e)).join('');
