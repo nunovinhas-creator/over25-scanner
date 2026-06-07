@@ -2375,19 +2375,35 @@ function sharpCard1x2(s){
     const movCol=sg.movement==='SHORTENING'?'var(--green)':'var(--amber)';
     const movTxt=sg.movement==='SHORTENING'?'↘ Short':'↗ Drift';
     const movPct=sg.pinnMove!=null?Math.abs(sg.pinnMove).toFixed(1)+'%':'—';
-    const timingCol=sg.hoursToKO<=2?'var(--red)':sg.hoursToKO<=6?'var(--amber)':'var(--text3)';
-    const timingTxt=sg.hoursToKO<=2?'<2h':sg.hoursToKO<=6?'<6h':sg.hoursToKO<=12?'<12h':sg.hoursToKO.toFixed(0)+'h';
-    return `<div style="background:var(--bg3);border-radius:6px;padding:8px 10px;flex:1;min-width:120px">
+
+    // Timing: <3h tem ROI -30% (mau) · 3-6h +2% · >24h +3.4% (melhor)
+    const timingCol=sg.hoursToKO<3?'var(--red)':sg.hoursToKO<=6?'var(--green)':sg.hoursToKO>24?'var(--green)':'var(--text3)';
+    const timingTxt=sg.hoursToKO<1?'<1h':sg.hoursToKO<3?'<3h':sg.hoursToKO<=6?'<6h':sg.hoursToKO<=12?'<12h':sg.hoursToKO<=24?'<24h':Math.round(sg.hoursToKO)+'h';
+    const timingWarn=sg.hoursToKO<3?' ⚠':'';
+
+    // Zona Rentável: HOME odds 2.50-2.99 + move 1-2% = ROI +25.5% histórico
+    const mvNum=sg.pinnMove!=null?Math.abs(sg.pinnMove):0;
+    const isGolden=sg.out==='HOME'&&sg.pin>=2.5&&sg.pin<3.0&&mvNum>=1&&mvNum<2&&sg.movement==='SHORTENING';
+    const isOddsZone=sg.out==='HOME'&&sg.pin>=2.5&&sg.pin<3.0;
+    const isDropZone=mvNum>=1&&mvNum<2&&sg.movement==='SHORTENING';
+    const zonaBadge=isGolden
+      ?'<div style="grid-column:1/-1;margin-top:4px"><span style="display:inline-block;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:700;background:rgba(22,163,74,.2);color:var(--green);border:1px solid rgba(22,163,74,.4)">✅ ZONA RENTÁVEL +25% ROI</span></div>'
+      :isOddsZone&&!isDropZone?'<div style="grid-column:1/-1;margin-top:4px"><span style="display:inline-block;padding:2px 6px;border-radius:4px;font-size:9px;background:rgba(22,163,74,.1);color:var(--green);border:1px solid rgba(22,163,74,.25)">📊 odds ok · falta move 1-2%</span></div>'
+      :isDropZone&&sg.out==='HOME'&&!isGolden?'<div style="grid-column:1/-1;margin-top:4px"><span style="display:inline-block;padding:2px 6px;border-radius:4px;font-size:9px;background:rgba(22,163,74,.1);color:var(--green);border:1px solid rgba(22,163,74,.25)">📊 move ok · falta odds 2.50-2.99</span></div>'
+      :'';
+
+    return `<div style="background:var(--bg3);border-radius:6px;padding:8px 10px;flex:1;min-width:120px${isGolden?';border:1px solid rgba(22,163,74,.4)':''}">
       <div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-bottom:3px">${sg.out}</div>
       <div style="font-size:12px;font-weight:700;margin-bottom:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${outLabel}</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
         <div><div style="font-family:var(--mono);font-size:9px;color:var(--text3)">Pin actual</div><div style="font-family:var(--mono);font-size:12px;font-weight:700">${sg.pin.toFixed(2)}</div></div>
         <div><div style="font-family:var(--mono);font-size:9px;color:var(--text3)">Abertura</div><div style="font-family:var(--mono);font-size:12px;color:var(--text3)">${sg.prev?sg.prev.toFixed(2):'—'}</div></div>
         <div><div style="font-family:var(--mono);font-size:9px;color:var(--text3)">Mov. Pin</div><div style="font-size:12px;font-weight:700;color:${movCol}">${movTxt} ${movPct}</div></div>
-        <div><div style="font-family:var(--mono);font-size:9px;color:var(--text3)">Timing</div><div style="font-size:12px;font-weight:700;color:${timingCol}">${timingTxt}</div></div>
+        <div><div style="font-family:var(--mono);font-size:9px;color:var(--text3)">Timing</div><div style="font-size:12px;font-weight:700;color:${timingCol}">${timingTxt}${timingWarn}</div></div>
         ${sg.recrAvg?`<div><div style="font-family:var(--mono);font-size:9px;color:var(--text3)">Recr. avg</div><div style="font-family:var(--mono);font-size:11px">${sg.recrAvg.toFixed(2)}</div></div>`:''}
         ${sg.div>0?`<div><div style="font-family:var(--mono);font-size:9px;color:var(--text3)">Divergência</div><div style="font-family:var(--mono);font-size:11px;color:${sg.divHasValue===false?'var(--red)':sg.div>=5?'var(--green)':'var(--amber)'}">${sg.div.toFixed(1)}%${sg.divHasValue===false?' ↓':' ↑'}</div></div>`:''}
         ${sg.multiBook?`<div style="grid-column:1/-1"><div style="font-size:10px;color:var(--purple)">✦ ${sg.recrMoving} books também moveram</div></div>`:''}
+        ${zonaBadge}
       </div>
     </div>`;
   }).join('');
