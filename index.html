@@ -2952,7 +2952,7 @@ function detectPatterns(e){
   const adjSoT    =(is2H&&htBase)?Math.max(0,totalSoT     -(htBase.sot||0)    ):totalSoT;
   const adjCorners=(is2H&&htBase)?Math.max(0,totalCorners -(htBase.corners||0)):totalCorners;
   const adjMin    =is2H?Math.max(1,min-45):min;
-  const suppressVolume=isHT||(is2H&&min<=50&&!htBase);
+  const suppressVolume=isHT||(is2H&&!htBase);
   const halfSfx=is2H?' (2ªP)':'';
 
   // 1. PRESSÃO (DA) — ataques perigosos/min: sinal primário dos sistemas profissionais
@@ -3233,7 +3233,7 @@ function renderLive(){
 
   // ── 2. APOSTAS EM CURSO — monitorização ──
   if(savedPicks.length){
-    html+=`<div class="live-sec picks" style="margin-top:${sec?16:0}px">📌 Apostas em Curso <span style="background:rgba(10,170,83,.12);color:var(--green);border-radius:3px;padding:1px 6px">${savedPicks.length}</span></div>`;
+    html+=`<div class="live-sec picks" style="margin-top:${sec?16:0}px">📌 Picks Pré-Jogo em Curso <span style="background:rgba(10,170,83,.12);color:var(--green);border-radius:3px;padding:1px 6px">${savedPicks.length}</span></div>`;
     html+=savedPicks.map(e=>liveCard(e)).join('');
     sec++;
   }
