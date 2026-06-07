@@ -2,10 +2,17 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Over 2.5 · Sharp · Live</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Scanner ao vivo de jogos Over 2.5 com análise de odds Pinnacle, shortening, xG, BTTS e sinais sharp. Picks calibrados com CLV e ROI histórico.">
+<meta property="og:title" content="Over 2.5 Scout — Scanner de Picks Sharp">
+<meta property="og:description" content="Deteta jogos com dinheiro sharp antes do mercado fechar. Análise de odds Pinnacle, xG, BTTS e ROI histórico.">
+<meta property="og:type" content="website">
+<title>Over 2.5 Scout — Scanner de Picks Sharp com Pinnacle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Alumni+Sans+Pinstripe:wght@400&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Alumni+Sans+Pinstripe:wght@400&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Alumni+Sans+Pinstripe:wght@400&display=swap');
 
 :root{
   /* ── PREMIUM BETTING DESIGN SYSTEM ── */
@@ -54,7 +61,7 @@
 
   /* Typography */
   --sans:   'Albert Sans',system-ui,sans-serif;
-  --mono:   'Albert Sans',system-ui,sans-serif;
+  --mono:   'JetBrains Mono','Courier New',monospace;
   --display:'Alumni Sans Pinstripe',serif;
 
   /* Shadows & Glows */
@@ -84,24 +91,12 @@ body{
 }
 .hdr-title{font-family:var(--display);font-size:18px;font-weight:400;letter-spacing:.05em;color:var(--text)}
 .hdr-title span{color:var(--gold)}
-.hdr-sub{font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:2px;letter-spacing:.04em}
+.hdr-sub{font-family:var(--mono);font-size:11px;color:var(--text3);margin-top:2px;letter-spacing:.04em}
 .hdr-right{display:flex;align-items:center;gap:8px}
 .status-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse2 2s infinite}
 @keyframes pulse2{0%,100%{opacity:1}50%{opacity:.25}}
 
-/* ── Config ── */
-.cfg-bar{
-  background:var(--laq-deep);border-bottom:1px solid var(--border);
-  padding:8px 16px;display:flex;gap:6px;flex-wrap:wrap
-}
-.cfg-bar input{
-  font-family:var(--mono);font-size:11px;padding:6px 10px;
-  border-radius:var(--r);border:1px solid var(--border);
-  background:var(--laq-1);color:var(--text);
-  min-width:110px;flex:1;transition:border-color .15s
-}
-.cfg-bar input:focus{outline:none;border-color:var(--gold)}
-.cfg-bar input::placeholder{color:var(--text3)}
+/* ── Config (legacy — kept for btn-load / btn-tg shared styles) ── */
 .btn-load{
   font-family:var(--sans);font-size:12px;font-weight:600;
   padding:6px 16px;border-radius:var(--r);border:1px solid var(--gold);
@@ -515,7 +510,7 @@ select option{background:var(--laq-3);color:var(--text)}
 /* Responsive */
 @media(min-width:480px){.stats-bar{grid-template-columns:repeat(4,1fr)}}
 @media(min-width:600px){.dash-kpi{grid-template-columns:repeat(3,1fr)}}
-@media(min-width:900px){body{max-width:900px;margin:0 auto}.hdr,.cfg-bar,.tabs{max-width:900px;margin-left:auto;margin-right:auto}}
+@media(min-width:900px){body{max-width:900px;margin:0 auto}.hdr,.load-progress,.tabs{max-width:900px;margin-left:auto;margin-right:auto}}
 
 /* ── PREMIUM VISUAL ENHANCEMENTS ── */
 
@@ -642,11 +637,77 @@ select option{background:var(--laq-3);color:var(--text)}
   padding:4px 9px;cursor:pointer;transition:all .15s;letter-spacing:.02em
 }
 .btn-help:hover{color:var(--text);border-color:var(--border2)}
+
+/* ── Screen-reader only ── */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* ── Load Progress Bar ── */
+.load-progress{
+  background:var(--laq-deep);border-bottom:1px solid var(--border);
+  padding:6px 16px;display:none;align-items:center;gap:10px
+}
+.load-progress.visible{display:flex}
+.load-progress-step{font-family:var(--mono);font-size:10px;color:var(--text3);white-space:nowrap;min-width:120px}
+.load-progress-track{flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.load-progress-bar{height:100%;background:var(--gold);border-radius:2px;transition:width .35s ease;width:0%}
+
+/* ── Config Modal ── */
+.cfg-modal{
+  position:fixed;inset:0;background:rgba(0,0,0,.88);
+  z-index:500;display:flex;align-items:flex-start;justify-content:center;
+  padding:16px;overflow-y:auto;animation:fadeIn .15s ease
+}
+.cfg-modal[hidden]{display:none}
+.cfg-modal-box{
+  background:var(--laq-2);border:1px solid var(--border2);border-radius:var(--rl);
+  width:100%;max-width:480px;overflow:hidden;margin:auto 0
+}
+.cfg-modal-head{
+  background:var(--laq-3);border-bottom:1px solid var(--border);
+  padding:14px 16px;display:flex;justify-content:space-between;align-items:center
+}
+.cfg-modal-head-title{font-size:14px;font-weight:700}
+.cfg-modal-body{padding:16px}
+.cfg-field{margin-bottom:12px}
+.cfg-field label{display:block;font-family:var(--mono);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.cfg-field input{
+  font-family:var(--mono);font-size:12px;padding:8px 12px;
+  border-radius:var(--r);border:1px solid var(--border);
+  background:var(--laq-1);color:var(--text);width:100%;transition:border-color .15s
+}
+.cfg-field input:focus{outline:none;border-color:var(--gold)}
+.cfg-field input::placeholder{color:var(--text3)}
+.cfg-hint{font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:4px}
+.cfg-modal-footer{
+  padding:12px 16px;border-top:1px solid var(--border);
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap
+}
+
+/* ── Header load + config buttons ── */
+.btn-cfg{
+  background:transparent;border:1px solid var(--border);border-radius:var(--r);
+  color:var(--text3);font-size:14px;width:30px;height:30px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0
+}
+.btn-cfg:hover{border-color:var(--border2);color:var(--text)}
+.btn-load-hdr{
+  font-family:var(--sans);font-size:12px;font-weight:600;
+  padding:6px 14px;border-radius:var(--r);border:1px solid var(--gold);
+  background:var(--gold);color:var(--laq-deep);
+  cursor:pointer;white-space:nowrap;transition:background .15s,border-color .15s
+}
+.btn-load-hdr:hover{background:var(--gold-d);border-color:var(--gold-d);box-shadow:var(--glow-gold)}
+.btn-load-hdr:active{background:#9A7C0A}
+
+/* ── Dashboard period filter ── */
+.dash-period-row{display:flex;gap:5px;margin-bottom:14px;align-items:center}
+.dash-period-label{font-family:var(--mono);font-size:10px;color:var(--text3);margin-right:4px}
 </style></head>
 <body>
+<h1 class="sr-only">Over 2.5 Scout — Scanner de Picks Sharp com Pinnacle</h1>
 
 <!-- ── Header ── -->
-<div class="hdr">
+<div class="hdr" role="banner">
   <div style="display:flex;align-items:center;gap:10px">
     <img src="assets/logo.svg" alt="Over 2.5 Scout" height="32" style="display:block;flex-shrink:0" onerror="this.style.display='none'">
     <div>
@@ -655,35 +716,78 @@ select option{background:var(--laq-3);color:var(--text)}
     </div>
   </div>
   <div class="hdr-right">
-    <button class="btn-help" onclick="openHelp()" title="Como funciona?">?</button>
-    <div class="status-dot" id="statusDot" style="background:var(--text3)"></div>
-    <span style="font-family:var(--mono);font-size:10px;color:var(--text3)" id="statusTxt">offline</span>
+    <button class="btn-load-hdr" onclick="loadAll()" aria-label="Carregar dados">▶ Carregar</button>
+    <button class="btn-cfg" onclick="openCfg()" aria-label="Configurações" title="Configurações">⚙</button>
+    <button class="btn-help" onclick="openHelp()" aria-label="Como funciona?" title="Como funciona?">?</button>
+    <div class="status-dot" id="statusDot" style="background:var(--text3)" aria-hidden="true"></div>
+    <span style="font-family:var(--mono);font-size:10px;color:var(--text3)" id="statusTxt" aria-live="polite">offline</span>
   </div>
 </div>
 
-<!-- ── Config ── -->
-<div class="cfg-bar">
-  <input type="password" id="bsdKey"   placeholder="🔑 BSD API Key">
-  <input type="password" id="ghToken"  placeholder="🐙 GitHub Token">
-  <input type="password" id="tgToken"  placeholder="📱 TG Token">
-  <input type="text"     id="tgChat"   placeholder="Chat ID" style="max-width:110px">
-  <input type="email"    id="emailTo"  placeholder="✉️ Email" style="max-width:170px">
-  <button class="btn-load" onclick="loadAll()">▶ Carregar</button>
-  <button class="btn-tg"   onclick="testTG()">TG</button>
-  <button class="phase-btn active" id="phaseDevBtn" onclick="setCurrentPhase('dev')">DEV</button>
-  <button class="phase-btn" id="phaseLiveBtn" onclick="setCurrentPhase('live')">LIVE</button>
-  <!-- auto-log sempre activo — mantém elemento no DOM para JS -->
-  <input type="checkbox" id="autoLogChk" checked style="display:none">
-  <span id="autoLabel" style="display:none">DEV</span>
+<!-- ── Load progress bar ── -->
+<div class="load-progress" id="loadProgress" role="status" aria-label="A carregar dados">
+  <span class="load-progress-step" id="loadProgressStep">A iniciar…</span>
+  <div class="load-progress-track">
+    <div class="load-progress-bar" id="loadProgressBar"></div>
+  </div>
 </div>
 
-<!-- ── Tabs ── -->
-<div class="tabs">
-  <div class="tab active" id="tab-scan" onclick="switchTab('scan')">🔍 Scanner</div>
-  <div class="tab" id="tab-sharp" onclick="switchTab('sharp')">🎯 Sharp 1X2</div>
-  <div class="tab" id="tab-live" onclick="switchTab('live')" style="color:var(--red)">⚡ Live</div>
-  <div class="tab" id="tab-dash" onclick="switchTab('dash')">📊 Dashboard</div>
+<!-- ── Config modal ── -->
+<div class="cfg-modal" id="cfgModal" hidden role="dialog" aria-modal="true" aria-labelledby="cfgModalTitle">
+  <div class="cfg-modal-box">
+    <div class="cfg-modal-head">
+      <div>
+        <div class="cfg-modal-head-title" id="cfgModalTitle">⚙ Configurações</div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:2px">As chaves são guardadas localmente no browser</div>
+      </div>
+      <button class="help-close" onclick="closeCfg()" aria-label="Fechar configurações">✕</button>
+    </div>
+    <div class="cfg-modal-body">
+      <div class="cfg-field">
+        <label for="bsdKey">BSD API Key</label>
+        <input type="password" id="bsdKey" placeholder="Chave de acesso à API">
+      </div>
+      <div class="cfg-field">
+        <label for="ghToken">GitHub Token</label>
+        <input type="password" id="ghToken" placeholder="Token para backup de picks">
+      </div>
+      <div class="cfg-field">
+        <label for="tgToken">Telegram Bot Token</label>
+        <input type="password" id="tgToken" placeholder="Token do bot Telegram">
+      </div>
+      <div class="cfg-field">
+        <label for="tgChat">Telegram Chat ID</label>
+        <input type="text" id="tgChat" placeholder="ID do canal ou grupo">
+      </div>
+      <div class="cfg-field">
+        <label for="emailTo">Email de relatórios</label>
+        <input type="email" id="emailTo" placeholder="email@exemplo.com">
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;margin-top:4px">
+        <span style="font-family:var(--mono);font-size:11px;color:var(--text3)">Fase:</span>
+        <button class="phase-btn active" id="phaseDevBtn" onclick="setCurrentPhase('dev')">DEV</button>
+        <button class="phase-btn" id="phaseLiveBtn" onclick="setCurrentPhase('live')">LIVE</button>
+      </div>
+    </div>
+    <div class="cfg-modal-footer">
+      <button class="btn-load" onclick="saveCfg();closeCfg();loadAll()">▶ Guardar e Carregar</button>
+      <button class="btn-sm" onclick="testTG()">Testar TG</button>
+      <button class="btn-sm" onclick="saveCfg();closeCfg()">Guardar</button>
+    </div>
+  </div>
 </div>
+
+<!-- hidden inputs kept for JS compatibility (values sync'd from modal) -->
+<input type="checkbox" id="autoLogChk" checked style="display:none">
+<span id="autoLabel" style="display:none">DEV</span>
+
+<!-- ── Tabs ── -->
+<nav class="tabs" role="tablist" aria-label="Secções principais">
+  <div class="tab active" id="tab-scan" role="tab" aria-selected="true" aria-controls="panel-scan" tabindex="0" onclick="switchTab('scan')">🔍 Scanner</div>
+  <div class="tab" id="tab-sharp" role="tab" aria-selected="false" aria-controls="panel-sharp" tabindex="-1" onclick="switchTab('sharp')">🎯 Sharp 1X2</div>
+  <div class="tab" id="tab-live" role="tab" aria-selected="false" aria-controls="panel-live" tabindex="-1" onclick="switchTab('live')" style="color:var(--red)">⚡ Live</div>
+  <div class="tab" id="tab-dash" role="tab" aria-selected="false" aria-controls="panel-dash" tabindex="-1" onclick="switchTab('dash')">📊 Dashboard</div>
+</nav>
 
 
 <!-- ══ SCANNER PANEL ══ -->
@@ -902,6 +1006,11 @@ select option{background:var(--laq-3);color:var(--text)}
     <div id="nWarning" class="warn-banner"></div>
     <div class="filters" style="margin-top:12px;margin-bottom:12px">
       <button class="fb g active" id="filterShorteningBtn" onclick="el('filterShortening').checked=!el('filterShortening').checked;this.classList.toggle('active',el('filterShortening').checked);renderDash()">↘ Shortening</button>
+      <span style="flex:1"></span>
+      <span class="dash-period-label">Período:</span>
+      <button class="fb active" id="dperiod-all" onclick="setDashPeriod(this,'all')">Tudo</button>
+      <button class="fb" id="dperiod-30" onclick="setDashPeriod(this,'30d')">30d</button>
+      <button class="fb" id="dperiod-7" onclick="setDashPeriod(this,'7d')">7d</button>
     </div>
     <div class="dash-kpi" id="dashKpi">
       <div class="kpi-card"><div class="kpi-label">Taxa acerto</div><div class="kpi-val" id="dWR">—</div><div class="kpi-sub" id="dWRsub"></div></div>
@@ -927,7 +1036,10 @@ select option{background:var(--laq-3);color:var(--text)}
       <span style="font-family:var(--mono);font-size:9px;color:var(--text3)" id="proposalsMeta"></span>
     </div>
     <div id="proposalsGrid" style="margin-bottom:12px"></div>
-    <div class="sec-title">Picks recentes</div>
+    <div class="sec-title" style="display:flex;justify-content:space-between;align-items:center">
+      <span>Picks recentes</span>
+      <button class="btn-sm" onclick="exportPicksCSV()" title="Exportar CSV">⬇ CSV</button>
+    </div>
     <div class="picks-table">
       <div class="pt-head"><span>Data</span><span>Jogo</span><span>Odds</span><span>Prob</span><span>Result</span></div>
       <div id="picksBody"><div class="loading" style="padding:20px"><div class="spinner"></div></div></div>
@@ -1143,8 +1255,9 @@ function loadCfg(){
     if(c.e&&el('emailTo'))el('emailTo').value=c.e;
     if(el('autoLogChk')) el('autoLogChk').checked = c.autoLog!==false;
     if(c.phase) setCurrentPhase(c.phase);
-    // Auto-carregar se API key já guardada
+    // Auto-carregar se API key já guardada; caso contrário abre o modal de config
     if(c.k) setTimeout(()=>loadAll(), 300);
+    else setTimeout(()=>openCfg(), 400);
   }catch(e){}
 }
 
@@ -1379,8 +1492,12 @@ function normalizePick(p){
 // ════════════════════════════════════════════════════════════════
 function switchTab(name){
   ['scan','sharp','live','dash'].forEach(t=>{
-    el('tab-'+t)?.classList.toggle('active',t===name);
-    el('panel-'+t)?.classList.toggle('active',t===name);
+    const tab=el('tab-'+t);
+    const panel=el('panel-'+t);
+    tab?.classList.toggle('active',t===name);
+    if(tab) tab.setAttribute('aria-selected',t===name?'true':'false');
+    if(tab) tab.setAttribute('tabindex',t===name?'0':'-1');
+    panel?.classList.toggle('active',t===name);
   });
   if(name==='sharp') renderSharp();
   if(name==='live'&&!liveActive){ liveActive=true; loadLive(); }
@@ -1417,8 +1534,17 @@ async function fetchAll1x2(df){
   return {results:all,count:all.length};
 }
 
+function setProgress(pct,step){
+  const bar=el('loadProgressBar'),lbl=el('loadProgressStep'),wrap=el('loadProgress');
+  if(bar) bar.style.width=pct+'%';
+  if(lbl) lbl.textContent=step||'';
+  if(wrap) wrap.classList.toggle('visible',pct>0&&pct<100);
+  if(pct>=100&&wrap) setTimeout(()=>wrap.classList.remove('visible'),600);
+}
+
 async function loadAll(){
   saveCfg();
+  setProgress(5,'A iniciar…');
   el('statusDot').style.background='var(--amber)';
   el('statusDot').style.boxShadow='none';
   el('statusTxt').textContent='a carregar';
@@ -1427,6 +1553,8 @@ async function loadAll(){
   if(!el('bsdKey').value.trim()){
     el('scanList').innerHTML='<div class="empty">🔑 Preenche a BSD API Key primeiro</div>';
     el('statusTxt').textContent='offline';
+    setProgress(0,'');
+    openCfg();
     return;
   }
 
@@ -1435,6 +1563,7 @@ async function loadAll(){
     const df=now.toISOString().split('T')[0];
     const dt=new Date(now.getTime()+30*3600000).toISOString().split('T')[0];
 
+    setProgress(15,'A buscar eventos e odds…');
     // Fetch paralelo: eventos + predictions + odds
     const [evData, predData, oddsOverData, oddsUnderData, odds1x2Data] = await Promise.all([
       get('/api/v2/events/?status=notstarted&date_from='+df+'&date_to='+dt+'&limit=200'),
@@ -1444,6 +1573,7 @@ async function loadAll(){
       fetchAll1x2(df),
     ]);
 
+    setProgress(35,'A processar eventos…');
     const events = arr(evData);
 
     // Mapas
@@ -1705,6 +1835,7 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
       }));
     }
 
+    setProgress(80,'A calcular scores…');
     allGames=enriched;
     // Ligar score Over ao sharp
     allSharp1x2.forEach(s=>{
@@ -1738,6 +1869,7 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
 
     renderSharp();
 
+    setProgress(100,'Pronto');
     el('statusDot').style.background='var(--green)';
     el('statusDot').style.boxShadow='0 0 6px var(--green)';
     el('statusTxt').textContent='live';
@@ -1762,6 +1894,7 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
       <div style="font-size:12px;color:var(--text3)">${msg}</div>
       ${is401?'<div style="font-size:12px;margin-top:10px">Vai a <strong>sports.bzzoiro.com</strong> → login → gera nova API key</div>':''}
     </div>`;
+    setProgress(0,'');
     el('statusDot').style.background='var(--red)';
     el('statusTxt').textContent='erro';
     console.error('loadAll error:', err);
@@ -3786,13 +3919,18 @@ function renderDash(){
 
   const res=p=>p.result_over25==='WIN'||p.result_over25==='LOSS';
   const onlyShort=document.getElementById('filterShortening')?.checked!==false;
+  // Period cutoff
+  let periodCutoff=null;
+  if(dashPeriod==='30d'){periodCutoff=new Date();periodCutoff.setDate(periodCutoff.getDate()-30);}
+  else if(dashPeriod==='7d'){periodCutoff=new Date();periodCutoff.setDate(periodCutoff.getDate()-7);}
   // Só picks válidos: com casa, fora e data legível, filtro de fase
   const validPicks=allPicks.filter(p=>
     (p.casa||'').length>1 &&
     (p.fora||'').length>1 &&
     p.data && !isNaN(new Date(p.data)) &&
     (!onlyShort || (p.movimento||'').toUpperCase()==='SHORTENING') &&
-    (dashPhase==='all' || (p.phase||'dev')===dashPhase)
+    (dashPhase==='all' || (p.phase||'dev')===dashPhase) &&
+    (!periodCutoff || new Date(p.data)>=periodCutoff)
   );
   const withR=validPicks.filter(res);
 
@@ -5004,6 +5142,17 @@ function toggleLiveLegend(){
 }
 
 // ════════════════════════════════════════════════════════════════
+// CONFIG MODAL
+// ════════════════════════════════════════════════════════════════
+function openCfg(){
+  const m=el('cfgModal');
+  if(m){m.hidden=false;document.body.style.overflow='hidden';}
+}
+function closeCfg(){
+  const m=el('cfgModal');
+  if(m){m.hidden=true;document.body.style.overflow='';}
+}
+
 // HELP MODAL
 // ════════════════════════════════════════════════════════════════
 function openHelp(){
@@ -5014,7 +5163,45 @@ function closeHelp(){
   const m=el('helpModal');
   if(m){m.style.display='none';document.body.style.overflow='';}
 }
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeHelp();});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeHelp();closeCfg();}});
+
+// DASHBOARD PERIOD FILTER
+// ════════════════════════════════════════════════════════════════
+let dashPeriod='all';
+function setDashPeriod(btn, period){
+  dashPeriod=period;
+  ['all','30d','7d'].forEach(p=>{
+    const b=el('dperiod-'+p);
+    if(b) b.classList.toggle('active',p===period);
+  });
+  renderDash();
+}
+
+// CSV EXPORT
+// ════════════════════════════════════════════════════════════════
+function exportPicksCSV(){
+  const picks=allPicks||[];
+  if(!picks.length){alert('Sem picks para exportar.');return;}
+  const rows=[['Data','Casa','Fora','Liga','Odds','Prob','Score','Resultado','Lucro']];
+  picks.forEach(p=>{
+    const d=p.date||p.dt||'';
+    const home=p.home||p.casa||'';
+    const away=p.away||p.fora||'';
+    const league=p.league||p.liga||'';
+    const odds=p.odds||'';
+    const prob=p.prob||'';
+    const score=p.score||'';
+    const res=p.result||p.resultado||'';
+    const pnl=res==='W'?(+(odds)-1).toFixed(2):res==='L'?'-1.00':'';
+    rows.push([d,home,away,league,odds,prob,score,res,pnl]);
+  });
+  const csv=rows.map(r=>r.map(v=>'"'+(String(v).replace(/"/g,'""'))+'"').join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='picks_over25_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();URL.revokeObjectURL(url);
+}
 
 // ════════════════════════════════════════════════════════════════
 // INIT
@@ -5241,8 +5428,8 @@ window._syncInterval = setInterval(async()=>{
         <div class="help-row">
           <div class="help-row-icon">2️⃣</div>
           <div class="help-row-body">
-            <div class="help-row-title">Ver a aba 📌 Picks</div>
-            <div class="help-row-desc">Se o número de picks aparecer no badge, há jogos Short+Sharp qualificados hoje. Esses são os picks de maior confiança.</div>
+            <div class="help-row-title">Filtro 📌 Picks no Scanner</div>
+            <div class="help-row-desc">No Scanner, clica em <strong>📌 Picks</strong> para ver só os jogos Short+Sharp qualificados hoje. Esses são os picks de maior confiança. Se o badge mostrar um número, há picks activos.</div>
           </div>
         </div>
         <div class="help-row">
