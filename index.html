@@ -1531,9 +1531,10 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
         const pinnMovePct = pinnMove!=null?Math.abs(pinnMove):0;
         const movement = o.mov||(pinnMove!=null?pinnMove>0?'SHORTENING':'DRIFTING':null);
 
-        // ── Critério 2: Timing — quanto mais perto mais valioso ──
-        // Multiplica o score se o movimento for recente
-        const timingBonus = hoursToKO<=2?3:hoursToKO<=6?2:hoursToKO<=12?1.5:1.0;
+        // ── Critério 2: Timing — sinais cedo têm mais ROI (dados históricos N=192)
+        // >24h: +3.4% ROI · 3-6h: +2.1% · 1-3h: -30.6% · <1h: -14.8%
+        // Sinais tardios (<3h) são já reacção a notícias/alinhamentos e o mercado reagiu
+        const timingBonus = hoursToKO>24?1.4:hoursToKO>12?1.2:hoursToKO>6?1.0:hoursToKO>3?0.8:0.6;
 
         // ── Critério 3: Divergência Pinnacle vs recreativas ──
         const recrAvg=o.recr.length?o.recr.reduce((s,v)=>s+v,0)/o.recr.length:null;
@@ -1546,26 +1547,32 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
         // ── Critério 4: Múltiplos books a mover ──
         const multiBook = o.recrMoving>=2; // 2+ books recreativas também moveram
 
-        // ── Score composto ──
+        // ── Score composto — calibrado por ROI histórico (N=231 resolvidos) ──
+        // Sweet spot: 1-2% movimento → ROI +9.3%
+        // 2-3%: -14.7% ROI (já parcialmente precificado)
+        // 3-5%: -25.8% ROI · 5%+: -19.2% ROI (overshoot, mercado já reagiu)
+        // <1%: -13.3% ROI (ruído — divergência sem movimento sólido)
         let score=0;
-        if(pinnMovePct>=5) score+=50;
-        else if(pinnMovePct>=3) score+=35;
-        else if(pinnMovePct>=2) score+=20;
-        else if(pinnMovePct>=1) score+=10;
-        else if(div>=5) score+=8; // divergência sem movimento claro
+        if(pinnMovePct>=1&&pinnMovePct<2){score+=30;}  // zona dourada
+        else if(pinnMovePct>=2&&pinnMovePct<3){score+=14;}  // já a perder valor
+        else if(pinnMovePct>=3&&pinnMovePct<5){score+=7;}   // oversized, market reagiu
+        else if(pinnMovePct>=5){score+=5;}                  // move extremo já precificado
+        else if(div>=5){score+=8;}                          // só divergência, sem move
 
         score = Math.round(score * timingBonus);
         if(multiBook) score+=15;
-        if(movement==='SHORTENING') score+=5;
+        if(movement==='SHORTENING') score+=8;  // confirma direcção (era 5)
 
         // Filtro mínimo: só sinais com score ≥15
         if(score<8) return;
 
         // ── Label ──
-        // STEAM: ≤30min ao KO (dinheiro sharp de alta certeza)
+        // STEAM: move ≥5% + ≤30min (raro, move muito agressivo imediatamente antes)
+        // SHARP: 1-2% move (sweet spot de ROI) OU 2%+ com timing >6h (cedo e sólido)
+        // WATCH: tudo o resto acima do threshold mínimo
         let label;
         if(pinnMovePct>=5&&hoursToKO<=0.5) label='STEAM';
-        else if(pinnMovePct>=5||(pinnMovePct>=2&&hoursToKO<=12)) label='SHARP';
+        else if((pinnMovePct>=1&&pinnMovePct<2)||(pinnMovePct>=2&&hoursToKO>6)) label='SHARP';
         else label='WATCH';
 
         sigs.push({
@@ -2628,7 +2635,7 @@ function renderDash1x2(){
     '</svg><div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:4px">'+
     withOdds.length+' picks c/odds · '+(lastV>=0?'+':'')+lastV.toFixed(2)+'u acumulado</div>';
 
-  // Breakdown por outcome
+  // Breakdown por outcome — DRAW marcado como zona a eliminar
   const byOut={HOME:[],DRAW:[],AWAY:[]};
   withOdds.forEach(p=>{
     const out=(p.outcome||'').toUpperCase();
@@ -2640,12 +2647,46 @@ function renderDash1x2(){
     const pf=arr.reduce((s,p)=>s+(p.resultado_outcome==='WIN'?parseFloat(p.odds_entrada)-1:-1),0);
     const r=(pf/arr.length*100).toFixed(1);
     const col=parseFloat(r)>=0?'var(--green)':'var(--red)';
-    return '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border)">'+
-      '<span style="font-family:var(--mono);font-size:11px">'+out+'</span>'+
+    const warn=out==='DRAW'?'<span style="font-size:9px;color:var(--red);margin-left:4px">⚠ ELIMINAR</span>':'';
+    return '<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)">'+
+      '<span style="font-family:var(--mono);font-size:11px">'+out+warn+'</span>'+
       '<span style="font-size:11px">'+w+'/'+arr.length+' WR'+(w/arr.length*100).toFixed(0)+'%</span>'+
       '<span style="font-family:var(--mono);font-size:11px;color:'+col+'">'+(parseFloat(r)>=0?'+':'')+r+'%</span>'+
     '</div>';
   }).join('') || '<div style="font-size:11px;color:var(--text3);padding:8px">Sem dados</div>';
+
+  // ── Zona Rentável — sub-segmentos com ROI+ confirmado pelos dados históricos ──
+  const _zHome=withOdds.filter(p=>(p.outcome||'').toUpperCase()==='HOME');
+  const _zGolden=_zHome.filter(p=>{
+    const o=parseFloat(p.odds_entrada||0), d=parseFloat(p.drop_pct||0);
+    return o>=2.5&&o<3.0&&d>=1&&d<2;
+  });
+  const _zOdds=_zHome.filter(p=>{const o=parseFloat(p.odds_entrada||0);return o>=2.5&&o<3.0;});
+  const _zDrop=_zHome.filter(p=>{const d=parseFloat(p.drop_pct||0);return d>=1&&d<2;});
+  const _calcZ=ps=>{
+    if(!ps.length) return null;
+    const w=ps.filter(p=>p.resultado_outcome==='WIN').length;
+    const pf=ps.reduce((s,p)=>s+(p.resultado_outcome==='WIN'?parseFloat(p.odds_entrada)-1:-1),0);
+    return {n:ps.length,wr:(w/ps.length*100).toFixed(0),roi:(pf/ps.length*100).toFixed(1)};
+  };
+  const _zRows=[
+    ['odds 2.50-2.99',_calcZ(_zOdds)],
+    ['drop 1-2%',_calcZ(_zDrop)],
+    ['drop 1-2% + odds 2.50-2.99',_calcZ(_zGolden)],
+  ].filter(([,r])=>r&&r.n>0);
+  if(_zRows.length){
+    const _zHtml='<div style="font-size:10px;font-weight:600;color:var(--green);margin-bottom:6px">📊 ZONA RENTÁVEL (HOME)</div>'+
+    _zRows.map(([name,r])=>{
+      const c=parseFloat(r.roi)>=0?'var(--green)':'var(--red)';
+      return '<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)">'+
+        '<span style="font-family:var(--mono);font-size:10px">'+name+'</span>'+
+        '<span style="font-size:10px">n='+r.n+' WR'+r.wr+'%</span>'+
+        '<span style="font-family:var(--mono);font-size:10px;color:'+c+'">'+(parseFloat(r.roi)>=0?'+':'')+r.roi+'%</span>'+
+      '</div>';
+    }).join('');
+    // Append zona rentável after outcomes breakdown
+    el('d1x2ByOutcome').innerHTML += '<div style="margin-top:10px;padding:8px;background:rgba(22,163,74,.06);border:1px solid rgba(22,163,74,.2);border-radius:6px">'+_zHtml+'</div>';
+  }
 
   // Breakdown por timing
   const timBuckets=[['<6h',0,6],['6-12h',6,12],['12-24h',12,24],['>24h',24,9999]];
@@ -2700,7 +2741,7 @@ function renderDash1x2(){
       '<div>'+
         '<div style="font-size:11px;font-weight:600">'+(p.casa||'?')+' vs '+(p.fora||'?')+'</div>'+
         '<div style="font-size:10px;color:var(--text3)">'+ds+' · '+(p.outcome||'?')+' · @'+(parseFloat(p.odds_entrada||0).toFixed(2)||'—')+'</div>'+
-        '<div style="font-size:10px;color:var(--text3)">'+(p.label||'')+' · NVP '+(p.nvp||'—')+(p.clv?' · CLV '+(parseFloat(p.clv)>=0?'+':'')+parseFloat(p.clv).toFixed(1)+'%':'')+'</div>'+
+        '<div style="font-size:10px;color:var(--text3)">'+(p.label||'')+' · NVP '+(p.nvp||'—')+((p.drop_pct&&parseFloat(p.drop_pct)>0)?' · move '+parseFloat(p.drop_pct).toFixed(1)+'%':'')+(p.clv?' · CLV '+(parseFloat(p.clv)>=0?'+':'')+parseFloat(p.clv).toFixed(1)+'%':'')+'</div>'+
       '</div>'+
       '<span style="font-size:14px">'+resIcon+'</span>'+
     '</div>';
