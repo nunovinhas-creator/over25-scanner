@@ -734,90 +734,24 @@ select option{background:var(--laq-3);color:var(--text)}
 
 <!-- ══ SHARP 1X2 PANEL ══ -->
 <div class="panel" id="panel-sharp">
-  <!-- Sub-tabs -->
-  <div style="display:flex;gap:0;margin-top:12px;border-bottom:1px solid var(--border)">
-    <button class="stab active" id="stab-sinais" onclick="switchSharpTab('sinais')">📡 Sinais</button>
-    <button class="stab" id="stab-dash1x2" onclick="switchSharpTab('dash1x2')">📊 Dashboard 1X2</button>
+  <div class="stats-bar" style="margin-top:12px">
+    <div class="stat-card"><div class="stat-label">Jogos</div><div class="stat-val" id="sh1Total">—</div></div>
+    <div class="stat-card"><div class="stat-label">STEAM</div><div class="stat-val" id="sh1Steam" style="color:var(--red)">—</div></div>
+    <div class="stat-card"><div class="stat-label">SHARP</div><div class="stat-val" id="sh1Sharp" style="color:var(--purple)">—</div></div>
+    <div class="stat-card"><div class="stat-label">WATCH</div><div class="stat-val" id="sh1Watch" style="color:var(--amber)">—</div></div>
   </div>
-
-  <!-- Sub-painel: Sinais -->
-  <div id="spanel-sinais">
-    <div class="stats-bar" style="margin-top:12px">
-      <div class="stat-card"><div class="stat-label">Jogos</div><div class="stat-val" id="sh1Total">—</div></div>
-      <div class="stat-card"><div class="stat-label">STEAM</div><div class="stat-val" id="sh1Steam" style="color:var(--red)">—</div></div>
-      <div class="stat-card"><div class="stat-label">SHARP</div><div class="stat-val" id="sh1Sharp" style="color:var(--purple)">—</div></div>
-      <div class="stat-card"><div class="stat-label">WATCH</div><div class="stat-val" id="sh1Watch" style="color:var(--amber)">—</div></div>
-    </div>
-    <div class="filters">
-      <button class="fb active" onclick="setSharpFilter(this,'all')">Todos</button>
-      <button class="fb" onclick="setSharpFilter(this,'steam')">🔥 STEAM</button>
-      <button class="fb" onclick="setSharpFilter(this,'sharp')">🎯 SHARP</button>
-      <button class="fb" onclick="setSharpFilter(this,'watch')">👁 WATCH</button>
-      <select id="sharpSort" onchange="renderSharp()" style="margin-left:auto">
-        <option value="div">Por score sharp</option>
-        <option value="date">Por data</option>
-      </select>
-    </div>
-    <div class="dbg" id="dbgSharp" style="display:none"></div>
-    <div id="sharpList"><div class="empty">Clica em <strong>Carregar</strong> para ver sinais 1X2.</div></div>
+  <div class="filters">
+    <button class="fb active" onclick="setSharpFilter(this,'all')">Todos</button>
+    <button class="fb" onclick="setSharpFilter(this,'steam')">🔥 STEAM</button>
+    <button class="fb" onclick="setSharpFilter(this,'sharp')">🎯 SHARP</button>
+    <button class="fb" onclick="setSharpFilter(this,'watch')">👁 WATCH</button>
+    <select id="sharpSort" onchange="renderSharp()" style="margin-left:auto">
+      <option value="div">Por score sharp</option>
+      <option value="date">Por data</option>
+    </select>
   </div>
-
-  <!-- Sub-painel: Dashboard 1X2 -->
-  <div id="spanel-dash1x2" style="display:none">
-    <div style="margin-top:12px;margin-bottom:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-      <label style="display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--text2);cursor:pointer">
-        <input type="checkbox" id="filter1x2Home" checked onchange="renderDash1x2()" style="accent-color:var(--green);width:14px;height:14px">
-        Só HOME
-      </label>
-    </div>
-    <!-- mantém IDs no DOM para JS -->
-    <button id="btnSync1x2" style="display:none"></button>
-    <div id="syncStatus1x2" style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:8px;display:none"></div>
-
-    <!-- KPIs -->
-    <div class="stats-bar">
-      <div class="stat-card">
-        <div class="stat-label">TAXA ACERTO</div>
-        <div class="stat-val" id="d1x2WR" style="font-size:22px">—</div>
-        <div style="font-size:10px;color:var(--text3);margin-top:2px" id="d1x2WRn">0 apostas</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">ROI GLOBAL</div>
-        <div class="stat-val" id="d1x2ROI" style="font-size:22px">—</div>
-        <div style="font-size:10px;color:var(--text3);margin-top:2px" id="d1x2ROIn">+0.00u (0 c/odds)</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">CLV MÉDIO</div>
-        <div class="stat-val" id="d1x2CLV" style="font-size:22px">—</div>
-        <div style="font-size:10px;color:var(--text3);margin-top:2px">vs closing line</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">SÉRIE</div>
-        <div class="stat-val" id="d1x2Serie" style="font-size:22px">—</div>
-        <div style="font-size:10px;color:var(--text3);margin-top:2px" id="d1x2SerieType"></div>
-      </div>
-    </div>
-
-    <!-- Curva ROI -->
-    <div class="dash-card" style="margin-top:12px">
-      <div class="dash-card-title">CURVA ROI ACUMULADO</div>
-      <div id="d1x2Curve"><div class="empty" style="padding:20px">Sem dados com resultado</div></div>
-    </div>
-
-    <!-- Breakdown -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
-      <div class="dash-card"><div class="dash-card-title">POR OUTCOME</div><div id="d1x2ByOutcome"></div></div>
-      <div class="dash-card"><div class="dash-card-title">POR TIMING</div><div id="d1x2ByTiming"></div></div>
-      <div class="dash-card"><div class="dash-card-title">STEAM</div><div id="d1x2BySteam"></div></div>
-      <div class="dash-card"><div class="dash-card-title">CLV TRACKER</div><div id="d1x2CLVTrack"></div></div>
-    </div>
-
-    <!-- Picks recentes -->
-    <div class="dash-card" style="margin-top:12px">
-      <div class="dash-card-title">PICKS RECENTES 1X2</div>
-      <div id="d1x2Picks"></div>
-    </div>
-  </div>
+  <div class="dbg" id="dbgSharp" style="display:none"></div>
+  <div id="sharpList"><div class="empty">Clica em <strong>Carregar</strong> para ver sinais 1X2.</div></div>
 </div>
 
 <!-- ══ LIVE PANEL ══ -->
@@ -950,56 +884,120 @@ select option{background:var(--laq-3);color:var(--text)}
 
 <!-- ══ DASHBOARD PANEL ══ -->
 <div class="panel" id="panel-dash">
-  <!-- elementos mantidos no DOM para JS -->
+  <!-- elementos mantidos no DOM para JS (fora dos sub-painéis para compatibilidade) -->
   <button id="btnSync" style="display:none"></button>
   <button id="btnReactSync" style="display:none"></button>
   <input type="checkbox" id="filterShortening" checked style="display:none" onchange="renderDash()">
   <div id="syncStatus" style="display:none;font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:8px"></div>
+  <button id="btnSync1x2" style="display:none"></button>
+  <div id="syncStatus1x2" style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:8px;display:none"></div>
 
-  <div id="nWarning" class="warn-banner"></div>
-  <div class="filters" style="margin-top:12px;margin-bottom:12px">
-    <span class="filter-label">Fase</span>
-    <button class="fb active" id="dashPhaseAll" onclick="setDashPhase('all')">Todas</button>
-    <button class="fb" id="dashPhaseDev" onclick="setDashPhase('dev')">DEV</button>
-    <button class="fb" id="dashPhaseLive" onclick="setDashPhase('live')">LIVE</button>
-    <button class="fb g active" id="filterShorteningBtn" onclick="el('filterShortening').checked=!el('filterShortening').checked;this.classList.toggle('active',el('filterShortening').checked);renderDash()">↘ Shortening</button>
-    <button class="btn-sm blue" onclick="openReportModal()" style="margin-left:auto">📊 Relatório</button>
+  <!-- Sub-tabs -->
+  <div style="display:flex;gap:0;margin-top:12px;border-bottom:1px solid var(--border);align-items:center">
+    <button class="stab active" id="dtab-over25" onclick="switchDashTab('over25')">📈 Over 2.5</button>
+    <button class="stab" id="dtab-sharp1x2" onclick="switchDashTab('sharp1x2')">🎯 Sharp 1X2</button>
+    <button class="stab" id="dtab-live" onclick="switchDashTab('live')">⚡ Live</button>
+    <div style="margin-left:auto;padding-right:4px">
+      <button class="btn-sm blue" onclick="openReportModal()">📊 Relatório</button>
+    </div>
   </div>
-  <div class="dash-kpi" id="dashKpi">
-    <div class="kpi-card"><div class="kpi-label">Taxa acerto</div><div class="kpi-val" id="dWR">—</div><div class="kpi-sub" id="dWRsub"></div></div>
-    <div class="kpi-card"><div class="kpi-label">ROI global</div><div class="kpi-val" id="dROI">—</div><div class="kpi-sub" id="dROIsub"></div></div>
-    <div class="kpi-card"><div class="kpi-label">ROI 7 dias</div><div class="kpi-val" id="dROI7">—</div></div>
-    <div class="kpi-card"><div class="kpi-label">CLV médio</div><div class="kpi-val" id="dCLV">—</div><div class="kpi-sub" id="dCLVsub">vs closing line</div></div>
-    <div class="kpi-card"><div class="kpi-label">Profit Factor</div><div class="kpi-val" id="dPF">—</div><div class="kpi-sub">lucro bruto / perda</div></div>
-    <div class="kpi-card"><div class="kpi-label">Max Drawdown</div><div class="kpi-val" id="dDD">—</div><div class="kpi-sub">pior período pico→vale</div></div>
-    <div class="kpi-card"><div class="kpi-label">Série</div><div class="kpi-val" id="dStreak">—</div><div class="kpi-sub" id="dStreakSub"></div></div>
+
+  <!-- ── Sub-painel: Over 2.5 ── -->
+  <div id="dpanel-over25">
+    <div id="nWarning" class="warn-banner"></div>
+    <div class="filters" style="margin-top:12px;margin-bottom:12px">
+      <span class="filter-label">Fase</span>
+      <button class="fb active" id="dashPhaseAll" onclick="setDashPhase('all')">Todas</button>
+      <button class="fb" id="dashPhaseDev" onclick="setDashPhase('dev')">DEV</button>
+      <button class="fb" id="dashPhaseLive" onclick="setDashPhase('live')">LIVE</button>
+      <button class="fb g active" id="filterShorteningBtn" onclick="el('filterShortening').checked=!el('filterShortening').checked;this.classList.toggle('active',el('filterShortening').checked);renderDash()">↘ Shortening</button>
+    </div>
+    <div class="dash-kpi" id="dashKpi">
+      <div class="kpi-card"><div class="kpi-label">Taxa acerto</div><div class="kpi-val" id="dWR">—</div><div class="kpi-sub" id="dWRsub"></div></div>
+      <div class="kpi-card"><div class="kpi-label">ROI global</div><div class="kpi-val" id="dROI">—</div><div class="kpi-sub" id="dROIsub"></div></div>
+      <div class="kpi-card"><div class="kpi-label">ROI 7 dias</div><div class="kpi-val" id="dROI7">—</div></div>
+      <div class="kpi-card"><div class="kpi-label">CLV médio</div><div class="kpi-val" id="dCLV">—</div><div class="kpi-sub" id="dCLVsub">vs closing line</div></div>
+      <div class="kpi-card"><div class="kpi-label">Profit Factor</div><div class="kpi-val" id="dPF">—</div><div class="kpi-sub">lucro bruto / perda</div></div>
+      <div class="kpi-card"><div class="kpi-label">Max Drawdown</div><div class="kpi-val" id="dDD">—</div><div class="kpi-sub">pior período pico→vale</div></div>
+      <div class="kpi-card"><div class="kpi-label">Série</div><div class="kpi-val" id="dStreak">—</div><div class="kpi-sub" id="dStreakSub"></div></div>
+    </div>
+    <div class="roi-chart">
+      <div class="roi-title">Curva ROI acumulado — Over 2.5</div>
+      <div id="roiChart" style="height:70px"><div class="empty" style="padding:10px">Sem dados</div></div>
+    </div>
+    <div class="sec-title">Resultados por filtro</div>
+    <div class="bk-grid" id="bkGrid"></div>
+    <div id="confluenceSection" style="display:none">
+      <div class="sec-title">🔗 Confluência Scanner + Sharp</div>
+      <div id="confluenceGrid" style="margin-bottom:12px"></div>
+    </div>
+    <div class="sec-title" style="display:flex;justify-content:space-between;align-items:center">
+      <span>💡 Análise e sugestões</span>
+      <span style="font-family:var(--mono);font-size:9px;color:var(--text3)" id="proposalsMeta"></span>
+    </div>
+    <div id="proposalsGrid" style="margin-bottom:12px"></div>
+    <div class="sec-title">Picks recentes</div>
+    <div class="picks-table">
+      <div class="pt-head"><span>Data</span><span>Jogo</span><span>Odds</span><span>Prob</span><span>Result</span></div>
+      <div id="picksBody"><div class="loading" style="padding:20px"><div class="spinner"></div></div></div>
+    </div>
   </div>
-  <div class="roi-chart">
-    <div class="roi-title">Curva ROI acumulado</div>
-    <div id="roiChart" style="height:70px"><div class="empty" style="padding:10px">Sem dados</div></div>
+
+  <!-- ── Sub-painel: Sharp 1X2 ── -->
+  <div id="dpanel-sharp1x2" style="display:none">
+    <div style="margin-top:12px;margin-bottom:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <label style="display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--text2);cursor:pointer">
+        <input type="checkbox" id="filter1x2Home" checked onchange="renderDash1x2()" style="accent-color:var(--green);width:14px;height:14px">
+        Só HOME
+      </label>
+    </div>
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-label">TAXA ACERTO</div>
+        <div class="stat-val" id="d1x2WR" style="font-size:22px">—</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:2px" id="d1x2WRn">0 apostas</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">ROI GLOBAL</div>
+        <div class="stat-val" id="d1x2ROI" style="font-size:22px">—</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:2px" id="d1x2ROIn">+0.00u (0 c/odds)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">CLV MÉDIO</div>
+        <div class="stat-val" id="d1x2CLV" style="font-size:22px">—</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:2px">vs closing line</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">SÉRIE</div>
+        <div class="stat-val" id="d1x2Serie" style="font-size:22px">—</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:2px" id="d1x2SerieType"></div>
+      </div>
+    </div>
+    <div class="dash-card" style="margin-top:12px">
+      <div class="dash-card-title">CURVA ROI ACUMULADO — Sharp 1X2</div>
+      <div id="d1x2Curve"><div class="empty" style="padding:20px">Sem dados com resultado</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
+      <div class="dash-card"><div class="dash-card-title">POR OUTCOME</div><div id="d1x2ByOutcome"></div></div>
+      <div class="dash-card"><div class="dash-card-title">POR TIMING</div><div id="d1x2ByTiming"></div></div>
+      <div class="dash-card"><div class="dash-card-title">STEAM / SHARP / WATCH</div><div id="d1x2BySteam"></div></div>
+      <div class="dash-card"><div class="dash-card-title">CLV TRACKER</div><div id="d1x2CLVTrack"></div></div>
+    </div>
+    <div class="dash-card" style="margin-top:12px">
+      <div class="dash-card-title">PICKS RECENTES 1X2</div>
+      <div id="d1x2Picks"></div>
+    </div>
   </div>
-  <div class="sec-title">Resultados por filtro</div>
-  <div class="bk-grid" id="bkGrid"></div>
-  <div class="sec-title" style="display:flex;justify-content:space-between;align-items:center">
-    <span>💡 Análise e sugestões</span>
-    <span style="font-family:var(--mono);font-size:9px;color:var(--text3)" id="proposalsMeta"></span>
-  </div>
-  <div id="proposalsGrid" style="margin-bottom:12px"></div>
-  <div class="sec-title" style="display:flex;justify-content:space-between;align-items:center">
-    <span>📡 Padrões ao vivo</span>
-    <span style="font-family:var(--mono);font-size:9px;color:var(--text3)" id="obsMeta"></span>
-  </div>
-  <div id="obsGrid" style="margin-bottom:12px">
-    <div class="empty" style="padding:14px">Sem observações ainda. Abre o módulo Live para começar a registar.</div>
-  </div>
-  <div id="confluenceSection" style="display:none">
-    <div class="sec-title">🔗 Confluência Scanner + Sharp</div>
-    <div id="confluenceGrid" style="margin-bottom:12px"></div>
-  </div>
-  <div class="sec-title">Picks recentes</div>
-  <div class="picks-table">
-    <div class="pt-head"><span>Data</span><span>Jogo</span><span>Odds</span><span>Prob</span><span>Result</span></div>
-    <div id="picksBody"><div class="loading" style="padding:20px"><div class="spinner"></div></div></div>
+
+  <!-- ── Sub-painel: Live Padrões ── -->
+  <div id="dpanel-live" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;margin-bottom:4px">
+      <div style="font-family:var(--mono);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em">Padrões ao Vivo — Histórico de observações</div>
+      <span style="font-family:var(--mono);font-size:9px;color:var(--text3)" id="obsMeta"></span>
+    </div>
+    <div id="obsGrid" style="margin-bottom:12px">
+      <div class="empty" style="padding:14px">Sem observações ainda. Abre o módulo Live para começar a registar.</div>
+    </div>
   </div>
 </div>
 
@@ -1396,7 +1394,10 @@ function switchTab(name){
   if(name==='picks') renderPicksPub();
   if(name==='sharp') renderSharp();
   if(name==='live'&&!liveActive){ liveActive=true; loadLive(); }
-  if(name==='dash'&&!_dashLoaded){ loadDash(); }
+  if(name==='dash'){
+    switchDashTab(_activeDashTab||'over25');
+    if(!_dashLoaded) loadDash();
+  }
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -2325,13 +2326,16 @@ async function savePick(btn){
 // ════════════════════════════════════════════════════════════════
 let sharpFilter='all';
 
-function switchSharpTab(tab){
-  ['sinais','dash1x2'].forEach(t=>{
-    el('spanel-'+t).style.display=t===tab?'':'none';
-    const b=el('stab-'+t);
-    if(b) b.classList.toggle('active',t===tab);
+function switchSharpTab(tab){ /* legacy no-op — dashboard consolidado no separador Dashboard */ }
+
+let _activeDashTab = 'over25';
+function switchDashTab(tab){
+  _activeDashTab = tab;
+  ['over25','sharp1x2','live'].forEach(t=>{
+    el('dtab-'+t)?.classList.toggle('active', t===tab);
+    const p = el('dpanel-'+t);
+    if(p) p.style.display = t===tab ? '' : 'none';
   });
-  if(tab==='dash1x2') loadDash1x2();
 }
 
 function switchLiveTab(tab){
@@ -3619,6 +3623,7 @@ async function loadDash(){
     allObs = Array.isArray(obs) ? obs : [];
     _dashLoaded=true;
     renderDash();
+    renderDash1x2();
     fillObsResults().then(()=>renderObsDashboard()).catch(()=>renderObsDashboard());
   }catch(e){el('picksBody').innerHTML='<div class="empty">Erro ao carregar picks: '+esc(e.message)+'</div>';}
 }
