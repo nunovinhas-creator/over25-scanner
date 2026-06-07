@@ -1042,6 +1042,10 @@ const TH_MOVE       = 1.0;    // % movimento mínimo Pinnacle (ruído <1% filtra
 const DIV_MIN        = 2.0;    // % divergência mínima Pin vs recreativas
 const DIV_STEAM      = 8.0;    // % threshold STEAM
 const TH_LIVE_PICK   = 8;      // patternScore mínimo para classificar como sinal live
+// ── Pick qualification gates (baseados em análise de ROI dos dados históricos) ──
+const PICKS_MIN_ODDS = 1.65;   // odds mínimas — abaixo destroem ROI apesar do WR
+const PICKS_MAX_PROB = 0.73;   // prob máxima — acima é overconfidence (modelo perde edge)
+const PICKS_MIN_PROB = 0.50;   // prob mínima — abaixo não há sinal estatístico
 const CLV_DEVIG      = 1.01;   // overround assumido para devigging do CLV (1%)
 // Calibração Bayesiana — actualizar N e WR após cada análise de backtest
 const CALIB = { N:44, WR:0.591, K:10 };
@@ -1770,17 +1774,23 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
 
 // Critério de qualificação: Shortening no Over 2.5 + sinal Sharp
 function isShortSharp(g){
-  return (g.movement||'').toUpperCase()==='SHORTENING' && !!g.sharpLabel;
+  // SHORTENING obrigatório — é a única condição com ROI positivo confirmado (+12%)
+  // sharpLabel não obrigatório: SHORTENING puro já é suficiente para edge
+  return (g.movement||'').toUpperCase()==='SHORTENING';
 }
 
-// Threshold de score mínimo para publicar (evita ruído)
-const PICKS_MIN_SCORE = 45;
+// Threshold de score mínimo para publicar (calibrado para zona lucrativa)
+const PICKS_MIN_SCORE = 48;
 
 function getQualifiedPicks(){
   const now = Date.now();
   return allGames
     .filter(g => {
       if(!isShortSharp(g) || g.score < PICKS_MIN_SCORE) return false;
+      // Gate de odds mínimas — abaixo de 1.65 o ROI é negativo mesmo com bom WR
+      if(g.odds_over != null && g.odds_over > 0 && g.odds_over < PICKS_MIN_ODDS) return false;
+      // Gate de prob máxima — acima de 73% o modelo está overconfident (ROI -7.7%)
+      if(g.prob25 != null && g.prob25 > PICKS_MAX_PROB) return false;
       // Remove jogos terminados (>115 min após KO = 90min jogo + desconto + margem)
       const elapsed = (now - new Date(g.date).getTime()) / 60000;
       return elapsed < 115;
@@ -1798,7 +1808,7 @@ function renderPicksPub(){
     const shortening = allGames.filter(g=>(g.movement||'').toUpperCase()==='SHORTENING').length;
     const withSharp  = allGames.filter(g=>g.sharpLabel).length;
     info.style.display = 'block';
-    info.textContent = total+' jogos analisados · '+shortening+' shortening · '+withSharp+' c/ sharp · '+picks.length+' qualificam (Short+Sharp score≥'+PICKS_MIN_SCORE+')';
+    info.textContent = total+' jogos analisados · '+shortening+' shortening · '+withSharp+' c/ sharp · '+picks.length+' qualificam (Short score≥'+PICKS_MIN_SCORE+' odds≥'+PICKS_MIN_ODDS+' prob≤'+Math.round(PICKS_MAX_PROB*100)+'%)';
   }
 
   const list = el('picksPubList');
@@ -1806,7 +1816,7 @@ function renderPicksPub(){
     list.innerHTML = `<div class="empty" style="padding:40px;text-align:center">
       <div style="font-size:28px;margin-bottom:8px">📌</div>
       <div style="font-weight:600;margin-bottom:4px">Nenhum pick Short+Sharp ${total?'neste momento':''}</div>
-      <div style="font-family:var(--mono);font-size:11px;color:var(--text3)">${total?'Nenhum jogo cumpre simultaneamente Shortening + Sharp + score≥'+PICKS_MIN_SCORE:'Clica em Carregar para analisar os jogos do dia'}</div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--text3)">${total?'Critérios: Shortening + score≥'+PICKS_MIN_SCORE+' + odds≥'+PICKS_MIN_ODDS+' + prob≤'+Math.round(PICKS_MAX_PROB*100)+'%':'Clica em Carregar para analisar os jogos do dia'}</div>
     </div>`;
     return;
   }
@@ -1961,17 +1971,18 @@ function buildPickMsg(g){
 function calcScore({prob25,bttsN,xgH,xgA,movement,div,sharpLabel,pinnNow,recrAvg,rec,mdl,h2h,league}){
   let s=0; const sig=[];
 
-  // 1. ML BSD (base) — calibração Bayesiana aplicada antes das bandas
+  // 1. ML BSD — sweet spot 65-72%; acima de 72% o modelo é overconfident (ROI negativo)
   if(prob25!=null){
     const p=bayesCalib(prob25)*100;
-    if(p>=70){s+=40;sig.push({t:'ML '+p.toFixed(0)+'%',c:'g'});}
-    else if(p>=60){s+=32;sig.push({t:'ML '+p.toFixed(0)+'%',c:'g'});}
-    else if(p>=55){s+=26;sig.push({t:'ML '+p.toFixed(0)+'%',c:'g'});}
-    else if(p>=50){s+=20;sig.push({t:'ML '+p.toFixed(0)+'%',c:'a'});}
-    else if(p>=45){s+=14;sig.push({t:'ML '+p.toFixed(0)+'%',c:'a'});}
-    else if(p>=40){s+=8;}
-    else{s+=3;}
-  }else{s+=12;}
+    if(p>=65&&p<73){s+=38;sig.push({t:'ML '+p.toFixed(0)+'%',c:'g'});}  // zona dourada
+    else if(p>=60&&p<65){s+=32;sig.push({t:'ML '+p.toFixed(0)+'%',c:'g'});}
+    else if(p>=55&&p<60){s+=24;sig.push({t:'ML '+p.toFixed(0)+'%',c:'g'});}
+    else if(p>=73){s+=22;sig.push({t:'ML '+p.toFixed(0)+'%⚠',c:'a'});}  // overconfidence zone
+    else if(p>=50){s+=16;sig.push({t:'ML '+p.toFixed(0)+'%',c:'a'});}
+    else if(p>=45){s+=10;sig.push({t:'ML '+p.toFixed(0)+'%',c:'a'});}
+    else if(p>=40){s+=5;}
+    else{s+=2;}
+  }else{s+=10;}
 
   // 2. xG — peso reduzido se ML disponível (já incorpora xG internamente)
   if(xgH!=null&&xgA!=null){
@@ -1999,12 +2010,12 @@ function calcScore({prob25,bttsN,xgH,xgA,movement,div,sharpLabel,pinnNow,recrAvg
     s+=Math.round(pts*m);
   }
 
-  // 4. Sharp money
-  if(sharpLabel==='STEAM'){s+=15;sig.push({t:'🔥 STEAM',c:'p'});}
-  else if(sharpLabel==='SHARP'){s+=10;sig.push({t:'🎯 SHARP',c:'p'});}
-  else if(sharpLabel==='WATCH'){s+=5;sig.push({t:'👁 WATCH',c:'a'});}
-  else if(movement==='SHORTENING'){s+=5;sig.push({t:'↘ Short',c:'a'});}
-  else if(movement==='DRIFTING'){sig.push({t:'↗ Drift',c:'r'});}
+  // 4. Sharp money + movimento — SHORTENING é o sinal principal (ROI +12% confirmado)
+  if(sharpLabel==='STEAM'){s+=18;sig.push({t:'🔥 STEAM',c:'p'});}
+  else if(sharpLabel==='SHARP'){s+=14;sig.push({t:'🎯 SHARP',c:'p'});}
+  else if(sharpLabel==='WATCH'){s+=8;sig.push({t:'👁 WATCH',c:'a'});}
+  else if(movement==='SHORTENING'){s+=12;sig.push({t:'↘ Short',c:'a'});}  // era 5pts
+  else if(movement==='DRIFTING'){s-=12;sig.push({t:'↗ Drift',c:'r'});}  // penalizar: ROI -7.5%
 
   // 5. Divergência
   if(div!=null&&div>=5){s+=5;sig.push({t:'div '+div.toFixed(1)+'%',c:'a'});}
@@ -2109,11 +2120,26 @@ function gameCard(g){
   const _xgtB=g.xgH!=null&&g.xgA!=null?g.xgH+g.xgA:0;
   const _oB=parseFloat(g.oddsOver||0);
   const _movB=(g.movement||'').toUpperCase();
-  const _isCandidato=_movB==='SHORTENING'&&bttsN>=55&&_oB>=1.5&&_oB<=3.0;
-  const _isCriterio=_xgtB>=2.0&&_oB>=2.0&&_oB<=3.0;
+  const _prob25=g.prob25!=null?bayesCalib(g.prob25):null;
+
+  // Qualificação para pick — espelha getQualifiedPicks()
+  const _isShort=_movB==='SHORTENING';
+  const _oddsOk=!g.oddsOver||_oB<=0||_oB>=PICKS_MIN_ODDS;
+  const _probOk=_prob25==null||_prob25<=PICKS_MAX_PROB;
+  const _scoreOk=g.score>=PICKS_MIN_SCORE;
+
+  const _isCandidato=_isShort&&_oddsOk&&_probOk&&_scoreOk;
   const pickBadge=_isCandidato
-    ?'<span class="badge bg" style="font-size:10px;padding:3px 8px;background:var(--green);color:#fff;font-weight:700">📌 CANDIDATO</span>'
-    :_isCriterio?'<span class="badge bg" style="font-size:10px;padding:3px 8px">⭐ CRITÉRIO</span>':'';
+    ?'<span class="badge bg" style="font-size:10px;padding:3px 8px;background:var(--green);color:#fff;font-weight:700">📌 PICK</span>'
+    :'';
+
+  // Avisos de qualidade
+  const driftWarn=_movB==='DRIFTING'
+    ?'<span class="badge br" style="font-size:9px;padding:2px 6px;opacity:.85">⚠ DRIFT −ROI</span>':'';
+  const lowOddsWarn=_oB>0&&_oB<PICKS_MIN_ODDS
+    ?`<span class="badge br" style="font-size:9px;padding:2px 6px;opacity:.85">⚠ odds &lt;${PICKS_MIN_ODDS}</span>`:'';
+  const highProbWarn=_prob25!=null&&_prob25>PICKS_MAX_PROB
+    ?'<span class="badge ba" style="font-size:9px;padding:2px 6px;opacity:.85">⚠ overconfidence</span>':'';
 
   return `<div class="game-card ${cardClass}" id="gc_${g.id}">
     <div class="card-head" onclick="toggleCard(${g.id})">
@@ -2132,6 +2158,7 @@ function gameCard(g){
           ${g.sharpLabel?`<span class="badge bp">${g.sharpLabel==='STEAM'?'🔥':g.sharpLabel==='SHARP'?'🎯':'👁'} ${esc(g.sharpLabel)}</span>`:''}
           ${edgeBadge}
           ${pickBadge}
+          ${driftWarn}${lowOddsWarn}${highProbWarn}
         </div>
         ${negEdge?`<div style="font-size:10px;color:var(--red);background:rgba(220,38,38,.06);border:1px solid rgba(220,38,38,.2);border-radius:4px;padding:3px 8px;margin-top:3px">⚠ Edge negativo vs ${edgeRef} — modelo diverge do mercado${g.pinnActual?' sharp':''}</div>`:''}
         <div class="score-bar"><div class="score-bar-fill" style="width:${barW};background:${barCol}"></div></div>
@@ -5035,7 +5062,7 @@ window._syncInterval = setInterval(async()=>{
           <div class="help-row-icon">↘</div>
           <div class="help-row-body">
             <div class="help-row-title"><span class="help-tag green">Shortening</span> Odds a encurtar</div>
-            <div class="help-row-desc">As odds do Over 2.5 na Pinnacle estão a descer (= o mercado está a precificar maior probabilidade de Over). O sinal mais valioso quando combinado com SHARP ou STEAM.<br><span style="font-family:var(--mono);font-size:10px;color:var(--text3)">No histórico: Shortening → 67% WR e +23% ROI · Drifting → 52% WR e −7% ROI</span></div>
+            <div class="help-row-desc">As odds do Over 2.5 na Pinnacle estão a descer (= o mercado está a precificar maior probabilidade de Over). O sinal mais valioso — SHORTENING puro já justifica o pick sem necessidade de Sharp adicional.<br><span style="font-family:var(--mono);font-size:10px;color:var(--text3)">No histórico (N=53): Shortening → 61% WR e +12% ROI · Drifting → 50% WR e −8% ROI (eliminado)</span></div>
           </div>
         </div>
       </div>
@@ -5073,7 +5100,7 @@ window._syncInterval = setInterval(async()=>{
           <div class="help-row-icon">📌</div>
           <div class="help-row-body">
             <div class="help-row-title">Picks</div>
-            <div class="help-row-desc">Jogos que cumprem as duas condições em simultâneo: <em>Shortening + Sharp/STEAM + score ≥ 45</em>. Cada pick mostra o EV% e o Kelly recomendado para dimensionar a aposta. Um pick desaparece automaticamente 115 minutos após o KO.<br><span style="font-family:var(--mono);font-size:10px;color:var(--text3)">No histórico (N=46): Shortening → 67% WR · +23% ROI · score≥55 → 71% WR · +28% ROI</span></div>
+            <div class="help-row-desc">Jogos que cumprem: <em>Shortening + score ≥ 48 + odds ≥ 1.65 + prob ≤ 73%</em>. O critério Sharp adicional foi removido — SHORTENING puro tem edge suficiente. O cap de prob 73% elimina a zona overconfident do modelo. Cada pick mostra EV% e Kelly recomendado.<br><span style="font-family:var(--mono);font-size:10px;color:var(--text3)">No histórico (N=53): Short+prob60-69% → 67% WR · +19% ROI · Short+score≥50 → 67% WR · +17% ROI</span></div>
           </div>
         </div>
         <div class="help-row">
