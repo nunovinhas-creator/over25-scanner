@@ -3501,20 +3501,25 @@ async function saveLivePick(btn){
 // ════════════════════════════════════════════════════════════════
 async function autoLogCandidatos(){
   if(!el('ghToken')?.value.trim()) return;
-  const candidatos=allGames.filter(g=>{
-    const o=parseFloat(g.oddsOver||0);
-    return g.score>=40 && o>=1.3 && o<=4.0 && !isSaved(String(g.id));
-  });
+  const _qualBase=allGames.filter(g=>{ const o=parseFloat(g.oddsOver||0); return g.score>=40&&o>=1.3&&o<=4.0; });
+  const candidatos=_qualBase.filter(g=>!isSaved(String(g.id)));
+  const jaGuardados=_qualBase.length-candidatos.length;
 
   // Diagnóstico visível no Scanner
   const diag=el('autoLogStatus');
   if(diag){
     const total=allGames.length;
-    const dist={40:allGames.filter(g=>g.score>=40).length, 55:allGames.filter(g=>g.score>=55).length, 65:allGames.filter(g=>g.score>=65).length};
     const withML=allGames.filter(g=>g.prob25!=null).length;
+    const withOdds=allGames.filter(g=>parseFloat(g.oddsOver||0)>=1.3).length;
+    const s40=allGames.filter(g=>g.score>=40).length;
+    const s55=allGames.filter(g=>g.score>=55).length;
     diag.style.display='block';
     diag.style.color='var(--text2)';
-    diag.innerHTML=`🤖 Auto-log: <strong style="color:var(--green)">${candidatos.length} candidatos</strong> (score≥40 c/ odds) · jogos c/ ML: ${withML}/${total} · score≥55: ${dist[55]} · score≥65: ${dist[65]}`;
+    const novosStr=candidatos.length
+      ? `<strong style="color:var(--green)">${candidatos.length} novos</strong>`
+      : `<span style="color:var(--text3)">0 novos</span>`;
+    const savedStr=jaGuardados?` · <span style="color:var(--amber)">${jaGuardados} já guardados</span>`:'';
+    diag.innerHTML=`🤖 Auto-log: ${novosStr}${savedStr} (score≥40 c/ odds) · qualificam: ${_qualBase.length} · c/ ML: ${withML}/${total} · c/ odds: ${withOdds} · ≥55: ${s55}`;
   }
 
   if(!candidatos.length) return;
