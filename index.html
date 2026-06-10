@@ -1581,13 +1581,12 @@ async function loadAll(){
 
     setProgress(15,'A buscar eventos e odds…');
     // Fetch paralelo: eventos + predictions + odds
-    const [evData, evData7, predData, oddsOverData, oddsUnderData, odds1x2Data] = await Promise.all([
+    const [evData, evData7, predData, oddsOverData, oddsUnderData] = await Promise.all([
       get('/api/v2/events/?status=notstarted&date_from='+df+'&date_to='+dt+'&limit=200'),
       get('/api/v2/events/?status=notstarted&date_from='+df+'&date_to='+dt7+'&limit=500'),
       get('/api/v2/predictions/?status=upcoming&date_from='+df+'&date_to='+dt+'&limit=200'),
       get('/api/v2/odds/?market=over_under_25&outcome=over&limit=200&updated_after='+df+'T00:00:00Z'),
       get('/api/v2/odds/?market=over_under_25&outcome=under&limit=200&updated_after='+df+'T00:00:00Z'),
-      fetchAll1x2(df),
     ]);
 
     setProgress(35,'A processar eventos…');
@@ -1628,37 +1627,45 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
     //   🎯 SHARP  — Pin moveu ≥2% + timing ≤12h
     //   👁 WATCH  — Pin moveu ≥1% ou divergência ≥5% sem movimento claro
 
-    // 1. Agrupar odds 1X2 por evento e bookmaker
+    // 1. Agrupar odds 1X2 por evento — fetch per-event para garantir ID correto
     const sh1x2 = {};
-    const _firstOdds1x2=arr(odds1x2Data)[0]||{};
-    const _odds1x2Keys=Object.keys(_firstOdds1x2).join(',');
-    arr(odds1x2Data).forEach(o=>{
-      const eid=o.event?.id||o.event_id; if(!eid) return;
-      const slug=o.bookmaker_slug||'';
-      const price=parseFloat(o.decimal_odds||0);
-      const prev=parseFloat(o.previous_decimal_odds||0);
-      const rawOut=(o.outcome||'').toUpperCase();
-      const out=rawOut==='HOME'||rawOut==='HOME_WIN'?'HOME':
-                rawOut==='DRAW'?'DRAW':
-                rawOut==='AWAY'||rawOut==='AWAY_WIN'?'AWAY':rawOut;
-      if(!price||!['HOME','DRAW','AWAY'].includes(out)) return;
+    function _parse1x2(eid, oddsArr){
       if(!sh1x2[eid]) sh1x2[eid]={};
-      if(!sh1x2[eid][out]) sh1x2[eid][out]={pin:null,prev:null,mov:null,updatedAt:null,recr:[],recrMoving:0};
-      const d=sh1x2[eid][out];
-      if(slug==='pinnacle'){
-        d.pin=price;
-        if(prev&&Math.abs(prev-price)>0.005) d.prev=prev;
-        if(o.movement) d.mov=o.movement;
-        if(o.updated_at) d.updatedAt=o.updated_at;
-      } else if(RECR.includes(slug)&&price>0){
-        d.recr.push(price);
-        // Conta books recreativas que também estão a mover na mesma direcção
-        if(prev&&Math.abs(prev-price)>0.005){
-          const recrMov=prev>price?'SHORTENING':'DRIFTING';
-          if(o.movement&&o.movement===recrMov) d.recrMoving++;
+      arr(oddsArr).forEach(o=>{
+        const slug=o.bookmaker_slug||'';
+        const price=parseFloat(o.decimal_odds||0);
+        const prev=parseFloat(o.previous_decimal_odds||0);
+        const rawOut=(o.outcome||'').toUpperCase();
+        const out=rawOut==='HOME'||rawOut==='HOME_WIN'?'HOME':
+                  rawOut==='DRAW'?'DRAW':
+                  rawOut==='AWAY'||rawOut==='AWAY_WIN'?'AWAY':rawOut;
+        if(!price||!['HOME','DRAW','AWAY'].includes(out)) return;
+        if(!sh1x2[eid][out]) sh1x2[eid][out]={pin:null,prev:null,mov:null,updatedAt:null,recr:[],recrMoving:0};
+        const d=sh1x2[eid][out];
+        if(slug==='pinnacle'){
+          d.pin=price;
+          if(prev&&Math.abs(prev-price)>0.005) d.prev=prev;
+          if(o.movement) d.mov=o.movement;
+          if(o.updated_at) d.updatedAt=o.updated_at;
+        } else if(RECR.includes(slug)&&price>0){
+          d.recr.push(price);
+          if(prev&&Math.abs(prev-price)>0.005){
+            const recrMov=prev>price?'SHORTENING':'DRIFTING';
+            if(o.movement&&o.movement===recrMov) d.recrMoving++;
+          }
         }
-      }
-    });
+      });
+    }
+    const SH_BATCH=10;
+    for(let i=0;i<events7.length;i+=SH_BATCH){
+      const batch=events7.slice(i,i+SH_BATCH);
+      await Promise.all(batch.map(async ev=>{
+        try{
+          const d=await get('/api/v2/odds/?event_id='+ev.id+'&market=1x2&limit=50');
+          _parse1x2(ev.id, d);
+        }catch(e){}
+      }));
+    }
 
     // 2. Calcular sinais por evento
     const sharpRaw=[];
@@ -1869,28 +1876,14 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
     el('sh1Sharp').textContent=allSharp1x2.filter(s=>s.label==='SHARP').length;
     el('sh1Watch').textContent=allSharp1x2.filter(s=>s.label==='WATCH').length;
     el('dbgSharp').style.display='block';
-    const totalOdds1x2=arr(odds1x2Data).length;
-    const eventsWithPin=Object.keys(sh1x2).filter(k=>
-      sh1x2[k].HOME?.pin||sh1x2[k].AWAY?.pin).length;
+    const eventsWithPin=Object.keys(sh1x2).filter(k=>sh1x2[k].HOME?.pin||sh1x2[k].AWAY?.pin).length;
+    const eventsWithRecr=Object.values(sh1x2).filter(d=>(d.HOME?.recr?.length||0)+(d.AWAY?.recr?.length||0)>0).length;
+    const eventsWithPrev=Object.values(sh1x2).filter(d=>d.HOME?.prev||d.AWAY?.prev).length;
     const steamCount=allSharp1x2.filter(s=>s.label==='STEAM').length;
     const sharpCount=allSharp1x2.filter(s=>s.label==='SHARP').length;
     const lt6h=allSharp1x2.filter(s=>s.hoursToKO<=6).length;
-    // Debug enriquecido: mostra sample de div/move para diagnóstico
-    const _sampleEvs=Object.values(sh1x2).slice(0,5);
-    const _sampleDiv=_sampleEvs.map(d=>{
-      const o=d.HOME||d.AWAY; if(!o||!o.pin) return null;
-      const rAvg=o.recr.length?o.recr.reduce((s,v)=>s+v,0)/o.recr.length:null;
-      const dv=rAvg&&o.pin?Math.abs(((rAvg-o.pin)/o.pin)*100).toFixed(1):null;
-      const mv=o.prev&&o.pin?Math.abs(((o.prev-o.pin)/o.prev)*100).toFixed(1):null;
-      return `div${dv??'—'}%/mv${mv??'—'}%/r${o.recr.length}`;
-    }).filter(Boolean).join(' ');
-    const eventsWithRecr=Object.values(sh1x2).filter(d=>(d.HOME?.recr?.length||0)+(d.AWAY?.recr?.length||0)>0).length;
-    const eventsWithPrev=Object.values(sh1x2).filter(d=>d.HOME?.prev||d.AWAY?.prev).length;
-    const firstSh1x2Key=Object.keys(sh1x2)[0]||'—';
-    const firstEv7Id=events7[0]?.id??'—';
-    const firstEv7Keys=Object.keys(events7[0]||{}).join(',');
-    el('dbgSharp').textContent=totalOdds1x2+' odds 1X2 · '+eventsWithPin+' c/Pinnacle · '+eventsWithRecr+' c/recr · '+eventsWithPrev+' c/prev · ev7='+events7.length+' · match='+sharpEventsMatched+'(skip='+sharpEventsSkippedTime+') · '+
-      allSharp1x2.length+' sinais | oddsKeys='+_odds1x2Keys+' | evKeys='+firstEv7Keys+' | shKey='+firstSh1x2Key+' ev7id='+firstEv7Id;
+    el('dbgSharp').textContent=events7.length+' ev7 · '+eventsWithPin+' c/Pinnacle · '+eventsWithRecr+' c/recr · '+eventsWithPrev+' c/prev · '+sharpEventsMatched+' match('+sharpEventsSkippedTime+' skip) · '+
+      allSharp1x2.length+' sinais · '+steamCount+' STEAM · '+sharpCount+' SHARP · '+lt6h+' <6h KO';
 
     renderSharp();
 
