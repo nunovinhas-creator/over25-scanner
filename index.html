@@ -1630,8 +1630,10 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
 
     // 1. Agrupar odds 1X2 por evento e bookmaker
     const sh1x2 = {};
+    const _firstOdds1x2=arr(odds1x2Data)[0]||{};
+    const _odds1x2Keys=Object.keys(_firstOdds1x2).join(',');
     arr(odds1x2Data).forEach(o=>{
-      const eid=o.event_id; if(!eid) return;
+      const eid=o.event?.id||o.event_id; if(!eid) return;
       const slug=o.bookmaker_slug||'';
       const price=parseFloat(o.decimal_odds||0);
       const prev=parseFloat(o.previous_decimal_odds||0);
@@ -1886,9 +1888,9 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
     const eventsWithPrev=Object.values(sh1x2).filter(d=>d.HOME?.prev||d.AWAY?.prev).length;
     const firstSh1x2Key=Object.keys(sh1x2)[0]||'—';
     const firstEv7Id=events7[0]?.id??'—';
+    const firstEv7Keys=Object.keys(events7[0]||{}).join(',');
     el('dbgSharp').textContent=totalOdds1x2+' odds 1X2 · '+eventsWithPin+' c/Pinnacle · '+eventsWithRecr+' c/recr · '+eventsWithPrev+' c/prev · ev7='+events7.length+' · match='+sharpEventsMatched+'(skip='+sharpEventsSkippedTime+') · '+
-      allSharp1x2.length+' sinais · shKey='+firstSh1x2Key+' ev7id='+firstEv7Id+
-      (_sampleDiv?' | '+_sampleDiv:'');
+      allSharp1x2.length+' sinais | oddsKeys='+_odds1x2Keys+' | evKeys='+firstEv7Keys+' | shKey='+firstSh1x2Key+' ev7id='+firstEv7Id;
 
     renderSharp();
 
