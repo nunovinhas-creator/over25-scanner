@@ -4027,7 +4027,7 @@ function renderDash(){
 
   // CLV médio
   const withCLV=validPicks.filter(p=>p.clv&&parseFloat(p.clv)!==0);
-  const clvAvg=calcCLVAvg(validPicks);
+  const clvAvg=calcCLVAvg(withCLV);
   if(el('dCLV')){
     el('dCLV').textContent=clvAvg!=null?(clvAvg>=0?'+':'')+clvAvg.toFixed(1)+'%':'—';
     if(clvAvg!=null) el('dCLV').style.color=clvAvg>0?'var(--green)':'var(--red)';
@@ -4063,12 +4063,12 @@ function renderDash(){
   const isShort=p=>(p.movimento||'').toUpperCase()==='SHORTENING';
   const isSharp=p=>!!(p.sharp_label);
   const bkGroups=[
-    ['↘ Só Shortening', allPicks.filter(p=>isShort(p)&&!isSharp(p)&&res(p))],
-    ['↘+🎯 Short+Sharp', allPicks.filter(p=>isShort(p)&&isSharp(p)&&res(p))],
-    ['🎯 Só Sharp',     allPicks.filter(p=>!isShort(p)&&isSharp(p)&&res(p))],
-    ['↗ Drifting',      allPicks.filter(p=>p.movimento==='DRIFTING'&&res(p))],
-    ['⚡ xG≥2.0',       allPicks.filter(p=>parseFloat(p.xg_total||0)>=2.0&&res(p))],
-    ['🔵 BTTS≥55',      allPicks.filter(p=>parseFloat(p.btts_prob||0)>=55&&res(p))],
+    ['↘ Só Shortening', validPicks.filter(p=>isShort(p)&&!isSharp(p)&&res(p))],
+    ['↘+🎯 Short+Sharp', validPicks.filter(p=>isShort(p)&&isSharp(p)&&res(p))],
+    ['🎯 Só Sharp',     validPicks.filter(p=>!isShort(p)&&isSharp(p)&&res(p))],
+    ['↗ Drifting',      validPicks.filter(p=>p.movimento==='DRIFTING'&&res(p))],
+    ['⚡ xG≥2.0',       validPicks.filter(p=>parseFloat(p.xg_total||0)>=2.0&&res(p))],
+    ['🔵 BTTS≥55',      validPicks.filter(p=>parseFloat(p.btts_prob||0)>=55&&res(p))],
   ];
   el('bkGrid').innerHTML=bkGroups.map(([name,grp])=>{
     if(grp.length<2)return '';
