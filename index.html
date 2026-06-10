@@ -1161,7 +1161,24 @@ const CALIB = { N:44, WR:0.591, K:10 };
 const TH_SCORE_HIGH  = 70;     // score ≥70 = candidato forte (verde)
 const TH_SCORE_MED   = 50;     // score ≥50 = candidato (âmbar)
 // 1xbet/onexbet removidos — copiam preços sharp, distorcem divergência
-const RECR = ['bet365','bwin','unibet','williamhill','betfair','betway','marathonbet','betclic','ladbrokes','coral','paddypower'];
+const RECR = [
+  'bet365','bet-365',
+  'bwin',
+  'unibet',
+  'williamhill','william-hill','william_hill',
+  'betfair','betfair-exchange',
+  'betway',
+  'marathonbet','marathon-bet',
+  'betclic',
+  'ladbrokes',
+  'coral',
+  'paddypower','paddy-power',
+  '1xbet','1x-bet','1xbet-ru',
+  'betsson','nbet','fonbet','betsafe',
+  'interwetten','nordicbet','betvictor',
+  'sportingbet','888sport','888-sport',
+  'betano','betano-pt','betano-gr',
+];
 // Taxa histórica Over 2.5 por liga — referência para normalização de score (liga neutra ≈ 0.55)
 const LEAGUE_BASE = {
   'Eredivisie':0.67,'Bundesliga':0.63,'Belgian First Division A':0.62,'Belgium First Division A':0.62,
@@ -1681,18 +1698,26 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
         // 2-3%: -14.7% ROI (já parcialmente precificado)
         // 3-5%: -25.8% ROI · 5%+: -19.2% ROI (overshoot, mercado já reagiu)
         // <1%: -13.3% ROI (ruído — divergência sem movimento sólido)
-        let score=0;
-        if(pinnMovePct>=1&&pinnMovePct<2){score+=30;}  // zona dourada
-        else if(pinnMovePct>=2&&pinnMovePct<3){score+=14;}  // já a perder valor
-        else if(pinnMovePct>=3&&pinnMovePct<5){score+=7;}   // oversized, market reagiu
-        else if(pinnMovePct>=5){score+=5;}                  // move extremo já precificado
-        else if(div>=5){score+=8;}                          // só divergência, sem move
+        let moveScore=0;
+        if(pinnMovePct>=1&&pinnMovePct<2){moveScore=30;}  // zona dourada
+        else if(pinnMovePct>=2&&pinnMovePct<3){moveScore=14;}
+        else if(pinnMovePct>=3&&pinnMovePct<5){moveScore=7;}
+        else if(pinnMovePct>=5){moveScore=5;}
 
-        score = Math.round(score * timingBonus);
+        // Divergência Pin vs recreativas (limiar baixado para DIV_MIN — sem movimento pode bastar)
+        let divScore=0;
+        if(div>=5){divScore=10;}
+        else if(div>=DIV_MIN){divScore=7;}   // era >=5; agora qualquer div detectável qualifica
+
+        // timingBonus aplica só ao moveScore — divergência não deve ser penalizada por timing
+        let score = Math.round(moveScore * timingBonus) + divScore;
         if(multiBook) score+=15;
-        if(movement==='SHORTENING') score+=8;  // confirma direcção (era 5)
+        if(movement==='SHORTENING') score+=8;
 
-        // Filtro mínimo: só sinais com score ≥15
+        // Fallback: Pinnacle presente + divergência mínima → mostrar como WATCH
+        // (garante visibilidade mesmo sem previous_decimal_odds da API)
+        if(score<8 && o.pin>0 && o.recr.length>=1 && divHasValue && div>=DIV_MIN) score=8;
+
         if(score<8) return;
 
         // ── Label ──
@@ -1862,8 +1887,19 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
     const steamCount=allSharp1x2.filter(s=>s.label==='STEAM').length;
     const sharpCount=allSharp1x2.filter(s=>s.label==='SHARP').length;
     const lt6h=allSharp1x2.filter(s=>s.hoursToKO<=6).length;
-    el('dbgSharp').textContent=totalOdds1x2+' odds 1X2 · '+eventsWithPin+' c/Pinnacle · '+
-      allSharp1x2.length+' sinais · '+steamCount+' STEAM · '+sharpCount+' SHARP · '+lt6h+' <6h KO';
+    // Debug enriquecido: mostra sample de div/move para diagnóstico
+    const _sampleEvs=Object.values(sh1x2).slice(0,5);
+    const _sampleDiv=_sampleEvs.map(d=>{
+      const o=d.HOME||d.AWAY; if(!o||!o.pin) return null;
+      const rAvg=o.recr.length?o.recr.reduce((s,v)=>s+v,0)/o.recr.length:null;
+      const dv=rAvg&&o.pin?Math.abs(((rAvg-o.pin)/o.pin)*100).toFixed(1):null;
+      const mv=o.prev&&o.pin?Math.abs(((o.prev-o.pin)/o.prev)*100).toFixed(1):null;
+      return `div${dv??'—'}%/mv${mv??'—'}%/r${o.recr.length}`;
+    }).filter(Boolean).join(' ');
+    const eventsWithRecr=Object.values(sh1x2).filter(d=>(d.HOME?.recr?.length||0)+(d.AWAY?.recr?.length||0)>0).length;
+    el('dbgSharp').textContent=totalOdds1x2+' odds 1X2 · '+eventsWithPin+' c/Pinnacle · '+eventsWithRecr+' c/recr · '+
+      allSharp1x2.length+' sinais · '+steamCount+' STEAM · '+sharpCount+' SHARP · '+lt6h+' <6h KO'+
+      (_sampleDiv?' | '+_sampleDiv:'');
 
     renderSharp();
 
