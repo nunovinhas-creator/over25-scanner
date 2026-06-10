@@ -3501,7 +3501,7 @@ async function saveLivePick(btn){
 // ════════════════════════════════════════════════════════════════
 async function autoLogCandidatos(){
   if(!el('ghToken')?.value.trim()) return;
-  const _qualBase=allGames.filter(g=>{ const o=parseFloat(g.oddsOver||0); return g.score>=40&&o>=1.3&&o<=4.0; });
+  const _qualBase=allGames.filter(g=>{ const o=parseFloat(g.oddsOver||0); return g.score>=30&&o>=1.3&&o<=4.0; });
   const candidatos=_qualBase.filter(g=>!isSaved(String(g.id)));
   const jaGuardados=_qualBase.length-candidatos.length;
 
@@ -3519,7 +3519,7 @@ async function autoLogCandidatos(){
       ? `<strong style="color:var(--green)">${candidatos.length} novos</strong>`
       : `<span style="color:var(--text3)">0 novos</span>`;
     const savedStr=jaGuardados?` · <span style="color:var(--amber)">${jaGuardados} já guardados</span>`:'';
-    diag.innerHTML=`🤖 Auto-log: ${novosStr}${savedStr} (score≥40 c/ odds) · qualificam: ${_qualBase.length} · c/ ML: ${withML}/${total} · c/ odds: ${withOdds} · ≥55: ${s55}`;
+    diag.innerHTML=`🤖 Auto-log: ${novosStr}${savedStr} (score≥30 c/ odds) · qualificam: ${_qualBase.length} · c/ ML: ${withML}/${total} · c/ odds: ${withOdds} · ≥55: ${s55}`;
   }
 
   if(!candidatos.length) return;
@@ -3539,7 +3539,7 @@ async function autoLogCandidatos(){
       const prob=g.prob25!=null?(g.prob25*100).toFixed(1):'';
       const xgt=g.xgH!=null&&g.xgA!=null?(g.xgH+g.xgA).toFixed(2):'';
       const sharpSig=allSharp1x2.find(s=>s.id===g.id);
-      const scoreBand=g.score>=75?'75+':g.score>=65?'65-75':g.score>=55?'55-65':'40-55';
+      const scoreBand=g.score>=75?'75+':g.score>=65?'65-75':g.score>=55?'55-65':g.score>=40?'40-55':'30-40';
       const ov=parseFloat(g.oddsOver||0);
       const oddsBand=ov>=2.50?'2.50+':ov>=2.10?'2.10-2.50':ov>=1.80?'1.80-2.10':'1.50-1.80';
       const impliedProb=ov>1?(1/ov*100).toFixed(1):'';
@@ -4225,7 +4225,12 @@ function calcOverStats(picks){
   const sorted=[...withR].sort((a,b)=>new Date(b.data)-new Date(a.data));
   let streak=0,stType='';
   for(const p of sorted){if(!streak){stType=p.result_over25;streak=1;}else if(p.result_over25===stType)streak++;else break;}
-  return {n:withR.length,nTotal:valid.length,wins:wins.length,wr,roi,profit,clvAvg,clvN:withCLV.length,roi7,streak,stType,todayN:todayR.length,todayW:todayW.length,todayROI};
+  // Brier Score — mede calibração probabilística (benchmark Pinnacle: 0.22-0.23)
+  const withProb=withR.filter(p=>parseFloat(p.prob_over25||0)>0);
+  const brierScore=withProb.length>=5
+    ?withProb.reduce((s,p)=>{const pr=parseFloat(p.prob_over25)/100;const out=p.result_over25==='WIN'?1:0;return s+Math.pow(pr-out,2);},0)/withProb.length
+    :null;
+  return {n:withR.length,nTotal:valid.length,wins:wins.length,wr,roi,profit,clvAvg,clvN:withCLV.length,roi7,streak,stType,todayN:todayR.length,todayW:todayW.length,todayROI,brierScore,brierN:withProb.length};
 }
 
 // ── Estatísticas partilhadas (Sharp 1X2) ──
@@ -4261,22 +4266,38 @@ function generateProposals(sOver, sSharp, picks){
   if(sOver.n<30){
     add('critical','🚧','Sem dados suficientes',`N=${sOver.n} picks resolvidos. São necessários mínimo 30 para qualquer análise. Erro padrão actual: ±${sOver.n?Math.round(100/Math.sqrt(sOver.n)):99}pp.`);
   } else if(sOver.n<200){
-    add('warning','📏',`Amostra insuficiente para validar edge (N=${sOver.n})`,`Intervalo de confiança actual: ±${Math.round(100/Math.sqrt(sOver.n))}pp no WR. São precisos ≥200 picks. Continue a registar sem ajustar parâmetros.`);
+    const ci=Math.round(100/Math.sqrt(sOver.n));
+    add('warning','📏',`Amostra insuficiente para validar edge (N=${sOver.n})`,`IC actual ±${ci}pp no WR. Para diminuir para ±7pp precisas de N≈200. Estratégia: não ajustar limiares — registar mais picks. ROI precisa de 500–1000 picks para ser estatisticamente significativo; CLV consegue com ~200.`);
   } else {
     add('positive','✅',`Amostra estatisticamente relevante (N=${sOver.n})`,`Com ${sOver.n} picks o intervalo de confiança é ±${Math.round(100/Math.sqrt(sOver.n))}pp — resultados interpretáveis com confiança.`);
   }
 
-  // 2. CLV Over
+  // 2. CLV Over — threshold +2% baseado em literatura (Buchdahl/Pyckio)
   if(sOver.clvN>=10){
-    if(sOver.clvAvg>1.5){
-      add('positive','📈','Edge confirmado via CLV (Over 2.5)',`CLV médio ${sOver.clvAvg>=0?'+':''}${sOver.clvAvg.toFixed(1)}% sobre ${sOver.clvN} picks. Está a entrar consistentemente antes do mercado fechar — edge genuíno.`);
-    } else if(sOver.clvAvg>0){
-      add('info','〰️','CLV marginalmente positivo (Over 2.5)',`CLV ${sOver.clvAvg.toFixed(1)}% — edge fraco. Pode ser ruído. Confirmar com mais amostra.`);
+    if(sOver.clvAvg>=2.0){
+      add('positive','📈','Edge confirmado via CLV (Over 2.5)',`CLV médio +${sOver.clvAvg.toFixed(1)}% (N=${sOver.clvN}). Limiar profissional ≥+2% atingido — edge genuíno com entrada antes do mercado fechar.`);
+    } else if(sOver.clvAvg>=1.0){
+      add('info','〰️','CLV positivo mas abaixo do limiar de significância',`CLV ${sOver.clvAvg.toFixed(1)}% — positivo mas no intervalo de ruído (0–+1%). Edge só confirmável com N≥200 picks e CLV médio ≥+2%.`);
+    } else if(sOver.clvAvg>=0){
+      add('warning','〰️','CLV dentro do ruído de mercado',`CLV +${sOver.clvAvg.toFixed(1)}%. Margem vig do Pinnacle (~1%) absorve este edge. Necessário CLV ≥+2% para edge real.`);
     } else {
-      add('warning','⚠️','CLV negativo — entradas após o movimento (Over 2.5)',`CLV médio ${sOver.clvAvg.toFixed(1)}%. Está a entrar depois do mercado já ter reagido. Considere entrar mais cedo (ex: Scanner logo após loadAll).`);
+      add('warning','⚠️','CLV negativo — entradas após o movimento (Over 2.5)',`CLV médio ${sOver.clvAvg.toFixed(1)}%. Está a entrar depois do mercado já ter reagido. Use o scanner imediatamente após carregar, não minutos depois.`);
     }
   } else if(sOver.n>=20){
     add('info','🕐','CLV ainda sem dados suficientes',`Só ${sOver.clvN} picks têm CLV calculado. Active o "Sync ReAct" após os jogos terminarem para calcular CLV em todos.`);
+  }
+
+  // 2b. Brier Score — calibração probabilística
+  if(sOver.brierScore!=null){
+    const bs=sOver.brierScore;
+    const bsColor=bs<0.22?'green':bs<0.24?'amber':'red';
+    if(bs<0.22){
+      add('positive','🎯','Modelo bem calibrado (Brier Score)',`Brier Score ${bs.toFixed(3)} (N=${sOver.brierN}) — melhor que o benchmark Pinnacle (0.22-0.23). As probabilidades ML reflectem a realidade.`);
+    } else if(bs<0.25){
+      add('info','📐','Calibração próxima do mercado (Brier Score)',`Brier Score ${bs.toFixed(3)} vs benchmark Pinnacle 0.22-0.23. Calibração aceitável mas sem vantagem sobre as odds do mercado.`);
+    } else {
+      add('warning','📐','Modelo descalibrado (Brier Score)',`Brier Score ${bs.toFixed(3)} — acima do benchmark Pinnacle (0.22-0.23). Probabilidades ML sobreestimam o evento. Considere recalibração (Platt scaling).`);
+    }
   }
 
   // 3. CLV Sharp
