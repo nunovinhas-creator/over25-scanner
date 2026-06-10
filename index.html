@@ -1577,11 +1577,13 @@ async function loadAll(){
     const now=new Date();
     const df=now.toISOString().split('T')[0];
     const dt=new Date(now.getTime()+30*3600000).toISOString().split('T')[0];
+    const dt7=new Date(now.getTime()+7*24*3600000).toISOString().split('T')[0];
 
     setProgress(15,'A buscar eventos e odds…');
     // Fetch paralelo: eventos + predictions + odds
-    const [evData, predData, oddsOverData, oddsUnderData, odds1x2Data] = await Promise.all([
+    const [evData, evData7, predData, oddsOverData, oddsUnderData, odds1x2Data] = await Promise.all([
       get('/api/v2/events/?status=notstarted&date_from='+df+'&date_to='+dt+'&limit=200'),
+      get('/api/v2/events/?status=notstarted&date_from='+df+'&date_to='+dt7+'&limit=500'),
       get('/api/v2/predictions/?status=upcoming&date_from='+df+'&date_to='+dt+'&limit=200'),
       get('/api/v2/odds/?market=over_under_25&outcome=over&limit=200&updated_after='+df+'T00:00:00Z'),
       get('/api/v2/odds/?market=over_under_25&outcome=under&limit=200&updated_after='+df+'T00:00:00Z'),
@@ -1590,6 +1592,7 @@ async function loadAll(){
 
     setProgress(35,'A processar eventos…');
     const events = arr(evData);
+    const events7 = arr(evData7);
 
     // Mapas
     const predMap={};
@@ -1610,8 +1613,8 @@ async function loadAll(){
       if(!oddsUnder[eid]||o.is_max_quote) oddsUnder[eid]=parseFloat(o.decimal_odds);
     });
 
-    // Liga names
-    events.forEach(ev=>{ if(ev.league_id&&ev.league_name) lgNames[ev.league_id]=ev.league_name; });
+    // Liga names (usar eventos de 7 dias para Sharp ter nomes completos)
+    events7.forEach(ev=>{ if(ev.league_id&&ev.league_name) lgNames[ev.league_id]=ev.league_name; });
 allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNames[g.det.league_id]='Liga '+g.det.league_id; });
 
     // ── Sharp Detector v2 — critérios profissionais ──────────────
@@ -1660,7 +1663,7 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
     const nowMs=Date.now();
     let sharpEventsMatched=0, sharpEventsSkippedTime=0;
 
-    events.forEach(ev=>{
+    events7.forEach(ev=>{
       const d=sh1x2[ev.id]; if(!d) return;
       sharpEventsMatched++;
       const kickoffMs=new Date(ev.event_date).getTime();
