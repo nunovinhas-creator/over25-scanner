@@ -1677,10 +1677,8 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
         const pinnMovePct = pinnMove!=null?Math.abs(pinnMove):0;
         const movement = o.mov||(pinnMove!=null?pinnMove>0?'SHORTENING':'DRIFTING':null);
 
-        // ── Critério 2: Timing — sinais cedo têm mais ROI (dados históricos N=192)
-        // >24h: +3.4% ROI · 3-6h: +2.1% · 1-3h: -30.6% · <1h: -14.8%
-        // Sinais tardios (<3h) são já reacção a notícias/alinhamentos e o mercado reagiu
-        const timingBonus = hoursToKO>24?1.4:hoursToKO>12?1.2:hoursToKO>6?1.0:hoursToKO>3?0.8:0.6;
+        // Timing: sinais perto do KO têm maior urgência (mercado profissional fecha posição)
+        const timingBonus = hoursToKO<=2?3:hoursToKO<=6?2:hoursToKO<=12?1.5:1.0;
 
         // ── Critério 3: Divergência Pinnacle vs recreativas ──
         const recrAvg=o.recr.length?o.recr.reduce((s,v)=>s+v,0)/o.recr.length:null;
@@ -1693,16 +1691,11 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
         // ── Critério 4: Múltiplos books a mover ──
         const multiBook = o.recrMoving>=2; // 2+ books recreativas também moveram
 
-        // ── Score composto — calibrado por ROI histórico (N=231 resolvidos) ──
-        // Sweet spot: 1-2% movimento → ROI +9.3%
-        // 2-3%: -14.7% ROI (já parcialmente precificado)
-        // 3-5%: -25.8% ROI · 5%+: -19.2% ROI (overshoot, mercado já reagiu)
-        // <1%: -13.3% ROI (ruído — divergência sem movimento sólido)
         let moveScore=0;
-        if(pinnMovePct>=1&&pinnMovePct<2){moveScore=30;}  // zona dourada
-        else if(pinnMovePct>=2&&pinnMovePct<3){moveScore=14;}
-        else if(pinnMovePct>=3&&pinnMovePct<5){moveScore=7;}
-        else if(pinnMovePct>=5){moveScore=5;}
+        if(pinnMovePct>=5){moveScore=50;}
+        else if(pinnMovePct>=3){moveScore=35;}
+        else if(pinnMovePct>=2){moveScore=20;}
+        else if(pinnMovePct>=1){moveScore=10;}
 
         // Divergência Pin vs recreativas (limiar baixado para DIV_MIN — sem movimento pode bastar)
         let divScore=0;
