@@ -1884,8 +1884,10 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
     }).filter(Boolean).join(' ');
     const eventsWithRecr=Object.values(sh1x2).filter(d=>(d.HOME?.recr?.length||0)+(d.AWAY?.recr?.length||0)>0).length;
     const eventsWithPrev=Object.values(sh1x2).filter(d=>d.HOME?.prev||d.AWAY?.prev).length;
-    el('dbgSharp').textContent=totalOdds1x2+' odds 1X2 · '+eventsWithPin+' c/Pinnacle · '+eventsWithRecr+' c/recr · '+eventsWithPrev+' c/prev · '+sharpEventsMatched+' match('+sharpEventsSkippedTime+' skip) · '+
-      allSharp1x2.length+' sinais · '+steamCount+' STEAM · '+sharpCount+' SHARP · '+lt6h+' <6h KO'+
+    const firstSh1x2Key=Object.keys(sh1x2)[0]||'—';
+    const firstEv7Id=events7[0]?.id??'—';
+    el('dbgSharp').textContent=totalOdds1x2+' odds 1X2 · '+eventsWithPin+' c/Pinnacle · '+eventsWithRecr+' c/recr · '+eventsWithPrev+' c/prev · ev7='+events7.length+' · match='+sharpEventsMatched+'(skip='+sharpEventsSkippedTime+') · '+
+      allSharp1x2.length+' sinais · shKey='+firstSh1x2Key+' ev7id='+firstEv7Id+
       (_sampleDiv?' | '+_sampleDiv:'');
 
     renderSharp();
