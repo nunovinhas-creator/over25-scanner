@@ -1658,14 +1658,16 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
     // 2. Calcular sinais por evento
     const sharpRaw=[];
     const nowMs=Date.now();
+    let sharpEventsMatched=0, sharpEventsSkippedTime=0;
 
     events.forEach(ev=>{
       const d=sh1x2[ev.id]; if(!d) return;
+      sharpEventsMatched++;
       const kickoffMs=new Date(ev.event_date).getTime();
       const hoursToKO=Math.max(0,(kickoffMs-nowMs)/3600000);
 
       // Só analisa jogos que ainda não começaram
-      if(hoursToKO<=0||hoursToKO>36) return;
+      if(hoursToKO<=0||hoursToKO>36){ sharpEventsSkippedTime++; return; }
 
       const sigs=[];
 
@@ -1691,35 +1693,23 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
         // ── Critério 4: Múltiplos books a mover ──
         const multiBook = o.recrMoving>=2; // 2+ books recreativas também moveram
 
-        let moveScore=0;
-        if(pinnMovePct>=5){moveScore=50;}
-        else if(pinnMovePct>=3){moveScore=35;}
-        else if(pinnMovePct>=2){moveScore=20;}
-        else if(pinnMovePct>=1){moveScore=10;}
+        let score=0;
+        if(pinnMovePct>=5) score+=50;
+        else if(pinnMovePct>=3) score+=35;
+        else if(pinnMovePct>=2) score+=20;
+        else if(pinnMovePct>=1) score+=10;
+        else if(div>=5) score+=8;
 
-        // Divergência Pin vs recreativas (limiar baixado para DIV_MIN — sem movimento pode bastar)
-        let divScore=0;
-        if(div>=5){divScore=10;}
-        else if(div>=DIV_MIN){divScore=7;}   // era >=5; agora qualquer div detectável qualifica
-
-        // timingBonus aplica só ao moveScore — divergência não deve ser penalizada por timing
-        let score = Math.round(moveScore * timingBonus) + divScore;
+        score = Math.round(score * timingBonus);
         if(multiBook) score+=15;
-        if(movement==='SHORTENING') score+=8;
-
-        // Fallback: Pinnacle presente + divergência mínima → mostrar como WATCH
-        // (garante visibilidade mesmo sem previous_decimal_odds da API)
-        if(score<8 && o.pin>0 && o.recr.length>=1 && divHasValue && div>=DIV_MIN) score=8;
+        if(movement==='SHORTENING') score+=5;
 
         if(score<8) return;
 
         // ── Label ──
-        // STEAM: move ≥5% + ≤30min (raro, move muito agressivo imediatamente antes)
-        // SHARP: 1-2% move (sweet spot de ROI) OU 2%+ com timing >6h (cedo e sólido)
-        // WATCH: tudo o resto acima do threshold mínimo
         let label;
         if(pinnMovePct>=5&&hoursToKO<=0.5) label='STEAM';
-        else if((pinnMovePct>=1&&pinnMovePct<2)||(pinnMovePct>=2&&hoursToKO>6)) label='SHARP';
+        else if(pinnMovePct>=5||(pinnMovePct>=2&&hoursToKO<=12)) label='SHARP';
         else label='WATCH';
 
         sigs.push({
@@ -1890,7 +1880,8 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
       return `div${dv??'—'}%/mv${mv??'—'}%/r${o.recr.length}`;
     }).filter(Boolean).join(' ');
     const eventsWithRecr=Object.values(sh1x2).filter(d=>(d.HOME?.recr?.length||0)+(d.AWAY?.recr?.length||0)>0).length;
-    el('dbgSharp').textContent=totalOdds1x2+' odds 1X2 · '+eventsWithPin+' c/Pinnacle · '+eventsWithRecr+' c/recr · '+
+    const eventsWithPrev=Object.values(sh1x2).filter(d=>d.HOME?.prev||d.AWAY?.prev).length;
+    el('dbgSharp').textContent=totalOdds1x2+' odds 1X2 · '+eventsWithPin+' c/Pinnacle · '+eventsWithRecr+' c/recr · '+eventsWithPrev+' c/prev · '+sharpEventsMatched+' match('+sharpEventsSkippedTime+' skip) · '+
       allSharp1x2.length+' sinais · '+steamCount+' STEAM · '+sharpCount+' SHARP · '+lt6h+' <6h KO'+
       (_sampleDiv?' | '+_sampleDiv:'');
 
