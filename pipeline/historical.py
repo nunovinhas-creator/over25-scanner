@@ -388,7 +388,7 @@ def _build_parser() -> argparse.ArgumentParser:
     mode.add_argument("--update", action="store_true",
                       help="Download current season and merge with existing data")
     mode.add_argument("--synthetic", action="store_true",
-                      help="Generate synthetic data (no network needed)")
+                      help="[TEST ONLY] Generate synthetic data locally — NEVER use in production")
     p.add_argument("--out-dir", type=Path,
                    default=Path(__file__).resolve().parent.parent / "data" / "historical",
                    help="Output directory (default: data/historical)")
