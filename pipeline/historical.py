@@ -193,6 +193,77 @@ def _dedup(df: pd.DataFrame) -> pd.DataFrame:
     return df.drop_duplicates(subset=key)
 
 
+def _repair_missing_divs(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Recover Div='?' rows by propagating known team→Div mappings.
+
+    Root cause: UTF-8 BOM read via latin-1 renames 'Div' to 'ï»¿Div', so
+    _normalise() falls back to Div='?'.  This function infers the correct Div
+    using:
+      1. Same-season lookup from correctly-read rows in the same DataFrame
+      2. Cross-season lookup when a team always played in the same division
+      3. Iterative propagation: once one team in a game is resolved, its
+         opponent is resolved too (they play in the same division)
+
+    Returns the DataFrame with Div='?' rows repaired where possible.
+    """
+    if "?" not in df["Div"].values:
+        return df
+
+    from collections import defaultdict
+
+    unknown_mask = df["Div"] == "?"
+    n_unknown = unknown_mask.sum()
+
+    # Build (team, season) → div from known rows
+    tsmap: dict[tuple[str, object], str] = {}
+    tmap_multi: dict[str, set] = defaultdict(set)
+    for _, row in df[~unknown_mask][["HomeTeam", "Season", "Div"]].drop_duplicates().iterrows():
+        key = (row["HomeTeam"], row["Season"])
+        tsmap[key] = row["Div"]
+        tmap_multi[row["HomeTeam"]].add(row["Div"])
+
+    def _lookup(team: str, season: object) -> Optional[str]:
+        if (team, season) in tsmap:
+            return tsmap[(team, season)]
+        divs = tmap_multi.get(team, set())
+        if len(divs) == 1:
+            return next(iter(divs))
+        return None
+
+    # Iterative propagation (converges in ≤ 5 passes for football data)
+    inferred: dict[int, str] = {}
+    for _ in range(20):
+        new_this_pass = 0
+        for idx, row in df[unknown_mask].iterrows():
+            if idx in inferred:
+                continue
+            ht, at, s = row["HomeTeam"], row["AwayTeam"], row["Season"]
+            div = _lookup(ht, s) or _lookup(at, s)
+            if div:
+                inferred[idx] = div
+                tsmap[(ht, s)] = div
+                tsmap[(at, s)] = div
+                tmap_multi[ht].add(div)
+                tmap_multi[at].add(div)
+                new_this_pass += 1
+        if new_this_pass == 0:
+            break
+
+    if inferred:
+        df = df.copy()
+        for idx, div in inferred.items():
+            df.at[idx, "Div"] = div
+
+    n_recovered = len(inferred)
+    n_still_unknown = (df["Div"] == "?").sum()
+    logger.info(
+        "Div recovery: %d/%d repaired, %d still unknown",
+        n_recovered, n_unknown, n_still_unknown,
+    )
+    return df
+
+
 # ---------------------------------------------------------------------------
 # Synthetic data generation
 # ---------------------------------------------------------------------------
@@ -334,6 +405,7 @@ def download_all(epochs: list[str] = EPOCHS) -> pd.DataFrame:
     if not parts:
         raise RuntimeError("No data downloaded — is the network reachable?")
     combined = pd.concat(parts, ignore_index=True)
+    combined = _repair_missing_divs(combined)
     combined = _dedup(combined)
     combined.sort_values(["Date", "Div"], inplace=True, na_position="last")
     return combined
@@ -362,6 +434,7 @@ def update_current(existing_path: Path) -> pd.DataFrame:
     else:
         combined = new_df
 
+    combined = _repair_missing_divs(combined)
     combined = _dedup(combined)
     combined.sort_values(["Date", "Div"], inplace=True, na_position="last")
     return combined
