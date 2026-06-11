@@ -132,7 +132,6 @@ def _download_one(epoch: str, div: str) -> Optional[pd.DataFrame]:
         return None
     try:
         df = pd.read_csv(io.BytesIO(raw), encoding="latin-1", on_bad_lines="skip")
-        df.insert(0, "_epoch", epoch)
         return df
     except Exception as exc:
         logger.warning("Could not parse %s: %s", url, exc)
@@ -368,7 +367,10 @@ def save(df: pd.DataFrame, out_dir: Path) -> None:
     try:
         import pyarrow  # noqa: F401
         parquet_path = out_dir / "matches.parquet"
-        df.to_parquet(parquet_path, index=False)
+        df_pq = df.copy()
+        if "Season" in df_pq.columns:
+            df_pq["Season"] = df_pq["Season"].astype(str)
+        df_pq.to_parquet(parquet_path, index=False)
         logger.info("Saved parquet to %s", parquet_path)
     except ImportError:
         logger.debug("pyarrow not available; skipping parquet output")
