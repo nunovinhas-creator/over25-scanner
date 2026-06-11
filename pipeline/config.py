@@ -146,9 +146,11 @@ class Config:
 
     # Blend weight for model vs market probability.
     # p_final = MODEL_WEIGHT * p_model + (1 - MODEL_WEIGHT) * p_market
-    # At 0.30 the market drives 70% of the final probability, anchoring to
-    # Pinnacle's closing line which has WR≈49% vs our model's announced 64.7%.
-    # Revisit when N≥200 and walk-forward CLV is confirmed positive.
+    # FASE 4 validation (epoch 2526, isotonic calibration, LOEO-CV):
+    #   w=0.30 → Brier=0.24168 (cal) vs 0.25110 (uncal) — best across w∈{0.10,0.15,0.20,0.30}
+    #   CLV IC 95% = [-0.985%, +1.366%] — inclui zero (N=83, época única)
+    # NOTE: odds band 2.00–2.50 persistently negative (ROI=-26.5% calibrated).
+    # Cap MAX_ODDS_OVER=2.00 is recommended — apply after explicit approval.
     MODEL_WEIGHT: float = 0.30
 
     # Minimum blended EV required to generate a Telegram alert.

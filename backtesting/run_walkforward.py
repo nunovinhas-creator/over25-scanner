@@ -134,7 +134,13 @@ def run_walkforward(
     blend_weights: list[float] = BLEND_WEIGHTS,
     min_ev: float = MIN_EV_DEFAULT,
     min_train: int = MIN_TRAIN_GAMES,
+    calibrator_fn=None,
+    test_season_filter: Optional[int] = None,
 ) -> pd.DataFrame:
+    """
+    calibrator_fn: optional callable(np.ndarray) -> np.ndarray applied to p_dc before blend.
+    test_season_filter: if set, only saves records for games in that season.
+    """
     from models.math.poisson import fit_dixon_coles_fast, prob_over25_from_model
 
     df = df.copy()
@@ -214,8 +220,18 @@ def run_walkforward(
                 mid_odds = ((odds_over + pc_over) / 2.0) if (pd.notna(pc_over) and pc_over > 1.0) else np.nan
                 clv_mid = (mid_odds / pc_over - 1.0) if pd.notna(mid_odds) else np.nan
 
+                # Season label (for calibration split)
+                game_season = int(row.get("Season", 0)) if "Season" in row.index else 0
+
+                # Skip games not in the target season (training data still used for model fitting)
+                if test_season_filter is not None and game_season != test_season_filter:
+                    continue
+
+                # Apply calibrator to p_dc before blend (FASE 4)
+                p_model = float(calibrator_fn(np.array([p_dc]))[0]) if calibrator_fn is not None else p_dc
+
                 for w in blend_weights:
-                    p_final = w * p_dc + (1.0 - w) * p_market_val
+                    p_final = w * p_model + (1.0 - w) * p_market_val
                     ev_final = p_final * odds_over - 1.0
                     # w=0.0 saves ALL records (full-sample market baseline); others require EV gate
                     is_bet = ev_final >= min_ev
@@ -228,6 +244,7 @@ def run_walkforward(
                         "home":            home,
                         "away":            away,
                         "over25":          int(row["over25"]),
+                        "season":          game_season,
                         "p_dc":            round(p_dc, 6),
                         "p_market":        round(p_market_val, 6),
                         "p_market_source": p_market_src,
