@@ -142,7 +142,7 @@ def _download_one(epoch: str, div: str) -> Optional[pd.DataFrame]:
 # Normalisation
 # ---------------------------------------------------------------------------
 
-def _normalise(df: pd.DataFrame, epoch: str) -> pd.DataFrame:
+def _normalise(df: pd.DataFrame, epoch: str, div: str = "") -> pd.DataFrame:
     """Keep only relevant columns, parse dates, add over25 flag."""
     existing = [c for c in KEEP_COLS if c in df.columns]
     out = df[existing].copy()
@@ -152,12 +152,12 @@ def _normalise(df: pd.DataFrame, epoch: str) -> pd.DataFrame:
         out["Date"] = pd.to_datetime(out["Date"], dayfirst=True, errors="coerce")
         out = out.dropna(subset=["Date"])
 
-    # Ensure Div column
-    if "Div" not in out.columns:
-        out["Div"] = "?"
+    # Ensure Div column — fall back to the known div code when CSV omits it
+    if "Div" not in out.columns or out["Div"].isna().all():
+        out["Div"] = div if div else "?"
 
-    # Season tag
-    out["Season"] = epoch
+    # Season tag (always string so comparisons with CURRENT_EPOCH are safe)
+    out["Season"] = str(epoch)
 
     # Over 2.5 flag
     for col in ("FTHG", "FTAG"):
@@ -319,7 +319,7 @@ def download_all(epochs: list[str] = EPOCHS) -> pd.DataFrame:
         for div in DIVISIONS:
             df = _download_one(epoch, div)
             if df is not None and not df.empty:
-                parts.append(_normalise(df, epoch))
+                parts.append(_normalise(df, epoch, div=div))
     if not parts:
         raise RuntimeError("No data downloaded — is the network reachable?")
     combined = pd.concat(parts, ignore_index=True)
@@ -334,7 +334,7 @@ def update_current(existing_path: Path) -> pd.DataFrame:
     for div in DIVISIONS:
         df = _download_one(CURRENT_EPOCH, div)
         if df is not None and not df.empty:
-            new_parts.append(_normalise(df, CURRENT_EPOCH))
+            new_parts.append(_normalise(df, CURRENT_EPOCH, div=div))
 
     if not new_parts:
         raise RuntimeError("No data for current epoch — network unreachable?")
@@ -343,6 +343,8 @@ def update_current(existing_path: Path) -> pd.DataFrame:
 
     if existing_path.exists():
         old_df = pd.read_csv(existing_path, parse_dates=["Date"])
+        # Season is written as str but read_csv may infer int64 — cast to str
+        old_df["Season"] = old_df["Season"].astype(str)
         # Drop old current-epoch rows and replace with fresh download
         old_df = old_df[old_df["Season"] != CURRENT_EPOCH]
         combined = pd.concat([old_df, new_df], ignore_index=True)
