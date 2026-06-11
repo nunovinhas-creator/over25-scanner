@@ -114,7 +114,10 @@ def train_all(
     fitted_at = datetime.utcnow().isoformat()
 
     for div, group in matches_df.groupby("Div"):
-        league = _DIV_TO_LEAGUE.get(str(div), str(div))
+        if str(div) not in _DIV_TO_LEAGUE:
+            logger.info("Skipping unrecognised division '%s' (%d rows) — likely BOM/encoding issue", div, len(group))
+            continue
+        league = _DIV_TO_LEAGUE[str(div)]
         train_df = _last_n_seasons(group, N_SEASONS).copy()
 
         if len(train_df) < min_games:

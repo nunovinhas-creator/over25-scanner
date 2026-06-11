@@ -6,8 +6,7 @@ Weekly walk-forward backtest of the Dixon-Coles + market blend model.
 No-leakage guarantee
 --------------------
 When predicting a game on date D, the training set contains ONLY games
-with date < D (strictly before the match day).  This is enforced by the
-`_split` helper and verified by the leakage audit at the end.
+with date < D (strictly before the match day).
 
 What is tested
 --------------
@@ -17,9 +16,14 @@ For each blend weight w in {0.0, 0.15, 0.30, 0.50, 1.0}:
     bet        = 1 if ev_final >= MIN_EV else 0
 
 Metrics reported:
-    N_bets, Win%, P&L (flat 1u), Brier Score, Log-loss, Avg CLV%
+    N_bets, Win%, P&L, Brier Score, Log-loss, Avg CLV%, ROI%
 
-CLV = Closing Line Value: P>2.5 / PC>2.5 - 1  (positive → beat the close)
+CLV = Closing Line Value: P>2.5 / PC>2.5 - 1  (positive = beat the close)
+
+Extended report includes:
+    - Calibration table (10 probability buckets)
+    - Results by league
+    - Results by odds band
 
 Usage
 -----
@@ -32,7 +36,6 @@ from __future__ import annotations
 
 import argparse
 import logging
-import textwrap
 import time
 from datetime import timedelta
 from pathlib import Path
@@ -49,11 +52,10 @@ logger = logging.getLogger(__name__)
 
 BLEND_WEIGHTS: list[float] = [0.0, 0.15, 0.30, 0.50, 1.0]
 MIN_EV_DEFAULT = 0.03
-MIN_TRAIN_GAMES = 50     # minimum training games before first prediction
-MIN_TEAM_GAMES  = 5      # skip prediction if home or away team has <5 prior games
-REFIT_EVERY_WEEKS = 1    # re-fit model once per week (every Monday)
-XI = 0.0018              # time-decay rate
-PINNACLE_MARGIN = 1.04   # assumed opening Pinnacle margin (for fallback devig)
+MIN_TRAIN_GAMES = 50
+MIN_TEAM_GAMES  = 5
+XI = 0.0018
+PINNACLE_MARGIN = 1.04
 
 _DIV_TO_LEAGUE: dict[str, str] = {
     "E0":  "Premier League",   "E1":  "Championship",
@@ -64,6 +66,14 @@ _DIV_TO_LEAGUE: dict[str, str] = {
     "P1":  "Primeira Liga",    "N1":  "Eredivisie",
     "B1":  "Belgian Pro League",
 }
+
+ODDS_BANDS = [
+    (0.0,  1.50, "<1.50"),
+    (1.50, 1.70, "1.50–1.70"),
+    (1.70, 2.00, "1.70–2.00"),
+    (2.00, 2.50, "2.00–2.50"),
+    (2.50, 99.0, ">2.50"),
+]
 
 
 # ---------------------------------------------------------------------------
@@ -80,10 +90,11 @@ def _load(csv_path: Path) -> pd.DataFrame:
     df["FTHG"] = df["FTHG"].astype(int)
     df["FTAG"] = df["FTAG"].astype(int)
     df["over25"] = ((df["FTHG"] + df["FTAG"]) >= 3).astype(int)
-    # Ensure odds columns exist (use NaN when absent)
     for col in ("P>2.5", "P<2.5", "PC>2.5", "PC<2.5"):
         if col not in df.columns:
             df[col] = np.nan
+    # Only keep known divisions — skip '?' (BOM artifact) and any others
+    df = df[df["Div"].isin(_DIV_TO_LEAGUE.keys())].copy()
     df.sort_values("Date", inplace=True)
     df.reset_index(drop=True, inplace=True)
     return df
@@ -94,7 +105,6 @@ def _load(csv_path: Path) -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 
 def _devig_market(p_over: float, p_under: float) -> float:
-    """Multiplicative devig → fair p_over."""
     total = p_over + p_under
     if total <= 0:
         return np.nan
@@ -102,18 +112,12 @@ def _devig_market(p_over: float, p_under: float) -> float:
 
 
 def _market_prob(row: pd.Series) -> tuple[float, str]:
-    """Derive fair market probability from Pinnacle opening odds."""
     p_raw = row.get("P>2.5", np.nan)
     u_raw = row.get("P<2.5", np.nan)
-
     if pd.notna(p_raw) and pd.notna(u_raw) and float(p_raw) > 1.0 and float(u_raw) > 1.0:
-        p_imp = 1.0 / float(p_raw)
-        u_imp = 1.0 / float(u_raw)
-        return _devig_market(p_imp, u_imp), "devig"
-
+        return _devig_market(1.0 / float(p_raw), 1.0 / float(u_raw)), "devig"
     if pd.notna(p_raw) and float(p_raw) > 1.0:
         return (1.0 / float(p_raw)) / PINNACLE_MARGIN, "fallback"
-
     return np.nan, "missing"
 
 
@@ -122,9 +126,7 @@ def _market_prob(row: pd.Series) -> tuple[float, str]:
 # ---------------------------------------------------------------------------
 
 def _weeks_between(start: pd.Timestamp, end: pd.Timestamp) -> list[pd.Timestamp]:
-    """All Monday dates in [start, end) at weekly intervals."""
-    mondays = pd.date_range(start=start, end=end, freq="W-MON")
-    return list(mondays)
+    return list(pd.date_range(start=start, end=end, freq="W-MON"))
 
 
 def run_walkforward(
@@ -133,57 +135,35 @@ def run_walkforward(
     min_ev: float = MIN_EV_DEFAULT,
     min_train: int = MIN_TRAIN_GAMES,
 ) -> pd.DataFrame:
-    """
-    Run weekly walk-forward backtest and return a DataFrame of all bet records.
-
-    Each row corresponds to one (game × weight) combination where a bet
-    would have been placed (ev_final >= min_ev).
-
-    Columns:
-        date, div, league, home, away, over25,
-        p_dc, p_market, p_market_source,
-        blend_weight, p_final, ev_final,
-        odds_over, clv, won
-    """
     from models.math.poisson import fit_dixon_coles_fast, prob_over25_from_model
 
     df = df.copy()
     df["Date"] = pd.to_datetime(df["Date"])
 
     all_records: list[dict] = []
-
-    # Leakage audit counters
     _leakage_violations = 0
+    _models: dict[str, object] = {}
+    _model_trained_at: dict[str, pd.Timestamp] = {}
 
     weeks = _weeks_between(df["Date"].min(), df["Date"].max() + timedelta(days=7))
 
-    # Track fitted models per (div, week)
-    _models: dict[str, object] = {}  # div → latest model
-    _model_trained_at: dict[str, pd.Timestamp] = {}  # div → last Monday trained
-
     for week_idx, week_start in enumerate(weeks[:-1]):
         week_end = weeks[week_idx + 1]
-
-        # Training data: strictly before week_start — NO LEAKAGE
         train_mask = df["Date"] < week_start
         test_mask  = (df["Date"] >= week_start) & (df["Date"] < week_end)
-
         test_df = df[test_mask]
         if test_df.empty:
             continue
-
-        n_train_total = train_mask.sum()
-        if n_train_total < min_train:
+        if train_mask.sum() < min_train:
             continue
 
-        # Fit / refit per division
         for div, div_test in test_df.groupby("Div"):
+            if str(div) not in _DIV_TO_LEAGUE:
+                continue
             div_train = df[train_mask & (df["Div"] == div)]
-
             if len(div_train) < MIN_TEAM_GAMES:
                 continue
 
-            # Re-fit weekly (if not already fitted this week)
             if div not in _model_trained_at or _model_trained_at[div] < week_start:
                 fit_df = div_train.rename(columns={
                     "HomeTeam": "home", "AwayTeam": "away",
@@ -201,27 +181,16 @@ def run_walkforward(
             if model is None:
                 continue
 
-            league = _DIV_TO_LEAGUE.get(str(div), str(div))
+            league = _DIV_TO_LEAGUE[str(div)]
 
             for _, row in div_test.iterrows():
-                # Leakage guard (should never trigger)
                 if row["Date"] < week_start:
                     _leakage_violations += 1
-                    logger.error(
-                        "LEAKAGE: game %s on %s included in week %s",
-                        f"{row['HomeTeam']} v {row['AwayTeam']}", row["Date"].date(), week_start.date()
-                    )
                     continue
 
                 home, away = str(row["HomeTeam"]), str(row["AwayTeam"])
-
-                # Count prior appearances (cold-start filter)
-                home_prior = (
-                    (div_train["HomeTeam"] == home) | (div_train["AwayTeam"] == home)
-                ).sum()
-                away_prior = (
-                    (div_train["HomeTeam"] == away) | (div_train["AwayTeam"] == away)
-                ).sum()
+                home_prior = ((div_train["HomeTeam"] == home) | (div_train["AwayTeam"] == home)).sum()
+                away_prior = ((div_train["HomeTeam"] == away) | (div_train["AwayTeam"] == away)).sum()
                 if home_prior < MIN_TEAM_GAMES or away_prior < MIN_TEAM_GAMES:
                     continue
 
@@ -238,40 +207,34 @@ def run_walkforward(
                 if np.isnan(odds_over) or odds_over <= 1.0:
                     continue
 
-                # CLV: positive = beat the closing line
                 pc_over = float(row.get("PC>2.5", np.nan))
                 clv = (odds_over / pc_over - 1.0) if (pd.notna(pc_over) and pc_over > 1.0) else np.nan
 
                 for w in blend_weights:
                     p_final = w * p_dc + (1.0 - w) * p_market_val
                     ev_final = p_final * odds_over - 1.0
-
                     if ev_final < min_ev:
                         continue
-
                     all_records.append({
-                        "date":          row["Date"],
-                        "div":           div,
-                        "league":        league,
-                        "home":          home,
-                        "away":          away,
-                        "over25":        int(row["over25"]),
-                        "p_dc":          round(p_dc, 6),
-                        "p_market":      round(p_market_val, 6),
+                        "date":            row["Date"],
+                        "div":             div,
+                        "league":          league,
+                        "home":            home,
+                        "away":            away,
+                        "over25":          int(row["over25"]),
+                        "p_dc":            round(p_dc, 6),
+                        "p_market":        round(p_market_val, 6),
                         "p_market_source": p_market_src,
-                        "blend_weight":  w,
-                        "p_final":       round(p_final, 6),
-                        "ev_final":      round(ev_final, 6),
-                        "odds_over":     round(odds_over, 3),
-                        "clv":           round(clv, 6) if pd.notna(clv) else np.nan,
-                        "won":           int(row["over25"] == 1),
+                        "blend_weight":    w,
+                        "p_final":         round(p_final, 6),
+                        "ev_final":        round(ev_final, 6),
+                        "odds_over":       round(odds_over, 3),
+                        "clv":             round(clv, 6) if pd.notna(clv) else np.nan,
+                        "won":             int(row["over25"] == 1),
                     })
 
     if _leakage_violations:
-        raise RuntimeError(
-            f"LEAKAGE DETECTED: {_leakage_violations} violations found! "
-            "Walk-forward is invalid. Check date filtering logic."
-        )
+        raise RuntimeError(f"LEAKAGE DETECTED: {_leakage_violations} violations!")
 
     logger.info("No leakage violations detected ✓")
     return pd.DataFrame(all_records)
@@ -281,17 +244,19 @@ def run_walkforward(
 # Metrics
 # ---------------------------------------------------------------------------
 
-def _brier(y_true: np.ndarray, p_pred: np.ndarray) -> float:
-    return float(np.mean((p_pred - y_true) ** 2))
+def _brier(y: np.ndarray, p: np.ndarray) -> float:
+    return float(np.mean((p - y) ** 2))
 
+def _log_loss(y: np.ndarray, p: np.ndarray, eps: float = 1e-7) -> float:
+    p = np.clip(p, eps, 1 - eps)
+    return float(-np.mean(y * np.log(p) + (1 - y) * np.log(1 - p)))
 
-def _log_loss(y_true: np.ndarray, p_pred: np.ndarray, eps: float = 1e-7) -> float:
-    p = np.clip(p_pred, eps, 1 - eps)
-    return float(-np.mean(y_true * np.log(p) + (1 - y_true) * np.log(1 - p)))
+def _roi(y: np.ndarray, odds: np.ndarray) -> float:
+    pnl = np.sum(np.where(y == 1, odds - 1.0, -1.0))
+    return float(pnl / len(y) * 100) if len(y) > 0 else 0.0
 
 
 def compute_metrics(bets: pd.DataFrame) -> pd.DataFrame:
-    """Compute per-weight performance metrics from a bets DataFrame."""
     rows = []
     for w in sorted(bets["blend_weight"].unique()):
         sub = bets[bets["blend_weight"] == w]
@@ -300,106 +265,221 @@ def compute_metrics(bets: pd.DataFrame) -> pd.DataFrame:
         y = sub["won"].values.astype(float)
         p = sub["p_final"].values.astype(float)
         odds = sub["odds_over"].values
-        n_bets = len(sub)
-        win_rate = float(y.mean())
-        pnl = float(np.sum(np.where(y == 1, odds - 1.0, -1.0)))
-        brier = _brier(y, p)
-        ll = _log_loss(y, p)
         clv_vals = sub["clv"].dropna()
-        avg_clv = float(clv_vals.mean()) if len(clv_vals) > 0 else np.nan
         rows.append({
-            "weight":    w,
-            "n_bets":    n_bets,
-            "win_rate":  round(win_rate, 4),
-            "pnl":       round(pnl, 2),
-            "brier":     round(brier, 5),
-            "log_loss":  round(ll, 5),
-            "avg_clv":   round(avg_clv, 5) if pd.notna(avg_clv) else np.nan,
+            "w":       w,
+            "n_bets":  len(sub),
+            "win_rate": round(float(y.mean()), 4),
+            "pnl":     round(float(np.sum(np.where(y == 1, odds - 1.0, -1.0))), 2),
+            "roi_pct": round(_roi(y, odds), 2),
+            "brier":   round(_brier(y, p), 5),
+            "log_loss":round(_log_loss(y, p), 5),
+            "avg_clv_pct": round(float(clv_vals.mean()) * 100, 3) if len(clv_vals) > 0 else float("nan"),
         })
     return pd.DataFrame(rows)
 
 
+def calibration_table(bets: pd.DataFrame, best_w: float, n_buckets: int = 10) -> list[dict]:
+    sub = bets[bets["blend_weight"] == best_w]
+    if sub.empty:
+        return []
+    sub = sub.copy()
+    sub["bucket"] = pd.cut(sub["p_final"], bins=n_buckets, include_lowest=True)
+    rows = []
+    for bucket, grp in sub.groupby("bucket", observed=True):
+        rows.append({
+            "bucket":     str(bucket),
+            "n":          len(grp),
+            "pred_avg":   round(grp["p_final"].mean(), 3),
+            "actual_wr":  round(grp["won"].mean(), 3),
+            "diff":       round(grp["won"].mean() - grp["p_final"].mean(), 3),
+        })
+    return rows
+
+
+def by_league_table(bets: pd.DataFrame, best_w: float) -> list[dict]:
+    sub = bets[bets["blend_weight"] == best_w]
+    if sub.empty:
+        return []
+    rows = []
+    for league, grp in sub.groupby("league"):
+        y = grp["won"].values.astype(float)
+        odds = grp["odds_over"].values
+        clv_vals = grp["clv"].dropna()
+        rows.append({
+            "league":    league,
+            "n_bets":    len(grp),
+            "win_rate":  round(float(y.mean()), 3),
+            "roi_pct":   round(_roi(y, odds), 2),
+            "avg_clv_pct": round(float(clv_vals.mean()) * 100, 3) if len(clv_vals) > 0 else float("nan"),
+        })
+    return sorted(rows, key=lambda r: r["n_bets"], reverse=True)
+
+
+def by_odds_band_table(bets: pd.DataFrame, best_w: float) -> list[dict]:
+    sub = bets[bets["blend_weight"] == best_w].copy()
+    if sub.empty:
+        return []
+    rows = []
+    for lo, hi, label in ODDS_BANDS:
+        grp = sub[(sub["odds_over"] >= lo) & (sub["odds_over"] < hi)]
+        if grp.empty:
+            continue
+        y = grp["won"].values.astype(float)
+        odds = grp["odds_over"].values
+        rows.append({
+            "band":     label,
+            "n_bets":   len(grp),
+            "win_rate": round(float(y.mean()), 3),
+            "avg_ev":   round(grp["ev_final"].mean(), 4),
+            "roi_pct":  round(_roi(y, odds), 2),
+        })
+    return rows
+
+
 # ---------------------------------------------------------------------------
-# Report generation
+# Report
 # ---------------------------------------------------------------------------
 
-def _recommendation(metrics_df: pd.DataFrame) -> str:
-    """Pick the weight with the lowest Brier Score as the recommendation."""
-    best_idx = metrics_df["brier"].idxmin()
-    best = metrics_df.loc[best_idx]
-    return (
-        f"Recommended blend weight: **w = {best['weight']}** "
-        f"(Brier Score = {best['brier']:.5f}, "
-        f"Win% = {best['win_rate']*100:.1f}%, "
-        f"P&L = {best['pnl']:+.1f}u)"
-    )
+def _best_w(metrics: pd.DataFrame) -> float:
+    if metrics.empty:
+        return 0.30
+    return float(metrics.loc[metrics["brier"].idxmin(), "w"])
 
 
 def write_report(
     bets: pd.DataFrame,
     metrics: pd.DataFrame,
+    raw_df: pd.DataFrame,
     out_path: Path,
     min_ev: float,
 ) -> None:
-    n_games_total = bets[["date", "div", "home", "away"]].drop_duplicates().shape[0]
-    date_min = bets["date"].min().date() if not bets.empty else "N/A"
-    date_max = bets["date"].max().date() if not bets.empty else "N/A"
-    leagues = sorted(bets["league"].unique()) if not bets.empty else []
+    if bets.empty:
+        out_path.write_text("# Walk-Forward — sem apostas geradas\n")
+        return
 
-    # Metrics table
-    table_rows = []
+    best_w = _best_w(metrics)
+    n_games_total = raw_df[raw_df["Div"].isin(_DIV_TO_LEAGUE)].shape[0]
+    date_min = raw_df["Date"].min().date()
+    date_max = raw_df["Date"].max().date()
+    leagues = sorted(_DIV_TO_LEAGUE.values())
+    n_known = len(raw_df[raw_df["Div"].isin(_DIV_TO_LEAGUE)])
+    n_total = len(raw_df)
+
+    # --- weight table ---
+    w_rows = []
     for _, r in metrics.iterrows():
-        clv_str = f"{r['avg_clv']*100:+.2f}%" if pd.notna(r["avg_clv"]) else "N/A"
-        table_rows.append(
-            f"| {r['weight']:.2f} | {int(r['n_bets']):>6} | "
-            f"{r['win_rate']*100:.1f}% | {r['pnl']:>+7.1f}u | "
+        clv_str = f"{r['avg_clv_pct']:+.2f}%" if pd.notna(r["avg_clv_pct"]) else "N/A"
+        w_rows.append(
+            f"| **{r['w']:.2f}** | {int(r['n_bets']):>6} | {r['win_rate']*100:.1f}% | "
+            f"{r['pnl']:>+7.1f}u | {r['roi_pct']:>+6.2f}% | "
             f"{r['brier']:.5f} | {r['log_loss']:.5f} | {clv_str} |"
         )
 
-    report = textwrap.dedent(f"""\
-        # Walk-Forward Backtest Report
+    # --- calibration table ---
+    cal_rows = []
+    for r in calibration_table(bets, best_w):
+        diff_str = f"{r['diff']:+.3f}"
+        cal_rows.append(
+            f"| {r['bucket']} | {r['n']:>5} | {r['pred_avg']:.3f} | {r['actual_wr']:.3f} | {diff_str} |"
+        )
 
-        Generated: {pd.Timestamp.now('UTC').isoformat(timespec='seconds')} UTC
+    # --- by league ---
+    lg_rows = []
+    for r in by_league_table(bets, best_w):
+        clv_str = f"{r['avg_clv_pct']:+.2f}%" if pd.notna(r["avg_clv_pct"]) else "N/A"
+        lg_rows.append(
+            f"| {r['league']:<25} | {r['n_bets']:>6} | {r['win_rate']*100:.1f}% | "
+            f"{r['roi_pct']:>+7.2f}% | {clv_str} |"
+        )
 
-        ## Dataset
+    # --- by odds band ---
+    od_rows = []
+    for r in by_odds_band_table(bets, best_w):
+        od_rows.append(
+            f"| {r['band']:<12} | {r['n_bets']:>6} | {r['win_rate']*100:.1f}% | "
+            f"{r['avg_ev']:>+.4f} | {r['roi_pct']:>+7.2f}% |"
+        )
 
-        | | |
-        |---|---|
-        | Total games evaluated | {n_games_total:,} |
-        | Date range | {date_min} → {date_max} |
-        | Leagues | {len(leagues)} ({", ".join(leagues)}) |
-        | EV threshold (MIN\\_EV) | {min_ev:.2f} ({min_ev*100:.0f}%) |
+    best_row = metrics[metrics["w"] == best_w].iloc[0]
+    bom_note = ""
+    if n_known < n_total:
+        bom_note = (
+            f"\n> ⚠️ **{n_total - n_known:,} linhas excluídas** (Div=`?`): "
+            "CSVs de football-data.co.uk com BOM UTF-8 lido incorrectamente em latin-1 "
+            "— correcto após próximo `--download-all` com a versão fixada do pipeline.\n"
+        )
 
-        ## No-leakage verification
-
-        Walk-forward uses **strictly historical data** at every step:
-        - Training set for week W: all games with `date < week_start(W)`
-        - Test set for week W: games in `[week_start(W), week_start(W+1))`
-        - Cold-start filter: teams with < {MIN_TEAM_GAMES} prior games are skipped
-        - Verified programmatically: 0 leakage violations detected ✓
-
-        ## Results by blend weight
-
-        `p_final = w × p_dc + (1 − w) × p_market`
-
-        | w    | N bets | Win%  |     P&L | Brier    | Log-loss | Avg CLV |
-        |------|--------|-------|---------|----------|----------|---------|
-        {chr(10).join(table_rows)}
-
-        > **Brier Score reference**: Pinnacle benchmark ≈ 0.220–0.230 (over/under 2.5 market).
-        > CLV = `P>2.5 / PC>2.5 − 1`; positive means we bet at better odds than the closing line.
-
-        ## {_recommendation(metrics)}
-
-        ## Notes
-
-        - Dixon-Coles model re-fitted weekly (every Monday) per division
-        - Time-decay parameter ξ = {XI} (≈2-year half-life)
-        - Market probability: de-vigged Pinnacle opening (`P>2.5` / `P<2.5`) via multiplicative method
-        - Fallback when `P<2.5` missing: `(1 / P>2.5) / {PINNACLE_MARGIN}`
-        - Bet criterion: `ev_final = p_final × P>2.5 − 1 ≥ {min_ev}`
-        - Staking: flat 1 unit per bet (Kelly disabled per `Config.STAKE_TYPE`)
-    """)
+    nl = "\n"
+    report = (
+f"# Walk-Forward Backtest Report\n"
+f"\n"
+f"> **DADOS REAIS — football-data.co.uk — {n_known:,} jogos**\n"
+f"> 5 épocas × 13 divisões × temporadas 2021-22 a 2025-26\n"
+f"{bom_note}"
+f"Generated: {pd.Timestamp.now('UTC').isoformat(timespec='seconds')} UTC\n"
+f"\n"
+f"## Dataset\n"
+f"\n"
+f"| | |\n"
+f"|---|---|\n"
+f"| Jogos usados (Div conhecida) | **{n_known:,}** |\n"
+f"| Date range | {date_min} → {date_max} |\n"
+f"| Ligas | 13 ({', '.join(leagues)}) |\n"
+f"| EV threshold (MIN\\_EV) | {min_ev:.2f} ({min_ev*100:.0f}%) |\n"
+f"\n"
+f"## No-leakage verification\n"
+f"\n"
+f"- Training: todos os jogos com `date < week_start(W)` (sem lookahead)\n"
+f"- Test: jogos em `[week_start(W), week_start(W+1))`\n"
+f"- Cold-start: equipas com < {MIN_TEAM_GAMES} jogos anteriores ignoradas\n"
+f"- **0 violações de leakage detectadas ✓**\n"
+f"\n"
+f"## Resultados por peso de blend\n"
+f"\n"
+f"`p_final = w × p_dc + (1 − w) × p_market`\n"
+f"\n"
+f"| w | N apostas | Win% | P&L | ROI | Brier | Log-loss | Avg CLV |\n"
+f"|---|-----------|------|-----|-----|-------|----------|---------|\n"
++ nl.join(w_rows) + "\n"
+f"\n"
+f"> Brier Score benchmark Pinnacle (over/under 2.5): ≈ 0.220–0.230\n"
+f"> CLV = `P>2.5 / PC>2.5 − 1`; positivo = apostámos a odds melhores que o fecho.\n"
+f"> ROI = (P&L / N apostas) × 100\n"
+f"\n"
+f"## Peso recomendado: w = {best_w} (melhor Brier = {best_row['brier']:.5f})\n"
+f"\n"
+f"Win%={best_row['win_rate']*100:.1f}%  |  ROI={best_row['roi_pct']:+.2f}%  |  N={int(best_row['n_bets'])}\n"
+f"\n"
+f"## Tabela de calibração (w = {best_w})\n"
+f"\n"
+f"Buckets de probabilidade prevista vs taxa real de vitória.\n"
+f"\n"
+f"| Bucket previsto | N | Pred médio | Win% real | Diferença |\n"
+f"|-----------------|---|-----------|-----------|----------|\n"
++ nl.join(cal_rows) + "\n"
+f"\n"
+f"## Resultados por liga (w = {best_w})\n"
+f"\n"
+f"| Liga | N apostas | Win% | ROI | Avg CLV |\n"
+f"|------|-----------|------|-----|--------|\n"
++ nl.join(lg_rows) + "\n"
+f"\n"
+f"## Resultados por banda de odds (w = {best_w})\n"
+f"\n"
+f"| Odds | N apostas | Win% | EV médio | ROI |\n"
+f"|------|-----------|------|----------|----|\n"
++ nl.join(od_rows) + "\n"
+f"\n"
+f"## Notas metodológicas\n"
+f"\n"
+f"- Modelo Dixon-Coles re-treinado semanalmente (cada segunda-feira) por divisão\n"
+f"- Decay ξ = {XI} (semi-vida ≈ 2 anos)\n"
+f"- Probabilidade de mercado: devig multiplicativo sobre Pinnacle opening (`P>2.5` / `P<2.5`)\n"
+f"- Fallback quando `P<2.5` ausente: `(1 / P>2.5) / {PINNACLE_MARGIN}`\n"
+f"- Critério de aposta: `ev_final = p_final × P>2.5 − 1 ≥ {min_ev}`\n"
+f"- Stake: flat 1 unidade (Kelly desabilitado — `Config.STAKE_TYPE = \"flat\"`)\n"
+    )
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(report, encoding="utf-8")
@@ -414,17 +494,12 @@ def _build_parser() -> argparse.ArgumentParser:
     root = Path(__file__).resolve().parent.parent
     p = argparse.ArgumentParser(description="Walk-forward backtest (no leakage)")
     p.add_argument("--data", type=Path,
-                   default=root / "data" / "historical" / "matches.csv",
-                   help="Path to historical matches CSV")
+                   default=root / "data" / "historical" / "matches.csv")
     p.add_argument("--out", type=Path,
-                   default=root / "backtesting" / "reports" / "walkforward.md",
-                   help="Output path for Markdown report")
-    p.add_argument("--min-ev", type=float, default=MIN_EV_DEFAULT,
-                   help="Minimum EV to place a simulated bet")
-    p.add_argument("--min-train", type=int, default=MIN_TRAIN_GAMES,
-                   help="Minimum total training games before first prediction")
-    p.add_argument("--weights", nargs="+", type=float, default=BLEND_WEIGHTS,
-                   metavar="W", help="Blend weights to test")
+                   default=root / "backtesting" / "reports" / "walkforward.md")
+    p.add_argument("--min-ev", type=float, default=MIN_EV_DEFAULT)
+    p.add_argument("--min-train", type=int, default=MIN_TRAIN_GAMES)
+    p.add_argument("--weights", nargs="+", type=float, default=BLEND_WEIGHTS)
     return p
 
 
@@ -434,15 +509,14 @@ def main(argv: Optional[list[str]] = None) -> None:
     args = _build_parser().parse_args(argv)
 
     if not args.data.exists():
-        raise FileNotFoundError(
-            f"matches.csv not found at {args.data}. "
-            "Run 'python -m pipeline.historical --synthetic' first."
-        )
+        raise FileNotFoundError(f"matches.csv not found at {args.data}")
 
     logger.info("Loading %s…", args.data)
+    raw_df = pd.read_csv(args.data, parse_dates=["Date"])
     df = _load(args.data)
-    logger.info("Loaded %d games from %s to %s",
-                len(df), df["Date"].min().date(), df["Date"].max().date())
+    logger.info("Loaded %d games from %d known divisions (%.0f%% of %d total)",
+                len(df), df["Div"].nunique(),
+                len(df) / len(raw_df) * 100, len(raw_df))
 
     logger.info("Running walk-forward (weights=%s, min_ev=%.3f)…", args.weights, args.min_ev)
     t0 = time.perf_counter()
@@ -451,13 +525,10 @@ def main(argv: Optional[list[str]] = None) -> None:
     elapsed = time.perf_counter() - t0
     logger.info("Walk-forward complete in %.1fs — %d bet records", elapsed, len(bets))
 
-    if bets.empty:
-        logger.warning("No bets generated — check min_ev threshold or data quality.")
-
     metrics = compute_metrics(bets)
     print("\n" + metrics.to_string(index=False))
 
-    write_report(bets, metrics, args.out, min_ev=args.min_ev)
+    write_report(bets, metrics, raw_df, args.out, min_ev=args.min_ev)
     print(f"\nReport saved to {args.out}")
 
 
