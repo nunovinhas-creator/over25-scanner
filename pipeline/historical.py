@@ -131,7 +131,18 @@ def _download_one(epoch: str, div: str) -> Optional[pd.DataFrame]:
     if raw is None:
         return None
     try:
-        df = pd.read_csv(io.BytesIO(raw), encoding="latin-1", on_bad_lines="skip")
+        # Try utf-8-sig first: handles UTF-8 BOM (avoids 'ï»¿Div' column names).
+        # Fall back to latin-1 for files with accented team names not valid in UTF-8.
+        for enc in ("utf-8-sig", "latin-1"):
+            try:
+                df = pd.read_csv(io.BytesIO(raw), encoding=enc, on_bad_lines="skip")
+                break
+            except UnicodeDecodeError:
+                continue
+        else:
+            raise ValueError("Could not decode with utf-8-sig or latin-1")
+        # Normalise column names: strip residual BOM artifact and whitespace
+        df.columns = df.columns.str.replace(r'^ï»¿', '', regex=True).str.strip()
         return df
     except Exception as exc:
         logger.warning("Could not parse %s: %s", url, exc)
