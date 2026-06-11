@@ -492,10 +492,13 @@ def write_report(
     # --- weight table ---
     w_rows = []
     for _, r in metrics.iterrows():
-        clv_str = f"{r['avg_clv_pct']:+.2f}%" if pd.notna(r["avg_clv_pct"]) else "N/A"
+        clv_str = f"{r['avg_clv_pct']:+.2f}%" if pd.notna(r["avg_clv_pct"]) else "—"
+        wr_str  = f"{r['win_rate']*100:.1f}%" if pd.notna(r["win_rate"]) else "—"
+        roi_str = f"{r['roi_pct']:+.2f}%" if pd.notna(r["roi_pct"]) else "—"
+        pnl_str = f"{r['pnl']:+.1f}u"
         w_rows.append(
-            f"| **{r['w']:.2f}** | {int(r['n_bets']):>6} | {r['win_rate']*100:.1f}% | "
-            f"{r['pnl']:>+7.1f}u | {r['roi_pct']:>+6.2f}% | "
+            f"| **{r['w']:.2f}** | {int(r['n_bets']):>6} | {wr_str} | "
+            f"{pnl_str} | {roi_str} | "
             f"{r['brier']:.5f} | {r['log_loss']:.5f} | {clv_str} |"
         )
 
