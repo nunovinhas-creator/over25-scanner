@@ -300,12 +300,12 @@ def _calibration_tbl(y: np.ndarray, p_f: np.ndarray,
         return []
     p_bet = p_f[bet_mask]; y_bet = y[bet_mask]
     try:
-        bins = pd.cut(p_bet, bins=n_buckets, include_lowest=True)
+        bins_s = pd.cut(pd.Series(p_bet), bins=n_buckets, include_lowest=True)
     except Exception:
         return []
     rows = []
-    for bucket in bins.cat.categories:
-        m = bins == bucket
+    for bucket in bins_s.cat.categories:
+        m = (bins_s == bucket).values
         if not m.any():
             continue
         rows.append({
@@ -607,6 +607,9 @@ f"- Serialização em `data/calibrator.json` — sem pickle, parâmetros legíve
 # Main
 # ---------------------------------------------------------------------------
 
+_OOS_CACHE = Path("/tmp/over25_oos_cache.parquet")
+
+
 def main() -> None:
     logging.basicConfig(
         level=logging.INFO,
@@ -618,19 +621,25 @@ def main() -> None:
 
     from backtesting.run_walkforward import _load, run_walkforward
 
-    logger.info("A carregar %s…", DATA_CSV)
-    full_df = _load(DATA_CSV)
-    logger.info("Carregado: %d jogos | %d divisões | épocas %s",
-                len(full_df), full_df["Div"].nunique(),
-                sorted(full_df["Season"].dropna().unique().astype(int).tolist())
-                if "Season" in full_df.columns else "N/A")
-
     # ── Passo 1: recolher previsões OOS (um único passe, blend=0.0) ─────────
-    logger.info("Passo 1/6 — walk-forward completo (blend=[0.0]) para recolher OOS p_dc…")
-    t0 = time.perf_counter()
-    all_oos = run_walkforward(full_df, blend_weights=[0.0], min_ev=MIN_EV, min_train=MIN_TRAIN)
-    elapsed = time.perf_counter() - t0
-    logger.info("Walk-forward completo em %.1fs — %d registos OOS", elapsed, len(all_oos))
+    if _OOS_CACHE.exists():
+        logger.info("Passo 1/6 — a carregar OOS cache de %s…", _OOS_CACHE)
+        all_oos = pd.read_parquet(_OOS_CACHE)
+        logger.info("Cache carregada: %d registos OOS", len(all_oos))
+    else:
+        logger.info("A carregar %s…", DATA_CSV)
+        full_df = _load(DATA_CSV)
+        logger.info("Carregado: %d jogos | %d divisões | épocas %s",
+                    len(full_df), full_df["Div"].nunique(),
+                    sorted(full_df["Season"].dropna().unique().astype(int).tolist())
+                    if "Season" in full_df.columns else "N/A")
+        logger.info("Passo 1/6 — walk-forward completo (blend=[0.0]) para recolher OOS p_dc…")
+        t0 = time.perf_counter()
+        all_oos = run_walkforward(full_df, blend_weights=[0.0], min_ev=MIN_EV, min_train=MIN_TRAIN)
+        elapsed = time.perf_counter() - t0
+        logger.info("Walk-forward completo em %.1fs — %d registos OOS", elapsed, len(all_oos))
+        all_oos.to_parquet(_OOS_CACHE, index=False)
+        logger.info("Cache guardada em %s", _OOS_CACHE)
 
     if "season" not in all_oos.columns:
         raise RuntimeError("Coluna 'season' em falta — verifica run_walkforward.py")
