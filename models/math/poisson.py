@@ -375,7 +375,7 @@ def batch_predict(
 def fit_dixon_coles_fast(
     matches_df: pd.DataFrame,
     xi: float = 0.0018,
-    max_iter: int = 500,
+    max_iter: int = 2000,
 ) -> dict:
     """
     Fit Dixon-Coles using vectorised numpy operations and L-BFGS-B.

@@ -50,7 +50,7 @@ logger = logging.getLogger(__name__)
 # Constants
 # ---------------------------------------------------------------------------
 
-BLEND_WEIGHTS: list[float] = [0.0, 0.15, 0.30, 0.50, 1.0]
+BLEND_WEIGHTS: list[float] = [0.0, 0.05, 0.10, 0.15, 0.20, 0.30, 0.50, 1.0]
 MIN_EV_DEFAULT = 0.03
 MIN_TRAIN_GAMES = 50
 MIN_TEAM_GAMES  = 5
@@ -210,10 +210,16 @@ def run_walkforward(
                 pc_over = float(row.get("PC>2.5", np.nan))
                 clv = (odds_over / pc_over - 1.0) if (pd.notna(pc_over) and pc_over > 1.0) else np.nan
 
+                # Mid-price CLV: proxy for -30min timing ((open+close)/2 as bet price)
+                mid_odds = ((odds_over + pc_over) / 2.0) if (pd.notna(pc_over) and pc_over > 1.0) else np.nan
+                clv_mid = (mid_odds / pc_over - 1.0) if pd.notna(mid_odds) else np.nan
+
                 for w in blend_weights:
                     p_final = w * p_dc + (1.0 - w) * p_market_val
                     ev_final = p_final * odds_over - 1.0
-                    if ev_final < min_ev:
+                    # w=0.0 saves ALL records (full-sample market baseline); others require EV gate
+                    is_bet = ev_final >= min_ev
+                    if w > 0.0 and not is_bet:
                         continue
                     all_records.append({
                         "date":            row["Date"],
@@ -230,6 +236,8 @@ def run_walkforward(
                         "ev_final":        round(ev_final, 6),
                         "odds_over":       round(odds_over, 3),
                         "clv":             round(clv, 6) if pd.notna(clv) else np.nan,
+                        "clv_mid":         round(clv_mid, 6) if pd.notna(clv_mid) else np.nan,
+                        "is_bet":          is_bet,
                         "won":             int(row["over25"] == 1),
                     })
 
@@ -259,28 +267,99 @@ def _roi(y: np.ndarray, odds: np.ndarray) -> float:
 def compute_metrics(bets: pd.DataFrame) -> pd.DataFrame:
     rows = []
     for w in sorted(bets["blend_weight"].unique()):
-        sub = bets[bets["blend_weight"] == w]
-        if sub.empty:
+        all_w = bets[bets["blend_weight"] == w]
+        if all_w.empty:
             continue
-        y = sub["won"].values.astype(float)
-        p = sub["p_final"].values.astype(float)
-        odds = sub["odds_over"].values
-        clv_vals = sub["clv"].dropna()
+
+        # For w=0.0: Brier/log-loss on all records (full market calibration);
+        # bets/P&L/ROI only on EV-gated is_bet rows.
+        if "is_bet" in all_w.columns and w == 0.0:
+            bet_sub = all_w[all_w["is_bet"]]
+            eval_sub = all_w  # full sample for calibration metrics
+        else:
+            bet_sub = all_w
+            eval_sub = all_w
+
+        y_eval = eval_sub["won"].values.astype(float)
+        p_eval = eval_sub["p_final"].values.astype(float)
+
+        if bet_sub.empty:
+            y_bet = np.array([], dtype=float)
+            odds_bet = np.array([], dtype=float)
+        else:
+            y_bet = bet_sub["won"].values.astype(float)
+            odds_bet = bet_sub["odds_over"].values
+
+        clv_vals = bet_sub["clv"].dropna() if not bet_sub.empty else pd.Series([], dtype=float)
+
         rows.append({
-            "w":       w,
-            "n_bets":  len(sub),
-            "win_rate": round(float(y.mean()), 4),
-            "pnl":     round(float(np.sum(np.where(y == 1, odds - 1.0, -1.0))), 2),
-            "roi_pct": round(_roi(y, odds), 2),
-            "brier":   round(_brier(y, p), 5),
-            "log_loss":round(_log_loss(y, p), 5),
+            "w":          w,
+            "n_bets":     len(bet_sub),
+            "win_rate":   round(float(y_bet.mean()), 4) if len(y_bet) > 0 else float("nan"),
+            "pnl":        round(float(np.sum(np.where(y_bet == 1, odds_bet - 1.0, -1.0))), 2) if len(y_bet) > 0 else 0.0,
+            "roi_pct":    round(_roi(y_bet, odds_bet), 2) if len(y_bet) > 0 else float("nan"),
+            "brier":      round(_brier(y_eval, p_eval), 5),
+            "log_loss":   round(_log_loss(y_eval, p_eval), 5),
             "avg_clv_pct": round(float(clv_vals.mean()) * 100, 3) if len(clv_vals) > 0 else float("nan"),
         })
     return pd.DataFrame(rows)
 
 
+def clv_stats(bets: pd.DataFrame, w: float) -> dict:
+    """CLV mean, SE, 95% CI for a given blend weight (EV-bet rows only)."""
+    sub = bets[bets["blend_weight"] == w]
+    if "is_bet" in sub.columns:
+        sub = sub[sub["is_bet"]]
+    clv_vals = sub["clv"].dropna().values * 100  # convert to %
+    n = len(clv_vals)
+    if n == 0:
+        return {"n": 0, "mean": float("nan"), "se": float("nan"),
+                "ci95_lo": float("nan"), "ci95_hi": float("nan"), "ci_includes_zero": True}
+    mean = float(np.mean(clv_vals))
+    se = float(np.std(clv_vals, ddof=1) / np.sqrt(n))
+    ci_lo = mean - 1.96 * se
+    ci_hi = mean + 1.96 * se
+    return {
+        "n": n,
+        "mean": round(mean, 3),
+        "se": round(se, 3),
+        "ci95_lo": round(ci_lo, 3),
+        "ci95_hi": round(ci_hi, 3),
+        "ci_includes_zero": ci_lo <= 0.0 <= ci_hi,
+    }
+
+
+def mid_price_clv_stats(bets: pd.DataFrame, w: float) -> dict:
+    """
+    CLV if bet were placed at mid-price (open+close)/2 — proxy for -30min KO timing.
+    Returns same structure as clv_stats().
+    """
+    sub = bets[bets["blend_weight"] == w]
+    if "is_bet" in sub.columns:
+        sub = sub[sub["is_bet"]]
+    clv_vals = sub["clv_mid"].dropna().values * 100
+    n = len(clv_vals)
+    if n == 0:
+        return {"n": 0, "mean": float("nan"), "se": float("nan"),
+                "ci95_lo": float("nan"), "ci95_hi": float("nan"), "ci_includes_zero": True}
+    mean = float(np.mean(clv_vals))
+    se = float(np.std(clv_vals, ddof=1) / np.sqrt(n))
+    ci_lo = mean - 1.96 * se
+    ci_hi = mean + 1.96 * se
+    return {
+        "n": n,
+        "mean": round(mean, 3),
+        "se": round(se, 3),
+        "ci95_lo": round(ci_lo, 3),
+        "ci95_hi": round(ci_hi, 3),
+        "ci_includes_zero": ci_lo <= 0.0 <= ci_hi,
+    }
+
+
 def calibration_table(bets: pd.DataFrame, best_w: float, n_buckets: int = 10) -> list[dict]:
     sub = bets[bets["blend_weight"] == best_w]
+    if "is_bet" in sub.columns:
+        sub = sub[sub["is_bet"]]
     if sub.empty:
         return []
     sub = sub.copy()
@@ -297,41 +376,85 @@ def calibration_table(bets: pd.DataFrame, best_w: float, n_buckets: int = 10) ->
     return rows
 
 
+_MIN_SEGMENT_N = 100  # minimum bets per league/odds-band to get its own row
+
+
 def by_league_table(bets: pd.DataFrame, best_w: float) -> list[dict]:
     sub = bets[bets["blend_weight"] == best_w]
+    if "is_bet" in sub.columns:
+        sub = sub[sub["is_bet"]]
     if sub.empty:
         return []
     rows = []
+    other_rows = []
     for league, grp in sub.groupby("league"):
         y = grp["won"].values.astype(float)
         odds = grp["odds_over"].values
         clv_vals = grp["clv"].dropna()
+        entry = {
+            "league":      league,
+            "n_bets":      len(grp),
+            "win_rate":    round(float(y.mean()), 3),
+            "roi_pct":     round(_roi(y, odds), 2),
+            "avg_clv_pct": round(float(clv_vals.mean()) * 100, 3) if len(clv_vals) > 0 else float("nan"),
+        }
+        if len(grp) >= _MIN_SEGMENT_N:
+            rows.append(entry)
+        else:
+            other_rows.append(grp)
+
+    rows = sorted(rows, key=lambda r: r["n_bets"], reverse=True)
+
+    if other_rows:
+        others = pd.concat(other_rows)
+        y = others["won"].values.astype(float)
+        odds = others["odds_over"].values
+        clv_vals = others["clv"].dropna()
         rows.append({
-            "league":    league,
-            "n_bets":    len(grp),
-            "win_rate":  round(float(y.mean()), 3),
-            "roi_pct":   round(_roi(y, odds), 2),
+            "league":      f"outros ({len(others)} apostas, n < {_MIN_SEGMENT_N}/liga)",
+            "n_bets":      len(others),
+            "win_rate":    round(float(y.mean()), 3),
+            "roi_pct":     round(_roi(y, odds), 2),
             "avg_clv_pct": round(float(clv_vals.mean()) * 100, 3) if len(clv_vals) > 0 else float("nan"),
         })
-    return sorted(rows, key=lambda r: r["n_bets"], reverse=True)
+    return rows
 
 
 def by_odds_band_table(bets: pd.DataFrame, best_w: float) -> list[dict]:
     sub = bets[bets["blend_weight"] == best_w].copy()
+    if "is_bet" in sub.columns:
+        sub = sub[sub["is_bet"]]
     if sub.empty:
         return []
     rows = []
+    other_rows = []
     for lo, hi, label in ODDS_BANDS:
         grp = sub[(sub["odds_over"] >= lo) & (sub["odds_over"] < hi)]
         if grp.empty:
             continue
         y = grp["won"].values.astype(float)
         odds = grp["odds_over"].values
-        rows.append({
+        entry = {
             "band":     label,
             "n_bets":   len(grp),
             "win_rate": round(float(y.mean()), 3),
             "avg_ev":   round(grp["ev_final"].mean(), 4),
+            "roi_pct":  round(_roi(y, odds), 2),
+        }
+        if len(grp) >= _MIN_SEGMENT_N:
+            rows.append(entry)
+        else:
+            other_rows.append(grp)
+
+    if other_rows:
+        others = pd.concat(other_rows)
+        y = others["won"].values.astype(float)
+        odds = others["odds_over"].values
+        rows.append({
+            "band":     f"outros (n < {_MIN_SEGMENT_N})",
+            "n_bets":   len(others),
+            "win_rate": round(float(y.mean()), 3),
+            "avg_ev":   round(others["ev_final"].mean(), 4),
             "roi_pct":  round(_roi(y, odds), 2),
         })
     return rows
@@ -369,10 +492,13 @@ def write_report(
     # --- weight table ---
     w_rows = []
     for _, r in metrics.iterrows():
-        clv_str = f"{r['avg_clv_pct']:+.2f}%" if pd.notna(r["avg_clv_pct"]) else "N/A"
+        clv_str = f"{r['avg_clv_pct']:+.2f}%" if pd.notna(r["avg_clv_pct"]) else "—"
+        wr_str  = f"{r['win_rate']*100:.1f}%" if pd.notna(r["win_rate"]) else "—"
+        roi_str = f"{r['roi_pct']:+.2f}%" if pd.notna(r["roi_pct"]) else "—"
+        pnl_str = f"{r['pnl']:+.1f}u"
         w_rows.append(
-            f"| **{r['w']:.2f}** | {int(r['n_bets']):>6} | {r['win_rate']*100:.1f}% | "
-            f"{r['pnl']:>+7.1f}u | {r['roi_pct']:>+6.2f}% | "
+            f"| **{r['w']:.2f}** | {int(r['n_bets']):>6} | {wr_str} | "
+            f"{pnl_str} | {roi_str} | "
             f"{r['brier']:.5f} | {r['log_loss']:.5f} | {clv_str} |"
         )
 
@@ -410,6 +536,12 @@ def write_report(
             "— correcto após próximo `--download-all` com a versão fixada do pipeline.\n"
         )
 
+    # --- CLV stats with 95% CI ---
+    clv_ci = clv_stats(bets, best_w)
+    clv_mid_ci = mid_price_clv_stats(bets, best_w)
+    ci_zero_note = " ⚠️ **IC inclui zero — CLV não significativamente positivo**" if clv_ci["ci_includes_zero"] else " ✓ IC não inclui zero"
+    ci_mid_zero_note = " ⚠️ IC inclui zero" if clv_mid_ci["ci_includes_zero"] else " ✓ IC não inclui zero"
+
     nl = "\n"
     report = (
 f"# Walk-Forward Backtest Report\n"
@@ -443,6 +575,7 @@ f"| w | N apostas | Win% | P&L | ROI | Brier | Log-loss | Avg CLV |\n"
 f"|---|-----------|------|-----|-----|-------|----------|---------|\n"
 + nl.join(w_rows) + "\n"
 f"\n"
+f"> `w=0.00` — baseline do mercado: Brier/Log-loss calculados sobre todos os jogos com odds Pinnacle disponíveis (não filtrados por EV); N apostas=0 porque EV≈0 a odds de abertura.\n"
 f"> Brier Score benchmark Pinnacle (over/under 2.5): ≈ 0.220–0.230\n"
 f"> CLV = `P>2.5 / PC>2.5 − 1`; positivo = apostámos a odds melhores que o fecho.\n"
 f"> ROI = (P&L / N apostas) × 100\n"
@@ -450,6 +583,31 @@ f"\n"
 f"## Peso recomendado: w = {best_w} (melhor Brier = {best_row['brier']:.5f})\n"
 f"\n"
 f"Win%={best_row['win_rate']*100:.1f}%  |  ROI={best_row['roi_pct']:+.2f}%  |  N={int(best_row['n_bets'])}\n"
+f"\n"
+f"## CLV — Intervalo de Confiança 95% (w = {best_w})\n"
+f"\n"
+f"| Métrica | Valor |\n"
+f"|---------|-------|\n"
+f"| N apostas com CLV | {clv_ci['n']} |\n"
+f"| CLV médio | {clv_ci['mean']:+.3f}% |\n"
+f"| Erro padrão (SE) | ±{clv_ci['se']:.3f}% |\n"
+f"| IC 95% | [{clv_ci['ci95_lo']:+.3f}%, {clv_ci['ci95_hi']:+.3f}%] |\n"
+f"\n"
+f"{ci_zero_note}\n"
+f"\n"
+f"## Simulação de timing realista (-30min KO)\n"
+f"\n"
+f"CLV calculado a preço médio `(P>2.5 + PC>2.5) / 2` — proxy para entrada ~30min antes do KO.\n"
+f"\n"
+f"| Métrica | Valor |\n"
+f"|---------|-------|\n"
+f"| CLV mid-price médio | {clv_mid_ci['mean']:+.3f}% |\n"
+f"| Erro padrão (SE) | ±{clv_mid_ci['se']:.3f}% |\n"
+f"| IC 95% | [{clv_mid_ci['ci95_lo']:+.3f}%, {clv_mid_ci['ci95_hi']:+.3f}%] |\n"
+f"\n"
+f"{ci_mid_zero_note}\n"
+f"\n"
+f"> Interpretação: `CLV opening` = valor assumindo entrada na abertura. `CLV mid-price` = valor assumindo entrada 30min antes. Se mid-price > opening, odds melhoram à medida que se aproxima o KO.\n"
 f"\n"
 f"## Tabela de calibração (w = {best_w})\n"
 f"\n"
@@ -461,11 +619,15 @@ f"|-----------------|---|-----------|-----------|----------|\n"
 f"\n"
 f"## Resultados por liga (w = {best_w})\n"
 f"\n"
+f"> Apenas segmentos com n ≥ {_MIN_SEGMENT_N} apostas têm linha própria; o resto é agregado.\n"
+f"\n"
 f"| Liga | N apostas | Win% | ROI | Avg CLV |\n"
 f"|------|-----------|------|-----|--------|\n"
 + nl.join(lg_rows) + "\n"
 f"\n"
 f"## Resultados por banda de odds (w = {best_w})\n"
+f"\n"
+f"> Apenas bandas com n ≥ {_MIN_SEGMENT_N} apostas têm linha própria; o resto é agregado.\n"
 f"\n"
 f"| Odds | N apostas | Win% | EV médio | ROI |\n"
 f"|------|-----------|------|----------|----|\n"
