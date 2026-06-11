@@ -411,13 +411,11 @@ def filter_by_league(
 
 def filter_alert_candidates(picks: list[dict]) -> list[dict]:
     """
-    Return only picks that should generate a Telegram alert.
+    Return only picks that should generate a Telegram alert (pre-transform gate).
 
     DRIFTING picks are saved to picks.json for study purposes but never
     generate alerts.  Backtesting confirms DRIFTING adds no edge over
-    SHORTENING+SHARP alone (same ROI, higher variance) while the
-    backtesting MaxDD difference vs flat staking further discourages
-    acting on these signals.
+    SHORTENING+SHARP alone (same ROI, higher variance).
 
     Parameters
     ----------
@@ -433,6 +431,55 @@ def filter_alert_candidates(picks: list[dict]) -> list[dict]:
         p for p in picks
         if str(p.get("movimento", "")).strip().upper() != "DRIFTING"
     ]
+
+
+def filter_alert_by_ev(
+    enriched_df: "pd.DataFrame",
+    min_ev: float,
+) -> "pd.DataFrame":
+    """
+    Post-transform EV gate: keep only rows where ev_final >= min_ev.
+
+    This is the final alert decision filter, applied after
+    ``compute_final_probability`` has been called inside ``enrich_picks``.
+    Combined with ``filter_alert_candidates`` (DRIFTING gate) and
+    ``filter_by_league`` (whitelist gate), it ensures Telegram alerts
+    only fire when:
+      1. liga is in the production whitelist
+      2. movimento != DRIFTING
+      3. blended EV >= MIN_EV_ALERT (default 3%)
+
+    Telegram message fields to include:
+        p_final, p_market, ev_final, clv (if available)
+
+    Parameters
+    ----------
+    enriched_df:
+        DataFrame produced by ``enrich_picks`` (has ``ev_final`` column).
+    min_ev:
+        Minimum blended EV threshold (e.g. 0.03 = 3%).
+
+    Returns
+    -------
+    pd.DataFrame
+        Rows where ev_final is present and >= min_ev.
+    """
+    import pandas as pd
+
+    if "ev_final" not in enriched_df.columns:
+        logger.warning("filter_alert_by_ev: 'ev_final' column missing; returning empty")
+        return enriched_df.iloc[0:0]
+
+    ev = pd.to_numeric(enriched_df["ev_final"], errors="coerce")
+    mask = ev >= min_ev
+    result = enriched_df[mask]
+    logger.info(
+        "filter_alert_by_ev: %d of %d picks pass ev_final >= %.3f",
+        len(result),
+        len(enriched_df),
+        min_ev,
+    )
+    return result
 
 
 # ---------------------------------------------------------------------------
@@ -547,6 +594,15 @@ def run_etl(config: Any) -> dict:
     except Exception as exc:  # noqa: BLE001
         logger.error("run_etl: failed to save features parquet: %s", exc)
         summary["features_path"] = None
+
+    # --- 5b. Post-transform EV gate -----------------------------------------
+    ev_alerts_df = filter_alert_by_ev(enriched_df, config.MIN_EV_ALERT)
+    summary["n_ev_alert_candidates"] = len(ev_alerts_df)
+    logger.info(
+        "run_etl: [5b] EV gate (ev_final >= %.3f) — %d alert candidates",
+        config.MIN_EV_ALERT,
+        len(ev_alerts_df),
+    )
 
     # --- 6. Daily summary ---------------------------------------------------
     summary["daily_summary"] = generate_daily_summary(enriched_df)

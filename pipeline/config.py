@@ -144,6 +144,17 @@ class Config:
     MAX_ODDS: float = 3.5
     MIN_ODDS: float = 1.3
 
+    # Blend weight for model vs market probability.
+    # p_final = MODEL_WEIGHT * p_model + (1 - MODEL_WEIGHT) * p_market
+    # At 0.30 the market drives 70% of the final probability, anchoring to
+    # Pinnacle's closing line which has WR≈49% vs our model's announced 64.7%.
+    # Revisit when N≥200 and walk-forward CLV is confirmed positive.
+    MODEL_WEIGHT: float = 0.30
+
+    # Minimum blended EV required to generate a Telegram alert.
+    # ev_final = p_final * odds_over - 1  (e.g. 0.03 = 3% edge after devig)
+    MIN_EV_ALERT: float = 0.03
+
     # Kelly staking is DISABLED in production.
     # Backtesting shows MaxDD=450 (kelly_sizing) vs MaxDD=20 (flat/shortsharp) — the
     # model is not calibrated enough to use fractional Kelly safely.  STAKE_TYPE returns
