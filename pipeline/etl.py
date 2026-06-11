@@ -330,6 +330,112 @@ def generate_daily_summary(picks_df: pd.DataFrame) -> dict:
 
 
 # ---------------------------------------------------------------------------
+# League whitelist filter
+# ---------------------------------------------------------------------------
+
+
+def filter_by_league(
+    picks: list[dict],
+    leagues: list[str],
+    rejected_path: Path,
+) -> tuple[list[dict], int]:
+    """
+    Split picks into whitelisted and rejected based on the 'liga' field.
+
+    Picks with an empty 'liga' or a liga not in the whitelist are written to
+    ``rejected_path`` (merged with any existing content, deduplicated by id)
+    with a ``reject_reason`` field for auditability.  They are NOT passed to
+    the main pipeline — DRIFTING picks that slipped through with bad liga values
+    (e.g. Angola-Mauritânia, Singapura-China) are excluded here.
+
+    Parameters
+    ----------
+    picks:
+        Raw pick dicts (from local file or GAS).
+    leagues:
+        Whitelist of accepted league names (must match picks['liga'] exactly).
+    rejected_path:
+        Path to write rejected picks JSON.  Created if absent; merged if present.
+
+    Returns
+    -------
+    tuple[list[dict], int]
+        (accepted_picks, n_rejected)
+    """
+    league_set = set(leagues)
+    accepted: list[dict] = []
+    rejected: list[dict] = []
+
+    for pick in picks:
+        liga = str(pick.get("liga", "")).strip()
+        if not liga:
+            rejected.append({**pick, "reject_reason": "liga_vazia"})
+        elif liga not in league_set:
+            rejected.append({**pick, "reject_reason": f"liga_fora_da_whitelist:{liga}"})
+        else:
+            accepted.append(pick)
+
+    if rejected:
+        rejected_path = Path(rejected_path)
+        existing: list[dict] = []
+        if rejected_path.exists():
+            try:
+                with rejected_path.open("r", encoding="utf-8") as fh:
+                    existing = json.load(fh)
+            except (json.JSONDecodeError, OSError) as exc:
+                logger.warning("filter_by_league: cannot read %s: %s", rejected_path, exc)
+
+        existing_ids = {str(r.get("id", "")) for r in existing if r.get("id")}
+        new_rejected = [r for r in rejected if str(r.get("id", "")) not in existing_ids]
+        merged = existing + new_rejected
+
+        rejected_path.parent.mkdir(parents=True, exist_ok=True)
+        with rejected_path.open("w", encoding="utf-8") as fh:
+            json.dump(merged, fh, ensure_ascii=False, indent=2, default=str)
+
+        logger.info(
+            "filter_by_league: %d accepted, %d rejected (%d new) → %s",
+            len(accepted),
+            len(rejected),
+            len(new_rejected),
+            rejected_path,
+        )
+
+    return accepted, len(rejected)
+
+
+# ---------------------------------------------------------------------------
+# Alert candidate filter
+# ---------------------------------------------------------------------------
+
+
+def filter_alert_candidates(picks: list[dict]) -> list[dict]:
+    """
+    Return only picks that should generate a Telegram alert.
+
+    DRIFTING picks are saved to picks.json for study purposes but never
+    generate alerts.  Backtesting confirms DRIFTING adds no edge over
+    SHORTENING+SHARP alone (same ROI, higher variance) while the
+    backtesting MaxDD difference vs flat staking further discourages
+    acting on these signals.
+
+    Parameters
+    ----------
+    picks:
+        Raw pick dicts (all movements included).
+
+    Returns
+    -------
+    list[dict]
+        Subset of picks where movimento != 'DRIFTING'.
+    """
+    return [
+        p for p in picks
+        if str(p.get("movimento", "")).strip().upper() != "DRIFTING"
+    ]
+
+
+# ---------------------------------------------------------------------------
 # Main ETL pipeline
 # ---------------------------------------------------------------------------
 
@@ -382,6 +488,26 @@ def run_etl(config: Any) -> dict:
 
     summary["n_raw"] = len(all_raw)
     logger.info("run_etl: %d raw picks (local: %d, gas_new: %d)", len(all_raw), len(local_picks), len(gas_picks))
+
+    # --- 1b. League whitelist filter ----------------------------------------
+    rejected_path = config.DATA_DIR / "rejected_picks.json"
+    all_raw, n_rejected = filter_by_league(all_raw, config.LEAGUES, rejected_path)
+    summary["n_rejected_league"] = n_rejected
+    logger.info(
+        "run_etl: [1b] league filter — %d pass, %d rejected → %s",
+        len(all_raw),
+        n_rejected,
+        rejected_path,
+    )
+
+    # --- 1c. Alert candidates (DRIFTING excluded) ---------------------------
+    alert_candidates = filter_alert_candidates(all_raw)
+    summary["n_alert_candidates"] = len(alert_candidates)
+    logger.info(
+        "run_etl: [1c] alert candidates — %d of %d picks are non-DRIFTING",
+        len(alert_candidates),
+        len(all_raw),
+    )
 
     # --- 2. Validate --------------------------------------------------------
     logger.info("run_etl: [2/5] validate")
