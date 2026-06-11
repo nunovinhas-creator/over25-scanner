@@ -41,6 +41,33 @@ GAS_REQUEST_TIMEOUT = 20
 # e.g. https://www.football-data.co.uk/mmz4281/2324/E0.csv
 FD_BASE = "https://www.football-data.co.uk/mmz4281/{season}/{code}.csv"
 
+# ---------------------------------------------------------------------------
+# The Odds API sport_key → canonical league name
+# ---------------------------------------------------------------------------
+
+# Maps The Odds API sport_key values to the league names used in picks.json
+# and pipeline.config._DEFAULT_LEAGUES.  Unknown sport_keys return "" so
+# filter_by_league() rejects them as "liga_vazia".
+SPORT_KEY_LEAGUE_MAP: dict[str, str] = {
+    "soccer_epl":                    "Premier League",
+    "soccer_spain_la_liga":          "La Liga",
+    "soccer_germany_bundesliga":     "Bundesliga",
+    "soccer_italy_serie_a":          "Serie A",
+    "soccer_france_ligue_one":       "Ligue 1",
+    "soccer_portugal_primeira_liga": "Primeira Liga",
+    "soccer_netherlands_eredivisie": "Eredivisie",
+    "soccer_belgium_first_div":      "Belgian Pro League",
+    "soccer_england_championship":   "Championship",
+    "soccer_spain_segunda":          "La Liga 2",
+    "soccer_germany_bundesliga2":    "Bundesliga 2",
+    "soccer_italy_serie_b":          "Serie B",
+}
+
+
+def resolve_league(sport_key: str) -> str:
+    """Map a The Odds API sport_key to a canonical league name, or '' if unknown."""
+    return SPORT_KEY_LEAGUE_MAP.get(sport_key, "")
+
 # Canonical column mapping from football-data.co.uk to internal schema
 _FD_COLUMN_MAP: dict[str, str] = {
     "Div": "league_code",
@@ -307,6 +334,11 @@ def fetch_bsd_events(
             "fetch_bsd_events: events is not a list (type: %s)", type(events).__name__
         )
         return []
+
+    # Populate 'liga' from sport_key so the league filter always has data to work with.
+    for ev in events:
+        if not ev.get("liga"):
+            ev["liga"] = resolve_league(ev.get("sport_key", ""))
 
     logger.info(
         "fetch_bsd_events: fetched %d events from BSD API (date=%s)",

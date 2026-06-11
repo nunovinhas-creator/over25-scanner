@@ -66,23 +66,22 @@ def _load_dotenv(dotenv_path: Path) -> None:
 # ---------------------------------------------------------------------------
 
 _DEFAULT_LEAGUES: list[str] = [
-    # Top 5 European leagues
+    # Top 8 European domestic leagues (high liquidity, Pinnacle coverage)
     "Premier League",
     "La Liga",
     "Bundesliga",
     "Serie A",
     "Ligue 1",
-    # Additional high-liquidity leagues
-    "Eredivisie",
     "Primeira Liga",
-    "Championship",
-    "Super Lig",
+    "Eredivisie",
     "Belgian Pro League",
-    "Scottish Premiership",
-    # International / continental
-    "UEFA Champions League",
-    "UEFA Europa League",
-    "UEFA Conference League",
+    # Second divisions — sufficient Pinnacle liquidity for CLV measurement
+    "Championship",       # England 2nd
+    "La Liga 2",          # Spain 2nd
+    "Bundesliga 2",       # Germany 2nd
+    "Serie B",            # Italy 2nd
+    # Explicitly excluded: friendlies, national teams, Asian/African/American leagues,
+    # Scottish Premiership, Super Lig, UEFA cups (insufficient closing-line data).
 ]
 
 
@@ -145,6 +144,13 @@ class Config:
     MAX_ODDS: float = 3.5
     MIN_ODDS: float = 1.3
 
+    # Kelly staking is DISABLED in production.
+    # Backtesting shows MaxDD=450 (kelly_sizing) vs MaxDD=20 (flat/shortsharp) — the
+    # model is not calibrated enough to use fractional Kelly safely.  STAKE_TYPE returns
+    # to "half_kelly" only after Fase 5 walk-forward calibration validation confirms
+    # sustained positive CLV (target ≥+2%).
+    STAKE_TYPE: str = "flat"
+
     def __post_init__(self) -> None:
         # Resolve paths
         self.DATA_DIR = Path(self.DATA_DIR).resolve()
@@ -161,6 +167,12 @@ class Config:
         if self.MAX_ODDS <= self.MIN_ODDS:
             raise ValueError(
                 f"MAX_ODDS ({self.MAX_ODDS}) must be greater than MIN_ODDS ({self.MIN_ODDS})"
+            )
+        if self.STAKE_TYPE != "flat":
+            raise ValueError(
+                f"STAKE_TYPE='{self.STAKE_TYPE}' is not permitted in production. "
+                "Kelly staking is disabled until Fase 5 calibration validation. "
+                "See Config.STAKE_TYPE comment for details."
             )
 
 

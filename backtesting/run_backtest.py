@@ -206,7 +206,8 @@ def main() -> int:
         help=(
             "Strategy name to run, or 'all' to run every strategy. "
             "Available: baseline, shortening_only, sharp_only, shortsharp, "
-            "high_score, high_xg, value_only, kelly_sizing, conservative"
+            "high_score, high_xg, value_only, "
+            "kelly_sizing_experimental, conservative_experimental"
         ),
     )
     parser.add_argument(

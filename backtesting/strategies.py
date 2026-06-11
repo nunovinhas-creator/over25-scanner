@@ -3,15 +3,20 @@ Pre-defined strategy configurations and filter presets for the Over 2.5 scanner 
 
 Strategy catalogue
 ------------------
-baseline         - All picks, flat stake, no extra filters
-shortening_only  - Only SHORTENING Pinnacle movement
-sharp_only       - Only STEAM or SHARP signal
-shortsharp       - SHORTENING + STEAM/SHARP
-high_score       - System score >= 55
-high_xg          - xG total >= 3.0 (applied as a pre-filter on the DataFrame)
-value_only       - Expected Value > 0  (prob/100 * odds > 1)
-kelly_sizing     - shortsharp + half-Kelly staking
-conservative     - shortsharp + high_score + value_only + half-Kelly
+baseline                    - All picks, flat stake, no extra filters
+shortening_only             - Only SHORTENING Pinnacle movement
+sharp_only                  - Only STEAM or SHARP signal
+shortsharp                  - SHORTENING + STEAM/SHARP
+high_score                  - System score >= 55
+high_xg                     - xG total >= 3.0 (applied as a pre-filter on the DataFrame)
+value_only                  - Expected Value > 0  (prob/100 * odds > 1)
+kelly_sizing_experimental   - shortsharp + half-Kelly staking  [DISABLED IN PRODUCTION]
+conservative_experimental   - shortsharp + high_score + value_only + half-Kelly  [DISABLED IN PRODUCTION]
+
+Note: strategies suffixed _experimental use Kelly staking and are for research/backtesting
+only.  Production pipeline (Config.STAKE_TYPE) is locked to "flat" until Fase 5
+calibration validation confirms sustained positive CLV.  Backtesting MaxDD: kelly(450)
+vs flat/shortsharp(20).
 """
 
 from __future__ import annotations
@@ -71,14 +76,16 @@ STRATEGIES: dict[str, BacktestConfig] = {
         stake_type="flat",
         flat_stake=10.0,
     ),
-    "kelly_sizing": BacktestConfig(
+    # Kelly strategies — EXPERIMENTAL ONLY, not for production use.
+    # Config.STAKE_TYPE="flat" prevents Kelly from running in the live pipeline.
+    "kelly_sizing_experimental": BacktestConfig(
         min_score=45,
         stake_type="half_kelly",
         kelly_fraction=0.5,
         require_shortening=True,
         require_sharp=True,
     ),
-    "conservative": BacktestConfig(
+    "conservative_experimental": BacktestConfig(
         min_score=55,
         stake_type="half_kelly",
         kelly_fraction=0.5,
@@ -98,7 +105,7 @@ _DATAFRAME_FILTERS: dict[str, Any] = {
         )
         > 1.0
     ],
-    "conservative": lambda df: df[
+    "conservative_experimental": lambda df: df[
         (
             pd.to_numeric(df["prob_over25"], errors="coerce") / 100.0
             * pd.to_numeric(df["odds_over"], errors="coerce")
