@@ -31,6 +31,9 @@ logger = logging.getLogger(__name__)
 # Expected value threshold for is_value_bet flag
 _EV_THRESHOLD = 0.0
 
+# Default blend weight (overridden by Config.MODEL_WEIGHT when called from ETL)
+_DEFAULT_MODEL_WEIGHT = 0.30
+
 # Common abbreviations → canonical names (lowercase)
 _TEAM_ABBREVS: dict[str, str] = {
     "man city": "manchester city",
@@ -74,6 +77,82 @@ _FEATURE_COLS = [
     "has_sharp",
     "is_shortening",
 ]
+
+
+# ---------------------------------------------------------------------------
+# Market probability blend
+# ---------------------------------------------------------------------------
+
+
+def compute_final_probability(
+    prob_over25: float,
+    odds_over: float,
+    odds_under: Optional[float] = None,
+    model_weight: float = _DEFAULT_MODEL_WEIGHT,
+) -> dict:
+    """
+    Blend the model's raw probability with the de-vigged market probability.
+
+    The market (Pinnacle closing line) is better calibrated than the system
+    model (system WR≈49% vs announced 64.7%).  Blending anchors the final
+    probability toward the market, reducing overconfidence.
+
+    Formula::
+
+        p_final = model_weight * p_model + (1 - model_weight) * p_market
+        ev_final = p_final * odds_over - 1
+
+    Parameters
+    ----------
+    prob_over25 : float
+        System model probability (0–100 scale).
+    odds_over : float
+        Decimal odds for Over 2.5.
+    odds_under : float or None
+        Decimal odds for Under 2.5.  When absent (common in picks.json),
+        a 5% assumed margin fallback is used and ``p_market_source`` is
+        set to ``"fallback"``.
+    model_weight : float
+        Weight given to the model probability (default 0.30).
+
+    Returns
+    -------
+    dict with keys:
+        p_model         — model probability in [0, 1]
+        p_market        — de-vigged market probability in [0, 1]
+        p_market_source — 'devig' | 'fallback'
+        p_final         — blended probability in [0, 1]
+        ev_final        — blended EV (e.g. 0.03 = 3% edge)
+    """
+    from models.math.devig import metodo_multiplicativo  # lazy import
+
+    p_model = max(0.0, min(1.0, float(prob_over25) / 100.0))
+
+    # Market probability
+    try:
+        ou = float(odds_under) if odds_under is not None else None
+        ov = float(odds_over)
+        if ou and ou > 1.0 and ov > 1.0:
+            p_market, _ = metodo_multiplicativo(ov, ou)
+            p_market_source = "devig"
+        else:
+            raise ValueError("no valid odds_under")
+    except (TypeError, ValueError):
+        # Fallback: assume 5% total margin → implied p_market = (1/odds_over)/1.05
+        p_market = (1.0 / float(odds_over)) / 1.05
+        p_market_source = "fallback"
+
+    p_market = max(0.0, min(1.0, p_market))
+    p_final = model_weight * p_model + (1.0 - model_weight) * p_market
+    ev_final = p_final * float(odds_over) - 1.0
+
+    return {
+        "p_model": round(p_model, 6),
+        "p_market": round(p_market, 6),
+        "p_market_source": p_market_source,
+        "p_final": round(p_final, 6),
+        "ev_final": round(ev_final, 6),
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -220,7 +299,35 @@ def enrich_picks(df: pd.DataFrame) -> pd.DataFrame:
     sharp = sharp.replace("", "NONE")
     df["movement_sharp_combo"] = mov + "_" + sharp
 
-    logger.debug("enrich_picks: added ev_pct, half_kelly, is_value_bet, score_tier, movement_sharp_combo to %d rows", len(df))
+    # --- Blended market probability -----------------------------------------
+    odds_under_col = df.get("odds_under", pd.Series(dtype=float))
+    blend_results = []
+    for idx in df.index:
+        p25 = pd.to_numeric(df.at[idx, "prob_over25"] if "prob_over25" in df.columns else None, errors="coerce")
+        ov = pd.to_numeric(df.at[idx, "odds_over"] if "odds_over" in df.columns else None, errors="coerce")
+        ou_raw = odds_under_col.get(idx) if hasattr(odds_under_col, "get") else None
+        ou = pd.to_numeric(ou_raw, errors="coerce") if ou_raw is not None else None
+
+        if pd.notna(p25) and pd.notna(ov) and ov > 1.0:
+            blend_results.append(compute_final_probability(float(p25), float(ov), float(ou) if pd.notna(ou) else None))
+        else:
+            blend_results.append({
+                "p_model": float("nan"),
+                "p_market": float("nan"),
+                "p_market_source": "unavailable",
+                "p_final": float("nan"),
+                "ev_final": float("nan"),
+            })
+
+    blend_df = pd.DataFrame(blend_results, index=df.index)
+    for col in blend_df.columns:
+        df[col] = blend_df[col]
+
+    logger.debug(
+        "enrich_picks: added ev_pct, half_kelly, is_value_bet, score_tier, "
+        "movement_sharp_combo, p_model, p_market, p_final, ev_final to %d rows",
+        len(df),
+    )
     return df
 
 
