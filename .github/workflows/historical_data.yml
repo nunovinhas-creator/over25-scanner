@@ -1,0 +1,81 @@
+name: Update historical data
+
+on:
+  schedule:
+    # Every Monday at 06:00 UTC (football-data.co.uk updates Monday mornings)
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Download mode"
+        required: false
+        default: "update"
+        type: choice
+        options:
+          - update
+          - download-all
+          - synthetic
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          pip install --quiet pandas numpy scipy pyarrow
+
+      - name: Determine download mode
+        id: mode
+        run: |
+          # workflow_dispatch overrides; scheduled run always uses "update"
+          MODE="${{ github.event.inputs.mode || 'update' }}"
+          echo "mode=$MODE" >> "$GITHUB_OUTPUT"
+
+      - name: Download / generate historical data
+        run: |
+          python -m pipeline.historical --${{ steps.mode.outputs.mode }}
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+
+      - name: Show dataset summary
+        run: |
+          python - <<'EOF'
+          import pandas as pd
+          df = pd.read_csv("data/historical/matches.csv")
+          print(f"Total rows : {len(df):,}")
+          print(f"Date range : {df['Date'].min()} → {df['Date'].max()}")
+          print(f"Seasons    : {sorted(df['Season'].unique())}")
+          print(f"Divisions  : {sorted(df['Div'].unique())}")
+          EOF
+
+      - name: Commit updated dataset
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add data/historical/matches.csv
+          # Add parquet only if it was generated
+          [ -f data/historical/matches.parquet ] && git add data/historical/matches.parquet || true
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            NROWS=$(python -c "import pandas as pd; print(f\"{len(pd.read_csv('data/historical/matches.csv')):,}\")")
+            git commit -m "data: update historical matches ($NROWS rows) [skip ci]"
+            git push origin main
+          fi

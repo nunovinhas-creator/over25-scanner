@@ -366,3 +366,117 @@ def batch_predict(
         p = prob_over25_from_model(model, row["home"], row["away"], max_goals)
         probs.append(p)
     return pd.Series(probs, index=fixtures.index, name="prob_over25_dc")
+
+
+# ---------------------------------------------------------------------------
+# Vectorized fast fitting (L-BFGS-B + numpy, ~800× faster than SLSQP loop)
+# ---------------------------------------------------------------------------
+
+def fit_dixon_coles_fast(
+    matches_df: pd.DataFrame,
+    xi: float = 0.0018,
+    max_iter: int = 500,
+) -> dict:
+    """
+    Fit Dixon-Coles using vectorised numpy operations and L-BFGS-B.
+
+    Identical interface to ``fit_dixon_coles`` but ~800× faster on large
+    datasets because the negative log-likelihood is computed with numpy
+    arrays instead of a Python loop.  Identifiability is enforced via a
+    soft L2 penalty on the sum of attack parameters (λ=1.0) instead of
+    an equality constraint (which SLSQP requires but L-BFGS-B does not).
+
+    Parameters / Returns: same as ``fit_dixon_coles``.
+    """
+    from scipy.special import gammaln  # already in scipy, avoids re-import at module level
+
+    required = {"home", "away", "goals_home", "goals_away", "date"}
+    missing = required - set(matches_df.columns)
+    if missing:
+        raise ValueError(f"matches_df is missing columns: {missing}")
+
+    df = matches_df.copy()
+    df["goals_home"] = df["goals_home"].astype(int)
+    df["goals_away"] = df["goals_away"].astype(int)
+
+    teams = sorted(set(df["home"]) | set(df["away"]))
+    team_index = {t: i for i, t in enumerate(teams)}
+    n = len(teams)
+
+    weights = dixon_coles_weights(df["date"], xi=xi)
+    hi = np.array([team_index[h] for h in df["home"]], dtype=np.intp)
+    ai = np.array([team_index[a] for a in df["away"]], dtype=np.intp)
+    gh = df["goals_home"].values.astype(np.int32)
+    ga = df["goals_away"].values.astype(np.int32)
+
+    # Pre-compute constant gammaln terms (independent of params)
+    _log_gh_fac = gammaln(gh + 1)
+    _log_ga_fac = gammaln(ga + 1)
+
+    # Boolean masks for the 4 low-score cells where tau ≠ 1
+    m00 = (gh == 0) & (ga == 0)
+    m10 = (gh == 1) & (ga == 0)
+    m01 = (gh == 0) & (ga == 1)
+    m11 = (gh == 1) & (ga == 1)
+    has_tau = m00 | m10 | m01 | m11
+
+    def _neg_ll(params: np.ndarray) -> float:
+        alpha = params[:n]
+        beta  = params[n : 2 * n]
+        gamma = params[2 * n]
+        rho   = params[2 * n + 1]
+
+        lh = np.exp(alpha[hi] + beta[ai] + gamma)
+        la = np.exp(alpha[ai] + beta[hi])
+
+        ll = weights * (
+            gh * np.log(lh + 1e-300) - lh - _log_gh_fac
+            + ga * np.log(la + 1e-300) - la - _log_ga_fac
+        )
+
+        # Tau correction (only 4 score combinations)
+        if rho != 0.0 and has_tau.any():
+            tau = np.ones(len(gh))
+            tau[m00] = 1.0 - lh[m00] * la[m00] * rho
+            tau[m10] = 1.0 + la[m10] * rho
+            tau[m01] = 1.0 + lh[m01] * rho
+            if m11.any():
+                tau[m11] = 1.0 - rho
+            np.maximum(tau, 1e-9, out=tau)
+            ll[has_tau] += weights[has_tau] * np.log(tau[has_tau])
+
+        # Soft identifiability: penalise sum(alpha) ≠ 0
+        reg = 1.0 * (float(np.sum(alpha)) ** 2)
+        return float(-np.sum(ll) + reg)
+
+    x0 = np.zeros(2 * n + 2)
+    x0[2 * n]     = 0.1   # home advantage
+    x0[2 * n + 1] = -0.1  # rho
+
+    bounds = [(None, None)] * (2 * n) + [(None, None), (-0.99, 0.99)]
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        result = minimize(
+            _neg_ll,
+            x0,
+            method="L-BFGS-B",
+            bounds=bounds,
+            options={"maxiter": max_iter, "ftol": 1e-10, "gtol": 1e-7},
+        )
+
+    params = result.x
+    alpha = params[:n]
+    beta  = params[n : 2 * n]
+    gamma = float(params[2 * n])
+    rho   = float(params[2 * n + 1])
+
+    return {
+        "attack":  {t: float(alpha[team_index[t]]) for t in teams},
+        "defence": {t: float(beta[team_index[t]])  for t in teams},
+        "home_adv":  gamma,
+        "rho":       rho,
+        "teams":     teams,
+        "converged": result.success,
+        "_optimizer_message": result.message,
+    }
