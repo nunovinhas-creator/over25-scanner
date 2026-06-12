@@ -1643,13 +1643,20 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
                   rawOut==='DRAW'?'DRAW':
                   rawOut==='AWAY'||rawOut==='AWAY_WIN'?'AWAY':rawOut;
         if(!price||!['HOME','DRAW','AWAY'].includes(out)) return;
-        if(!sh1x2[eid][out]) sh1x2[eid][out]={pin:null,prev:null,mov:null,updatedAt:null,recr:[],recrMoving:0};
+        if(!sh1x2[eid][out]) sh1x2[eid][out]={pin:null,prev:null,mov:null,updatedAt:null,recr:[],recrMoving:0,b365:null};
         const d=sh1x2[eid][out];
         if(slug==='pinnacle'){
           d.pin=price;
           if(prev&&Math.abs(prev-price)>0.005) d.prev=prev;
           if(o.movement) d.mov=o.movement;
           if(o.updated_at) d.updatedAt=o.updated_at;
+        } else if((slug==='bet365'||slug==='bet-365')&&price>0){
+          d.b365=price;
+          d.recr.push(price);
+          if(prev&&Math.abs(prev-price)>0.005){
+            const recrMov=prev>price?'SHORTENING':'DRIFTING';
+            if(o.movement&&o.movement===recrMov) d.recrMoving++;
+          }
         } else if(RECR.includes(slug)&&price>0){
           d.recr.push(price);
           if(prev&&Math.abs(prev-price)>0.005){
@@ -1686,6 +1693,15 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
 
       const sigs=[];
 
+      // NVP — Pinnacle fair (de-vig multiplicativo 3-way)
+      const _pinH=d.HOME?.pin||0,_pinD=d.DRAW?.pin||0,_pinA=d.AWAY?.pin||0;
+      if(_pinH&&_pinD&&_pinA){
+        const _ovr=1/_pinH+1/_pinD+1/_pinA;
+        if(d.HOME) d.HOME.nvp=+(_ovr*_pinH).toFixed(3);
+        if(d.DRAW) d.DRAW.nvp=+(_ovr*_pinD).toFixed(3);
+        if(d.AWAY) d.AWAY.nvp=+(_ovr*_pinA).toFixed(3);
+      }
+
       ['HOME','AWAY'].forEach(out=>{
         const o=d[out]; if(!o||!o.pin) return;
 
@@ -1693,6 +1709,9 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
         const pinnMove = o.prev?((o.prev-o.pin)/o.prev)*100:null; // positivo = odds baixaram = SHORTENING
         const pinnMovePct = pinnMove!=null?Math.abs(pinnMove):0;
         const movement = o.mov||(pinnMove!=null?pinnMove>0?'SHORTENING':'DRIFTING':null);
+
+        // Divergência B365 vs Pinnacle NVP (de-vig mult): positivo = B365 mais generosa = potencial value
+        const divB365=(o.b365&&o.nvp)?+(o.b365/o.nvp-1).toFixed(4):null;
 
         // Timing: sinais perto do KO têm maior urgência (mercado profissional fecha posição)
         const timingBonus = hoursToKO<=2?3:hoursToKO<=6?2:hoursToKO<=12?1.5:1.0;
@@ -1732,7 +1751,8 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
           pin:o.pin, prev:o.prev, recrAvg, div,
           pinnMove, pinnMovePct, movement,
           hoursToKO:Math.round(hoursToKO*10)/10,
-          timingBonus, multiBook, recrMoving:o.recrMoving
+          timingBonus, multiBook, recrMoving:o.recrMoving,
+          b365:o.b365, nvp:o.nvp, divB365
         });
       });
 
@@ -2582,6 +2602,8 @@ function sharpCard1x2(s){
         <div><div style="font-family:var(--mono);font-size:9px;color:var(--text3)">Timing</div><div style="font-size:12px;font-weight:700;color:${timingCol}">${timingTxt}${timingWarn}</div></div>
         ${sg.recrAvg?`<div><div style="font-family:var(--mono);font-size:9px;color:var(--text3)">Recr. avg</div><div style="font-family:var(--mono);font-size:11px">${sg.recrAvg.toFixed(2)}</div></div>`:''}
         ${sg.div>0?`<div><div style="font-family:var(--mono);font-size:9px;color:var(--text3)">Divergência</div><div style="font-family:var(--mono);font-size:11px;color:${sg.divHasValue===false?'var(--red)':sg.div>=5?'var(--green)':'var(--amber)'}">${sg.div.toFixed(1)}%${sg.divHasValue===false?' ↓':' ↑'}</div></div>`:''}
+        ${sg.nvp?`<div><div style="font-family:var(--mono);font-size:9px;color:var(--text3)">NVP fair</div><div style="font-family:var(--mono);font-size:11px;color:var(--text3)">${sg.nvp.toFixed(3)}</div></div>`:''}
+        ${sg.b365?`<div><div style="font-family:var(--mono);font-size:9px;color:var(--text3)">B365</div><div style="font-family:var(--mono);font-size:11px;color:${sg.divB365!=null&&sg.divB365>=0.03?'var(--green)':'var(--text2)'}">${sg.b365.toFixed(2)}${sg.divB365!=null?' ('+(sg.divB365*100).toFixed(1)+'%)':''}</div></div>`:''}
         ${sg.multiBook?`<div style="grid-column:1/-1"><div style="font-size:10px;color:var(--purple)">✦ ${sg.recrMoving} books também moveram</div></div>`:''}
         ${zonaBadge}
       </div>
@@ -2611,7 +2633,8 @@ function sharpCard1x2(s){
       ${overCtx}
     </div>
     <div style="padding:0 14px 10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-      ${s.sigs[0]?.pin?'<span style="font-family:var(--mono);font-size:10px;color:var(--amber)">NVP ~'+(s.sigs[0].pin*0.975).toFixed(2)+'</span>':''}
+      ${s.sigs[0]?.nvp?'<span style="font-family:var(--mono);font-size:10px;color:var(--amber)">NVP '+s.sigs[0].nvp.toFixed(2)+'</span>':s.sigs[0]?.pin?'<span style="font-family:var(--mono);font-size:10px;color:var(--amber)">NVP ~'+(s.sigs[0].pin*0.975).toFixed(2)+'</span>':''}
+      ${(()=>{const _sg=s.sigs.find(sg=>sg.divB365>=0.03);return _sg?'<span style="font-family:var(--mono);font-size:10px;padding:1px 5px;border-radius:3px;background:rgba(22,163,74,.2);color:var(--green);border:1px solid rgba(22,163,74,.3)">✓ B365 +'+(_sg.divB365*100).toFixed(1)+'% vs NVP</span>':''})()}
       <span style="font-family:var(--mono);font-size:10px;color:${isSaved(s.id+'_sh')?'var(--green)':'var(--text3)'}">
         ${isSaved(s.id+'_sh')?'🤖 auto-guardado':'⏳ a guardar...'}
       </span>
@@ -2634,8 +2657,9 @@ async function saveSharpPick(btn){
       casa:d.home||'', fora:d.away||'', liga:d.liga||'',
       outcome:sig?.out||'',
       odds_entrada:sig?.pin?sig.pin.toFixed(2):'',
-      nvp:sig?.nvp?sig.nvp.toFixed(3):'',
+      nvp:sig?.nvp?sig.nvp.toFixed(3):sig?.pin?(sig.pin*0.975).toFixed(3):'',
       drop_pct:sig?.pinnMovePct?sig.pinnMovePct.toFixed(1):'',
+      div_b365_pin:sig?.divB365!=null?(sig.divB365*100).toFixed(1):'',
       timing_h:d.hours||'',
       label:d.label||'',
       score:d.score||'',
@@ -2673,10 +2697,19 @@ async function saveSharpPick(btn){
       return;
     }
 
+    // Gate 4: divergência B365/NVP ≥ 3% — sinal validado 21.087 jogos (12 jun 2026)
+    const _1x2DivB365 = sig?.divB365 != null ? sig.divB365 : null;
+    if(_1x2DivB365 === null || _1x2DivB365 < 0.03){
+      console.info('Sharp 1X2: pick gravado sem alerta TG — div B365/NVP',
+        _1x2DivB365!==null?(_1x2DivB365*100).toFixed(1)+'%':'n/d', '< 3% (gate div)');
+      return;
+    }
+
     // TG — todos os gates passaram
     try{
       const movTxt=sig?.movement==='SHORTENING'?'↘ Short':'↗ Drift';
-      const nvpTxt=sig?.nvp?'NVP: '+sig.nvp.toFixed(3):'';
+      const nvpTxt=sig?.nvp?'NVP: '+sig.nvp.toFixed(3):(sig?.pin?'NVP ~'+(sig.pin*0.975).toFixed(3):'');
+      const divTxt=sig?.divB365!=null?'B365/NVP: +'+(sig.divB365*100).toFixed(1)+'%':'';
       const msg=[
         '🎯 SHARP 1X2 GUARDADO',
         d.home+' vs '+d.away,
@@ -2686,6 +2719,7 @@ async function saveSharpPick(btn){
         (sig?.out||'')+' | Pin: '+(sig?.pin?sig.pin.toFixed(2):'-'),
         movTxt+' '+(sig?.pinnMovePct?Math.abs(sig.pinnMovePct).toFixed(1)+'%':''),
         nvpTxt,
+        divTxt,
         (d.hours?parseFloat(d.hours).toFixed(0)+'h ao KO':''),
         (d.label||'')+' score '+( d.score||'')
       ].filter(Boolean).join('\n');
@@ -3804,8 +3838,9 @@ async function autoLogSharp1x2(){
         casa:s.home||'', fora:s.away||'', liga:s.league||'',
         outcome:sig.out||sig.outcome||'',
         odds_entrada:sig.pin?sig.pin.toFixed(2):'',
-        nvp:sig.pin?(sig.pin*0.975).toFixed(3):'',
+        nvp:sig.nvp?sig.nvp.toFixed(3):sig.pin?(sig.pin*0.975).toFixed(3):'',
         drop_pct:sig.pinnMove!=null?Math.abs(sig.pinnMove).toFixed(1):'',
+        div_b365_pin:sig.divB365!=null?(sig.divB365*100).toFixed(1):'',
         timing_h:s.hoursToKO?.toFixed(1)||'',
         label:s.label||'',
         score:String(s.totalScore||0),
@@ -3821,8 +3856,16 @@ async function autoLogSharp1x2(){
     if(saved>0){
       await ghWrite(PICKS1X2_FILE, picks, `auto-log 1x2: ${saved} sinal${saved>1?'is':''}`);
       sharp1x2Picks=picks;
-      const lines=savedSigs.map(s=>`${s.home} vs ${s.away} [${s.label}]`);
-      sendTG(`🎯 AUTO-LOG Sharp 1X2: ${saved} sinais\n${lines.join('\n')}`).catch(()=>{});
+      // TG apenas para sinais com div B365/NVP ≥ 3%
+      const alertSigs=savedSigs.filter(s=>s.sigs[0]?.divB365>=0.03);
+      if(alertSigs.length>0){
+        const lines=alertSigs.map(s=>{
+          const sg=s.sigs[0];
+          const divTxt=sg.divB365!=null?' B365+'+(sg.divB365*100).toFixed(1)+'%':'';
+          return `${s.home} vs ${s.away} [${s.label}]${divTxt}`;
+        });
+        sendTG(`🎯 AUTO-LOG Sharp 1X2: ${alertSigs.length} sinal${alertSigs.length>1?'is':''} (div≥3%)\n${lines.join('\n')}`).catch(()=>{});
+      }
       renderSharp();
     }
   }catch(e){}
