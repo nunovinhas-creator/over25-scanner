@@ -31,6 +31,18 @@ Brier por fold — Isotónico: `[0.24951, 0.24464, 0.24333, 0.2451]`
 
 > Brier benchmark Pinnacle (over/under 2.5): ≈ 0.220–0.230
 
+## Comparação Brier — Mercado vs Modelo (comparação principal)
+
+| Configuração | Brier | N apostas | Interpretação |
+|---|---|---|---|
+| **Mercado puro** (p_market devig) | **0.24320** | 1,889 | Baseline — todos os jogos com odds Pinnacle |
+| DC não-calibrado (w=0.30) | 0.25110 | 102 | Dixon-Coles raw piora face ao mercado |
+| **DC calibrado (w=0.30)** | **0.24168** ← | 83 | Calibração recupera e supera ligeiramente o mercado |
+
+> **Conclusão**: A calibração isotónica recupera a degradação do Dixon-Coles puro (0.25110 → 0.24168),
+> ficando 0.00152 abaixo do mercado puro (0.24320). A diferença é pequena mas positiva com N=83.
+> Com mais dados ao vivo a diferença deverá confirmar-se ou refutar-se.
+
 ## Resultados por peso — calibrado vs não-calibrado (época 2526)
 
 `p_final = w × p_cal + (1 − w) × p_market`

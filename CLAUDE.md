@@ -83,12 +83,29 @@ The Stop hook (`/home/user/over25-scanner/.claude/auto-push.sh`) handles commit+
 
 ## Overview
 
-This is a static, no-build sports betting scanner for Over 2.5 goals markets. It consists of two standalone HTML files — no framework, no bundler, no package manager.
+This project has two layers:
 
-- **`index.html`** — Main app ("Over 2.5 SCOUT"): scanner, Sharp 1X2 signals, live monitor, dashboard (~1967 lines)
-- **`tracker.html`** — Standalone analytics monitor ("Over 2.5 MONITOR") with ROI curve and breakdown by filter (~555 lines)
+**1. Static front-end scanner** (browser, no build):
+- **`index.html`** — Main app ("Over 2.5 SCOUT"): scanner, Sharp 1X2 signals, live monitor, dashboard
+- **`tracker.html`** — Standalone analytics monitor ("Over 2.5 MONITOR") with ROI curve and breakdown by filter
 
-Open either file directly in a browser to run. There are no build steps, no tests, and no linters configured.
+**2. Python ML pipeline** (server-side, GitHub Actions):
+- Dixon-Coles per-league model (`models/train_dc.py`) — trains on last 2 seasons, exports `data/dc_ratings.json`
+- Isotonic calibrator (`backtesting/run_calibration.py`) — LOEO-CV on 4 training epochs, exports `data/calibrator.json`
+- Walk-forward backtester (`backtesting/run_walkforward.py`) — strict temporal split, calibrator_fn support
+- Pipeline transform (`pipeline/transform.py`) — `compute_final_probability_dc()` blends DC + market
+
+**FASE 4 validation (epoch 2526):**
+- Calibrated (w=0.30): Brier=0.24168 vs Market=0.24320 vs Uncalibrated=0.25110
+- CLV IC 95% = [-0.985%, +1.366%] — inclui zero (N=83, época única)
+- Regime: MODO OBSERVAÇÃO — sem dinheiro real até CLV rolling-30 > +1% com N≥300
+
+**Key decisions recorded (não reverter sem evidência nova):**
+- `MAX_ODDS_OVER`: NÃO implementado. Evidência não-monotónica (>2.50 deu +3.69%, N=35 insuficiente). Em vez disso: `odds_band` gravado em cada pick para análise ao vivo.
+- Kelly: desativado até CLV validado ao vivo (MODO OBSERVAÇÃO). buildPickMsg ainda exibe valor mas é informativo.
+- MODEL_WEIGHT=0.30: melhor Brier calibrado em LOEO-CV. Não alterar sem nova validação.
+
+Open either HTML file directly in a browser to run. There are no build steps, no tests, and no linters for the front-end.
 
 ## External Dependencies
 
@@ -154,6 +171,58 @@ Config (API key, TG token, chat ID) persists in `localStorage` under key `ov_cfg
 
 Standalone page reading from its own GAS Sheet URL. Renders KPIs, SVG ROI curve, breakdown cards per filter group, daily timeline, and a picks table. Uses the same JSONP pattern. Falls back to hardcoded sample data if the Sheet doesn't respond.
 
+## Python Pipeline Commands
+
+```bash
+# Train Dixon-Coles ratings (requires data/historical/matches.csv)
+python -m models.train_dc
+
+# Calibrate + validate (LOEO-CV, saves data/calibrator.json + backtesting/reports/)
+python -m backtesting.run_calibration
+
+# Walk-forward backtest only
+python -m backtesting.run_walkforward
+
+# Run tests
+pytest tests/ -v --tb=short
+
+# Run a single test file
+pytest tests/pipeline/test_devig.py -v
+
+# Download/update historical data (synthetic fallback for testing)
+python -m pipeline.historical --synthetic
+```
+
+## Python File Structure
+
+```
+models/
+  math/
+    devig.py          — metodo_multiplicativo, metodo_shin, devig()
+    poisson.py        — fit_dixon_coles_fast, prob_over25_poisson, prob_over25_from_model
+  train_dc.py         — CLI to train DC per league → data/dc_ratings.json
+backtesting/
+  run_walkforward.py  — OOS predictions with calibrator_fn + season filter
+  run_calibration.py  — FASE 4: LOEO-CV → calibrator.json + validation report
+  reports/            — calibration_validation.md (temporal split)
+pipeline/
+  transform.py        — compute_final_probability, compute_final_probability_dc
+  config.py           — MODEL_WEIGHT=0.30
+data/
+  dc_ratings.json     — fitted DC parameters per league (auto-updated Mondays)
+  calibrator.json     — isotonic calibrator (auto-updated Mondays)
+  historical/         — matches.csv (auto-updated Mondays via historical_data.yml)
+.github/workflows/
+  historical_data.yml — Monday 06:00 UTC: update matches.csv
+  retrain_dc.yml      — Monday 07:00 UTC: retrain DC + recalibrate
+```
+
+## Data Rules
+
+**NUNCA substituir dados reais por sintéticos para fazer um pipeline 'passar'.** Dados sintéticos são permitidos apenas em testes unitários (`tests/`), sempre claramente marcados.
+
 ## Language
 
 The UI is in **Portuguese (pt-PT)**. All user-facing strings, variable names like `casa`/`fora`/`liga`, and field names in the GAS schema use Portuguese. Keep this convention when adding new UI text or data fields.
+
+Python code uses English variable names, Portuguese comments where needed.

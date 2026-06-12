@@ -1001,6 +1001,9 @@ select option{background:var(--laq-3);color:var(--text)}
 
   <!-- ── Sub-painel: Over 2.5 ── -->
   <div id="dpanel-over25">
+    <div id="modoObsBanner" class="warn-banner" style="background:rgba(255,184,0,.10);border-color:rgba(255,184,0,.5);font-weight:600">
+      ⚠️ MODO OBSERVAÇÃO — sem dinheiro real até CLV &gt; +1% com n ≥ 300
+    </div>
     <div id="nWarning" class="warn-banner"></div>
     <div class="filters" style="margin-top:12px;margin-bottom:12px">
       <button class="fb g active" id="filterShorteningBtn" onclick="el('filterShortening').checked=!el('filterShortening').checked;this.classList.toggle('active',el('filterShortening').checked);renderDash()">↘ Shortening</button>
@@ -1014,7 +1017,7 @@ select option{background:var(--laq-3);color:var(--text)}
       <div class="kpi-card"><div class="kpi-label">Taxa acerto</div><div class="kpi-val" id="dWR">—</div><div class="kpi-sub" id="dWRsub"></div></div>
       <div class="kpi-card"><div class="kpi-label">ROI global</div><div class="kpi-val" id="dROI">—</div><div class="kpi-sub" id="dROIsub"></div></div>
       <div class="kpi-card"><div class="kpi-label">ROI 7 dias</div><div class="kpi-val" id="dROI7">—</div></div>
-      <div class="kpi-card"><div class="kpi-label">CLV médio</div><div class="kpi-val" id="dCLV">—</div><div class="kpi-sub" id="dCLVsub">vs closing line</div></div>
+      <div class="kpi-card"><div class="kpi-label">CLV rolling 30</div><div class="kpi-val" id="dCLV">—</div><div class="kpi-sub" id="dCLVsub">vs closing line</div></div>
       <div class="kpi-card"><div class="kpi-label">Profit Factor</div><div class="kpi-val" id="dPF">—</div><div class="kpi-sub">lucro bruto / perda</div></div>
       <div class="kpi-card"><div class="kpi-label">Max Drawdown</div><div class="kpi-val" id="dDD">—</div><div class="kpi-sub">pior período pico→vale</div></div>
       <div class="kpi-card"><div class="kpi-label">Série</div><div class="kpi-val" id="dStreak">—</div><div class="kpi-sub" id="dStreakSub"></div></div>
@@ -2423,6 +2426,16 @@ async function savePick(btn){
     const xgt=g.xgH!=null&&g.xgA!=null?(g.xgH+g.xgA).toFixed(2):'';
     const _ovSave=g.oddsOver||0;
     const _koMsSave=g.date?new Date(g.date).getTime():NaN;
+    // Compute blend metrics for pick storage
+    const _ou=parseFloat(g.oddsUnder||0);
+    const _pMkt=_ovSave>1&&_ou>1
+      ? (1/_ovSave)/((1/_ovSave)+(1/_ou))  // devigged
+      : _ovSave>1?(1/_ovSave)/1.05:null;   // fallback 5% margin
+    const _pModel=g.prob25!=null?bayesCalib(g.prob25):null;
+    const _pFinal=_pModel!=null&&_pMkt!=null?0.30*_pModel+0.70*_pMkt:_pMkt;
+    const _evFinal=_pFinal!=null&&_ovSave>1?(_pFinal*_ovSave-1):null;
+    const _oddsVal=parseFloat(_ovSave)||0;
+    const _oddsBand=_oddsVal<1.50?'<1.50':_oddsVal<1.70?'1.50–1.70':_oddsVal<2.00?'1.70–2.00':_oddsVal<=2.50?'2.00–2.50':'>2.50';
     await picksSave({
       id:String(g.id),
       casa:g.home, fora:g.away, liga:g.league||'',
@@ -2441,7 +2454,12 @@ async function savePick(btn){
       timing_to_ko_h:isNaN(_koMsSave)?'':((_koMsSave-Date.now())/3600000).toFixed(2),
       league_base_rate:(LEAGUE_BASE[g.league]??0.55).toFixed(2),
       edge_vs_market:g.edgeVsMarket!=null?(g.edgeVsMarket*100).toFixed(1):'',
-      pinn_actual:g.pinnActual?'1':''
+      pinn_actual:g.pinnActual?'1':'',
+      p_model:_pModel!=null?(_pModel*100).toFixed(2):'',
+      p_market:_pMkt!=null?(_pMkt*100).toFixed(2):'',
+      p_final:_pFinal!=null?(_pFinal*100).toFixed(2):'',
+      ev_final:_evFinal!=null?(_evFinal*100).toFixed(2):'',
+      odds_band:_oddsBand
     });
     markSaved(id);
     setBtnSaved(btn);
@@ -2455,8 +2473,11 @@ async function savePick(btn){
       g.league||'',
       new Date(g.date).toLocaleString('pt-PT',{weekday:'short',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}),
       '---',
-      'APOSTAR: Over 2.5'+(g.oddsOver?' @'+parseFloat(g.oddsOver).toFixed(2):''),
+      'APOSTAR: Over 2.5'+(g.oddsOver?' @'+parseFloat(g.oddsOver).toFixed(2):'')+' ['+_oddsBand+']',
       tgProb?'ML: '+tgProb:'',
+      _pMkt!=null?'Mercado: '+(_pMkt*100).toFixed(1)+'%':'',
+      _pFinal!=null?'p_final: '+(_pFinal*100).toFixed(1)+'%':'',
+      _evFinal!=null?'EV: '+(_evFinal*100>=0?'+':'')+(_evFinal*100).toFixed(1)+'%':'',
       tgXgt?'xG: '+tgXgt:'',
       g.movement||'',
       g.sharpLabel?'Sharp: '+g.sharpLabel:'',
@@ -4025,13 +4046,29 @@ function renderDash(){
     if(pf!=null) el('dPF').style.color=pf>=1.2?'var(--green)':pf>=1.0?'var(--amber)':'var(--red)';
   }
 
-  // CLV médio
+  // CLV rolling 30 (KPI principal) com SE
   const withCLV=validPicks.filter(p=>p.clv&&parseFloat(p.clv)!==0);
-  const clvAvg=calcCLVAvg(withCLV);
+  // Use last 30 picks with CLV as rolling window
+  const sortedCLV=[...withCLV].sort((a,b)=>new Date(b.data)-new Date(a.data));
+  const roll30=sortedCLV.slice(0,30);
+  const clvRoll30=roll30.length?roll30.reduce((s,p)=>s+parseFloat(p.clv),0)/roll30.length:null;
+  const clvSE=roll30.length>=2?Math.sqrt(roll30.reduce((s,p)=>s+Math.pow(parseFloat(p.clv)-clvRoll30,2),0)/(roll30.length-1))/Math.sqrt(roll30.length):null;
+  const clvAvg=calcCLVAvg(withCLV); // global average (used in MODO OBS check)
   if(el('dCLV')){
-    el('dCLV').textContent=clvAvg!=null?(clvAvg>=0?'+':'')+clvAvg.toFixed(1)+'%':'—';
-    if(clvAvg!=null) el('dCLV').style.color=clvAvg>0?'var(--green)':'var(--red)';
-    el('dCLVsub').textContent=withCLV.length?withCLV.length+' picks c/CLV':'sem dados ainda';
+    el('dCLV').textContent=clvRoll30!=null?(clvRoll30>=0?'+':'')+clvRoll30.toFixed(1)+'%':'—';
+    if(clvRoll30!=null) el('dCLV').style.color=clvRoll30>1?'var(--green)':clvRoll30>0?'var(--amber)':'var(--red)';
+    const seStr=clvSE!=null?' ±'+clvSE.toFixed(1)+'%':'';
+    el('dCLVsub').textContent=roll30.length?`${roll30.length}/30 picks${seStr}`:withCLV.length?withCLV.length+' picks (total)':'sem dados ainda';
+  }
+  // ROI sub note: n insuficiente warning when n < 300
+  if(el('dROIsub')&&withROdds.length<300){
+    el('dROIsub').textContent+=' ⚠️ n<300';
+  }
+  // MODO OBSERVAÇÃO banner: show until CLV rolling30 > +1% with n_clv >= 300
+  const modoObs=el('modoObsBanner');
+  if(modoObs){
+    const clvGate=(clvRoll30!=null&&clvRoll30>1.0&&withCLV.length>=300);
+    modoObs.style.display=clvGate?'none':'block';
   }
 
   // ROI curve
