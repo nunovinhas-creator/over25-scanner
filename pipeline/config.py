@@ -84,6 +84,17 @@ _DEFAULT_LEAGUES: list[str] = [
     # Scottish Premiership, Super Lig, UEFA cups (insufficient closing-line data).
 ]
 
+# ---------------------------------------------------------------------------
+# 1X2 timing gate
+# ---------------------------------------------------------------------------
+
+# Janela de timing para alertas Sharp 1X2.
+# Análise de 282 picks históricos: média 17.4h antes do KO.
+# 0-6h tem melhor ROI do que 12-24h — sinal mais limpo perto do fecho do mercado.
+# Picks fora desta janela são GRAVADOS mas não geram alerta Telegram.
+MIN_TIMING_H_1X2: float = 0.0  # mínimo de horas antes do KO (0 = em jogo não conta)
+MAX_TIMING_H_1X2: float = 6.0  # máximo de horas antes do KO para gerar alerta
+
 
 # ---------------------------------------------------------------------------
 # Config dataclass
