@@ -240,3 +240,106 @@ class TestSharp1x2SignalMissingColumns:
         assert "Q1" in content
         assert "Q2" in content
         assert "Q3" in content
+        assert "Q4" in content
+        assert "Conclusão" in content
+
+
+# ---------------------------------------------------------------------------
+# TAREFA 2 (ext) — análise de divergência e pin_drop inverso
+# ---------------------------------------------------------------------------
+
+def _make_1x2_df(n: int = 500, seed: int = 99) -> "pd.DataFrame":
+    """Minimal synthetic 1X2 DataFrame for unit tests — fast, no network."""
+    rng = np.random.default_rng(seed)
+    rows = []
+    for _ in range(n):
+        lh = rng.uniform(0.8, 2.0)
+        la = rng.uniform(0.8, 1.8)
+        psh = round(1.0 / (lh / (lh + la + 0.3) * 1.04), 3)
+        psd = round(1.0 / (0.3 / (lh + la + 0.3) * 1.04), 3)
+        psa = round(1.0 / (la / (lh + la + 0.3) * 1.04), 3)
+        psch = round(psh * rng.uniform(0.95, 1.02), 3)
+        pscd = round(psd * rng.uniform(0.97, 1.03), 3)
+        psca = round(psa * rng.uniform(0.95, 1.02), 3)
+        # B365: same probs but 8% margin → generally lower odds
+        b365h = round(1.0 / (lh / (lh + la + 0.3) * 1.08), 3)
+        b365d = round(1.0 / (0.3 / (lh + la + 0.3) * 1.08), 3)
+        b365a = round(1.0 / (la / (lh + la + 0.3) * 1.08), 3)
+        ftr = rng.choice(["H", "D", "A"])
+        rows.append({
+            "Div": "E0", "Season": "2526", "Date": "2026-01-01",
+            "FTR": ftr,
+            "PSH": psh, "PSD": psd, "PSA": psa,
+            "PSCH": psch, "PSCD": pscd, "PSCA": psca,
+            "B365H": b365h, "B365D": b365d, "B365A": b365a,
+        })
+    return pd.DataFrame(rows)
+
+
+class TestSharp1x2AnalysisFunctions:
+    """Unit tests for Q2 reverse and Q4 divergence analysis functions."""
+
+    def test_q2_reverse_returns_quartile_table(self) -> None:
+        """_q2_reverse returns a DataFrame with quartile rows and overall dict."""
+        from backtesting.run_sharp1x2_signal import _q2_reverse, _prepare
+        df = _prepare(_make_1x2_df())
+        by_q, overall = _q2_reverse(df)
+        assert not by_q.empty
+        assert "roi_pct" in by_q.columns
+        assert "n" in overall and "roi_pct" in overall
+
+    def test_q2_reverse_picks_min_drop(self) -> None:
+        """Reverse strategy picks MIN pin_drop outcome (most drift)."""
+        from backtesting.run_sharp1x2_signal import _prepare
+        row = {
+            "Div": "E0", "Season": "2526", "Date": "2026-01-01",
+            "HomeTeam": "A", "AwayTeam": "B", "FTR": "A",
+            "PSH": 2.00, "PSD": 3.50, "PSA": 3.80,
+            "PSCH": 1.50, "PSCD": 3.55, "PSCA": 3.82,  # H drops most
+            "B365H": 1.98, "B365D": 3.45, "B365A": 3.75,
+        }
+        clean = _prepare(pd.DataFrame([row]))
+        assert len(clean) == 1
+        # pin_drop_h = 2.00/1.50 - 1 = 0.333 (biggest) → reverse must NOT pick H
+        min_col = clean[["pin_drop_h", "pin_drop_d", "pin_drop_a"]].iloc[0].idxmin()
+        assert min_col != "pin_drop_h"
+
+    def test_q4_divergence_empty_when_b365_missing(self) -> None:
+        """_q4_divergence returns empty DataFrames when B365 columns absent."""
+        from backtesting.run_sharp1x2_signal import _q4_divergence, _prepare
+        df = _prepare(_make_1x2_df())
+        no_b365 = df.drop(columns=[c for c in ("B365H", "B365D", "B365A") if c in df.columns])
+        by_thresh, by_league = _q4_divergence(no_b365)
+        assert by_thresh.empty and by_league.empty
+
+    def test_q4_divergence_fires_with_artificial_data(self) -> None:
+        """_q4_divergence detects bets when B365 is explicitly 12.5% above PSH."""
+        from backtesting.run_sharp1x2_signal import _q4_divergence, _MIN_DIV_GLOBAL
+        n = _MIN_DIV_GLOBAL + 50
+        rng = np.random.default_rng(99)
+        rows = [{"Div": "E0", "FTR": rng.choice(["H", "D", "A"]),
+                 "PSH": 2.00, "PSD": 3.50, "PSA": 3.80,
+                 "PSCH": 1.95, "PSCD": 3.55, "PSCA": 3.85,
+                 "B365H": 2.25, "B365D": 3.45, "B365A": 3.75}
+                for _ in range(n)]
+        by_thresh, _ = _q4_divergence(pd.DataFrame(rows))
+        assert not by_thresh.empty, "Should find bets with B365H 12.5% above PSH"
+        assert (by_thresh["threshold"] == ">10%").any()
+
+    def test_report_has_conclusion_section(self, tmp_path: Path) -> None:
+        """Report must include a Conclusão section with veredictos."""
+        import backtesting.run_sharp1x2_signal as mod
+        df = _make_1x2_df(n=1000, seed=7)
+        csv_path = tmp_path / "m.csv"
+        df.to_csv(csv_path, index=False)
+        orig = mod._REPORT_PATH
+        mod._REPORT_PATH = tmp_path / "r.md"
+        mod._REPORT_DIR = tmp_path
+        try:
+            mod.main(["--csv", str(csv_path)])
+        finally:
+            mod._REPORT_PATH = orig
+            mod._REPORT_DIR = orig.parent
+        content = (tmp_path / "r.md").read_text()
+        assert "Conclusão" in content
+        assert "Veredicto" in content
