@@ -1049,52 +1049,108 @@ select option{background:var(--laq-3);color:var(--text)}
 
   <!-- ── Sub-painel: Sharp 1X2 ── -->
   <div id="dpanel-sharp1x2" style="display:none">
-    <div style="margin-top:12px;margin-bottom:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+    <!-- Banner MODO OBSERVAÇÃO -->
+    <div id="d1x2ModeBanner" style="margin-top:12px"></div>
+
+    <!-- Filtro -->
+    <div style="margin-bottom:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
       <label style="display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--text2);cursor:pointer">
         <input type="checkbox" id="filter1x2Home" checked onchange="renderDash1x2()" style="accent-color:var(--green);width:14px;height:14px">
         Só HOME
       </label>
     </div>
-    <div class="stats-bar">
-      <div class="stat-card">
-        <div class="stat-label">TAXA ACERTO</div>
-        <div class="stat-val" id="d1x2WR" style="font-size:22px">—</div>
-        <div style="font-size:10px;color:var(--text3);margin-top:2px" id="d1x2WRn">0 apostas</div>
+
+    <!-- CLV rolling-30 — KPI PRIMÁRIO -->
+    <div class="dash-card" style="margin-bottom:8px">
+      <div class="dash-card-title">CLV ROLLING-30 <span style="font-size:9px;font-weight:400;color:var(--text3)">(proxy div_b365_pin · real quando odds_fecho implementado)</span></div>
+      <div id="d1x2KpiClv"><div style="font-size:11px;color:var(--text3);padding:12px">Sem picks alertados settled.</div></div>
+    </div>
+
+    <!-- HOME vs AWAY + Top Ligas -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+      <div class="dash-card">
+        <div class="dash-card-title">HOME vs AWAY</div>
+        <div id="d1x2KpiHA"><div style="font-size:11px;color:var(--text3);padding:8px">Sem dados</div></div>
       </div>
-      <div class="stat-card">
-        <div class="stat-label">ROI GLOBAL</div>
-        <div class="stat-val" id="d1x2ROI" style="font-size:22px">—</div>
-        <div style="font-size:10px;color:var(--text3);margin-top:2px" id="d1x2ROIn">+0.00u (0 c/odds)</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">CLV MÉDIO</div>
-        <div class="stat-val" id="d1x2CLV" style="font-size:22px">—</div>
-        <div style="font-size:10px;color:var(--text3);margin-top:2px">vs closing line</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">SÉRIE</div>
-        <div class="stat-val" id="d1x2Serie" style="font-size:22px">—</div>
-        <div style="font-size:10px;color:var(--text3);margin-top:2px" id="d1x2SerieType"></div>
+      <div class="dash-card">
+        <div class="dash-card-title">TOP LIGAS</div>
+        <div id="d1x2KpiLigas"><div style="font-size:11px;color:var(--text3);padding:8px">Sem dados</div></div>
       </div>
     </div>
-    <div class="dash-card" style="margin-top:12px">
-      <div class="dash-card-title">CURVA ROI ACUMULADO — Sharp 1X2</div>
-      <div id="d1x2Curve"><div class="empty" style="padding:20px">Sem dados com resultado</div></div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
+
+    <!-- ROI GLOBAL — secundário, collapsible -->
+    <details style="margin-bottom:8px">
+      <summary style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text2);cursor:pointer;padding:8px 12px;background:var(--bg2);border-radius:6px;list-style:none;display:flex;justify-content:space-between;align-items:center">
+        <span>ROI Global (secundário)</span>
+        <span style="font-size:9px;color:var(--amber)">⚠️ n insuficiente — odds ~5.0 requerem n≥500</span>
+      </summary>
+      <div style="border:1px solid var(--border);border-top:none;border-radius:0 0 6px 6px;padding:8px">
+        <div class="stats-bar">
+          <div class="stat-card">
+            <div class="stat-label">TAXA ACERTO</div>
+            <div class="stat-val" id="d1x2WR" style="font-size:22px">—</div>
+            <div style="font-size:10px;color:var(--text3);margin-top:2px" id="d1x2WRn">0 apostas</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">ROI GLOBAL</div>
+            <div class="stat-val" id="d1x2ROI" style="font-size:22px">—</div>
+            <div style="font-size:10px;color:var(--text3);margin-top:2px" id="d1x2ROIn">+0.00u (0 c/odds)</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">CLV MÉDIO</div>
+            <div class="stat-val" id="d1x2CLV" style="font-size:22px">—</div>
+            <div style="font-size:10px;color:var(--text3);margin-top:2px">vs closing line</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">SÉRIE</div>
+            <div class="stat-val" id="d1x2Serie" style="font-size:22px">—</div>
+            <div style="font-size:10px;color:var(--text3);margin-top:2px" id="d1x2SerieType"></div>
+          </div>
+        </div>
+        <div class="dash-card" style="margin-top:8px">
+          <div class="dash-card-title">CURVA ROI ACUMULADO — Sharp 1X2</div>
+          <div id="d1x2Curve"><div class="empty" style="padding:20px">Sem dados com resultado</div></div>
+        </div>
+      </div>
+    </details>
+
+    <!-- Breakdowns 2×2 -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
       <div class="dash-card"><div class="dash-card-title">POR OUTCOME</div><div id="d1x2ByOutcome"></div></div>
       <div class="dash-card"><div class="dash-card-title">POR TIMING</div><div id="d1x2ByTiming"></div></div>
       <div class="dash-card"><div class="dash-card-title">STEAM / SHARP / WATCH</div><div id="d1x2BySteam"></div></div>
       <div class="dash-card"><div class="dash-card-title">CLV TRACKER</div><div id="d1x2CLVTrack"></div></div>
     </div>
+
+    <!-- Picks recentes -->
     <div class="dash-card" style="margin-top:12px">
       <div class="dash-card-title">PICKS RECENTES 1X2</div>
       <div id="d1x2Picks"></div>
     </div>
-    <div class="dash-card" style="margin-top:8px;border-color:var(--amber)">
-      <div class="dash-card-title" style="color:var(--amber)">EM OBSERVAÇÃO — DRAW N1 <span style="font-size:9px;font-weight:400;color:var(--text3)">activação: 50 settled c/CLV&gt;+1%</span></div>
-      <div id="d1x2ObsN1"><div style="font-size:11px;color:var(--text3);padding:8px">Sem picks DRAW N1 gravados ainda.</div></div>
-    </div>
+
+    <!-- Em observação (collapsible) -->
+    <details id="d1x2ObsDetails" style="margin-top:8px">
+      <summary style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--amber);cursor:pointer;padding:8px 12px;background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.3);border-radius:6px;list-style:none">EM OBSERVAÇÃO (3)</summary>
+      <div style="border:1px solid rgba(245,158,11,.3);border-top:none;border-radius:0 0 6px 6px;padding:8px;display:flex;flex-direction:column;gap:8px">
+        <div class="dash-card" style="border-color:var(--amber);margin:0">
+          <div class="dash-card-title" style="color:var(--amber)">DRAW N1 (Eredivisie) <span style="font-size:9px;font-weight:400;color:var(--text3)">activação: 50 settled c/CLV&gt;+1%</span></div>
+          <div id="d1x2ObsN1"><div style="font-size:11px;color:var(--text3);padding:8px">Sem picks DRAW N1 gravados ainda.</div></div>
+        </div>
+        <div class="dash-card" style="border-color:var(--red);margin:0">
+          <div class="dash-card-title" style="color:var(--red)">HOME N1 (Eredivisie) <span style="font-size:9px;font-weight:400;color:var(--text3)">bloqueado desde 12 jun 2026 · rever n≥100</span></div>
+          <div id="d1x2ObsN1Home"><div style="font-size:11px;color:var(--text3);padding:8px">Sem picks HOME N1 registados.</div></div>
+        </div>
+        <div class="dash-card" style="border-color:var(--text3);margin:0">
+          <div class="dash-card-title" style="color:var(--text3)">ODDS FECHO REAL</div>
+          <div id="d1x2ObsOddsFecho">
+            <div style="font-family:var(--mono);font-size:11px;padding:8px;color:var(--text3);line-height:1.7">
+              xfail ativo: CLV usa proxy <code>div_b365_pin</code> (B365/NVP−1).<br>
+              Implementar captura de <code>odds_fecho</code> post-KO para CLV exacto.
+            </div>
+          </div>
+        </div>
+      </div>
+    </details>
   </div>
 
   <!-- ── Sub-painel: Live Padrões ── -->
@@ -2811,38 +2867,144 @@ async function syncResults1x2(){
 }
 
 function _renderObsN1(){
+  // ── DRAW N1 ──
   const obsEl = el('d1x2ObsN1');
-  if(!obsEl) return;
-  const obs = sharp1x2Picks.filter(p => p.gate_blocked_reason === 'draw_observacao_n1');
-  if(!obs.length){
-    obsEl.innerHTML='<div style="font-size:11px;color:var(--text3);padding:8px">Sem picks DRAW N1 gravados ainda.</div>';
+  if(obsEl){
+    const obs = sharp1x2Picks.filter(p => p.gate_blocked_reason === 'draw_observacao_n1');
+    if(!obs.length){
+      obsEl.innerHTML='<div style="font-size:11px;color:var(--text3);padding:8px">Sem picks DRAW N1 gravados ainda.</div>';
+    } else {
+      const settled = obs.filter(p => p.resultado_outcome==='WIN'||p.resultado_outcome==='LOSS');
+      const wins = settled.filter(p => p.resultado_outcome==='WIN');
+      const wr = settled.length ? (wins.length/settled.length*100).toFixed(1) : null;
+      const clvVals = obs.map(p=>calcCLVAvg([p])).filter(v=>v!==null);
+      const clvAvg = clvVals.length ? clvVals.reduce((s,v)=>s+v,0)/clvVals.length : null;
+      const target = 50;
+      const prog = Math.min(100, settled.length/target*100);
+      const progCol = prog >= 100 ? 'var(--green)' : 'var(--amber)';
+      obsEl.innerHTML = `<div style="font-family:var(--mono);font-size:11px;padding:8px;line-height:1.8">
+        <div>${obs.length} picks gravados · ${settled.length} settled${wr!=null?' · WR '+wr+'%':''}</div>
+        ${clvAvg!=null?`<div>CLV est. <strong style="color:${clvAvg>0?'var(--green)':'var(--red)'}">${clvAvg>=0?'+':''}${clvAvg.toFixed(1)}%</strong> (div_b365_pin médio)</div>`:''}
+        <div style="margin-top:6px">
+          Progresso activação: <strong>${settled.length}/${target}</strong>
+          <span style="display:inline-block;width:80px;height:6px;background:var(--bg3);border-radius:3px;vertical-align:middle;margin:0 6px">
+            <span style="display:block;height:100%;width:${prog.toFixed(0)}%;background:${progCol};border-radius:3px;transition:width .4s"></span>
+          </span>
+          ${prog>=100?'<span style="color:var(--green)">✓ Critério atingido — rever Gate 2 para N1</span>':''}
+        </div>
+        <div style="font-size:10px;color:var(--text3);margin-top:4px">Critério: 50 settled c/CLV&gt;+1% → activar DRAW N1</div>
+      </div>`;
+    }
+  }
+  // ── HOME N1 ──
+  const homeEl = el('d1x2ObsN1Home');
+  if(homeEl){
+    const homeObs = sharp1x2Picks.filter(p => p.gate_blocked_reason === 'n1_home_negativo');
+    if(!homeObs.length){
+      homeEl.innerHTML='<div style="font-size:11px;color:var(--text3);padding:8px">Sem picks HOME N1 registados.</div>';
+    } else {
+      const prog = Math.min(100, homeObs.length/100*100);
+      homeEl.innerHTML = `<div style="font-family:var(--mono);font-size:11px;padding:8px;line-height:1.8">
+        <div>${homeObs.length} picks registados com gate_blocked_reason: n1_home_negativo</div>
+        <div style="margin-top:6px">
+          Progresso revisão: <strong>${homeObs.length}/100</strong>
+          <span style="display:inline-block;width:80px;height:6px;background:var(--bg3);border-radius:3px;vertical-align:middle;margin:0 6px">
+            <span style="display:block;height:100%;width:${prog.toFixed(0)}%;background:var(--red);border-radius:3px;transition:width .4s"></span>
+          </span>
+        </div>
+        <div style="font-size:10px;color:var(--text3);margin-top:4px">Evidência histórica: ROI −6.07% em 100 apostas. Rever com n≥100 ao vivo.</div>
+      </div>`;
+    }
+  }
+}
+
+function _renderModeBanner(clvMean30, nSettled){
+  const bannerEl = el('d1x2ModeBanner');
+  if(!bannerEl) return;
+  const active = clvMean30 !== null && clvMean30 > 1.0 && nSettled >= 200;
+  if(active){
+    bannerEl.innerHTML = `<div style="background:rgba(22,163,74,.12);border:1px solid var(--green);border-radius:8px;padding:10px 14px;font-family:var(--mono);font-size:11px;color:var(--green);margin-bottom:8px">
+      ✅ SINAL VALIDADO — CLV ${clvMean30>=0?'+':''}${clvMean30.toFixed(2)}% com n=${nSettled} settled — critério atingido
+    </div>`;
+  } else {
+    const clvStr = clvMean30 !== null ? `CLV atual: ${clvMean30>=0?'+':''}${clvMean30.toFixed(2)}%` : 'CLV: sem dados';
+    bannerEl.innerHTML = `<div style="background:rgba(245,158,11,.09);border:1px solid var(--amber);border-radius:8px;padding:10px 14px;font-family:var(--mono);font-size:11px;color:var(--amber);margin-bottom:8px">
+      ⏳ MODO OBSERVAÇÃO — sem apostas reais até CLV &gt; +1% com n ≥ 200 settled &nbsp;·&nbsp; ${clvStr} &nbsp;·&nbsp; ${nSettled}/200 settled
+    </div>`;
+  }
+}
+
+function _renderKpiClv(rolling30, clvMean30, clvSE, nAlertados, nSettled){
+  const kpiEl = el('d1x2KpiClv');
+  if(!kpiEl) return;
+  if(!rolling30.length){
+    kpiEl.innerHTML='<div style="font-size:11px;color:var(--text3);padding:12px">Sem picks alertados settled — CLV disponível quando os primeiros resultados chegarem.</div>';
     return;
   }
-  const settled = obs.filter(p => p.resultado_outcome==='WIN'||p.resultado_outcome==='LOSS');
-  const wins = settled.filter(p => p.resultado_outcome==='WIN');
-  const wr = settled.length ? (wins.length/settled.length*100).toFixed(1) : null;
-  // CLV: div_b365_pin como proxy; ou clv explícito se disponível
-  const clvOf = p => {
-    const c=parseFloat(p.clv||''); if(!isNaN(c)&&c!==0) return c;
-    const d=parseFloat(p.div_b365_pin||''); return (!isNaN(d)&&d!==0) ? d : null;
-  };
-  const clvVals = obs.map(clvOf).filter(v=>v!==null);
-  const clvAvg = clvVals.length ? clvVals.reduce((s,v)=>s+v,0)/clvVals.length : null;
-  const target = 50;
-  const prog = Math.min(100, settled.length/target*100);
-  const progCol = prog >= 100 ? 'var(--green)' : 'var(--amber)';
-  obsEl.innerHTML = `<div style="font-family:var(--mono);font-size:11px;padding:8px;line-height:1.8">
-    <div>${obs.length} picks gravados · ${settled.length} settled${wr!=null?' · WR '+wr+'%':''}</div>
-    ${clvAvg!=null?`<div>CLV est. <strong style="color:${clvAvg>0?'var(--green)':'var(--red)'}">${clvAvg>=0?'+':''}${clvAvg.toFixed(1)}%</strong> (div_b365_pin médio)</div>`:''}
-    <div style="margin-top:6px">
-      Progresso activação: <strong>${settled.length}/${target}</strong>
-      <span style="display:inline-block;width:80px;height:6px;background:var(--bg3);border-radius:3px;vertical-align:middle;margin:0 6px">
-        <span style="display:block;height:100%;width:${prog.toFixed(0)}%;background:${progCol};border-radius:3px;transition:width .4s"></span>
-      </span>
-      ${prog>=100?'<span style="color:var(--green)">✓ Critério atingido — rever Gate 2 para N1</span>':''}
+  const clvCol = clvMean30 !== null ? (clvMean30 > 0 ? 'var(--green)' : 'var(--red)') : 'var(--text3)';
+  const seStr = clvSE !== null ? ` ±${clvSE.toFixed(2)}%` : '';
+  const clvStr = clvMean30 !== null ? `${clvMean30>=0?'+':''}${clvMean30.toFixed(2)}%${seStr}` : '—';
+  kpiEl.innerHTML = `<div style="display:flex;align-items:flex-end;gap:20px;padding:8px;flex-wrap:wrap">
+    <div>
+      <div style="font-size:30px;font-weight:700;font-family:var(--mono);color:${clvCol}">${clvStr}</div>
+      <div style="font-size:10px;color:var(--text3);margin-top:2px">rolling-30 · últimos ${rolling30.length} settled alertados</div>
     </div>
-    <div style="font-size:10px;color:var(--text3);margin-top:4px">Critério: 50 settled c/CLV&gt;+1% → activar DRAW N1</div>
+    <div style="font-size:11px;font-family:var(--mono);line-height:1.9;color:var(--text2)">
+      <div>Alertados total: <strong>${nAlertados}</strong></div>
+      <div>Settled total: <strong>${nSettled}</strong></div>
+    </div>
   </div>`;
+}
+
+function _renderKpiHA(alertados){
+  const kpiEl = el('d1x2KpiHA');
+  if(!kpiEl) return;
+  const rows = ['HOME','AWAY'].map(out => {
+    const ps = alertados.filter(p=>(p.outcome||'').toUpperCase()===out);
+    if(!ps.length) return '';
+    const settled = ps.filter(p=>p.resultado_outcome==='WIN'||p.resultado_outcome==='LOSS');
+    const wins = settled.filter(p=>p.resultado_outcome==='WIN');
+    const wr = settled.length ? (wins.length/settled.length*100).toFixed(0)+'%' : '—';
+    const clvV = calcCLVAvg(ps);
+    const clvStr = clvV !== null ? (clvV>=0?'+':'')+clvV.toFixed(1)+'%' : '—';
+    const clvCol = clvV !== null ? (clvV>0?'var(--green)':'var(--red)') : 'var(--text3)';
+    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)">
+      <span style="font-family:var(--mono);font-size:11px">${out}</span>
+      <span style="font-size:11px">n=${ps.length} WR${wr}</span>
+      <span style="font-family:var(--mono);font-size:11px;color:${clvCol}">${clvStr}</span>
+    </div>`;
+  }).join('');
+  kpiEl.innerHTML = rows || '<div style="font-size:11px;color:var(--text3);padding:8px">Sem dados</div>';
+}
+
+function _renderKpiLigas(alertados){
+  const kpiEl = el('d1x2KpiLigas');
+  if(!kpiEl) return;
+  if(!alertados.length){
+    kpiEl.innerHTML='<div style="font-size:11px;color:var(--text3);padding:8px">Sem dados</div>';
+    return;
+  }
+  const byLiga = {};
+  alertados.forEach(p=>{
+    const lg = p.liga || p.league || '?';
+    if(!byLiga[lg]) byLiga[lg]=[];
+    byLiga[lg].push(p);
+  });
+  const rows = Object.entries(byLiga)
+    .sort((a,b)=>b[1].length-a[1].length)
+    .slice(0,5)
+    .map(([liga,ps])=>{
+      const clvV = calcCLVAvg(ps);
+      const clvStr = clvV !== null ? (clvV>=0?'+':'')+clvV.toFixed(1)+'%' : '—';
+      const clvCol = clvV !== null ? (clvV>0?'var(--green)':'var(--red)') : 'var(--text3)';
+      const lgDisplay = liga.length>12 ? liga.slice(0,11)+'…' : liga;
+      return `<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border)">
+        <span style="font-family:var(--mono);font-size:10px" title="${liga}">${lgDisplay}</span>
+        <span style="font-size:10px">n=${ps.length}</span>
+        <span style="font-family:var(--mono);font-size:10px;color:${clvCol}">${clvStr}</span>
+      </div>`;
+    }).join('');
+  kpiEl.innerHTML = rows;
 }
 
 function renderDash1x2(){
@@ -2872,7 +3034,23 @@ function renderDash1x2(){
     return o>=1.01&&o<=30;
   });
 
-  // KPIs
+  // Alertados (global, sem filtro onlyHome) = picks que passaram todos os gates
+  const alertados = sharp1x2Picks.filter(p => !p.gate_blocked_reason || p.gate_blocked_reason === '');
+  const settledAll = alertados.filter(p => p.resultado_outcome==='WIN' || p.resultado_outcome==='LOSS');
+  // Rolling-30: últimos 30 settled alertados por data
+  const rolling30 = [...settledAll].sort((a,b)=>new Date(b.data)-new Date(a.data)).slice(0,30);
+  const clvVals30 = rolling30.map(p=>calcCLVAvg([p])).filter(v=>v!==null);
+  const clvMean30 = clvVals30.length ? clvVals30.reduce((s,v)=>s+v,0)/clvVals30.length : null;
+  const clvSE = clvVals30.length > 1
+    ? Math.sqrt(clvVals30.reduce((s,v)=>s+(v-clvMean30)**2,0)/(clvVals30.length-1)) / Math.sqrt(clvVals30.length)
+    : null;
+
+  // KPIs primários (sempre renderizados)
+  _renderModeBanner(clvMean30, settledAll.length);
+  _renderKpiClv(rolling30, clvMean30, clvSE, alertados.length, settledAll.length);
+  _renderKpiHA(alertados);
+  _renderKpiLigas(alertados);
+
   if(!withOdds.length){
     el('d1x2WR').textContent='—';
     el('d1x2WRn').textContent='0 apostas';
