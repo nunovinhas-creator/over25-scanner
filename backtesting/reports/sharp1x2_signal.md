@@ -1,6 +1,6 @@
 # Sharp 1X2 — Análise de Sinais (pin_drop + divergência)
 
-Gerado em 2026-06-12 08:28 UTC
+Gerado em 2026-06-12 11:19 UTC
 Fonte: `matches.csv` · 21,087 jogos · épocas ['2122', '2223', '2324', '2425', '2526'] · divisões ['B1', 'D1', 'D2', 'E0', 'E1', 'F1', 'F2', 'I1', 'I2', 'N1', 'P1', 'SP1', 'SP2']
 
 > **Limitação dos dados**: football-data.co.uk tem apenas odds de abertura e fecho,
@@ -114,6 +114,52 @@ Odds de liquidação: Pinnacle closing (evita viés de usar as odds do sinal).
 | E1 | >3% | 366 | 24.0 | -1.55 |
 
 
+---
+
+## Q5 — Validação temporal walk-forward (div > 3%)
+
+Threshold fixo: **3%** (escolhido na análise de treino, 12 jun 2026).
+CLV simulado = B365_na_signal / Pin_closing − 1
+(positivo → B365 estava acima do fecho eficiente da Pinnacle → potencial value).
+
+| treino | validação | n_treino | n_val | threshold_ótimo_treino | roi_ótimo_treino | roi_treino_@3pct | n_apostas_val | roi_val_@3pct | wr_val | clv_sim_val |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2122+2223+2324 | 2425 | 14370 | 4680 | >10% | +19.20% | +4.83% | 1001 | +1.03% | 25.1% | +2.50% |
+| 2122+2223+2324+2425 | 2526 | 19050 | 2022 | >8% | +7.95% | +3.71% | 337 | -10.10% | 22.8% | +2.49% |
+
+> **Interpretação**: CLV sim > 0% → B365 sistematicamente acima do fecho Pinnacle → edge real.
+> ROI val > −2% com n ≥ 300 → sinal sobrevive walk-forward.
+> Se ambas as épocas de validação tiverem CLV sim positivo → implementar Gate 4 em produção.
+
+---
+
+## Q6 — Investigação da anomalia N1 (Eredivisie, div > 3%)
+
+**N1**: 438 apostas · ROI +16.68% · WR 24.4%
+
+**Concentração**: ✓ ROI distribuído por múltiplas épocas — padrão consistente.
+
+### Por época
+
+| Season | n | wr_pct | roi_pct | avg_div_pct | avg_close_odds |
+| --- | --- | --- | --- | --- | --- |
+| 2122 | 69.0 | 26.1 | 21.91 | 6.5 | 6.016 |
+| 2223 | 82.0 | 23.2 | 13.0 | 7.7 | 7.021 |
+| 2324 | 94.0 | 21.3 | -0.12 | 6.4 | 6.898 |
+| 2425 | 147.0 | 24.5 | 19.29 | 7.8 | 6.226 |
+| 2526 | 46.0 | 30.4 | 41.41 | 7.0 | 6.699 |
+
+
+### Por outcome (H / D / A)
+
+| picked | n | wr_pct | roi_pct | avg_div_pct | avg_close_odds |
+| --- | --- | --- | --- | --- | --- |
+| A | 196 | 20.9 | 13.61 | 7.7 | 7.854 |
+| D | 142 | 32.4 | 36.94 | 6.1 | 4.648 |
+| H | 100 | 20.0 | -6.07 | 7.7 | 6.632 |
+
+
+> ✓ **ROI consistente por múltiplas épocas** — padrão robusto para N1.
 ---
 
 ## Conclusão — Qual o sinal mais promissor?
