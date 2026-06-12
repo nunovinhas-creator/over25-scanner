@@ -16,8 +16,8 @@ import copy
 from typing import Any, Dict, List, Optional, Tuple
 
 import pytest
-import pandera as pa
-from pandera import Column, DataFrameSchema, Check
+import pandera.pandas as pa
+from pandera.pandas import Column, DataFrameSchema, Check
 import pandas as pd
 
 # ---------------------------------------------------------------------------

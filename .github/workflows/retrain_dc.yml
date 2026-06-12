@@ -64,6 +64,14 @@ jobs:
           print(f"CV Brier (LOEO): {cal['cv_brier_loeo']:.5f}")
           EOF
 
+      - name: Sharp 1X2 — relatório semanal Telegram
+        run: |
+          python backtesting/send_sharp1x2_weekly.py
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+
       - name: Commit updated ratings and calibrator
         run: |
           git config user.name  "github-actions[bot]"

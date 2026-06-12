@@ -98,17 +98,22 @@ This project has two layers:
 **FASE 4 validation (epoch 2526):**
 - Calibrated (w=0.30): Brier=0.24168 vs Market=0.24320 vs Uncalibrated=0.25110
 - CLV IC 95% = [-0.985%, +1.366%] — inclui zero (N=83, época única)
-- Regime: MODO OBSERVAÇÃO — sem dinheiro real até CLV rolling-30 > +1% com N≥300
+- Regime: MODO OBSERVAÇÃO — sem dinheiro real até CLV rolling-30 > +1% com n≥200 settled
 
 **Key decisions recorded (não reverter sem evidência nova):**
 - `MAX_ODDS_OVER`: NÃO implementado. Evidência não-monotónica (>2.50 deu +3.69%, N=35 insuficiente). Em vez disso: `odds_band` gravado em cada pick para análise ao vivo.
 - Kelly: desativado até CLV validado ao vivo (MODO OBSERVAÇÃO). buildPickMsg ainda exibe valor mas é informativo.
 - MODEL_WEIGHT=0.30: melhor Brier calibrado em LOEO-CV. Não alterar sem nova validação.
 - Sharp 1X2 signal: MUDOU de `pin_drop` → divergência B365/Pinnacle (12 jun 2026).
-  Critério de alerta: `div_b365_pin > 0.03` + liga whitelisted + outcome != DRAW + timing < 6h KO.
+  Critério de alerta: `div_b365_pin > 3%` (raw `divB365 > 0.03`) + liga whitelisted + outcome≠DRAW (exc. N1 tracking) + HOME N1 bloqueado + timing 0–6h KO.
   `pin_drop` continua gravado por pick para análise futura mas NÃO é critério de alerta.
-  Evidência: 21.087 jogos históricos, ROI +2.46% em 3.731 apostas (threshold >3%).
-  Walk-forward pendente de validação — ver `backtesting/reports/sharp1x2_signal.md` (Q5).
+  Evidência histórica: 21.087 jogos, ROI +2.46% em 3.731 apostas (threshold >3%).
+  **Walk-forward validado** (Q5 — `backtesting/reports/sharp1x2_signal.md`):
+    Ronda 1 (val 2425): n=1001, ROI=+1.03%, WR=25.1%, CLV sim=+2.50%
+    Ronda 2 (val 2526): n=337, ROI=−10.10%, WR=22.8%, CLV sim=+2.49%
+    CLV positivo em AMBAS as épocas → sinal não refutado. ROI instável por n baixo.
+  CLV proxy: `div_b365_pin` (B365/NVP−1, já em %). CLV exacto quando `odds_fecho` implementado.
+  Modo: OBSERVAÇÃO — sem dinheiro real até CLV rolling-30 > +1% com n ≥ 200 settled.
 - DRAW N1 (Eredivisie): em tracking separado desde 12 jun 2026. Gate 2 bloqueia DRAW global
   mas picks DRAW N1 com div≥3% são gravados com `gate_blocked_reason: "draw_observacao_n1"`.
   Critério de activação (exceção Gate 2 para N1): 50 settled com CLV>+1% → rever Gate 2.
@@ -214,9 +219,11 @@ models/
     poisson.py        — fit_dixon_coles_fast, prob_over25_poisson, prob_over25_from_model
   train_dc.py         — CLI to train DC per league → data/dc_ratings.json
 backtesting/
-  run_walkforward.py  — OOS predictions with calibrator_fn + season filter
-  run_calibration.py  — FASE 4: LOEO-CV → calibrator.json + validation report
-  reports/            — calibration_validation.md (temporal split)
+  run_walkforward.py       — OOS predictions with calibrator_fn + season filter
+  run_calibration.py       — FASE 4: LOEO-CV → calibrator.json + validation report
+  run_sharp1x2_signal.py   — Q1–Q6 analysis: div threshold, walk-forward, N1 anomaly
+  send_sharp1x2_weekly.py  — Weekly TG report (CLV rolling-30, HOME/AWAY, DRAW N1 progress)
+  reports/                 — calibration_validation.md, sharp1x2_signal.md
 pipeline/
   transform.py        — compute_final_probability, compute_final_probability_dc
   config.py           — MODEL_WEIGHT=0.30
@@ -225,13 +232,23 @@ data/
   calibrator.json     — isotonic calibrator (auto-updated Mondays)
   historical/         — matches.csv (auto-updated Mondays via historical_data.yml)
 .github/workflows/
-  historical_data.yml — Monday 06:00 UTC: update matches.csv
-  retrain_dc.yml      — Monday 07:00 UTC: retrain DC + recalibrate
+  historical_data.yml   — Monday 06:00 UTC: update matches.csv
+  retrain_dc.yml        — Monday 07:00 UTC: retrain DC + recalibrate + Sharp 1X2 TG report
+  sharp1x2_analysis.yml — workflow_dispatch: run Q1–Q6 analysis report
 ```
 
 ## Data Rules
 
 **NUNCA substituir dados reais por sintéticos para fazer um pipeline 'passar'.** Dados sintéticos são permitidos apenas em testes unitários (`tests/`), sempre claramente marcados.
+
+## Sharp 1X2 — Backlog (não implementado)
+
+| Item | Estado | Critério de activação |
+|---|---|---|
+| `odds_fecho` real | xfail ativo | Capturar odds Pinnacle post-KO → CLV exacto vs proxy `div_b365_pin` |
+| DRAW N1 (Eredivisie) | tracking: 0/50 settled | 50 settled c/CLV>+1% → activar excepção Gate 2 para DRAW N1 |
+| HOME N1 (Eredivisie) | bloqueado: `n1_home_negativo` | n≥100 settled ao vivo → rever (histórico ROI −6.07%) |
+| Intraday odds feed | não iniciado | High-frequency updates para signals intraday mais precisos |
 
 ## Language
 

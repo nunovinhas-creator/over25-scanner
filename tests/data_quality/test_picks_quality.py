@@ -17,9 +17,9 @@ from typing import Any, Dict, List
 
 import numpy as np
 import pandas as pd
-import pandera as pa
+import pandera.pandas as pa
 import pytest
-from pandera import Column, DataFrameSchema, Check
+from pandera.pandas import Column, DataFrameSchema, Check
 
 # ---------------------------------------------------------------------------
 # Helpers / fixtures
