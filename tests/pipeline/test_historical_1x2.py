@@ -1,0 +1,242 @@
+"""
+tests/pipeline/test_historical_1x2.py
+---------------------------------------
+Testes para a extensão 1X2 de pipeline/historical.py e
+backtesting/run_sharp1x2_signal.py.
+
+Todos os dados usados são SINTÉTICOS — nunca dados reais.
+
+Correr com:
+    pytest tests/pipeline/test_historical_1x2.py -v --tb=short
+"""
+
+from __future__ import annotations
+
+import io
+import sys
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+import pytest
+
+from pipeline.historical import (
+    _normalise,
+    _synthetic_season,
+    generate_synthetic,
+    KEEP_COLS,
+)
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+def _make_raw_with_1x2(**extra_cols) -> pd.DataFrame:
+    """Minimal raw CSV row with 1X2 columns present."""
+    base = {
+        "Div": "E0", "Date": "01/08/2526",
+        "HomeTeam": "Arsenal", "AwayTeam": "Chelsea",
+        "FTHG": 2, "FTAG": 1, "FTR": "H",
+        "P>2.5": 1.85, "P<2.5": 2.00,
+        "PC>2.5": 1.83, "PC<2.5": 2.02,
+        "B365>2.5": 1.80, "B365<2.5": 2.05,
+        "Avg>2.5": 1.82, "Max>2.5": 1.86,
+        "PSH": 2.10, "PSD": 3.40, "PSA": 3.80,
+        "PSCH": 1.95, "PSCD": 3.50, "PSCA": 4.10,
+        "B365H": 2.05, "B365D": 3.30, "B365A": 3.75,
+    }
+    base.update(extra_cols)
+    return pd.DataFrame([base])
+
+
+def _make_raw_without_1x2() -> pd.DataFrame:
+    """Minimal raw CSV row WITHOUT 1X2 columns (pre-extension dataset)."""
+    return pd.DataFrame([{
+        "Div": "E0", "Date": "01/08/2526",
+        "HomeTeam": "Arsenal", "AwayTeam": "Chelsea",
+        "FTHG": 2, "FTAG": 1,
+        "P>2.5": 1.85, "P<2.5": 2.00,
+        "PC>2.5": 1.83, "PC<2.5": 2.02,
+        "B365>2.5": 1.80, "B365<2.5": 2.05,
+        "Avg>2.5": 1.82, "Max>2.5": 1.86,
+    }])
+
+
+# ---------------------------------------------------------------------------
+# TAREFA 2.1 — _normalise() extrai colunas 1X2
+# ---------------------------------------------------------------------------
+
+class TestNormalise1x2:
+    def test_keeps_ftr_when_present(self) -> None:
+        raw = _make_raw_with_1x2()
+        out = _normalise(raw, epoch="2526", div="E0")
+        assert "FTR" in out.columns
+        assert out["FTR"].iloc[0] == "H"
+
+    def test_keeps_pinnacle_opening_odds(self) -> None:
+        raw = _make_raw_with_1x2()
+        out = _normalise(raw, epoch="2526", div="E0")
+        for col in ("PSH", "PSD", "PSA"):
+            assert col in out.columns, f"Missing {col}"
+            assert pd.to_numeric(out[col].iloc[0], errors="coerce") > 1.0
+
+    def test_keeps_pinnacle_closing_odds(self) -> None:
+        raw = _make_raw_with_1x2()
+        out = _normalise(raw, epoch="2526", div="E0")
+        for col in ("PSCH", "PSCD", "PSCA"):
+            assert col in out.columns, f"Missing {col}"
+            assert pd.to_numeric(out[col].iloc[0], errors="coerce") > 1.0
+
+    def test_keeps_b365_1x2_odds(self) -> None:
+        raw = _make_raw_with_1x2()
+        out = _normalise(raw, epoch="2526", div="E0")
+        for col in ("B365H", "B365D", "B365A"):
+            assert col in out.columns, f"Missing {col}"
+
+    def test_pin_drop_computed_correctly(self) -> None:
+        """pin_drop_h = PSH/PSCH - 1"""
+        raw = _make_raw_with_1x2(PSH=2.10, PSCH=1.95)
+        out = _normalise(raw, epoch="2526", div="E0")
+        expected = 2.10 / 1.95 - 1
+        assert "pin_drop_h" in out.columns
+        assert abs(out["pin_drop_h"].iloc[0] - expected) < 1e-6
+
+    def test_pin_drop_positive_when_odds_shorten(self) -> None:
+        """PSH > PSCH → odds fell → pin_drop_h > 0 (money came in on home)."""
+        raw = _make_raw_with_1x2(PSH=3.00, PSCH=2.50)
+        out = _normalise(raw, epoch="2526", div="E0")
+        assert out["pin_drop_h"].iloc[0] > 0
+
+    def test_pin_drop_negative_when_odds_lengthen(self) -> None:
+        """PSH < PSCH → odds drifted → pin_drop_h < 0."""
+        raw = _make_raw_with_1x2(PSH=2.50, PSCH=3.00)
+        out = _normalise(raw, epoch="2526", div="E0")
+        assert out["pin_drop_h"].iloc[0] < 0
+
+    def test_no_crash_when_1x2_absent(self) -> None:
+        """_normalise() must not raise when 1X2 columns are absent."""
+        raw = _make_raw_without_1x2()
+        out = _normalise(raw, epoch="2526", div="E0")
+        # Over/Under columns still present
+        assert "P>2.5" in out.columns
+        # pin_drop columns should be NaN (column exists but all NaN)
+        assert "pin_drop_h" in out.columns
+        assert out["pin_drop_h"].isna().all()
+
+    def test_pin_drop_nan_when_close_is_nan(self) -> None:
+        """If PSCH is NaN, pin_drop_h must be NaN (not raise)."""
+        raw = _make_raw_with_1x2()
+        raw["PSCH"] = np.nan
+        out = _normalise(raw, epoch="2526", div="E0")
+        assert out["pin_drop_h"].isna().all()
+
+    def test_keep_cols_includes_1x2(self) -> None:
+        """KEEP_COLS must include all expected 1X2 columns."""
+        for col in ("FTR", "PSH", "PSD", "PSA", "PSCH", "PSCD", "PSCA", "B365H", "B365D", "B365A"):
+            assert col in KEEP_COLS, f"{col} missing from KEEP_COLS"
+
+
+# ---------------------------------------------------------------------------
+# TAREFA 2.1 — _synthetic_season() gera dados 1X2
+# ---------------------------------------------------------------------------
+
+class TestSyntheticSeason1x2:
+    def _get_season(self) -> pd.DataFrame:
+        rng = np.random.default_rng(0)
+        return _synthetic_season("E0", "2526", rng)
+
+    def test_ftr_present_and_valid(self) -> None:
+        df = self._get_season()
+        assert "FTR" in df.columns
+        assert set(df["FTR"].unique()).issubset({"H", "D", "A"})
+
+    def test_ftr_consistent_with_scoreline(self) -> None:
+        df = self._get_season()
+        expected = df.apply(
+            lambda r: "H" if r["FTHG"] > r["FTAG"] else ("D" if r["FTHG"] == r["FTAG"] else "A"),
+            axis=1,
+        )
+        assert (df["FTR"] == expected).all()
+
+    def test_pinnacle_1x2_columns_present(self) -> None:
+        df = self._get_season()
+        for col in ("PSH", "PSD", "PSA", "PSCH", "PSCD", "PSCA"):
+            assert col in df.columns, f"Missing {col}"
+            assert df[col].notna().all(), f"{col} has NaN"
+
+    def test_b365_1x2_columns_present(self) -> None:
+        df = self._get_season()
+        for col in ("B365H", "B365D", "B365A"):
+            assert col in df.columns, f"Missing {col}"
+
+    def test_pin_drop_present_and_plausible(self) -> None:
+        df = self._get_season()
+        for col in ("pin_drop_h", "pin_drop_d", "pin_drop_a"):
+            assert col in df.columns, f"Missing {col}"
+            # Should be between -0.5 and +0.5 for synthetic data
+            assert (df[col].abs() < 0.5).all(), f"{col} has implausible values"
+
+    def test_pinnacle_odds_reasonable_range(self) -> None:
+        """Pinnacle 1X2 odds should be between 1.1 and 20."""
+        df = self._get_season()
+        for col in ("PSH", "PSD", "PSA", "PSCH", "PSCD", "PSCA"):
+            assert (df[col] >= 1.05).all(), f"{col} has odds < 1.05"
+            assert (df[col] <= 30.0).all(), f"{col} has odds > 30"
+
+    def test_generate_synthetic_has_1x2(self) -> None:
+        """generate_synthetic() (all epochs × divisions) must include 1X2 columns."""
+        df = generate_synthetic(seed=0)
+        assert "FTR" in df.columns
+        assert "PSH" in df.columns
+        assert "pin_drop_h" in df.columns
+        assert df["PSH"].notna().any()
+
+
+# ---------------------------------------------------------------------------
+# TAREFA 2.3 — run_sharp1x2_signal handles missing 1X2 gracefully
+# ---------------------------------------------------------------------------
+
+class TestSharp1x2SignalMissingColumns:
+    def test_exits_cleanly_when_no_1x2_cols(self, tmp_path: Path) -> None:
+        """Script must exit code 0 when CSV lacks 1X2 columns."""
+        df = generate_synthetic(seed=1)
+        # Remove all 1X2 columns to simulate pre-extension dataset
+        drop_cols = [c for c in ("FTR", "PSH", "PSD", "PSA", "PSCH", "PSCD", "PSCA",
+                                  "pin_drop_h", "pin_drop_d", "pin_drop_a") if c in df.columns]
+        df = df.drop(columns=drop_cols)
+        csv_path = tmp_path / "matches.csv"
+        df.to_csv(csv_path, index=False)
+
+        from backtesting.run_sharp1x2_signal import main
+        rc = main(["--csv", str(csv_path)])
+        assert rc == 0
+
+    def test_exits_cleanly_when_csv_missing(self, tmp_path: Path) -> None:
+        """Script must exit code 0 when CSV doesn't exist yet."""
+        from backtesting.run_sharp1x2_signal import main
+        rc = main(["--csv", str(tmp_path / "nonexistent.csv")])
+        assert rc == 0
+
+    def test_produces_report_when_1x2_present(self, tmp_path: Path) -> None:
+        """When 1X2 data is present, script writes a report."""
+        df = generate_synthetic(seed=2)
+        csv_path = tmp_path / "matches.csv"
+        df.to_csv(csv_path, index=False)
+
+        import backtesting.run_sharp1x2_signal as mod
+        orig_path = mod._REPORT_PATH
+        report_path = tmp_path / "sharp1x2_signal.md"
+        mod._REPORT_PATH = report_path
+        mod._REPORT_DIR = tmp_path
+        try:
+            rc = mod.main(["--csv", str(csv_path)])
+        finally:
+            mod._REPORT_PATH = orig_path
+            mod._REPORT_DIR = orig_path.parent
+
+        assert rc == 0
+        assert report_path.exists(), "Report not written when 1X2 data is present"
+        content = report_path.read_text()
+        assert "Q1" in content
+        assert "Q2" in content
+        assert "Q3" in content

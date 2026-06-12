@@ -4,9 +4,12 @@ pipeline/historical.py
 Download and normalise historical football match data from football-data.co.uk.
 
 Columns normalised to:
-  Div, Date, Season, HomeTeam, AwayTeam, FTHG, FTAG, over25,
-  P>2.5, P<2.5, PC>2.5, PC<2.5,
-  B365>2.5, B365<2.5, Avg>2.5, Max>2.5
+  Div, Date, Season, HomeTeam, AwayTeam, FTHG, FTAG, FTR, over25,
+  P>2.5, P<2.5, PC>2.5, PC<2.5, B365>2.5, B365<2.5, Avg>2.5, Max>2.5
+  PSH, PSD, PSA (Pinnacle 1X2 opening odds)
+  PSCH, PSCD, PSCA (Pinnacle 1X2 closing odds)
+  B365H, B365D, B365A (Bet365 1X2)
+  pin_drop_h, pin_drop_d, pin_drop_a (derived: PSx/PSCx - 1; positive = odds shortened)
 
 Output:  data/historical/matches.csv  (always)
          data/historical/matches.parquet  (if pyarrow is available)
@@ -18,6 +21,9 @@ Usage
 
     # Update only the current season (2025-26):
     python -m pipeline.historical --update
+
+    # Re-download all 5 seasons to pick up new 1X2 columns:
+    python -m pipeline.historical --full-1x2
 
     # Generate synthetic data (no network needed — cloud / CI):
     python -m pipeline.historical --synthetic
@@ -83,11 +89,18 @@ EPOCH_SEASON_START = {
 # Columns we keep from the raw CSV (any subset that exists is retained)
 KEEP_COLS = [
     "Div", "Date", "HomeTeam", "AwayTeam",
-    "FTHG", "FTAG",
+    "FTHG", "FTAG", "FTR",
     "P>2.5", "P<2.5", "PC>2.5", "PC<2.5",
     "B365>2.5", "B365<2.5",
     "Avg>2.5", "Max>2.5",
+    # 1X2 raw odds
+    "PSH", "PSD", "PSA",       # Pinnacle 1X2 opening
+    "PSCH", "PSCD", "PSCA",    # Pinnacle 1X2 closing
+    "B365H", "B365D", "B365A", # Bet365 1X2
 ]
+
+# 1X2 column groups used for detection and pin_drop computation
+_1X2_PIN_COLS = [("PSH", "PSCH", "pin_drop_h"), ("PSD", "PSCD", "pin_drop_d"), ("PSA", "PSCA", "pin_drop_a")]
 
 # De-duplicate key
 DEDUP_COLS = ["Div", "Date", "HomeTeam", "AwayTeam"]
@@ -154,7 +167,7 @@ def _download_one(epoch: str, div: str) -> Optional[pd.DataFrame]:
 # ---------------------------------------------------------------------------
 
 def _normalise(df: pd.DataFrame, epoch: str, div: str = "") -> pd.DataFrame:
-    """Keep only relevant columns, parse dates, add over25 flag."""
+    """Keep only relevant columns, parse dates, add over25 flag, compute pin_drop."""
     existing = [c for c in KEEP_COLS if c in df.columns]
     out = df[existing].copy()
 
@@ -177,10 +190,23 @@ def _normalise(df: pd.DataFrame, epoch: str, div: str = "") -> pd.DataFrame:
     if "FTHG" in out.columns and "FTAG" in out.columns:
         out["over25"] = ((out["FTHG"] + out["FTAG"]) >= 3).astype(int)
 
-    # Coerce odds columns to float
-    odds_cols = [c for c in out.columns if ">" in c or "<" in c or "B365" in c or "Avg" in c or "Max" in c]
+    # Coerce odds columns to float (Over/Under + 1X2)
+    odds_cols = [
+        c for c in out.columns
+        if ">" in c or "<" in c
+        or c in ("PSH", "PSD", "PSA", "PSCH", "PSCD", "PSCA", "B365H", "B365D", "B365A")
+        or "Avg" in c or "Max" in c
+    ]
     for col in odds_cols:
         out[col] = pd.to_numeric(out[col], errors="coerce")
+
+    # pin_drop: PSx / PSCx - 1 (positive = odds shortened = money came in)
+    # Missing columns → NaN column; never crashes
+    for open_col, close_col, drop_col in _1X2_PIN_COLS:
+        if open_col in out.columns and close_col in out.columns:
+            out[drop_col] = out[open_col] / out[close_col] - 1
+        else:
+            out[drop_col] = np.nan
 
     return out
 
@@ -297,6 +323,8 @@ def _synthetic_season(
     season_start_year = EPOCH_SEASON_START.get(epoch, 2021)
     aug_start = date(season_start_year, 8, 5)
 
+    from scipy.stats import poisson as _poisson
+
     rows = []
     # Round-robin home and away
     matchdays: list[list[tuple[int, int]]] = []
@@ -323,7 +351,6 @@ def _synthetic_season(
             ga = int(rng.poisson(max(la, 0.1)))
 
             # True probability of over 2.5 (Poisson)
-            from scipy.stats import poisson as _poisson
             p_true = float(1.0 - sum(
                 _poisson.pmf(k, lh) * _poisson.pmf(j, la)
                 for k in range(4) for j in range(4)
@@ -331,43 +358,95 @@ def _synthetic_season(
             ))
             p_true = float(np.clip(p_true, 0.05, 0.95))
 
+            # True 1X2 probabilities from Poisson (sum to ~1)
+            ph_true = float(sum(
+                _poisson.pmf(h, lh) * _poisson.pmf(a, la)
+                for h in range(10) for a in range(10) if h > a
+            ))
+            pd_true = float(sum(
+                _poisson.pmf(k, lh) * _poisson.pmf(k, la)
+                for k in range(10)
+            ))
+            pa_true = float(max(0.0, 1.0 - ph_true - pd_true))
+            ph_true = float(np.clip(ph_true, 0.05, 0.90))
+            pd_true = float(np.clip(pd_true, 0.05, 0.50))
+            pa_true = float(np.clip(pa_true, 0.05, 0.90))
+            # Re-normalise after clipping
+            _sum = ph_true + pd_true + pa_true
+            ph_true, pd_true, pa_true = ph_true/_sum, pd_true/_sum, pa_true/_sum
+
             # Simulate odds with bookmaker margin
-            # Pinnacle opening: ~4% margin
-            pin_margin   = rng.uniform(0.038, 0.045)
-            p_over_book  = p_true * (1 + pin_margin)
-            p_under_book = (1 - p_true) * (1 + pin_margin)
-            p_odds = 1.0 / p_over_book
-            u_odds = 1.0 / p_under_book
+            # Pinnacle opening: ~4% margin (3-way)
+            pin_margin = rng.uniform(0.038, 0.045)
+            psh_odds = 1.0 / (ph_true * (1 + pin_margin))
+            psd_odds = 1.0 / (pd_true * (1 + pin_margin))
+            psa_odds = 1.0 / (pa_true * (1 + pin_margin))
 
-            # Closing: slightly tighter margin + small noise
-            noise = rng.normal(0, 0.005)
-            p_close_true = float(np.clip(p_true + noise, 0.05, 0.95))
+            # Pinnacle closing: tighter margin + small noise simulating late money
+            close_noise_h = float(rng.normal(0, 0.015))
+            close_noise_d = float(rng.normal(0, 0.010))
+            ph_close = float(np.clip(ph_true + close_noise_h, 0.05, 0.90))
+            pd_close = float(np.clip(pd_true + close_noise_d, 0.05, 0.50))
+            pa_close = float(np.clip(1.0 - ph_close - pd_close, 0.05, 0.90))
             close_margin = rng.uniform(0.032, 0.038)
-            pc_odds = 1.0 / (p_close_true * (1 + close_margin))
-            uc_odds = 1.0 / ((1 - p_close_true) * (1 + close_margin))
+            psch_odds = 1.0 / (ph_close * (1 + close_margin))
+            pscd_odds = 1.0 / (pd_close * (1 + close_margin))
+            psca_odds = 1.0 / (pa_close * (1 + close_margin))
 
-            # Bet365: wider margin ~6%
-            b365_margin   = rng.uniform(0.055, 0.065)
-            b365_p_odds   = 1.0 / (p_true * (1 + b365_margin))
-            b365_u_odds   = 1.0 / ((1 - p_true) * (1 + b365_margin))
+            # Bet365: wider margin ~8%
+            b365_margin = rng.uniform(0.075, 0.085)
+            b365h_odds = 1.0 / (ph_true * (1 + b365_margin))
+            b365d_odds = 1.0 / (pd_true * (1 + b365_margin))
+            b365a_odds = 1.0 / (pa_true * (1 + b365_margin))
+
+            # Over/Under odds
+            p_over_book = p_true * (1 + pin_margin)
+            p_odds = 1.0 / p_over_book
+            u_odds = 1.0 / ((1 - p_true) * (1 + pin_margin))
+
+            noise_ou = rng.normal(0, 0.005)
+            p_close_true = float(np.clip(p_true + noise_ou, 0.05, 0.95))
+            close_margin_ou = rng.uniform(0.032, 0.038)
+            pc_odds = 1.0 / (p_close_true * (1 + close_margin_ou))
+            uc_odds = 1.0 / ((1 - p_close_true) * (1 + close_margin_ou))
+
+            b365_margin_ou = rng.uniform(0.055, 0.065)
+            b365_p_odds = 1.0 / (p_true * (1 + b365_margin_ou))
+            b365_u_odds = 1.0 / ((1 - p_true) * (1 + b365_margin_ou))
+
+            # FTR from simulated scoreline
+            ftr = "H" if gh > ga else ("D" if gh == ga else "A")
 
             rows.append({
-                "Div":      div,
-                "Date":     current_day,
-                "Season":   epoch,
-                "HomeTeam": h_name,
-                "AwayTeam": a_name,
-                "FTHG":     gh,
-                "FTAG":     ga,
-                "over25":   int(gh + ga >= 3),
-                "P>2.5":    round(p_odds, 3),
-                "P<2.5":    round(u_odds, 3),
-                "PC>2.5":   round(pc_odds, 3),
-                "PC<2.5":   round(uc_odds, 3),
-                "B365>2.5": round(b365_p_odds, 3),
-                "B365<2.5": round(b365_u_odds, 3),
-                "Avg>2.5":  round((p_odds + b365_p_odds) / 2, 3),
-                "Max>2.5":  round(max(p_odds, b365_p_odds), 3),
+                "Div":        div,
+                "Date":       current_day,
+                "Season":     epoch,
+                "HomeTeam":   h_name,
+                "AwayTeam":   a_name,
+                "FTHG":       gh,
+                "FTAG":       ga,
+                "FTR":        ftr,
+                "over25":     int(gh + ga >= 3),
+                "P>2.5":      round(p_odds, 3),
+                "P<2.5":      round(u_odds, 3),
+                "PC>2.5":     round(pc_odds, 3),
+                "PC<2.5":     round(uc_odds, 3),
+                "B365>2.5":   round(b365_p_odds, 3),
+                "B365<2.5":   round(b365_u_odds, 3),
+                "Avg>2.5":    round((p_odds + b365_p_odds) / 2, 3),
+                "Max>2.5":    round(max(p_odds, b365_p_odds), 3),
+                "PSH":        round(psh_odds, 3),
+                "PSD":        round(psd_odds, 3),
+                "PSA":        round(psa_odds, 3),
+                "PSCH":       round(psch_odds, 3),
+                "PSCD":       round(pscd_odds, 3),
+                "PSCA":       round(psca_odds, 3),
+                "B365H":      round(b365h_odds, 3),
+                "B365D":      round(b365d_odds, 3),
+                "B365A":      round(b365a_odds, 3),
+                "pin_drop_h": round(psh_odds / psch_odds - 1, 5),
+                "pin_drop_d": round(psd_odds / pscd_odds - 1, 5),
+                "pin_drop_a": round(psa_odds / psca_odds - 1, 5),
             })
         current_day += timedelta(days=7)
 
@@ -473,6 +552,8 @@ def _build_parser() -> argparse.ArgumentParser:
                       help="Download all 5 seasons from football-data.co.uk")
     mode.add_argument("--update", action="store_true",
                       help="Download current season and merge with existing data")
+    mode.add_argument("--full-1x2", action="store_true",
+                      help="Re-download all 5 seasons × 13 divisions to include 1X2 columns")
     mode.add_argument("--synthetic", action="store_true",
                       help="[TEST ONLY] Generate synthetic data locally — NEVER use in production")
     p.add_argument("--out-dir", type=Path,
@@ -494,6 +575,9 @@ def main(argv: Optional[list[str]] = None) -> None:
         csv_path = args.out_dir / "matches.csv"
         logger.info("Updating current epoch (%s) into %s…", CURRENT_EPOCH, csv_path)
         df = update_current(csv_path)
+    elif getattr(args, "full_1x2", False):
+        logger.info("Re-downloading all epochs for 1X2 columns: %s", EPOCHS)
+        df = download_all(epochs=EPOCHS)
     else:
         logger.info("Downloading all epochs: %s", EPOCHS)
         df = download_all()
@@ -503,7 +587,8 @@ def main(argv: Optional[list[str]] = None) -> None:
     n = len(df)
     seasons = df["Season"].nunique() if "Season" in df.columns else "?"
     divs = df["Div"].nunique() if "Div" in df.columns else "?"
-    print(f"\nDone: {n:,} matches | {seasons} seasons | {divs} divisions")
+    has_1x2 = "PSH" in df.columns and df["PSH"].notna().any()
+    print(f"\nDone: {n:,} matches | {seasons} seasons | {divs} divisions | 1X2: {'sim' if has_1x2 else 'não'}")
     if n < 10_000:
         logger.warning("Dataset has fewer than 10 000 games (%d); check inputs.", n)
 
