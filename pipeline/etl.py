@@ -433,6 +433,107 @@ def filter_alert_candidates(picks: list[dict]) -> list[dict]:
     ]
 
 
+def filter_1x2_alert_candidates(
+    picks: list[dict],
+    leagues: list[str],
+    rejected_path: Path,
+    max_timing_h: float = 6.0,
+) -> tuple[list[dict], dict]:
+    """
+    Filter Sharp 1X2 picks for Telegram alerts.
+
+    All picks are assumed already saved to picks_1x2.json (saving is unconditional).
+    Only picks that pass all three gates generate an alert.
+
+    Gates applied (pick is saved but NOT alerted when failing):
+    1. Liga whitelist — reutiliza filter_by_league(); rejeitos escritos em rejected_path
+    2. DRAW outcome — WR histórico 4.5%, n=22, aguarda validação com n>=100
+    3. Timing gate — só picks com 0 <= timing_h <= max_timing_h horas antes do KO
+
+    Side-effect: logs a warning if settled picks have empty odds_fecho (CLV not computable).
+
+    Parameters
+    ----------
+    picks:
+        Raw Sharp 1X2 pick dicts (from picks_1x2.json).
+    leagues:
+        Whitelist of accepted league names (same as Over 2.5 whitelist).
+    rejected_path:
+        Path to rejected_picks_1x2.json; created/merged if needed.
+    max_timing_h:
+        Maximum hours before KO to generate an alert (default 6.0 = MAX_TIMING_H_1X2).
+
+    Returns
+    -------
+    tuple[list[dict], dict]
+        (alert_candidates, stats) where stats has keys:
+        n_input, n_rejected_liga, n_draw_blocked, n_timing_blocked, n_alert
+    """
+    stats: dict = {}
+
+    # Gate 1: liga whitelist → rejeitos em rejected_picks_1x2.json
+    after_liga, n_rejected_liga = filter_by_league(picks, leagues, Path(rejected_path))
+    stats["n_rejected_liga"] = n_rejected_liga
+
+    # Gate 2: DRAW desativado — WR histórico 4.5%, n=22, aguarda validação com n>=100
+    after_draw = [
+        p for p in after_liga
+        if str(p.get("outcome", "")).strip().upper() != "DRAW"
+    ]
+    n_draw_blocked = len(after_liga) - len(after_draw)
+    stats["n_draw_blocked"] = n_draw_blocked
+    if n_draw_blocked:
+        logger.info(
+            "filter_1x2_alert_candidates: %d DRAW picks bloqueados "
+            "(WR histórico 4.5%%, n=22, aguarda n>=100 para revalidar)",
+            n_draw_blocked,
+        )
+
+    # Gate 3: timing gate — só picks com timing_h ∈ [0, max_timing_h]
+    def _timing_ok(p: dict) -> bool:
+        try:
+            t = float(p.get("timing_h") or "999")
+            return 0.0 <= t <= max_timing_h
+        except (TypeError, ValueError):
+            return False
+
+    after_timing = [p for p in after_draw if _timing_ok(p)]
+    n_timing_blocked = len(after_draw) - len(after_timing)
+    stats["n_timing_blocked"] = n_timing_blocked
+    if n_timing_blocked:
+        logger.info(
+            "filter_1x2_alert_candidates: %d picks bloqueados por timing (timing_h > %.1fh)",
+            n_timing_blocked,
+            max_timing_h,
+        )
+
+    # CLV logging: avisa picks settled sem odds_fecho (CLV não calculável)
+    settled_sem_close = [
+        p for p in picks
+        if p.get("resultado_outcome") in ("WIN", "LOSS")
+        and not str(p.get("odds_fecho", "")).strip()
+    ]
+    if settled_sem_close:
+        logger.warning(
+            "filter_1x2_alert_candidates: %d picks Sharp 1X2 settled sem odds_fecho — "
+            "CLV não calculado. Implementar captura de odds Pinnacle de fecho (Prompt 3).",
+            len(settled_sem_close),
+        )
+    stats["n_settled_sem_clv"] = len(settled_sem_close)
+
+    stats.update({
+        "n_input": len(picks),
+        "n_alert": len(after_timing),
+    })
+    logger.info(
+        "filter_1x2_alert_candidates: %d → %d candidatos a alerta "
+        "(liga_rej=%d, draw=%d, timing=%d, sem_clv=%d)",
+        len(picks), len(after_timing),
+        n_rejected_liga, n_draw_blocked, n_timing_blocked, len(settled_sem_close),
+    )
+    return after_timing, stats
+
+
 def filter_alert_by_ev(
     enriched_df: "pd.DataFrame",
     min_ev: float,

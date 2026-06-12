@@ -2645,7 +2645,35 @@ async function saveSharpPick(btn){
     });
     markSaved(saveId);
     setBtnSaved(btn);
-    // TG
+    // ── Gates de alerta 1X2 ──
+    // Pick sempre gravado; TG só enviado se passar os 3 gates abaixo.
+
+    // Gate 1: liga whitelist — mesma lista do Over 2.5
+    const _1x2Liga = (d.liga||'').trim();
+    const _1x2Whitelist = [
+      'Premier League','La Liga','Bundesliga','Serie A','Ligue 1',
+      'Primeira Liga','Eredivisie','Belgian Pro League',
+      'Championship','La Liga 2','Bundesliga 2','Serie B'
+    ];
+    if(!_1x2Liga || !_1x2Whitelist.includes(_1x2Liga)){
+      console.info('Sharp 1X2: pick gravado sem alerta TG — liga fora da whitelist:', _1x2Liga||'(vazia)');
+      return;
+    }
+
+    // Gate 2: DRAW desativado — WR histórico 4.5%, n=22, aguarda validação com n>=100
+    if((sig?.out||'').toUpperCase() === 'DRAW'){
+      console.info('Sharp 1X2: pick gravado sem alerta TG — DRAW (WR 4.5%, n=22, aguarda n>=100)');
+      return;
+    }
+
+    // Gate 3: timing gate — só picks com timing_h <= 6h antes do KO (MAX_TIMING_H_1X2)
+    const _1x2TimingH = parseFloat(d.hours||'999');
+    if(!isFinite(_1x2TimingH) || _1x2TimingH < 0 || _1x2TimingH > 6){
+      console.info('Sharp 1X2: pick gravado sem alerta TG — timing', _1x2TimingH.toFixed(1)+'h > 6h');
+      return;
+    }
+
+    // TG — todos os gates passaram
     try{
       const movTxt=sig?.movement==='SHORTENING'?'↘ Short':'↗ Drift';
       const nvpTxt=sig?.nvp?'NVP: '+sig.nvp.toFixed(3):'';
@@ -2723,6 +2751,15 @@ async function syncResults1x2(){
     }
     if(st) st.textContent=`✅ Sync completo: ${updated} actualizados, ${notFound} não encontrados`;
     if(updated>0) await loadDash1x2();
+    // Aviso CLV: picks settled sem odds_fecho → CLV não calculável (TAREFA 1.4)
+    const _1x2Settled = picks.filter(p=>p.resultado_outcome==='WIN'||p.resultado_outcome==='LOSS');
+    const _1x2SemClose = _1x2Settled.filter(p=>!String(p.odds_fecho||'').trim());
+    if(_1x2SemClose.length > 0){
+      console.warn('Sharp 1X2:', _1x2SemClose.length, 'picks settled sem odds_fecho — CLV não calculado (TAREFA 1.4, Prompt 3)');
+      const tgWarn = `⚠️ ${_1x2SemClose.length} picks Sharp 1X2 settled sem odds_fecho — CLV não calculado`;
+      sendTG(tgWarn).catch(()=>{});
+      if(st) st.textContent += ` · ⚠️ ${_1x2SemClose.length} sem odds_fecho (CLV pendente)`;
+    }
   }catch(e){
     if(st) st.textContent='❌ Erro: '+esc(e.message);
   }finally{
