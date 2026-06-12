@@ -1,0 +1,78 @@
+name: Sharp 1X2 signal analysis
+
+on:
+  workflow_dispatch:
+
+jobs:
+  analyse:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          pip install --quiet pandas numpy scipy pyarrow
+
+      - name: Check 1X2 column availability
+        id: check
+        run: |
+          python - <<'EOF'
+          import sys
+          import pandas as pd
+          from pathlib import Path
+          csv = Path("data/historical/matches.csv")
+          if not csv.exists():
+              print("HAS_1X2=false")
+              sys.exit(0)
+          df = pd.read_csv(csv, nrows=5)
+          has = "PSH" in df.columns
+          print(f"HAS_1X2={'true' if has else 'false'}")
+          EOF
+          python - <<'PYEOF' >> "$GITHUB_OUTPUT"
+          import pandas as pd
+          from pathlib import Path
+          csv = Path("data/historical/matches.csv")
+          if not csv.exists():
+              print("has_1x2=false")
+          else:
+              df = pd.read_csv(csv, nrows=5)
+              print(f"has_1x2={'true' if 'PSH' in df.columns else 'false'}")
+          PYEOF
+
+      - name: Warn if 1X2 columns absent
+        if: steps.check.outputs.has_1x2 == 'false'
+        run: |
+          echo "::warning::Colunas 1X2 não encontradas em matches.csv. Corre 'Update historical data' com mode=full-1x2 primeiro."
+
+      - name: Run sharp 1X2 analysis
+        run: |
+          python -m backtesting.run_sharp1x2_signal
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+
+      - name: Commit analysis report
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add backtesting/reports/sharp1x2_signal.md || true
+
+          if git diff --cached --quiet; then
+            echo "Sem alterações no relatório."
+          else
+            git commit -m "analysis: sharp 1X2 signal report [skip ci]"
+            git push origin main
+          fi

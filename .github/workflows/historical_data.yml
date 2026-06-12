@@ -14,6 +14,7 @@ on:
         options:
           - download-all
           - update
+          - full-1x2
 
 jobs:
   update-data:
@@ -60,6 +61,10 @@ jobs:
           print(f"Date range : {df['Date'].min()} → {df['Date'].max()}")
           print(f"Seasons    : {sorted(df['Season'].unique())}")
           print(f"Divisions  : {sorted(df['Div'].unique())}")
+          has_1x2 = "PSH" in df.columns and df["PSH"].notna().any()
+          print(f"1X2 cols   : {'present' if has_1x2 else 'absent — run full-1x2 to add'}")
+          if has_1x2:
+              print(f"  PSH non-null: {df['PSH'].notna().sum():,} / {len(df):,}")
           EOF
 
       - name: Commit updated dataset
