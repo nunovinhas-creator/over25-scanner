@@ -156,6 +156,133 @@ def compute_final_probability(
 
 
 # ---------------------------------------------------------------------------
+# DC-calibrated probability blend (FASE 4/5)
+# ---------------------------------------------------------------------------
+
+
+def compute_final_probability_dc(
+    home: str,
+    away: str,
+    league: str,
+    dc_ratings: dict,
+    calibrator_fn,
+    odds_over: float,
+    odds_under: Optional[float] = None,
+    model_weight: float = _DEFAULT_MODEL_WEIGHT,
+) -> dict:
+    """
+    Compute blended probability using Dixon-Coles ratings + isotonic calibrator.
+
+    Parameters
+    ----------
+    home, away : str
+        Team names (will be matched against dc_ratings keys).
+    league : str
+        Canonical league name (must match key in dc_ratings).
+    dc_ratings : dict
+        Full dc_ratings.json structure as loaded by json.load().
+    calibrator_fn : callable
+        Function p_arr → p_arr_calibrated (from _calibrator_fn_from_data).
+    odds_over : float
+        Decimal odds for Over 2.5.
+    odds_under : float or None
+        Decimal odds for Under 2.5.
+    model_weight : float
+        Blend weight for the DC model (default 0.30).
+
+    Returns
+    -------
+    dict with keys:
+        p_model_source  — 'dc' | 'market_only'
+        p_dc_raw        — raw Dixon-Coles probability (or NaN if unavailable)
+        p_model         — calibrated DC probability (or p_market if fallback)
+        p_market        — de-vigged market probability
+        p_market_source — 'devig' | 'fallback'
+        p_final         — blended probability
+        ev_final        — p_final * odds_over - 1
+        odds_band       — categorical: '<1.50' | '1.50–1.70' | '1.70–2.00' | '2.00–2.50' | '>2.50'
+    """
+    from models.math.poisson import prob_over25_poisson  # lazy import
+    from models.math.devig import metodo_multiplicativo  # lazy import
+
+    # -- Market probability ---------------------------------------------------
+    try:
+        ou = float(odds_under) if odds_under is not None else None
+        ov = float(odds_over)
+        if ou and ou > 1.0 and ov > 1.0:
+            p_market, _ = metodo_multiplicativo(ov, ou)
+            p_market_source = "devig"
+        else:
+            raise ValueError("no valid odds_under")
+    except (TypeError, ValueError):
+        p_market = (1.0 / float(odds_over)) / 1.05
+        p_market_source = "fallback"
+    p_market = float(np.clip(p_market, 0.0, 1.0))
+
+    # -- Dixon-Coles probability ----------------------------------------------
+    p_dc_raw: float = float("nan")
+    p_model_source = "market_only"
+    p_model = p_market
+
+    league_data = dc_ratings.get(league)
+    if league_data is not None:
+        teams = league_data.get("teams", {})
+        home_data = teams.get(home)
+        away_data = teams.get(away)
+        if home_data and away_data:
+            try:
+                # Reconstruct lambda_h, lambda_a from DC log-linear model
+                alpha_h = home_data["attack"]
+                beta_h = home_data["defence"]
+                alpha_a = away_data["attack"]
+                beta_a = away_data["defence"]
+                gamma = league_data["home_adv"]
+                rho = league_data.get("rho", 0.0)
+                lambda_h = float(np.exp(alpha_h + beta_a + gamma))
+                lambda_a = float(np.exp(alpha_a + beta_h))
+                p_dc_raw = float(prob_over25_poisson(lambda_h, lambda_a, rho=rho))
+                p_calibrated = float(calibrator_fn(np.array([p_dc_raw]))[0])
+                p_model = float(np.clip(p_calibrated, 0.0, 1.0))
+                p_model_source = "dc"
+            except Exception:
+                logger.warning(
+                    "compute_final_probability_dc: DC prediction failed for %s vs %s",
+                    home, away,
+                )
+
+    # -- Blend ----------------------------------------------------------------
+    if p_model_source == "dc":
+        p_final = model_weight * p_model + (1.0 - model_weight) * p_market
+    else:
+        p_final = p_market
+    ev_final = p_final * float(odds_over) - 1.0
+
+    # -- Odds band ------------------------------------------------------------
+    ov = float(odds_over)  # reuse local var
+    if ov < 1.50:
+        odds_band = "<1.50"
+    elif ov < 1.70:
+        odds_band = "1.50–1.70"
+    elif ov < 2.00:
+        odds_band = "1.70–2.00"
+    elif ov <= 2.50:
+        odds_band = "2.00–2.50"
+    else:
+        odds_band = ">2.50"
+
+    return {
+        "p_model_source": p_model_source,
+        "p_dc_raw": round(p_dc_raw, 6) if not (p_dc_raw != p_dc_raw) else None,
+        "p_model": round(p_model, 6),
+        "p_market": round(p_market, 6),
+        "p_market_source": p_market_source,
+        "p_final": round(p_final, 6),
+        "ev_final": round(ev_final, 6),
+        "odds_band": odds_band,
+    }
+
+
+# ---------------------------------------------------------------------------
 # String normalisation
 # ---------------------------------------------------------------------------
 

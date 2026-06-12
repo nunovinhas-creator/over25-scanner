@@ -1,0 +1,82 @@
+name: Retrain DC + Recalibrate
+
+on:
+  schedule:
+    # Every Monday at 07:00 UTC (after historical_data.yml at 06:00)
+    - cron: "0 7 * * 1"
+  workflow_dispatch:
+
+jobs:
+  retrain:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          pip install --quiet pandas numpy scipy pyarrow scikit-learn
+
+      - name: Train Dixon-Coles ratings
+        run: |
+          python -m models.train_dc \
+            --data data/historical/matches.csv \
+            --out data/dc_ratings.json
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+
+      - name: Recalibrate (LOEO-CV + epoch 2526 validation)
+        run: |
+          rm -f /tmp/over25_oos_cache.parquet
+          python -m backtesting.run_calibration \
+            --data data/historical/matches.csv \
+            --out data/calibrator.json
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+
+      - name: Show calibration summary
+        run: |
+          python - <<'EOF'
+          import json
+          from pathlib import Path
+
+          dc = json.loads(Path("data/dc_ratings.json").read_text())
+          cal = json.loads(Path("data/calibrator.json").read_text())
+
+          print(f"DC ratings: {len(dc)} leagues fitted")
+          for league, info in sorted(dc.items()):
+              status = "✓" if info["converged"] else "✗"
+              print(f"  {status} {league:25s}  n={info['n_games']:4d}  rho={info['rho']:+.4f}")
+
+          print(f"\nCalibrator: {cal['method']}, n_train={cal['n_train']:,}")
+          print(f"CV Brier (LOEO): {cal['cv_brier_loeo']:.5f}")
+          EOF
+
+      - name: Commit updated ratings and calibrator
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add data/dc_ratings.json data/calibrator.json
+          [ -f backtesting/reports/calibration_validation.md ] && \
+            git add backtesting/reports/calibration_validation.md || true
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            DATE=$(date -u +%Y-%m-%d)
+            git commit -m "model: retrain DC + recalibrate ($DATE) [skip ci]"
+            git push origin main
+          fi
