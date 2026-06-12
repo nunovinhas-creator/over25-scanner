@@ -285,6 +285,188 @@ def _q4_divergence(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
 
 
 # ---------------------------------------------------------------------------
+# Q5: Walk-forward temporal validation of div>3% signal
+# ---------------------------------------------------------------------------
+
+_FIXED_THRESH = 0.03  # threshold chosen from training analysis 12 jun 2026
+
+def _q5_walkforward(df: pd.DataFrame) -> list[dict]:
+    """
+    Walk-forward validation to eliminate selection bias.
+    Round 1: train=2122+2223+2324  → validate=2425
+    Round 2: train=2122+2223+2324+2425 → validate=2526
+
+    Fixed threshold=0.03 applied to both validation epochs.
+    CLV simulado = B365_at_signal / Pin_closing - 1 (measures if B365 was above efficient closing)
+    """
+    needed = ["B365H","B365D","B365A","PSH","PSD","PSA","PSCH","PSCD","PSCA","FTR","Season"]
+    if not all(c in df.columns for c in needed):
+        return [{"error": "Colunas B365 ou Season em falta para walk-forward"}]
+
+    d = df[[c for c in needed + (["Div"] if "Div" in df.columns else []) if c in df.columns]].copy()
+    for col in [c for c in needed if c not in ("FTR","Season")]:
+        d[col] = pd.to_numeric(d[col], errors="coerce")
+    d = d.dropna(subset=["B365H","PSH","PSCH","FTR","Season"]).copy()
+
+    d["div_h"] = d["B365H"] / d["PSH"] - 1
+    d["div_d"] = d["B365D"] / d["PSD"] - 1
+    d["div_a"] = d["B365A"] / d["PSA"] - 1
+    d["max_div"] = d[["div_h","div_d","div_a"]].max(axis=1)
+    pick_map = {0:"H", 1:"D", 2:"A"}
+    d["picked"] = d[["div_h","div_d","div_a"]].values.argmax(axis=1)
+    d["picked"] = d["picked"].map(pick_map)
+
+    # CLV simulado: did B365 beat the Pinnacle closing line?
+    d["b365_picked"] = np.where(d["picked"]=="H", d["B365H"],
+                        np.where(d["picked"]=="D", d["B365D"], d["B365A"]))
+    d["pin_close"] = _close_odds_col(d)
+    d["clv_sim"] = d["b365_picked"] / d["pin_close"] - 1
+
+    def _eval_thresh(sub: pd.DataFrame, thresh: float) -> Optional[dict]:
+        bets = sub[sub["max_div"] > thresh]
+        if len(bets) < 30:
+            return None
+        profits = np.where(bets["FTR"]==bets["picked"], _close_odds_col(bets)-1, -1.0)
+        return {
+            "n": len(bets),
+            "roi_pct": round(float(profits.mean()*100), 2),
+            "wr_pct": round(float((bets["FTR"]==bets["picked"]).mean()*100), 1),
+            "clv_sim_pct": round(float(bets["clv_sim"].mean()*100), 2),
+            "avg_close_odds": round(float(_close_odds_col(bets).mean()), 3),
+        }
+
+    def _best_thresh(sub: pd.DataFrame) -> tuple:
+        best_t, best_roi = None, -999.0
+        for t in _DIV_THRESHOLDS:
+            r = _eval_thresh(sub, t)
+            if r and r["roi_pct"] > best_roi:
+                best_roi, best_t = r["roi_pct"], t
+        return best_t, best_roi
+
+    ROUNDS = [
+        (["2122","2223","2324"], "2425"),
+        (["2122","2223","2324","2425"], "2526"),
+    ]
+
+    results = []
+    for train_epocs, val_epoc in ROUNDS:
+        train = d[d["Season"].isin(train_epocs)]
+        val   = d[d["Season"] == val_epoc]
+
+        if len(val) < 30:
+            results.append({
+                "treino": "+".join(train_epocs), "validação": val_epoc,
+                "n_treino": len(train), "n_val": len(val),
+                "nota": "época sem dados suficientes",
+            })
+            continue
+
+        opt_t, opt_roi = _best_thresh(train)
+        r_train = _eval_thresh(train, _FIXED_THRESH)
+        r_val   = _eval_thresh(val,   _FIXED_THRESH)
+
+        results.append({
+            "treino": "+".join(train_epocs),
+            "validação": val_epoc,
+            "n_treino": len(train),
+            "n_val": len(val),
+            "threshold_ótimo_treino": f">{opt_t*100:.0f}%" if opt_t else "N/A",
+            "roi_ótimo_treino": f"{opt_roi:+.2f}%" if opt_t else "N/A",
+            "roi_treino_@3pct": f"{r_train['roi_pct']:+.2f}%" if r_train else "N/A",
+            "n_apostas_val": r_val["n"] if r_val else 0,
+            "roi_val_@3pct": f"{r_val['roi_pct']:+.2f}%" if r_val else "insuf.",
+            "wr_val": f"{r_val['wr_pct']}%" if r_val else "—",
+            "clv_sim_val": f"{r_val['clv_sim_pct']:+.2f}%" if r_val else "—",
+        })
+
+    return results
+
+
+# ---------------------------------------------------------------------------
+# Q6: Investigate divergence signal anomaly (per-league / per-outcome breakdown)
+# ---------------------------------------------------------------------------
+
+def _q6_investigate_div(df: pd.DataFrame, div_filter: Optional[str] = "N1") -> dict:
+    """
+    Investigate a suspiciously high ROI in one division.
+    Breakdowns by season and outcome to detect data artifacts.
+    """
+    needed = ["B365H","B365D","B365A","PSH","PSD","PSA","PSCH","PSCD","PSCA","FTR","Season","Div"]
+    if not all(c in df.columns for c in needed):
+        return {"error": "Div ou colunas B365 em falta"}
+
+    sub = df[df["Div"]==div_filter].copy() if div_filter else df.copy()
+    if sub.empty:
+        return {"error": f"Div '{div_filter}' não encontrada"}
+
+    for col in ["B365H","B365D","B365A","PSH","PSD","PSA","PSCH","PSCD","PSCA"]:
+        sub[col] = pd.to_numeric(sub[col], errors="coerce")
+    sub = sub.dropna(subset=["B365H","PSH","PSCH","FTR","Season"]).copy()
+
+    sub["div_h"] = sub["B365H"] / sub["PSH"] - 1
+    sub["div_d"] = sub["B365D"] / sub["PSD"] - 1
+    sub["div_a"] = sub["B365A"] / sub["PSA"] - 1
+    sub["max_div"] = sub[["div_h","div_d","div_a"]].max(axis=1)
+    pick_map = {0:"H",1:"D",2:"A"}
+    sub["picked"] = sub[["div_h","div_d","div_a"]].values.argmax(axis=1)
+    sub["picked"] = sub["picked"].map(pick_map)
+
+    bets = sub[sub["max_div"] > _FIXED_THRESH].copy()
+    if len(bets) < 10:
+        return {"error": f"{div_filter}: apenas {len(bets)} apostas ao threshold {_FIXED_THRESH:.0%}"}
+
+    def _grp_stats(grp: pd.DataFrame) -> pd.Series:
+        profits = np.where(grp["FTR"]==grp["picked"], _close_odds_col(grp)-1, -1.0)
+        return pd.Series({
+            "n": len(grp),
+            "wr_pct": round(float((grp["FTR"]==grp["picked"]).mean()*100), 1),
+            "roi_pct": round(float(profits.mean()*100), 2),
+            "avg_div_pct": round(float(grp["max_div"].mean()*100), 1),
+            "avg_close_odds": round(float(_close_odds_col(grp).mean()), 3),
+        })
+
+    by_season = (
+        bets.groupby("Season", group_keys=False).apply(_grp_stats)
+        .reset_index().rename(columns={"index":"Season"})
+    )
+    by_season = by_season[by_season["n"] >= 5]
+
+    by_outcome = (
+        bets.groupby("picked", group_keys=False).apply(_grp_stats)
+        .reset_index().rename(columns={"index":"picked"})
+    )
+    by_outcome = by_outcome[by_outcome["n"] >= 5]
+
+    profits_all = np.where(bets["FTR"]==bets["picked"], _close_odds_col(bets)-1, -1.0)
+
+    # Concentration: any single season drives > 60% of the net profit
+    season_profits = []
+    for _, grp in bets.groupby("Season"):
+        p = np.where(grp["FTR"]==grp["picked"], _close_odds_col(grp)-1, -1.0)
+        season_profits.append(p.sum())
+    total_profit = sum(season_profits)
+    concentrated = (
+        len(season_profits) > 1 and total_profit > 0
+        and max(season_profits) / total_profit > 0.60
+    )
+
+    return {
+        "div": div_filter,
+        "n_total": len(bets),
+        "roi_overall": round(float(profits_all.mean()*100), 2),
+        "wr_overall": round(float((bets["FTR"]==bets["picked"]).mean()*100), 1),
+        "by_season": by_season,
+        "by_outcome": by_outcome,
+        "concentrated": concentrated,
+        "concentration_note": (
+            "⚠ Edge concentrado numa única época — possível anomalia de dados."
+            if concentrated else
+            "✓ ROI distribuído por múltiplas épocas — padrão consistente."
+        ),
+    }
+
+
+# ---------------------------------------------------------------------------
 # Conclusion
 # ---------------------------------------------------------------------------
 
@@ -400,6 +582,8 @@ def _write_report(
     q2_by_q: pd.DataFrame,   q2_overall: dict,
     q3: dict,
     q4_by_thresh: pd.DataFrame, q4_by_league: pd.DataFrame,
+    q5_walkforward: list[dict],
+    q6_n1: dict,
     csv_path: Path,
 ) -> None:
     n = len(df)
@@ -487,7 +671,83 @@ def _write_report(
         _fmt_table(q4_by_league) if not (q4_by_league is None or q4_by_league.empty)
         else "_Sem células com n ≥ 300._\n",
         "",
+        "---",
+        "",
+        "## Q5 — Validação temporal walk-forward (div > 3%)",
+        "",
+        f"Threshold fixo: **{_FIXED_THRESH*100:.0f}%** (escolhido na análise de treino, 12 jun 2026).",
+        "CLV simulado = B365_na_signal / Pin_closing − 1",
+        "(positivo → B365 estava acima do fecho eficiente da Pinnacle → potencial value).",
+        "",
     ]
+
+    if not q5_walkforward or (len(q5_walkforward) == 1 and "error" in q5_walkforward[0]):
+        err = q5_walkforward[0].get("error", "erro desconhecido") if q5_walkforward else "sem dados"
+        lines.append(f"_Walk-forward indisponível: {err}_")
+    else:
+        wf_cols = [
+            "treino", "validação", "n_treino", "n_val",
+            "threshold_ótimo_treino", "roi_ótimo_treino", "roi_treino_@3pct",
+            "n_apostas_val", "roi_val_@3pct", "wr_val", "clv_sim_val",
+        ]
+        # Build markdown table from results
+        present_cols = [c for c in wf_cols if any(c in r for r in q5_walkforward)]
+        header = "| " + " | ".join(present_cols) + " |"
+        sep    = "| " + " | ".join("---" for _ in present_cols) + " |"
+        rows   = []
+        for r in q5_walkforward:
+            cell = " | ".join(str(r.get(c, "—")) for c in present_cols)
+            rows.append(f"| {cell} |")
+        lines += [header, sep] + rows
+        lines += [
+            "",
+            "> **Interpretação**: CLV sim > 0% → B365 sistematicamente acima do fecho Pinnacle → edge real.",
+            "> ROI val > −2% com n ≥ 300 → sinal sobrevive walk-forward.",
+            "> Se ambas as épocas de validação tiverem CLV sim positivo → implementar Gate 4 em produção.",
+        ]
+
+    # Q6 — Anomalia N1
+    lines += [
+        "",
+        "---",
+        "",
+        "## Q6 — Investigação da anomalia N1 (Eredivisie, div > 3%)",
+        "",
+    ]
+
+    if "error" in q6_n1:
+        lines.append(f"_Q6 indisponível: {q6_n1['error']}_")
+    else:
+        div_label = q6_n1.get("div", "N1")
+        lines += [
+            f"**{div_label}**: {q6_n1['n_total']:,} apostas · ROI {q6_n1['roi_overall']:+.2f}% · "
+            f"WR {q6_n1['wr_overall']}%",
+            "",
+            f"**Concentração**: {q6_n1['concentration_note']}",
+            "",
+            "### Por época",
+            "",
+        ]
+        bs = q6_n1.get("by_season")
+        lines.append(_fmt_table(bs) if bs is not None and not bs.empty else "_Sem dados por época._\n")
+        lines += [
+            "",
+            "### Por outcome (H / D / A)",
+            "",
+        ]
+        bo = q6_n1.get("by_outcome")
+        lines.append(_fmt_table(bo) if bo is not None and not bo.empty else "_Sem dados por outcome._\n")
+        if q6_n1.get("concentrated"):
+            lines += [
+                "",
+                "> ⚠ **Anomalia confirmada**: edge concentrado numa única época.",
+                "> Excluir N1 das ligas elegíveis até nova validação com dados adicionais.",
+            ]
+        else:
+            lines += [
+                "",
+                "> ✓ **ROI consistente por múltiplas épocas** — padrão robusto para N1.",
+            ]
 
     lines += _build_conclusion(q1_overall, q2_overall, q4_by_thresh, n)
     lines += ["", "---", "", "_Análise automática — ver `backtesting/run_sharp1x2_signal.py`_"]
@@ -543,12 +803,20 @@ def main(argv: Optional[list[str]] = None) -> int:
     print("Q4 (divergência B365/Pin)…")
     q4_by_thresh, q4_by_league = _q4_divergence(clean)
 
+    print("Q5 (walk-forward temporal)…")
+    q5_walkforward = _q5_walkforward(clean)
+
+    print("Q6 (investigação anomalia N1)…")
+    q6_n1 = _q6_investigate_div(clean, div_filter="N1")
+
     _write_report(
         clean,
         q1_by_div, q1_overall,
         q2_by_q,   q2_overall,
         q3,
         q4_by_thresh, q4_by_league,
+        q5_walkforward,
+        q6_n1,
         csv_path,
     )
     return 0

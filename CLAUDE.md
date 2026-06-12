@@ -104,6 +104,11 @@ This project has two layers:
 - `MAX_ODDS_OVER`: NÃO implementado. Evidência não-monotónica (>2.50 deu +3.69%, N=35 insuficiente). Em vez disso: `odds_band` gravado em cada pick para análise ao vivo.
 - Kelly: desativado até CLV validado ao vivo (MODO OBSERVAÇÃO). buildPickMsg ainda exibe valor mas é informativo.
 - MODEL_WEIGHT=0.30: melhor Brier calibrado em LOEO-CV. Não alterar sem nova validação.
+- Sharp 1X2 signal: MUDOU de `pin_drop` → divergência B365/Pinnacle (12 jun 2026).
+  Critério de alerta: `div_b365_pin > 0.03` + liga whitelisted + outcome != DRAW + timing < 6h KO.
+  `pin_drop` continua gravado por pick para análise futura mas NÃO é critério de alerta.
+  Evidência: 21.087 jogos históricos, ROI +2.46% em 3.731 apostas (threshold >3%).
+  Walk-forward pendente de validação — ver `backtesting/reports/sharp1x2_signal.md` (Q5).
 
 Open either HTML file directly in a browser to run. There are no build steps, no tests, and no linters for the front-end.
 
