@@ -1091,6 +1091,10 @@ select option{background:var(--laq-3);color:var(--text)}
       <div class="dash-card-title">PICKS RECENTES 1X2</div>
       <div id="d1x2Picks"></div>
     </div>
+    <div class="dash-card" style="margin-top:8px;border-color:var(--amber)">
+      <div class="dash-card-title" style="color:var(--amber)">EM OBSERVAÇÃO — DRAW N1 <span style="font-size:9px;font-weight:400;color:var(--text3)">activação: 50 settled c/CLV&gt;+1%</span></div>
+      <div id="d1x2ObsN1"><div style="font-size:11px;color:var(--text3);padding:8px">Sem picks DRAW N1 gravados ainda.</div></div>
+    </div>
   </div>
 
   <!-- ── Sub-painel: Live Padrões ── -->
@@ -1223,8 +1227,13 @@ const LSKEY = {
 };
 const isToday = dateStr => !!dateStr && new Date(dateStr).toDateString()===new Date().toDateString();
 const calcCLVAvg = picks => {
-  const w=picks.filter(p=>parseFloat(p.clv||0)!==0);
-  return w.length ? w.reduce((s,p)=>s+parseFloat(p.clv),0)/w.length : null;
+  // Usa clv explícito; fallback: div_b365_pin como proxy de CLV (B365/NVP−1)
+  const clvOf = p => {
+    const c=parseFloat(p.clv||''); if(!isNaN(c)&&c!==0) return c;
+    const d=parseFloat(p.div_b365_pin||''); return (!isNaN(d)&&d!==0) ? d : null;
+  };
+  const vals=picks.map(p=>clvOf(p)).filter(v=>v!==null);
+  return vals.length ? vals.reduce((s,v)=>s+v,0)/vals.length : null;
 };
 function calcROI(picks, isWinFn, getOddsFn){
   const valid=picks.filter(p=>parseFloat(getOddsFn(p)||0)>=1.01);
@@ -2650,7 +2659,36 @@ async function saveSharpPick(btn){
   try{
     let sig=null;
     try{ sig=d.sig?JSON.parse(decodeURIComponent(d.sig)):null; }catch(e){ console.warn('sig decode:',e.message); }
-    // Guardar no picks_1x2.json via GitHub API
+
+    // ── Gates pré-calculados (incluídos no pick para analytics) ──
+    const _out = (sig?.out||'').toUpperCase();
+    const _liga = (d.liga||'').trim();
+    const _isN1 = _liga === 'Eredivisie';
+    const _div = sig?.divB365 != null ? sig.divB365 : null;
+    const _timingH = parseFloat(d.hours||'999');
+    const _whitelist = [
+      'Premier League','La Liga','Bundesliga','Serie A','Ligue 1',
+      'Primeira Liga','Eredivisie','Belgian Pro League',
+      'Championship','La Liga 2','Bundesliga 2','Serie B'
+    ];
+    let gateBlockedReason = '';
+    if(!_liga || !_whitelist.includes(_liga)){
+      gateBlockedReason = 'liga_fora_whitelist';
+    } else if(_out === 'DRAW' && _isN1 && _div !== null && _div >= 0.03){
+      // DRAW N1 com div≥3%: tracking separado, sem alerta TG
+      // Activação: 50 settled com CLV>+1% → rever Gate 2 para exceção N1
+      gateBlockedReason = 'draw_observacao_n1';
+    } else if(_out === 'DRAW'){
+      gateBlockedReason = 'draw_suspenso';
+    } else if(_out === 'HOME' && _isN1){
+      // HOME N1 excluído — ROI -6.07% histórico (12 jun 2026, n=100)
+      gateBlockedReason = 'n1_home_negativo';
+    } else if(!isFinite(_timingH) || _timingH < 0 || _timingH > 6){
+      gateBlockedReason = 'timing_apos_6h';
+    } else if(_div === null || _div < 0.03){
+      gateBlockedReason = 'div_baixa';
+    }
+
     await picks1x2Save({
       id:saveId,
       data:d.date||new Date().toISOString(),
@@ -2663,45 +2701,16 @@ async function saveSharpPick(btn){
       timing_h:d.hours||'',
       label:d.label||'',
       score:d.score||'',
+      gate_blocked_reason:gateBlockedReason,
       fonte:'sharp_1x2',
       phase:getCurrentPhase(),
       resultado_jogo:'', resultado_outcome:'', clv:'', odds_fecho:''
     });
     markSaved(saveId);
     setBtnSaved(btn);
-    // ── Gates de alerta 1X2 ──
-    // Pick sempre gravado; TG só enviado se passar os 3 gates abaixo.
 
-    // Gate 1: liga whitelist — mesma lista do Over 2.5
-    const _1x2Liga = (d.liga||'').trim();
-    const _1x2Whitelist = [
-      'Premier League','La Liga','Bundesliga','Serie A','Ligue 1',
-      'Primeira Liga','Eredivisie','Belgian Pro League',
-      'Championship','La Liga 2','Bundesliga 2','Serie B'
-    ];
-    if(!_1x2Liga || !_1x2Whitelist.includes(_1x2Liga)){
-      console.info('Sharp 1X2: pick gravado sem alerta TG — liga fora da whitelist:', _1x2Liga||'(vazia)');
-      return;
-    }
-
-    // Gate 2: DRAW desativado — WR histórico 4.5%, n=22, aguarda validação com n>=100
-    if((sig?.out||'').toUpperCase() === 'DRAW'){
-      console.info('Sharp 1X2: pick gravado sem alerta TG — DRAW (WR 4.5%, n=22, aguarda n>=100)');
-      return;
-    }
-
-    // Gate 3: timing gate — só picks com timing_h <= 6h antes do KO (MAX_TIMING_H_1X2)
-    const _1x2TimingH = parseFloat(d.hours||'999');
-    if(!isFinite(_1x2TimingH) || _1x2TimingH < 0 || _1x2TimingH > 6){
-      console.info('Sharp 1X2: pick gravado sem alerta TG — timing', _1x2TimingH.toFixed(1)+'h > 6h');
-      return;
-    }
-
-    // Gate 4: divergência B365/NVP ≥ 3% — sinal validado 21.087 jogos (12 jun 2026)
-    const _1x2DivB365 = sig?.divB365 != null ? sig.divB365 : null;
-    if(_1x2DivB365 === null || _1x2DivB365 < 0.03){
-      console.info('Sharp 1X2: pick gravado sem alerta TG — div B365/NVP',
-        _1x2DivB365!==null?(_1x2DivB365*100).toFixed(1)+'%':'n/d', '< 3% (gate div)');
+    if(gateBlockedReason){
+      console.info('Sharp 1X2: pick gravado sem alerta TG —', gateBlockedReason);
       return;
     }
 
@@ -2709,19 +2718,19 @@ async function saveSharpPick(btn){
     try{
       const movTxt=sig?.movement==='SHORTENING'?'↘ Short':'↗ Drift';
       const nvpTxt=sig?.nvp?'NVP: '+sig.nvp.toFixed(3):(sig?.pin?'NVP ~'+(sig.pin*0.975).toFixed(3):'');
-      const divTxt=sig?.divB365!=null?'B365/NVP: +'+(sig.divB365*100).toFixed(1)+'%':'';
+      const divTxt=_div!=null?'B365/NVP: +'+(_div*100).toFixed(1)+'%':'';
       const msg=[
         '🎯 SHARP 1X2 GUARDADO',
         d.home+' vs '+d.away,
         (d.liga||''),
         new Date(d.date).toLocaleString('pt-PT',{weekday:'short',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}),
         '---',
-        (sig?.out||'')+' | Pin: '+(sig?.pin?sig.pin.toFixed(2):'-'),
+        _out+' | Pin: '+(sig?.pin?sig.pin.toFixed(2):'-'),
         movTxt+' '+(sig?.pinnMovePct?Math.abs(sig.pinnMovePct).toFixed(1)+'%':''),
         nvpTxt,
         divTxt,
         (d.hours?parseFloat(d.hours).toFixed(0)+'h ao KO':''),
-        (d.label||'')+' score '+( d.score||'')
+        (d.label||'')+' score '+(d.score||'')
       ].filter(Boolean).join('\n');
       sendTG(msg).catch(()=>{});
     }catch(e){}
@@ -2801,6 +2810,41 @@ async function syncResults1x2(){
   }
 }
 
+function _renderObsN1(){
+  const obsEl = el('d1x2ObsN1');
+  if(!obsEl) return;
+  const obs = sharp1x2Picks.filter(p => p.gate_blocked_reason === 'draw_observacao_n1');
+  if(!obs.length){
+    obsEl.innerHTML='<div style="font-size:11px;color:var(--text3);padding:8px">Sem picks DRAW N1 gravados ainda.</div>';
+    return;
+  }
+  const settled = obs.filter(p => p.resultado_outcome==='WIN'||p.resultado_outcome==='LOSS');
+  const wins = settled.filter(p => p.resultado_outcome==='WIN');
+  const wr = settled.length ? (wins.length/settled.length*100).toFixed(1) : null;
+  // CLV: div_b365_pin como proxy; ou clv explícito se disponível
+  const clvOf = p => {
+    const c=parseFloat(p.clv||''); if(!isNaN(c)&&c!==0) return c;
+    const d=parseFloat(p.div_b365_pin||''); return (!isNaN(d)&&d!==0) ? d : null;
+  };
+  const clvVals = obs.map(clvOf).filter(v=>v!==null);
+  const clvAvg = clvVals.length ? clvVals.reduce((s,v)=>s+v,0)/clvVals.length : null;
+  const target = 50;
+  const prog = Math.min(100, settled.length/target*100);
+  const progCol = prog >= 100 ? 'var(--green)' : 'var(--amber)';
+  obsEl.innerHTML = `<div style="font-family:var(--mono);font-size:11px;padding:8px;line-height:1.8">
+    <div>${obs.length} picks gravados · ${settled.length} settled${wr!=null?' · WR '+wr+'%':''}</div>
+    ${clvAvg!=null?`<div>CLV est. <strong style="color:${clvAvg>0?'var(--green)':'var(--red)'}">${clvAvg>=0?'+':''}${clvAvg.toFixed(1)}%</strong> (div_b365_pin médio)</div>`:''}
+    <div style="margin-top:6px">
+      Progresso activação: <strong>${settled.length}/${target}</strong>
+      <span style="display:inline-block;width:80px;height:6px;background:var(--bg3);border-radius:3px;vertical-align:middle;margin:0 6px">
+        <span style="display:block;height:100%;width:${prog.toFixed(0)}%;background:${progCol};border-radius:3px;transition:width .4s"></span>
+      </span>
+      ${prog>=100?'<span style="color:var(--green)">✓ Critério atingido — rever Gate 2 para N1</span>':''}
+    </div>
+    <div style="font-size:10px;color:var(--text3);margin-top:4px">Critério: 50 settled c/CLV&gt;+1% → activar DRAW N1</div>
+  </div>`;
+}
+
 function renderDash1x2(){
   const onlyHome=document.getElementById('filter1x2Home')?.checked!==false;
   const picks=sharp1x2Picks.filter(p=>
@@ -2843,6 +2887,7 @@ function renderDash1x2(){
     el('d1x2BySteam').innerHTML='<div style="font-size:11px;color:var(--text3);padding:8px">Sem dados</div>';
     el('d1x2CLVTrack').innerHTML='<div style="font-size:11px;color:var(--text3);padding:8px">Sem dados</div>';
     el('d1x2Picks').innerHTML='<div style="font-size:11px;color:var(--text3);padding:8px">Sem picks</div>';
+    _renderObsN1();
     return;
   }
 
@@ -2996,6 +3041,9 @@ function renderDash1x2(){
     'CLV médio: '+(clvAvg>=0?'+':'')+clvAvg.toFixed(2)+'%'+
     '</div>':
     '<div style="font-size:11px;color:var(--text3);padding:8px">Sem CLV ainda — preenchido após jogos</div>';
+
+  // Em observação — DRAW N1
+  _renderObsN1();
 
   // Picks recentes
   const recent=[...picks].sort((a,b)=>new Date(b.data)-new Date(a.data)).slice(0,10);
@@ -3832,6 +3880,31 @@ async function autoLogSharp1x2(){
       const sid=String(s.id)+'_sh';
       if(picks.some(p=>String(p.id)===sid)){ markSaved(sid); continue; }
       const sig=s.sigs[0]||{};
+      const _autoOut = (sig.out||sig.outcome||'').toUpperCase();
+      const _autoLiga = s.league||'';
+      const _autoIsN1 = _autoLiga === 'Eredivisie';
+      const _autoDiv = sig.divB365 != null ? sig.divB365 : null;
+      const _autoTimingH = parseFloat(s.hoursToKO||'999');
+      const _autoWhitelist = [
+        'Premier League','La Liga','Bundesliga','Serie A','Ligue 1',
+        'Primeira Liga','Eredivisie','Belgian Pro League',
+        'Championship','La Liga 2','Bundesliga 2','Serie B'
+      ];
+      let _autoGateReason = '';
+      if(!_autoLiga || !_autoWhitelist.includes(_autoLiga)){
+        _autoGateReason = 'liga_fora_whitelist';
+      } else if(_autoOut === 'DRAW' && _autoIsN1 && _autoDiv !== null && _autoDiv >= 0.03){
+        _autoGateReason = 'draw_observacao_n1';
+      } else if(_autoOut === 'DRAW'){
+        _autoGateReason = 'draw_suspenso';
+      } else if(_autoOut === 'HOME' && _autoIsN1){
+        _autoGateReason = 'n1_home_negativo';
+      } else if(!isFinite(_autoTimingH) || _autoTimingH < 0 || _autoTimingH > 6){
+        _autoGateReason = 'timing_apos_6h';
+      } else if(_autoDiv === null || _autoDiv < 0.03){
+        _autoGateReason = 'div_baixa';
+      }
+
       picks.push({
         id:sid,
         data:s.date||new Date().toISOString(),
@@ -3844,20 +3917,21 @@ async function autoLogSharp1x2(){
         timing_h:s.hoursToKO?.toFixed(1)||'',
         label:s.label||'',
         score:String(s.totalScore||0),
+        gate_blocked_reason:_autoGateReason,
         fonte:'auto-log',
         phase:getCurrentPhase(),
         resultado_jogo:'', resultado_outcome:'', clv:'', odds_fecho:'',
         saved_at:new Date().toISOString()
       });
       markSaved(sid);
-      savedSigs.push(s);
+      savedSigs.push({s, gateReason: _autoGateReason});
       saved++;
     }
     if(saved>0){
       await ghWrite(PICKS1X2_FILE, picks, `auto-log 1x2: ${saved} sinal${saved>1?'is':''}`);
       sharp1x2Picks=picks;
-      // TG apenas para sinais com div B365/NVP ≥ 3%
-      const alertSigs=savedSigs.filter(s=>s.sigs[0]?.divB365>=0.03);
+      // TG apenas para picks que passaram todos os gates (gateReason === '')
+      const alertSigs=savedSigs.filter(x=>x.gateReason==='').map(x=>x.s);
       if(alertSigs.length>0){
         const lines=alertSigs.map(s=>{
           const sg=s.sigs[0];

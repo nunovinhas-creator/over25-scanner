@@ -109,6 +109,13 @@ This project has two layers:
   `pin_drop` continua gravado por pick para análise futura mas NÃO é critério de alerta.
   Evidência: 21.087 jogos históricos, ROI +2.46% em 3.731 apostas (threshold >3%).
   Walk-forward pendente de validação — ver `backtesting/reports/sharp1x2_signal.md` (Q5).
+- DRAW N1 (Eredivisie): em tracking separado desde 12 jun 2026. Gate 2 bloqueia DRAW global
+  mas picks DRAW N1 com div≥3% são gravados com `gate_blocked_reason: "draw_observacao_n1"`.
+  Critério de activação (exceção Gate 2 para N1): 50 settled com CLV>+1% → rever Gate 2.
+  Evidência histórica: ROI +36.94% em 142 apostas, 5 épocas consistentes.
+- HOME N1 (Eredivisie): excluído do alerta TG desde 12 jun 2026. Gravado com
+  `gate_blocked_reason: "n1_home_negativo"`. Rever quando n≥100 ao vivo.
+  Evidência histórica: ROI −6.07% em 100 apostas.
 
 Open either HTML file directly in a browser to run. There are no build steps, no tests, and no linters for the front-end.
 
