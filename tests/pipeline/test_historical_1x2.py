@@ -326,6 +326,35 @@ class TestSharp1x2AnalysisFunctions:
         assert not by_thresh.empty, "Should find bets with B365H 12.5% above PSH"
         assert (by_thresh["threshold"] == ">10%").any()
 
+    def test_q6_investigate_div_no_keyerror(self) -> None:
+        """_q6_investigate_div must not raise KeyError: 'picked' (groupby pandas bug)."""
+        from backtesting.run_sharp1x2_signal import _q6_investigate_div, _prepare
+        # Build synthetic data with Div=N1 and B365H elevated above PSH to trigger bets
+        rng = np.random.default_rng(42)
+        rows = []
+        for i in range(120):
+            psh = round(rng.uniform(1.8, 3.5), 3)
+            psd = round(rng.uniform(3.0, 4.5), 3)
+            psa = round(rng.uniform(2.0, 5.0), 3)
+            # B365H elevated by 5-15% so div_h > 0.03
+            b365h = round(psh * rng.uniform(1.05, 1.15), 3)
+            b365d = round(psd * rng.uniform(0.96, 1.02), 3)
+            b365a = round(psa * rng.uniform(0.96, 1.02), 3)
+            rows.append({
+                "Div": "N1", "Season": rng.choice(["2324", "2425", "2526"]),
+                "Date": "2026-01-01", "FTR": rng.choice(["H", "D", "A"]),
+                "PSH": psh, "PSD": psd, "PSA": psa,
+                "PSCH": round(psh * rng.uniform(0.96, 1.01), 3),
+                "PSCD": round(psd * rng.uniform(0.97, 1.02), 3),
+                "PSCA": round(psa * rng.uniform(0.96, 1.01), 3),
+                "B365H": b365h, "B365D": b365d, "B365A": b365a,
+            })
+        df = pd.DataFrame(rows)
+        result = _q6_investigate_div(df, div_filter="N1")
+        assert "error" not in result, f"Q6 returned error: {result.get('error')}"
+        assert "by_outcome" in result
+        assert isinstance(result["by_outcome"], pd.DataFrame)
+
     def test_report_has_conclusion_section(self, tmp_path: Path) -> None:
         """Report must include a Conclusão section with veredictos."""
         import backtesting.run_sharp1x2_signal as mod

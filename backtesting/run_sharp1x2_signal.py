@@ -431,11 +431,22 @@ def _q6_investigate_div(df: pd.DataFrame, div_filter: Optional[str] = "N1") -> d
     )
     by_season = by_season[by_season["n"] >= 5]
 
-    by_outcome = (
-        bets.groupby("picked", group_keys=False).apply(_grp_stats)
-        .reset_index().rename(columns={"index":"picked"})
-    )
-    by_outcome = by_outcome[by_outcome["n"] >= 5]
+    # groupby("picked").apply() drops "picked" from groups in pandas — use explicit loop
+    by_outcome_rows = []
+    for pval, grp in bets.groupby("picked"):
+        if len(grp) < 5:
+            continue
+        close = _close_odds_col(grp)
+        profits = np.where(grp["FTR"] == pval, close - 1, -1.0)
+        by_outcome_rows.append({
+            "picked": pval,
+            "n": len(grp),
+            "wr_pct": round(float((grp["FTR"] == pval).mean() * 100), 1),
+            "roi_pct": round(float(profits.mean() * 100), 2),
+            "avg_div_pct": round(float(grp["max_div"].mean() * 100), 1),
+            "avg_close_odds": round(float(close.mean()), 3),
+        })
+    by_outcome = pd.DataFrame(by_outcome_rows)
 
     profits_all = np.where(bets["FTR"]==bets["picked"], _close_odds_col(bets)-1, -1.0)
 
