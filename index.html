@@ -5529,16 +5529,9 @@ async function reactLiveAlert(game) {
     };
 
     if(risk>=3){
-      const lvl=risk>=6?'🚨 CRÍTICO':'⚠️ PERIGO';
-      const msg=`${lvl}\n${g.home} ${g.hScore||0}-${g.aScore||0} ${g.away}\n⏱ ${min}' · Precisa ${needGoals} gol(os) em ${minsLeft}min\nxG: ${xgLive.toFixed(1)} · ${reasons.join(', ')}`;
       return {
-        thought:`Risco ${risk}/9 (${reasons.join(', ')}). Nível ${lvl}. Enviar alerta TG.`,
-        action:{
-          desc:`sendTG: ${lvl} (risco ${risk}/9)`,
-          run:()=>sendTG(msg).then(ok=>{if(ok)localStorage.setItem(alertKey,'1');return ok;}),
-          observe:ok=>ok?`Alerta ${lvl} enviado com sucesso`:'Falha no envio TG',
-          update:ok=>({alertSent:ok,risk,alertLevel:lvl})
-        }
+        thought:`Risco ${risk}/9 (${reasons.join(', ')}). Alerta PERIGO desactivado.`,
+        done:true,conclusion:{type:'MONITOR',risk,reasons}
       };
     }
 
