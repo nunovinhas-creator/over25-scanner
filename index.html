@@ -1224,6 +1224,9 @@ const CALIB = { N:44, WR:0.591, K:10 };
 const TH_SCORE_HIGH  = 70;     // score ≥70 = candidato forte (verde)
 const TH_SCORE_MED   = 50;     // score ≥50 = candidato (âmbar)
 // 1xbet/onexbet removidos — copiam preços sharp, distorcem divergência
+// Substituído pelo workflow deploy_version.yml em cada push para main
+const BUILD_SHA = '__BUILD_SHA__';
+let _autoLogRunning = false;   // true durante autoLog chain — adia reload de versão
 const RECR = [
   'bet365','bet-365',
   'bwin',
@@ -1954,9 +1957,11 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
 
     // Auto-log serializado — candidatos → sharp → closing odds (evita conflitos de SHA no mesmo ficheiro)
     const _autoLog=el('autoLogChk')?.checked;
+    if(_autoLog) _autoLogRunning = true;
     (_autoLog ? autoLogCandidatos().catch(e=>{console.warn('autoLogCandidatos:',e.message);}) : Promise.resolve())
       .then(()=>_autoLog ? autoLogSharp1x2().catch(e=>{console.warn('autoLogSharp1x2:',e.message);}) : Promise.resolve())
-      .then(()=>_autoLog ? captureClosingOdds().catch(e=>{console.warn('captureClosingOdds:',e.message);}) : Promise.resolve());
+      .then(()=>_autoLog ? captureClosingOdds().catch(e=>{console.warn('captureClosingOdds:',e.message);}) : Promise.resolve())
+      .finally(()=>{ if(_autoLog) _autoLogRunning = false; });
 
     // Actualizar stats Sharp
     el('sh1Total').textContent=allSharp1x2.length;
@@ -5628,6 +5633,48 @@ window._syncInterval = setInterval(async()=>{
     sendDailyReport().catch(e=>{console.warn('sendDailyReport:',e.message);});
   }
 }, 30*60*1000);
+
+// ════════════════════════════════════════════════════════════════
+// AUTO-RELOAD SILENCIOSO — deteta nova versão e recarrega
+// ════════════════════════════════════════════════════════════════
+function _doReload(){
+  caches.keys()
+    .then(keys => Promise.all(keys.map(k => caches.delete(k))))
+    .catch(()=>{})
+    .finally(()=>{ location.reload(); });
+}
+
+async function checkVersion(){
+  // SHA não resolvido (ficheiro nunca foi pelo deploy workflow) — não verificar
+  if(BUILD_SHA === '__BUILD_SHA__') return;
+  try{
+    const r = await fetch('version.json', { cache:'no-store' });
+    if(!r.ok) return;
+    const { sha } = await r.json();
+    if(!sha || sha === '__BUILD_SHA__' || sha === BUILD_SHA) return;
+
+    // SHA diferente encontrado
+    const flagKey = `reload_attempted_${sha}`;
+    if(sessionStorage.getItem(flagKey)) return; // já tentou, aguarda próxima verificação
+    sessionStorage.setItem(flagKey, '1');
+
+    if(_autoLogRunning){
+      // Auto-log em curso — aguarda conclusão (poll a cada 500ms)
+      const waitAndReload = () => {
+        if(_autoLogRunning){ setTimeout(waitAndReload, 500); }
+        else { _doReload(); }
+      };
+      setTimeout(waitAndReload, 500);
+    } else {
+      _doReload();
+    }
+  }catch(e){/* versão não crítica — falha silenciosa */}
+}
+
+// Verificação no load + a cada 5 minutos
+checkVersion();
+if(window._versionInterval) clearInterval(window._versionInterval);
+window._versionInterval = setInterval(checkVersion, 5 * 60 * 1000);
 </script>
 <!-- ── Help Modal ── -->
 <div class="help-modal" id="helpModal" style="display:none" onclick="if(event.target===this)closeHelp()">

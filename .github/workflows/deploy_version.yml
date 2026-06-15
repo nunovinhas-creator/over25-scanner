@@ -1,0 +1,44 @@
+name: Deploy — versão bump
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  version:
+    # Evita loop infinito: não corre em commits do próprio workflow
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Calcular SHA curto
+        id: sha
+        run: echo "short=$(echo '${{ github.sha }}' | cut -c1-7)" >> $GITHUB_OUTPUT
+
+      - name: Actualizar version.json
+        run: |
+          echo '{"sha":"${{ steps.sha.outputs.short }}"}' > version.json
+
+      - name: Actualizar BUILD_SHA em index.html
+        run: |
+          sed -i "s/const BUILD_SHA = '[^']*'/const BUILD_SHA = '${{ steps.sha.outputs.short }}'/" index.html
+
+      - name: Commit e push
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add version.json index.html
+          if git diff --cached --quiet; then
+            echo "Sem alterações para commitar."
+          else
+            git commit -m "chore: version bump ${{ steps.sha.outputs.short }} [skip ci]"
+            git push origin main
+          fi

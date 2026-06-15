@@ -124,6 +124,11 @@ This project has two layers:
 
 Open either HTML file directly in a browser to run. There are no build steps, no tests, and no linters for the front-end.
 
+### Auto-reload de versão (index.html)
+`checkVersion()` corre no load e a cada 5 min: faz `fetch('version.json', {cache:'no-store'})`, compara o SHA remoto com `BUILD_SHA` embutido no HTML. Se divergirem, limpa caches e faz `location.reload()`. Flag `reload_attempted_<sha>` em `sessionStorage` evita loop infinito. Reload é adiado se `_autoLogRunning=true`.
+
+`version.json` e `BUILD_SHA` são actualizados pelo workflow `deploy_version.yml` em cada push para `main` (commit `[skip ci]`). **Nota de CDN**: se GitHub Pages/Fastly cachear `version.json`, a deteção pode demorar até ao TTL da cache (tipicamente 10 min). Aceitável para este caso de uso.
+
 ## External Dependencies
 
 All logic is inline JavaScript. Three external services are used:
