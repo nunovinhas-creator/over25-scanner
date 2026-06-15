@@ -4,44 +4,32 @@
 > Treino/Calibração: épocas 2122, 2223, 2324, 2425
 > Validação (intocada): época **2526**
 
-Generated: 2026-06-11T23:06:49+00:00 UTC
+Generated: 2026-06-15T13:11:55+00:00 UTC
 
 ## Calibrador seleccionado
 
 | Métrica | Valor |
 |---------|-------|
 | Método seleccionado | **Isotonic** |
-| CV Brier (LOEO 4-fold) | 0.24565 |
-| Platt avg Brier | 0.24620 |
-| Isotónico avg Brier | 0.24565 ← **seleccionado** |
-| Parâmetros | 45 pares de threshold |
-| N amostras de treino | 17,628 |
+| CV Brier (LOEO 4-fold) | 0.24558 |
+| Platt avg Brier | 0.24622 |
+| Isotónico avg Brier | 0.24558 ← **seleccionado** |
+| Parâmetros | 49 pares de threshold |
+| N amostras de treino | 17,775 |
 | Épocas de treino | 2122, 2223, 2324, 2425 |
 
-Brier por fold — Platt: `[0.25031, 0.24496, 0.24419, 0.24535]`
-Brier por fold — Isotónico: `[0.24951, 0.24464, 0.24333, 0.2451]`
+Brier por fold — Platt: `[0.25037, 0.24498, 0.24429, 0.24524]`
+Brier por fold — Isotónico: `[0.24913, 0.24457, 0.24352, 0.24511]`
 
 ## Baseline de mercado (época 2526, todos os jogos com odds Pinnacle)
 
 | Métrica | Valor |
 |---------|-------|
-| N jogos | 1,889 |
-| Brier (p_market) | 0.24320 |
-| Log-loss (p_market) | 0.67938 |
+| N jogos | 1,912 |
+| Brier (p_market) | 0.24421 |
+| Log-loss (p_market) | 0.68144 |
 
 > Brier benchmark Pinnacle (over/under 2.5): ≈ 0.220–0.230
-
-## Comparação Brier — Mercado vs Modelo (comparação principal)
-
-| Configuração | Brier | N apostas | Interpretação |
-|---|---|---|---|
-| **Mercado puro** (p_market devig) | **0.24320** | 1,889 | Baseline — todos os jogos com odds Pinnacle |
-| DC não-calibrado (w=0.30) | 0.25110 | 102 | Dixon-Coles raw piora face ao mercado |
-| **DC calibrado (w=0.30)** | **0.24168** ← | 83 | Calibração recupera e supera ligeiramente o mercado |
-
-> **Conclusão**: A calibração isotónica recupera a degradação do Dixon-Coles puro (0.25110 → 0.24168),
-> ficando 0.00152 abaixo do mercado puro (0.24320). A diferença é pequena mas positiva com N=83.
-> Com mais dados ao vivo a diferença deverá confirmar-se ou refutar-se.
 
 ## Resultados por peso — calibrado vs não-calibrado (época 2526)
 
@@ -49,93 +37,82 @@ Brier por fold — Isotónico: `[0.24951, 0.24464, 0.24333, 0.2451]`
 
 | w | N cal | ROI cal | CLV cal | Brier cal || N unc | ROI unc | Brier unc |
 |---|-------|---------|---------|----------||-------|---------|----------|
-| **0.10** | 0 | — | — | — || 0 | — | — |
-| **0.15** | 3 | -7.67% | +3.054% | 0.25837 || 11 | -57.45% | 0.23702 |
-| **0.20** | 23 | -17.78% | +0.400% | 0.24522 || 29 | -33.62% | 0.24393 |
-| **0.30** | 83 | -14.39% | +0.190% | 0.24168 || 102 | -18.83% | 0.25110 | ◄
+| **0.10** | 0 | — | — | — || 2 | +18.00% | 0.28249 |
+| **0.15** | 5 | +2.60% | +1.486% | 0.25872 || 11 | -36.00% | 0.25759 |
+| **0.20** | 14 | -43.43% | +1.006% | 0.22690 || 31 | -22.77% | 0.25473 | ◄
+| **0.30** | 85 | +4.64% | -0.509% | 0.25497 || 108 | -7.20% | 0.25494 |
 
 > **Cal** = `p_dc` calibrado pelo Isotonic antes do blend
 > **Unc** = `p_dc` directo do Dixon-Coles (sem calibração)
 > ◄ = peso seleccionado (melhor Brier calibrado)
 
-## Peso seleccionado: w = 0.3
+## Peso seleccionado: w = 0.2
 
 | | Calibrado | Não-calibrado |
 |---|---|---|
-| N apostas | 83 | 102 |
-| Win% | 34.9% | 40.2% |
-| P&L | -11.9u | -19.2u |
-| ROI | -14.39% | -18.83% |
-| Brier | 0.24168 | 0.25110 |
+| N apostas | 14 | 31 |
+| Win% | 21.4% | 35.5% |
+| P&L | -6.1u | -7.1u |
+| ROI | -43.43% | -22.77% |
+| Brier | 0.22690 | 0.25473 |
 
-### CLV com IC 95% (calibrado, w = 0.3)
+### CLV com IC 95% (calibrado, w = 0.2)
 
 | Métrica | Valor |
 |---------|-------|
-| N apostas com CLV | 83 |
-| CLV médio | +0.190% |
-| SE | ±0.600% |
-| IC 95% | [-0.985%, +1.366%] |
+| N apostas com CLV | 14 |
+| CLV médio | +1.006% |
+| SE | ±1.008% |
+| IC 95% | [-0.968%, +2.981%] |
 
  ⚠️ IC inclui zero — CLV não significativamente positivo
 
-## Tabela de calibração — w = 0.3
+## Tabela de calibração — w = 0.2
 
 ### Calibrado (buckets devem alinhar melhor)
 
 | Bucket previsto | N | Pred médio | Win% real | Diferença |
 |-----------------|---|-----------|-----------|----------|
-| (0.325, 0.349] |   10 | 0.337 | 0.300 | -0.037 |
-| (0.349, 0.373] |    7 | 0.358 | 0.286 | -0.073 |
-| (0.373, 0.396] |    2 | 0.389 | 0.500 | +0.111 |
-| (0.396, 0.419] |   15 | 0.405 | 0.467 | +0.061 |
-| (0.419, 0.443] |    8 | 0.433 | 0.250 | -0.183 |
-| (0.443, 0.466] |    3 | 0.455 | 0.333 | -0.121 |
-| (0.466, 0.489] |   17 | 0.477 | 0.412 | -0.065 |
-| (0.489, 0.513] |   12 | 0.505 | 0.250 | -0.255 |
-| (0.513, 0.536] |    6 | 0.524 | 0.333 | -0.191 |
-| (0.536, 0.559] |    3 | 0.555 | 0.333 | -0.222 |
+| (0.31, 0.331] |    1 | 0.311 | 0.000 | -0.311 |
+| (0.37, 0.389] |    3 | 0.379 | 0.667 | +0.288 |
+| (0.409, 0.428] |    2 | 0.416 | 0.000 | -0.416 |
+| (0.428, 0.448] |    1 | 0.444 | 0.000 | -0.444 |
+| (0.448, 0.467] |    4 | 0.455 | 0.250 | -0.205 |
+| (0.467, 0.487] |    2 | 0.469 | 0.000 | -0.469 |
+| (0.487, 0.506] |    1 | 0.506 | 0.000 | -0.506 |
 
 ### Não-calibrado (para comparação)
 
 | Bucket previsto | N | Pred médio | Win% real | Diferença |
 |-----------------|---|-----------|-----------|----------|
-| (0.388, 0.424] |    5 | 0.401 | 0.600 | +0.199 |
-| (0.424, 0.459] |   14 | 0.442 | 0.286 | -0.156 |
-| (0.459, 0.494] |   15 | 0.480 | 0.467 | -0.014 |
-| (0.494, 0.529] |   24 | 0.512 | 0.250 | -0.262 |
-| (0.529, 0.564] |   20 | 0.544 | 0.350 | -0.194 |
-| (0.564, 0.599] |   13 | 0.586 | 0.538 | -0.047 |
-| (0.599, 0.634] |    7 | 0.611 | 0.571 | -0.040 |
-| (0.634, 0.669] |    2 | 0.643 | 1.000 | +0.357 |
-| (0.669, 0.704] |    1 | 0.683 | 1.000 | +0.317 |
-| (0.704, 0.739] |    1 | 0.739 | 0.000 | -0.739 |
+| (0.387, 0.41] |    1 | 0.388 | 1.000 | +0.612 |
+| (0.41, 0.432] |    3 | 0.423 | 0.333 | -0.090 |
+| (0.432, 0.454] |    2 | 0.444 | 0.000 | -0.444 |
+| (0.454, 0.476] |    7 | 0.465 | 0.429 | -0.037 |
+| (0.476, 0.498] |    6 | 0.481 | 0.333 | -0.148 |
+| (0.52, 0.542] |    5 | 0.531 | 0.400 | -0.131 |
+| (0.542, 0.564] |    5 | 0.558 | 0.200 | -0.358 |
+| (0.586, 0.608] |    2 | 0.604 | 0.500 | -0.104 |
 
-## Resultados por banda de odds — w = 0.3
+## Resultados por banda de odds — w = 0.2
 
 ### Calibrado
 
 | Odds | N apostas | Win% | EV médio | ROI |
 |------|-----------|------|----------|----|
-| 2.00–2.50    |    42 | 33.3% | +0.0553 |  -26.50% |
-| >2.50        |    35 | 37.1% | +0.0500 |   +3.69% |
-| outros (n<30) |     6 | 33.3% | — |  -35.00% |
+| outros (n<30) |    14 | 21.4% | — |  -43.43% |
 
 ### Não-calibrado
 
 | Odds | N apostas | Win% | EV médio | ROI |
 |------|-----------|------|----------|----|
-| 1.70–2.00    |    41 | 48.8% | +0.0502 |  -10.24% |
-| 2.00–2.50    |    49 | 30.6% | +0.0681 |  -32.06% |
-| outros (n<30) |    12 | 50.0% | — |   +5.83% |
+| outros (n<30) |    31 | 35.5% | — |  -22.77% |
 
 ## Decisão: Cap de odds
 
-**CAP RECOMENDADO ≤ 2.00** — A assimetria persiste na banda 2.00–2.50 após calibração (ROI=-26.5%, N=42). Não-calibrado: ROI=-32.1%. A calibração não resolveu o overconfidence nesta banda.
+**INCONCLUSIVO** — Banda 2.00–2.50 sem apostas suficientes (< 10) após calibração na época de validação. Sem cap aplicado.
 
-**Implementação sugerida**: adicionar `MAX_ODDS_OVER = 2.00` em `config.py`.
-
-**Justificação**: Dixon-Coles sobrestima probabilidades em jogos de baixo expected score (odds altas Over). A calibração suaviza mas não elimina o viés.
+Reavaliar com dados de mais uma época.
 
 ## Notas metodológicas
 
