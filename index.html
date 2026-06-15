@@ -2707,6 +2707,25 @@ function sharpCard1x2(s){
   </div>`;
 }
 
+// Gate partilhado para saveSharpPick e autoLogSharp1x2 — fonte única de verdade
+function _applySharp1x2Gates({ out, liga, div, timingH }){
+  const WHITELIST = [
+    'Premier League','La Liga','Bundesliga','Serie A','Ligue 1',
+    'Primeira Liga','Eredivisie','Belgian Pro League',
+    'Championship','La Liga 2','Bundesliga 2','Serie B'
+  ];
+  const _out = (out||'').toUpperCase();
+  const _liga = (liga||'').trim();
+  const _isN1 = _liga === 'Eredivisie';
+  if(!_liga || !WHITELIST.includes(_liga)) return 'liga_fora_whitelist';
+  if(_out === 'DRAW' && _isN1 && div !== null && div >= 0.03) return 'draw_observacao_n1';
+  if(_out === 'DRAW') return 'draw_suspenso';
+  if(_out === 'HOME' && _isN1) return 'n1_home_negativo';
+  if(!isFinite(timingH) || timingH < 0 || timingH > 6) return 'timing_apos_6h';
+  if(div === null || div < 0.03) return 'div_baixa';
+  return '';
+}
+
 async function saveSharpPick(btn){
   const d=btn.dataset;
   const saveId=String(d.id)+'_sh';
@@ -2716,34 +2735,15 @@ async function saveSharpPick(btn){
     let sig=null;
     try{ sig=d.sig?JSON.parse(decodeURIComponent(d.sig)):null; }catch(e){ console.warn('sig decode:',e.message); }
 
-    // ── Gates pré-calculados (incluídos no pick para analytics) ──
+    // ── Gates pré-calculados via função partilhada ──
     const _out = (sig?.out||'').toUpperCase();
-    const _liga = (d.liga||'').trim();
-    const _isN1 = _liga === 'Eredivisie';
     const _div = sig?.divB365 != null ? sig.divB365 : null;
-    const _timingH = parseFloat(d.hours||'999');
-    const _whitelist = [
-      'Premier League','La Liga','Bundesliga','Serie A','Ligue 1',
-      'Primeira Liga','Eredivisie','Belgian Pro League',
-      'Championship','La Liga 2','Bundesliga 2','Serie B'
-    ];
-    let gateBlockedReason = '';
-    if(!_liga || !_whitelist.includes(_liga)){
-      gateBlockedReason = 'liga_fora_whitelist';
-    } else if(_out === 'DRAW' && _isN1 && _div !== null && _div >= 0.03){
-      // DRAW N1 com div≥3%: tracking separado, sem alerta TG
-      // Activação: 50 settled com CLV>+1% → rever Gate 2 para exceção N1
-      gateBlockedReason = 'draw_observacao_n1';
-    } else if(_out === 'DRAW'){
-      gateBlockedReason = 'draw_suspenso';
-    } else if(_out === 'HOME' && _isN1){
-      // HOME N1 excluído — ROI -6.07% histórico (12 jun 2026, n=100)
-      gateBlockedReason = 'n1_home_negativo';
-    } else if(!isFinite(_timingH) || _timingH < 0 || _timingH > 6){
-      gateBlockedReason = 'timing_apos_6h';
-    } else if(_div === null || _div < 0.03){
-      gateBlockedReason = 'div_baixa';
-    }
+    const gateBlockedReason = _applySharp1x2Gates({
+      out: _out,
+      liga: (d.liga||'').trim(),
+      div: _div,
+      timingH: parseFloat(d.hours||'999')
+    });
 
     await picks1x2Save({
       id:saveId,
@@ -2934,11 +2934,14 @@ function _renderModeBanner(clvMean30, nSettled){
   }
 }
 
-function _renderKpiClv(rolling30, clvMean30, clvSE, nAlertados, nSettled){
+function _renderKpiClv(rolling30, clvMean30, clvSE, nAlertados, nSettled, flaggedCount){
   const kpiEl = el('d1x2KpiClv');
   if(!kpiEl) return;
+  const flaggedNote = flaggedCount > 0
+    ? `<div style="font-size:9px;color:var(--text3);margin-top:4px">${flaggedCount} picks pré-correção excluídos do tracking (timing fora de critério)</div>`
+    : '';
   if(!rolling30.length){
-    kpiEl.innerHTML='<div style="font-size:11px;color:var(--text3);padding:12px">Sem picks alertados settled — CLV disponível quando os primeiros resultados chegarem.</div>';
+    kpiEl.innerHTML=`<div style="font-size:11px;color:var(--text3);padding:12px">Sem picks alertados settled — CLV disponível quando os primeiros resultados chegarem.</div>${flaggedNote}`;
     return;
   }
   const clvCol = clvMean30 !== null ? (clvMean30 > 0 ? 'var(--green)' : 'var(--red)') : 'var(--text3)';
@@ -2953,7 +2956,7 @@ function _renderKpiClv(rolling30, clvMean30, clvSE, nAlertados, nSettled){
       <div>Alertados total: <strong>${nAlertados}</strong></div>
       <div>Settled total: <strong>${nSettled}</strong></div>
     </div>
-  </div>`;
+  </div>${flaggedNote}`;
 }
 
 function _renderKpiHA(alertados){
@@ -3035,7 +3038,12 @@ function renderDash1x2(){
   });
 
   // Alertados (global, sem filtro onlyHome) = picks que passaram todos os gates
-  const alertados = sharp1x2Picks.filter(p => !p.gate_blocked_reason || p.gate_blocked_reason === '');
+  // Excluir picks pré-correção (browser antigo sem gate de timing)
+  const flaggedCount = sharp1x2Picks.filter(p => p.data_quality_flag === 'pre_bugfix_timing_v1').length;
+  const alertados = sharp1x2Picks.filter(p =>
+    (!p.gate_blocked_reason || p.gate_blocked_reason === '') &&
+    p.data_quality_flag !== 'pre_bugfix_timing_v1'
+  );
   const settledAll = alertados.filter(p => p.resultado_outcome==='WIN' || p.resultado_outcome==='LOSS');
   // Rolling-30: últimos 30 settled alertados por data
   const rolling30 = [...settledAll].sort((a,b)=>new Date(b.data)-new Date(a.data)).slice(0,30);
@@ -3047,7 +3055,7 @@ function renderDash1x2(){
 
   // KPIs primários (sempre renderizados)
   _renderModeBanner(clvMean30, settledAll.length);
-  _renderKpiClv(rolling30, clvMean30, clvSE, alertados.length, settledAll.length);
+  _renderKpiClv(rolling30, clvMean30, clvSE, alertados.length, settledAll.length, flaggedCount);
   _renderKpiHA(alertados);
   _renderKpiLigas(alertados);
 
@@ -4058,30 +4066,13 @@ async function autoLogSharp1x2(){
       const sid=String(s.id)+'_sh';
       if(picks.some(p=>String(p.id)===sid)){ markSaved(sid); continue; }
       const sig=s.sigs[0]||{};
-      const _autoOut = (sig.out||sig.outcome||'').toUpperCase();
-      const _autoLiga = s.league||'';
-      const _autoIsN1 = _autoLiga === 'Eredivisie';
       const _autoDiv = sig.divB365 != null ? sig.divB365 : null;
-      const _autoTimingH = parseFloat(s.hoursToKO||'999');
-      const _autoWhitelist = [
-        'Premier League','La Liga','Bundesliga','Serie A','Ligue 1',
-        'Primeira Liga','Eredivisie','Belgian Pro League',
-        'Championship','La Liga 2','Bundesliga 2','Serie B'
-      ];
-      let _autoGateReason = '';
-      if(!_autoLiga || !_autoWhitelist.includes(_autoLiga)){
-        _autoGateReason = 'liga_fora_whitelist';
-      } else if(_autoOut === 'DRAW' && _autoIsN1 && _autoDiv !== null && _autoDiv >= 0.03){
-        _autoGateReason = 'draw_observacao_n1';
-      } else if(_autoOut === 'DRAW'){
-        _autoGateReason = 'draw_suspenso';
-      } else if(_autoOut === 'HOME' && _autoIsN1){
-        _autoGateReason = 'n1_home_negativo';
-      } else if(!isFinite(_autoTimingH) || _autoTimingH < 0 || _autoTimingH > 6){
-        _autoGateReason = 'timing_apos_6h';
-      } else if(_autoDiv === null || _autoDiv < 0.03){
-        _autoGateReason = 'div_baixa';
-      }
+      const _autoGateReason = _applySharp1x2Gates({
+        out: sig.out||sig.outcome||'',
+        liga: s.league||'',
+        div: _autoDiv,
+        timingH: parseFloat(s.hoursToKO||'999')
+      });
 
       picks.push({
         id:sid,

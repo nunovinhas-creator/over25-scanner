@@ -62,8 +62,12 @@ def compute_stats(picks: list[dict]) -> dict:
     today = datetime.now(timezone.utc)
     week_ago = today - timedelta(days=7)
 
-    # alertados = picks that passed all gates (no gate_blocked_reason)
-    alertados = [p for p in picks if not p.get("gate_blocked_reason")]
+    # alertados = picks que passaram todos os gates e não têm data quality flag
+    alertados = [
+        p for p in picks
+        if not p.get("gate_blocked_reason")
+        and p.get("data_quality_flag") != "pre_bugfix_timing_v1"
+    ]
     settled = [p for p in alertados if p.get("resultado_outcome") in ("WIN", "LOSS")]
 
     # CLV rolling-30: últimos 30 settled alertados por data
