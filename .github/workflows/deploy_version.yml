@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
 
+concurrency:
+  group: version-bump
+  cancel-in-progress: true
+
 jobs:
   version:
     # Evita loop infinito: não corre em commits do próprio workflow
@@ -35,6 +39,8 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git reset --soft origin/main
           git add version.json index.html
           if git diff --cached --quiet; then
             echo "Sem alterações para commitar."
