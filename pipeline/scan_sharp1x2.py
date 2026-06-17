@@ -47,7 +47,12 @@ WHITELIST = {
 
 # Mapa defensivo BSD league_id → nome canónico.
 # Fail-closed: ID desconhecido → '' → WHITELIST rejeita.
-BSD_LEAGUE_ID_MAP: dict[int, str] = {1: "Premier League", 3: "La Liga", 4: "Serie A"}
+BSD_LEAGUE_ID_MAP: dict[int, str] = {
+    1: "Premier League", 3: "La Liga", 4: "Serie A",
+    5: "Bundesliga", 6: "Ligue 1", 10: "Eredivisie",
+    14: "Belgian Pro League",
+    # Championship, Bundesliga 2, Serie B, La Liga 2, Primeira Liga — IDs TBD
+}
 
 
 # ── Gates — espelho fiel de _applySharp1x2Gates() em index.html ────────────────
