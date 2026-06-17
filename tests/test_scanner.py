@@ -3,19 +3,20 @@ tests/test_scanner.py
 ---------------------
 Smoke tests para pipeline/scan_over25.py e pipeline/scan_sharp1x2.py.
 
-Usa mocks da Odds API e Telegram para não depender de secrets nem rede.
-Verifica: gate logic, deduplicação, escrita em picks.json / rejected.
+Usa mocks do BSD Sports API e Telegram — sem rede, sem secrets.
+Eventos no formato BSD (event_id, home, away, date, movement, ...).
+Verifica: gates, deduplicação, TG alerts, escrita em picks / rejected.
 """
 
 from __future__ import annotations
 
 import json
-import sys
-import tempfile
 import unittest
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
+import tempfile
+
 
 # ── helpers ────────────────────────────────────────────────────────────────────
 
@@ -24,105 +25,69 @@ def _future_iso(hours: float = 3.0) -> str:
     return dt.strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
-def _make_odds_event(
+def _bsd_event(
     event_id: str,
     home: str,
     away: str,
-    sport_key: str = "soccer_epl",
+    league: str = "Premier League",
     hours_to_ko: float = 3.0,
     odds_over: float = 1.90,
     odds_under: float = 2.00,
+    movement: str = "SHORTENING",
+    pinnacle_home: float | None = None,
+    pinnacle_draw: float | None = None,
+    pinnacle_away: float | None = None,
+    b365_home: float | None = None,
+    b365_draw: float | None = None,
+    b365_away: float | None = None,
 ) -> dict:
-    """Evento simulado no formato da Odds API (mercado totals)."""
-    return {
-        "id": event_id,
-        "sport_key": sport_key,
-        "home_team": home,
-        "away_team": away,
-        "commence_time": _future_iso(hours_to_ko),
-        "bookmakers": [
-            {
-                "key": "pinnacle",
-                "markets": [
-                    {
-                        "key": "totals",
-                        "outcomes": [
-                            {"name": "Over",  "point": 2.5, "price": odds_over},
-                            {"name": "Under", "point": 2.5, "price": odds_under},
-                        ],
-                    }
-                ],
-            }
-        ],
+    """Evento no formato BSD Sports API."""
+    ev: dict = {
+        "event_id": event_id,
+        "home": home,
+        "away": away,
+        "league": league,
+        "date": _future_iso(hours_to_ko),
+        "odds_over": odds_over,
+        "odds_under": odds_under,
+        "movement": movement,
     }
-
-
-def _make_1x2_event(
-    event_id: str,
-    home: str,
-    away: str,
-    sport_key: str = "soccer_epl",
-    hours_to_ko: float = 3.0,
-    pinn: tuple[float, float, float] = (1.85, 3.50, 4.20),
-    b365: tuple[float, float, float] = (1.85 * 1.05, 3.50 * 1.04, 4.20 * 1.05),
-) -> dict:
-    """Evento simulado no formato da Odds API (mercado h2h)."""
-    def _outcomes(h, d, a):
-        return [
-            {"name": "Home", "price": h},
-            {"name": "Draw", "price": d},
-            {"name": "Away", "price": a},
-        ]
-
-    return {
-        "id": event_id,
-        "sport_key": sport_key,
-        "home_team": home,
-        "away_team": away,
-        "commence_time": _future_iso(hours_to_ko),
-        "bookmakers": [
-            {"key": "pinnacle", "markets": [{"key": "h2h", "outcomes": _outcomes(*pinn)}]},
-            {"key": "bet365",   "markets": [{"key": "h2h", "outcomes": _outcomes(*b365)}]},
-        ],
-    }
+    if pinnacle_home is not None:
+        ev.update({"pinnacle_home": pinnacle_home, "pinnacle_draw": pinnacle_draw, "pinnacle_away": pinnacle_away})
+    if b365_home is not None:
+        ev.update({"b365_home": b365_home, "b365_draw": b365_draw, "b365_away": b365_away})
+    return ev
 
 
 # ── Over 2.5 tests ─────────────────────────────────────────────────────────────
 
 class TestScanOver25(unittest.TestCase):
 
-    def _run_scan(self, api_events_per_key: dict, existing_picks: list | None = None):
+    def _run_scan(self, bsd_events: list[dict], existing_picks: list | None = None):
         """
         Corre scan() com data dir temporária e mocks.
-        api_events_per_key: {sport_key: [events]} — substituição de fetch_events.
+        bsd_events: lista de eventos BSD simulados.
         Devolve (picks_list, rejected_list, tg_calls).
         """
         import pipeline.scan_over25 as mod
 
         with tempfile.TemporaryDirectory() as tmp:
             tmp_path = Path(tmp)
-
-            # Pré-popula picks existentes se pedido
             picks_file = tmp_path / "picks.json"
             rejected_file = tmp_path / "rejected_picks.json"
             state_file = tmp_path / "scan_state_over25.json"
             if existing_picks:
                 picks_file.write_text(json.dumps(existing_picks))
 
-            def fake_fetch(sport_key):
-                return api_events_per_key.get(sport_key, [])
+            def fake_fetch():
+                return bsd_events
 
-            # EV alto garantido: prob pipeline retorna ev_final=0.10
             def fake_compute_prob(ev, dc_ratings, calibrator_fn):
-                # Simula pipeline com EV positivo (10%)
                 return {
-                    "p_model_source": "dc",
-                    "p_dc_raw": 0.60,
-                    "p_model": 0.62,
-                    "p_market": 0.55,
+                    "p_model_source": "dc", "p_dc_raw": 0.60,
+                    "p_model": 0.62, "p_market": 0.55,
                     "p_market_source": "devig",
-                    "p_final": 0.575,
-                    "ev_final": 0.10,
+                    "p_final": 0.575, "ev_final": 0.10,
                     "odds_band": "1.70–2.00",
                 }
 
@@ -133,8 +98,8 @@ class TestScanOver25(unittest.TestCase):
                 patch.object(mod, "PICKS_FILE", picks_file),
                 patch.object(mod, "REJECTED_FILE", rejected_file),
                 patch.object(mod, "SCAN_STATE_FILE", state_file),
-                patch.object(mod, "ODDS_API_KEY", "fake_key"),
-                patch.object(mod, "fetch_events", side_effect=fake_fetch),
+                patch.object(mod, "BSD_API_KEY", "fake_key"),
+                patch.object(mod, "_fetch_all_events", side_effect=fake_fetch),
                 patch.object(mod, "compute_prob", side_effect=fake_compute_prob),
                 patch.object(mod, "send_telegram", side_effect=lambda t: tg_calls.append(t)),
                 patch.object(mod, "git_commit_push"),
@@ -146,22 +111,15 @@ class TestScanOver25(unittest.TestCase):
             return picks, rejected, tg_calls
 
     def test_one_pass_two_rejected(self):
-        """1 jogo passa todos os gates, 2 são rejeitados (liga e timing)."""
-        events = {
-            # Jogo válido — Premier League, 3h, boas odds
-            "soccer_epl": [
-                _make_odds_event("ev1", "Arsenal", "Chelsea", hours_to_ko=3.0, odds_over=1.90, odds_under=2.00),
-            ],
-            # Liga não na whitelist (MLS → não existe em LEAGUE_SPORT_KEYS, mas
-            # testamos timing rejeitado via horas > 6)
-            "soccer_germany_bundesliga": [
-                _make_odds_event("ev2", "Bayern", "Dortmund", hours_to_ko=10.0, odds_over=1.80, odds_under=2.10),
-            ],
-            # Odds fora da banda (> MAX_ODDS=3.50)
-            "soccer_spain_la_liga": [
-                _make_odds_event("ev3", "Real Madrid", "Barca", hours_to_ko=2.0, odds_over=4.50, odds_under=1.20),
-            ],
-        }
+        """1 jogo passa todos os gates, 2 são rejeitados (timing e odds)."""
+        events = [
+            # Válido — Premier League, 3h, boas odds, SHORTENING
+            _bsd_event("ev1", "Arsenal", "Chelsea", hours_to_ko=3.0, odds_over=1.90),
+            # Timing > 6h → rejeitado
+            _bsd_event("ev2", "Bayern", "Dortmund", league="Bundesliga", hours_to_ko=10.0),
+            # Odds fora da banda (> 3.50)
+            _bsd_event("ev3", "Real Madrid", "Barca", league="La Liga", hours_to_ko=2.0, odds_over=4.50),
+        ]
         picks, rejected, tg = self._run_scan(events)
 
         self.assertEqual(len(picks), 1)
@@ -172,44 +130,58 @@ class TestScanOver25(unittest.TestCase):
         self.assertEqual(reject_reasons.get("ev2"), "timing_apos_6h")
         self.assertEqual(reject_reasons.get("ev3"), "odds_fora_banda")
 
-    def test_dedup_no_double_alert(self):
-        """Mesmo evento em duas corridas consecutivas → só 1 alerta."""
-        event = _make_odds_event("ev_dedup", "Man City", "Liverpool", hours_to_ko=4.0)
-        events = {"soccer_epl": [event]}
+    def test_drifting_rejected(self):
+        """DRIFTING (fornecido pelo BSD) → rejeitado sem alerta TG."""
+        events = [
+            _bsd_event("ev_drift", "Man City", "Liverpool", hours_to_ko=3.0, movement="DRIFTING"),
+        ]
+        picks, rejected, tg = self._run_scan(events)
 
-        # Primeira corrida
+        self.assertEqual(len(tg), 0)
+        drift_rej = [r for r in rejected if r.get("reject_reason") == "odds_drifting"]
+        self.assertEqual(len(drift_rej), 1)
+
+    def test_liga_fora_whitelist(self):
+        """Liga fora da whitelist → rejeitada."""
+        events = [
+            _bsd_event("ev_mls", "LA Galaxy", "Seattle", league="MLS", hours_to_ko=3.0),
+        ]
+        picks, rejected, tg = self._run_scan(events)
+
+        self.assertEqual(len(tg), 0)
+        self.assertEqual(len(picks), 0)
+        self.assertTrue(any(r.get("reject_reason") == "liga_fora_whitelist" for r in rejected))
+
+    def test_dedup_no_double_alert(self):
+        """Mesmo evento em duas corridas → só 1 alerta TG."""
+        events = [_bsd_event("ev_dedup", "Man City", "Liverpool", hours_to_ko=4.0)]
+
         picks1, _, tg1 = self._run_scan(events)
         self.assertEqual(len(tg1), 1)
-        self.assertEqual(len(picks1), 1)
 
-        # Segunda corrida com picks existentes
         picks2, _, tg2 = self._run_scan(events, existing_picks=picks1)
-        self.assertEqual(len(tg2), 0, "Não deve haver segundo alerta para o mesmo evento")
+        self.assertEqual(len(tg2), 0, "Não deve haver segundo alerta")
         self.assertEqual(len(picks2), 1, "Não deve duplicar o pick")
 
     def test_update_alert_on_significant_odds_change(self):
-        """Odds mudam > 3% → cria pick _update e envia alerta."""
-        ev_original = _make_odds_event("ev_upd", "PSG", "Lyon", hours_to_ko=3.0, odds_over=1.90)
+        """Odds mudam > 3% → cria pick _update e envia alerta de atualização."""
         existing = [{
             "id": "ev_upd",
             "casa": "PSG", "fora": "Lyon", "liga": "Ligue 1",
-            "data": _future_iso(3.0),
-            "odds_over": 1.90,  # odds anteriores
+            "data": _future_iso(3.0), "odds_over": 1.90,
             "gate_blocked_reason": "", "resultado_outcome": "", "scanned_at": "2026-01-01T00:00:00Z",
         }]
-
-        # Odds agora em 1.80 — mudança de 5.3% > 3%
-        ev_updated = _make_odds_event("ev_upd", "PSG", "Lyon", hours_to_ko=3.0, odds_over=1.80)
-        events = {"soccer_france_ligue_one": [ev_updated]}
+        # Odds agora 1.80 — queda de 5.3% > 3%
+        events = [_bsd_event("ev_upd", "PSG", "Lyon", league="Ligue 1", hours_to_ko=3.0, odds_over=1.80)]
 
         picks, _, tg = self._run_scan(events, existing_picks=existing)
 
         update_ids = [p["id"] for p in picks if "_update" in p["id"]]
-        self.assertEqual(len(update_ids), 1, "Deve criar pick _update")
-        self.assertTrue(any("ATUALIZAÇÃO" in t for t in tg), "Deve enviar alerta de atualização")
+        self.assertEqual(len(update_ids), 1)
+        self.assertTrue(any("ATUALIZAÇÃO" in t for t in tg))
 
-    def test_no_alert_without_odds_api_key(self):
-        """Sem ODDS_API_KEY o scan sai silenciosamente sem alertas."""
+    def test_no_alert_without_bsd_key(self):
+        """Sem BSD_API_KEY o scan termina com sys.exit(0)."""
         import pipeline.scan_over25 as mod
 
         with tempfile.TemporaryDirectory() as tmp:
@@ -219,7 +191,7 @@ class TestScanOver25(unittest.TestCase):
                 patch.object(mod, "PICKS_FILE", tmp_path / "picks.json"),
                 patch.object(mod, "REJECTED_FILE", tmp_path / "rejected.json"),
                 patch.object(mod, "SCAN_STATE_FILE", tmp_path / "state.json"),
-                patch.object(mod, "ODDS_API_KEY", ""),
+                patch.object(mod, "BSD_API_KEY", ""),
                 patch.object(mod, "git_commit_push"),
             ):
                 with self.assertRaises(SystemExit) as ctx:
@@ -231,7 +203,7 @@ class TestScanOver25(unittest.TestCase):
 
 class TestScanSharp1x2(unittest.TestCase):
 
-    def _run_scan(self, api_events_per_key: dict, existing_picks: list | None = None):
+    def _run_scan(self, bsd_events: list[dict], existing_picks: list | None = None):
         import pipeline.scan_sharp1x2 as mod
 
         with tempfile.TemporaryDirectory() as tmp:
@@ -241,8 +213,8 @@ class TestScanSharp1x2(unittest.TestCase):
             if existing_picks:
                 picks_file.write_text(json.dumps(existing_picks))
 
-            def fake_fetch(sport_key):
-                return api_events_per_key.get(sport_key, [])
+            def fake_fetch():
+                return bsd_events
 
             tg_calls = []
 
@@ -250,8 +222,8 @@ class TestScanSharp1x2(unittest.TestCase):
                 patch.object(mod, "DATA_DIR", tmp_path),
                 patch.object(mod, "PICKS_FILE", picks_file),
                 patch.object(mod, "REJECTED_FILE", rejected_file),
-                patch.object(mod, "ODDS_API_KEY", "fake_key"),
-                patch.object(mod, "fetch_1x2_events", side_effect=fake_fetch),
+                patch.object(mod, "BSD_API_KEY", "fake_key"),
+                patch.object(mod, "_fetch_all_events", side_effect=fake_fetch),
                 patch.object(mod, "send_telegram", side_effect=lambda t: tg_calls.append(t)),
                 patch.object(mod, "git_commit_push"),
             ):
@@ -261,17 +233,19 @@ class TestScanSharp1x2(unittest.TestCase):
             rejected = json.loads(rejected_file.read_text()) if rejected_file.exists() else []
             return picks, rejected, tg_calls
 
-    def test_away_passes_gates(self):
-        """AWAY com div>3% e timing<6h deve gerar alerta."""
-        # B365 AWAY = 4.41, Pinnacle AWAY = 4.20 → div = 4.41/4.20 - 1 = 5%
-        event = _make_1x2_event(
-            "g1", "Arsenal", "Chelsea",
-            sport_key="soccer_epl",
-            hours_to_ko=3.0,
-            pinn=(1.85, 3.50, 4.20),
-            b365=(1.85, 3.50, 4.41),
+    def _ev_with_1x2(self, event_id, league="Premier League", hours_to_ko=3.0,
+                     pinn=(1.85, 3.50, 4.20), b365=(1.85, 3.50, 4.41)):
+        return _bsd_event(
+            event_id, "Arsenal", "Chelsea", league=league, hours_to_ko=hours_to_ko,
+            pinnacle_home=pinn[0], pinnacle_draw=pinn[1], pinnacle_away=pinn[2],
+            b365_home=b365[0], b365_draw=b365[1], b365_away=b365[2],
         )
-        picks, rejected, tg = self._run_scan({"soccer_epl": [event]})
+
+    def test_away_passes_gates(self):
+        """AWAY com div>3% e timing<6h → alerta TG."""
+        # B365 AWAY=4.41, Pin AWAY=4.20 → div=5%
+        ev = self._ev_with_1x2("g1", pinn=(1.85, 3.50, 4.20), b365=(1.85, 3.50, 4.41))
+        picks, rejected, tg = self._run_scan([ev])
 
         away_picks = [p for p in picks if p["outcome"] == "AWAY"]
         self.assertEqual(len(away_picks), 1)
@@ -279,30 +253,20 @@ class TestScanSharp1x2(unittest.TestCase):
         self.assertTrue(any("SHARP 1X2" in t for t in tg))
 
     def test_draw_blocked_non_n1(self):
-        """DRAW numa liga que não é Eredivisie → draw_suspenso."""
-        event = _make_1x2_event(
-            "g2", "Real Madrid", "Barca",
-            sport_key="soccer_spain_la_liga",
-            hours_to_ko=3.0,
-            pinn=(1.50, 4.00, 6.00),
-            b365=(1.50, 4.30, 6.00),  # div DRAW = 7.5%
-        )
-        picks, rejected, tg = self._run_scan({"soccer_spain_la_liga": [event]})
+        """DRAW numa liga não-N1 → draw_suspenso."""
+        ev = self._ev_with_1x2("g2", league="La Liga",
+                                pinn=(1.50, 4.00, 6.00), b365=(1.50, 4.30, 6.00))
+        picks, rejected, tg = self._run_scan([ev])
 
-        draw_rejected = [r for r in rejected if r["outcome"] == "DRAW"]
-        self.assertTrue(len(draw_rejected) >= 1)
-        self.assertEqual(draw_rejected[0]["gate_blocked_reason"], "draw_suspenso")
+        draw_rej = [r for r in rejected if r["outcome"] == "DRAW"]
+        self.assertTrue(len(draw_rej) >= 1)
+        self.assertEqual(draw_rej[0]["gate_blocked_reason"], "draw_suspenso")
 
     def test_draw_n1_tracking(self):
-        """DRAW Eredivisie com div≥3% → gate_blocked_reason = draw_observacao_n1 (gravado mas não alertado)."""
-        event = _make_1x2_event(
-            "g3", "Ajax", "PSV",
-            sport_key="soccer_netherlands_eredivisie",
-            hours_to_ko=3.0,
-            pinn=(2.10, 3.30, 3.60),
-            b365=(2.10, 3.50, 3.60),  # div DRAW = 3.30/3.30... ~ 6%
-        )
-        picks, rejected, tg = self._run_scan({"soccer_netherlands_eredivisie": [event]})
+        """DRAW Eredivisie com div≥3% → draw_observacao_n1 (gravado, não alertado)."""
+        ev = self._ev_with_1x2("g3", league="Eredivisie",
+                                pinn=(2.10, 3.30, 3.60), b365=(2.10, 3.50, 3.60))
+        picks, rejected, tg = self._run_scan([ev])
 
         draw_rej = [r for r in rejected if r["outcome"] == "DRAW"]
         self.assertTrue(len(draw_rej) >= 1)
@@ -310,14 +274,9 @@ class TestScanSharp1x2(unittest.TestCase):
 
     def test_home_n1_blocked(self):
         """HOME Eredivisie → n1_home_negativo."""
-        event = _make_1x2_event(
-            "g4", "Ajax", "PSV",
-            sport_key="soccer_netherlands_eredivisie",
-            hours_to_ko=3.0,
-            pinn=(1.85, 3.50, 4.20),
-            b365=(1.85 * 1.05, 3.50, 4.20),  # div HOME = 5%
-        )
-        picks, rejected, tg = self._run_scan({"soccer_netherlands_eredivisie": [event]})
+        ev = self._ev_with_1x2("g4", league="Eredivisie",
+                                pinn=(1.85, 3.50, 4.20), b365=(1.95, 3.50, 4.20))
+        picks, rejected, tg = self._run_scan([ev])
 
         home_rej = [r for r in rejected if r["outcome"] == "HOME"]
         self.assertTrue(len(home_rej) >= 1)
@@ -325,14 +284,9 @@ class TestScanSharp1x2(unittest.TestCase):
 
     def test_timing_gate(self):
         """Timing > 6h → timing_apos_6h."""
-        event = _make_1x2_event(
-            "g5", "Arsenal", "Chelsea",
-            sport_key="soccer_epl",
-            hours_to_ko=10.0,
-            pinn=(1.85, 3.50, 4.20),
-            b365=(1.85 * 1.05, 3.50, 4.20 * 1.05),
-        )
-        picks, rejected, tg = self._run_scan({"soccer_epl": [event]})
+        ev = self._ev_with_1x2("g5", hours_to_ko=10.0,
+                                pinn=(1.85, 3.50, 4.20), b365=(1.85, 3.50, 4.41))
+        picks, rejected, tg = self._run_scan([ev])
 
         timing_rej = [r for r in rejected if r.get("gate_blocked_reason") == "timing_apos_6h"]
         self.assertTrue(len(timing_rej) >= 1)
@@ -340,26 +294,27 @@ class TestScanSharp1x2(unittest.TestCase):
 
     def test_dedup_sharp1x2(self):
         """Mesmo pick em duas corridas → só 1 alerta."""
-        event = _make_1x2_event(
-            "g6", "Man City", "Liverpool",
-            sport_key="soccer_epl",
-            hours_to_ko=4.0,
-            pinn=(1.85, 3.50, 4.20),
-            b365=(1.85, 3.50, 4.41),  # AWAY div=5%
-        )
+        ev = self._ev_with_1x2("g6", pinn=(1.85, 3.50, 4.20), b365=(1.85, 3.50, 4.41))
 
-        picks1, _, tg1 = self._run_scan({"soccer_epl": [event]})
-        away_picks = [p for p in picks1 if p["outcome"] == "AWAY"]
-        self.assertTrue(len(away_picks) >= 1)
+        picks1, _, tg1 = self._run_scan([ev])
+        away1 = [p for p in picks1 if p["outcome"] == "AWAY"]
+        self.assertTrue(len(away1) >= 1)
 
-        picks2, _, tg2 = self._run_scan({"soccer_epl": [event]}, existing_picks=picks1)
+        picks2, _, tg2 = self._run_scan([ev], existing_picks=picks1)
         self.assertEqual(len(tg2), 0, "Sem alerta duplicado")
 
+    def test_no_1x2_odds_skipped(self):
+        """Evento sem odds 1X2 (sem pinnacle_*) é ignorado silenciosamente."""
+        ev = _bsd_event("g7", "Arsenal", "Chelsea", hours_to_ko=3.0)  # sem odds 1X2
+        picks, rejected, tg = self._run_scan([ev])
+        self.assertEqual(len(tg), 0)
+        self.assertEqual(len(picks), 0)
 
-# ── Gate unit tests ────────────────────────────────────────────────────────────
+
+# ── Gate unit tests ─────────────────────────────────────────────────────────────
 
 class TestApplySharp1x2Gates(unittest.TestCase):
-    """Testes unitários diretos em apply_sharp1x2_gates() — replica test_sharp1x2_gates.py."""
+    """Testes unitários de apply_sharp1x2_gates() — porta Python do JS."""
 
     def setUp(self):
         from pipeline.scan_sharp1x2 import apply_sharp1x2_gates
