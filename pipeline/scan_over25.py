@@ -51,10 +51,12 @@ WHITELIST = {
 # Mapa defensivo BSD league_id → nome canónico.
 # Fail-closed: ID desconhecido → '' → WHITELIST rejeita.
 BSD_LEAGUE_ID_MAP: dict[int, str] = {
-    1: "Premier League", 3: "La Liga", 4: "Serie A",
+    # Nomes canónicos (whitelist) — têm prioridade sobre league_name da BSD.
+    # BSD devolve nomes diferentes: id=2→"Liga Portugal Betclic", id=14→"Pro League", id=38→"Segunda División".
+    1: "Premier League", 2: "Primeira Liga", 3: "La Liga", 4: "Serie A",
     5: "Bundesliga", 6: "Ligue 1", 10: "Eredivisie",
-    14: "Belgian Pro League",
-    # Championship, Bundesliga 2, Serie B, La Liga 2, Primeira Liga — IDs TBD
+    12: "Championship", 14: "Belgian Pro League", 38: "La Liga 2",
+    # Bundesliga 2 e Serie B: ausentes da BSD (65 ligas disponíveis, nenhuma corresponde).
 }
 
 
@@ -129,7 +131,7 @@ def _fetch_all_events() -> list[dict]:
             "event_id": eid,
             "home": ev.get("home_team") or ev.get("home", ""),
             "away": ev.get("away_team") or ev.get("away", ""),
-            "league": ev.get("league_name") or BSD_LEAGUE_ID_MAP.get(ev.get("league_id") or 0, "") or ev.get("league", ""),
+            "league": BSD_LEAGUE_ID_MAP.get(ev.get("league_id") or 0) or ev.get("league_name") or ev.get("league", ""),
             "date": ev.get("event_date") or ev.get("date", ""),
             "odds_over": ov_map.get(eid),
             "odds_under": un_map.get(eid),
