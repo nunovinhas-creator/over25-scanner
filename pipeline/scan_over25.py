@@ -31,8 +31,8 @@ SCAN_STATE_FILE = DATA_DIR / "scan_state_over25.json"
 
 # ── env ────────────────────────────────────────────────────────────────────────
 BSD_API_KEY = os.environ.get("BSD_API_KEY", "")
-TG_TOKEN = os.environ.get("TELEGRAM_TOKEN", "")
-TG_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "1352687611")
+TG_TOKEN = os.environ.get("TG_TOKEN", "")
+TG_CHAT_ID = os.environ.get("TG_CHAT_ID", "1352687611")
 
 # ── constants ──────────────────────────────────────────────────────────────────
 MODEL_WEIGHT = 0.30
@@ -191,7 +191,7 @@ def compute_prob(ev: dict, dc_ratings: dict, calibrator_fn) -> dict | None:
 
 def send_telegram(text: str) -> None:
     if not TG_TOKEN:
-        print("TELEGRAM_TOKEN não definido — skip TG", file=sys.stderr)
+        print("TG_TOKEN não definido — skip TG", file=sys.stderr)
         return
     url = f"https://api.telegram.org/bot{TG_TOKEN}/sendMessage"
     data = urllib.parse.urlencode({"chat_id": TG_CHAT_ID, "text": text}).encode()
