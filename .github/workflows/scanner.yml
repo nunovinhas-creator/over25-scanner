@@ -1,0 +1,47 @@
+name: Scanner automático
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'  # a cada 30 minutos
+  workflow_dispatch: {}
+
+concurrency:
+  group: auto-scanner
+  cancel-in-progress: true
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependências
+        run: pip install --quiet numpy scipy pandas
+
+      - name: Over 2.5 scan
+        run: python -m pipeline.scan_over25
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+
+      - name: Sharp 1X2 scan
+        run: python -m pipeline.scan_sharp1x2
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
