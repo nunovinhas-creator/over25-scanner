@@ -350,6 +350,99 @@ class TestApplySharp1x2Gates(unittest.TestCase):
     def test_timing_exactly_6h(self):
         self.assertEqual(self.gates("AWAY", "Ligue 1", 0.04, 6.0), "")
 
+    # ── Regressão: ligas específicas que motivaram a correcção ───────────────
+    def test_usl_league_one_blocked(self):
+        """Oakland Roots SC (USL League One) deve ser bloqueado."""
+        self.assertEqual(self.gates("AWAY", "USL League One", 0.09, 3), "liga_fora_whitelist")
+
+    def test_usl_championship_blocked(self):
+        self.assertEqual(self.gates("HOME", "USL Championship", 0.05, 2), "liga_fora_whitelist")
+
+    def test_world_cup_blocked(self):
+        """Ghana vs Panama (Mundial) deve ser bloqueado."""
+        self.assertEqual(self.gates("HOME", "FIFA World Cup", 0.05, 3), "liga_fora_whitelist")
+
+    def test_empty_liga_blocked(self):
+        """Liga vazia (pré-fix BSD API) deve ser bloqueada."""
+        self.assertEqual(self.gates("AWAY", "", 0.05, 3), "liga_fora_whitelist")
+
+
+class TestRegressionWhitelist(unittest.TestCase):
+    """Regressão: Ghana vs Panama e Oakland Roots SC devem ser rejeitados pelo scanner."""
+
+    def test_ghana_panama_over25_rejected(self):
+        """Ghana vs Panama (liga vazia = sem whitelist match) → rejeitado no Over 2.5."""
+        import pipeline.scan_over25 as mod
+        import tempfile
+
+        ev = _bsd_event("ghana1", "Ghana", "Panama", league="FIFA World Cup",
+                        hours_to_ko=3.0, odds_over=2.20)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            picks_file = tmp_path / "picks.json"
+            rejected_file = tmp_path / "rejected_picks.json"
+            state_file = tmp_path / "scan_state_over25.json"
+
+            tg_calls = []
+
+            with (
+                patch.object(mod, "DATA_DIR", tmp_path),
+                patch.object(mod, "PICKS_FILE", picks_file),
+                patch.object(mod, "REJECTED_FILE", rejected_file),
+                patch.object(mod, "SCAN_STATE_FILE", state_file),
+                patch.object(mod, "BSD_API_KEY", "fake_key"),
+                patch.object(mod, "_fetch_all_events", return_value=[ev]),
+                patch.object(mod, "compute_prob", return_value={"p_final": 0.60, "p_market": 0.50, "ev_final": 0.10, "p_model_source": "dc", "p_dc_raw": 0.60, "p_model": 0.60, "p_market_source": "devig"}),
+                patch.object(mod, "send_telegram", side_effect=lambda t: tg_calls.append(t)),
+                patch.object(mod, "git_commit_push"),
+            ):
+                mod.scan()
+
+            picks = json.loads(picks_file.read_text()) if picks_file.exists() else []
+            rejected = json.loads(rejected_file.read_text()) if rejected_file.exists() else []
+
+        self.assertEqual(len(tg_calls), 0, "Não deve enviar TG para jogo fora whitelist")
+        self.assertEqual(len(picks), 0, "Ghana vs Panama não deve estar em picks")
+        world_cup_rejected = [r for r in rejected if r.get("reject_reason") == "liga_fora_whitelist"]
+        self.assertGreater(len(world_cup_rejected), 0, "Ghana vs Panama deve estar em rejected")
+
+    def test_oakland_roots_sharp1x2_rejected(self):
+        """Oakland Roots SC (USL League One) → rejeitado no Sharp 1X2, sem TG."""
+        import pipeline.scan_sharp1x2 as mod
+        import tempfile
+
+        ev = _bsd_event("oak1", "Oakland Roots SC", "Birmingham Legion",
+                        league="USL League One", hours_to_ko=3.0,
+                        pinnacle_home=2.10, pinnacle_draw=3.40, pinnacle_away=3.60,
+                        b365_home=2.30, b365_draw=3.50, b365_away=3.80)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            picks_file = tmp_path / "picks_1x2.json"
+            rejected_file = tmp_path / "rejected_picks_1x2.json"
+            tg_calls = []
+
+            with (
+                patch.object(mod, "DATA_DIR", tmp_path),
+                patch.object(mod, "PICKS_FILE", picks_file),
+                patch.object(mod, "REJECTED_FILE", rejected_file),
+                patch.object(mod, "BSD_API_KEY", "fake_key"),
+                patch.object(mod, "_fetch_all_events", return_value=[ev]),
+                patch.object(mod, "send_telegram", side_effect=lambda t: tg_calls.append(t)),
+                patch.object(mod, "git_commit_push"),
+            ):
+                mod.scan()
+
+            picks = json.loads(picks_file.read_text()) if picks_file.exists() else []
+            rejected = json.loads(rejected_file.read_text()) if rejected_file.exists() else []
+
+        self.assertEqual(len(tg_calls), 0, "Não deve enviar TG para Oakland Roots SC")
+        usl_picks = [p for p in picks if "Oakland" in (p.get("casa") or "")]
+        self.assertEqual(len(usl_picks), 0, "Oakland Roots SC não deve estar em picks")
+        usl_rejected = [r for r in rejected if r.get("gate_blocked_reason") == "liga_fora_whitelist"]
+        self.assertGreater(len(usl_rejected), 0, "Oakland Roots SC deve estar em rejected")
+
 
 if __name__ == "__main__":
     unittest.main()
