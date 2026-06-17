@@ -2616,6 +2616,7 @@ function renderSharp(){
     return;
   }
   let list=allSharp1x2.filter(s=>{
+    if(!SHARP1X2_WHITELIST.has(s.league||'')) return false;
     if(sharpFilter==='steam') return s.label==='STEAM';
     if(sharpFilter==='sharp') return s.label==='SHARP';
     if(sharpFilter==='watch') return s.label==='WATCH';
@@ -2712,17 +2713,19 @@ function sharpCard1x2(s){
   </div>`;
 }
 
+// Whitelist canónica — fonte única de verdade para browser e Python (pipeline/config.py)
+const SHARP1X2_WHITELIST = new Set([
+  'Premier League','La Liga','Bundesliga','Serie A','Ligue 1',
+  'Primeira Liga','Eredivisie','Belgian Pro League',
+  'Championship','La Liga 2','Bundesliga 2','Serie B'
+]);
+
 // Gate partilhado para saveSharpPick e autoLogSharp1x2 — fonte única de verdade
 function _applySharp1x2Gates({ out, liga, div, timingH }){
-  const WHITELIST = [
-    'Premier League','La Liga','Bundesliga','Serie A','Ligue 1',
-    'Primeira Liga','Eredivisie','Belgian Pro League',
-    'Championship','La Liga 2','Bundesliga 2','Serie B'
-  ];
   const _out = (out||'').toUpperCase();
   const _liga = (liga||'').trim();
   const _isN1 = _liga === 'Eredivisie';
-  if(!_liga || !WHITELIST.includes(_liga)) return 'liga_fora_whitelist';
+  if(!_liga || !SHARP1X2_WHITELIST.has(_liga)) return 'liga_fora_whitelist';
   if(_out === 'DRAW' && _isN1 && div !== null && div >= 0.03) return 'draw_observacao_n1';
   if(_out === 'DRAW') return 'draw_suspenso';
   if(_out === 'HOME' && _isN1) return 'n1_home_negativo';
@@ -3832,7 +3835,7 @@ async function saveLivePick(btn){
 // ════════════════════════════════════════════════════════════════
 async function autoLogCandidatos(){
   if(!el('ghToken')?.value.trim()) return;
-  const _qualBase=allGames.filter(g=>{ const o=parseFloat(g.oddsOver||0); return g.score>=30&&o>=1.3&&o<=4.0; });
+  const _qualBase=allGames.filter(g=>{ const o=parseFloat(g.oddsOver||0); return g.score>=30&&o>=1.3&&o<=4.0&&SHARP1X2_WHITELIST.has(g.league||''); });
   const candidatos=_qualBase.filter(g=>!isSaved(String(g.id)));
   const jaGuardados=_qualBase.length-candidatos.length;
 
@@ -4079,6 +4082,8 @@ async function autoLogSharp1x2(){
         timingH: parseFloat(s.hoursToKO||'999')
       });
 
+      // Liga fora da whitelist → não gravar (nem sequer para tracking)
+      if(_autoGateReason === 'liga_fora_whitelist'){ markSaved(sid); continue; }
       picks.push({
         id:sid,
         data:s.date||new Date().toISOString(),
