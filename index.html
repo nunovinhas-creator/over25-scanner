@@ -1833,7 +1833,7 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
 
       sharpRaw.push({
         id:ev.id, home:ev.home_team, away:ev.away_team,
-        date:ev.event_date, league:ev.league_name||BSD_LEAGUE_ID_MAP[ev.league_id]||lgNames[ev.league_id]||'',
+        date:ev.event_date, league:BSD_LEAGUE_ID_MAP[ev.league_id]||ev.league_name||lgNames[ev.league_id]||'',
         sigs, totalScore:maxScore, hoursToKO:Math.round(hoursToKO*10)/10,
         label:hasSTEAM?'STEAM':hasSHARP?'SHARP':'WATCH',
         scanScore:0
@@ -1924,12 +1924,12 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
           const {score,signals}=calcScore({prob25,bttsN,xgH,xgA,movement,div,sharpLabel,
             pinnNow,recrAvg,rec,mdl,
             h2h:det?.h2h,
-            league:ev.league_name||BSD_LEAGUE_ID_MAP[ev.league_id]||lgNames[ev.league_id]||''});
+            league:BSD_LEAGUE_ID_MAP[ev.league_id]||ev.league_name||lgNames[ev.league_id]||''});
 
           const edgeVsMarket=(prob25!=null&&pinnNow!=null)?(prob25-(1/pinnNow)):null;
           enriched.push({
             id:ev.id, home:ev.home_team, away:ev.away_team,
-            date:ev.event_date, league:ev.league_name||BSD_LEAGUE_ID_MAP[ev.league_id]||lgNames[ev.league_id]||'',
+            date:ev.event_date, league:BSD_LEAGUE_ID_MAP[ev.league_id]||ev.league_name||lgNames[ev.league_id]||'',
             league_id:ev.league_id,
             score, signals, prob25, bttsN, xgH, xgA,
             movement, div, sharpLabel, pinnNow, recrAvg, pinnPrev,
@@ -2720,16 +2720,17 @@ const SHARP1X2_WHITELIST = new Set([
   'Championship','La Liga 2','Bundesliga 2','Serie B'
 ]);
 
-// Mapa defensivo BSD league_id → nome canónico para as ligas whitelisted.
-// Fallback quando BSD não devolve league_name (falha de API ou event sem nome).
-// IDs confirmados: EPL=1, La Liga=3, Serie A=4, Bundesliga=5, Ligue 1=6, Eredivisie=10.
-// Belgian Pro League=14 inferido de picks históricos (KAA Gent vs KRC Genk).
-// Championship, Bundesliga 2, Serie B, La Liga 2, Primeira Liga — IDs TBD (aguarda scan ao vivo).
-// Fail-closed: liga não reconhecida → string vazia → SHARP1X2_WHITELIST.has('') = false.
+// Mapa BSD league_id → nome canónico (fonte única de verdade para a whitelist).
+// SEMPRE tem prioridade sobre league_name da BSD — nomes BSD não batem com os nossos:
+//   id=2  BSD devolve "Liga Portugal Betclic" → canonical "Primeira Liga"
+//   id=14 BSD devolve "Pro League"            → canonical "Belgian Pro League"
+//   id=38 BSD devolve "Segunda División"      → canonical "La Liga 2"
+// Bundesliga 2 e Serie B: ausentes da BSD (65 ligas disponíveis, nenhuma corresponde).
+// Fail-closed: ID desconhecido → undefined → '' → SHARP1X2_WHITELIST.has('') = false.
 const BSD_LEAGUE_ID_MAP = {
-  1:'Premier League', 3:'La Liga', 4:'Serie A',
+  1:'Premier League', 2:'Primeira Liga', 3:'La Liga', 4:'Serie A',
   5:'Bundesliga', 6:'Ligue 1', 10:'Eredivisie',
-  14:'Belgian Pro League',
+  12:'Championship', 14:'Belgian Pro League', 38:'La Liga 2',
 };
 
 // Gate partilhado para saveSharpPick e autoLogSharp1x2 — fonte única de verdade
