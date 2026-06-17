@@ -2926,7 +2926,7 @@ function _renderObsN1(){
   }
 }
 
-function _renderModeBanner(clvMean30, nSettled){
+function _renderModeBanner(clvMean30, nSettled, excludedCount){
   const bannerEl = el('d1x2ModeBanner');
   if(!bannerEl) return;
   const active = clvMean30 !== null && clvMean30 > 1.0 && nSettled >= 200;
@@ -2936,8 +2936,11 @@ function _renderModeBanner(clvMean30, nSettled){
     </div>`;
   } else {
     const clvStr = clvMean30 !== null ? `CLV atual: ${clvMean30>=0?'+':''}${clvMean30.toFixed(2)}%` : 'CLV: sem dados';
+    const excNote = excludedCount > 0
+      ? ` <span style="font-size:9px;color:var(--text3);font-weight:400">&nbsp;·&nbsp; ${excludedCount} picks excluídos (dados pré-fix 17 jun 2026)</span>`
+      : '';
     bannerEl.innerHTML = `<div style="background:rgba(245,158,11,.09);border:1px solid var(--amber);border-radius:8px;padding:10px 14px;font-family:var(--mono);font-size:11px;color:var(--amber);margin-bottom:8px">
-      ⏳ MODO OBSERVAÇÃO — sem apostas reais até CLV &gt; +1% com n ≥ 200 settled &nbsp;·&nbsp; ${clvStr} &nbsp;·&nbsp; ${nSettled}/200 settled
+      ⏳ MODO OBSERVAÇÃO — sem apostas reais até CLV &gt; +1% com n ≥ 200 settled &nbsp;·&nbsp; ${clvStr} &nbsp;·&nbsp; ${nSettled}/200 settled${excNote}
     </div>`;
   }
 }
@@ -2946,7 +2949,7 @@ function _renderKpiClv(rolling30, clvMean30, clvSE, nAlertados, nSettled, flagge
   const kpiEl = el('d1x2KpiClv');
   if(!kpiEl) return;
   const flaggedNote = flaggedCount > 0
-    ? `<div style="font-size:9px;color:var(--text3);margin-top:4px">${flaggedCount} picks pré-correção excluídos do tracking (timing fora de critério)</div>`
+    ? `<div style="font-size:9px;color:var(--text3);margin-top:4px">${flaggedCount} picks excluídos — dados pré-fix 17 jun 2026 (liga vazia ou fora da whitelist)</div>`
     : '';
   if(!rolling30.length){
     kpiEl.innerHTML=`<div style="font-size:11px;color:var(--text3);padding:12px">Sem picks alertados settled — CLV disponível quando os primeiros resultados chegarem.</div>${flaggedNote}`;
@@ -3020,7 +3023,10 @@ function _renderKpiLigas(alertados){
 
 function renderDash1x2(){
   const onlyHome=document.getElementById('filter1x2Home')?.checked!==false;
-  const picks=sharp1x2Picks.filter(p=>
+  // Excluir picks contaminados pré-fix (liga vazia ou errada — dados anteriores a 17 jun 2026)
+  const cleanSh=sharp1x2Picks.filter(p=>!p.data_quality_flag);
+  const excludedSh=sharp1x2Picks.length-cleanSh.length;
+  const picks=cleanSh.filter(p=>
     !onlyHome || (p.outcome||'').toUpperCase()==='HOME'
   );
   // Sharp 1X2: resultado_outcome se preenchido, senão pendente
@@ -3046,11 +3052,9 @@ function renderDash1x2(){
   });
 
   // Alertados (global, sem filtro onlyHome) = picks que passaram todos os gates
-  // Excluir picks pré-correção (browser antigo sem gate de timing)
-  const flaggedCount = sharp1x2Picks.filter(p => p.data_quality_flag === 'pre_bugfix_timing_v1').length;
-  const alertados = sharp1x2Picks.filter(p =>
-    (!p.gate_blocked_reason || p.gate_blocked_reason === '') &&
-    p.data_quality_flag !== 'pre_bugfix_timing_v1'
+  const flaggedCount = excludedSh;
+  const alertados = cleanSh.filter(p =>
+    (!p.gate_blocked_reason || p.gate_blocked_reason === '')
   );
   const settledAll = alertados.filter(p => p.resultado_outcome==='WIN' || p.resultado_outcome==='LOSS');
   // Rolling-30: últimos 30 settled alertados por data
@@ -3062,7 +3066,7 @@ function renderDash1x2(){
     : null;
 
   // KPIs primários (sempre renderizados)
-  _renderModeBanner(clvMean30, settledAll.length);
+  _renderModeBanner(clvMean30, settledAll.length, excludedSh);
   _renderKpiClv(rolling30, clvMean30, clvSE, alertados.length, settledAll.length, flaggedCount);
   _renderKpiHA(alertados);
   _renderKpiLigas(alertados);
@@ -4313,8 +4317,11 @@ function renderDash(){
   let periodCutoff=null;
   if(dashPeriod==='30d'){periodCutoff=new Date();periodCutoff.setDate(periodCutoff.getDate()-30);}
   else if(dashPeriod==='7d'){periodCutoff=new Date();periodCutoff.setDate(periodCutoff.getDate()-7);}
+  // Picks limpos: excluir contaminados pré-fix (liga vazia, liga errada — dados anteriores a 17 jun 2026)
+  const cleanPicks=allPicks.filter(p=>!p.data_quality_flag);
+  const excludedCount=allPicks.length-cleanPicks.length;
   // Só picks válidos: com casa, fora e data legível, filtro de fase
-  const validPicks=allPicks.filter(p=>
+  const validPicks=cleanPicks.filter(p=>
     (p.casa||'').length>1 &&
     (p.fora||'').length>1 &&
     p.data && !isNaN(new Date(p.data)) &&
@@ -4402,6 +4409,10 @@ function renderDash(){
   if(modoObs){
     const clvGate=(clvRoll30!=null&&clvRoll30>1.0&&withCLV.length>=300);
     modoObs.style.display=clvGate?'none':'block';
+    const excNote=excludedCount>0
+      ?` <span style="font-size:9px;color:var(--text3);font-weight:400">&nbsp;·&nbsp; ${excludedCount} picks excluídos (dados pré-fix 17 jun 2026)</span>`
+      :'';
+    modoObs.innerHTML=`⚠️ MODO OBSERVAÇÃO — sem dinheiro real até CLV &gt; +1% com n ≥ 300${excNote}`;
   }
 
   // ROI curve
