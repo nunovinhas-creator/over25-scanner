@@ -20,6 +20,8 @@ import urllib.request
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
+import requests
+
 # ── paths ──────────────────────────────────────────────────────────────────────
 ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
@@ -73,13 +75,95 @@ def apply_sharp1x2_gates(out: str, liga: str, div: float | None, timing_h: float
 # ── BSD fetch ───────────────────────────────────────────────────────────────────
 
 def _fetch_all_events() -> list[dict]:
-    """Busca eventos BSD para hoje e amanhã."""
-    from pipeline.extract import fetch_bsd_events
+    """Busca eventos BSD para hoje+amanhã e faz join com odds 1X2."""
     today = date.today().isoformat()
     tomorrow = (date.today() + timedelta(days=1)).isoformat()
-    events = fetch_bsd_events(BSD_API_KEY, date=today)
-    events += fetch_bsd_events(BSD_API_KEY, date=tomorrow)
-    return events
+    base = "https://sports.bzzoiro.com"
+    headers = {"Authorization": f"Token {BSD_API_KEY}", "Accept": "application/json"}
+
+    def _get_list(path: str) -> list:
+        try:
+            r = requests.get(base + path, headers=headers, timeout=30)
+            r.raise_for_status()
+            payload = r.json()
+            if isinstance(payload, list):
+                return payload, None
+            return payload.get("results") or payload.get("data") or [], payload.get("next")
+        except Exception as exc:
+            print(f"BSD fetch {path}: {exc}", file=sys.stderr)
+            return [], None
+
+    events, _ = _get_list(
+        f"/api/v2/events/?status=notstarted&date_from={today}&date_to={tomorrow}&limit=200"
+    )
+
+    # Fetch 1X2 odds (paginated)
+    odds_1x2: list[dict] = []
+    next_url: str | None = (
+        f"/api/v2/odds/?market=1x2&limit=200&updated_after={today}T00:00:00Z"
+    )
+    for _ in range(10):
+        if not next_url:
+            break
+        page, next_url = _get_list(next_url)
+        odds_1x2.extend(page)
+        if not page:
+            break
+
+    # Group 1X2 odds by event_id → outcome → bookmaker
+    pins: dict[str, dict[str, float]] = {}   # eid → {HOME: x, DRAW: y, AWAY: z}
+    b365s: dict[str, dict[str, float]] = {}
+
+    for o in odds_1x2:
+        eid = str(o.get("event_id") or "")
+        if not eid:
+            continue
+        slug = o.get("bookmaker_slug", "")
+        raw_out = (o.get("outcome") or "").upper()
+        out = (
+            "HOME" if raw_out in ("HOME", "HOME_WIN") else
+            "DRAW" if raw_out == "DRAW" else
+            "AWAY" if raw_out in ("AWAY", "AWAY_WIN") else ""
+        )
+        if not out:
+            continue
+        price = float(o.get("decimal_odds") or 0)
+        if not price:
+            continue
+        if slug == "pinnacle":
+            pins.setdefault(eid, {})[out] = price
+        elif slug in ("bet365", "bet-365"):
+            b365s.setdefault(eid, {})[out] = price
+
+    # Merge events with 1X2 odds, normalising BSD field names
+    result = []
+    for ev in events:
+        eid = str(ev.get("id") or ev.get("event_id") or "")
+        if not eid:
+            continue
+        entry: dict = {
+            "event_id": eid,
+            "home": ev.get("home_team") or ev.get("home", ""),
+            "away": ev.get("away_team") or ev.get("away", ""),
+            "league": ev.get("league_name") or ev.get("league", ""),
+            "date": ev.get("event_date") or ev.get("date", ""),
+        }
+        pin = pins.get(eid, {})
+        b3 = b365s.get(eid, {})
+        if pin:
+            entry.update({
+                "pinnacle_home": pin.get("HOME"),
+                "pinnacle_draw": pin.get("DRAW"),
+                "pinnacle_away": pin.get("AWAY"),
+            })
+        if b3:
+            entry.update({
+                "b365_home": b3.get("HOME"),
+                "b365_draw": b3.get("DRAW"),
+                "b365_away": b3.get("AWAY"),
+            })
+        result.append(entry)
+    return result
 
 
 def _extract_1x2_odds(ev: dict) -> dict[str, dict[str, float]]:

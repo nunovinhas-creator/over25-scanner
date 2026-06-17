@@ -32,7 +32,8 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 
 BSD_BASE_URL = "https://sports.bzzoiro.com"
-BSD_EVENTS_PATH = "/events/"
+BSD_EVENTS_PATH = "/api/v2/events/"
+BSD_ODDS_PATH = "/api/v2/odds/"
 BSD_REQUEST_TIMEOUT = 30  # seconds
 
 GAS_REQUEST_TIMEOUT = 20
@@ -248,21 +249,26 @@ def load_picks_from_gas(sheet_url: str) -> list[dict]:
 
 def fetch_bsd_events(
     api_key: str,
+    date_from: Optional[str] = None,
+    date_to: Optional[str] = None,
     date: Optional[str] = None,
     timeout: int = BSD_REQUEST_TIMEOUT,
 ) -> list[dict]:
     """
     Fetch soccer events from the BSD Sports API.
 
-    Endpoint: ``GET https://sports.bzzoiro.com/events/``
+    Endpoint: ``GET https://sports.bzzoiro.com/api/v2/events/``
 
     Parameters
     ----------
     api_key:
-        BSD API key (passed as ``x-api-key`` header).
+        BSD API key (``Authorization: Token <key>`` header).
+    date_from:
+        ISO-8601 date string ``'YYYY-MM-DD'`` for the start of the range.
+    date_to:
+        ISO-8601 date string ``'YYYY-MM-DD'`` for the end of the range.
     date:
-        ISO-8601 date string ``'YYYY-MM-DD'`` to filter events.
-        If ``None``, the API default is used (typically today).
+        Deprecated alias for ``date_from`` (kept for backward compatibility).
     timeout:
         HTTP request timeout in seconds.
 
@@ -270,24 +276,23 @@ def fetch_bsd_events(
     -------
     list[dict]
         Raw event records, or ``[]`` on any error.
-
-    Notes
-    -----
-    The BSD API returns events under a top-level ``data`` or ``events``
-    key; both variants are handled.
     """
     if not api_key:
         logger.error("fetch_bsd_events: api_key is empty")
         return []
 
-    url = urljoin(BSD_BASE_URL, BSD_EVENTS_PATH)
+    url = BSD_BASE_URL + BSD_EVENTS_PATH
     headers = {
-        "x-api-key": api_key,
+        "Authorization": f"Token {api_key}",
         "Accept": "application/json",
     }
-    params: dict = {}
-    if date:
-        params["date"] = date
+    params: dict = {"status": "notstarted", "limit": 200}
+    if date_from:
+        params["date_from"] = date_from
+    elif date:
+        params["date_from"] = date
+    if date_to:
+        params["date_to"] = date_to
 
     try:
         resp = requests.get(url, headers=headers, params=params, timeout=timeout)
@@ -316,9 +321,9 @@ def fetch_bsd_events(
     # Unwrap common envelope shapes
     if isinstance(payload, dict):
         events = (
-            payload.get("data")
+            payload.get("results")
+            or payload.get("data")
             or payload.get("events")
-            or payload.get("results")
             or []
         )
     elif isinstance(payload, list):
@@ -335,17 +340,130 @@ def fetch_bsd_events(
         )
         return []
 
-    # Populate 'liga' from sport_key so the league filter always has data to work with.
+    # Normalise BSD field aliases so callers can use either name
     for ev in events:
+        if not ev.get("league") and ev.get("league_name"):
+            ev["league"] = ev["league_name"]
+        if not ev.get("home") and ev.get("home_team"):
+            ev["home"] = ev["home_team"]
+        if not ev.get("away") and ev.get("away_team"):
+            ev["away"] = ev["away_team"]
+        if not ev.get("date") and ev.get("event_date"):
+            ev["date"] = ev["event_date"]
+        if not ev.get("event_id") and ev.get("id"):
+            ev["event_id"] = str(ev["id"])
         if not ev.get("liga"):
-            ev["liga"] = resolve_league(ev.get("sport_key", ""))
+            ev["liga"] = ev.get("league") or resolve_league(ev.get("sport_key", ""))
 
     logger.info(
-        "fetch_bsd_events: fetched %d events from BSD API (date=%s)",
+        "fetch_bsd_events: fetched %d events from BSD API (date_from=%s)",
         len(events),
-        date or "default",
+        date_from or date or "default",
     )
     return events
+
+
+def fetch_bsd_odds(
+    api_key: str,
+    market: str,
+    outcome: Optional[str] = None,
+    event_id: Optional[str] = None,
+    updated_after: Optional[str] = None,
+    limit: int = 200,
+    max_pages: int = 10,
+    timeout: int = BSD_REQUEST_TIMEOUT,
+) -> list[dict]:
+    """
+    Fetch odds from the BSD Sports API (paginated).
+
+    Endpoint: ``GET https://sports.bzzoiro.com/api/v2/odds/``
+
+    Parameters
+    ----------
+    api_key:
+        BSD API key (``Authorization: Token <key>`` header).
+    market:
+        Market slug, e.g. ``'over_under_25'``, ``'1x2'``.
+    outcome:
+        Optional outcome filter, e.g. ``'over'``, ``'under'``.
+    event_id:
+        Optional filter to a single event.
+    updated_after:
+        ISO-8601 datetime string, e.g. ``'2026-06-17T00:00:00Z'``.
+    limit:
+        Records per page.
+    max_pages:
+        Maximum number of pages to fetch (safety cap).
+
+    Returns
+    -------
+    list[dict]
+        Flat list of odds records, or ``[]`` on any error.
+    """
+    if not api_key:
+        logger.error("fetch_bsd_odds: api_key is empty")
+        return []
+
+    headers = {
+        "Authorization": f"Token {api_key}",
+        "Accept": "application/json",
+    }
+    params: dict = {"market": market, "limit": limit}
+    if outcome:
+        params["outcome"] = outcome
+    if event_id:
+        params["event_id"] = event_id
+    if updated_after:
+        params["updated_after"] = updated_after
+
+    all_records: list[dict] = []
+    url = BSD_BASE_URL + BSD_ODDS_PATH
+
+    for page in range(max_pages):
+        try:
+            if page == 0:
+                resp = requests.get(url, headers=headers, params=params, timeout=timeout)
+            else:
+                resp = requests.get(url, headers=headers, timeout=timeout)
+            resp.raise_for_status()
+        except requests.exceptions.Timeout:
+            logger.error("fetch_bsd_odds: request timed out after %ds (page %d)", timeout, page)
+            break
+        except requests.exceptions.HTTPError as exc:
+            logger.error(
+                "fetch_bsd_odds: HTTP %s error (page %d)", exc.response.status_code, page
+            )
+            break
+        except requests.exceptions.RequestException as exc:
+            logger.error("fetch_bsd_odds: request failed (page %d): %s", page, exc)
+            break
+
+        try:
+            payload = resp.json()
+        except ValueError:
+            logger.error("fetch_bsd_odds: non-JSON response (page %d)", page)
+            break
+
+        if isinstance(payload, list):
+            all_records.extend(payload)
+            break
+        elif isinstance(payload, dict):
+            results = payload.get("results") or payload.get("data") or []
+            if isinstance(results, list):
+                all_records.extend(results)
+            next_url = payload.get("next")
+            if not next_url:
+                break
+            # next may be absolute; strip scheme+host to get path+query
+            url = next_url.split("sports.bzzoiro.com", 1)[-1] if "sports.bzzoiro.com" in next_url else next_url
+            url = BSD_BASE_URL + url if url.startswith("/") else url
+            params = {}  # params already encoded in next_url
+        else:
+            logger.error("fetch_bsd_odds: unexpected payload type (page %d)", page)
+            break
+
+    logger.info("fetch_bsd_odds: fetched %d records for market=%s", len(all_records), market)
+    return all_records
 
 
 # ---------------------------------------------------------------------------

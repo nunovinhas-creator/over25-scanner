@@ -20,6 +20,8 @@ import urllib.request
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
+import requests
+
 # ── paths ──────────────────────────────────────────────────────────────────────
 ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
@@ -50,13 +52,81 @@ WHITELIST = {
 # ── BSD fetch ───────────────────────────────────────────────────────────────────
 
 def _fetch_all_events() -> list[dict]:
-    """Busca eventos BSD para hoje e amanhã (garante cobertura perto da meia-noite)."""
-    from pipeline.extract import fetch_bsd_events
+    """Busca eventos BSD para hoje+amanhã e faz join com odds over/under."""
     today = date.today().isoformat()
     tomorrow = (date.today() + timedelta(days=1)).isoformat()
-    events = fetch_bsd_events(BSD_API_KEY, date=today)
-    events += fetch_bsd_events(BSD_API_KEY, date=tomorrow)
-    return events
+    base = "https://sports.bzzoiro.com"
+    headers = {"Authorization": f"Token {BSD_API_KEY}", "Accept": "application/json"}
+
+    def _get(path: str) -> list:
+        try:
+            r = requests.get(base + path, headers=headers, timeout=30)
+            r.raise_for_status()
+            payload = r.json()
+            if isinstance(payload, list):
+                return payload
+            return payload.get("results") or payload.get("data") or []
+        except Exception as exc:
+            print(f"BSD fetch {path}: {exc}", file=sys.stderr)
+            return []
+
+    events = _get(
+        f"/api/v2/events/?status=notstarted&date_from={today}&date_to={tomorrow}&limit=200"
+    )
+    odds_over_raw = _get(
+        f"/api/v2/odds/?market=over_under_25&outcome=over&limit=200&updated_after={today}T00:00:00Z"
+    )
+    odds_under_raw = _get(
+        f"/api/v2/odds/?market=over_under_25&outcome=under&limit=200&updated_after={today}T00:00:00Z"
+    )
+
+    # Build maps: event_id → best decimal odds + movement
+    ov_map: dict[str, float] = {}
+    un_map: dict[str, float] = {}
+    mov_map: dict[str, str] = {}
+
+    for o in odds_over_raw:
+        eid = str(o.get("event_id") or "")
+        if not eid:
+            continue
+        price = float(o.get("decimal_odds") or 0)
+        if not price:
+            continue
+        # prefer consensus/max-quote entry; otherwise first seen
+        is_ref = o.get("bookmaker_slug") == "oddssafari-consensus" or o.get("is_max_quote")
+        if is_ref or eid not in ov_map:
+            ov_map[eid] = price
+        if o.get("movement") and eid not in mov_map:
+            mov_map[eid] = str(o["movement"]).upper()
+
+    for o in odds_under_raw:
+        eid = str(o.get("event_id") or "")
+        if not eid:
+            continue
+        price = float(o.get("decimal_odds") or 0)
+        if not price:
+            continue
+        is_ref = o.get("bookmaker_slug") == "oddssafari-consensus" or o.get("is_max_quote")
+        if is_ref or eid not in un_map:
+            un_map[eid] = price
+
+    # Merge events with odds, normalising BSD field names
+    result = []
+    for ev in events:
+        eid = str(ev.get("id") or ev.get("event_id") or "")
+        if not eid:
+            continue
+        result.append({
+            "event_id": eid,
+            "home": ev.get("home_team") or ev.get("home", ""),
+            "away": ev.get("away_team") or ev.get("away", ""),
+            "league": ev.get("league_name") or ev.get("league", ""),
+            "date": ev.get("event_date") or ev.get("date", ""),
+            "odds_over": ov_map.get(eid),
+            "odds_under": un_map.get(eid),
+            "movement": mov_map.get(eid, "SHORTENING"),
+        })
+    return result
 
 
 def _event_fields(ev: dict) -> dict:
