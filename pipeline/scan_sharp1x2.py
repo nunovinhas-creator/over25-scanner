@@ -3,8 +3,8 @@
 pipeline/scan_sharp1x2.py
 -------------------------
 Scanner automático Sharp 1X2 — corre a cada 30 min em GitHub Actions.
-Chama The Odds API (mercado h2h, Pinnacle + Bet365), calcula div_b365_pin,
-aplica _apply_sharp1x2_gates(), alerta via Telegram. Commita picks para main.
+Usa BSD Sports API (BSD_API_KEY) via pipeline.extract.fetch_bsd_events.
+Calcula div_b365_pin por outcome, aplica gates, alerta via Telegram.
 
 Uso: python -m pipeline.scan_sharp1x2
 """
@@ -17,7 +17,7 @@ import subprocess
 import sys
 import urllib.parse
 import urllib.request
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 # ── paths ──────────────────────────────────────────────────────────────────────
@@ -27,40 +27,29 @@ PICKS_FILE = DATA_DIR / "picks_1x2.json"
 REJECTED_FILE = DATA_DIR / "rejected_picks_1x2.json"
 
 # ── env ────────────────────────────────────────────────────────────────────────
-ODDS_API_KEY = os.environ.get("ODDS_API_KEY", "")
+BSD_API_KEY = os.environ.get("BSD_API_KEY", "")
 TG_TOKEN = os.environ.get("TELEGRAM_TOKEN", "")
 TG_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "1352687611")
 
 # ── constants ──────────────────────────────────────────────────────────────────
 MAX_TIMING_H = 6.0
 MIN_TIMING_H = 0.0
-DIV_MIN = 0.03          # div_b365_pin > 3% para alertar
+DIV_MIN = 0.03
 ODDS_UPDATE_THRESHOLD = 0.03
 
-LEAGUE_SPORT_KEYS: dict[str, str] = {
-    "soccer_epl":                    "Premier League",
-    "soccer_spain_la_liga":          "La Liga",
-    "soccer_germany_bundesliga":     "Bundesliga",
-    "soccer_italy_serie_a":          "Serie A",
-    "soccer_france_ligue_one":       "Ligue 1",
-    "soccer_portugal_primeira_liga": "Primeira Liga",
-    "soccer_netherlands_eredivisie": "Eredivisie",
-    "soccer_belgium_first_div":      "Belgian Pro League",
-    "soccer_england_championship":   "Championship",
-    "soccer_spain_segunda":          "La Liga 2",
-    "soccer_germany_bundesliga2":    "Bundesliga 2",
-    "soccer_italy_serie_b":          "Serie B",
+WHITELIST = {
+    "Premier League", "La Liga", "Bundesliga", "Serie A", "Ligue 1",
+    "Primeira Liga", "Eredivisie", "Belgian Pro League",
+    "Championship", "La Liga 2", "Bundesliga 2", "Serie B",
 }
 
-WHITELIST = set(LEAGUE_SPORT_KEYS.values())
 
-
-# ── Gates — espelho Python de _applySharp1x2Gates() em index.html ──────────────
+# ── Gates — espelho fiel de _applySharp1x2Gates() em index.html ────────────────
 
 def apply_sharp1x2_gates(out: str, liga: str, div: float | None, timing_h: float) -> str:
     """
-    Porta fiel de _applySharp1x2Gates() (JS, index.html).
-    Devolve '' se aprovado, ou o nome da razão de rejeição.
+    Porta Python de _applySharp1x2Gates() (JS, index.html).
+    Devolve '' se aprovado, ou o nome do motivo de rejeição.
     """
     _out = (out or "").upper()
     _liga = (liga or "").strip()
@@ -81,85 +70,40 @@ def apply_sharp1x2_gates(out: str, liga: str, div: float | None, timing_h: float
     return ""
 
 
-# ── HTTP helper ─────────────────────────────────────────────────────────────────
+# ── BSD fetch ───────────────────────────────────────────────────────────────────
 
-def _http_get(url: str, timeout: int = 15) -> list | dict | None:
-    try:
-        req = urllib.request.Request(url, headers={"Accept": "application/json"})
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
-            return json.loads(resp.read().decode())
-    except Exception as exc:
-        print(f"HTTP GET failed ({url[:70]}…): {exc}", file=sys.stderr)
-        return None
-
-
-# ── Odds API ────────────────────────────────────────────────────────────────────
-
-def fetch_1x2_events(sport_key: str) -> list[dict]:
-    """Busca eventos com odds 1X2 da Pinnacle e Bet365 para um sport_key."""
-    if not ODDS_API_KEY:
-        return []
-    url = (
-        "https://api.the-odds-api.com/v4/sports/"
-        f"{sport_key}/odds/"
-        f"?apiKey={ODDS_API_KEY}"
-        "&regions=eu&markets=h2h&oddsFormat=decimal"
-        "&bookmakers=pinnacle,bet365"
-    )
-    data = _http_get(url)
-    return data if isinstance(data, list) else []
+def _fetch_all_events() -> list[dict]:
+    """Busca eventos BSD para hoje e amanhã."""
+    from pipeline.extract import fetch_bsd_events
+    today = date.today().isoformat()
+    tomorrow = (date.today() + timedelta(days=1)).isoformat()
+    events = fetch_bsd_events(BSD_API_KEY, date=today)
+    events += fetch_bsd_events(BSD_API_KEY, date=tomorrow)
+    return events
 
 
-def _extract_h2h(bookmakers: list[dict], bm_key: str) -> dict[str, float]:
-    """Extrai {Home/Draw/Away: odds} para um bookmaker específico."""
-    for bm in bookmakers:
-        if bm.get("key") != bm_key:
-            continue
-        for market in bm.get("markets", []):
-            if market.get("key") != "h2h":
-                continue
-            return {
-                o["name"]: float(o["price"])
-                for o in market.get("outcomes", [])
-                if o.get("name") and o.get("price")
-            }
-    return {}
-
-
-def parse_1x2_event(raw: dict, league: str, timing_h: float) -> list[dict]:
+def _extract_1x2_odds(ev: dict) -> dict[str, dict[str, float]]:
     """
-    Converte evento da Odds API para lista de picks 1X2 (um por outcome).
-    div_b365_pin = b365_odds / pinn_odds - 1 (positivo → B365 > Pinnacle).
+    Extrai odds 1X2 da Pinnacle e B365 de um evento BSD.
+    Retorna {'pinnacle': {'HOME': x, 'DRAW': y, 'AWAY': z}, 'b365': {...}}
+    ou dicts vazios se os campos não estiverem presentes.
     """
-    bms = raw.get("bookmakers", [])
-    pinn = _extract_h2h(bms, "pinnacle")
-    b365 = _extract_h2h(bms, "bet365")
+    pinn = {}
+    b365 = {}
 
-    if not pinn or not b365:
-        return []
+    ph = ev.get("pinnacle_home")
+    pd_ = ev.get("pinnacle_draw")
+    pa = ev.get("pinnacle_away")
+    if ph and pd_ and pa:
+        pinn = {"HOME": float(ph), "DRAW": float(pd_), "AWAY": float(pa)}
 
-    outcome_map = {"Home": "HOME", "Draw": "DRAW", "Away": "AWAY"}
-    picks = []
-    for label, out in outcome_map.items():
-        pinn_odds = pinn.get(label)
-        b365_odds = b365.get(label)
-        if not pinn_odds or not b365_odds:
-            continue
-        div = round(b365_odds / pinn_odds - 1, 6)
-        picks.append({
-            "event_id": raw.get("id", ""),
-            "casa": raw.get("home_team", ""),
-            "fora": raw.get("away_team", ""),
-            "liga": league,
-            "data": raw.get("commence_time", ""),
-            "outcome": out,
-            "odds_pinnacle": pinn_odds,
-            "odds_b365": b365_odds,
-            "div_b365_pin": round(div * 100, 4),  # em % para armazenamento
-            "_div_raw": div,                        # valor raw para os gates
-            "timing_h": round(timing_h, 2),
-        })
-    return picks
+    bh = ev.get("b365_home")
+    bd = ev.get("b365_draw")
+    ba = ev.get("b365_away")
+    if bh and bd and ba:
+        b365 = {"HOME": float(bh), "DRAW": float(bd), "AWAY": float(ba)}
+
+    return {"pinnacle": pinn, "b365": b365}
 
 
 # ── Telegram ────────────────────────────────────────────────────────────────────
@@ -170,23 +114,23 @@ def send_telegram(text: str) -> None:
         return
     url = f"https://api.telegram.org/bot{TG_TOKEN}/sendMessage"
     data = urllib.parse.urlencode({"chat_id": TG_CHAT_ID, "text": text}).encode()
-    req = urllib.request.Request(url, data=data, method="POST")
     try:
-        with urllib.request.urlopen(req, timeout=10) as resp:
+        with urllib.request.urlopen(
+            urllib.request.Request(url, data=data, method="POST"), timeout=10
+        ) as resp:
             print(f"TG enviado (status {resp.status})")
     except Exception as exc:
         print(f"TG falhou (não fatal): {exc}", file=sys.stderr)
 
 
-def _build_msg(p: dict, prefix: str = "") -> str:
-    div_pct = round(p["_div_raw"] * 100, 2)
-    lines = [
-        f"{prefix}🔵 SHARP 1X2 — {p['liga']}",
-        f"{p['casa']} vs {p['fora']}",
-        f"Outcome: {p['outcome']} | odds={p['odds_b365']} (B365) / {p['odds_pinnacle']} (Pin)",
-        f"div_b365_pin={div_pct:+.2f}% | KO em {p['timing_h']:.1f}h",
-    ]
-    return "\n".join(lines)
+def _build_msg(pick: dict, div_raw: float, prefix: str = "") -> str:
+    div_pct = round(div_raw * 100, 2)
+    return "\n".join([
+        f"{prefix}🔵 SHARP 1X2 — {pick['liga']}",
+        f"{pick['casa']} vs {pick['fora']}",
+        f"Outcome: {pick['outcome']} | B365={pick['odds_entrada']} / Pin={pick['odds_pinnacle']}",
+        f"div_b365_pin={div_pct:+.2f}% | KO em {pick['timing_h']:.1f}h",
+    ])
 
 
 # ── Git ─────────────────────────────────────────────────────────────────────────
@@ -198,8 +142,7 @@ def git_commit_push(files: list[str], msg: str) -> None:
         subprocess.run(["git", "fetch", "origin", "main"], check=True)
         subprocess.run(["git", "reset", "--soft", "origin/main"], check=True)
         subprocess.run(["git", "add"] + files, check=True)
-        diff = subprocess.run(["git", "diff", "--cached", "--quiet"])
-        if diff.returncode != 0:
+        if subprocess.run(["git", "diff", "--cached", "--quiet"]).returncode != 0:
             subprocess.run(["git", "commit", "-m", msg], check=True)
             subprocess.run(["git", "push", "origin", "main"], check=True)
             print(f"Commit feito: {msg}")
@@ -209,7 +152,7 @@ def git_commit_push(files: list[str], msg: str) -> None:
         print(f"git commit/push falhou: {exc}", file=sys.stderr)
 
 
-# ── I/O helpers ─────────────────────────────────────────────────────────────────
+# ── I/O ─────────────────────────────────────────────────────────────────────────
 
 def _load_list(path: Path) -> list[dict]:
     if not path.exists():
@@ -229,8 +172,8 @@ def _save_list(path: Path, data: list[dict]) -> None:
 # ── Main scan ───────────────────────────────────────────────────────────────────
 
 def scan() -> None:
-    if not ODDS_API_KEY:
-        print("ODDS_API_KEY não definido — a abortar", file=sys.stderr)
+    if not BSD_API_KEY:
+        print("BSD_API_KEY não definido — a abortar", file=sys.stderr)
         sys.exit(0)
 
     existing_picks: dict[str, dict] = {p["id"]: p for p in _load_list(PICKS_FILE)}
@@ -240,75 +183,88 @@ def scan() -> None:
     new_rejected: list[dict] = []
     alerts_sent = 0
     ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    seen_events: set[str] = set()
 
-    for sport_key, league in LEAGUE_SPORT_KEYS.items():
-        for raw in fetch_1x2_events(sport_key):
-            commence = raw.get("commence_time", "")
-            try:
-                ko = datetime.fromisoformat(commence.replace("Z", "+00:00"))
-                timing_h = (ko - datetime.now(timezone.utc)).total_seconds() / 3600.0
-            except Exception:
+    for raw in _fetch_all_events():
+        event_id = str(raw.get("event_id") or raw.get("id", ""))
+        if not event_id or event_id in seen_events:
+            continue
+        seen_events.add(event_id)
+
+        casa = raw.get("home") or raw.get("home_team", "")
+        fora = raw.get("away") or raw.get("away_team", "")
+        liga = raw.get("league") or raw.get("liga", "")
+        commence = raw.get("date") or raw.get("commence_time", "")
+
+        try:
+            ko = datetime.fromisoformat(commence.replace("Z", "+00:00"))
+            timing_h = (ko - datetime.now(timezone.utc)).total_seconds() / 3600.0
+        except Exception:
+            continue
+        if timing_h < 0:
+            continue
+
+        odds = _extract_1x2_odds(raw)
+        pinn = odds["pinnacle"]
+        b365 = odds["b365"]
+
+        if not pinn or not b365:
+            continue
+
+        for out in ("HOME", "DRAW", "AWAY"):
+            pinn_odds = pinn.get(out)
+            b365_odds = b365.get(out)
+            if not pinn_odds or not b365_odds:
                 continue
-            if timing_h < 0:
+
+            div_raw = b365_odds / pinn_odds - 1
+
+            gate_reason = apply_sharp1x2_gates(
+                out=out, liga=liga, div=div_raw, timing_h=timing_h,
+            )
+
+            pick_id = f"{event_id}_{out.lower()}_sh"
+
+            base_pick = {
+                "id": pick_id,
+                "casa": casa,
+                "fora": fora,
+                "liga": liga,
+                "data": commence,
+                "outcome": out,
+                "odds_entrada": b365_odds,
+                "odds_pinnacle": pinn_odds,
+                "div_b365_pin": round(div_raw * 100, 4),
+                "timing_h": round(timing_h, 2),
+                "gate_blocked_reason": gate_reason,
+                "resultado_outcome": "",
+                "clv": "",
+                "odds_fecho": "",
+                "saved_at": ts,
+                "fonte": "auto-scan",
+            }
+
+            if gate_reason:
+                new_rejected.append({**base_pick, "reject_reason": gate_reason})
                 continue
 
-            for candidate in parse_1x2_event(raw, league, timing_h):
-                out = candidate["outcome"]
-                div_raw = candidate["_div_raw"]
+            if pick_id in existing_picks:
+                prev_odds = float(existing_picks[pick_id].get("odds_entrada") or 0)
+                if prev_odds and abs(b365_odds - prev_odds) / prev_odds > ODDS_UPDATE_THRESHOLD:
+                    update_id = f"{pick_id}_update"
+                    if update_id not in existing_picks:
+                        upd = {**base_pick, "id": update_id}
+                        new_picks.append(upd)
+                        existing_picks[update_id] = upd
+                        send_telegram("🔄 ATUALIZAÇÃO\n" + _build_msg(base_pick, div_raw))
+                        alerts_sent += 1
+                continue
 
-                gate_reason = apply_sharp1x2_gates(
-                    out=out,
-                    liga=league,
-                    div=div_raw,
-                    timing_h=timing_h,
-                )
+            new_picks.append(base_pick)
+            existing_picks[pick_id] = base_pick
+            send_telegram(_build_msg(base_pick, div_raw))
+            alerts_sent += 1
 
-                # ID único: event_id + outcome (ex: "abc123_away_sh")
-                pick_id = f"{candidate['event_id']}_{out.lower()}_sh"
-
-                base_pick = {
-                    "id": pick_id,
-                    "casa": candidate["casa"],
-                    "fora": candidate["fora"],
-                    "liga": league,
-                    "data": commence,
-                    "outcome": out,
-                    "odds_entrada": candidate["odds_b365"],
-                    "odds_pinnacle": candidate["odds_pinnacle"],
-                    "div_b365_pin": candidate["div_b365_pin"],
-                    "timing_h": candidate["timing_h"],
-                    "gate_blocked_reason": gate_reason,
-                    "resultado_outcome": "",
-                    "clv": "",
-                    "odds_fecho": "",
-                    "saved_at": ts,
-                    "fonte": "auto-scan",
-                }
-
-                if gate_reason:
-                    new_rejected.append({**base_pick, "reject_reason": gate_reason})
-                    continue
-
-                # Aprovado — dedup
-                if pick_id in existing_picks:
-                    prev_odds = float(existing_picks[pick_id].get("odds_entrada") or 0)
-                    cur_odds = candidate["odds_b365"]
-                    if prev_odds and abs(cur_odds - prev_odds) / prev_odds > ODDS_UPDATE_THRESHOLD:
-                        update_id = f"{pick_id}_update"
-                        if update_id not in existing_picks:
-                            upd = {**base_pick, "id": update_id}
-                            new_picks.append(upd)
-                            existing_picks[update_id] = upd
-                            send_telegram("🔄 ATUALIZAÇÃO\n" + _build_msg(candidate))
-                            alerts_sent += 1
-                    continue
-
-                new_picks.append(base_pick)
-                existing_picks[pick_id] = base_pick
-                send_telegram(_build_msg(candidate))
-                alerts_sent += 1
-
-    # Persiste
     _save_list(PICKS_FILE, list(existing_picks.values()))
 
     rej_index = {r.get("id", "") + r.get("saved_at", ""): r for r in existing_rejected}

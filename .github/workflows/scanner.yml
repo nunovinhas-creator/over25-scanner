@@ -28,13 +28,13 @@ jobs:
           python-version: "3.11"
 
       - name: Instalar dependências
-        run: pip install --quiet numpy scipy pandas
+        run: pip install --quiet requests numpy scipy pandas
 
       - name: Over 2.5 scan
         run: python -m pipeline.scan_over25
         env:
           PYTHONPATH: ${{ github.workspace }}
-          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+          BSD_API_KEY: ${{ secrets.BSD_API_KEY }}
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
 
@@ -42,6 +42,6 @@ jobs:
         run: python -m pipeline.scan_sharp1x2
         env:
           PYTHONPATH: ${{ github.workspace }}
-          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+          BSD_API_KEY: ${{ secrets.BSD_API_KEY }}
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
