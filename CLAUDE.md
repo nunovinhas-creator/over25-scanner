@@ -99,6 +99,7 @@ This project has two layers:
 - Calibrated (w=0.30): Brier=0.24168 vs Market=0.24320 vs Uncalibrated=0.25110
 - CLV IC 95% = [-0.985%, +1.366%] — inclui zero (N=83, época única)
 - Regime: MODO OBSERVAÇÃO — sem dinheiro real até CLV rolling-30 > +1% com n≥200 settled
+- **Observação efectiva começa 17 jun 2026** — picks anteriores contaminados (liga vazia ou fora da whitelist pré-fix BSD API) e excluídos de todos os KPIs com campo `data_quality_flag`
 
 **Key decisions recorded (não reverter sem evidência nova):**
 - `MAX_ODDS_OVER`: NÃO implementado. Evidência não-monotónica (>2.50 deu +3.69%, N=35 insuficiente). Em vez disso: `odds_band` gravado em cada pick para análise ao vivo.
@@ -114,6 +115,7 @@ This project has two layers:
     CLV positivo em AMBAS as épocas → sinal não refutado. ROI instável por n baixo.
   CLV proxy: `div_b365_pin` (B365/NVP−1, já em %). CLV exacto quando `odds_fecho` implementado.
   Modo: OBSERVAÇÃO — sem dinheiro real até CLV rolling-30 > +1% com n ≥ 200 settled.
+  **Observação efectiva começa 17 jun 2026** — todos os 351 picks anteriores marcados com `data_quality_flag` e excluídos dos KPIs.
 - DRAW N1 (Eredivisie): em tracking separado desde 12 jun 2026. Gate 2 bloqueia DRAW global
   mas picks DRAW N1 com div≥3% são gravados com `gate_blocked_reason: "draw_observacao_n1"`.
   Critério de activação (exceção Gate 2 para N1): 50 settled com CLV>+1% → rever Gate 2.
