@@ -95,6 +95,10 @@ This project has two layers:
 - Walk-forward backtester (`backtesting/run_walkforward.py`) — strict temporal split, calibrator_fn support
 - Pipeline transform (`pipeline/transform.py`) — `compute_final_probability_dc()` blends DC + market
 
+**Whitelist de produção — 10 ligas BSD confirmadas:**
+`Premier League(1), Primeira Liga(2), La Liga(3), Serie A(4), Bundesliga(5), Ligue 1(6), Eredivisie(10), Championship(12), Belgian Pro League(14), La Liga 2(38)`
+Bundesliga 2 e Serie B ausentes da BSD (65 ligas disponíveis) — continuam no histórico football-data.co.uk (D2/I2) para backtesting mas nunca geram picks em produção.
+
 **FASE 4 validation (epoch 2526):**
 - Calibrated (w=0.30): Brier=0.24168 vs Market=0.24320 vs Uncalibrated=0.25110
 - CLV IC 95% = [-0.985%, +1.366%] — inclui zero (N=83, época única)
@@ -114,6 +118,7 @@ This project has two layers:
     Ronda 2 (val 2526): n=337, ROI=−10.10%, WR=22.8%, CLV sim=+2.49%
     CLV positivo em AMBAS as épocas → sinal não refutado. ROI instável por n baixo.
   CLV proxy: `div_b365_pin` (B365/NVP−1, já em %). CLV exacto quando `odds_fecho` implementado.
+  **`previous_decimal_odds` (BSD odds API):** campo disponível para 1X2 e Over/Under — é a odd do scan anterior, NÃO a odd de abertura nem a closing line. Útil para detectar movimento mas NÃO resolve o xfail de `odds_fecho`. CLV exacto requer fetch dedicado pós-KO (Pinnacle closing line).
   Modo: OBSERVAÇÃO — sem dinheiro real até CLV rolling-30 > +1% com n ≥ 200 settled.
   **Observação efectiva começa 17 jun 2026** — todos os 351 picks anteriores marcados com `data_quality_flag` e excluídos dos KPIs.
 - DRAW N1 (Eredivisie): em tracking separado desde 12 jun 2026. Gate 2 bloqueia DRAW global
@@ -252,7 +257,7 @@ data/
 
 | Item | Estado | Critério de activação |
 |---|---|---|
-| `odds_fecho` real | xfail ativo | Capturar odds Pinnacle post-KO → CLV exacto vs proxy `div_b365_pin` |
+| `odds_fecho` real | xfail ativo | Fetch Pinnacle post-KO (KO+10min) → `decimal_odds` nesse momento = closing line → CLV exacto. `previous_decimal_odds` não serve (é o scan anterior, não a abertura). |
 | DRAW N1 (Eredivisie) | tracking: 0/50 settled | 50 settled c/CLV>+1% → activar excepção Gate 2 para DRAW N1 |
 | HOME N1 (Eredivisie) | bloqueado: `n1_home_negativo` | n≥100 settled ao vivo → rever (histórico ROI −6.07%) |
 | Intraday odds feed | não iniciado | High-frequency updates para signals intraday mais precisos |

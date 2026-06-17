@@ -24,7 +24,8 @@ from backtesting.send_sharp1x2_weekly import compute_stats
 WHITELIST = [
     "Premier League", "La Liga", "Bundesliga", "Serie A", "Ligue 1",
     "Primeira Liga", "Eredivisie", "Belgian Pro League",
-    "Championship", "La Liga 2", "Bundesliga 2", "Serie B",
+    "Championship", "La Liga 2",
+    # Bundesliga 2 e Serie B removidas — ausentes da BSD API.
 ]
 
 

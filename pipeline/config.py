@@ -75,11 +75,11 @@ _DEFAULT_LEAGUES: list[str] = [
     "Primeira Liga",
     "Eredivisie",
     "Belgian Pro League",
-    # Second divisions — sufficient Pinnacle liquidity for CLV measurement
-    "Championship",       # England 2nd
-    "La Liga 2",          # Spain 2nd
-    "Bundesliga 2",       # Germany 2nd
-    "Serie B",            # Italy 2nd
+    # Second divisions — sufficient Pinnacle liquidity, present in BSD API
+    "Championship",       # England 2nd (BSD id=12)
+    "La Liga 2",          # Spain 2nd   (BSD id=38, BSD name "Segunda División")
+    # Bundesliga 2 (Germany) e Serie B (Italy): ausentes da BSD API (65 ligas disponíveis).
+    # Mantidos no histórico football-data.co.uk (D2/I2) para backtesting — não geram picks em produção.
     # Explicitly excluded: friendlies, national teams, Asian/African/American leagues,
     # Scottish Premiership, Super Lig, UEFA cups (insufficient closing-line data).
 ]
