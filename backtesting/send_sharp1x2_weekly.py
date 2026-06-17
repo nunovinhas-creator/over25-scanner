@@ -19,8 +19,8 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 PICKS_FILE = Path(__file__).resolve().parent.parent / "data" / "picks_1x2.json"
-TG_TOKEN = os.environ.get("TELEGRAM_TOKEN", "")
-TG_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "1352687611")
+TG_TOKEN = os.environ.get("TG_TOKEN", "")
+TG_CHAT_ID = os.environ.get("TG_CHAT_ID", "1352687611")
 
 
 def _clv_of(p: dict) -> float | None:
@@ -66,7 +66,7 @@ def compute_stats(picks: list[dict]) -> dict:
     alertados = [
         p for p in picks
         if not p.get("gate_blocked_reason")
-        and p.get("data_quality_flag") != "pre_bugfix_timing_v1"
+        and not p.get("data_quality_flag")
     ]
     settled = [p for p in alertados if p.get("resultado_outcome") in ("WIN", "LOSS")]
 

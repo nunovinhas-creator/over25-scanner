@@ -1833,7 +1833,7 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
 
       sharpRaw.push({
         id:ev.id, home:ev.home_team, away:ev.away_team,
-        date:ev.event_date, league:ev.league_name||lgNames[ev.league_id]||'',
+        date:ev.event_date, league:ev.league_name||lgNames[ev.league_id]||BSD_LEAGUE_ID_MAP[ev.league_id]||'',
         sigs, totalScore:maxScore, hoursToKO:Math.round(hoursToKO*10)/10,
         label:hasSTEAM?'STEAM':hasSHARP?'SHARP':'WATCH',
         scanScore:0
@@ -1924,12 +1924,12 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
           const {score,signals}=calcScore({prob25,bttsN,xgH,xgA,movement,div,sharpLabel,
             pinnNow,recrAvg,rec,mdl,
             h2h:det?.h2h,
-            league:ev.league_name||lgNames[ev.league_id]||''});
+            league:ev.league_name||lgNames[ev.league_id]||BSD_LEAGUE_ID_MAP[ev.league_id]||''});
 
           const edgeVsMarket=(prob25!=null&&pinnNow!=null)?(prob25-(1/pinnNow)):null;
           enriched.push({
             id:ev.id, home:ev.home_team, away:ev.away_team,
-            date:ev.event_date, league:ev.league_name||lgNames[ev.league_id]||'',
+            date:ev.event_date, league:ev.league_name||lgNames[ev.league_id]||BSD_LEAGUE_ID_MAP[ev.league_id]||'',
             league_id:ev.league_id,
             score, signals, prob25, bttsN, xgH, xgA,
             movement, div, sharpLabel, pinnNow, recrAvg, pinnPrev,
@@ -2719,6 +2719,12 @@ const SHARP1X2_WHITELIST = new Set([
   'Primeira Liga','Eredivisie','Belgian Pro League',
   'Championship','La Liga 2','Bundesliga 2','Serie B'
 ]);
+
+// Mapa defensivo BSD league_id → nome canónico para as ligas whitelisted.
+// Fallback quando BSD não devolve league_name (falha de API ou event sem nome).
+// IDs: BSD Sports API docs (EPL=1, La Liga=3, Serie A=4 confirmados em CLAUDE.md).
+// Fail-closed: liga não reconhecida → string vazia → SHARP1X2_WHITELIST.has('') = false.
+const BSD_LEAGUE_ID_MAP = {1:'Premier League',3:'La Liga',4:'Serie A'};
 
 // Gate partilhado para saveSharpPick e autoLogSharp1x2 — fonte única de verdade
 function _applySharp1x2Gates({ out, liga, div, timingH }){
