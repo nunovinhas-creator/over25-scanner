@@ -42,7 +42,8 @@ ODDS_UPDATE_THRESHOLD = 0.03
 WHITELIST = {
     "Premier League", "La Liga", "Bundesliga", "Serie A", "Ligue 1",
     "Primeira Liga", "Eredivisie", "Belgian Pro League",
-    "Championship", "La Liga 2", "Bundesliga 2", "Serie B",
+    "Championship", "La Liga 2",
+    # Bundesliga 2 e Serie B ausentes da BSD API — não geram picks em produção.
 }
 
 # Mapa defensivo BSD league_id → nome canónico.

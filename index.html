@@ -2713,11 +2713,12 @@ function sharpCard1x2(s){
   </div>`;
 }
 
-// Whitelist canónica — fonte única de verdade para browser e Python (pipeline/config.py)
+// Whitelist canónica — 10 ligas de produção (fonte única de verdade; pipeline/config.py em sync).
+// Bundesliga 2 e Serie B removidas: ausentes da BSD API (65 ligas; apenas afetam backtesting).
 const SHARP1X2_WHITELIST = new Set([
   'Premier League','La Liga','Bundesliga','Serie A','Ligue 1',
   'Primeira Liga','Eredivisie','Belgian Pro League',
-  'Championship','La Liga 2','Bundesliga 2','Serie B'
+  'Championship','La Liga 2',
 ]);
 
 // Mapa BSD league_id → nome canónico (fonte única de verdade para a whitelist).
