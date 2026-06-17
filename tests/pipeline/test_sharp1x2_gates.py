@@ -142,13 +142,32 @@ class TestDataQualityFlagExclusion:
         return base
 
     def test_flagged_pick_excluded_from_alertados(self):
-        """Picks com data_quality_flag=pre_bugfix_timing_v1 excluídos dos alertados."""
+        """Qualquer data_quality_flag exclui o pick dos alertados."""
         picks = [
             self._make_pick(id="1_sh", data_quality_flag="pre_bugfix_timing_v1"),
-            self._make_pick(id="2_sh"),  # pick limpo
+            self._make_pick(id="2_sh", data_quality_flag="pre_bugfix_liga_vazia"),
+            self._make_pick(id="3_sh", data_quality_flag="liga_fora_whitelist_pre_fix"),
+            self._make_pick(id="4_sh"),  # pick limpo
         ]
         stats = compute_stats(picks)
-        # o pick flagged não deve contar como alertado
+        assert stats["total_alertados"] == 1
+
+    def test_liga_fora_whitelist_flag_excluded(self):
+        """Picks com data_quality_flag=liga_fora_whitelist_pre_fix excluídos dos alertados."""
+        picks = [
+            self._make_pick(id="1_sh", data_quality_flag="liga_fora_whitelist_pre_fix"),
+            self._make_pick(id="2_sh"),
+        ]
+        stats = compute_stats(picks)
+        assert stats["total_alertados"] == 1
+
+    def test_post_fix_flag_excluded(self):
+        """Picks com data_quality_flag=liga_fora_whitelist_post_fix excluídos dos alertados."""
+        picks = [
+            self._make_pick(id="1_sh", data_quality_flag="liga_fora_whitelist_post_fix"),
+            self._make_pick(id="2_sh"),
+        ]
+        stats = compute_stats(picks)
         assert stats["total_alertados"] == 1
 
     def test_flagged_pick_not_in_settled(self):

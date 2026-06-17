@@ -45,6 +45,10 @@ WHITELIST = {
     "Championship", "La Liga 2", "Bundesliga 2", "Serie B",
 }
 
+# Mapa defensivo BSD league_id → nome canónico.
+# Fail-closed: ID desconhecido → '' → WHITELIST rejeita.
+BSD_LEAGUE_ID_MAP: dict[int, str] = {1: "Premier League", 3: "La Liga", 4: "Serie A"}
+
 
 # ── Gates — espelho fiel de _applySharp1x2Gates() em index.html ────────────────
 
@@ -146,7 +150,7 @@ def _fetch_all_events() -> list[dict]:
             "event_id": eid,
             "home": ev.get("home_team") or ev.get("home", ""),
             "away": ev.get("away_team") or ev.get("away", ""),
-            "league": ev.get("league_name") or ev.get("league", ""),
+            "league": ev.get("league_name") or BSD_LEAGUE_ID_MAP.get(ev.get("league_id") or 0, "") or ev.get("league", ""),
             "date": ev.get("event_date") or ev.get("date", ""),
         }
         pin = pins.get(eid, {})
