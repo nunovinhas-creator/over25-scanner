@@ -83,7 +83,8 @@ def _fetch_all_events() -> list[dict]:
 
     def _get_list(path: str) -> list:
         try:
-            r = requests.get(base + path, headers=headers, timeout=30)
+            url = path if path.startswith("http") else base + path
+            r = requests.get(url, headers=headers, timeout=30)
             r.raise_for_status()
             payload = r.json()
             if isinstance(payload, list):
