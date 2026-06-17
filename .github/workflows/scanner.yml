@@ -35,13 +35,13 @@ jobs:
         env:
           PYTHONPATH: ${{ github.workspace }}
           BSD_API_KEY: ${{ secrets.BSD_API_KEY }}
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TG_TOKEN: ${{ secrets.TG_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
 
       - name: Sharp 1X2 scan
         run: python -m pipeline.scan_sharp1x2
         env:
           PYTHONPATH: ${{ github.workspace }}
           BSD_API_KEY: ${{ secrets.BSD_API_KEY }}
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TG_TOKEN: ${{ secrets.TG_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
