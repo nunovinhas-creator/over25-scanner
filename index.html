@@ -2510,6 +2510,15 @@ async function savePick(btn){
   const id=isNaN(Number(_rawId))?_rawId:Number(_rawId);
   const g=allGames.find(x=>String(x.id)===String(id));
   if(!g){btn.textContent='❌ Não encontrado';return;}
+  // Guard de whitelist — picks manuais de ligas fora das 10 de produção são bloqueados.
+  // Comportamento intencional: jogo visível no scanner mas não guardável se for fora da whitelist.
+  const _saveLeague=g.league||BSD_LEAGUE_ID_MAP[g.league_id]||'';
+  if(!SHARP1X2_WHITELIST.has(_saveLeague)){
+    console.warn('savePick bloqueado — liga fora da whitelist:',_saveLeague||'(vazia)');
+    btn.textContent='⛔ Liga fora da whitelist';
+    setTimeout(()=>{btn.textContent='⭐ Guardar pick';btn.disabled=false;},3000);
+    return;
+  }
   btn.textContent='⏳ A guardar...';btn.disabled=true;
   try{
     const prob=g.prob25!=null?(g.prob25*100).toFixed(1):'';
@@ -3834,6 +3843,12 @@ async function saveLivePick(btn){
   const d=btn.dataset;
   const liveId=String(d.eid||'live')+'_live';
   if(isSaved(liveId)){setBtnSaved(btn);return;}
+  // Guard de whitelist — picks live de ligas fora das 10 de produção são bloqueados.
+  const _liveLiga=d.liga||'';
+  if(!SHARP1X2_WHITELIST.has(_liveLiga)){
+    console.warn('saveLivePick bloqueado — liga fora da whitelist:',_liveLiga||'(vazia)');
+    return;
+  }
   btn.textContent='⏳ A guardar...';btn.disabled=true;
   try{
     const result=parseInt(d.golos||0)>=3?'WIN':'';
@@ -4003,6 +4018,7 @@ async function autoLogObservations(){
   const THRESHOLD = 6; // patternScore mínimo base
   // Jogos novos com padrões fortes ainda não guardados
   const toSave = liveData.filter(e=>{
+    if(!SHARP1X2_WHITELIST.has(e.league||'')) return false; // guard de whitelist
     if((e.patternScore||0) < THRESHOLD) return false;
     if(localStorage.getItem(LSKEY.obs(e.id))) return false;
     // Odds implícitas <25% (>4.0): mercado já descartou — não regista
