@@ -1,0 +1,19 @@
+name: Probe BSD Markets (one-shot)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install deps
+        run: pip install requests
+      - name: Probe BSD markets
+        env:
+          BSD_API_KEY: ${{ secrets.BSD_API_KEY }}
+        run: python scripts/probe_bsd_markets.py
