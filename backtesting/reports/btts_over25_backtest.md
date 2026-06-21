@@ -1,12 +1,11 @@
-# BTTS+Over 2.5 — Backtest Fast
+# BTTS+Over 2.5 — Backtest Walk-Forward
 
-> **Dados reais — football-data.co.uk — 18,577 jogos com previsão DC**
+> **Dados reais — football-data.co.uk — 22,429 jogos com previsão DC**
 > Threshold overlay (backtest): ≥ 10% (p\_dc\_conjunta − p\_naive)
-> Período: 2021-07-23 → 2026-05-31
-> ⚠️ **Modo rápido (in-sample)**: probabilidades calculadas com dc_ratings.json actual.
-> Modelo treinado em dados sobrepostos — calibração indicativa, não EV real.
-> Para análise walk-forward sem leakage, correr sem flag `--fast`.
+> Período: 2021-08-27 → 2026-05-31
 
+**Metodologia:** Walk-forward semanal sem lookahead. Modelo DC ajustado semanalmente
+com todos os jogos anteriores à semana de teste. Equipas com < 5 jogos prévios excluídas.
 Sem odds BTTS+Over 2.5 disponíveis no dataset — ROI não calculado.
 
 ## Definições
@@ -24,69 +23,73 @@ Sem odds BTTS+Over 2.5 disponíveis no dataset — ROI não calculado.
 
 | | Todos os jogos DC | Overlay ≥ 10% |
 |---|---|---|
-| N jogos | 18,577 | 17,309 |
-| WR real (BTTS+O2.5) | 41.4% | 41.2% |
-| Overlay médio | +12.92% | +13.27% |
+| N jogos | 22,429 | 20,377 |
+| WR real (BTTS+O2.5) | 40.8% | 40.5% |
+| Overlay médio | +12.73% | +13.21% |
 
 ## Calibração — p_dc_conjunta vs frequência real
 
 | Bucket | N | p_pred_avg | p_real (%) | Diff |
 |---|---|---|---|---|
-| (0.1, 0.2]             |    264 | 0.169 | 0.250 | +0.081 |
-| (0.2, 0.3]             |   2513 | 0.265 | 0.331 | +0.066 |
-| (0.3, 0.4]             |   7019 | 0.354 | 0.377 | +0.023 |
-| (0.4, 0.5]             |   6023 | 0.447 | 0.449 | +0.002 |
-| (0.5, 0.6]             |   2366 | 0.537 | 0.516 | -0.021 |
-| (0.6, 0.7]             |    387 | 0.631 | 0.568 | -0.062 |
-| (0.7, 0.8]             |      5 | 0.724 | 1.000 | +0.276 |
+| (-0.001, 0.1]          |    105 | 0.068 | 0.429 | +0.361 |
+| (0.1, 0.2]             |    726 | 0.166 | 0.342 | +0.175 |
+| (0.2, 0.3]             |   3985 | 0.261 | 0.355 | +0.094 |
+| (0.3, 0.4]             |   8012 | 0.351 | 0.384 | +0.033 |
+| (0.4, 0.5]             |   6532 | 0.445 | 0.439 | -0.006 |
+| (0.5, 0.6]             |   2554 | 0.538 | 0.482 | -0.056 |
+| (0.6, 0.7]             |    451 | 0.635 | 0.497 | -0.139 |
+| (0.7, 0.8]             |     53 | 0.739 | 0.585 | -0.154 |
+| (0.8, 0.9]             |     11 | 0.827 | 0.545 | -0.282 |
 
 ## Calibração — p_naive vs frequência real (referência)
 
 | Bucket | N | p_pred_avg | p_real (%) | Diff |
 |---|---|---|---|---|
-| (-0.001, 0.1]          |    415 | 0.079 | 0.255 | +0.177 |
-| (0.1, 0.2]             |   4391 | 0.162 | 0.343 | +0.180 |
-| (0.2, 0.3]             |   7183 | 0.248 | 0.398 | +0.150 |
-| (0.3, 0.4]             |   4665 | 0.342 | 0.473 | +0.131 |
-| (0.4, 0.5]             |   1569 | 0.437 | 0.511 | +0.073 |
-| (0.5, 0.6]             |    325 | 0.537 | 0.606 | +0.069 |
-| (0.6, 0.7]             |     29 | 0.619 | 0.621 | +0.002 |
+| (-0.001, 0.1]          |   1145 | 0.072 | 0.348 | +0.277 |
+| (0.1, 0.2]             |   6285 | 0.157 | 0.364 | +0.206 |
+| (0.2, 0.3]             |   7867 | 0.248 | 0.397 | +0.149 |
+| (0.3, 0.4]             |   4939 | 0.344 | 0.460 | +0.116 |
+| (0.4, 0.5]             |   1730 | 0.439 | 0.475 | +0.035 |
+| (0.5, 0.6]             |    374 | 0.540 | 0.527 | -0.013 |
+| (0.6, 0.7]             |     65 | 0.636 | 0.492 | -0.143 |
+| (0.7, 0.8]             |     21 | 0.744 | 0.619 | -0.125 |
+| (0.8, 0.9]             |      3 | 0.822 | 0.667 | -0.156 |
 
 ## Por liga — todos os jogos DC
 
 | Liga | N | WR real | p_pred_avg |
 |---|---|---|---|
-| Championship              |   2148 | 39.0% | 36.3% |
-| Premier League            |   1752 | 44.0% | 41.9% |
-| La Liga 2                 |   1712 | 37.3% | 35.6% |
-| La Liga                   |   1644 | 38.5% | 38.8% |
-| Serie A                   |   1610 | 38.0% | 34.0% |
-| Ligue 1                   |   1427 | 43.9% | 42.3% |
-| Bundesliga                |   1334 | 49.0% | 49.7% |
-| Eredivisie                |   1334 | 45.4% | 47.0% |
-| Belgian Pro League        |   1287 | 42.3% | 40.3% |
-| Primeira Liga             |   1134 | 39.0% | 35.5% |
-| Bundesliga 2              |   1086 | 49.2% | 46.9% |
-| Serie B                   |   1074 | 38.7% | 35.4% |
-| Ligue 2                   |   1035 | 36.5% | 38.0% |
+| Championship              |   2626 | 38.1% | 36.4% |
+| La Liga 2                 |   2173 | 36.6% | 32.4% |
+| La Liga                   |   1814 | 38.9% | 34.6% |
+| Premier League            |   1813 | 44.8% | 41.7% |
+| Serie A                   |   1804 | 37.8% | 37.7% |
+| Serie B                   |   1735 | 37.1% | 35.2% |
+| Ligue 2                   |   1621 | 37.5% | 32.8% |
+| Ligue 1                   |   1598 | 43.4% | 40.5% |
+| Belgian Pro League        |   1481 | 42.0% | 42.4% |
+| Bundesliga                |   1450 | 48.2% | 47.0% |
+| Eredivisie                |   1449 | 45.4% | 42.7% |
+| Primeira Liga             |   1442 | 38.4% | 34.3% |
+| Bundesliga 2              |   1423 | 47.3% | 46.4% |
 
 ## Por liga — overlay ≥ 10%
 
 | Liga | N | WR real | p_pred_avg |
 |---|---|---|---|
-| Championship              |   2033 | 39.6% | 37.2% |
-| Premier League            |   1663 | 44.0% | 42.2% |
-| La Liga 2                 |   1656 | 37.6% | 35.9% |
-| La Liga                   |   1544 | 38.4% | 38.5% |
-| Serie A                   |   1543 | 38.3% | 33.9% |
-| Ligue 1                   |   1299 | 43.3% | 42.4% |
-| Belgian Pro League        |   1214 | 42.2% | 40.1% |
-| Bundesliga                |   1158 | 47.8% | 48.6% |
-| Eredivisie                |   1121 | 44.2% | 45.5% |
-| Serie B                   |   1041 | 38.3% | 35.4% |
-| Bundesliga 2              |   1040 | 49.3% | 46.8% |
-| Ligue 2                   |   1025 | 36.6% | 37.9% |
-| Primeira Liga             |    972 | 39.1% | 35.4% |
+| Championship              |   2502 | 38.3% | 36.7% |
+| La Liga 2                 |   2038 | 36.7% | 33.2% |
+| Serie A                   |   1685 | 37.7% | 37.5% |
+| Serie B                   |   1664 | 36.7% | 35.3% |
+| La Liga                   |   1639 | 38.7% | 34.9% |
+| Premier League            |   1620 | 44.7% | 42.3% |
+| Ligue 2                   |   1491 | 38.2% | 34.0% |
+| Ligue 1                   |   1471 | 42.8% | 40.3% |
+| Belgian Pro League        |   1378 | 41.5% | 42.1% |
+| Bundesliga 2              |   1329 | 47.0% | 46.1% |
+| Primeira Liga             |   1213 | 37.9% | 34.8% |
+| Eredivisie                |   1177 | 44.8% | 42.3% |
+| Bundesliga                |   1170 | 48.0% | 45.8% |
 
 ## Interpretação
 
@@ -99,4 +102,4 @@ Sem odds BTTS+Over 2.5 disponíveis no dataset — ROI não calculado.
 - **Gate live scan**: overlay ≥ 8% AND ev\_final\_over25 ≥ 3% AND liga whitelisted.
 - **Activação alertas TG**: n ≥ 100 settled com CLV proxy > +5% no período.
 
-Generated: 2026-06-21T09:42:38+00:00 UTC
+Generated: 2026-06-21T09:53:02+00:00 UTC
