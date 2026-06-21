@@ -42,7 +42,8 @@ MAX_TIMING_H = 6.0
 MIN_ODDS = 1.30
 MAX_ODDS = 3.50
 ODDS_UPDATE_THRESHOLD = 0.03  # >3% mudança nas odds → cria pick _update
-BTTS_O25_OVERLAY_MIN = 0.08   # overlay mínimo para pick BTTS+Over 2.5
+BTTS_O25_OVERLAY_MIN = 0.08   # overlay mínimo (gate antigo, comentado — mantido para referência)
+CLV_BTTS_O25_MIN    = 0.05   # CLV real mínimo: p_dc_conjunta/(p_btts×p_o25_mkt)−1 ≥ 5%
 
 WHITELIST = {
     "Premier League", "La Liga", "Bundesliga", "Serie A", "Ligue 1",
@@ -93,11 +94,20 @@ def _fetch_all_events() -> list[dict]:
     odds_under_raw = _get(
         f"/api/v2/odds/?market=over_under_25&outcome=under&limit=200&updated_after={today}T00:00:00Z"
     )
+    odds_btts_yes_raw = _get(
+        f"/api/v2/odds/?market=btts&outcome=yes&limit=200&updated_after={today}T00:00:00Z"
+    )
+    odds_btts_no_raw = _get(
+        f"/api/v2/odds/?market=btts&outcome=no&limit=200&updated_after={today}T00:00:00Z"
+    )
 
     # Build maps: event_id → best decimal odds + movement
     ov_map: dict[str, float] = {}
     un_map: dict[str, float] = {}
     mov_map: dict[str, str] = {}
+    # BTTS: eid → {slug: odds} para yes e no separadamente
+    btts_yes_by_bk: dict[str, dict[str, float]] = {}
+    btts_no_by_bk:  dict[str, dict[str, float]] = {}
 
     for o in odds_over_raw:
         eid = str(o.get("event_id") or "")
@@ -124,21 +134,52 @@ def _fetch_all_events() -> list[dict]:
         if is_ref or eid not in un_map:
             un_map[eid] = price
 
+    for o in odds_btts_yes_raw:
+        eid = str(o.get("event_id") or "")
+        price = float(o.get("decimal_odds") or 0)
+        slug = (o.get("bookmaker_slug") or "").strip()
+        if eid and price and slug:
+            btts_yes_by_bk.setdefault(eid, {})[slug] = price
+
+    for o in odds_btts_no_raw:
+        eid = str(o.get("event_id") or "")
+        price = float(o.get("decimal_odds") or 0)
+        slug = (o.get("bookmaker_slug") or "").strip()
+        if eid and price and slug:
+            btts_no_by_bk.setdefault(eid, {})[slug] = price
+
     # Merge events with odds, normalising BSD field names
     result = []
     for ev in events:
         eid = str(ev.get("id") or ev.get("event_id") or "")
         if not eid:
             continue
+
+        # Seleccionar odds BTTS: Pinnacle se disponível, senão bookie com odds mais baixas
+        yes_bk = btts_yes_by_bk.get(eid, {})
+        no_bk  = btts_no_by_bk.get(eid, {})
+        if "pinnacle" in yes_bk:
+            bk_btts = "pinnacle"
+        elif yes_bk:
+            bk_btts = min(yes_bk, key=lambda b: yes_bk[b])  # odds mais baixas = maior p implícita
+        else:
+            bk_btts = ""
+        odds_btts_yes = yes_bk.get(bk_btts) if bk_btts else None
+        # No: mesmo bookmaker se disponível, senão qualquer um
+        odds_btts_no  = no_bk.get(bk_btts) or (next(iter(no_bk.values()), None) if no_bk else None)
+
         result.append({
-            "event_id": eid,
-            "home": ev.get("home_team") or ev.get("home", ""),
-            "away": ev.get("away_team") or ev.get("away", ""),
-            "league": BSD_LEAGUE_ID_MAP.get(ev.get("league_id") or 0) or ev.get("league_name") or ev.get("league", ""),
-            "date": ev.get("event_date") or ev.get("date", ""),
-            "odds_over": ov_map.get(eid),
-            "odds_under": un_map.get(eid),
-            "movement": mov_map.get(eid, "SHORTENING"),
+            "event_id":      eid,
+            "home":          ev.get("home_team") or ev.get("home", ""),
+            "away":          ev.get("away_team") or ev.get("away", ""),
+            "league":        BSD_LEAGUE_ID_MAP.get(ev.get("league_id") or 0) or ev.get("league_name") or ev.get("league", ""),
+            "date":          ev.get("event_date") or ev.get("date", ""),
+            "odds_over":     ov_map.get(eid),
+            "odds_under":    un_map.get(eid),
+            "movement":      mov_map.get(eid, "SHORTENING"),
+            "odds_btts_yes": odds_btts_yes,
+            "odds_btts_no":  odds_btts_no,
+            "bookmaker_btts": bk_btts,
         })
     return result
 
@@ -146,14 +187,17 @@ def _fetch_all_events() -> list[dict]:
 def _event_fields(ev: dict) -> dict:
     """Normaliza campos do BSD (trata aliases para robustez)."""
     return {
-        "id": str(ev.get("event_id") or ev.get("id", "")),
-        "casa": ev.get("home") or ev.get("home_team", ""),
-        "fora": ev.get("away") or ev.get("away_team", ""),
-        "liga": ev.get("league") or ev.get("liga", ""),
-        "data": ev.get("date") or ev.get("commence_time", ""),
-        "odds_over": ev.get("odds_over"),
-        "odds_under": ev.get("odds_under"),
-        "movimento": (ev.get("movement") or "SHORTENING").upper(),
+        "id":              str(ev.get("event_id") or ev.get("id", "")),
+        "casa":            ev.get("home") or ev.get("home_team", ""),
+        "fora":            ev.get("away") or ev.get("away_team", ""),
+        "liga":            ev.get("league") or ev.get("liga", ""),
+        "data":            ev.get("date") or ev.get("commence_time", ""),
+        "odds_over":       ev.get("odds_over"),
+        "odds_under":      ev.get("odds_under"),
+        "movimento":       (ev.get("movement") or "SHORTENING").upper(),
+        "odds_btts_yes":   ev.get("odds_btts_yes"),
+        "odds_btts_no":    ev.get("odds_btts_no"),
+        "bookmaker_btts":  ev.get("bookmaker_btts", ""),
     }
 
 
@@ -270,16 +314,31 @@ def _save_list(path: Path, data: list[dict]) -> None:
 
 # ── BTTS+Over 2.5 joint probability ─────────────────────────────────────────────
 
-def _compute_btts_over25(casa: str, fora: str, liga: str, dc_ratings: dict) -> dict | None:
+def _compute_btts_over25(
+    casa: str,
+    fora: str,
+    liga: str,
+    dc_ratings: dict,
+    odds_btts_yes: float | None = None,
+    odds_btts_no:  float | None = None,
+    bookmaker_btts: str = "",
+    p_over25_market: float | None = None,
+) -> dict | None:
     """
-    Compute P(BTTS AND Over 2.5) from the DC bivariate grid.
-    Returns None if dc_ratings don't cover this match.
+    Compute P(BTTS AND Over 2.5) from the DC bivariate grid, e CLV real vs mercado.
+
+    clv_btts_over25 = p_dc_conjunta / (p_btts_market × p_over25_market) − 1
+
+    Parâmetros de mercado:
+        odds_btts_yes / odds_btts_no — odds BSD do market=btts
+        p_over25_market              — probabilidade de-vigged Over 2.5 (de compute_prob)
     """
     try:
         import numpy as np
         from pipeline.transform import normalize_team_names
         from models.math.poisson import build_dc_grid, extract_btts_over25_prob, prob_over25_poisson
 
+        # ── DC bivariate grid ────────────────────────────────────────────────
         league_data = dc_ratings.get(liga)
         if not league_data:
             return None
@@ -291,21 +350,50 @@ def _compute_btts_over25(casa: str, fora: str, liga: str, dc_ratings: dict) -> d
 
         lambda_h = float(np.exp(home_data["attack"] + away_data["defence"] + league_data["home_adv"]))
         lambda_a = float(np.exp(away_data["attack"] + home_data["defence"]))
-        rho = float(league_data.get("rho", 0.0))
+        rho      = float(league_data.get("rho", 0.0))
 
-        grid = build_dc_grid(lambda_h, lambda_a, rho=rho)
+        grid          = build_dc_grid(lambda_h, lambda_a, rho=rho)
         p_dc_conjunta = extract_btts_over25_prob(grid)
         p_btts_dc     = float(grid[1:, 1:].sum())
         p_over25_dc   = prob_over25_poisson(lambda_h, lambda_a, rho=rho)
         p_naive       = p_btts_dc * p_over25_dc
         overlay       = p_dc_conjunta - p_naive
 
+        # ── Probabilidade de mercado BTTS (de-vig) ───────────────────────────
+        p_btts_market:    float | None = None
+        btts_market_source = "unavailable"
+
+        if odds_btts_yes and float(odds_btts_yes) > 1.0:
+            p_yes_raw = 1.0 / float(odds_btts_yes)
+            if odds_btts_no and float(odds_btts_no) > 1.0:
+                p_no_raw = 1.0 / float(odds_btts_no)
+                p_btts_market     = p_yes_raw / (p_yes_raw + p_no_raw)
+                btts_market_source = "devig"
+            else:
+                p_btts_market     = p_yes_raw / 1.05   # assume margem 5%
+                btts_market_source = "fallback"
+
+        # ── CLV real ─────────────────────────────────────────────────────────
+        clv_btts_over25: float | None = None
+        p_naive_market:  float | None = None
+
+        if p_btts_market is not None and p_over25_market and p_over25_market > 0:
+            p_naive_market  = p_btts_market * p_over25_market
+            clv_btts_over25 = p_dc_conjunta / p_naive_market - 1 if p_naive_market > 0 else None
+
         return {
-            "p_dc_conjunta": round(p_dc_conjunta, 6),
-            "p_btts_dc":     round(p_btts_dc, 6),
-            "p_over25_dc":   round(p_over25_dc, 6),
-            "p_naive":       round(p_naive, 6),
-            "overlay":       round(overlay, 6),
+            "p_dc_conjunta":    round(p_dc_conjunta, 6),
+            "p_btts_dc":        round(p_btts_dc, 6),
+            "p_over25_dc":      round(p_over25_dc, 6),
+            "p_naive":          round(p_naive, 6),
+            "overlay":          round(overlay, 6),
+            "p_btts_market":    round(p_btts_market, 6)    if p_btts_market    is not None else None,
+            "p_over25_market":  round(p_over25_market, 6)  if p_over25_market  is not None else None,
+            "p_naive_market":   round(p_naive_market, 6)   if p_naive_market   is not None else None,
+            "clv_btts_over25":  round(clv_btts_over25, 6)  if clv_btts_over25  is not None else None,
+            "btts_market_source": btts_market_source,
+            "odds_btts":        float(odds_btts_yes) if odds_btts_yes else None,
+            "bookmaker_btts":   bookmaker_btts,
         }
     except Exception as exc:
         print(f"BTTS+O2.5 compute: {exc}", file=sys.stderr)
@@ -404,8 +492,16 @@ def scan() -> None:
         alerts_sent += 1
 
         # ── BTTS+Over 2.5 gate ──────────────────────────────────────────────
-        btts_data = _compute_btts_over25(ev["casa"], ev["fora"], ev["liga"], dc_ratings)
-        if btts_data and btts_data["overlay"] >= BTTS_O25_OVERLAY_MIN:
+        btts_data = _compute_btts_over25(
+            ev["casa"], ev["fora"], ev["liga"], dc_ratings,
+            odds_btts_yes=ev.get("odds_btts_yes"),
+            odds_btts_no=ev.get("odds_btts_no"),
+            bookmaker_btts=ev.get("bookmaker_btts", ""),
+            p_over25_market=prob.get("p_market"),
+        )
+        # Gate antigo (overlay DC naive): btts_data["overlay"] >= BTTS_O25_OVERLAY_MIN
+        clv_b25 = btts_data.get("clv_btts_over25") if btts_data else None
+        if btts_data and clv_b25 is not None and clv_b25 >= CLV_BTTS_O25_MIN:
             btts_id = f"{ev_id}_btts"
             if btts_id not in existing_btts:
                 btts_pick = {
@@ -417,8 +513,15 @@ def scan() -> None:
                 }
                 new_btts_picks.append(btts_pick)
                 existing_btts[btts_id] = btts_pick
-                # TG BTTS+Over 2.5 desativado — ativar após validação backtest (n≥100 settled, CLV proxy>+5%)
-                # send_telegram(f"⚽ BTTS+O2.5 — {ev['liga']}\n{ev['casa']} vs {ev['fora']}\np_conjunta={btts_data['p_dc_conjunta']*100:.1f}% | overlay={btts_data['overlay']*100:.1f}%")
+                clv_pct = round(clv_b25 * 100, 1)
+                naive_pct = round((btts_data["p_naive_market"] or 0) * 100, 1)
+                send_telegram(
+                    f"⚽ BTTS+Over 2.5 — CLV +{clv_pct:.1f}% vs mercado\n"
+                    f"{ev['liga']}: {ev['casa']} vs {ev['fora']}\n"
+                    f"p_conjunta={btts_data['p_dc_conjunta']*100:.1f}% | "
+                    f"p_mkt={naive_pct:.1f}% | odds_btts={btts_data['odds_btts']}"
+                )
+                alerts_sent += 1
 
     _save_list(PICKS_FILE, list(existing_picks.values()))
 

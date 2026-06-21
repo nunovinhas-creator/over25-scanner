@@ -1157,18 +1157,18 @@ select option{background:var(--laq-3);color:var(--text)}
   <!-- ── Sub-painel: BTTS+Over 2.5 ── -->
   <div id="dpanel-btts" style="display:none">
     <div class="warn-banner" style="background:rgba(255,184,0,.10);border-color:rgba(255,184,0,.5);font-weight:600;margin-top:12px">
-      ⚠️ MODO OBSERVAÇÃO — sem apostas reais até n ≥ 100 settled com CLV proxy &gt; +5%
+      ⚠️ MODO OBSERVAÇÃO — sem apostas reais até n ≥ 100 settled com CLV médio &gt; +5%
     </div>
     <div id="bttsMeta" style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:8px;margin-bottom:4px"></div>
     <div class="dash-kpi" style="margin-top:8px">
-      <div class="kpi-card"><div class="kpi-label">Picks guardados</div><div class="kpi-val" id="bttsN">—</div><div class="kpi-sub">auto-scan overlay ≥ 8%</div></div>
+      <div class="kpi-card"><div class="kpi-label">Picks guardados</div><div class="kpi-val" id="bttsN">—</div><div class="kpi-sub">auto-scan CLV ≥ 5%</div></div>
       <div class="kpi-card"><div class="kpi-label">Settled</div><div class="kpi-val" id="bttsSettled">—</div><div class="kpi-sub">com resultado BTTS+O2.5</div></div>
-      <div class="kpi-card"><div class="kpi-label">p_conjunta média</div><div class="kpi-val" id="bttsPred">—</div><div class="kpi-sub">DC bivariate grid</div></div>
-      <div class="kpi-card"><div class="kpi-label">Overlay médio</div><div class="kpi-val" id="bttsOverlay">—</div><div class="kpi-sub">p_conjunta − p_naive</div></div>
+      <div class="kpi-card"><div class="kpi-label">CLV rolling-30</div><div class="kpi-val" id="bttsCLV30">—</div><div class="kpi-sub">p_dc / p_mkt − 1</div></div>
+      <div class="kpi-card"><div class="kpi-label">CLV médio total</div><div class="kpi-val" id="bttsCLVAvg">—</div><div class="kpi-sub">todos com CLV real</div></div>
     </div>
     <div class="sec-title" style="margin-top:12px">Picks BTTS+Over 2.5 recentes</div>
     <div class="picks-table">
-      <div class="pt-head"><span>Data</span><span>Jogo</span><span>Liga</span><span>p_conjunta</span><span>Overlay</span><span>Resultado</span></div>
+      <div class="pt-head"><span>Data</span><span>Jogo</span><span>Liga</span><span>p_conjunta</span><span>CLV</span><span>Resultado</span></div>
       <div id="bttsBody"><div class="loading" style="padding:20px"><div class="spinner"></div></div></div>
     </div>
   </div>
@@ -2635,15 +2635,29 @@ async function renderDashBtts(){
     const picks=await resp.json();
     const n=picks.length;
     const settled=picks.filter(p=>p.resultado_btts_over25==='WIN'||p.resultado_btts_over25==='LOSS');
-    const avgPred=n?picks.reduce((s,p)=>s+(parseFloat(p.p_dc_conjunta)||0),0)/n:0;
-    const avgOverlay=n?picks.reduce((s,p)=>s+(parseFloat(p.overlay)||0),0)/n:0;
+
+    // CLV real: picks que têm clv_btts_over25 calculado (btts_market_source !== 'unavailable')
+    const withCLV=picks.filter(p=>p.clv_btts_over25!=null);
+    const avgCLV=withCLV.length?withCLV.reduce((s,p)=>s+(parseFloat(p.clv_btts_over25)||0),0)/withCLV.length:null;
+    // rolling-30: últimos 30 picks com CLV (mais recentes primeiro)
+    const sorted30=[...withCLV].sort((a,b)=>b.scanned_at>a.scanned_at?1:-1).slice(0,30);
+    const clvRoll30=sorted30.length?sorted30.reduce((s,p)=>s+(parseFloat(p.clv_btts_over25)||0),0)/sorted30.length:null;
+
     if(el('bttsN')) el('bttsN').textContent=n;
     if(el('bttsSettled')) el('bttsSettled').textContent=settled.length;
-    if(el('bttsPred')) el('bttsPred').textContent=n?(avgPred*100).toFixed(1)+'%':'—';
-    if(el('bttsOverlay')) el('bttsOverlay').textContent=n?(avgOverlay*100).toFixed(1)+'pp':'—';
-    if(el('bttsMeta')) el('bttsMeta').textContent=`picks_btts_over25.json · ${n} registos · overlay gate ≥ 8% · TG desativado (validação pendente)`;
+    const clvColor=v=>v>=0.05?'var(--green)':v>=0?'var(--amber)':'var(--red)';
+    if(el('bttsCLV30')){
+      el('bttsCLV30').textContent=clvRoll30!=null?(clvRoll30>=0?'+':'')+( clvRoll30*100).toFixed(1)+'%':'—';
+      if(clvRoll30!=null) el('bttsCLV30').style.color=clvColor(clvRoll30);
+    }
+    if(el('bttsCLVAvg')){
+      el('bttsCLVAvg').textContent=avgCLV!=null?(avgCLV>=0?'+':'')+(avgCLV*100).toFixed(1)+'% (n='+withCLV.length+')':'—';
+      if(avgCLV!=null) el('bttsCLVAvg').style.color=clvColor(avgCLV);
+    }
+    const src=withCLV.length?` · ${withCLV.length}/${n} com CLV real`:'';
+    if(el('bttsMeta')) el('bttsMeta').textContent=`picks_btts_over25.json · ${n} registos · gate CLV ≥ 5%${src}`;
     if(!n){
-      body.innerHTML='<div class="empty" style="padding:20px">Sem picks BTTS+Over 2.5 ainda. O auto-scan guarda aqui quando overlay ≥ 8%.</div>';
+      body.innerHTML='<div class="empty" style="padding:20px">Sem picks BTTS+Over 2.5 ainda. O auto-scan guarda aqui quando CLV ≥ 5%.</div>';
       return;
     }
     const rows=[...picks].sort((a,b)=>b.scanned_at>a.scanned_at?1:-1).slice(0,50);
@@ -2651,7 +2665,9 @@ async function renderDashBtts(){
       const dt=(p.data||p.scanned_at||'').substring(0,10);
       const res=p.resultado_btts_over25;
       const resHtml=res==='WIN'?'<span style="color:var(--green)">✓ WIN</span>':res==='LOSS'?'<span style="color:var(--red)">✗ LOSS</span>':'<span style="color:var(--text3)">—</span>';
-      return `<div class="pt-row"><span>${dt}</span><span style="font-size:11px">${p.casa||''} vs ${p.fora||''}</span><span style="font-size:10px;color:var(--text2)">${p.liga||''}</span><span>${((parseFloat(p.p_dc_conjunta)||0)*100).toFixed(1)}%</span><span>${((parseFloat(p.overlay)||0)*100).toFixed(1)}pp</span><span>${resHtml}</span></div>`;
+      const clv=p.clv_btts_over25!=null?parseFloat(p.clv_btts_over25):null;
+      const clvHtml=clv!=null?`<span style="color:${clvColor(clv)}">${clv>=0?'+':''}${(clv*100).toFixed(1)}%</span>`:'<span style="color:var(--text3)">—</span>';
+      return `<div class="pt-row"><span>${dt}</span><span style="font-size:11px">${p.casa||''} vs ${p.fora||''}</span><span style="font-size:10px;color:var(--text2)">${p.liga||''}</span><span>${((parseFloat(p.p_dc_conjunta)||0)*100).toFixed(1)}%</span>${clvHtml}<span>${resHtml}</span></div>`;
     }).join('');
   }catch(e){
     body.innerHTML=`<div class="empty" style="padding:20px;color:var(--text3)">picks_btts_over25.json não disponível — o auto-scan gera este ficheiro.</div>`;

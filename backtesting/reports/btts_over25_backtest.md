@@ -102,4 +102,4 @@ Sem odds BTTS+Over 2.5 disponíveis no dataset — ROI não calculado.
 - **Gate live scan**: overlay ≥ 8% AND ev\_final\_over25 ≥ 3% AND liga whitelisted.
 - **Activação alertas TG**: n ≥ 100 settled com CLV proxy > +5% no período.
 
-Generated: 2026-06-21T09:53:02+00:00 UTC
+Generated: 2026-06-21T09:57:01+00:00 UTC
