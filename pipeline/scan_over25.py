@@ -28,6 +28,7 @@ DATA_DIR = ROOT / "data"
 PICKS_FILE = DATA_DIR / "picks.json"
 REJECTED_FILE = DATA_DIR / "rejected_picks.json"
 SCAN_STATE_FILE = DATA_DIR / "scan_state_over25.json"
+BTTS_O25_FILE = DATA_DIR / "picks_btts_over25.json"
 
 # ── env ────────────────────────────────────────────────────────────────────────
 BSD_API_KEY = os.environ.get("BSD_API_KEY", "")
@@ -41,6 +42,7 @@ MAX_TIMING_H = 6.0
 MIN_ODDS = 1.30
 MAX_ODDS = 3.50
 ODDS_UPDATE_THRESHOLD = 0.03  # >3% mudança nas odds → cria pick _update
+BTTS_O25_OVERLAY_MIN = 0.08   # overlay mínimo para pick BTTS+Over 2.5
 
 WHITELIST = {
     "Premier League", "La Liga", "Bundesliga", "Serie A", "Ligue 1",
@@ -266,6 +268,50 @@ def _save_list(path: Path, data: list[dict]) -> None:
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
+# ── BTTS+Over 2.5 joint probability ─────────────────────────────────────────────
+
+def _compute_btts_over25(casa: str, fora: str, liga: str, dc_ratings: dict) -> dict | None:
+    """
+    Compute P(BTTS AND Over 2.5) from the DC bivariate grid.
+    Returns None if dc_ratings don't cover this match.
+    """
+    try:
+        import numpy as np
+        from pipeline.transform import normalize_team_names
+        from models.math.poisson import build_dc_grid, extract_btts_over25_prob, prob_over25_poisson
+
+        league_data = dc_ratings.get(liga)
+        if not league_data:
+            return None
+        teams = league_data.get("teams", {})
+        home_data = teams.get(normalize_team_names(casa))
+        away_data = teams.get(normalize_team_names(fora))
+        if not home_data or not away_data:
+            return None
+
+        lambda_h = float(np.exp(home_data["attack"] + away_data["defence"] + league_data["home_adv"]))
+        lambda_a = float(np.exp(away_data["attack"] + home_data["defence"]))
+        rho = float(league_data.get("rho", 0.0))
+
+        grid = build_dc_grid(lambda_h, lambda_a, rho=rho)
+        p_dc_conjunta = extract_btts_over25_prob(grid)
+        p_btts_dc     = float(grid[1:, 1:].sum())
+        p_over25_dc   = prob_over25_poisson(lambda_h, lambda_a, rho=rho)
+        p_naive       = p_btts_dc * p_over25_dc
+        overlay       = p_dc_conjunta - p_naive
+
+        return {
+            "p_dc_conjunta": round(p_dc_conjunta, 6),
+            "p_btts_dc":     round(p_btts_dc, 6),
+            "p_over25_dc":   round(p_over25_dc, 6),
+            "p_naive":       round(p_naive, 6),
+            "overlay":       round(overlay, 6),
+        }
+    except Exception as exc:
+        print(f"BTTS+O2.5 compute: {exc}", file=sys.stderr)
+        return None
+
+
 # ── Main scan ───────────────────────────────────────────────────────────────────
 
 def scan() -> None:
@@ -277,12 +323,14 @@ def scan() -> None:
     calibrator_fn = _load_calibrator_fn()
     existing_picks: dict[str, dict] = {p["id"]: p for p in _load_list(PICKS_FILE)}
     existing_rejected: list[dict] = _load_list(REJECTED_FILE)
+    existing_btts: dict[str, dict] = {p["id"]: p for p in _load_list(BTTS_O25_FILE)}
     scan_state: dict = (
         json.loads(SCAN_STATE_FILE.read_text()) if SCAN_STATE_FILE.exists() else {}
     )
 
     new_picks: list[dict] = []
     new_rejected: list[dict] = []
+    new_btts_picks: list[dict] = []
     alerts_sent = 0
     ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     seen_ids: set[str] = set()
@@ -355,6 +403,23 @@ def scan() -> None:
         send_telegram(_build_msg(ev, prob))
         alerts_sent += 1
 
+        # ── BTTS+Over 2.5 gate ──────────────────────────────────────────────
+        btts_data = _compute_btts_over25(ev["casa"], ev["fora"], ev["liga"], dc_ratings)
+        if btts_data and btts_data["overlay"] >= BTTS_O25_OVERLAY_MIN:
+            btts_id = f"{ev_id}_btts"
+            if btts_id not in existing_btts:
+                btts_pick = {
+                    **ev, **prob, **btts_data,
+                    "id": btts_id,
+                    "resultado_btts_over25": "",
+                    "scanned_at": ts,
+                    "fonte": "auto-scan-btts",
+                }
+                new_btts_picks.append(btts_pick)
+                existing_btts[btts_id] = btts_pick
+                # TG BTTS+Over 2.5 desativado — ativar após validação backtest (n≥100 settled, CLV proxy>+5%)
+                # send_telegram(f"⚽ BTTS+O2.5 — {ev['liga']}\n{ev['casa']} vs {ev['fora']}\np_conjunta={btts_data['p_dc_conjunta']*100:.1f}% | overlay={btts_data['overlay']*100:.1f}%")
+
     _save_list(PICKS_FILE, list(existing_picks.values()))
 
     rej_index = {r.get("id", "") + r.get("scanned_at", ""): r for r in existing_rejected}
@@ -362,15 +427,17 @@ def scan() -> None:
         rej_index[r.get("id", "") + r.get("scanned_at", "")] = r
     _save_list(REJECTED_FILE, list(rej_index.values()))
 
+    _save_list(BTTS_O25_FILE, list(existing_btts.values()))
     SCAN_STATE_FILE.write_text(json.dumps(scan_state, indent=2, ensure_ascii=False))
 
     print(
         f"Over 2.5 scan: {len(new_picks)} novos picks | "
-        f"{len(new_rejected)} rejeitados | {alerts_sent} TG enviados"
+        f"{len(new_rejected)} rejeitados | {alerts_sent} TG enviados | "
+        f"{len(new_btts_picks)} BTTS+O2.5 novos"
     )
 
     git_commit_push(
-        [str(PICKS_FILE), str(REJECTED_FILE), str(SCAN_STATE_FILE)],
+        [str(PICKS_FILE), str(REJECTED_FILE), str(SCAN_STATE_FILE), str(BTTS_O25_FILE)],
         f"auto-scan over25 {ts} [skip ci]",
     )
 
