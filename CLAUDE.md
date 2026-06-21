@@ -83,58 +83,138 @@ The Stop hook (`/home/user/over25-scanner/.claude/auto-push.sh`) handles commit+
 
 ## Overview
 
-This project has two layers:
+Estado do sistema a **21 jun 2026** — três módulos em produção, todos em MODO OBSERVAÇÃO.
 
-**1. Static front-end scanner** (browser, no build):
-- **`index.html`** — Main app ("Over 2.5 SCOUT"): scanner, Sharp 1X2 signals, live monitor, dashboard
-- **`tracker.html`** — Standalone analytics monitor ("Over 2.5 MONITOR") with ROI curve and breakdown by filter
+**Camada 1 — Front-end estático** (browser, sem build):
+- **`index.html`** — "Over 2.5 SCOUT": scanner, Sharp 1X2, monitor live, dashboard (tabs: Over 2.5, Sharp 1X2, BTTS+O2.5, Live)
+- **`tracker.html`** — "Over 2.5 MONITOR": ROI curve, breakdown por filtro, picks table (GAS Sheet dedicada)
 
-**2. Python ML pipeline** (server-side, GitHub Actions):
-- Dixon-Coles per-league model (`models/train_dc.py`) — trains on last 2 seasons, exports `data/dc_ratings.json`
-- Isotonic calibrator (`backtesting/run_calibration.py`) — LOEO-CV on 4 training epochs, exports `data/calibrator.json`
-- Walk-forward backtester (`backtesting/run_walkforward.py`) — strict temporal split, calibrator_fn support
-- Pipeline transform (`pipeline/transform.py`) — `compute_final_probability_dc()` blends DC + market
+**Camada 2 — Pipeline Python** (GitHub Actions):
+- Dixon-Coles por liga (`models/train_dc.py`) → `data/dc_ratings.json`
+- Calibrador isotónico LOEO-CV (`backtesting/run_calibration.py`) → `data/calibrator.json`
+- Três scanners automáticos (`pipeline/scan_over25.py`, `pipeline/scan_sharp1x2.py`) — correm a cada 30 min
 
-**Whitelist de produção — 10 ligas BSD confirmadas:**
-`Premier League(1), Primeira Liga(2), La Liga(3), Serie A(4), Bundesliga(5), Ligue 1(6), Eredivisie(10), Championship(12), Belgian Pro League(14), La Liga 2(38)`
-Bundesliga 2 e Serie B ausentes da BSD (65 ligas disponíveis) — continuam no histórico football-data.co.uk (D2/I2) para backtesting mas nunca geram picks em produção.
+Open either HTML file directly in a browser to run. No build steps, no tests, no linters for the front-end.
 
-**FASE 4 validation (epoch 2526):**
-- Calibrated (w=0.30): Brier=0.24168 vs Market=0.24320 vs Uncalibrated=0.25110
-- CLV IC 95% = [-0.985%, +1.366%] — inclui zero (N=83, época única)
-- Regime: MODO OBSERVAÇÃO — sem dinheiro real até CLV rolling-30 > +1% com n≥200 settled
-- **Observação efectiva começa 17 jun 2026** — picks anteriores contaminados (liga vazia ou fora da whitelist pré-fix BSD API) e excluídos de todos os KPIs com campo `data_quality_flag`
+---
 
-**Key decisions recorded (não reverter sem evidência nova):**
-- `MAX_ODDS_OVER`: NÃO implementado. Evidência não-monotónica (>2.50 deu +3.69%, N=35 insuficiente). Em vez disso: `odds_band` gravado em cada pick para análise ao vivo.
-- Kelly: desativado até CLV validado ao vivo (MODO OBSERVAÇÃO). buildPickMsg ainda exibe valor mas é informativo.
-- MODEL_WEIGHT=0.30: melhor Brier calibrado em LOEO-CV. Não alterar sem nova validação.
-- Sharp 1X2 signal: MUDOU de `pin_drop` → divergência B365/Pinnacle (12 jun 2026).
-  Critério de alerta: `div_b365_pin > 3%` (raw `divB365 > 0.03`) + liga whitelisted + outcome≠DRAW (exc. N1 tracking) + HOME N1 bloqueado + timing 0–6h KO.
-  `pin_drop` continua gravado por pick para análise futura mas NÃO é critério de alerta.
-  Evidência histórica: 21.087 jogos, ROI +2.46% em 3.731 apostas (threshold >3%).
-  **Walk-forward validado** (Q5 — `backtesting/reports/sharp1x2_signal.md`):
-    Ronda 1 (val 2425): n=1001, ROI=+1.03%, WR=25.1%, CLV sim=+2.50%
-    Ronda 2 (val 2526): n=337, ROI=−10.10%, WR=22.8%, CLV sim=+2.49%
-    CLV positivo em AMBAS as épocas → sinal não refutado. ROI instável por n baixo.
-  CLV proxy: `div_b365_pin` (B365/NVP−1, já em %). CLV exacto quando `odds_fecho` implementado.
-  **`previous_decimal_odds` (BSD odds API):** campo disponível para 1X2 e Over/Under — é a odd do scan anterior, NÃO a odd de abertura nem a closing line. Útil para detectar movimento mas NÃO resolve o xfail de `odds_fecho`. CLV exacto requer fetch dedicado pós-KO (Pinnacle closing line).
-  Modo: OBSERVAÇÃO — sem dinheiro real até CLV rolling-30 > +1% com n ≥ 200 settled.
-  **Observação efectiva começa 17 jun 2026** — todos os 351 picks anteriores marcados com `data_quality_flag` e excluídos dos KPIs.
-- DRAW N1 (Eredivisie): em tracking separado desde 12 jun 2026. Gate 2 bloqueia DRAW global
-  mas picks DRAW N1 com div≥3% são gravados com `gate_blocked_reason: "draw_observacao_n1"`.
-  Critério de activação (exceção Gate 2 para N1): 50 settled com CLV>+1% → rever Gate 2.
-  Evidência histórica: ROI +36.94% em 142 apostas, 5 épocas consistentes.
-- HOME N1 (Eredivisie): excluído do alerta TG desde 12 jun 2026. Gravado com
-  `gate_blocked_reason: "n1_home_negativo"`. Rever quando n≥100 ao vivo.
-  Evidência histórica: ROI −6.07% em 100 apostas.
+## Três Módulos em Produção
 
-Open either HTML file directly in a browser to run. There are no build steps, no tests, and no linters for the front-end.
+### 1 — Over 2.5 Scanner
 
-### Auto-reload de versão (index.html)
-`checkVersion()` corre no load e a cada 5 min: faz `fetch('version.json', {cache:'no-store'})`, compara o SHA remoto com `BUILD_SHA` embutido no HTML. Se divergirem, limpa caches e faz `location.reload()`. Flag `reload_attempted_<sha>` em `sessionStorage` evita loop infinito. Reload é adiado se `_autoLogRunning=true`.
+| Campo | Valor |
+|---|---|
+| Sinal | Dixon-Coles + calibração isotónica + blend mercado (`MODEL_WEIGHT=0.30`) |
+| Gate | EV ≥ 3% (`MIN_EV`) + liga whitelisted + não-DRIFTING + timing < 6h KO |
+| CLV proxy | `div_over_pin` (Over 2.5 Pinnacle vs NVP) |
+| Validação | FASE 4 (época 2526): Brier calibrado=0.24168 vs market=0.24320; CLV IC 95% [−0.985%, +1.366%] (N=83) |
+| Activação apostas reais | CLV rolling-30 > +1% com n ≥ 300 settled |
+| Observação efectiva | **17 jun 2026** — picks anteriores têm `data_quality_flag` e excluídos dos KPIs |
 
-`version.json` e `BUILD_SHA` são actualizados pelo workflow `deploy_version.yml` em cada push para `main` (commit `[skip ci]`). **Nota de CDN**: se GitHub Pages/Fastly cachear `version.json`, a deteção pode demorar até ao TTL da cache (tipicamente 10 min). Aceitável para este caso de uso.
+### 2 — Sharp 1X2
+
+| Campo | Valor |
+|---|---|
+| Sinal | Divergência Bet365/Pinnacle > 3% (`div_b365_pin`) |
+| Gate | div > 3% + liga whitelisted + não-DRAW + HOME N1 bloqueado + timing 0–6h KO |
+| CLV proxy | `div_b365_pin` (B365/NVP−1, %). CLV exacto requer `odds_fecho` pós-KO (xfail activo) |
+| Evidência histórica | 21.087 jogos, ROI +2.46% em 3.731 apostas (threshold >3%) |
+| Walk-forward | Ronda 1 (2425): ROI +1.03%, CLV sim +2.50%; Ronda 2 (2526): ROI −10.10%, CLV sim +2.49% — CLV positivo em ambas |
+| Em tracking | DRAW N1 Eredivisie: 0/50 settled; HOME N1: 0/100 settled (bloqueado: ROI histórico −6.07%) |
+| Activação apostas reais | CLV rolling-30 > +1% com n ≥ 200 settled |
+| Observação efectiva | **17 jun 2026** — 351 picks anteriores com `data_quality_flag` excluídos dos KPIs |
+
+### 3 — BTTS+Over 2.5
+
+| Campo | Valor |
+|---|---|
+| Sinal | Grelha bivariada DC — `p_dc_conjunta = P(BTTS AND O2.5)` via `build_dc_grid()` + `extract_btts_over25_prob()` |
+| Gate | `clv_btts_over25 ≥ 5%` + EV over25 ≥ 3% + liga whitelisted |
+| CLV real | `p_dc_conjunta / (p_btts_market × p_over25_market) − 1`; BSD market `btts` outcome=yes/no confirmado |
+| De-vig BTTS | Se yes+no disponíveis: `p_yes/(p_yes+p_no)`; senão: `(1/odds_yes)/1.05` (fallback) |
+| Picks | `data/picks_btts_over25.json` — auto-scan, formato `{ev_id}_btts` |
+| Alertas TG | Activos: `⚽ BTTS+Over 2.5 — CLV +X.X% vs mercado` |
+| Backtest | Walk-forward: 22.429 jogos, WR 40.8%, zero leakage (gate overlay não discrimina → CLV gate substituiu) |
+| Activação apostas reais | CLV rolling-30 > +5% com n ≥ 100 settled |
+| Observação efectiva | **21 jun 2026** |
+
+**Markets BSD confirmados:** `market=1x2`, `market=over_under_25`, `market=btts` (outcome=yes/no)
+
+---
+
+## Whitelist de Produção — 10 Ligas BSD
+
+| ID BSD | Liga |
+|---|---|
+| 1 | Premier League |
+| 2 | Primeira Liga |
+| 3 | La Liga |
+| 4 | Serie A |
+| 5 | Bundesliga |
+| 6 | Ligue 1 |
+| 10 | Eredivisie |
+| 12 | Championship |
+| 14 | Belgian Pro League |
+| 38 | La Liga 2 |
+
+Bundesliga 2 e Serie B: ausentes da BSD (65 ligas disponíveis) — presentes no histórico football-data.co.uk para backtesting, nunca geram picks em produção. `BSD_LEAGUE_ID_MAP` no código usa estes IDs para mapear `league_id` → nome canónico (fail-closed: ID desconhecido → `''` → whitelist rejeita).
+
+---
+
+## Infraestrutura Automática
+
+| Workflow | Trigger | O que faz |
+|---|---|---|
+| `scanner.yml` | a cada 30 min | Over 2.5 scan + Sharp 1X2 scan + commit `data/picks*.json` |
+| `historical_data.yml` | seg 06:00 UTC | Actualiza `data/historical/matches.csv` (football-data.co.uk) |
+| `retrain_dc.yml` | seg 07:00 UTC | Re-treina DC + calibrador + relatório TG Sharp 1X2 semanal |
+| `deploy_version.yml` | cada push main | Actualiza `version.json` + `BUILD_SHA` em `index.html` [skip ci] |
+| `dashboard.yml` | trigger | Gera dashboard HTML analítico |
+| `data_quality.yml` | diário 07:00 UTC | Schema + data quality + backtests automáticos |
+| `sharp1x2_analysis.yml` | workflow_dispatch | Q1–Q6 analysis report Sharp 1X2 |
+| `probe_bsd_markets.yml` | workflow_dispatch | Diagnóstico markets disponíveis na BSD API |
+
+**Secrets necessários:** `BSD_API_KEY`, `TG_TOKEN`, `TG_CHAT_ID`
+
+---
+
+## Decisões Permanentes (não reverter sem evidência nova)
+
+| Decisão | Estado | Critério de revisão |
+|---|---|---|
+| `MODEL_WEIGHT=0.30` | fixo | Melhor Brier calibrado em LOEO-CV. Nova validação obrigatória. |
+| Kelly staking | DESACTIVADO | `ValueError` se `STAKE_TYPE ≠ "flat"`. Rever quando CLV validado ao vivo. |
+| Odds cap (`MAX_ODDS_OVER`) | REJEITADO | Evidência não-monotónica (>2.50: ROI +3.69%, N=35 insuficiente). `odds_band` gravado por pick. |
+| DRAW (todos os módulos) | SUSPENSO | Excepção: DRAW N1 Eredivisie em tracking. Activar quando 50 settled CLV>+1%. |
+| HOME N1 (Sharp 1X2) | BLOQUEADO | ROI histórico −6.07%, 100 apostas. Rever quando n≥100 ao vivo. |
+| Bundesliga 2 / Serie B | FORA da whitelist BSD | BSD não tem estas ligas. Mantidas no histórico para backtesting. |
+| `pin_drop` como sinal 1X2 | SUBSTITUÍDO | Desde 12 jun 2026: sinal é `div_b365_pin > 3%`. `pin_drop` gravado por pick mas não é gate. |
+| `previous_decimal_odds` | NÃO é closing line | É a odd do scan anterior. CLV exacto requer fetch Pinnacle pós-KO (+10min). |
+
+---
+
+## Ciclos de Revisão
+
+| Checkpoint | Data | O que verificar |
+|---|---|---|
+| C3 | 30 jun 2026 | Workflows activos + CLV rolling primeiros picks reais (3 módulos) |
+| C4 | 15 jul 2026 | Primeira leitura com peso estatístico (n≈200 Over 2.5, n≈50 Sharp, n≈50 BTTS) |
+| C5 | 31 jul 2026 | Decisão de agosto: apostar ou manter observação (gates CLV por módulo) |
+
+---
+
+## Backlog Técnico (por prioridade)
+
+| Item | Estado | Critério de activação |
+|---|---|---|
+| `odds_fecho` real — CLV exacto Sharp 1X2 | xfail activo | Fetch Pinnacle pós-KO (+10min): `decimal_odds` nesse momento = closing line. `previous_decimal_odds` não serve. |
+| 2º soft book no Sharp 1X2 (além da Bet365) | não iniciado | Melhorar robustez do sinal `div_b365_pin` |
+| DRAW N1 Eredivisie | tracking 0/50 | 50 settled CLV>+1% → activar excepção Gate 2 para DRAW N1 |
+| HOME N1 Eredivisie | bloqueado | 100 settled ao vivo → rever (histórico ROI −6.07%) |
+| Skellam para 1X2 | não iniciado | Segundo sinal independente do DC para Sharp 1X2 |
+| Walk-forward BTTS+O2.5 sem `--fast` | pendente | Out-of-sample com DC re-fit semanal (backtest actual usa dc_ratings.json in-sample) |
+
+---
 
 ## External Dependencies
 
@@ -177,6 +257,11 @@ Defined inside `loadAll()` — the `sharpRaw` build loop scores each 1X2 outcome
 - Minimum score threshold: 8 pts to appear
 
 Labels: `STEAM` = movement ≥5% and ≤30min to KO; `SHARP` = movement ≥5% or (≥2% and ≤12h); `WATCH` = anything above threshold.
+
+### Auto-reload de versão (index.html)
+`checkVersion()` corre no load e a cada 5 min: faz `fetch('version.json', {cache:'no-store'})`, compara o SHA remoto com `BUILD_SHA` embutido no HTML. Se divergirem, limpa caches e faz `location.reload()`. Flag `reload_attempted_<sha>` em `sessionStorage` evita loop infinito. Reload é adiado se `_autoLogRunning=true`.
+
+`version.json` e `BUILD_SHA` são actualizados pelo workflow `deploy_version.yml` em cada push para `main` (commit `[skip ci]`). Se GitHub Pages/Fastly cachear `version.json`, a deteção pode demorar até ao TTL da cache (≈10 min).
 
 ### Key Constants (index.html)
 ```js
@@ -228,72 +313,53 @@ python -m pipeline.historical --synthetic
 models/
   math/
     devig.py          — metodo_multiplicativo, metodo_shin, devig()
-    poisson.py        — fit_dixon_coles_fast, prob_over25_poisson, prob_over25_from_model
+    poisson.py        — fit_dixon_coles_fast, prob_over25_poisson, prob_over25_from_model,
+                        build_dc_grid, extract_btts_over25_prob
   train_dc.py         — CLI to train DC per league → data/dc_ratings.json
 backtesting/
-  run_walkforward.py       — OOS predictions with calibrator_fn + season filter
-  run_calibration.py       — FASE 4: LOEO-CV → calibrator.json + validation report
-  run_sharp1x2_signal.py   — Q1–Q6 analysis: div threshold, walk-forward, N1 anomaly
-  send_sharp1x2_weekly.py  — Weekly TG report (CLV rolling-30, HOME/AWAY, DRAW N1 progress)
-  reports/                 — calibration_validation.md, sharp1x2_signal.md
+  run_walkforward.py          — OOS predictions with calibrator_fn + season filter
+  run_calibration.py          — FASE 4: LOEO-CV → calibrator.json + validation report
+  run_sharp1x2_signal.py      — Q1–Q6 analysis: div threshold, walk-forward, N1 anomaly
+  run_btts_over25_backtest.py — Walk-forward BTTS+O2.5 (--fast: in-sample via dc_ratings.json)
+  send_sharp1x2_weekly.py     — Weekly TG report (CLV rolling-30, HOME/AWAY, DRAW N1 progress)
+  reports/                    — calibration_validation.md, sharp1x2_signal.md, btts_over25_backtest.md
 pipeline/
+  scan_over25.py      — Over 2.5 scan + BTTS+Over 2.5 scan (30 min cron)
+  scan_sharp1x2.py    — Sharp 1X2 scan (30 min cron)
   transform.py        — compute_final_probability, compute_final_probability_dc
   config.py           — MODEL_WEIGHT=0.30
 data/
-  dc_ratings.json     — fitted DC parameters per league (auto-updated Mondays)
-  calibrator.json     — isotonic calibrator (auto-updated Mondays)
-  historical/         — matches.csv (auto-updated Mondays via historical_data.yml)
+  dc_ratings.json          — fitted DC parameters per league (auto-updated Mondays)
+  calibrator.json          — isotonic calibrator (auto-updated Mondays)
+  picks.json               — Over 2.5 picks (auto-scan)
+  picks_btts_over25.json   — BTTS+Over 2.5 picks (auto-scan)
+  historical/              — matches.csv (auto-updated Mondays via historical_data.yml)
 .github/workflows/
-  historical_data.yml   — Monday 06:00 UTC: update matches.csv
-  retrain_dc.yml        — Monday 07:00 UTC: retrain DC + recalibrate + Sharp 1X2 TG report
-  sharp1x2_analysis.yml — workflow_dispatch: run Q1–Q6 analysis report
+  scanner.yml           — a cada 30 min: Over 2.5 + Sharp 1X2 scan
+  historical_data.yml   — seg 06:00 UTC: update matches.csv
+  retrain_dc.yml        — seg 07:00 UTC: retrain DC + recalibrate + Sharp 1X2 TG report
+  deploy_version.yml    — cada push main: version.json + BUILD_SHA [skip ci]
+  data_quality.yml      — diário 07:00 UTC: schema validation + backtests
+  sharp1x2_analysis.yml — workflow_dispatch: Q1–Q6 analysis report
+  probe_bsd_markets.yml — workflow_dispatch: diagnóstico markets BSD API
 ```
 
 ## Data Rules
 
 **NUNCA substituir dados reais por sintéticos para fazer um pipeline 'passar'.** Dados sintéticos são permitidos apenas em testes unitários (`tests/`), sempre claramente marcados.
 
-## BTTS+Over 2.5 — Estado e limitações
-
-Módulo implementado (PR #86, 21 jun 2026) mas em **MODO OBSERVAÇÃO** sem alertas TG.
+## BTTS+Over 2.5 — Componentes
 
 | Componente | Ficheiro | Estado |
 |---|---|---|
-| Grid bivariada DC + p_conjunta | `models/math/poisson.py` | ✅ produção |
-| Scan automático + gate overlay≥8% | `pipeline/scan_over25.py` | ✅ activo (TG desativado) |
-| Picks guardados | `data/picks_btts_over25.json` | ✅ auto-scan |
-| Dashboard sub-tab | `index.html` → dtab-btts | ✅ visível |
-| Backtest (in-sample, dc_ratings.json) | `backtesting/run_btts_over25_backtest.py` | ✅ `--fast` |
-| TG alertas | `scan_over25.py` linha ~416 | ❌ comentado |
-| CLV de mercado | — | ❌ sem odds BTTS+O2.5 na BSD |
-
-**CLV real não disponível — BSD API não tem market BTTS+Over 2.5 confirmado.**
-Diagnóstico pendente: correr workflow `probe_bsd_markets` (workflow_dispatch) para confirmar
-quais markets a BSD suporta. Script em `scripts/probe_bsd_markets.py`.
-
-**Markets BSD conhecidos:**
-- `market=1x2` — Sharp 1X2 (HOME/DRAW/AWAY)
-- `market=over_under_25` — Over/Under 2.5 golos
-- Candidatos BTTS testados: `btts`, `gg`, `both_teams_score`, `btts_over25`, etc. — **estado desconhecido até correr o probe**
-
-**Critério de activação de TG:**
-- n ≥ 100 settled com p_conjunta disponível
-- CLV proxy (div_over_pin como substituto) > +5% rolling-30
-- Descomentar a linha `# send_telegram(...)` em `scan_over25.py` quando atingido
-
-**Se BSD tiver market BTTS:**
-1. Adicionar fetch em `scan_over25.py` ao lado do `over_under_25`
-2. Usar `p_btts_mkt` como denominador para CLV: `p_dc_conjunta / p_btts_mkt_devigged - 1`
-3. Atualizar `backtesting/run_btts_over25_backtest.py` com odds reais
-
-## Sharp 1X2 — Backlog (não implementado)
-
-| Item | Estado | Critério de activação |
-|---|---|---|
-| `odds_fecho` real | xfail ativo | Fetch Pinnacle post-KO (KO+10min) → `decimal_odds` nesse momento = closing line → CLV exacto. `previous_decimal_odds` não serve (é o scan anterior, não a abertura). |
-| DRAW N1 (Eredivisie) | tracking: 0/50 settled | 50 settled c/CLV>+1% → activar excepção Gate 2 para DRAW N1 |
-| HOME N1 (Eredivisie) | bloqueado: `n1_home_negativo` | n≥100 settled ao vivo → rever (histórico ROI −6.07%) |
-| Intraday odds feed | não iniciado | High-frequency updates para signals intraday mais precisos |
+| Grid bivariada DC + p_conjunta | `models/math/poisson.py` — `build_dc_grid`, `extract_btts_over25_prob` | ✅ produção |
+| Scan automático + gate CLV≥5% | `pipeline/scan_over25.py` | ✅ activo |
+| De-vig BTTS (BSD market=btts) | `scan_over25.py` — `_compute_btts_over25()` | ✅ devig ou fallback 5% |
+| Picks guardados | `data/picks_btts_over25.json` — id `{ev_id}_btts` | ✅ auto-scan |
+| Dashboard sub-tab | `index.html` → `dtab-btts` / `dpanel-btts` | ✅ CLV rolling-30 visível |
+| TG alertas | `scan_over25.py` — `send_telegram(...)` | ✅ activo (CLV ≥ 5%) |
+| Backtest walk-forward | `backtesting/run_btts_over25_backtest.py` | ✅ `--fast` (in-sample); OOS pendente |
+| CLV real de mercado | BSD `market=btts` outcome=yes/no | ✅ disponível e integrado |
 
 ## Language
 
