@@ -253,6 +253,39 @@ data/
 
 **NUNCA substituir dados reais por sintéticos para fazer um pipeline 'passar'.** Dados sintéticos são permitidos apenas em testes unitários (`tests/`), sempre claramente marcados.
 
+## BTTS+Over 2.5 — Estado e limitações
+
+Módulo implementado (PR #86, 21 jun 2026) mas em **MODO OBSERVAÇÃO** sem alertas TG.
+
+| Componente | Ficheiro | Estado |
+|---|---|---|
+| Grid bivariada DC + p_conjunta | `models/math/poisson.py` | ✅ produção |
+| Scan automático + gate overlay≥8% | `pipeline/scan_over25.py` | ✅ activo (TG desativado) |
+| Picks guardados | `data/picks_btts_over25.json` | ✅ auto-scan |
+| Dashboard sub-tab | `index.html` → dtab-btts | ✅ visível |
+| Backtest (in-sample, dc_ratings.json) | `backtesting/run_btts_over25_backtest.py` | ✅ `--fast` |
+| TG alertas | `scan_over25.py` linha ~416 | ❌ comentado |
+| CLV de mercado | — | ❌ sem odds BTTS+O2.5 na BSD |
+
+**CLV real não disponível — BSD API não tem market BTTS+Over 2.5 confirmado.**
+Diagnóstico pendente: correr workflow `probe_bsd_markets` (workflow_dispatch) para confirmar
+quais markets a BSD suporta. Script em `scripts/probe_bsd_markets.py`.
+
+**Markets BSD conhecidos:**
+- `market=1x2` — Sharp 1X2 (HOME/DRAW/AWAY)
+- `market=over_under_25` — Over/Under 2.5 golos
+- Candidatos BTTS testados: `btts`, `gg`, `both_teams_score`, `btts_over25`, etc. — **estado desconhecido até correr o probe**
+
+**Critério de activação de TG:**
+- n ≥ 100 settled com p_conjunta disponível
+- CLV proxy (div_over_pin como substituto) > +5% rolling-30
+- Descomentar a linha `# send_telegram(...)` em `scan_over25.py` quando atingido
+
+**Se BSD tiver market BTTS:**
+1. Adicionar fetch em `scan_over25.py` ao lado do `over_under_25`
+2. Usar `p_btts_mkt` como denominador para CLV: `p_dc_conjunta / p_btts_mkt_devigged - 1`
+3. Atualizar `backtesting/run_btts_over25_backtest.py` com odds reais
+
 ## Sharp 1X2 — Backlog (não implementado)
 
 | Item | Estado | Critério de activação |
