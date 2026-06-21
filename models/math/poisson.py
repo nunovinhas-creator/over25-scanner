@@ -372,6 +372,76 @@ def batch_predict(
 # Vectorized fast fitting (L-BFGS-B + numpy, ~800× faster than SLSQP loop)
 # ---------------------------------------------------------------------------
 
+# ---------------------------------------------------------------------------
+# Bivariate grid + BTTS+Over 2.5 joint probability
+# ---------------------------------------------------------------------------
+
+def build_dc_grid(
+    lambda_h: float,
+    lambda_a: float,
+    rho: float = 0.0,
+    max_goals: int = 10,
+) -> np.ndarray:
+    """
+    Build bivariate Poisson probability grid with optional DC correction.
+
+    grid[x, y] = P(home scores x goals, away scores y goals).
+
+    Parameters
+    ----------
+    lambda_h, lambda_a : float
+        Expected goals for home and away team.
+    rho : float
+        Dixon-Coles low-score correction (use 0.0 for plain Poisson).
+    max_goals : int
+        Truncation: grid is (max_goals+1) × (max_goals+1).
+
+    Returns
+    -------
+    grid : np.ndarray of shape (max_goals+1, max_goals+1)
+    """
+    lambda_h = max(lambda_h, 1e-6)
+    lambda_a = max(lambda_a, 1e-6)
+
+    g = np.arange(0, max_goals + 1)
+    pmf_h = poisson.pmf(g, lambda_h)
+    pmf_a = poisson.pmf(g, lambda_a)
+    grid = np.outer(pmf_h, pmf_a)
+
+    if rho != 0.0:
+        for x in range(min(2, max_goals + 1)):
+            for y in range(min(2, max_goals + 1)):
+                tau_val = _tau(lambda_h, lambda_a, x, y, rho)
+                grid[x, y] *= max(tau_val, 1e-9)
+
+    return grid
+
+
+def extract_btts_over25_prob(grid: np.ndarray) -> float:
+    """
+    Compute P(BTTS AND Over 2.5) from a bivariate goal probability grid.
+
+    Sums grid[x][y] where x >= 1 AND y >= 1 AND (x + y) >= 3.
+    Note: (1,1) is BTTS but not Over 2.5 (total = 2), so it is excluded.
+
+    Parameters
+    ----------
+    grid : np.ndarray
+        Output of ``build_dc_grid``.
+
+    Returns
+    -------
+    float in [0, 1]
+    """
+    max_g = grid.shape[0] - 1
+    p = 0.0
+    for x in range(1, max_g + 1):
+        for y in range(1, max_g + 1):
+            if x + y >= 3:
+                p += grid[x, y]
+    return float(np.clip(p, 0.0, 1.0))
+
+
 def fit_dixon_coles_fast(
     matches_df: pd.DataFrame,
     xi: float = 0.0018,
