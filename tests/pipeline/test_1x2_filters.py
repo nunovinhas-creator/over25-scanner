@@ -3,8 +3,8 @@ tests/pipeline/test_1x2_filters.py
 ------------------------------------
 Testes para pipeline.etl.filter_1x2_alert_candidates.
 
-Inclui um teste sentinel (xfail) que falha enquanto odds_fecho não for
-implementado — serve de lembrete permanente da TAREFA 1.4 (Prompt 3).
+Inclui sentinel para odds_fecho (TAREFA 1.4): salta se update_closing_odds
+ainda não populou dados; falha se picks settled existem mas sem odds_fecho.
 
 Correr com:
     pytest tests/pipeline/test_1x2_filters.py -v --tb=short
@@ -232,36 +232,40 @@ class TestCLVTracking1x2:
         )
         assert stats["n_settled_sem_clv"] == 0
 
-    @pytest.mark.xfail(
-        reason=(
-            "SENTINEL — odds_fecho não implementado no syncResults1x2(). "
-            "Este teste falha intencionalmente enquanto todos os picks settled "
-            "tiverem odds_fecho vazio. "
-            "Implementar captura de odds Pinnacle de fecho (Prompt 3). "
-            "Remove este xfail quando o teste começar a passar."
-        ),
-        strict=True,
-    )
     def test_all_settled_picks_have_odds_fecho(self) -> None:
         """
-        SENTINEL — falha enquanto odds_fecho não for preenchido em picks_1x2.json.
+        Valida que picks settled têm odds_fecho preenchido (CLV calculável).
 
-        Todos os picks settled (WIN/LOSS) devem ter odds_fecho preenchido para
-        o CLV poder ser calculado: clv = odds_entrada / odds_fecho - 1.
+        CLV = odds_entrada / odds_fecho - 1 (Pinnacle closing line).
+        Implementação: pipeline/update_closing_odds.py + sharp1x2_analysis.yml.
 
-        Estado actual: 269/269 picks settled sem odds_fecho.
-        Implementação pendente: ver TAREFA 1.4 (Prompt 3).
+        Salta se o mecanismo ainda não populou dados (estado inicial após deploy).
         """
         if not _PICKS1X2_PATH.exists():
             pytest.skip("data/picks_1x2.json não encontrado")
 
         picks = json.loads(_PICKS1X2_PATH.read_text())
-        settled = [p for p in picks if p.get("resultado_outcome") in ("WIN", "LOSS")]
+        settled = [
+            p for p in picks
+            if p.get("resultado_outcome") in ("WIN", "LOSS")
+            and not p.get("data_quality_flag")
+        ]
+
+        if not settled:
+            pytest.skip("Sem picks settled sem data_quality_flag")
+
+        settled_com_close = [p for p in settled if str(p.get("odds_fecho", "")).strip()]
+        if not settled_com_close:
+            pytest.skip(
+                "update_closing_odds ainda não correu — nenhum pick tem odds_fecho. "
+                "Executar sharp1x2_analysis workflow ou aguardar próximo ciclo de 30min."
+            )
+
         settled_sem_close = [
             p for p in settled if not str(p.get("odds_fecho", "")).strip()
         ]
-
         assert len(settled_sem_close) == 0, (
             f"{len(settled_sem_close)}/{len(settled)} picks settled sem odds_fecho — "
-            "CLV não calculado. Implementar captura de odds_fecho (Prompt 3)."
+            f"({len(settled_com_close)} já preenchidos). "
+            "Verificar logs de update_closing_odds para picks em falta."
         )

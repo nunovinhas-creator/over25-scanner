@@ -33,6 +33,8 @@ BSD_API_KEY = os.environ.get("BSD_API_KEY", "")
 TG_TOKEN = os.environ.get("TG_TOKEN", "")
 TG_CHAT_ID = os.environ.get("TG_CHAT_ID", "1352687611")
 
+BSD_BASE = "https://sports.bzzoiro.com"
+
 # ── constants ──────────────────────────────────────────────────────────────────
 MAX_TIMING_H = 6.0
 MIN_TIMING_H = 0.0
@@ -177,6 +179,57 @@ def _fetch_all_events() -> list[dict]:
             })
         result.append(entry)
     return result
+
+
+def fetch_closing_odds(event_id: str, outcome: str) -> float | None:
+    """
+    Fetch odds Pinnacle para um evento settled via BSD API.
+
+    Chama GET /api/v2/odds/?market=1x2&event_id=<id>&limit=50
+    e extrai decimal_odds da Pinnacle para o outcome especificado.
+    Retorna None se BSD não tiver odds disponíveis para este evento.
+
+    Usado por update_closing_odds.py (+15min após KO).
+    A disponibilidade de odds pós-KO depende da BSD API —
+    confirmar com probe_bsd_closing_odds.py antes de assumir viabilidade.
+    """
+    if not BSD_API_KEY:
+        return None
+
+    headers = {"Authorization": f"Token {BSD_API_KEY}", "Accept": "application/json"}
+    try:
+        r = requests.get(
+            f"{BSD_BASE}/api/v2/odds/",
+            headers=headers,
+            params={"market": "1x2", "event_id": event_id, "limit": 50},
+            timeout=15,
+        )
+        r.raise_for_status()
+        payload = r.json()
+    except Exception as exc:
+        print(f"fetch_closing_odds({event_id}): {exc}", file=sys.stderr)
+        return None
+
+    records = payload if isinstance(payload, list) else (
+        payload.get("results") or payload.get("data") or []
+    )
+    out_norm = outcome.upper()
+    for rec in records:
+        if rec.get("bookmaker_slug") != "pinnacle":
+            continue
+        raw_out = (rec.get("outcome") or "").upper()
+        rec_out = (
+            "HOME" if raw_out in ("HOME", "HOME_WIN") else
+            "DRAW" if raw_out == "DRAW" else
+            "AWAY" if raw_out in ("AWAY", "AWAY_WIN") else ""
+        )
+        if rec_out == out_norm:
+            try:
+                price = float(rec.get("decimal_odds") or 0)
+                return price if price > 1.0 else None
+            except (TypeError, ValueError):
+                return None
+    return None
 
 
 def _extract_1x2_odds(ev: dict) -> dict[str, dict[str, float]]:
