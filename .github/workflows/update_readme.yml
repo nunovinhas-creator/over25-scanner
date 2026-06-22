@@ -1,0 +1,51 @@
+name: Update README
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - CLAUDE.md
+      - data/picks.json
+      - data/picks_1x2.json
+      - data/picks_btts_over25.json
+      - data/observations.json
+      - version.json
+
+jobs:
+  update_readme:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Regenerate README dynamic section
+        run: python scripts/generate_readme.py
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+
+      - name: Commit updated README
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add README.md
+
+          if git diff --cached --quiet; then
+            echo "Sem alterações no README."
+          else
+            git commit -m "[skip ci] update README"
+            git push origin main
+          fi
