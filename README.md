@@ -1,0 +1,252 @@
+# Over 2.5 Scout — Sistema de Apostas em Futebol
+
+[![Scanner](https://github.com/nunovinhas-creator/over25-scanner/actions/workflows/scanner.yml/badge.svg)](https://github.com/nunovinhas-creator/over25-scanner/actions/workflows/scanner.yml)
+[![Sharp 1X2](https://github.com/nunovinhas-creator/over25-scanner/actions/workflows/sharp1x2_analysis.yml/badge.svg)](https://github.com/nunovinhas-creator/over25-scanner/actions/workflows/sharp1x2_analysis.yml)
+[![Data Quality](https://github.com/nunovinhas-creator/over25-scanner/actions/workflows/data_quality.yml/badge.svg)](https://github.com/nunovinhas-creator/over25-scanner/actions/workflows/data_quality.yml)
+[![Python](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/)
+[![Licença](https://img.shields.io/badge/licen%C3%A7a-privado-lightgrey.svg)]()
+
+Sistema automatizado de identificação de valor em mercados de apostas de futebol. Três módulos em produção, todos em **modo observação** — sem apostas reais até os gates de CLV serem atingidos.
+
+---
+
+## Estado Actual
+
+<!-- DYNAMIC_STATUS_START -->
+| Módulo | Picks válidos | Settled | CLV rolling-30 | Gate | Estado |
+|---|---|---|---|---|---|
+| Over 2.5 | — | — | — | CLV>+1% n≥300 | OBSERVAÇÃO |
+| Sharp 1X2 | — | — | — | CLV>+1% n≥200 | OBSERVAÇÃO |
+| BTTS+O2.5 | — | — | — | CLV>+5% n≥100 | OBSERVAÇÃO |
+
+_Actualizado: —_
+<!-- DYNAMIC_STATUS_END -->
+
+**Observação efectiva:** Over 2.5 e Sharp 1X2 desde 17 Jun 2026 · BTTS+O2.5 desde 21 Jun 2026
+
+---
+
+## Arquitectura
+
+```
+                    BSD Sports API
+                         │
+              ┌──────────┴──────────┐
+              │  GitHub Actions     │
+              │  (a cada 30 min)    │
+              └──────────┬──────────┘
+                         │
+         ┌───────────────┼───────────────┐
+         ▼               ▼               ▼
+  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐
+  │  Over 2.5   │ │  Sharp 1X2  │ │  BTTS+O2.5  │
+  │  Scanner    │ │  Scanner    │ │  Scanner    │
+  │             │ │             │ │             │
+  │ DC+isotonic │ │ div_b365_pin│ │ DC bivariate│
+  │ EV ≥ 3%     │ │ div > 3%    │ │ CLV ≥ 5%    │
+  └──────┬──────┘ └──────┬──────┘ └──────┬──────┘
+         │               │               │
+         ▼               ▼               ▼
+   picks.json    picks_1x2.json  picks_btts_over25.json
+         │               │               │
+         └───────────────┼───────────────┘
+                         ▼
+                ┌────────────────┐
+                │  CLV Tracker   │
+                │  rolling-30    │
+                │  gate check    │
+                └───────┬────────┘
+                        │ gate atingido?
+                        ▼
+                 Telegram Alert
+                 (TG chat 1352687611)
+```
+
+**Módulos:**
+
+| Módulo | Sinal | Gate |
+|---|---|---|
+| **Over 2.5** | Dixon-Coles + calibração isotónica + blend mercado (`MODEL_WEIGHT=0.30`) | EV ≥ 3%, liga whitelisted, não-DRIFTING, timing < 6h KO |
+| **Sharp 1X2** | Divergência Bet365/Pinnacle (`div_b365_pin > 3%`) | HOME/AWAY apenas, timing 0–6h KO |
+| **BTTS+O2.5** | Grid bivariada DC — `p_dc_conjunta = P(BTTS AND O2.5)` | `clv_btts_over25 ≥ 5%` + EV over25 ≥ 3% |
+
+---
+
+## Stack Técnica
+
+| Componente | Tecnologia |
+|---|---|
+| Modelo estatístico | Dixon-Coles (por liga, retrain semanal) |
+| Calibração | Regressão isotónica LOEO-CV (`calibrator.json`) |
+| Blend modelo/mercado | `p_final = 0.30 × p_model + 0.70 × p_market` |
+| De-vig | Método multiplicativo + Shin |
+| Dados ao vivo | BSD Sports API (`sports.bzzoiro.com`) |
+| Dados históricos | football-data.co.uk (épocas 2122–2526) |
+| Automação | GitHub Actions (cron 30min, retrain segunda-feira) |
+| Alertas | Telegram Bot API |
+| Frontend | HTML/JS estático (`index.html`, `tracker.html`) |
+| Testes | pytest + validação de schema Pandera |
+
+---
+
+## Ligas Suportadas (Whitelist BSD)
+
+| ID BSD | Liga | País |
+|---|---|---|
+| 1 | Premier League | Inglaterra |
+| 2 | Primeira Liga | Portugal |
+| 3 | La Liga | Espanha |
+| 4 | Serie A | Itália |
+| 5 | Bundesliga | Alemanha |
+| 6 | Ligue 1 | França |
+| 10 | Eredivisie | Holanda |
+| 12 | Championship | Inglaterra |
+| 14 | Belgian Pro League | Bélgica |
+| 38 | La Liga 2 | Espanha |
+
+> Bundesliga 2 e Serie B: presentes no histórico para backtesting, ausentes da BSD API — nunca geram picks em produção.
+
+---
+
+## Estratégias — Backtesting Over 2.5
+
+Resultados walk-forward out-of-sample (épocas 2122–2526). Estratégias definidas em `backtesting/strategies.py`.
+
+| Estratégia | n apostas | WR% | ROI% | MaxDD | Sharpe |
+|---|---|---|---|---|---|
+| `high_score` | 7 | 71.4% | +27.89% | 10 | 0.313 |
+| `shortsharp` | 10 | 60.0% | +9.93% | 20 | 0.104 |
+| `sharp_only` | 10 | 60.0% | +9.93% | 20 | 0.104 |
+| `shortening_only` | 14 | 57.1% | +2.62% | 30 | 0.028 |
+| `baseline` | 35 | 51.4% | -6.27% | 80 | -0.067 |
+
+> **Validação FASE 4 (época 2526):** Brier calibrado=0.24168 vs mercado=0.24320 · CLV IC 95% [−0.985%, +1.366%] (N=83)
+
+**Sharp 1X2 (histórico football-data.co.uk):** 21.087 jogos · ROI +2.46% em 3.731 apostas (threshold div>3%)
+
+---
+
+## Ciclos de Revisão
+
+| Checkpoint | Data | Critério |
+|---|---|---|
+| **C3** | 30 Jun 2026 | Workflows activos + primeiros CLV com n suficiente |
+| **C4** | 15 Jul 2026 | Primeira leitura estatística (n≈200 Over 2.5, n≈50 Sharp, n≈50 BTTS) |
+| **C5** | 31 Jul 2026 | Decisão de agosto: apostar ou manter MODO OBSERVAÇÃO |
+
+Gates de activação para apostas reais:
+
+```
+Over 2.5:  CLV rolling-30 > +1%  e  n ≥ 300 settled
+Sharp 1X2: CLV rolling-30 > +1%  e  n ≥ 200 settled
+BTTS+O2.5: CLV rolling-30 > +5%  e  n ≥ 100 settled
+```
+
+---
+
+## Comando `/scan`
+
+Orquestra 4 subagentes em sequência via Claude Code:
+
+```
+/scan
+```
+
+| Passo | Subagente | O que faz |
+|---|---|---|
+| 1 | `data-fetcher` | Fetch eventos + odds (over/under, BTTS, 1X2) da BSD API para hoje |
+| 2 | `model-runner` | Aplica DC + calibrador isotónico → `p_final`, `ev_final` por evento |
+| 3 | `clv-tracker` | Lê picks dos 3 módulos, exclui `data_quality_flag`, calcula CLV rolling-30 |
+| 4 | `telegram-notifier` | Envia alerta TG **apenas se** gate de activação for atingido |
+
+---
+
+## Workflows Automáticos
+
+| Workflow | Trigger | Função |
+|---|---|---|
+| `scanner.yml` | cron 30min | Over 2.5 scan + Sharp 1X2 scan |
+| `sharp1x2_analysis.yml` | cron 30min + dispatch | Update closing odds + análise de sinal |
+| `retrain_dc.yml` | seg 07:00 UTC | Re-treina DC + calibrador + relatório TG |
+| `historical_data.yml` | seg 06:00 UTC | Actualiza `matches.csv` (football-data.co.uk) |
+| `data_quality.yml` | diário 07:00 UTC | Schema validation + backtests automáticos |
+| `probe_bsd_closing_odds.yml` | dispatch | Diagnóstico odds pós-KO na BSD API |
+| `deploy_version.yml` | push main | Actualiza `version.json` + `BUILD_SHA` |
+
+---
+
+## Instalação
+
+```bash
+# Clonar o repositório
+git clone https://github.com/nunovinhas-creator/over25-scanner.git
+cd over25-scanner
+
+# Instalar dependências Python
+pip install -r requirements.txt
+
+# Treinar modelo (requer data/historical/matches.csv)
+python -m models.train_dc
+
+# Calibrar (LOEO-CV)
+python -m backtesting.run_calibration
+
+# Correr testes
+pytest tests/ -v --tb=short
+```
+
+### Secrets necessários (GitHub Actions)
+
+| Secret | Descrição |
+|---|---|
+| `BSD_API_KEY` | Chave da BSD Sports API (`sports.bzzoiro.com`) |
+| `TG_TOKEN` | Token do bot Telegram para alertas |
+| `TG_CHAT_ID` | Chat ID Telegram (default: `1352687611`) |
+
+### Frontend
+
+Abrir `index.html` directamente no browser — sem build steps.
+Introduzir a `BSD_API_KEY` na interface → guardada em `localStorage`.
+
+---
+
+## Estrutura do Projecto
+
+```
+over25-scanner/
+├── index.html                  # Over 2.5 SCOUT (scanner + Sharp 1X2 + Live + Dashboard)
+├── tracker.html                # Over 2.5 MONITOR (ROI curve, picks table)
+├── pipeline/
+│   ├── scan_over25.py          # Over 2.5 + BTTS scan (30min cron)
+│   ├── scan_sharp1x2.py        # Sharp 1X2 scan + fetch_closing_odds()
+│   ├── update_closing_odds.py  # Preenche odds_fecho pós-KO + calcula CLV
+│   ├── etl.py / extract.py     # BSD API ETL layer
+│   └── config.py               # MODEL_WEIGHT=0.30, whitelist
+├── models/
+│   ├── math/
+│   │   ├── poisson.py          # Dixon-Coles, grid bivariada BTTS+O2.5
+│   │   ├── devig.py            # Método multiplicativo + Shin
+│   │   └── calibration.py      # Platt, isotónica, temperature scaling
+│   ├── metrics/
+│   │   └── roi_metrics.py      # ROI, CLV rolling, Sharpe, clv_analysis_1x2()
+│   └── train_dc.py             # CLI: treina DC por liga → dc_ratings.json
+├── backtesting/
+│   ├── engine.py               # Walk-forward determinístico
+│   ├── run_calibration.py      # LOEO-CV → calibrator.json
+│   └── reports/                # Relatórios markdown + txt por estratégia
+├── data/
+│   ├── picks.json              # Over 2.5 picks (auto-scan)
+│   ├── picks_1x2.json          # Sharp 1X2 picks (auto-scan)
+│   ├── picks_btts_over25.json  # BTTS+O2.5 picks (auto-scan)
+│   ├── dc_ratings.json         # Parâmetros DC por liga
+│   ├── calibrator.json         # Calibrador isotónico
+│   └── historical/             # matches.csv (football-data.co.uk)
+├── scripts/
+│   ├── generate_readme.py      # Regenera secções dinâmicas do README
+│   └── probe_bsd_*.py          # Diagnósticos da BSD API
+└── .github/workflows/          # 8 workflows automáticos
+```
+
+---
+
+> **Aviso:** Este projecto é de uso privado. Em modo observação — nenhuma aposta real activa.
