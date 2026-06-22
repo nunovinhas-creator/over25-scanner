@@ -2,10 +2,42 @@ name: Sharp 1X2 signal analysis
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '*/30 * * * *'  # a cada 30 min — janela de closing odds
 
 jobs:
+  update_closing_odds:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install --quiet requests
+
+      - name: Update closing odds
+        run: python -m pipeline.update_closing_odds
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+          BSD_API_KEY: ${{ secrets.BSD_API_KEY }}
+          TG_TOKEN: ${{ secrets.TG_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+
   analyse:
     runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
     permissions:
       contents: write
 

@@ -1,0 +1,29 @@
+name: Probe BSD closing odds
+
+on:
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install --quiet requests
+
+      - name: Run closing odds probe
+        run: python scripts/probe_bsd_closing_odds.py
+        env:
+          BSD_API_KEY: ${{ secrets.BSD_API_KEY }}
+          PYTHONPATH: ${{ github.workspace }}

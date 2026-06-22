@@ -22,6 +22,7 @@ Expected columns used:
 from __future__ import annotations
 
 import logging
+from datetime import datetime, timezone
 from typing import Optional
 
 import numpy as np
@@ -428,6 +429,129 @@ def kelly_roi_comparison(picks_df: pd.DataFrame) -> dict:
 # ---------------------------------------------------------------------------
 # Sharpe ratio
 # ---------------------------------------------------------------------------
+
+
+def compute_clv_1x2(odds_entrada: float, odds_fecho: float) -> float:
+    """
+    CLV para Sharp 1X2: (odds_entrada / odds_fecho - 1) × 100.
+
+    Positivo = conseguimos odds melhores que o fecho da Pinnacle.
+
+    Parameters
+    ----------
+    odds_entrada:
+        Odds da Bet365 no momento do pick.
+    odds_fecho:
+        Odds Pinnacle de fecho (+15min após KO).
+
+    Returns
+    -------
+    float
+        CLV em percentagem.  NaN se inputs inválidos.
+    """
+    try:
+        e = float(odds_entrada)
+        f = float(odds_fecho)
+        if e <= 1.0 or f <= 1.0:
+            return float("nan")
+        return round((e / f - 1.0) * 100.0, 4)
+    except (TypeError, ValueError):
+        return float("nan")
+
+
+def clv_analysis_1x2(
+    picks: list[dict],
+    window: int = 30,
+    gate_clv_pct: float = 1.0,
+    gate_n_min: int = 200,
+    obs_start: str = "2026-06-17",
+) -> dict:
+    """
+    CLV rolling e métricas de performance para Sharp 1X2.
+
+    Trabalha directamente sobre a lista de dicts de picks_1x2.json
+    (sem conversão para DataFrame).  Filtra picks com data_quality_flag
+    e picks anteriores a obs_start.
+
+    Parameters
+    ----------
+    picks:
+        Lista de picks de picks_1x2.json.
+    window:
+        Tamanho da janela rolling (default: 30).
+    gate_clv_pct:
+        Threshold de activação: CLV rolling > gate_clv_pct %.
+    gate_n_min:
+        N mínimo de picks com CLV para activar o gate.
+    obs_start:
+        Data ISO de início de observação (picks anteriores excluídos dos KPIs).
+
+    Returns
+    -------
+    dict with keys:
+        n_settled, n_with_clv, mean_clv, rolling_clv, gate_activated,
+        n_picks_valid, roi_pct
+    """
+    try:
+        obs_dt = datetime.fromisoformat(obs_start).replace(tzinfo=timezone.utc)
+    except ValueError:
+        obs_dt = datetime.min.replace(tzinfo=timezone.utc)
+
+    valid: list[dict] = []
+    for p in picks:
+        if p.get("data_quality_flag"):
+            continue
+        ko_raw = p.get("data") or p.get("saved_at", "")
+        try:
+            ko = datetime.fromisoformat(ko_raw.replace("Z", "+00:00"))
+        except Exception:
+            continue
+        if ko < obs_dt:
+            continue
+        valid.append(p)
+
+    settled = [p for p in valid if p.get("resultado_outcome") in ("WIN", "LOSS")]
+    with_clv = [p for p in settled if str(p.get("clv", "")).strip()]
+
+    if not with_clv:
+        n_wins = sum(1 for p in settled if p.get("resultado_outcome") == "WIN")
+        roi = (n_wins * 2 - len(settled)) / len(settled) * 100.0 if settled else float("nan")
+        return {
+            "n_picks_valid": len(valid),
+            "n_settled": len(settled),
+            "n_with_clv": 0,
+            "mean_clv": float("nan"),
+            "rolling_clv": float("nan"),
+            "gate_activated": False,
+            "roi_pct": round(roi, 4) if settled else float("nan"),
+        }
+
+    def _parse_ko(p: dict) -> datetime:
+        try:
+            return datetime.fromisoformat(
+                (p.get("data") or p.get("saved_at", "")).replace("Z", "+00:00")
+            )
+        except Exception:
+            return datetime.min.replace(tzinfo=timezone.utc)
+
+    with_clv_sorted = sorted(with_clv, key=_parse_ko)
+    clv_values = [float(p["clv"]) for p in with_clv_sorted]
+
+    mean_clv = sum(clv_values) / len(clv_values)
+    rolling_clv = sum(clv_values[-window:]) / min(len(clv_values), window)
+
+    n_wins = sum(1 for p in settled if p.get("resultado_outcome") == "WIN")
+    roi = (n_wins * 2 - len(settled)) / len(settled) * 100.0 if settled else float("nan")
+
+    return {
+        "n_picks_valid": len(valid),
+        "n_settled": len(settled),
+        "n_with_clv": len(with_clv),
+        "mean_clv": round(mean_clv, 4),
+        "rolling_clv": round(rolling_clv, 4),
+        "gate_activated": rolling_clv > gate_clv_pct and len(with_clv) >= gate_n_min,
+        "roi_pct": round(roi, 4),
+    }
 
 
 def sharpe_ratio(returns: np.ndarray, rf: float = 0.0) -> float:
