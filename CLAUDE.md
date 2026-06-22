@@ -315,25 +315,60 @@ models/
     devig.py          — metodo_multiplicativo, metodo_shin, devig()
     poisson.py        — fit_dixon_coles_fast, prob_over25_poisson, prob_over25_from_model,
                         build_dc_grid, extract_btts_over25_prob
+    calibration.py    — Platt scaling, isotonic regression, temperature scaling
+    skellam.py        — Skellam distribution (diferença de Poisson) para 1X2
+    elo.py            — Elo adaptado para Over/Under 2.5 (experimental, não em produção)
+    kelly.py          — Kelly criterion (DESACTIVADO em produção)
+  metrics/
+    brier_score.py    — Brier score + decomposição Murphy 1973, reliability diagram
+    ece.py            — Expected Calibration Error (ECE) e métricas de calibração
+    roi_metrics.py    — ROI, profit factor, drawdown, CLV rolling (unit staking)
   train_dc.py         — CLI to train DC per league → data/dc_ratings.json
 backtesting/
-  run_walkforward.py          — OOS predictions with calibrator_fn + season filter
-  run_calibration.py          — FASE 4: LOEO-CV → calibrator.json + validation report
+  engine.py           — Backtester + BacktestConfig: walk-forward determinístico
+  strategies.py       — Catálogo de estratégias e filter presets (baseline, sharp, etc.)
+  report.py           — Geração de relatórios de backtest (texto e markdown)
+  run_backtest.py     — CLI entrypoint para backtesting Over 2.5 (todas as estratégias)
+  run_walkforward.py  — OOS predictions com calibrator_fn + season filter
+  run_calibration.py  — FASE 4: LOEO-CV → calibrator.json + validation report
   run_sharp1x2_signal.py      — Q1–Q6 analysis: div threshold, walk-forward, N1 anomaly
   run_btts_over25_backtest.py — Walk-forward BTTS+O2.5 (--fast: in-sample via dc_ratings.json)
   send_sharp1x2_weekly.py     — Weekly TG report (CLV rolling-30, HOME/AWAY, DRAW N1 progress)
-  reports/                    — calibration_validation.md, sharp1x2_signal.md, btts_over25_backtest.md
+  reports/                    — calibration_validation.md, sharp1x2_signal.md,
+                                btts_over25_backtest.md, walkforward.md, + .txt por estratégia
 pipeline/
   scan_over25.py      — Over 2.5 scan + BTTS+Over 2.5 scan (30 min cron)
   scan_sharp1x2.py    — Sharp 1X2 scan (30 min cron)
   transform.py        — compute_final_probability, compute_final_probability_dc
+  etl.py              — ETL orchestration: coordena extract → transform → load
+  extract.py          — Data extraction da BSD API (fail-safe: lista vazia em erro)
+  historical.py       — Download e normalização football-data.co.uk → matches.csv
   config.py           — MODEL_WEIGHT=0.30
 data/
   dc_ratings.json          — fitted DC parameters per league (auto-updated Mondays)
   calibrator.json          — isotonic calibrator (auto-updated Mondays)
   picks.json               — Over 2.5 picks (auto-scan)
+  picks_1x2.json           — Sharp 1X2 picks (auto-scan)
   picks_btts_over25.json   — BTTS+Over 2.5 picks (auto-scan)
-  historical/              — matches.csv (auto-updated Mondays via historical_data.yml)
+  rejected_picks.json      — Over 2.5 rejeitados (para análise de gates)
+  rejected_picks_1x2.json  — Sharp 1X2 rejeitados
+  scan_state_over25.json   — estado do scan anterior (odds + movimento por event_id)
+  observations.json        — observações live (tab Live)
+  historical/              — matches.csv + matches.parquet (auto-updated Mondays)
+  schema/
+    bsd_schema.py    — BSD API event schema e validação
+    picks_schema.py  — picks.json schema e validação
+dashboard/
+  generate_dashboard.py — gera dashboard/analytics.html (workflow dashboard.yml)
+  analytics.html        — dashboard HTML analítico (auto-gerado)
+scripts/
+  probe_bsd_markets.py  — diagnóstico markets BSD API (workflow_dispatch)
+  fetch_bsd_leagues.py  — lista ligas disponíveis na BSD API (workflow_dispatch)
+js/                     — módulos JS auxiliares carregados por index.html
+  api-client.js    — HTTP client com retry, timeout, deduplicação e cache 60s
+  config.js        — constantes e endpoints centralizados
+  state-manager.js — estado global com pub/sub e persistência automática
+  storage.js / logger.js / error-handler.js / validators.js / github-api.js
 .github/workflows/
   scanner.yml           — a cada 30 min: Over 2.5 + Sharp 1X2 scan
   historical_data.yml   — seg 06:00 UTC: update matches.csv
@@ -342,6 +377,7 @@ data/
   data_quality.yml      — diário 07:00 UTC: schema validation + backtests
   sharp1x2_analysis.yml — workflow_dispatch: Q1–Q6 analysis report
   probe_bsd_markets.yml — workflow_dispatch: diagnóstico markets BSD API
+  fetch_bsd_leagues.yml — workflow_dispatch: lista ligas BSD disponíveis
 ```
 
 ## Data Rules
