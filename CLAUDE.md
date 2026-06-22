@@ -402,3 +402,56 @@ js/                     — módulos JS auxiliares carregados por index.html
 The UI is in **Portuguese (pt-PT)**. All user-facing strings, variable names like `casa`/`fora`/`liga`, and field names in the GAS schema use Portuguese. Keep this convention when adding new UI text or data fields.
 
 Python code uses English variable names, Portuguese comments where needed.
+
+---
+
+## Subagentes — `.claude/agents/`
+
+Quatro subagentes especializados, orquestrados pelo comando `/scan`:
+
+| Agente | Ficheiro | Responsabilidade |
+|---|---|---|
+| `data-fetcher` | `.claude/agents/data-fetcher.md` | Fetch eventos + odds da BSD API via `pipeline/etl.py` / `scan_over25._fetch_all_events()` |
+| `model-runner` | `.claude/agents/model-runner.md` | Dixon-Coles + calibrador isotónico → `p_final`, `ev_final` por evento |
+| `clv-tracker` | `.claude/agents/clv-tracker.md` | CLV rolling-30, WR e ROI dos 3 módulos a partir de `data/picks*.json` |
+| `telegram-notifier` | `.claude/agents/telegram-notifier.md` | Alerta TG quando gate de activação é atingido (CLV > threshold e n ≥ mínimo) |
+
+**Comando `/scan`** (`.claude/commands/scan.md`) — orquestra os 4 agentes em sequência e apresenta tabela de estado dos 3 módulos.
+
+---
+
+## Estratégias e ROI (backtesting histórico)
+
+Resultados disponíveis em `backtesting/reports/`. Estratégias definidas em `backtesting/strategies.py`:
+
+| Estratégia | Ficheiro report | Critério de selecção |
+|---|---|---|
+| `baseline` | `baseline.txt` | Todos os picks com EV ≥ 3% |
+| `shortening_only` | `shortening_only.txt` | + movimento SHORTENING |
+| `sharp_only` | `sharp_only.txt` | + sinal Sharp confirmado |
+| `shortsharp` | `shortsharp.txt` | SHORTENING e Sharp combinados |
+| `high_xg` | `high_xg.txt` | + xG total > threshold |
+| `high_score` | `high_score.txt` | + score composto ≥ 65/100 |
+| `value_only` | `value_only.txt` | + odds_band seleccionada |
+| `conservative` | `conservative.txt` | Critérios mais restritivos |
+| `kelly_sizing` | `kelly_sizing.txt` | Kelly sizing (DESACTIVADO em produção) |
+| Walk-forward OOS | `walkforward.md` | Validação out-of-sample temporal |
+| Comparação | `comparison.md` | Todas as estratégias lado a lado |
+
+Para correr todas as estratégias: `python -m backtesting.run_backtest`
+
+---
+
+## Regra Mobile (browser/mobile-only)
+
+Este projecto é gerido **100% via browser ou mobile** — sem terminal local.
+
+**Regras obrigatórias para cada sessão:**
+
+1. **Ficheiros completos** — quando partilhares código para colar, dá sempre o ficheiro completo. Nunca diffs, nunca fragmentos parciais.
+2. **Merge para main antes de fechar** — toda a sessão deve terminar com as alterações merged para `main`. O Stop hook (`auto-push.sh`) faz commit+push do branch, mas o merge PR→main deve ser feito durante a sessão.
+3. **Sem terminal** — se algo só for possível via terminal local, dizer explicitamente e propor alternativa (GitHub Actions, GitHub web editor, ou workflow_dispatch).
+4. **Ciclos de revisão** — não iniciar apostas reais sem passar pelos checkpoints:
+   - **C3 — 30 Jun 2026**: confirmar workflows + primeiros CLV com n suficiente
+   - **C4 — 15 Jul 2026**: primeira leitura com peso estatístico por módulo
+   - **C5 — 31 Jul 2026**: decisão de agosto (apostar ou manter MODO OBSERVAÇÃO)
