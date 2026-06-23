@@ -160,7 +160,7 @@ def build_message(stats: dict) -> str:
 
 def send_telegram(text: str) -> None:
     if not TG_TOKEN:
-        print("TELEGRAM_TOKEN não definido — skip TG", file=sys.stderr)
+        print("TG_TOKEN não definido — skip TG", file=sys.stderr)
         return
     url = f"https://api.telegram.org/bot{TG_TOKEN}/sendMessage"
     data = urllib.parse.urlencode({"chat_id": TG_CHAT_ID, "text": text}).encode()

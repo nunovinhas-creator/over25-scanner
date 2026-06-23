@@ -69,8 +69,8 @@ jobs:
           python backtesting/send_sharp1x2_weekly.py
         env:
           PYTHONPATH: ${{ github.workspace }}
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TG_TOKEN: ${{ secrets.TG_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
 
       - name: Commit updated ratings and calibrator
         run: |
