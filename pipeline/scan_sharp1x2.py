@@ -276,10 +276,10 @@ def send_telegram(text: str) -> None:
 def _build_msg(pick: dict, div_raw: float, prefix: str = "") -> str:
     div_pct = round(div_raw * 100, 2)
     return "\n".join([
-        f"{prefix}🔵 SHARP 1X2 — {pick['liga']}",
-        f"{pick['casa']} vs {pick['fora']}",
-        f"Outcome: {pick['outcome']} | B365={pick['odds_entrada']} / Pin={pick['odds_pinnacle']}",
-        f"div_b365_pin={div_pct:+.2f}% | KO em {pick['timing_h']:.1f}h",
+        f"{prefix}🔵 SHARP 1X2 — APOSTAR AGORA",
+        f"{pick['liga']}: {pick['casa']} vs {pick['fora']}",
+        f"Outcome: HOME | B365={pick['odds_entrada']} / Pin={pick['odds_pinnacle']}",
+        f"div={div_pct:+.2f}% | KO em {pick['timing_h']:.1f}h",
     ])
 
 
@@ -399,21 +399,48 @@ def scan() -> None:
                 continue
 
             if pick_id in existing_picks:
-                prev_odds = float(existing_picks[pick_id].get("odds_entrada") or 0)
-                if prev_odds and abs(b365_odds - prev_odds) / prev_odds > ODDS_UPDATE_THRESHOLD:
+                prev_pin = float(existing_picks[pick_id].get("odds_pinnacle") or 0)
+                shortening = prev_pin > 0 and pinn_odds < prev_pin
+
+                prev_b365 = float(existing_picks[pick_id].get("odds_entrada") or 0)
+                if prev_b365 and abs(b365_odds - prev_b365) / prev_b365 > ODDS_UPDATE_THRESHOLD:
                     update_id = f"{pick_id}_update"
                     if update_id not in existing_picks:
                         upd = {**base_pick, "id": update_id}
                         new_picks.append(upd)
                         existing_picks[update_id] = upd
-                        send_telegram("🔄 ATUALIZAÇÃO\n" + _build_msg(base_pick, div_raw))
-                        alerts_sent += 1
+                        if out == "HOME" and shortening:
+                            if existing_picks[pick_id].get("alerted_at"):
+                                print(f"[OBS] {casa} vs {fora} — já alertado em {existing_picks[pick_id]['alerted_at']}")
+                            else:
+                                ts_alert = datetime.now(timezone.utc).isoformat()
+                                existing_picks[pick_id]["alerted_at"] = ts_alert
+                                upd["alerted_at"] = ts_alert
+                                send_telegram("🔄 ATUALIZAÇÃO\n" + _build_msg(base_pick, div_raw))
+                                alerts_sent += 1
+                        else:
+                            reason = "sem shortening" if out == "HOME" else f"{out} (não-HOME)"
+                            print(f"[OBS] {casa} vs {fora} — actualizado {reason} (sem TG)")
+                else:
+                    if shortening:
+                        if out == "HOME":
+                            if existing_picks[pick_id].get("alerted_at"):
+                                print(f"[OBS] {casa} vs {fora} — já alertado em {existing_picks[pick_id]['alerted_at']}")
+                            else:
+                                ts_alert = datetime.now(timezone.utc).isoformat()
+                                existing_picks[pick_id]["alerted_at"] = ts_alert
+                                base_pick["alerted_at"] = ts_alert
+                                send_telegram(_build_msg(base_pick, div_raw))
+                                alerts_sent += 1
+                        else:
+                            print(f"[OBS] {casa} vs {fora} — {out} shortening mas não HOME")
+                    else:
+                        print(f"[OBS] {casa} vs {fora} — sem shortening detectado")
                 continue
 
             new_picks.append(base_pick)
             existing_picks[pick_id] = base_pick
-            send_telegram(_build_msg(base_pick, div_raw))
-            alerts_sent += 1
+            print(f"[NOVO] {casa} vs {fora} — {out} guardado, aguarda confirmação")
 
     _save_list(PICKS_FILE, list(existing_picks.values()))
 
