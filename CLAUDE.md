@@ -81,6 +81,22 @@ The Stop hook (`/home/user/over25-scanner/.claude/auto-push.sh`) handles commit+
 
 ---
 
+## Governança — Regras Modulares
+
+As regras detalhadas estão em `.claude/rules/` (referência obrigatória antes de qualquer implementação):
+
+| Ficheiro | Conteúdo |
+|---|---|
+| [`.claude/rules/backend.md`](.claude/rules/backend.md) | Pipeline Python, scan, modelos, backtest, comandos |
+| [`.claude/rules/data.md`](.claude/rules/data.md) | Whitelist 10 ligas, data_quality_flag, picks.json |
+| [`.claude/rules/testing.md`](.claude/rules/testing.md) | Regras pytest, anti-leakage, xfail, validação FASE 4 |
+| [`.claude/rules/decisions.md`](.claude/rules/decisions.md) | Kelly off, DRAW suspenso, odds cap rejeitado, whitelist |
+| [`.claude/rules/cycles.md`](.claude/rules/cycles.md) | Checkpoints C3–C5, gates CLV, backlog técnico |
+
+**Gov Eval:** `.claude/gov-eval/scenarios.md` — 5 cenários de teste de governança (workflow: `gov-eval.yml`).
+
+---
+
 ## Overview
 
 Estado do sistema a **21 jun 2026** — três módulos em produção, todos em MODO OBSERVAÇÃO.
@@ -178,41 +194,32 @@ Bundesliga 2 e Serie B: ausentes da BSD (65 ligas disponíveis) — presentes no
 
 ---
 
-## Decisões Permanentes (não reverter sem evidência nova)
+## Decisões Permanentes
 
-| Decisão | Estado | Critério de revisão |
-|---|---|---|
-| `MODEL_WEIGHT=0.30` | fixo | Melhor Brier calibrado em LOEO-CV. Nova validação obrigatória. |
-| Kelly staking | DESACTIVADO | `ValueError` se `STAKE_TYPE ≠ "flat"`. Rever quando CLV validado ao vivo. |
-| Odds cap (`MAX_ODDS_OVER`) | REJEITADO | Evidência não-monotónica (>2.50: ROI +3.69%, N=35 insuficiente). `odds_band` gravado por pick. |
-| DRAW (todos os módulos) | SUSPENSO | Excepção: DRAW N1 Eredivisie em tracking. Activar quando 50 settled CLV>+1%. |
-| HOME N1 (Sharp 1X2) | BLOQUEADO | ROI histórico −6.07%, 100 apostas. Rever quando n≥100 ao vivo. |
-| Bundesliga 2 / Serie B | FORA da whitelist BSD | BSD não tem estas ligas. Mantidas no histórico para backtesting. |
-| `pin_drop` como sinal 1X2 | SUBSTITUÍDO | Desde 12 jun 2026: sinal é `div_b365_pin > 3%`. `pin_drop` gravado por pick mas não é gate. |
-| `previous_decimal_odds` | NÃO é closing line | É a odd do scan anterior. CLV exacto requer fetch Pinnacle pós-KO (+10min). |
+Ver detalhe completo em [`.claude/rules/decisions.md`](.claude/rules/decisions.md).
+
+| Decisão | Estado |
+|---|---|
+| `MODEL_WEIGHT=0.30` | FIXO |
+| Kelly staking | DESACTIVADO |
+| Odds cap (`MAX_ODDS_OVER`) | REJEITADO |
+| DRAW (todos os módulos) | SUSPENSO (excepção: DRAW N1 Eredivisie em tracking) |
+| HOME N1 (Sharp 1X2) | BLOQUEADO |
+| Bundesliga 2 / Serie B | FORA da whitelist BSD |
+| `pin_drop` como sinal 1X2 | SUBSTITUÍDO por `div_b365_pin` |
+| `previous_decimal_odds` | NÃO é closing line |
 
 ---
 
-## Ciclos de Revisão
+## Ciclos de Revisão e Gates de Activação
+
+Ver detalhe completo em [`.claude/rules/cycles.md`](.claude/rules/cycles.md).
 
 | Checkpoint | Data | O que verificar |
 |---|---|---|
-| C3 | 30 jun 2026 | Workflows activos + CLV rolling primeiros picks reais (3 módulos) |
-| C4 | 15 jul 2026 | Primeira leitura com peso estatístico (n≈200 Over 2.5, n≈50 Sharp, n≈50 BTTS) |
-| C5 | 31 jul 2026 | Decisão de agosto: apostar ou manter observação (gates CLV por módulo) |
-
----
-
-## Backlog Técnico (por prioridade)
-
-| Item | Estado | Critério de activação |
-|---|---|---|
-| `odds_fecho` real — CLV exacto Sharp 1X2 | xfail activo | Fetch Pinnacle pós-KO (+10min): `decimal_odds` nesse momento = closing line. `previous_decimal_odds` não serve. |
-| 2º soft book no Sharp 1X2 (além da Bet365) | não iniciado | Melhorar robustez do sinal `div_b365_pin` |
-| DRAW N1 Eredivisie | tracking 0/50 | 50 settled CLV>+1% → activar excepção Gate 2 para DRAW N1 |
-| HOME N1 Eredivisie | bloqueado | 100 settled ao vivo → rever (histórico ROI −6.07%) |
-| Skellam para 1X2 | não iniciado | Segundo sinal independente do DC para Sharp 1X2 |
-| Walk-forward BTTS+O2.5 sem `--fast` | pendente | Out-of-sample com DC re-fit semanal (backtest actual usa dc_ratings.json in-sample) |
+| C3 | 30 jun 2026 | Workflows activos + CLV rolling primeiros picks reais |
+| C4 | 15 jul 2026 | Primeira leitura com peso estatístico |
+| C5 | 31 jul 2026 | Decisão de agosto: apostar ou manter MODO OBSERVAÇÃO |
 
 ---
 
