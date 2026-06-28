@@ -47,5 +47,6 @@ jobs:
             echo "Sem alterações no README."
           else
             git commit -m "[skip ci] update README"
+            git pull --rebase origin main
             git push origin main
           fi
