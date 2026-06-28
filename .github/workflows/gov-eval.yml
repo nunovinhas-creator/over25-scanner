@@ -1,6 +1,13 @@
 name: Gov Eval — Governance Scenarios
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - ".claude/rules/**"
+      - "CLAUDE.md"
+  schedule:
+    - cron: "0 8 * * *"
   workflow_dispatch:
     inputs:
       scenario:
