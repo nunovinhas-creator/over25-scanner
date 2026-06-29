@@ -1,5 +1,7 @@
 # Over 2.5 Scout — Sistema de Apostas em Futebol
 
+📋 Documentação interna e índice de portfólio mantidos em repositório privado.
+
 [![Scanner](https://github.com/nunovinhas-creator/over25-scanner/actions/workflows/scanner.yml/badge.svg)](https://github.com/nunovinhas-creator/over25-scanner/actions/workflows/scanner.yml)
 [![Sharp 1X2](https://github.com/nunovinhas-creator/over25-scanner/actions/workflows/sharp1x2_analysis.yml/badge.svg)](https://github.com/nunovinhas-creator/over25-scanner/actions/workflows/sharp1x2_analysis.yml)
 [![Data Quality](https://github.com/nunovinhas-creator/over25-scanner/actions/workflows/data_quality.yml/badge.svg)](https://github.com/nunovinhas-creator/over25-scanner/actions/workflows/data_quality.yml)
