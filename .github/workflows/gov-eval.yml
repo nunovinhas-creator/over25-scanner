@@ -113,7 +113,7 @@ jobs:
             },
           }
 
-          target = os.environ.get("SCENARIO", "all")
+          target = os.environ.get("SCENARIO", "all").strip() or "all"
           to_run = list(SCENARIOS.keys()) if target == "all" else [target]
 
           results = {}
