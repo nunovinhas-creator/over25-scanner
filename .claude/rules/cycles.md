@@ -41,7 +41,7 @@ Nenhum módulo está em apostas reais. Picks são gerados e tracked mas não apo
 
 | Item | Estado | Critério de activação |
 |---|---|---|
-| `odds_fecho` real — CLV exacto Sharp 1X2 | WS listener implementado (`ws_closing_odds.yml`) — **aguarda addon Live WebSocket BSD ($3/mês)**; fallback REST pós-KO activo | Probe (11 jul 2026): auth `?token=` confirmada, mas key devolve `subscription_required`. Activar em sports.bzzoiro.com/websocket/ → listener começa a capturar closings pré-KO sem alterações (`closing_source="ws"`). Remover xfail quando houver n suficiente de closings reais |
+| `odds_fecho` real — CLV exacto Sharp 1X2 | REST pós-KO activo (`update_closing_odds.py`, +15min–24h) | Via WebSocket avaliada e **rejeitada em 11 jul 2026**: o Live WebSocket da BSD é addon pago ($3/mês) — decisão: não pagar. Probe confirmou protocolo (auth `?token=`, rota `ws/live/`) caso a decisão seja revista. Remover xfail quando houver n suficiente de closings reais via REST |
 | 2º soft book no Sharp 1X2 (além da Bet365) | não iniciado | Melhorar robustez do sinal `div_b365_pin` |
 | DRAW N1 Eredivisie | tracking 0/50 | 50 settled CLV>+1% → activar excepção Gate 2 para DRAW N1 |
 | HOME N1 Eredivisie | bloqueado | 100 settled ao vivo → rever (histórico ROI −6.07%) |
