@@ -156,6 +156,11 @@ Open either HTML file directly in a browser to run. No build steps, no tests, no
 
 **Markets BSD confirmados:** `market=1x2`, `market=over_under_25`, `market=btts` (outcome=yes/no)
 
+**Campos informativos por pick (desde 11 jul 2026 — NÃO são gates):**
+- `h2h_matches`, `h2h_avg_goals` — H2H agregado embutido no evento BSD (zero chamadas extra)
+- `prob_over25_ml`, `prob_btts_ml` — prediction CatBoost da BSD (`/api/v2/predictions/`), para comparação de Brier futura
+- `lineup_status`, `indisp_casa`, `indisp_fora`, `indisp_casa_det`, `indisp_fora_det` — indisponíveis (lesões/suspensões) via `/api/v2/events/{id}/lineups/`, 1 chamada por pick novo; incluídos no alerta TG Over 2.5 (`🚑 Indisponíveis`)
+
 ---
 
 ## Whitelist de Produção — 10 Ligas BSD

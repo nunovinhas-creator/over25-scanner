@@ -124,6 +124,22 @@ def _fetch_all_events() -> list[dict]:
     odds_btts_no_raw = _get(
         f"/api/v2/odds/?market=btts&outcome=no&limit=200&updated_after={today}T00:00:00Z"
     )
+    # Predictions CatBoost da BSD — campo informativo por pick (não é gate).
+    predictions_raw = _get(
+        f"/api/v2/predictions/?date_from={today}&date_to={tomorrow}&limit=200"
+    )
+
+    # event_id → (prob_over_25, prob_btts_yes) do modelo CatBoost da BSD
+    ml_map: dict[str, tuple[float | None, float | None]] = {}
+    for pr in predictions_raw:
+        pr_ev = pr.get("event") or {}
+        pid = str(pr_ev.get("id") or "")
+        if not pid:
+            continue
+        markets = pr.get("markets") or {}
+        ou = markets.get("over_under") or {}
+        bt = markets.get("btts") or {}
+        ml_map[pid] = (ou.get("prob_over_25"), bt.get("prob_yes"))
 
     # Build maps: event_id → odds de referência + movement
     # Prioridade da referência: consensus > is_max_quote > primeiro visto.
@@ -198,6 +214,11 @@ def _fetch_all_events() -> list[dict]:
         # No: mesmo bookmaker se disponível, senão qualquer um
         odds_btts_no  = no_bk.get(bk_btts) or (next(iter(no_bk.values()), None) if no_bk else None)
 
+        # H2H agregado vem embutido no próprio evento (EventDetailV2Schema) —
+        # zero chamadas extra. Campos informativos, não são gate.
+        h2h = ev.get("head_to_head") or {}
+        prob_o25_ml, prob_btts_ml = ml_map.get(eid, (None, None))
+
         result.append({
             "event_id":      eid,
             "home":          ev.get("home_team") or ev.get("home", ""),
@@ -210,6 +231,10 @@ def _fetch_all_events() -> list[dict]:
             "odds_btts_yes": odds_btts_yes,
             "odds_btts_no":  odds_btts_no,
             "bookmaker_btts": bk_btts,
+            "h2h_matches":   h2h.get("total_matches") if isinstance(h2h, dict) else None,
+            "h2h_avg_goals": h2h.get("avg_total_goals") if isinstance(h2h, dict) else None,
+            "prob_over25_ml": prob_o25_ml,
+            "prob_btts_ml":  prob_btts_ml,
         })
     return result
 
@@ -228,6 +253,11 @@ def _event_fields(ev: dict) -> dict:
         "odds_btts_yes":   ev.get("odds_btts_yes"),
         "odds_btts_no":    ev.get("odds_btts_no"),
         "bookmaker_btts":  ev.get("bookmaker_btts", ""),
+        # Campos informativos da BSD API (não são gates)
+        "h2h_matches":     ev.get("h2h_matches"),
+        "h2h_avg_goals":   ev.get("h2h_avg_goals"),
+        "prob_over25_ml":  ev.get("prob_over25_ml"),
+        "prob_btts_ml":    ev.get("prob_btts_ml"),
     }
 
 
@@ -254,6 +284,20 @@ def _load_calibrator_fn():
 def _load_dc_ratings() -> dict:
     p = DATA_DIR / "dc_ratings.json"
     return json.loads(p.read_text()) if p.exists() else {}
+
+
+def _fetch_lineup_info(ev_id: str) -> dict:
+    """Resumo de indisponíveis (lesões/suspensões) via BSD lineups.
+
+    Chamado apenas para eventos que passam todos os gates (1 chamada por pick
+    novo). Campos informativos — não são gate. Fail-safe: {} em erro.
+    """
+    try:
+        from pipeline.extract import fetch_event_lineups, summarize_lineups
+        return summarize_lineups(fetch_event_lineups(BSD_API_KEY, ev_id))
+    except Exception as exc:
+        print(f"_fetch_lineup_info: {ev_id}: {exc}", file=sys.stderr)
+        return {}
 
 
 def compute_prob(ev: dict, dc_ratings: dict, calibrator_fn) -> dict | None:
@@ -515,10 +559,17 @@ def scan() -> None:
                     alerts_sent += 1
             continue
 
-        pick = {**ev, **prob, "gate_blocked_reason": "", "resultado_outcome": "", "scanned_at": ts}
+        lineup_info = _fetch_lineup_info(ev_id)
+        pick = {**ev, **prob, **lineup_info, "gate_blocked_reason": "", "resultado_outcome": "", "scanned_at": ts}
         new_picks.append(pick)
         existing_picks[ev_id] = pick
-        send_telegram(_build_msg(ev, prob))
+        msg = _build_msg(ev, prob)
+        if lineup_info.get("indisp_casa") is not None or lineup_info.get("indisp_fora") is not None:
+            msg += (
+                f"\n🚑 Indisponíveis: casa {lineup_info.get('indisp_casa', '?')}"
+                f" / fora {lineup_info.get('indisp_fora', '?')}"
+            )
+        send_telegram(msg)
         alerts_sent += 1
 
         # ── BTTS+Over 2.5 gate ──────────────────────────────────────────────
@@ -535,7 +586,7 @@ def scan() -> None:
             btts_id = f"{ev_id}_btts"
             if btts_id not in existing_btts:
                 btts_pick = {
-                    **ev, **prob, **btts_data,
+                    **ev, **prob, **btts_data, **lineup_info,
                     "id": btts_id,
                     "resultado_btts_over25": "",
                     "scanned_at": ts,
