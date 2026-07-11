@@ -14,6 +14,7 @@ from pipeline.ws_closing_odds import (
     apply_closing,
     build_targets,
     extract_odds_rows,
+    fatal_ws_error,
 )
 
 NOW = datetime(2026, 7, 11, 20, 0, 0, tzinfo=timezone.utc)
@@ -129,6 +130,19 @@ class TestClosingTracker(unittest.TestCase):
         tracker.ingest([{"event_id": "555", "market": "over_under_25",
                          "outcome": "over", "decimal_odds": 1.9}], NOW)
         self.assertIsNone(tracker.closing_for(t))
+
+
+class TestFatalWsError(unittest.TestCase):
+    def test_fatal_codes(self):
+        """Frames de erro confirmados pelo probe → mensagem não vazia."""
+        for code in ("auth_required", "subscription_required", "not_found"):
+            msg = fatal_ws_error({"type": "error", "code": code, "message": "x"})
+            self.assertIn(code, msg)
+
+    def test_non_fatal(self):
+        self.assertEqual(fatal_ws_error({"type": "error", "code": "rate_limited"}), "")
+        self.assertEqual(fatal_ws_error({"type": "odds", "data": []}), "")
+        self.assertEqual(fatal_ws_error("garbage"), "")
 
 
 class TestApplyClosing(unittest.TestCase):

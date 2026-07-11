@@ -61,6 +61,20 @@ SUBSCRIBE_CANDIDATES = [
     {"type": "subscribe", "channel": "odds_book", "bookmaker_slug": "pinnacle"},
 ]
 
+# Erros fatais confirmados pelo probe (probe_bsd_ws.yml, 11 jul 2026):
+# o servidor envia {type:'error', code, message} e fecha com 4401/4402/4404.
+# Nestes casos não vale a pena reconnect — o REST fallback trata dos closings.
+FATAL_WS_ERROR_CODES = {"auth_required", "subscription_required", "not_found"}
+FATAL_WS_CLOSE_CODES = {4401, 4402, 4404}
+
+
+def fatal_ws_error(obj: object) -> str:
+    """Devolve a mensagem se o frame for um erro fatal do WS BSD, senão ''."""
+    if isinstance(obj, dict) and obj.get("type") == "error" \
+            and str(obj.get("code") or "") in FATAL_WS_ERROR_CODES:
+        return f"{obj.get('code')}: {obj.get('message', '')}"
+    return ""
+
 
 # ── Pure helpers (testáveis sem rede) ───────────────────────────────────────────
 
@@ -313,8 +327,23 @@ async def _listen(targets: list[dict], tracker: ClosingTracker) -> None:
                             obj = json.loads(frame)
                         except Exception:
                             continue
+                        fatal = fatal_ws_error(obj)
+                        if fatal:
+                            print(
+                                f"WS indisponível ({fatal}) — sem retry; "
+                                "o fallback REST (update_closing_odds) trata dos closings.",
+                                file=sys.stderr,
+                            )
+                            return
                         tracker.ingest(extract_odds_rows(obj), datetime.now(timezone.utc))
             except Exception as exc:
+                close_code = getattr(getattr(exc, "rcvd", None), "code", None)
+                if close_code in FATAL_WS_CLOSE_CODES:
+                    print(
+                        f"WS fechado com código {close_code} (auth/subscrição/rota) — sem retry.",
+                        file=sys.stderr,
+                    )
+                    return
                 remaining = deadline_ts - datetime.now(timezone.utc).timestamp()
                 if remaining <= 0:
                     return
