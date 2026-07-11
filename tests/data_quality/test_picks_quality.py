@@ -81,7 +81,7 @@ PicksSchema = DataFrameSchema(
         "data":          Column(_DT_UTC_DTYPE, nullable=False),
         "score_sistema": Column(float, Check.in_range(0, 100), nullable=False),
         "prob_over25":   Column(float, Check.in_range(0, 100), nullable=False),
-        "movimento":     Column(str,   Check.isin(["SHORTENING", "DRIFTING", "STABLE", "STEAM", ""]), nullable=False),
+        "movimento":     Column(str,   Check.isin(["SHORTENING", "DRIFTING", "STABLE", "STEAM", "UNKNOWN", ""]), nullable=False),
         "sharp_label":   Column(str,   Check.isin(["STEAM", "SHARP", "WATCH", ""]), nullable=False),
     },
     coerce=True,   # coerce int→float, ns→us, etc.

@@ -13,14 +13,20 @@ from __future__ import annotations
 
 import json
 import os
-import subprocess
 import sys
-import urllib.parse
-import urllib.request
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 import requests
+
+from pipeline.scan_common import (
+    BSD_LEAGUE_ID_MAP,
+    WHITELIST,
+    git_commit_push,
+    load_json_list,
+    save_json_list,
+    send_telegram,
+)
 
 # ── paths ──────────────────────────────────────────────────────────────────────
 ROOT = Path(__file__).resolve().parent.parent
@@ -32,8 +38,6 @@ BTTS_O25_FILE = DATA_DIR / "picks_btts_over25.json"
 
 # ── env ────────────────────────────────────────────────────────────────────────
 BSD_API_KEY = os.environ.get("BSD_API_KEY", "")
-TG_TOKEN = os.environ.get("TG_TOKEN", "")
-TG_CHAT_ID = os.environ.get("TG_CHAT_ID", "1352687611")
 
 # ── constants ──────────────────────────────────────────────────────────────────
 MODEL_WEIGHT = 0.30
@@ -42,26 +46,7 @@ MAX_TIMING_H = 6.0
 MIN_ODDS = 1.30
 MAX_ODDS = 3.50
 ODDS_UPDATE_THRESHOLD = 0.03  # >3% mudança nas odds → cria pick _update
-BTTS_O25_OVERLAY_MIN = 0.08   # overlay mínimo (gate antigo, comentado — mantido para referência)
 CLV_BTTS_O25_MIN    = 0.05   # CLV real mínimo: p_dc_conjunta/(p_btts×p_o25_mkt)−1 ≥ 5%
-
-WHITELIST = {
-    "Premier League", "La Liga", "Bundesliga", "Serie A", "Ligue 1",
-    "Primeira Liga", "Eredivisie", "Belgian Pro League",
-    "Championship", "La Liga 2",
-    # Bundesliga 2 e Serie B ausentes da BSD API — não geram picks em produção.
-}
-
-# Mapa defensivo BSD league_id → nome canónico.
-# Fail-closed: ID desconhecido → '' → WHITELIST rejeita.
-BSD_LEAGUE_ID_MAP: dict[int, str] = {
-    # Nomes canónicos (whitelist) — têm prioridade sobre league_name da BSD.
-    # BSD devolve nomes diferentes: id=2→"Liga Portugal Betclic", id=14→"Pro League", id=38→"Segunda División".
-    1: "Premier League", 2: "Primeira Liga", 3: "La Liga", 4: "Serie A",
-    5: "Bundesliga", 6: "Ligue 1", 10: "Eredivisie",
-    12: "Championship", 14: "Belgian Pro League", 38: "La Liga 2",
-    # Bundesliga 2 e Serie B: ausentes da BSD (65 ligas disponíveis, nenhuma corresponde).
-}
 
 
 # ── BSD fetch ───────────────────────────────────────────────────────────────────
@@ -227,7 +212,9 @@ def _fetch_all_events() -> list[dict]:
             "date":          ev.get("event_date") or ev.get("date", ""),
             "odds_over":     ov_map.get(eid),
             "odds_under":    un_map.get(eid),
-            "movement":      mov_map.get(eid, "SHORTENING"),
+            # Sem movement da BSD → UNKNOWN (fail-honest): o gate só rejeita
+            # DRIFTING, mas o registo não pode inventar SHORTENING.
+            "movement":      mov_map.get(eid, "UNKNOWN"),
             "odds_btts_yes": odds_btts_yes,
             "odds_btts_no":  odds_btts_no,
             "bookmaker_btts": bk_btts,
@@ -249,7 +236,7 @@ def _event_fields(ev: dict) -> dict:
         "data":            ev.get("date") or ev.get("commence_time", ""),
         "odds_over":       ev.get("odds_over"),
         "odds_under":      ev.get("odds_under"),
-        "movimento":       (ev.get("movement") or "SHORTENING").upper(),
+        "movimento":       (ev.get("movement") or "UNKNOWN").upper(),
         "odds_btts_yes":   ev.get("odds_btts_yes"),
         "odds_btts_no":    ev.get("odds_btts_no"),
         "bookmaker_btts":  ev.get("bookmaker_btts", ""),
@@ -321,21 +308,6 @@ def compute_prob(ev: dict, dc_ratings: dict, calibrator_fn) -> dict | None:
 
 # ── Telegram ────────────────────────────────────────────────────────────────────
 
-def send_telegram(text: str) -> None:
-    if not TG_TOKEN:
-        print("TG_TOKEN não definido — skip TG", file=sys.stderr)
-        return
-    url = f"https://api.telegram.org/bot{TG_TOKEN}/sendMessage"
-    data = urllib.parse.urlencode({"chat_id": TG_CHAT_ID, "text": text}).encode()
-    try:
-        with urllib.request.urlopen(
-            urllib.request.Request(url, data=data, method="POST"), timeout=10
-        ) as resp:
-            print(f"TG enviado (status {resp.status})")
-    except Exception as exc:
-        print(f"TG falhou (não fatal): {exc}", file=sys.stderr)
-
-
 def _build_msg(ev: dict, prob: dict, prefix: str = "") -> str:
     p = round(prob["p_final"] * 100, 1)
     pm = round(prob["p_market"] * 100, 1)
@@ -350,40 +322,10 @@ def _build_msg(ev: dict, prob: dict, prefix: str = "") -> str:
     ])
 
 
-# ── Git ─────────────────────────────────────────────────────────────────────────
+# ── I/O (partilhado em pipeline/scan_common.py) ────────────────────────────────
 
-def git_commit_push(files: list[str], msg: str) -> None:
-    try:
-        subprocess.run(["git", "config", "user.name", "github-actions[bot]"], check=True)
-        subprocess.run(["git", "config", "user.email", "github-actions[bot]@users.noreply.github.com"], check=True)
-        subprocess.run(["git", "fetch", "origin", "main"], check=True)
-        subprocess.run(["git", "reset", "--soft", "origin/main"], check=True)
-        subprocess.run(["git", "add"] + files, check=True)
-        if subprocess.run(["git", "diff", "--cached", "--quiet"]).returncode != 0:
-            subprocess.run(["git", "commit", "-m", msg], check=True)
-            subprocess.run(["git", "push", "origin", "main"], check=True)
-            print(f"Commit feito: {msg}")
-        else:
-            print("Sem alterações para commitar.")
-    except subprocess.CalledProcessError as exc:
-        print(f"git commit/push falhou: {exc}", file=sys.stderr)
-
-
-# ── I/O ─────────────────────────────────────────────────────────────────────────
-
-def _load_list(path: Path) -> list[dict]:
-    if not path.exists():
-        return []
-    try:
-        d = json.loads(path.read_text())
-        return d if isinstance(d, list) else []
-    except Exception:
-        return []
-
-
-def _save_list(path: Path, data: list[dict]) -> None:
-    DATA_DIR.mkdir(exist_ok=True)
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+_load_list = load_json_list
+_save_list = save_json_list
 
 
 # ── BTTS+Over 2.5 joint probability ─────────────────────────────────────────────
@@ -580,7 +522,6 @@ def scan() -> None:
             bookmaker_btts=ev.get("bookmaker_btts", ""),
             p_over25_market=prob.get("p_market"),
         )
-        # Gate antigo (overlay DC naive): btts_data["overlay"] >= BTTS_O25_OVERLAY_MIN
         clv_b25 = btts_data.get("clv_btts_over25") if btts_data else None
         if btts_data and clv_b25 is not None and clv_b25 >= CLV_BTTS_O25_MIN:
             btts_id = f"{ev_id}_btts"

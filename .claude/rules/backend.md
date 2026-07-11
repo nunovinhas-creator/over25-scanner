@@ -8,6 +8,7 @@ pipeline/etl.py          — orquestração extract → transform → load
 pipeline/transform.py    — compute_final_probability_dc (blend 30/70)
 pipeline/scan_over25.py  — Over 2.5 scan + BTTS+O2.5 scan (30 min cron)
 pipeline/scan_sharp1x2.py — Sharp 1X2 scan (30 min cron)
+pipeline/scan_common.py  — whitelist, BSD_LEAGUE_ID_MAP, TG, git, I/O partilhados
 pipeline/config.py       — MODEL_WEIGHT=0.30 (não alterar sem nova validação LOEO-CV)
 pipeline/historical.py   — download football-data.co.uk → matches.csv
 ```
@@ -20,7 +21,6 @@ models/math/poisson.py     — fit_dixon_coles_fast, prob_over25_poisson,
                               build_dc_grid, extract_btts_over25_prob
 models/math/calibration.py — Platt scaling, isotonic regression, temperature scaling
 models/math/skellam.py     — Skellam distribution para 1X2 (não em produção)
-models/math/elo.py         — Elo Over/Under 2.5 (experimental, não em produção)
 models/math/kelly.py       — Kelly criterion (DESACTIVADO — ver decisions.md)
 models/metrics/brier_score.py — Brier + decomposição Murphy 1973
 models/metrics/ece.py         — Expected Calibration Error
@@ -36,8 +36,13 @@ p_calib  = isotonic_calibrator(p_model)   ← LOEO-CV
 p_market = devig(odds Pinnacle over/under)
 p_final  = MODEL_WEIGHT × p_calib + (1 − MODEL_WEIGHT) × p_market
          = 0.30 × p_calib + 0.70 × p_market
-ev_final = p_final / p_market − 1
+ev_final = p_final × odds_over − 1
 ```
+
+Nota (auditoria jul 2026): `ev_final` é o EV real às odds brutas (inclui a margem
+do bookmaker) — é o que `pipeline/transform.py` calcula e o que o gate `MIN_EV=0.03`
+usa. A fórmula antiga documentada (`p_final / p_market − 1`) media divergência
+modelo-vs-mercado sem vig e nunca correspondeu ao código.
 
 `MODEL_WEIGHT=0.30` é fixo — melhor Brier calibrado em LOEO-CV. Alteração exige nova validação completa.
 

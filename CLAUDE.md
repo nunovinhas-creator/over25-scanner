@@ -329,7 +329,6 @@ models/
                         build_dc_grid, extract_btts_over25_prob
     calibration.py    — Platt scaling, isotonic regression, temperature scaling
     skellam.py        — Skellam distribution (diferença de Poisson) para 1X2
-    elo.py            — Elo adaptado para Over/Under 2.5 (experimental, não em produção)
     kelly.py          — Kelly criterion (DESACTIVADO em produção)
   metrics/
     brier_score.py    — Brier score + decomposição Murphy 1973, reliability diagram
@@ -351,6 +350,7 @@ backtesting/
 pipeline/
   scan_over25.py      — Over 2.5 scan + BTTS+Over 2.5 scan (30 min cron)
   scan_sharp1x2.py    — Sharp 1X2 scan (30 min cron)
+  scan_common.py      — whitelist, BSD_LEAGUE_ID_MAP, Telegram, git e I/O partilhados pelos scanners
   transform.py        — compute_final_probability, compute_final_probability_dc
   etl.py              — ETL orchestration: coordena extract → transform → load
   extract.py          — Data extraction da BSD API (fail-safe: lista vazia em erro)

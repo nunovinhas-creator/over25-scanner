@@ -99,8 +99,9 @@ BSDEventSchema = DataFrameSchema(
             str,
             checks=[
                 Check.isin(
-                    ["SHORTENING", "DRIFTING", "STABLE", "STEAM"],
-                    error="movement must be one of SHORTENING, DRIFTING, STABLE, STEAM",
+                    # UNKNOWN = campo em falta na resposta BSD (fail-honest, jul 2026)
+                    ["SHORTENING", "DRIFTING", "STABLE", "STEAM", "UNKNOWN"],
+                    error="movement must be one of SHORTENING, DRIFTING, STABLE, STEAM, UNKNOWN",
                 )
             ],
             nullable=False,
