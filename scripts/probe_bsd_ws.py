@@ -52,6 +52,15 @@ def _rest_get(path: str) -> object:
     return r.json()
 
 
+def _strip_html(html: str) -> str:
+    """Remove tags/scripts/styles de forma rudimentar para ler docs HTML."""
+    import re
+    html = re.sub(r"(?is)<(script|style)[^>]*>.*?</\1>", " ", html)
+    html = re.sub(r"(?s)<[^>]+>", "\n", html)
+    lines = [ln.strip() for ln in html.splitlines()]
+    return "\n".join(ln for ln in lines if ln)
+
+
 def _print_docs_hints() -> None:
     """Tenta obter documentação pública do WS (llms.txt e páginas de docs)."""
     print("\n[0] Documentação pública — referências a WebSocket")
@@ -71,6 +80,17 @@ def _print_docs_hints() -> None:
                 print(f"    | {ln[:200]}")
         except Exception as exc:
             print(f"  {path} → erro: {exc}")
+
+    # Página de protocolo completa — texto integral (sem HTML) para análise
+    print("\n[0b] /docs/websocket/ — protocolo completo (texto)")
+    try:
+        r = requests.get(BASE + "/docs/websocket/", timeout=20)
+        print(f"  HTTP {r.status_code}, {len(r.text)} chars")
+        if r.status_code == 200:
+            text = _strip_html(r.text)
+            print(text[:12000])
+    except Exception as exc:
+        print(f"  erro: {exc}")
 
 
 def _pick_target_event() -> str:
