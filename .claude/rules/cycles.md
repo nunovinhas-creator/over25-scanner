@@ -41,7 +41,7 @@ Nenhum módulo está em apostas reais. Picks são gerados e tracked mas não apo
 
 | Item | Estado | Critério de activação |
 |---|---|---|
-| `odds_fecho` real — CLV exacto Sharp 1X2 | xfail activo | Fetch Pinnacle pós-KO (+10min): `decimal_odds` nesse momento = closing line |
+| `odds_fecho` real — CLV exacto Sharp 1X2 | WS listener activo (`ws_closing_odds.yml`, desde 11 jul 2026) + fallback REST pós-KO | Captura pré-KO via `/ws/live/` (janela live começa em KO−5min); `closing_source="ws"` marca a origem. Remover xfail quando houver n suficiente de closings reais validadas |
 | 2º soft book no Sharp 1X2 (além da Bet365) | não iniciado | Melhorar robustez do sinal `div_b365_pin` |
 | DRAW N1 Eredivisie | tracking 0/50 | 50 settled CLV>+1% → activar excepção Gate 2 para DRAW N1 |
 | HOME N1 Eredivisie | bloqueado | 100 settled ao vivo → rever (histórico ROI −6.07%) |
