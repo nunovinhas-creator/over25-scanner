@@ -1691,7 +1691,7 @@ async function loadAll(){
     const oddsOver={}, oddsUnder={}, movMap={}, prevMap={};
     arr(oddsOverData).forEach(o=>{
       const eid=o.event_id; if(!eid) return;
-      const isRef=o.bookmaker_slug==='oddssafari-consensus'||o.is_max_quote;
+      const isRef=(o.bookmaker_slug||'').includes('consensus')||o.is_max_quote;
       if(!oddsOver[eid]||isRef){
         oddsOver[eid]=parseFloat(o.decimal_odds);
         if(o.movement) movMap[eid]=o.movement;

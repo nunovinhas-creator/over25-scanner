@@ -66,6 +66,15 @@ BSD_LEAGUE_ID_MAP: dict[int, str] = {
 
 # ── BSD fetch ───────────────────────────────────────────────────────────────────
 
+def _is_consensus(slug: str | None) -> bool:
+    """Entrada sintética de consenso da BSD (média dos bookmakers).
+
+    O OpenAPI spec documenta o slug como ``consensus``; versões anteriores
+    usavam ``oddssafari-consensus``. Match por substring cobre ambos.
+    """
+    return "consensus" in (slug or "")
+
+
 def _fetch_all_events() -> list[dict]:
     """Busca eventos BSD para hoje+amanhã e faz join com odds over/under."""
     today = date.today().isoformat()
@@ -73,17 +82,32 @@ def _fetch_all_events() -> list[dict]:
     base = "https://sports.bzzoiro.com"
     headers = {"Authorization": f"Token {BSD_API_KEY}", "Accept": "application/json"}
 
-    def _get(path: str) -> list:
-        try:
-            r = requests.get(base + path, headers=headers, timeout=30)
-            r.raise_for_status()
-            payload = r.json()
+    def _get(path: str, max_pages: int = 10) -> list:
+        # Segue o campo `next` do wrapper v2 (count/next/previous/results) —
+        # 200 tuplos (evento × bookmaker) por página não chegam num dia cheio.
+        records: list = []
+        url: str | None = base + path
+        for _ in range(max_pages):
+            if not url:
+                break
+            try:
+                r = requests.get(url, headers=headers, timeout=30)
+                r.raise_for_status()
+                payload = r.json()
+            except Exception as exc:
+                print(f"BSD fetch {path}: {exc}", file=sys.stderr)
+                break
             if isinstance(payload, list):
-                return payload
-            return payload.get("results") or payload.get("data") or []
-        except Exception as exc:
-            print(f"BSD fetch {path}: {exc}", file=sys.stderr)
-            return []
+                records.extend(payload)
+                break
+            page = payload.get("results") or payload.get("data") or []
+            records.extend(page)
+            url = payload.get("next")
+            if url and url.startswith("/"):
+                url = base + url
+            if not page:
+                break
+        return records
 
     events = _get(
         f"/api/v2/events/?status=notstarted&date_from={today}&date_to={tomorrow}&limit=200"
@@ -101,9 +125,14 @@ def _fetch_all_events() -> list[dict]:
         f"/api/v2/odds/?market=btts&outcome=no&limit=200&updated_after={today}T00:00:00Z"
     )
 
-    # Build maps: event_id → best decimal odds + movement
+    # Build maps: event_id → odds de referência + movement
+    # Prioridade da referência: consensus > is_max_quote > primeiro visto.
+    # (max_quote é a melhor odd do mercado — usá-la como p_market infla o EV,
+    #  por isso só serve de fallback quando não há linha de consenso.)
     ov_map: dict[str, float] = {}
     un_map: dict[str, float] = {}
+    ov_rank: dict[str, int] = {}
+    un_rank: dict[str, int] = {}
     mov_map: dict[str, str] = {}
     # BTTS: eid → {slug: odds} para yes e no separadamente
     btts_yes_by_bk: dict[str, dict[str, float]] = {}
@@ -116,10 +145,10 @@ def _fetch_all_events() -> list[dict]:
         price = float(o.get("decimal_odds") or 0)
         if not price:
             continue
-        # prefer consensus/max-quote entry; otherwise first seen
-        is_ref = o.get("bookmaker_slug") == "oddssafari-consensus" or o.get("is_max_quote")
-        if is_ref or eid not in ov_map:
+        rank = 2 if _is_consensus(o.get("bookmaker_slug")) else 1 if o.get("is_max_quote") else 0
+        if rank > ov_rank.get(eid, -1):
             ov_map[eid] = price
+            ov_rank[eid] = rank
         if o.get("movement") and eid not in mov_map:
             mov_map[eid] = str(o["movement"]).upper()
 
@@ -130,9 +159,10 @@ def _fetch_all_events() -> list[dict]:
         price = float(o.get("decimal_odds") or 0)
         if not price:
             continue
-        is_ref = o.get("bookmaker_slug") == "oddssafari-consensus" or o.get("is_max_quote")
-        if is_ref or eid not in un_map:
+        rank = 2 if _is_consensus(o.get("bookmaker_slug")) else 1 if o.get("is_max_quote") else 0
+        if rank > un_rank.get(eid, -1):
             un_map[eid] = price
+            un_rank[eid] = rank
 
     for o in odds_btts_yes_raw:
         eid = str(o.get("event_id") or "")
