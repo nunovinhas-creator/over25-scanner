@@ -4,15 +4,21 @@
 
 ```
 tests/
+  test_scanner.py            — smoke tests dos dois scanners (mocks BSD/TG): gates,
+                               deduplicação, alertas, escrita picks/rejected
+  test_btts_over25.py        — grelha bivariada DC + extract_btts_over25_prob
+  test_save_whitelist.py     — whitelist fail-closed
   pipeline/
-    test_devig.py       — testes de de-vig (metodo_multiplicativo, metodo_shin)
-    test_transform.py   — testes de compute_final_probability_dc
-    test_extract.py     — testes do cliente BSD API (mocks)
-  models/
-    test_poisson.py     — testes DC grid, extract_btts_over25_prob
-    test_calibration.py — testes do calibrador isotónico
-  backtesting/
-    test_engine.py      — testes do Backtester walk-forward
+    test_devig.py            — de-vig (metodo_multiplicativo, metodo_shin)
+    test_calibration.py      — calibrador isotónico + compute_final_probability_dc
+    test_etl_filters.py      — filter_by_league, filter_alert_candidates
+    test_1x2_filters.py      — filter_1x2_alert_candidates
+    test_sharp1x2_gates.py   — apply_sharp1x2_gates (porta Python dos gates JS)
+    test_historical_1x2.py   — histórico 1X2 football-data.co.uk
+    test_lineups.py          — summarize_lineups + _event_fields
+  data_quality/
+    test_bsd_schema.py       — schema de eventos BSD
+    test_picks_quality.py    — qualidade dos picks (consistência temporal, EV vs WR)
 ```
 
 ## Comandos

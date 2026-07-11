@@ -118,8 +118,9 @@ PicksSchema = DataFrameSchema(
             str,
             checks=[
                 Check.isin(
-                    ["SHORTENING", "DRIFTING", "STABLE", "STEAM", ""],
-                    error="movimento must be one of SHORTENING, DRIFTING, STABLE, STEAM or empty",
+                    # UNKNOWN = BSD não devolveu movement (fail-honest, jul 2026)
+                    ["SHORTENING", "DRIFTING", "STABLE", "STEAM", "UNKNOWN", ""],
+                    error="movimento must be one of SHORTENING, DRIFTING, STABLE, STEAM, UNKNOWN or empty",
                 )
             ],
             nullable=True,

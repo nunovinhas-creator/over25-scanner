@@ -11,16 +11,13 @@ from __future__ import annotations
 
 import json
 import math
-import os
 import sys
-import urllib.request
-import urllib.parse
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
+from pipeline.scan_common import send_telegram
+
 PICKS_FILE = Path(__file__).resolve().parent.parent / "data" / "picks_1x2.json"
-TG_TOKEN = os.environ.get("TG_TOKEN", "")
-TG_CHAT_ID = os.environ.get("TG_CHAT_ID", "1352687611")
 
 
 def _clv_of(p: dict) -> float | None:
@@ -156,20 +153,6 @@ def build_message(stats: dict) -> str:
         f"Gate rejeitados esta semana: {rej_str}",
     ]
     return "\n".join(lines)
-
-
-def send_telegram(text: str) -> None:
-    if not TG_TOKEN:
-        print("TG_TOKEN não definido — skip TG", file=sys.stderr)
-        return
-    url = f"https://api.telegram.org/bot{TG_TOKEN}/sendMessage"
-    data = urllib.parse.urlencode({"chat_id": TG_CHAT_ID, "text": text}).encode()
-    req = urllib.request.Request(url, data=data, method="POST")
-    try:
-        with urllib.request.urlopen(req, timeout=10) as resp:
-            print(f"TG: mensagem enviada (status {resp.status})")
-    except Exception as exc:
-        print(f"TG falhou (não fatal): {exc}", file=sys.stderr)
 
 
 def main() -> None:

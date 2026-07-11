@@ -393,7 +393,6 @@ def enrich_picks(df: pd.DataFrame) -> pd.DataFrame:
 
     # --- EV% ----------------------------------------------------------------
     # EV% = (p × odds − 1) × 100  (equivalent to implied edge %)
-    implied_prob = 1.0 / odds  # bookmaker's implied probability
     ev_pct = (prob * odds - 1.0) * 100.0
     df["ev_pct"] = ev_pct.round(4)
 

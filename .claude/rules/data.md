@@ -66,7 +66,7 @@ p_yes_devig = (1 / odds_yes) / 1.05
 Cada entrada em `picks*.json` deve incluir:
 - `ev_id` — event ID BSD
 - `p_final` — probabilidade calibrada final
-- `ev_final` — expected value (p_final/p_market − 1)
+- `ev_final` — expected value (p_final × odds_over − 1, às odds brutas)
 - `odds_band` — banda de odds no momento do pick
 - `data_quality_flag` — bool (true se antes da data de activação)
 - `league_id` — ID BSD da liga

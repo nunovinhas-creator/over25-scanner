@@ -146,6 +146,22 @@ BTTS+O2.5: CLV rolling-30 > +5%  e  n ≥ 100 settled
 
 ---
 
+## Documentação (auditoria jul 2026)
+
+| Documento | Conteúdo |
+|---|---|
+| [`docs/PRODUCT_THESIS.md`](docs/PRODUCT_THESIS.md) | Tese canónica do produto + teses rejeitadas |
+| [`docs/PRODUCT_SCOPE.md`](docs/PRODUCT_SCOPE.md) | O que está dentro e fora de scope, com justificação |
+| [`docs/MODEL_REVIEW.md`](docs/MODEL_REVIEW.md) | Revisão quantitativa: DC, de-vig, calibração, EV, CLV |
+| [`docs/ARCHITECTURE_REVIEW.md`](docs/ARCHITECTURE_REVIEW.md) | Revisão de arquitectura + problemas corrigidos |
+| [`docs/REPOSITORY_INVENTORY.md`](docs/REPOSITORY_INVENTORY.md) | Inventário KEEP/REFACTOR/DEPRECATE/REMOVE |
+| [`docs/KILL_LEDGER.md`](docs/KILL_LEDGER.md) | Registo de remoções com justificação |
+| [`docs/MARKET_POSITION.md`](docs/MARKET_POSITION.md) | Comparação com alternativas open-source e comerciais |
+| [`docs/ROADMAP.md`](docs/ROADMAP.md) | Roadmap até C5 e época 2627 |
+| [`docs/RELEASE.md`](docs/RELEASE.md) | Versão 2.1.0, migração, dívida técnica e científica |
+
+---
+
 ## Comando `/scan`
 
 Orquestra 4 subagentes em sequência via Claude Code:

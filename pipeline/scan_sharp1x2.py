@@ -11,16 +11,21 @@ Uso: python -m pipeline.scan_sharp1x2
 
 from __future__ import annotations
 
-import json
 import os
-import subprocess
 import sys
-import urllib.parse
-import urllib.request
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 import requests
+
+from pipeline.scan_common import (
+    BSD_LEAGUE_ID_MAP,
+    WHITELIST,
+    git_commit_push,
+    load_json_list,
+    save_json_list,
+    send_telegram,
+)
 
 # ── paths ──────────────────────────────────────────────────────────────────────
 ROOT = Path(__file__).resolve().parent.parent
@@ -30,8 +35,6 @@ REJECTED_FILE = DATA_DIR / "rejected_picks_1x2.json"
 
 # ── env ────────────────────────────────────────────────────────────────────────
 BSD_API_KEY = os.environ.get("BSD_API_KEY", "")
-TG_TOKEN = os.environ.get("TG_TOKEN", "")
-TG_CHAT_ID = os.environ.get("TG_CHAT_ID", "1352687611")
 
 BSD_BASE = "https://sports.bzzoiro.com"
 
@@ -40,24 +43,6 @@ MAX_TIMING_H = 6.0
 MIN_TIMING_H = 0.0
 DIV_MIN = 0.03
 ODDS_UPDATE_THRESHOLD = 0.03
-
-WHITELIST = {
-    "Premier League", "La Liga", "Bundesliga", "Serie A", "Ligue 1",
-    "Primeira Liga", "Eredivisie", "Belgian Pro League",
-    "Championship", "La Liga 2",
-    # Bundesliga 2 e Serie B ausentes da BSD API — não geram picks em produção.
-}
-
-# Mapa defensivo BSD league_id → nome canónico.
-# Fail-closed: ID desconhecido → '' → WHITELIST rejeita.
-BSD_LEAGUE_ID_MAP: dict[int, str] = {
-    # Nomes canónicos (whitelist) — têm prioridade sobre league_name da BSD.
-    # BSD devolve nomes diferentes: id=2→"Liga Portugal Betclic", id=14→"Pro League", id=38→"Segunda División".
-    1: "Premier League", 2: "Primeira Liga", 3: "La Liga", 4: "Serie A",
-    5: "Bundesliga", 6: "Ligue 1", 10: "Eredivisie",
-    12: "Championship", 14: "Belgian Pro League", 38: "La Liga 2",
-    # Bundesliga 2 e Serie B: ausentes da BSD (65 ligas disponíveis, nenhuma corresponde).
-}
 
 
 # ── Gates — espelho fiel de _applySharp1x2Gates() em index.html ────────────────
@@ -272,65 +257,20 @@ def _extract_1x2_odds(ev: dict) -> dict[str, dict[str, float]]:
 
 # ── Telegram ────────────────────────────────────────────────────────────────────
 
-def send_telegram(text: str) -> None:
-    if not TG_TOKEN:
-        print("TG_TOKEN não definido — skip TG", file=sys.stderr)
-        return
-    url = f"https://api.telegram.org/bot{TG_TOKEN}/sendMessage"
-    data = urllib.parse.urlencode({"chat_id": TG_CHAT_ID, "text": text}).encode()
-    try:
-        with urllib.request.urlopen(
-            urllib.request.Request(url, data=data, method="POST"), timeout=10
-        ) as resp:
-            print(f"TG enviado (status {resp.status})")
-    except Exception as exc:
-        print(f"TG falhou (não fatal): {exc}", file=sys.stderr)
-
-
 def _build_msg(pick: dict, div_raw: float, prefix: str = "") -> str:
     div_pct = round(div_raw * 100, 2)
     return "\n".join([
         f"{prefix}🔵 SHARP 1X2 — APOSTAR AGORA",
         f"{pick['liga']}: {pick['casa']} vs {pick['fora']}",
-        f"Outcome: HOME | B365={pick['odds_entrada']} / Pin={pick['odds_pinnacle']}",
+        f"Outcome: {pick['outcome']} | B365={pick['odds_entrada']} / Pin={pick['odds_pinnacle']}",
         f"div={div_pct:+.2f}% | KO em {pick['timing_h']:.1f}h",
     ])
 
 
-# ── Git ─────────────────────────────────────────────────────────────────────────
+# ── I/O (partilhado em pipeline/scan_common.py) ────────────────────────────────
 
-def git_commit_push(files: list[str], msg: str) -> None:
-    try:
-        subprocess.run(["git", "config", "user.name", "github-actions[bot]"], check=True)
-        subprocess.run(["git", "config", "user.email", "github-actions[bot]@users.noreply.github.com"], check=True)
-        subprocess.run(["git", "fetch", "origin", "main"], check=True)
-        subprocess.run(["git", "reset", "--soft", "origin/main"], check=True)
-        subprocess.run(["git", "add"] + files, check=True)
-        if subprocess.run(["git", "diff", "--cached", "--quiet"]).returncode != 0:
-            subprocess.run(["git", "commit", "-m", msg], check=True)
-            subprocess.run(["git", "push", "origin", "main"], check=True)
-            print(f"Commit feito: {msg}")
-        else:
-            print("Sem alterações para commitar.")
-    except subprocess.CalledProcessError as exc:
-        print(f"git commit/push falhou: {exc}", file=sys.stderr)
-
-
-# ── I/O ─────────────────────────────────────────────────────────────────────────
-
-def _load_list(path: Path) -> list[dict]:
-    if not path.exists():
-        return []
-    try:
-        d = json.loads(path.read_text())
-        return d if isinstance(d, list) else []
-    except Exception:
-        return []
-
-
-def _save_list(path: Path, data: list[dict]) -> None:
-    DATA_DIR.mkdir(exist_ok=True)
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+_load_list = load_json_list
+_save_list = save_json_list
 
 
 # ── Main scan ───────────────────────────────────────────────────────────────────

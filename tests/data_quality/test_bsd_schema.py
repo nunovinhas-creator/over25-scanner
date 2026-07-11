@@ -37,7 +37,7 @@ BSDEventSchema = DataFrameSchema(
         "odds_over":    Column(float, Check.in_range(1.0, 50.0), nullable=True),
         "movement":     Column(
             str,
-            Check.isin(["SHORTENING", "DRIFTING", "STABLE", ""]),
+            Check.isin(["SHORTENING", "DRIFTING", "STABLE", "UNKNOWN", ""]),
             nullable=True,
         ),
     },
@@ -209,9 +209,9 @@ class TestBatchValidation:
 
 
 class TestMovementValues:
-    @pytest.mark.parametrize("movement", ["SHORTENING", "DRIFTING", "STABLE", ""])
+    @pytest.mark.parametrize("movement", ["SHORTENING", "DRIFTING", "STABLE", "UNKNOWN", ""])
     def test_allowed_movement_values_pass(self, movement: str) -> None:
-        """Only the four allowed movement values should pass schema validation."""
+        """Only the allowed movement values should pass schema validation."""
         event = copy.deepcopy(VALID_BSD_EVENT)
         event["movement"] = movement
         validate_bsd_event(event)  # must not raise
