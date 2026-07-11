@@ -193,7 +193,9 @@ Bundesliga 2 e Serie B: ausentes da BSD (65 ligas disponíveis) — presentes no
 | `dashboard.yml` | trigger | Gera dashboard HTML analítico |
 | `data_quality.yml` | diário 07:00 UTC | Schema + data quality + backtests automáticos |
 | `sharp1x2_analysis.yml` | workflow_dispatch | Q1–Q6 analysis report Sharp 1X2 |
+| `ws_closing_odds.yml` | cron 10,40 * * * * | Closing odds em tempo real via WebSocket BSD (sai logo se não houver KO na janela) |
 | `probe_bsd_markets.yml` | workflow_dispatch | Diagnóstico markets disponíveis na BSD API |
+| `probe_bsd_ws.yml` | workflow_dispatch | Diagnóstico do protocolo WebSocket BSD (/ws/live/) |
 
 **Secrets necessários:** `BSD_API_KEY`, `TG_TOKEN`, `TG_CHAT_ID`
 
