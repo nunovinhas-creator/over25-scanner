@@ -88,6 +88,20 @@ def apply_sharp1x2_gates(out: str, liga: str, div: float | None, timing_h: float
 
 # ── BSD fetch ───────────────────────────────────────────────────────────────────
 
+def _fetch_lineup_info(ev_id: str) -> dict:
+    """Resumo de indisponíveis (lesões/suspensões) via BSD lineups.
+
+    Chamado apenas para picks novos (1 chamada por pick). Campos
+    informativos — não são gate. Fail-safe: {} em erro.
+    """
+    try:
+        from pipeline.extract import fetch_event_lineups, summarize_lineups
+        return summarize_lineups(fetch_event_lineups(BSD_API_KEY, ev_id))
+    except Exception as exc:
+        print(f"_fetch_lineup_info: {ev_id}: {exc}", file=sys.stderr)
+        return {}
+
+
 def _fetch_all_events() -> list[dict]:
     """Busca eventos BSD para hoje+amanhã e faz join com odds 1X2."""
     today = date.today().isoformat()
@@ -409,7 +423,10 @@ def scan() -> None:
                         upd = {**base_pick, "id": update_id}
                         new_picks.append(upd)
                         existing_picks[update_id] = upd
-                        if out == "HOME" and shortening:
+                        # Confirmação: shortening Pinnacle no 2º scan. Qualquer
+                        # outcome que passou os gates alerta (DRAW e HOME N1
+                        # nunca chegam aqui — gates devolvem sempre razão).
+                        if shortening:
                             if existing_picks[pick_id].get("alerted_at"):
                                 print(f"[OBS] {casa} vs {fora} — já alertado em {existing_picks[pick_id]['alerted_at']}")
                             else:
@@ -419,25 +436,22 @@ def scan() -> None:
                                 send_telegram("🔄 ATUALIZAÇÃO\n" + _build_msg(base_pick, div_raw))
                                 alerts_sent += 1
                         else:
-                            reason = "sem shortening" if out == "HOME" else f"{out} (não-HOME)"
-                            print(f"[OBS] {casa} vs {fora} — actualizado {reason} (sem TG)")
+                            print(f"[OBS] {casa} vs {fora} — actualizado sem shortening (sem TG)")
                 else:
                     if shortening:
-                        if out == "HOME":
-                            if existing_picks[pick_id].get("alerted_at"):
-                                print(f"[OBS] {casa} vs {fora} — já alertado em {existing_picks[pick_id]['alerted_at']}")
-                            else:
-                                ts_alert = datetime.now(timezone.utc).isoformat()
-                                existing_picks[pick_id]["alerted_at"] = ts_alert
-                                base_pick["alerted_at"] = ts_alert
-                                send_telegram(_build_msg(base_pick, div_raw))
-                                alerts_sent += 1
+                        if existing_picks[pick_id].get("alerted_at"):
+                            print(f"[OBS] {casa} vs {fora} — já alertado em {existing_picks[pick_id]['alerted_at']}")
                         else:
-                            print(f"[OBS] {casa} vs {fora} — {out} shortening mas não HOME")
+                            ts_alert = datetime.now(timezone.utc).isoformat()
+                            existing_picks[pick_id]["alerted_at"] = ts_alert
+                            base_pick["alerted_at"] = ts_alert
+                            send_telegram(_build_msg(base_pick, div_raw))
+                            alerts_sent += 1
                     else:
                         print(f"[OBS] {casa} vs {fora} — sem shortening detectado")
                 continue
 
+            base_pick.update(_fetch_lineup_info(event_id))
             new_picks.append(base_pick)
             existing_picks[pick_id] = base_pick
             print(f"[NOVO] {casa} vs {fora} — {out} guardado, aguarda confirmação")

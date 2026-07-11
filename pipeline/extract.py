@@ -467,6 +467,93 @@ def fetch_bsd_odds(
 
 
 # ---------------------------------------------------------------------------
+# BSD lineups — indisponíveis (lesões/suspensões)
+# ---------------------------------------------------------------------------
+
+BSD_LINEUPS_PATH = "/api/v2/events/{event_id}/lineups/"
+
+# Máximo de nomes por equipa no campo de detalhe (mantém picks*.json compacto)
+_MAX_UNAVAILABLE_NAMES = 6
+
+
+def fetch_event_lineups(
+    api_key: str,
+    event_id: str | int,
+    timeout: int = BSD_REQUEST_TIMEOUT,
+) -> Optional[dict]:
+    """
+    Fetch lineups (confirmed/predicted) + indisponíveis de um evento BSD.
+
+    Endpoint: ``GET /api/v2/events/{id}/lineups/``.
+    Fail-safe: devolve ``None`` em qualquer erro (rede, HTTP, JSON).
+    """
+    if not api_key or not event_id:
+        return None
+
+    headers = {"Authorization": f"Token {api_key}", "Accept": "application/json"}
+    url = BSD_BASE_URL + BSD_LINEUPS_PATH.format(event_id=event_id)
+    try:
+        resp = requests.get(url, headers=headers, timeout=timeout)
+        resp.raise_for_status()
+        payload = resp.json()
+        return payload if isinstance(payload, dict) else None
+    except Exception as exc:
+        logger.warning("fetch_event_lineups: event %s: %s", event_id, exc)
+        return None
+
+
+def summarize_lineups(payload: Optional[dict]) -> dict:
+    """
+    Resume o payload de ``/events/{id}/lineups/`` em campos por pick.
+
+    Campos devolvidos (informativos — não são gate):
+      - ``lineup_status``     — confirmed | predicted | unavailable | ''
+      - ``indisp_casa``       — nº de jogadores indisponíveis (casa) ou None
+      - ``indisp_fora``       — idem (fora)
+      - ``indisp_casa_det``   — "Nome (status), ..." truncado, ou ''
+      - ``indisp_fora_det``   — idem (fora)
+
+    Função pura — testável sem rede.
+    """
+    out = {
+        "lineup_status": "",
+        "indisp_casa": None,
+        "indisp_fora": None,
+        "indisp_casa_det": "",
+        "indisp_fora_det": "",
+    }
+    if not isinstance(payload, dict):
+        return out
+
+    out["lineup_status"] = str(payload.get("lineup_status") or "")
+
+    unavailable = payload.get("unavailable_players")
+    if not isinstance(unavailable, dict):
+        return out
+
+    for side, count_key, det_key in (
+        ("home", "indisp_casa", "indisp_casa_det"),
+        ("away", "indisp_fora", "indisp_fora_det"),
+    ):
+        players = unavailable.get(side)
+        if not isinstance(players, list):
+            continue
+        out[count_key] = len(players)
+        names = []
+        for p in players[:_MAX_UNAVAILABLE_NAMES]:
+            if not isinstance(p, dict):
+                continue
+            name = p.get("short_name") or p.get("name") or "?"
+            status = p.get("status") or ""
+            names.append(f"{name} ({status})" if status else name)
+        if len(players) > _MAX_UNAVAILABLE_NAMES:
+            names.append(f"+{len(players) - _MAX_UNAVAILABLE_NAMES}")
+        out[det_key] = ", ".join(names)
+
+    return out
+
+
+# ---------------------------------------------------------------------------
 # football-data.co.uk
 # ---------------------------------------------------------------------------
 

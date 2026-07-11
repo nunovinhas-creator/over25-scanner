@@ -78,6 +78,18 @@ def main() -> None:
         except Exception as exc:
             print(f"  ✗  market={market!r} → erro: {exc}")
 
+    # 2b. Bookmakers activos — confirmar o slug da entrada de consenso
+    print("\n[2b] GET /api/v2/bookmakers/ — slugs disponíveis")
+    try:
+        d = _get("/api/v2/bookmakers/")
+        bks = d if isinstance(d, list) else (d.get("results") or d.get("data") or [])
+        for bk in bks:
+            print(f"  slug={bk.get('slug')!r}  name={bk.get('name')!r}")
+        consensus = [bk.get("slug") for bk in bks if "consensus" in (bk.get("slug") or "")]
+        print(f"  → slugs de consenso: {consensus or 'NENHUM'}")
+    except Exception as exc:
+        print(f"  Erro: {exc}")
+
     # 3. Listar todos os markets disponíveis via endpoint sem filtro (paginado)
     print("\n[3] Scan de markets únicos nos primeiros 200 resultados")
     try:

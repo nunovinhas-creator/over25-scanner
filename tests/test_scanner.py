@@ -100,6 +100,7 @@ class TestScanOver25(unittest.TestCase):
                 patch.object(mod, "SCAN_STATE_FILE", state_file),
                 patch.object(mod, "BSD_API_KEY", "fake_key"),
                 patch.object(mod, "_fetch_all_events", side_effect=fake_fetch),
+                patch.object(mod, "_fetch_lineup_info", return_value={}),
                 patch.object(mod, "compute_prob", side_effect=fake_compute_prob),
                 patch.object(mod, "send_telegram", side_effect=lambda t: tg_calls.append(t)),
                 patch.object(mod, "git_commit_push"),
@@ -224,6 +225,7 @@ class TestScanSharp1x2(unittest.TestCase):
                 patch.object(mod, "REJECTED_FILE", rejected_file),
                 patch.object(mod, "BSD_API_KEY", "fake_key"),
                 patch.object(mod, "_fetch_all_events", side_effect=fake_fetch),
+                patch.object(mod, "_fetch_lineup_info", return_value={}),
                 patch.object(mod, "send_telegram", side_effect=lambda t: tg_calls.append(t)),
                 patch.object(mod, "git_commit_push"),
             ):
@@ -242,7 +244,7 @@ class TestScanSharp1x2(unittest.TestCase):
         )
 
     def test_away_passes_gates(self):
-        """AWAY com div>3% e timing<6h → alerta TG."""
+        """AWAY com div>3% e timing<6h → pick no 1º scan; TG na confirmação com shortening."""
         # B365 AWAY=4.41, Pin AWAY=4.20 → div=5%
         ev = self._ev_with_1x2("g1", pinn=(1.85, 3.50, 4.20), b365=(1.85, 3.50, 4.41))
         picks, rejected, tg = self._run_scan([ev])
@@ -250,7 +252,20 @@ class TestScanSharp1x2(unittest.TestCase):
         away_picks = [p for p in picks if p["outcome"] == "AWAY"]
         self.assertEqual(len(away_picks), 1)
         self.assertEqual(away_picks[0]["id"], "g1_away_sh")
-        self.assertTrue(any("SHARP 1X2" in t for t in tg))
+        # 1º scan guarda o sinal e aguarda confirmação — sem TG ainda
+        self.assertFalse(any("SHARP 1X2" in t for t in tg))
+
+        # 2º scan: Pinnacle encurta 4.20 → 4.10 (confirmação) → alerta TG
+        ev2 = self._ev_with_1x2("g1", pinn=(1.85, 3.50, 4.10), b365=(1.85, 3.50, 4.41))
+        picks2, _, tg2 = self._run_scan([ev2], existing_picks=picks)
+        self.assertTrue(any("SHARP 1X2" in t for t in tg2))
+        away2 = [p for p in picks2 if p["id"] == "g1_away_sh"][0]
+        self.assertTrue(away2.get("alerted_at"))
+
+        # 3º scan: shortening de novo mas já alertado → sem TG duplicado
+        ev3 = self._ev_with_1x2("g1", pinn=(1.85, 3.50, 4.05), b365=(1.85, 3.50, 4.41))
+        _, _, tg3 = self._run_scan([ev3], existing_picks=picks2)
+        self.assertFalse(any("SHARP 1X2" in t for t in tg3))
 
     def test_draw_blocked_non_n1(self):
         """DRAW numa liga não-N1 → draw_suspenso."""
