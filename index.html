@@ -3593,7 +3593,9 @@ async function loadLive(){
       const xgTotal=xgH!=null&&xgA!=null?xgH+xgA:null;
       const evObj={id:ev.id,home:ev.home_team,away:ev.away_team,
         hScore:ev.home_score||0,aScore:ev.away_score||0,
-        min,status:ev.status,period:ev.period||null,league:ev.league_name||'',
+        // Nome canónico via league_id (como no loadAll) — o league_name cru da BSD
+        // não bate com a whitelist em 3 ligas (Primeira Liga, Belgian Pro League, La Liga 2)
+        min,status:ev.status,period:ev.period||null,league:BSD_LEAGUE_ID_MAP[ev.league_id]||ev.league_name||'',
         goals,xgH,xgA,xgTotal,lastMom,overOdds,probLive,
         shots,sot,da,corners,possession,redCards,
         isSavedPick,isWatch:watchIds.has(String(ev.id)),isDanger};
