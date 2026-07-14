@@ -59,24 +59,76 @@ _PICKS_PATH = _PROJECT_ROOT / "data" / "picks.json"
 # ---------------------------------------------------------------------------
 
 
-def _bsd_get(api_key: str, path: str) -> dict:
-    """GET a um endpoint BSD. Fail-safe: {} em qualquer erro."""
+def _bsd_get(api_key: str, path: str):
+    """
+    GET a um endpoint BSD. Devolve o JSON cru (dict ou list). Fail-safe: {} em erro.
+    Timeout (connect, read) para não pendurar o loop se o servidor não responder.
+    """
     headers = {"Authorization": f"Token {api_key}", "Accept": "application/json"}
     try:
-        resp = requests.get(BSD_BASE_URL + path, headers=headers, timeout=BSD_TIMEOUT)
+        resp = requests.get(BSD_BASE_URL + path, headers=headers, timeout=(8, BSD_TIMEOUT))
         resp.raise_for_status()
-        payload = resp.json()
-        return payload if isinstance(payload, dict) else {}
+        return resp.json()
     except Exception as exc:  # noqa: BLE001
         print(f"BSD GET falhou ({path}): {exc}", file=sys.stderr)
         return {}
 
 
+def _bsd_get_dict(api_key: str, path: str) -> dict:
+    """Como _bsd_get mas garante dict (para stats/odds por evento)."""
+    payload = _bsd_get(api_key, path)
+    return payload if isinstance(payload, dict) else {}
+
+
+def _extract_events(payload) -> list[dict]:
+    """Desembrulha resultados de /api/v2/events/ (list directa ou envelope)."""
+    if isinstance(payload, list):
+        return payload
+    if isinstance(payload, dict):
+        for key in ("events", "results", "data"):
+            val = payload.get(key)
+            if isinstance(val, list):
+                return val
+    return []
+
+
+# Estados BSD que NÃO são "em jogo" (fail-open: qualquer outro estado com
+# minuto a decorrer conta como live).
+_NOT_LIVE_STATUS = {
+    "notstarted", "not_started", "scheduled", "upcoming", "tbd",
+    "finished", "ended", "completed", "closed", "ft", "aet", "afterpenalties",
+    "cancelled", "canceled", "postponed", "abandoned", "suspended", "interrupted",
+}
+
+
+def _looks_live(ev: dict) -> bool:
+    """Heurística robusta para 'jogo a decorrer' — não depende de um único token."""
+    status = str(ev.get("status") or "").lower().replace("_", "").replace(" ", "").replace("-", "")
+    minute = ev.get("current_minute")
+    if status in {"inplay", "live", "1sthalf", "2ndhalf", "halftime", "1h", "2h", "ht", "playing", "live1h", "live2h"}:
+        return True
+    # Fail-open: minuto a decorrer + estado não-terminal
+    if isinstance(minute, (int, float)) and minute > 0 and status not in _NOT_LIVE_STATUS:
+        return True
+    return False
+
+
 def fetch_live_events(api_key: str) -> list[dict]:
-    """Eventos ao vivo. Fail-safe: [] em erro."""
-    data = _bsd_get(api_key, "/api/v2/events/live/")
-    events = data.get("events") or data.get("results") or data.get("data") or []
-    return events if isinstance(events, list) else []
+    """
+    Eventos a decorrer, via o endpoint comprovado /api/v2/events/ (o /events/live/
+    pendura — provável streaming). Estratégia: tenta status=inplay; se falhar,
+    puxa os eventos de hoje e filtra client-side por _looks_live. Fail-safe: [].
+    """
+    # 1) filtro directo por status de jogo (valor mais comum em APIs desportivas)
+    live = _extract_events(_bsd_get(api_key, "/api/v2/events/?status=inplay&limit=200"))
+    live = [e for e in live if _looks_live(e)]
+    if live:
+        return live
+
+    # 2) fallback: eventos de hoje (sem filtro restritivo) → filtra os que estão live
+    today = datetime.now(timezone.utc).date().isoformat()
+    payload = _bsd_get(api_key, f"/api/v2/events/?date_from={today}&date_to={today}&limit=200")
+    return [e for e in _extract_events(payload) if _looks_live(e)]
 
 
 def load_today_pick_ids() -> set[str]:
@@ -115,8 +167,8 @@ def _num(v):
 def enrich_event(api_key: str, ev: dict, pick_ids: set[str]) -> dict:
     """Constrói o objecto de evento com stats + odds (equivalente ao map JS)."""
     ev_id = ev.get("id")
-    stats = _bsd_get(api_key, f"/api/v2/events/{ev_id}/stats/")
-    odds = _bsd_get(api_key, f"/api/v2/events/{ev_id}/odds/")
+    stats = _bsd_get_dict(api_key, f"/api/v2/events/{ev_id}/stats/")
+    odds = _bsd_get_dict(api_key, f"/api/v2/events/{ev_id}/odds/")
 
     sh = (stats.get("stats") or {}).get("home") or {}
     sa = (stats.get("stats") or {}).get("away") or {}

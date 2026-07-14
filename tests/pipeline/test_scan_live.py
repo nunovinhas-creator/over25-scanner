@@ -13,6 +13,8 @@ import pytest
 
 from pipeline.scan_live import (
     TH_LIVE_PICK,
+    _extract_events,
+    _looks_live,
     build_live_pick_msg,
     detect_patterns,
     is_live_pick,
@@ -125,6 +127,29 @@ def test_pattern_score_weights():
         {"id": "e", "level": "mkt"},
     ]
     assert pattern_score(pats) == 0 + 10 + 4 + 2 + 1 + 1
+
+
+@pytest.mark.parametrize("ev,expected", [  # synthetic
+    ({"status": "inplay", "current_minute": 0}, True),
+    ({"status": "2nd_half", "current_minute": 67}, True),
+    ({"status": "live", "current_minute": None}, True),
+    ({"status": "", "current_minute": 34}, True),          # fail-open: minuto a decorrer
+    ({"status": "notstarted", "current_minute": 0}, False),
+    ({"status": "finished", "current_minute": 90}, False),  # terminal, mesmo com minuto
+    ({"status": "scheduled", "current_minute": None}, False),
+])
+def test_looks_live(ev, expected):
+    """Heurística de 'jogo a decorrer' robusta a vários tokens de status."""
+    assert _looks_live(ev) is expected
+
+
+def test_extract_events_handles_list_and_envelope():
+    """/api/v2/events/ devolve list directa ou envelope {results|events|data}."""  # synthetic
+    assert _extract_events([{"id": 1}]) == [{"id": 1}]
+    assert _extract_events({"results": [{"id": 2}]}) == [{"id": 2}]
+    assert _extract_events({"events": [{"id": 3}]}) == [{"id": 3}]
+    assert _extract_events({"nope": 1}) == []
+    assert _extract_events(None) == []
 
 
 def test_build_msg_contains_key_fields():
