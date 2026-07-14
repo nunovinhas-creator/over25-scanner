@@ -39,7 +39,6 @@ import requests
 
 from pipeline.scan_common import (
     BSD_LEAGUE_ID_MAP,
-    WHITELIST,
     send_telegram,
 )
 
@@ -449,8 +448,13 @@ def build_live_pick_msg(e: dict) -> str:
 
 def scan_once(api_key: str, state: dict, pick_ids: set[str], alerted: set[str]) -> int:
     """
-    Um ciclo de scan. Envia TG para sinais qualificados novos (whitelist,
-    goals<3, ainda não alertados). Devolve nº de alertas enviados.
+    Um ciclo de scan. Envia TG para sinais qualificados novos (goals<3, ainda
+    não alertados). Devolve nº de alertas enviados.
+
+    NOTA: o sinal LIVE é INDEPENDENTE da whitelist do pré-jogo. Baseia-se só em
+    padrões do próprio jogo (xG, pressão, momentum, mercado ao vivo), que não
+    dependem do modelo Dixon-Coles nem do histórico por liga. Por isso NÃO se
+    filtra por WHITELIST aqui — igual ao separador Live do browser.
     """
     events = fetch_live_events(api_key)
     if not events:
@@ -458,9 +462,6 @@ def scan_once(api_key: str, state: dict, pick_ids: set[str], alerted: set[str]) 
 
     sent = 0
     for ev in events[:50]:
-        league = BSD_LEAGUE_ID_MAP.get(ev.get("league_id"), "")
-        if league not in WHITELIST:  # fail-closed: só ligas de produção
-            continue
         try:
             e = enrich_event(api_key, ev, pick_ids)
         except Exception as exc:  # noqa: BLE001
