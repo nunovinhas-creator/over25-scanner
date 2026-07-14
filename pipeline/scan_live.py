@@ -292,19 +292,17 @@ def detect_patterns(e: dict, state: dict) -> list[dict]:
                 and raw.get("corners") is not None and raw.get("date") == today:
             ht_base = raw
 
-    use_half = is_2h and ht_base  # deltas da 2ª parte só quando há baseline de intervalo
-    adj_shots = max(0, total_shots - ht_base["shots"]) if use_half else total_shots
-    adj_xg = max(0, xg_total - ht_base["xg"]) if use_half else xg_total
-    adj_da = max(0, total_da - (ht_base.get("da") or 0)) if use_half else total_da
-    adj_sot = max(0, total_sot - (ht_base.get("sot") or 0)) if use_half else total_sot
-    adj_corners = max(0, total_corners - (ht_base.get("corners") or 0)) if use_half else total_corners
-    # adj_min alinhado com adj_*: minuto da 2ª parte com baseline, senão jogo inteiro.
-    adj_min = max(1, mn - 45) if use_half else mn
-    # Divergência deliberada do browser: sem baseline (jogo já a decorrer quando o
-    # scanner arranca) usa-se o rácio de JOGO INTEIRO em vez de suprimir — a BSD só
-    # dá dangerous_attack como sinal de volume, suprimi-lo tornaria o live inútil.
-    suppress_volume = is_ht
-    sfx = " (2ªP)" if use_half else ""
+    # Fiel ao browser (detectPatterns): na 2ª parte usa deltas relativos ao
+    # baseline de intervalo; sem baseline suprime o volume (não conta a 1ª parte).
+    # É isto que faz um jogo aparecer — ou não — no "APOSTAR AGORA".
+    adj_shots = max(0, total_shots - ht_base["shots"]) if (is_2h and ht_base) else total_shots
+    adj_xg = max(0, xg_total - ht_base["xg"]) if (is_2h and ht_base) else xg_total
+    adj_da = max(0, total_da - (ht_base.get("da") or 0)) if (is_2h and ht_base) else total_da
+    adj_sot = max(0, total_sot - (ht_base.get("sot") or 0)) if (is_2h and ht_base) else total_sot
+    adj_corners = max(0, total_corners - (ht_base.get("corners") or 0)) if (is_2h and ht_base) else total_corners
+    adj_min = max(1, mn - 45) if is_2h else mn
+    suppress_volume = is_ht or (is_2h and not ht_base)
+    sfx = " (2ªP)" if is_2h else ""
 
     # 1. PRESSÃO (DA)
     if not suppress_volume and adj_da > 0 and adj_min > 0:
