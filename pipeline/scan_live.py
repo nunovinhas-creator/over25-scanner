@@ -301,7 +301,13 @@ def detect_patterns(e: dict, state: dict) -> list[dict]:
     adj_sot = max(0, total_sot - (ht_base.get("sot") or 0)) if (is_2h and ht_base) else total_sot
     adj_corners = max(0, total_corners - (ht_base.get("corners") or 0)) if (is_2h and ht_base) else total_corners
     adj_min = max(1, mn - 45) if is_2h else mn
-    suppress_volume = is_ht or (is_2h and not ht_base)
+    # Guarda contra extrapolação no arranque da 2ª parte: com poucos minutos
+    # decorridos, adj/adj_min*90 dá valores absurdos (ex.: 4 DA em 2 min →
+    # "Pressão 100"; "7 remates 2ªP" ao 47'). Só confia no rácio da 2ª parte
+    # após MIN_2H_WINDOW min — a mesma ideia que o browser já usa em xg_pace.
+    MIN_2H_WINDOW = 15
+    early_2h = bool(is_2h and ht_base and adj_min < MIN_2H_WINDOW)
+    suppress_volume = is_ht or (is_2h and not ht_base) or early_2h
     sfx = " (2ªP)" if is_2h else ""
 
     # 1. PRESSÃO (DA)
