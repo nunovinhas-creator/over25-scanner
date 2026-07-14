@@ -81,6 +81,23 @@ def test_second_half_without_baseline_suppresses_volume():
     assert "xg_delta" in ids       # xG delta não depende de volume
 
 
+def test_early_second_half_does_not_extrapolate_volume():
+    """No arranque da 2ª parte (poucos min desde o baseline) o volume NÃO dispara
+    — evita 'Pressão 100' / '7 remates 2ªP' ao 47'. Reproduz o sinal falso real."""  # synthetic
+    state = {"ht": {}, "mkt": {}}
+    # baseline capturado ao intervalo (1ª parte com pouca actividade)
+    ht = _base_event(min=45, status="half_time", period="half_time",
+                     shots={"h": 3, "a": 2}, da={"h": 15, "a": 10})
+    detect_patterns(ht, state)
+    # 47': 2 min de 2ª parte, alguma actividade → NÃO deve extrapolar
+    sh = _base_event(min=47, goals=1, hScore=0, aScore=1, status="2nd_half", period="2nd_half",
+                     shots={"h": 8, "a": 4}, da={"h": 19, "a": 12})
+    sh["patterns"] = detect_patterns(sh, state)
+    ids = {p["id"] for p in sh["patterns"]}
+    assert "pressure" not in ids
+    assert "shots" not in ids
+
+
 def test_halftime_baseline_enables_second_half_volume():
     """Com baseline capturado ao intervalo, a 2ª parte usa deltas ajustados."""  # synthetic
     state = {"ht": {}, "mkt": {}}
