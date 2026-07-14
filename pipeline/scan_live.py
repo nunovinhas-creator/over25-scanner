@@ -179,6 +179,24 @@ def _num(v):
         return None
 
 
+_RAW_DUMPED = False
+
+
+def _dump_raw(api_key: str, ev_id) -> None:
+    """Dump único da resposta crua de stats+odds — descobre a estrutura real
+    da BSD quando o enriquecimento devolve vazio. Corre 1x por processo."""
+    global _RAW_DUMPED
+    if _RAW_DUMPED:
+        return
+    _RAW_DUMPED = True
+    for label, path in (("stats", f"/api/v2/events/{ev_id}/stats/"),
+                        ("odds", f"/api/v2/events/{ev_id}/odds/")):
+        raw = _bsd_get(api_key, path)
+        kind = list(raw.keys()) if isinstance(raw, dict) else type(raw).__name__
+        snippet = json.dumps(raw, ensure_ascii=False)[:900]
+        print(f"  [debug {label}] ev={ev_id} keys={kind}\n    {snippet}")
+
+
 def enrich_event(api_key: str, ev: dict, pick_ids: set[str]) -> dict:
     """Constrói o objecto de evento com stats + odds (equivalente ao map JS)."""
     ev_id = ev.get("id")
@@ -494,6 +512,10 @@ def scan_once(api_key: str, state: dict, pick_ids: set[str], alerted: set[str],
             xg = f"{e['xgTotal']:.1f}" if e.get("xgTotal") is not None else "?"
             print(f"  live: {e['home']} {e['hScore']}-{e['aScore']} {e['away']} "
                   f"{e['min']}' xg={xg} score={e['patternScore']} [{pat_ids}]")
+            # Se o enrich veio vazio, dumpa a resposta crua (1x) p/ descobrir a
+            # estrutura real do endpoint de stats/odds da BSD.
+            if e.get("xgTotal") is None and not e["patterns"]:
+                _dump_raw(api_key, ev.get("id"))
 
         if not is_live_pick(e) or e["isSavedPick"] or e["goals"] >= 3:
             continue
