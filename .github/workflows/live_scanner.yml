@@ -48,9 +48,12 @@ jobs:
         run: pip install --quiet requests
 
       - name: Loop LIVE ao minuto
-        run: python -m pipeline.scan_live --loop --interval 60 --minutes ${{ github.event.inputs.minutes || '350' }}
+        # -u / PYTHONUNBUFFERED: output em tempo real no log do Actions (stdout
+        # bufferizado só apareceria no fim do job, ~5h depois).
+        run: python -u -m pipeline.scan_live --loop --interval 60 --minutes ${{ github.event.inputs.minutes || '350' }}
         env:
           PYTHONPATH: ${{ github.workspace }}
+          PYTHONUNBUFFERED: "1"
           BSD_API_KEY: ${{ secrets.BSD_API_KEY }}
           TG_TOKEN: ${{ secrets.TG_TOKEN }}
           TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
