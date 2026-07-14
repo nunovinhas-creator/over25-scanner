@@ -32,7 +32,7 @@ import json
 import os
 import sys
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import requests
@@ -112,22 +112,38 @@ def _looks_live(ev: dict) -> bool:
     return False
 
 
-def fetch_live_events(api_key: str) -> list[dict]:
+def fetch_live_events(api_key: str, verbose: bool = False) -> list[dict]:
     """
-    Eventos a decorrer, via o endpoint comprovado /api/v2/events/ (o /events/live/
-    pendura — provável streaming). Estratégia: tenta status=inplay; se falhar,
-    puxa os eventos de hoje e filtra client-side por _looks_live. Fail-safe: [].
+    Eventos a decorrer, via o endpoint comprovado /api/v2/events/.
+
+    O /events/live/ pendura (provável streaming) e uma query SEM data também
+    pendura (o servidor varre tudo). Só queries DELIMITADAS POR DATA respondem
+    depressa — é o padrão que a produção usa a cada 30 min. Por isso todas as
+    tentativas aqui são delimitadas por data (hoje→amanhã, cobre jogos que
+    cruzam a meia-noite UTC), e filtramos os que estão em jogo client-side.
+
+    Fail-safe: [] em erro.
     """
-    # 1) filtro directo por status de jogo (valor mais comum em APIs desportivas)
-    live = _extract_events(_bsd_get(api_key, "/api/v2/events/?status=inplay&limit=200"))
-    live = [e for e in live if _looks_live(e)]
+    today = datetime.now(timezone.utc).date().isoformat()
+    tomorrow = (datetime.now(timezone.utc).date() + timedelta(days=1)).isoformat()
+    date_q = f"date_from={today}&date_to={tomorrow}&limit=200"
+
+    # 1) primária (fiável): eventos da janela, sem filtro de status → filtra live.
+    #    Query delimitada por data = resposta rápida (como a produção).
+    payload = _bsd_get(api_key, f"/api/v2/events/?{date_q}")
+    fetched = _extract_events(payload)
+    live = [e for e in fetched if _looks_live(e)]
+    if verbose:
+        print(f"fetch_live_events: {len(fetched)} eventos na janela, {len(live)} a decorrer.")
     if live:
         return live
 
-    # 2) fallback: eventos de hoje (sem filtro restritivo) → filtra os que estão live
-    today = datetime.now(timezone.utc).date().isoformat()
-    payload = _bsd_get(api_key, f"/api/v2/events/?date_from={today}&date_to={today}&limit=200")
-    return [e for e in _extract_events(payload) if _looks_live(e)]
+    # 2) secundária: filtro directo por status de jogo (também delimitado por data).
+    payload2 = _bsd_get(api_key, f"/api/v2/events/?status=inplay&{date_q}")
+    live2 = [e for e in _extract_events(payload2) if _looks_live(e)]
+    if verbose and live2:
+        print(f"fetch_live_events: status=inplay devolveu {len(live2)} a decorrer.")
+    return live2
 
 
 def load_today_pick_ids() -> set[str]:
@@ -446,7 +462,8 @@ def build_live_pick_msg(e: dict) -> str:
 # ---------------------------------------------------------------------------
 
 
-def scan_once(api_key: str, state: dict, pick_ids: set[str], alerted: set[str]) -> int:
+def scan_once(api_key: str, state: dict, pick_ids: set[str], alerted: set[str],
+              verbose: bool = True) -> int:
     """
     Um ciclo de scan. Envia TG para sinais qualificados novos (goals<3, ainda
     não alertados). Devolve nº de alertas enviados.
@@ -456,7 +473,7 @@ def scan_once(api_key: str, state: dict, pick_ids: set[str], alerted: set[str]) 
     dependem do modelo Dixon-Coles nem do histórico por liga. Por isso NÃO se
     filtra por WHITELIST aqui — igual ao separador Live do browser.
     """
-    events = fetch_live_events(api_key)
+    events = fetch_live_events(api_key, verbose=verbose)
     if not events:
         return 0
 
