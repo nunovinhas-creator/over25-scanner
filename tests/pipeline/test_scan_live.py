@@ -67,18 +67,29 @@ def test_strong_first_half_qualifies():
     assert e["patterns"][0]["id"] == "conv"
 
 
-def test_second_half_without_baseline_suppresses_volume():
-    """Sem baseline de intervalo, os padrões de volume (pressão/cantos/remates)
-    são suprimidos na 2ª parte — igual ao comportamento do browser."""  # synthetic
+def test_second_half_without_baseline_uses_full_match():
+    """Sem baseline de intervalo (jogo já a decorrer quando o scanner arranca),
+    a pressão usa o rácio de JOGO INTEIRO em vez de ser suprimida — divergência
+    deliberada do browser, porque a BSD só dá dangerous_attack como sinal de
+    volume e suprimi-lo tornaria o live inútil."""  # synthetic
     e = _score(_base_event(
         min=70, goals=2, hScore=1, aScore=1, status="2nd_half", period="2nd_half",
         xgTotal=3.6, lastMom=55, overOdds=1.65, probLive=61,
-        shots={"h": 9, "a": 7}, sot={"h": 4, "a": 3}, da={"h": 45, "a": 38},
-        corners={"h": 6, "a": 4}, possession={"h": 58, "a": 42},
+        da={"h": 45, "a": 38},
     ))
     ids = {p["id"] for p in e["patterns"]}
-    assert "pressure" not in ids  # volume suprimido
-    assert "xg_delta" in ids      # xG delta não depende de volume
+    assert "pressure" in ids   # rácio de jogo inteiro (não suprimido)
+    assert "xg_delta" in ids    # xG delta não depende de volume
+
+
+def test_halftime_still_suppresses_volume():
+    """Ao intervalo (is_ht) a pressão continua suprimida (não faz sentido rácio)."""  # synthetic
+    e = _score(_base_event(
+        min=45, status="half_time", period="half_time",
+        da={"h": 30, "a": 25},
+    ))
+    ids = {p["id"] for p in e["patterns"]}
+    assert "pressure" not in ids
 
 
 def test_halftime_baseline_enables_second_half_volume():
