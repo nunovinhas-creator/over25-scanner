@@ -1,0 +1,56 @@
+name: Scanner LIVE (ao minuto)
+
+# Alertas "🔥 APOSTAR AGORA" ao MINUTO, independentes do browser.
+#
+# O cron do GitHub Actions NÃO é fiável ao minuto (mínimo ~5 min, com atrasos),
+# por isso a cadência real ao minuto vem de um job de longa duração que faz scan
+# a cada 60s durante ~5h50 (< 6h, limite do runner). O cron abaixo só ARRANCA o
+# job nas janelas de jogos; o loop interno é que garante o "ao minuto".
+#
+# Janelas (UTC) — cobrem tarde/noite europeia, onde estão quase todos os jogos:
+#   10:00 → ~15:50   |   16:00 → ~21:50
+# concurrency cancel-in-progress: o arranque das 16:00 substitui limpo o das 10:00.
+# Também arrancável à mão (workflow_dispatch) antes de qualquer jogo.
+
+on:
+  schedule:
+    - cron: '0 10 * * *'
+    - cron: '0 16 * * *'
+  workflow_dispatch:
+    inputs:
+      minutes:
+        description: "Duração do loop em minutos (máx 350)"
+        required: false
+        default: "350"
+
+concurrency:
+  group: live-scanner
+  cancel-in-progress: true
+
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 358  # < 360 (limite do runner); o loop sai antes por --minutes
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependências
+        run: pip install --quiet requests
+
+      - name: Loop LIVE ao minuto
+        run: python -m pipeline.scan_live --loop --interval 60 --minutes ${{ github.event.inputs.minutes || '350' }}
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+          BSD_API_KEY: ${{ secrets.BSD_API_KEY }}
+          TG_TOKEN: ${{ secrets.TG_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
