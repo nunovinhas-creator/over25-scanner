@@ -487,6 +487,14 @@ def scan_once(api_key: str, state: dict, pick_ids: set[str], alerted: set[str],
         e["patterns"] = detect_patterns(e, state)
         e["patternScore"] = pattern_score(e["patterns"])
 
+        if verbose:
+            # Diagnóstico por jogo live: confirma que enrich+padrões funcionam e
+            # mostra a distância ao gate (score>=12). xg=None ⇒ stats sem xG.
+            pat_ids = ",".join(pt["id"] for pt in e["patterns"]) or "—"
+            xg = f"{e['xgTotal']:.1f}" if e.get("xgTotal") is not None else "?"
+            print(f"  live: {e['home']} {e['hScore']}-{e['aScore']} {e['away']} "
+                  f"{e['min']}' xg={xg} score={e['patternScore']} [{pat_ids}]")
+
         if not is_live_pick(e) or e["isSavedPick"] or e["goals"] >= 3:
             continue
         key = str(e["id"])
