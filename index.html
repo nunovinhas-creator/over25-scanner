@@ -1284,6 +1284,11 @@ const LEAGUE_BASE = {
 // ESTADO
 // ════════════════════════════════════════════════════════════════
 let allGames=[], scanFilter='all', lgNames={}, allSharp1x2=[];
+// Estado do empty-state da aba Sharp 1X2 — distingue "sem dados carregados" de
+// "carregado, zero eventos whitelisted na janela" de "eventos existem, zero sinais".
+// Ver renderSharp(). sharpEligibleCount = eventos que sobrevivem ao filtro whitelist+36h,
+// antes do cálculo de sinais (populado nos dois caminhos: cache-hit e cache-miss).
+let sharpLoaded=false, sharpEligibleCount=0;
 let sharp1x2Picks=[];
 let liveData=[], liveFilter='all', liveTimer=null, liveActive=false;
 let liveCountdown=30;
@@ -1773,6 +1778,7 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
       sh1x2=_sharpCache.sh1x2||{};
       sharpEventsMatched=_sharpCache.sharpEventsMatched||0;
       sharpEventsSkippedTime=_sharpCache.sharpEventsSkippedTime||0;
+      sharpEligibleCount=_sharpCache.eligibleCount||0;
     }else{
       const _nowMsFilter=Date.now();
       const events7Sharp=events7
@@ -1784,6 +1790,7 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
         })
         .sort((a,b)=>new Date(a.event_date)-new Date(b.event_date))
         .slice(0,SHARP_MAX_EVENTS);
+      sharpEligibleCount=events7Sharp.length;
 
     // 1. Agrupar odds 1X2 por evento — fetch per-event para garantir ID correto
     function _parse1x2(eid, oddsArr){
@@ -1927,10 +1934,12 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
 
       try{
         sessionStorage.setItem(SHARP_CACHE_KEY, JSON.stringify({
-          ts:Date.now(), data:sharpRaw, sh1x2, sharpEventsMatched, sharpEventsSkippedTime
+          ts:Date.now(), data:sharpRaw, sh1x2, sharpEventsMatched, sharpEventsSkippedTime,
+          eligibleCount:sharpEligibleCount
         }));
       }catch(e){}
     }
+    sharpLoaded=true;
 
     // Ligar ao allGames para score Over
     allSharp1x2=sharpRaw;
@@ -2764,8 +2773,25 @@ function setSharpFilter(btn,f){
 }
 
 function renderSharp(){
-  if(!allSharp1x2.length){
+  if(!sharpLoaded){
     el('sharpList').innerHTML='<div class="empty" style="padding:30px"><p style="margin-bottom:12px">Sem dados carregados.</p><button class="btn-load" onclick="loadAll()" style="font-size:13px;padding:8px 20px">▶ Carregar dados</button></div>';
+    return;
+  }
+  // Dois vazios distintos — nenhum deve parecer erro (auditoria 16 jul 2026, época baixa
+  // das 10 ligas whitelisted): (A) zero eventos sobrevivem ao filtro whitelist+36h;
+  // (B) há eventos elegíveis mas nenhum gerou sinal STEAM/SHARP/WATCH.
+  if(!allSharp1x2.length){
+    if(sharpEligibleCount===0){
+      el('sharpList').innerHTML='<div class="empty" style="padding:30px">'+
+        '<p style="margin-bottom:8px">Sem jogos das ligas whitelisted nas próximas 36h.</p>'+
+        '<p style="margin-bottom:12px;color:var(--text3);font-size:12px">Época baixa — as ligas europeias retomam em agosto.</p>'+
+        '<p style="font-size:11px;color:var(--text3)">'+allGames.length+' jogos no scanner, 0 elegíveis para Sharp 1X2</p>'+
+      '</div>';
+    }else{
+      el('sharpList').innerHTML='<div class="empty" style="padding:30px">'+
+        '<p>'+sharpEligibleCount+' jogos elegíveis analisados — nenhum movimento sharp detetado de momento.</p>'+
+      '</div>';
+    }
     return;
   }
   let list=allSharp1x2.filter(s=>{
