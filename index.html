@@ -1755,17 +1755,24 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
     // intermitente. Mitigação: (a) só ligas whitelisted + janela igual ao gate hoursToKO
     // (36h, ver abaixo) entram no fetch per-event, com cap duro de SHARP_MAX_EVENTS;
     // (b) cache em sessionStorage com TTL de 10min evita repetir tudo a cada reload.
-    let sharpRaw;
+    // sh1x2/sharpEventsMatched/sharpEventsSkippedTime são consumidos bem depois deste bloco
+    // (stats de debug em #dbgSharp) — têm de viver no escopo de loadAll(), não só dentro do
+    // ramo que os popula, senão rebentam com "sh1x2 is not defined" em AMBOS os caminhos
+    // (cache hit e cache miss) assim que a execução chega lá.
+    let sharpRaw, sh1x2={}, sharpEventsMatched=0, sharpEventsSkippedTime=0;
     const _sharpCache=(()=>{
       try{
         const c=JSON.parse(sessionStorage.getItem(SHARP_CACHE_KEY)||'null');
-        if(c&&Array.isArray(c.data)&&(Date.now()-c.ts)<SHARP_CACHE_TTL_MS) return c.data;
+        if(c&&Array.isArray(c.data)&&(Date.now()-c.ts)<SHARP_CACHE_TTL_MS) return c;
       }catch(e){}
       return null;
     })();
 
     if(_sharpCache){
-      sharpRaw=_sharpCache;
+      sharpRaw=_sharpCache.data;
+      sh1x2=_sharpCache.sh1x2||{};
+      sharpEventsMatched=_sharpCache.sharpEventsMatched||0;
+      sharpEventsSkippedTime=_sharpCache.sharpEventsSkippedTime||0;
     }else{
       const _nowMsFilter=Date.now();
       const events7Sharp=events7
@@ -1779,7 +1786,6 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
         .slice(0,SHARP_MAX_EVENTS);
 
     // 1. Agrupar odds 1X2 por evento — fetch per-event para garantir ID correto
-    const sh1x2 = {};
     function _parse1x2(eid, oddsArr){
       if(!sh1x2[eid]) sh1x2[eid]={};
       arr(oddsArr).forEach(o=>{
@@ -1828,7 +1834,6 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
     // 2. Calcular sinais por evento
     sharpRaw=[];
     const nowMs=Date.now();
-    let sharpEventsMatched=0, sharpEventsSkippedTime=0;
 
     events7Sharp.forEach(ev=>{
       const d=sh1x2[ev.id]; if(!d) return;
@@ -1920,7 +1925,11 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
       });
     });
 
-      try{ sessionStorage.setItem(SHARP_CACHE_KEY, JSON.stringify({ts:Date.now(), data:sharpRaw})); }catch(e){}
+      try{
+        sessionStorage.setItem(SHARP_CACHE_KEY, JSON.stringify({
+          ts:Date.now(), data:sharpRaw, sh1x2, sharpEventsMatched, sharpEventsSkippedTime
+        }));
+      }catch(e){}
     }
 
     // Ligar ao allGames para score Over
