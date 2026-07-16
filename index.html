@@ -1243,6 +1243,12 @@ const CLV_DEVIG      = 1.01;   // overround assumido para devigging do CLV (1%)
 const CALIB = { N:44, WR:0.591, K:10 };
 const TH_SCORE_HIGH  = 70;     // score ≥70 = candidato forte (verde)
 const TH_SCORE_MED   = 50;     // score ≥50 = candidato (âmbar)
+// ── Auditoria 16 jul 2026: "Failed to fetch" / lentidão — mitigação da tempestade
+// de pedidos per-event no Sharp 1X2 e do auto-load repetido. Ver secção 2 do relatório.
+const AUTO_LOAD_TTL_MS   = 5*60*1000;   // não repete loadAll() automático se já correu há <5min
+const SHARP_CACHE_TTL_MS = 10*60*1000;  // cache sessionStorage do Sharp 1X2 (evita refetch per-event)
+const SHARP_CACHE_KEY    = 'ov_sharp_cache_v1';
+const SHARP_MAX_EVENTS   = 80;          // cap duro de eventos com fetch per-event de odds 1X2
 // 1xbet/onexbet removidos — copiam preços sharp, distorcem divergência
 // Substituído pelo workflow deploy_version.yml em cada push para main
 const BUILD_SHA = 'f81effa';
@@ -1337,10 +1343,28 @@ function halfKelly(prob, decimalOdds){
 }
 
 function h(){ return {'Authorization':'Token '+(el('bsdKey').value.trim())}; }
-async function get(path){
-  const r = await fetch(BASE+path,{headers:h()});
-  if(!r.ok) throw new Error('HTTP '+r.status+' '+path);
-  return r.json();
+// Timeout + retry com backoff exponencial. Não repete em 429 (agravaria o rate limit) —
+// ver auditoria 16 jul 2026, causa raiz do "Failed to fetch" intermitente.
+async function get(path,{retries=2,timeoutMs=10000}={}){
+  let lastErr;
+  for(let attempt=0;attempt<=retries;attempt++){
+    const ctrl=new AbortController();
+    const timer=setTimeout(()=>ctrl.abort(),timeoutMs);
+    try{
+      const r=await fetch(BASE+path,{headers:h(),signal:ctrl.signal});
+      clearTimeout(timer);
+      if(r.status===429) throw new Error('RATE_LIMIT: BSD API — demasiados pedidos, aguarda 1-2 min ('+path+')');
+      if(!r.ok) throw new Error('HTTP '+r.status+' '+path);
+      return await r.json();
+    }catch(e){
+      clearTimeout(timer);
+      if(e.name==='AbortError') lastErr=new Error('TIMEOUT '+timeoutMs+'ms '+path);
+      else lastErr=e;
+      if(lastErr.message.startsWith('RATE_LIMIT')) throw lastErr;
+      if(attempt<retries) await new Promise(res=>setTimeout(res,500*Math.pow(2,attempt)));
+    }
+  }
+  throw lastErr;
 }
 
 function saveCfg(){
@@ -1362,8 +1386,14 @@ function loadCfg(){
     if(c.e&&el('emailTo'))el('emailTo').value=c.e;
     if(el('autoLogChk')) el('autoLogChk').checked = c.autoLog!==false;
     if(c.phase) setCurrentPhase(c.phase);
-    // Auto-carregar se API key já guardada; caso contrário abre o modal de config
-    if(c.k) setTimeout(()=>loadAll(), 300);
+    // Auto-carregar só se API key guardada E o último load tiver expirado — evita repetir a
+    // tempestade de ~500 pedidos sempre que a página é reaberta (auditoria 16 jul 2026).
+    // Caso contrário fica no estado idle; o botão ▶ Carregar faz o load explícito.
+    if(c.k){
+      const lastLoad=parseInt(localStorage.getItem('ov_last_load_ts')||'0',10);
+      if(Date.now()-lastLoad>AUTO_LOAD_TTL_MS) setTimeout(()=>loadAll(), 300);
+      else el('scanList').innerHTML='<div class="empty">✅ Dados carregados há menos de '+Math.round(AUTO_LOAD_TTL_MS/60000)+' min. Clica em <strong>▶ Carregar</strong> para atualizar.</div>';
+    }
     else setTimeout(()=>openCfg(), 400);
   }catch(e){}
 }
@@ -1651,6 +1681,7 @@ function setProgress(pct,step){
 
 async function loadAll(){
   saveCfg();
+  try{ localStorage.setItem('ov_last_load_ts', String(Date.now())); }catch(e){}
   setProgress(5,'A iniciar…');
   el('statusDot').style.background='var(--amber)';
   el('statusDot').style.boxShadow='none';
@@ -1719,6 +1750,34 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
     //   🎯 SHARP  — Pin moveu ≥2% + timing ≤12h
     //   👁 WATCH  — Pin moveu ≥1% ou divergência ≥5% sem movimento claro
 
+    // Auditoria 16 jul 2026: fetch per-event de odds 1X2 chegava a ~500 pedidos (1 por
+    // evento nos próximos 7 dias) → 15-60s de load + rate-limiting BSD → "Failed to fetch"
+    // intermitente. Mitigação: (a) só ligas whitelisted + janela igual ao gate hoursToKO
+    // (36h, ver abaixo) entram no fetch per-event, com cap duro de SHARP_MAX_EVENTS;
+    // (b) cache em sessionStorage com TTL de 10min evita repetir tudo a cada reload.
+    let sharpRaw;
+    const _sharpCache=(()=>{
+      try{
+        const c=JSON.parse(sessionStorage.getItem(SHARP_CACHE_KEY)||'null');
+        if(c&&Array.isArray(c.data)&&(Date.now()-c.ts)<SHARP_CACHE_TTL_MS) return c.data;
+      }catch(e){}
+      return null;
+    })();
+
+    if(_sharpCache){
+      sharpRaw=_sharpCache;
+    }else{
+      const _nowMsFilter=Date.now();
+      const events7Sharp=events7
+        .filter(ev=>{
+          const liga=BSD_LEAGUE_ID_MAP[ev.league_id]||'';
+          if(!liga||!SHARP1X2_WHITELIST.has(liga)) return false;
+          const hToKO=(new Date(ev.event_date).getTime()-_nowMsFilter)/3600000;
+          return hToKO>0&&hToKO<=36;
+        })
+        .sort((a,b)=>new Date(a.event_date)-new Date(b.event_date))
+        .slice(0,SHARP_MAX_EVENTS);
+
     // 1. Agrupar odds 1X2 por evento — fetch per-event para garantir ID correto
     const sh1x2 = {};
     function _parse1x2(eid, oddsArr){
@@ -1756,8 +1815,8 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
       });
     }
     const SH_BATCH=10;
-    for(let i=0;i<events7.length;i+=SH_BATCH){
-      const batch=events7.slice(i,i+SH_BATCH);
+    for(let i=0;i<events7Sharp.length;i+=SH_BATCH){
+      const batch=events7Sharp.slice(i,i+SH_BATCH);
       await Promise.all(batch.map(async ev=>{
         try{
           const d=await get('/api/v2/odds/?event_id='+ev.id+'&market=1x2&limit=50');
@@ -1767,11 +1826,11 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
     }
 
     // 2. Calcular sinais por evento
-    const sharpRaw=[];
+    sharpRaw=[];
     const nowMs=Date.now();
     let sharpEventsMatched=0, sharpEventsSkippedTime=0;
 
-    events7.forEach(ev=>{
+    events7Sharp.forEach(ev=>{
       const d=sh1x2[ev.id]; if(!d) return;
       sharpEventsMatched++;
       const kickoffMs=new Date(ev.event_date).getTime();
@@ -1860,6 +1919,9 @@ allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNa
         scanScore:0
       });
     });
+
+      try{ sessionStorage.setItem(SHARP_CACHE_KEY, JSON.stringify({ts:Date.now(), data:sharpRaw})); }catch(e){}
+    }
 
     // Ligar ao allGames para score Over
     allSharp1x2=sharpRaw;
