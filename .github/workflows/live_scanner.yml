@@ -7,15 +7,19 @@ name: Scanner LIVE (ao minuto)
 # a cada 60s durante ~5h50 (< 6h, limite do runner). O cron abaixo só ARRANCA o
 # job nas janelas de jogos; o loop interno é que garante o "ao minuto".
 #
-# Janelas (UTC) — cobrem tarde/noite europeia, onde estão quase todos os jogos:
-#   10:00 → ~15:50   |   16:00 → ~21:50
-# concurrency cancel-in-progress: o arranque das 16:00 substitui limpo o das 10:00.
+# Cobertura 24h/dia (repo público = minutos de Actions ilimitados). Cada job faz
+# scan ao minuto durante ~5h50; encadeamos 6 arranques espaçados de 4h para cobrir
+# as 24h com folga: 4h de espaçamento vs ~5h50 de duração = ~1h50 de sobreposição
+# por transição, para absorver atrasos de arranque do cron do GitHub.
+#
+# Arranques (UTC), ao minuto 7 (fora do :00) para fugir à congestão do scheduler:
+#   00:07 · 04:07 · 08:07 · 12:07 · 16:07 · 20:07
+# concurrency cancel-in-progress: cada novo arranque substitui limpo o anterior.
 # Também arrancável à mão (workflow_dispatch) antes de qualquer jogo.
 
 on:
   schedule:
-    - cron: '0 10 * * *'
-    - cron: '0 16 * * *'
+    - cron: '7 0,4,8,12,16,20 * * *'
   workflow_dispatch:
     inputs:
       minutes:
