@@ -11,6 +11,13 @@ on:
       - data/picks_btts_over25.json
       - data/observations.json
       - version.json
+  schedule:
+    # Most of the paths above (picks*.json, observations.json) are updated by the
+    # auto-scan bot every 30min, which doesn't trigger push workflows (GITHUB_TOKEN
+    # anti-loop rule) — same staleness issue as dashboard.yml. 07:45 UTC: after
+    # data_quality.yml (07:00) and dashboard.yml (07:30), to avoid racing dashboard's
+    # push to main and to reflect the freshly regenerated dashboard/picks of the day.
+    - cron: "45 7 * * *"
 
 jobs:
   update_readme:

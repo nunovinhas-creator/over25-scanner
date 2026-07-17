@@ -8,6 +8,12 @@ on:
       - "data/picks.json"
   workflow_dispatch:
     # Allow manual trigger from the GitHub Actions UI
+  schedule:
+    # Auto-scan commits (bot, every 30min) don't trigger push workflows (GITHUB_TOKEN
+    # anti-loop rule), so the push trigger above can go stale for days. Daily cron picks
+    # up the slack — 07:30 UTC, after data_quality.yml's 07:00 run, so the dashboard
+    # reflects already-validated data.
+    - cron: "30 7 * * *"
 
 jobs:
   # ---------------------------------------------------------------------------
