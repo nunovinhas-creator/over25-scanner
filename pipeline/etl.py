@@ -29,6 +29,8 @@ from typing import Any, Optional
 import numpy as np
 import pandas as pd
 
+from pipeline.scan_common import UNKNOWN_LEAGUE
+
 logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
@@ -368,8 +370,10 @@ def filter_by_league(
 
     for pick in picks:
         liga = str(pick.get("liga", "")).strip()
-        if not liga:
-            rejected.append({**pick, "reject_reason": "liga_vazia"})
+        if not liga or liga == UNKNOWN_LEAGUE:
+            # Nunca gravar liga vazia (ver .claude/rules/data.md) — sentinela
+            # explícita distingue "irresolúvel" de "conhecida mas fora da whitelist".
+            rejected.append({**pick, "liga": UNKNOWN_LEAGUE, "reject_reason": "liga_desconhecida"})
         elif liga not in league_set:
             rejected.append({**pick, "reject_reason": f"liga_fora_da_whitelist:{liga}"})
         else:

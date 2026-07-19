@@ -21,6 +21,7 @@ import requests
 
 from pipeline.scan_common import (
     BSD_LEAGUE_ID_MAP,
+    UNKNOWN_LEAGUE,
     WHITELIST,
     git_commit_push,
     load_json_list,
@@ -47,6 +48,13 @@ MIN_ODDS = 1.30
 MAX_ODDS = 3.50
 ODDS_UPDATE_THRESHOLD = 0.03  # >3% mudança nas odds → cria pick _update
 CLV_BTTS_O25_MIN    = 0.05   # CLV real mínimo: p_dc_conjunta/(p_btts×p_o25_mkt)−1 ≥ 5%
+
+# Scoreline no momento do alerta (data-quality-fixes, Ponto 3). Todos os picks
+# deste scanner nascem pré-KO — Gate 1 (timing) já garante timing_h >= 0, ou
+# seja, o jogo ainda não começou quando o pick é gravado. "live" só se aplica
+# a picks gerados por pipeline/scan_live.py, que hoje não persiste picks
+# próprios (só envia TG) — ver .claude/rules/cycles.md backlog.
+_PRE_KO_SCORELINE = {"score_no_alerta": "0-0", "minuto_no_alerta": None, "origem_alerta": "pre-ko"}
 
 
 # ── BSD fetch ───────────────────────────────────────────────────────────────────
@@ -208,7 +216,7 @@ def _fetch_all_events() -> list[dict]:
             "event_id":      eid,
             "home":          ev.get("home_team") or ev.get("home", ""),
             "away":          ev.get("away_team") or ev.get("away", ""),
-            "league":        BSD_LEAGUE_ID_MAP.get(ev.get("league_id") or 0) or ev.get("league_name") or ev.get("league", ""),
+            "league":        BSD_LEAGUE_ID_MAP.get(ev.get("league_id") or 0) or ev.get("league_name") or ev.get("league") or UNKNOWN_LEAGUE,
             "date":          ev.get("event_date") or ev.get("date", ""),
             "odds_over":     ov_map.get(eid),
             "odds_under":    un_map.get(eid),
@@ -232,7 +240,7 @@ def _event_fields(ev: dict) -> dict:
         "id":              str(ev.get("event_id") or ev.get("id", "")),
         "casa":            ev.get("home") or ev.get("home_team", ""),
         "fora":            ev.get("away") or ev.get("away_team", ""),
-        "liga":            ev.get("league") or ev.get("liga", ""),
+        "liga":            ev.get("league") or ev.get("liga") or UNKNOWN_LEAGUE,
         "data":            ev.get("date") or ev.get("commence_time", ""),
         "odds_over":       ev.get("odds_over"),
         "odds_under":      ev.get("odds_under"),
@@ -448,7 +456,8 @@ def scan() -> None:
 
         # Gate 0 — liga whitelist
         if ev["liga"] not in WHITELIST:
-            new_rejected.append({**ev, "reject_reason": "liga_fora_whitelist", "scanned_at": ts})
+            reason = "liga_desconhecida" if ev["liga"] == UNKNOWN_LEAGUE else "liga_fora_whitelist"
+            new_rejected.append({**ev, "reject_reason": reason, "scanned_at": ts})
             continue
 
         # Gate 1 — timing
@@ -494,7 +503,8 @@ def scan() -> None:
                 update_id = f"{ev_id}_update"
                 if update_id not in existing_picks:
                     pick = {**ev, **prob, "id": update_id,
-                            "gate_blocked_reason": "", "resultado_outcome": "", "scanned_at": ts}
+                            "gate_blocked_reason": "", "resultado_outcome": "", "scanned_at": ts,
+                            **_PRE_KO_SCORELINE}
                     new_picks.append(pick)
                     existing_picks[update_id] = pick
                     send_telegram("🔄 ATUALIZAÇÃO\n" + _build_msg(ev, prob))
@@ -502,7 +512,8 @@ def scan() -> None:
             continue
 
         lineup_info = _fetch_lineup_info(ev_id)
-        pick = {**ev, **prob, **lineup_info, "gate_blocked_reason": "", "resultado_outcome": "", "scanned_at": ts}
+        pick = {**ev, **prob, **lineup_info, "gate_blocked_reason": "", "resultado_outcome": "", "scanned_at": ts,
+                **_PRE_KO_SCORELINE}
         new_picks.append(pick)
         existing_picks[ev_id] = pick
         msg = _build_msg(ev, prob)
@@ -532,6 +543,7 @@ def scan() -> None:
                     "resultado_btts_over25": "",
                     "scanned_at": ts,
                     "fonte": "auto-scan-btts",
+                    **_PRE_KO_SCORELINE,
                 }
                 new_btts_picks.append(btts_pick)
                 existing_btts[btts_id] = btts_pick

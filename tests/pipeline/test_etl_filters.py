@@ -51,13 +51,15 @@ class TestFilterByLeagueEmptyLiga:
         assert n_rej == 1
 
     def test_empty_liga_reject_reason(self, tmp_path: Path) -> None:
-        """Rejected pick must carry reject_reason='liga_vazia'."""
+        """Rejected pick must carry reject_reason='liga_desconhecida' and liga='DESCONHECIDA'
+        (nunca string vazia — ver .claude/rules/data.md)."""
         reject_path = tmp_path / "rejected.json"
         filter_by_league([_pick(id="1", liga="")], _WHITELIST, reject_path)
 
         rejected = json.loads(reject_path.read_text())
         assert len(rejected) == 1
-        assert rejected[0]["reject_reason"] == "liga_vazia"
+        assert rejected[0]["reject_reason"] == "liga_desconhecida"
+        assert rejected[0]["liga"] == "DESCONHECIDA"
 
 
 class TestFilterByLeagueNonWhitelisted:

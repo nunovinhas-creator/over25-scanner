@@ -31,7 +31,7 @@ WHITELIST = {
 }
 
 # Mapa defensivo BSD league_id → nome canónico.
-# Fail-closed: ID desconhecido → '' → WHITELIST rejeita.
+# Fail-closed: ID desconhecido → UNKNOWN_LEAGUE → WHITELIST rejeita.
 # BSD devolve nomes diferentes: id=2→"Liga Portugal Betclic",
 # id=14→"Pro League", id=38→"Segunda División" — o mapa tem prioridade.
 BSD_LEAGUE_ID_MAP: dict[int, str] = {
@@ -39,6 +39,12 @@ BSD_LEAGUE_ID_MAP: dict[int, str] = {
     5: "Bundesliga", 6: "Ligue 1", 10: "Eredivisie",
     12: "Championship", 14: "Belgian Pro League", 38: "La Liga 2",
 }
+
+# Sentinela explícita para liga irresolúvel (nunca gravar string vazia — ver
+# .claude/rules/data.md). Usada quando a BSD não devolve league_id mapeável
+# nem league_name/league utilizável. Distinto de uma liga conhecida mas fora
+# da whitelist (ex.: "MLS", "USL League One"), que mantém o nome real.
+UNKNOWN_LEAGUE = "DESCONHECIDA"
 
 
 def send_telegram(text: str) -> None:

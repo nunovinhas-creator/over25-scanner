@@ -153,6 +153,23 @@ class TestScanOver25(unittest.TestCase):
         self.assertEqual(len(picks), 0)
         self.assertTrue(any(r.get("reject_reason") == "liga_fora_whitelist" for r in rejected))
 
+    def test_liga_irresolvel_nunca_string_vazia(self):
+        """Liga irresolúvel (sem league_id mapeável nem league_name) grava
+        'DESCONHECIDA' + reject_reason='liga_desconhecida' — nunca liga=''
+        (ver .claude/rules/data.md)."""
+        events = [
+            _bsd_event("ev_unknown", "Time X", "Time Y", league="", hours_to_ko=3.0),
+        ]
+        picks, rejected, tg = self._run_scan(events)
+
+        self.assertEqual(len(tg), 0)
+        self.assertEqual(len(picks), 0)
+        unknown_rej = [r for r in rejected if r.get("id") == "ev_unknown"]
+        self.assertEqual(len(unknown_rej), 1)
+        self.assertEqual(unknown_rej[0]["liga"], "DESCONHECIDA")
+        self.assertNotEqual(unknown_rej[0]["liga"], "")
+        self.assertEqual(unknown_rej[0]["reject_reason"], "liga_desconhecida")
+
     def test_dedup_no_double_alert(self):
         """Mesmo evento em duas corridas → só 1 alerta TG."""
         events = [_bsd_event("ev_dedup", "Man City", "Liverpool", hours_to_ko=4.0)]
@@ -180,6 +197,18 @@ class TestScanOver25(unittest.TestCase):
         update_ids = [p["id"] for p in picks if "_update" in p["id"]]
         self.assertEqual(len(update_ids), 1)
         self.assertTrue(any("ATUALIZAÇÃO" in t for t in tg))
+
+    def test_pre_ko_scoreline_fields_set(self):
+        """Todo pick novo (pré-KO, timing_h>=0 garantido pelo Gate 1) grava
+        score_no_alerta='0-0', minuto_no_alerta=None, origem_alerta='pre-ko'
+        (data-quality-fixes, Ponto 3)."""
+        events = [_bsd_event("ev_scoreline", "Arsenal", "Chelsea", hours_to_ko=3.0)]
+        picks, _, _ = self._run_scan(events)
+
+        self.assertEqual(len(picks), 1)
+        self.assertEqual(picks[0]["score_no_alerta"], "0-0")
+        self.assertIsNone(picks[0]["minuto_no_alerta"])
+        self.assertEqual(picks[0]["origem_alerta"], "pre-ko")
 
     def test_no_alert_without_bsd_key(self):
         """Sem BSD_API_KEY o scan termina com sys.exit(0)."""
@@ -318,6 +347,33 @@ class TestScanSharp1x2(unittest.TestCase):
         picks2, _, tg2 = self._run_scan([ev], existing_picks=picks1)
         self.assertEqual(len(tg2), 0, "Sem alerta duplicado")
 
+    def test_liga_irresolvel_nunca_string_vazia(self):
+        """Liga irresolúvel no Sharp 1X2 grava 'DESCONHECIDA' + reject_reason
+        'liga_desconhecida' — nunca liga='' (ver .claude/rules/data.md)."""
+        ev = self._ev_with_1x2("g_unknown", league="", pinn=(1.85, 3.50, 4.20), b365=(1.85, 3.50, 4.41))
+        picks, rejected, tg = self._run_scan([ev])
+
+        self.assertEqual(len(tg), 0)
+        self.assertEqual(len(picks), 0)
+        unknown_rej = [r for r in rejected if r.get("id", "").startswith("g_unknown")]
+        self.assertTrue(len(unknown_rej) > 0)
+        for r in unknown_rej:
+            self.assertEqual(r["liga"], "DESCONHECIDA")
+            self.assertNotEqual(r["liga"], "")
+            self.assertEqual(r["reject_reason"], "liga_desconhecida")
+
+    def test_pre_ko_scoreline_fields_set(self):
+        """Pick Sharp 1X2 grava score_no_alerta='0-0', minuto_no_alerta=None,
+        origem_alerta='pre-ko' (data-quality-fixes, Ponto 3)."""
+        ev = self._ev_with_1x2("g_scoreline", pinn=(1.85, 3.50, 4.20), b365=(1.85, 3.50, 4.41))
+        picks, _, _ = self._run_scan([ev])
+
+        away_picks = [p for p in picks if p["outcome"] == "AWAY"]
+        self.assertEqual(len(away_picks), 1)
+        self.assertEqual(away_picks[0]["score_no_alerta"], "0-0")
+        self.assertIsNone(away_picks[0]["minuto_no_alerta"])
+        self.assertEqual(away_picks[0]["origem_alerta"], "pre-ko")
+
     def test_no_1x2_odds_skipped(self):
         """Evento sem odds 1X2 (sem pinnacle_*) é ignorado silenciosamente."""
         ev = _bsd_event("g7", "Arsenal", "Chelsea", hours_to_ko=3.0)  # sem odds 1X2
@@ -378,8 +434,15 @@ class TestApplySharp1x2Gates(unittest.TestCase):
         self.assertEqual(self.gates("HOME", "FIFA World Cup", 0.05, 3), "liga_fora_whitelist")
 
     def test_empty_liga_blocked(self):
-        """Liga vazia (pré-fix BSD API) deve ser bloqueada."""
-        self.assertEqual(self.gates("AWAY", "", 0.05, 3), "liga_fora_whitelist")
+        """Liga vazia (pré-fix BSD API) deve ser bloqueada com motivo explícito
+        distinto de 'liga_fora_whitelist' (nunca string vazia — data.md)."""
+        self.assertEqual(self.gates("AWAY", "", 0.05, 3), "liga_desconhecida")
+
+    def test_unknown_league_sentinel_blocked(self):
+        """Sentinela UNKNOWN_LEAGUE (liga irresolúvel na BSD) deve ser bloqueada
+        com o mesmo motivo explícito 'liga_desconhecida'."""
+        from pipeline.scan_common import UNKNOWN_LEAGUE
+        self.assertEqual(self.gates("AWAY", UNKNOWN_LEAGUE, 0.05, 3), "liga_desconhecida")
 
 
 class TestRegressionWhitelist(unittest.TestCase):

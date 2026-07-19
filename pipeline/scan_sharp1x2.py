@@ -20,6 +20,7 @@ import requests
 
 from pipeline.scan_common import (
     BSD_LEAGUE_ID_MAP,
+    UNKNOWN_LEAGUE,
     WHITELIST,
     git_commit_push,
     load_json_list,
@@ -44,6 +45,11 @@ MIN_TIMING_H = 0.0
 DIV_MIN = 0.03
 ODDS_UPDATE_THRESHOLD = 0.03
 
+# Scoreline no momento do alerta (data-quality-fixes, Ponto 3). Todos os picks
+# deste scanner nascem pré-KO — apply_sharp1x2_gates já exige
+# MIN_TIMING_H <= timing_h <= MAX_TIMING_H, ou seja, o jogo ainda não começou.
+_PRE_KO_SCORELINE = {"score_no_alerta": "0-0", "minuto_no_alerta": None, "origem_alerta": "pre-ko"}
+
 
 # ── Gates — espelho fiel de _applySharp1x2Gates() em index.html ────────────────
 
@@ -56,7 +62,9 @@ def apply_sharp1x2_gates(out: str, liga: str, div: float | None, timing_h: float
     _liga = (liga or "").strip()
     is_n1 = _liga == "Eredivisie"
 
-    if not _liga or _liga not in WHITELIST:
+    if not _liga or _liga == UNKNOWN_LEAGUE:
+        return "liga_desconhecida"
+    if _liga not in WHITELIST:
         return "liga_fora_whitelist"
     if _out == "DRAW" and is_n1 and div is not None and div >= DIV_MIN:
         return "draw_observacao_n1"
@@ -159,7 +167,7 @@ def _fetch_all_events() -> list[dict]:
             "event_id": eid,
             "home": ev.get("home_team") or ev.get("home", ""),
             "away": ev.get("away_team") or ev.get("away", ""),
-            "league": BSD_LEAGUE_ID_MAP.get(ev.get("league_id") or 0) or ev.get("league_name") or ev.get("league", ""),
+            "league": BSD_LEAGUE_ID_MAP.get(ev.get("league_id") or 0) or ev.get("league_name") or ev.get("league") or UNKNOWN_LEAGUE,
             "date": ev.get("event_date") or ev.get("date", ""),
         }
         pin = pins.get(eid, {})
@@ -297,7 +305,7 @@ def scan() -> None:
 
         casa = raw.get("home") or raw.get("home_team", "")
         fora = raw.get("away") or raw.get("away_team", "")
-        liga = raw.get("league") or raw.get("liga", "")
+        liga = raw.get("league") or raw.get("liga") or UNKNOWN_LEAGUE
         commence = raw.get("date") or raw.get("commence_time", "")
 
         try:
@@ -346,6 +354,7 @@ def scan() -> None:
                 "odds_fecho": "",
                 "saved_at": ts,
                 "fonte": "auto-scan",
+                **_PRE_KO_SCORELINE,
             }
 
             if gate_reason:

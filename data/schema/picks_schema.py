@@ -223,6 +223,33 @@ PicksSchema = DataFrameSchema(
             nullable=True,
             description="Final scoreline, e.g. '2-1' (populated post-match).",
         ),
+        # ---- Scoreline no momento do alerta (data-quality-fixes, Ponto 3) ----
+        # Retrocompatível: ausente em picks antigos → NaN após validate_picks()
+        # (ver loop "fill missing schema columns" em validate_picks()).
+        "score_no_alerta": Column(
+            str,
+            nullable=True,
+            description="Scoreline at alert time, e.g. '0-0'. Always '0-0' for "
+                        "pre-KO alerts (Over 2.5 gate requires timing_h >= 0).",
+        ),
+        "minuto_no_alerta": Column(
+            str,
+            nullable=True,
+            description="Match minute at alert time (string int). Null/empty "
+                        "for pre-KO alerts (origem_alerta='pre-ko').",
+        ),
+        "origem_alerta": Column(
+            str,
+            checks=[
+                Check.isin(
+                    ["pre-ko", "live", ""],
+                    error="origem_alerta must be 'pre-ko', 'live' or empty",
+                )
+            ],
+            nullable=True,
+            description="Alert origin: 'pre-ko' (scan_over25.py, always today) "
+                        "or 'live' (scan_live.py — not yet wired to persist picks).",
+        ),
     },
     coerce=True,
     strict=False,  # GAS may add extra columns; ignore them

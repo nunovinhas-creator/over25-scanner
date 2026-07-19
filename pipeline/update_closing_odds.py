@@ -90,13 +90,15 @@ def update() -> None:
 
     picks = _load_picks()
     now = datetime.now(timezone.utc)
+    ts = now.strftime("%Y-%m-%dT%H:%M:%SZ")
     updated = 0
     skipped_window = 0
-    skipped_no_odds = 0
+    errored = 0
+    changed = False
 
     for pick in picks:
         if pick.get("resultado_outcome") not in ("WIN", "LOSS"):
-            continue
+            continue  # sem settlement ainda — ver pipeline/settle_sharp1x2.py
         if str(pick.get("odds_fecho", "")).strip():
             continue  # já preenchido
 
@@ -109,48 +111,73 @@ def update() -> None:
             continue
 
         elapsed_min = (now - ko).total_seconds() / 60.0
-        if elapsed_min < CLOSE_MIN_MIN or elapsed_min > CLOSE_MAX_H * 60:
+        pick_id = str(pick.get("id", ""))
+
+        if elapsed_min < CLOSE_MIN_MIN:
+            skipped_window += 1
+            continue  # ainda cedo demais — sem erro, só ainda não é a altura
+
+        if elapsed_min > CLOSE_MAX_H * 60:
+            # Janela fechada sem nunca ter conseguido odds_fecho — falha
+            # explícita e definitiva (só marca uma vez, evita commits em loop).
+            if not pick.get("fetch_error"):
+                pick["fetch_error"] = "janela_fechada_sem_odds_fecho"
+                pick["fetch_error_at"] = ts
+                errored += 1
+                changed = True
             skipped_window += 1
             continue
 
-        pick_id = str(pick.get("id", ""))
         event_id = _event_id_from_pick_id(pick_id)
-        if not event_id:
-            continue
-
         outcome = str(pick.get("outcome", "")).upper()
-        if outcome not in ("HOME", "DRAW", "AWAY"):
+        if not event_id or outcome not in ("HOME", "DRAW", "AWAY"):
+            if not pick.get("fetch_error"):
+                pick["fetch_error"] = "id_ou_outcome_invalido"
+                pick["fetch_error_at"] = ts
+                errored += 1
+                changed = True
             continue
 
         odds_close = fetch_closing_odds(event_id, outcome)
         if odds_close is None:
+            # Falha explícita e visível no próprio pick — nunca só stderr.
+            # Mantém-se dentro da janela: próxima corrida tenta de novo.
+            pick["fetch_error"] = "bsd_sem_odds_pinnacle_pos_ko"
+            pick["fetch_error_at"] = ts
+            errored += 1
+            changed = True
             print(f"  {pick_id}: BSD sem odds Pinnacle pós-KO", file=sys.stderr)
-            skipped_no_odds += 1
             continue
 
         try:
             odds_entrada = float(pick.get("odds_entrada") or 0)
         except (TypeError, ValueError):
-            continue
+            odds_entrada = 0.0
         if odds_entrada <= 1.0:
+            pick["fetch_error"] = "odds_entrada_invalida"
+            pick["fetch_error_at"] = ts
+            errored += 1
+            changed = True
             continue
 
         # CLV positivo = conseguimos odds melhores que o fecho da Pinnacle
         clv = round((odds_entrada / odds_close - 1) * 100, 4)
         pick["odds_fecho"] = str(round(odds_close, 4))
         pick["clv"] = str(clv)
+        pick.pop("fetch_error", None)
+        pick.pop("fetch_error_at", None)
         updated += 1
+        changed = True
         print(f"  {pick_id}: odds_fecho={odds_close:.4f} | CLV={clv:+.2f}%")
 
     print(
         f"update_closing_odds: {updated} actualizados | "
         f"{skipped_window} fora janela temporal | "
-        f"{skipped_no_odds} sem odds BSD"
+        f"{errored} erro explícito registado"
     )
 
-    if updated:
+    if changed:
         _save_picks(picks)
-        ts = now.strftime("%Y-%m-%dT%H:%M:%SZ")
         _git_commit(f"auto-update closing odds sharp1x2 {ts} [skip ci]")
     else:
         print("Nenhuma alteração — sem commit.")
