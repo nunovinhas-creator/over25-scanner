@@ -152,19 +152,23 @@ def settle() -> None:
                 pick["settlement_error_at"] = ts
                 n_error += 1
                 changed = True
-            else:
+            elif not past_deadline:
                 n_pending += 1
             continue
 
         result = fetch_event_result(event_id)
 
+        # Guarda: um settlement_error já registado nunca é reescrito. Sem
+        # isto, um jogo preso sem resolução da BSD gerava um novo
+        # settlement_error_at (e um novo commit [skip ci]) a cada corrida do
+        # scan (ver PR #128) — o erro já está explícito, reescrevê-lo é ruído.
         if result is None:
-            if past_deadline:
+            if past_deadline and not pick.get("settlement_error"):
                 pick["settlement_error"] = "bsd_fetch_falhou_apos_48h"
                 pick["settlement_error_at"] = ts
                 n_error += 1
                 changed = True
-            else:
+            elif not past_deadline:
                 n_pending += 1
             continue
 
@@ -179,23 +183,23 @@ def settle() -> None:
             continue
 
         if status not in _FINISHED_STATUS:
-            if past_deadline:
+            if past_deadline and not pick.get("settlement_error"):
                 pick["settlement_error"] = f"nao_finalizado_apos_48h:status={status or 'desconhecido'}"
                 pick["settlement_error_at"] = ts
                 n_error += 1
                 changed = True
-            else:
+            elif not past_deadline:
                 n_pending += 1
             continue
 
         actual_outcome = resolve_outcome(result["home_score"], result["away_score"])
         if actual_outcome is None:
-            if past_deadline:
+            if past_deadline and not pick.get("settlement_error"):
                 pick["settlement_error"] = "score_final_invalido"
                 pick["settlement_error_at"] = ts
                 n_error += 1
                 changed = True
-            else:
+            elif not past_deadline:
                 n_pending += 1
             continue
 

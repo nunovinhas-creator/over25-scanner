@@ -141,6 +141,35 @@ class TestSettle:
         assert out[0]["resultado_outcome"] == ""
         assert "nao_finalizado_apos_48h" in out[0]["settlement_error"]
 
+    def test_second_settlement_error_is_noop_no_new_commit(self):
+        """Guarda (issue #127 / PR #128): um settlement_error já registado não
+        é reescrito numa segunda corrida — evita commits [skip ci] repetidos
+        quando um jogo fica preso sem resolução da BSD além das 48h."""
+        import pipeline.settle_sharp1x2 as mod
+
+        picks = [_pick(id="9_home_sh", data=_iso(50.0))]
+
+        with tempfile.TemporaryDirectory() as tmp:
+            picks_file = Path(tmp) / "picks_1x2.json"
+            picks_file.write_text(json.dumps(picks), encoding="utf-8")
+
+            commit_calls = []
+            with (
+                patch.object(mod, "PICKS_FILE", picks_file),
+                patch.object(mod, "BSD_API_KEY", "fake_key"),
+                patch.object(mod, "fetch_event_result", side_effect=lambda eid: None),
+                patch.object(mod, "git_commit_push", side_effect=lambda *a, **k: commit_calls.append(a)),
+            ):
+                mod.settle()
+                first = json.loads(picks_file.read_text())[0]
+                assert first["settlement_error"] == "bsd_fetch_falhou_apos_48h"
+                assert len(commit_calls) == 1
+
+                mod.settle()  # segunda corrida — mesmo pick, ainda sem resolução da BSD
+                second = json.loads(picks_file.read_text())[0]
+                assert second["settlement_error_at"] == first["settlement_error_at"]  # não reescrito
+                assert len(commit_calls) == 1  # sem novo commit
+
     def test_no_bsd_api_key_aborts_cleanly(self):
         import pipeline.settle_sharp1x2 as mod
 

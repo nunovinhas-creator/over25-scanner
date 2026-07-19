@@ -1234,6 +1234,20 @@ const TH_MOVE       = 1.0;    // % movimento mínimo Pinnacle (ruído <1% filtra
 const DIV_MIN        = 2.0;    // % divergência mínima Pin vs recreativas
 const DIV_STEAM      = 8.0;    // % threshold STEAM
 const TH_LIVE_PICK   = 12;     // patternScore mínimo para classificar como sinal live (calibrado: N=35, score≥12→46% WR vs score<12→24% WR)
+// Piso de odds válida (issue #127) — espelha MIN_VALID_ODDS em pipeline/scan_common.py.
+// 1.00 é a sentinela confirmada da BSD para mercado suspenso (golo/VAR); nunca um preço real.
+const MIN_VALID_ODDS = 1.01;
+const SUSPENDED_ODDS_STATUS_TOKENS = new Set(['suspended','stopped','closed','paused','off','inactive']);
+function classifyOdds(rawOdds, marketStatus){
+  // VALID/SUSPENDED/MISSING — ver classify_odds() em pipeline/scan_common.py (mesma lógica).
+  const token = String(marketStatus||'').trim().toLowerCase().replace(/[_\-\s]/g,'');
+  if(SUSPENDED_ODDS_STATUS_TOKENS.has(token)) return {status:'SUSPENDED', value:null};
+  if(rawOdds===null||rawOdds===undefined) return {status:'MISSING', value:null};
+  const value = Number(rawOdds);
+  if(!Number.isFinite(value)) return {status:'MISSING', value:null};
+  if(value<=MIN_VALID_ODDS) return {status:'SUSPENDED', value:null};
+  return {status:'VALID', value};
+}
 // ── Pick qualification gates (baseados em análise de ROI dos dados históricos) ──
 const PICKS_MIN_ODDS = 1.65;   // odds mínimas — abaixo destroem ROI apesar do WR
 const PICKS_MAX_PROB = 0.73;   // prob máxima — acima é overconfidence (modelo perde edge)
@@ -3677,8 +3691,16 @@ async function loadLive(){
       const xgA=sa.xg?.actual??null;
       const mom=stats?.momentum||[];
       const lastMom=mom.length?mom[mom.length-1]?.v:null;
-      const overOdds=odds?.odds?.over_25_goals??null;
-      const probLive=overOdds?Math.round((1/overOdds)*100):null;
+      const rawOverOdds=odds?.odds?.over_25_goals??null;
+      // over_25_goals_status: campo defensivo, não confirmado numa resposta BSD real.
+      const marketStatus=odds?.odds?.over_25_goals_status??odds?.status??null;
+      const {status:oddsStatus, value:overOdds}=classifyOdds(rawOverOdds, marketStatus);
+      if(oddsStatus!=='VALID'){
+        // Registo explícito e visível (não silencioso) — nunca deixar 'Odd 1.00 · Prob 100%'
+        // passar como sucesso (issue #127). console.warn fica nos DevTools/GH Pages logs.
+        console.warn(`[live] odds ${oddsStatus} ev=${ev.id} raw=${JSON.stringify(rawOverOdds)}`);
+      }
+      const probLive=overOdds!=null?Math.round((1/overOdds)*100):null;
       const shots   ={h:sh.total_shots     ??null, a:sa.total_shots     ??null};
       const sot     ={h:sh.shots_on_target ??null, a:sa.shots_on_target ??null};
       const da      ={h:sh.dangerous_attack??null, a:sa.dangerous_attack??null};
@@ -3694,7 +3716,7 @@ async function loadLive(){
         // Nome canónico via league_id (como no loadAll) — o league_name cru da BSD
         // não bate com a whitelist em 3 ligas (Primeira Liga, Belgian Pro League, La Liga 2)
         min,status:ev.status,period:ev.period||null,league:BSD_LEAGUE_ID_MAP[ev.league_id]||ev.league_name||'',
-        goals,xgH,xgA,xgTotal,lastMom,overOdds,probLive,
+        goals,xgH,xgA,xgTotal,lastMom,overOdds,probLive,oddsStatus,
         shots,sot,da,corners,possession,redCards,
         isSavedPick,isWatch:watchIds.has(String(ev.id)),isDanger};
       evObj.patterns=detectPatterns(evObj);
