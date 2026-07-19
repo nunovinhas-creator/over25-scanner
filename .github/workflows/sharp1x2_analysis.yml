@@ -6,7 +6,7 @@ on:
     - cron: '*/30 * * * *'  # a cada 30 min — janela de closing odds
 
 jobs:
-  update_closing_odds:
+  settle_and_close_odds:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -26,6 +26,17 @@ jobs:
 
       - name: Install dependencies
         run: pip install --quiet requests
+
+      # Settlement corre SEMPRE antes do fecho de odds — só faz sentido tentar
+      # odds_fecho depois de sabermos que o pick está settled (WIN/LOSS/VOID).
+      # Mesmo job, passos sequenciais (não jobs paralelos): ambos os passos
+      # fazem `git reset --soft origin/main` + commit + push sobre o mesmo
+      # ficheiro (picks_1x2.json) — correr em paralelo arriscaria overwrite.
+      - name: Settle Sharp 1X2 results
+        run: python -m pipeline.settle_sharp1x2
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+          BSD_API_KEY: ${{ secrets.BSD_API_KEY }}
 
       - name: Update closing odds
         run: python -m pipeline.update_closing_odds

@@ -64,14 +64,16 @@ class TestLigaWhitelist1x2:
         assert stats["n_rejected_liga"] == 1
 
     def test_empty_liga_written_to_rejected_1x2(self, tmp_path: Path) -> None:
-        """Liga vazia escreve reject_reason='liga_vazia' em rejected_picks_1x2.json."""
+        """Liga vazia escreve reject_reason='liga_desconhecida' e liga='DESCONHECIDA'
+        em rejected_picks_1x2.json (nunca string vazia — ver .claude/rules/data.md)."""
         rejected_path = tmp_path / "rejected_picks_1x2.json"
         filter_1x2_alert_candidates(
             [_pick(id="2_sh", liga="")], _WHITELIST, rejected_path
         )
         rejected = json.loads(rejected_path.read_text())
         assert len(rejected) == 1
-        assert rejected[0]["reject_reason"] == "liga_vazia"
+        assert rejected[0]["reject_reason"] == "liga_desconhecida"
+        assert rejected[0]["liga"] == "DESCONHECIDA"
 
     def test_unknown_liga_rejected(self, tmp_path: Path) -> None:
         """Liga fora da whitelist (ex: Brasileirao) → rejeitada."""

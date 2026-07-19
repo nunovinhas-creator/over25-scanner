@@ -15,7 +15,7 @@
 | 14 | Belgian Pro League |
 | 38 | La Liga 2 |
 
-**Regra fail-closed:** `BSD_LEAGUE_ID_MAP` mapeia `league_id` → nome canónico. ID desconhecido → `''` → whitelist rejeita. Nunca adicionar uma liga sem confirmar que a BSD API a suporta e que existe evidência histórica suficiente (mínimo 1 época completa).
+**Regra fail-closed:** `BSD_LEAGUE_ID_MAP` mapeia `league_id` → nome canónico. ID desconhecido/irresolúvel → `UNKNOWN_LEAGUE` ("DESCONHECIDA", nunca `''` — ver `pipeline/scan_common.py`) → whitelist rejeita com `reject_reason="liga_desconhecida"`. Nunca adicionar uma liga sem confirmar que a BSD API a suporta e que existe evidência histórica suficiente (mínimo 1 época completa).
 
 **Bundesliga 2 e Serie B:** ausentes da BSD (65 ligas disponíveis) — presentes no histórico football-data.co.uk para backtesting, **nunca** geram picks em produção.
 
@@ -34,7 +34,9 @@ data/observations.json        — observações live (tab Live)
 data/historical/matches.csv   — histórico football-data.co.uk (auto-updated segundas)
 data/historical/matches.parquet — versão parquet do histórico
 data/schema/bsd_schema.py     — BSD API event schema e validação
-data/schema/picks_schema.py   — picks.json schema e validação
+data/schema/picks_schema.py   — picks.json schema e validação (Over 2.5)
+data/schema/picks_1x2_schema.py — picks_1x2.json schema mínimo (Sharp 1X2)
+data/schema/picks_btts_schema.py — picks_btts_over25.json schema mínimo (BTTS+O2.5)
 ```
 
 ## data_quality_flag
@@ -72,3 +74,12 @@ Cada entrada em `picks*.json` deve incluir:
 - `league_id` — ID BSD da liga
 
 Picks BTTS têm id `{ev_id}_btts`.
+
+### Scoreline no momento do alerta (desde a sessão data-quality-fixes)
+
+Os três tipos de pick (Over 2.5, Sharp 1X2, BTTS+O2.5) gravam também:
+- `score_no_alerta` — scoreline no momento do alerta, ex. `"0-0"`
+- `minuto_no_alerta` — minuto do jogo no alerta (string int), `null` se pré-KO
+- `origem_alerta` — `"pre-ko"` ou `"live"`
+
+Hoje **todos** os picks automáticos são `origem_alerta="pre-ko"` — os gates dos três scanners exigem `timing_h >= 0` (jogo ainda não começou). `"live"` está reservado para quando `pipeline/scan_live.py` passar a persistir os seus próprios picks (não persiste hoje — ver backlog em `.claude/rules/cycles.md`). Campos ausentes em picks anteriores a esta sessão são `null`/`NaN` após validação (retrocompatível — ver `data/schema/picks_schema.py`, `picks_1x2_schema.py`, `picks_btts_schema.py`).

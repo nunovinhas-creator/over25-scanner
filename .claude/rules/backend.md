@@ -8,7 +8,11 @@ pipeline/etl.py          — orquestração extract → transform → load
 pipeline/transform.py    — compute_final_probability_dc (blend 30/70)
 pipeline/scan_over25.py  — Over 2.5 scan + BTTS+O2.5 scan (30 min cron)
 pipeline/scan_sharp1x2.py — Sharp 1X2 scan (30 min cron)
-pipeline/scan_common.py  — whitelist, BSD_LEAGUE_ID_MAP, TG, git, I/O partilhados
+pipeline/settle_sharp1x2.py — settlement Sharp 1X2 (resultado_outcome via BSD, 2.5h–48h pós-KO;
+                              corre antes de update_closing_odds.py, mesmo job/cron)
+pipeline/update_closing_odds.py — fetch odds_fecho Pinnacle pós-KO + CLV (15min–24h; job
+                              settle_and_close_odds em sharp1x2_analysis.yml, cron 30min)
+pipeline/scan_common.py  — whitelist, BSD_LEAGUE_ID_MAP, UNKNOWN_LEAGUE, TG, git, I/O partilhados
 pipeline/config.py       — MODEL_WEIGHT=0.30 (não alterar sem nova validação LOEO-CV)
 pipeline/historical.py   — download football-data.co.uk → matches.csv
 ```

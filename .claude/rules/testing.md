@@ -46,9 +46,9 @@ pytest --tb=long                     # traceback completo em falhas
 
 | Teste | Motivo |
 |---|---|
-| CLV exacto Sharp 1X2 | `odds_fecho` real requer fetch Pinnacle pós-KO; ainda não implementado |
+| ~~CLV exacto Sharp 1X2~~ | **Resolvido (sessão data-quality-fixes, Ponto 2).** Causa raiz não era o fetch em si — era a ausência de settlement: nada definia `resultado_outcome` para os picks do scanner de produção, por isso `update_closing_odds.py` nunca tinha picks elegíveis. `pipeline/settle_sharp1x2.py` implementa o settlement (BSD `/api/v2/events/{id}/`, janela 2.5h–48h pós-KO); falhas de settlement ou de fetch ficam explícitas no pick (`settlement_error`/`fetch_error` + timestamp), nunca pendentes silenciosamente. Falta ainda: acumular `n` suficiente de settlements reais antes de confiar no CLV rolling-30 (ver `.claude/rules/cycles.md`). |
 
-Não remover `xfail` sem implementar o fetch real de `odds_fecho`.
+`test_all_settled_picks_have_odds_fecho` (`tests/pipeline/test_1x2_filters.py`) salta enquanto não houver picks settled reais sem `data_quality_flag` — deixa de saltar assim que `settle_sharp1x2.py` + `update_closing_odds.py` acumularem produção suficiente.
 
 ## Validação FASE 4 (Over 2.5, época 2526)
 
