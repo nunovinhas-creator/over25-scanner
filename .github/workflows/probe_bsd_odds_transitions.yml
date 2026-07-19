@@ -1,0 +1,63 @@
+name: Probe BSD Odds Transitions (auto)
+
+on:
+  schedule:
+    # Quarta e sábado ~20:00 UTC — janelas com ligas europeias tipicamente a
+    # decorrer, para maximizar a hipótese de apanhar uma suspensão de mercado
+    # (golo/VAR) durante o polling.
+    - cron: "0 20 * * 3,6"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: >-
+          Forçar corrida mesmo que o estado "suspenso mid-game" já tenha
+          sido capturado (por omissão o script auto-desliga-se nesse caso)
+        type: boolean
+        default: false
+      run_minutes:
+        description: "Duração do polling em minutos"
+        type: number
+        default: 60
+
+concurrency:
+  group: probe-odds-transitions
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    # run_minutes (60 por omissão) + margem para setup/checkout/commit
+    timeout-minutes: 70
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: pip install --quiet requests
+
+      - name: Probe BSD odds transitions
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+          BSD_API_KEY: ${{ secrets.BSD_API_KEY }}
+          PROBE_FORCE: ${{ github.event.inputs.force }}
+          PROBE_RUN_MINUTES: ${{ github.event.inputs.run_minutes || '60' }}
+        run: python scripts/probe_bsd_odds_transitions.py
+
+      - name: Upload captured transitions as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: probe-odds-transitions-${{ github.run_number }}
+          path: data/probe_odds_transitions.json
+          retention-days: 90
+          if-no-files-found: warn

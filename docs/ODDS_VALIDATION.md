@@ -105,7 +105,7 @@ nenhum exemplo fabricado.
 | Jogo terminado | ❌ | idem |
 | Campo de status dedicado da BSD | ❌ | idem |
 
-### Como recorrer a sondagem
+### Como recorrer a sondagem — estados estáveis (notstarted/inplay/halftime/finished)
 
 `scripts/probe_bsd_odds_states.py` está pronto e tem cobertura de testes para
 tudo o que **não** depende de rede/API key: `_bucket_for` (classificação por
@@ -114,24 +114,86 @@ estado), `_anonymize` (remoção de nomes de equipas/liga) e o fail-closed de
 (16 casos sintéticos, nenhum payload real). A parte que fala com a BSD em si
 não tem — nem pode ter — teste automático nesta sessão.
 
-Para capturar os payloads reais:
+Para capturar os payloads reais destes 4 estados (todos suficientemente
+estáveis para um snapshot único apanhar):
 
 1. Correr o workflow `probe_bsd_odds_states.yml` via `workflow_dispatch`
    (branch/mobile-friendly — botão "Run workflow" no GitHub Actions), de
    preferência durante uma janela com jogos a decorrer (fins de tarde/noite
    CET com ligas europeias em curso) para maximizar a hipótese de apanhar os
-   4 buckets, incluindo golo/VAR em curso.
+   4 buckets.
 2. Ler os logs do job — o script imprime, por bucket
    (`notstarted`/`inplay`/`halftime`/`finished`), até 3 exemplos anonimizados
    (nomes de equipas/liga substituídos por `<home_team>` etc., odds e status
    mantidos intactos) e um sumário dos campos com `status` no nome
    encontrados nos payloads de odds.
-3. Se `inplay` aparecer com `over_25_goals <= 1.01` num payload, isso é
-   evidência directa (não só inferida do log de produção) da sentinela.
-4. Actualizar este documento com a tabela preenchida e, se aparecer um campo
+3. Actualizar este documento com a tabela preenchida e, se aparecer um campo
    de status dedicado, promovê-lo a sinal primário em `classify_odds()` /
    `classifyOdds()` (o piso `MIN_VALID_ODDS` mantém-se sempre como fallback
    defensivo — nunca remover).
-5. Adicionar os payloads reais capturados (anonimizados) como casos novos em
+4. Adicionar os payloads reais capturados (anonimizados) como casos novos em
    `tests/fixtures/odds_classification_spec.json`, marcados com a data da
    captura.
+
+### Sondagem automática — "suspenso mid-game" (golo/VAR)
+
+Este estado é **transiente** (dura segundos), o que torna `workflow_dispatch`
+manual inviável na prática — exigiria disparar o workflow exactamente durante
+uma suspensão de mercado. Sessão `claude/auto-probe-odds-states` substituiu a
+tentativa manual por **captura automática de transições**:
+
+- **`scripts/probe_bsd_odds_transitions.py`** — corre em loop até
+  `PROBE_RUN_MINUTES` minutos (60 por omissão), sondando o endpoint `/odds/`
+  dos jogos ao vivo a cada `PROBE_POLL_INTERVAL` segundos (25 por omissão,
+  dentro do intervalo 20-30s pedido). A lista de jogos ao vivo em si (query
+  mais pesada, delimitada por data — ver `fetch_live_events()` em
+  `pipeline/scan_live.py`) só é actualizada a cada 3 min, não a cada poll, e
+  o número de jogos acompanhados em paralelo tem um tecto
+  (`MAX_TRACKED_EVENTS=20`) — protege a BSD de um padrão de polling amplo
+  demais (ponto 5 do pedido).
+- **Agnóstico de liga (deliberado, verificado)** — `fetch_live_events()`
+  (`pipeline/scan_live.py`) não filtra por `WHITELIST` (comentário explícito
+  no código: "o sinal LIVE é INDEPENDENTE da whitelist do pré-jogo... igual
+  ao separador Live do browser"), e o probe usa-a directamente sem nenhum
+  filtro adicional. É diagnóstico de API, não geração de picks — qualquer
+  jogo ao vivo serve (Brasileirão, MLS, ligas nórdicas/asiáticas incluídas).
+  Isto importa na prática: em Julho as 10 ligas da whitelist de produção
+  estão de pausa — um filtro por whitelist teria feito o probe correr
+  semanas sem ver um único jogo.
+- **Detecção de transição** — `TransitionTracker` (máquina de estados pura,
+  sem I/O, testada com payloads sintéticos em
+  `tests/scripts/test_probe_bsd_odds_transitions.py`) dispara sempre que
+  `classify_odds()` muda de classificação **ou** o `market_status` cru muda
+  de valor, mesmo sem a odd mudar. A leitura imediatamente anterior fica
+  como `before`, a leitura que mostrou a mudança como `during`, e a leitura
+  seguinte do mesmo evento (≈25s depois) como `after`. Cap de 5 transições por
+  corrida — atingido o cap, o script termina cedo em vez de esperar os 60 min.
+- **Auto-desligamento** — isto é diagnóstico *one-off*, não monitorização
+  permanente. `data/probe_odds_transitions.json` funciona como marker E como
+  ficheiro de diagnóstico ao mesmo tempo: se já contiver uma transição com
+  `during_status="SUSPENDED"`, a corrida seguinte (`main()`) detecta-o **antes
+  de qualquer chamada de rede** e sai de imediato — 0 chamadas API. Cron
+  runs nunca ignoram este marker; `workflow_dispatch` com `force=true` ignora
+  deliberadamente, para permitir capturar mais exemplos depois do primeiro.
+- **Agendamento** — `.github/workflows/probe_bsd_odds_transitions.yml`:
+  `cron: "0 20 * * 3,6"` (quarta e sábado às 20:00 UTC — janela ampla o
+  suficiente para apanhar futebol a decorrer nalgum lado do mundo, mesmo
+  fora da época europeia; como o probe é agnóstico de liga, não depende de
+  nenhuma competição específica estar a jogar), mais `workflow_dispatch`
+  para corridas extra (inputs `force` e `run_minutes`).
+- **Output** — `data/probe_odds_transitions.json` (lista de registos
+  `before`/`during`/`after`, anonimizados recursivamente antes de serem
+  escritos — `_anonymize_payload()`, cobre qualquer profundidade, não só o
+  nível de topo) é commitado directamente para `main` via
+  `pipeline.scan_common.git_commit_push()` (mesma função que os scanners de
+  produção usam, mensagem `[skip ci]`), e também sobe como artefacto do
+  workflow (`probe-odds-transitions-<run>`, 90 dias) para inspecção rápida
+  nos logs sem depender do commit.
+
+**Estado nesta sessão:** sem rede para `sports.bzzoiro.com` nem
+`BSD_API_KEY` (idem à sessão anterior — confirmado de novo, `curl` devolve
+`CONNECT tunnel failed, 403`). O script e os testes foram validados com
+payloads sintéticos e com o fail-closed/auto-desligamento reais; **não correu
+contra a BSD real nesta sessão** e `data/probe_odds_transitions.json` ainda
+não existe no repositório. A primeira corrida agendada (próxima quarta ou
+sábado às 20:00 UTC) ou um `workflow_dispatch` manual é que o vai criar.
