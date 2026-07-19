@@ -143,7 +143,7 @@ uma suspensão de mercado. Sessão `claude/auto-probe-odds-states` substituiu a
 tentativa manual por **captura automática de transições**:
 
 - **`scripts/probe_bsd_odds_transitions.py`** — corre em loop até
-  `PROBE_RUN_MINUTES` minutos (45 por omissão), sondando o endpoint `/odds/`
+  `PROBE_RUN_MINUTES` minutos (60 por omissão), sondando o endpoint `/odds/`
   dos jogos ao vivo a cada `PROBE_POLL_INTERVAL` segundos (25 por omissão,
   dentro do intervalo 20-30s pedido). A lista de jogos ao vivo em si (query
   mais pesada, delimitada por data — ver `fetch_live_events()` em
@@ -151,6 +151,15 @@ tentativa manual por **captura automática de transições**:
   o número de jogos acompanhados em paralelo tem um tecto
   (`MAX_TRACKED_EVENTS=20`) — protege a BSD de um padrão de polling amplo
   demais (ponto 5 do pedido).
+- **Agnóstico de liga (deliberado, verificado)** — `fetch_live_events()`
+  (`pipeline/scan_live.py`) não filtra por `WHITELIST` (comentário explícito
+  no código: "o sinal LIVE é INDEPENDENTE da whitelist do pré-jogo... igual
+  ao separador Live do browser"), e o probe usa-a directamente sem nenhum
+  filtro adicional. É diagnóstico de API, não geração de picks — qualquer
+  jogo ao vivo serve (Brasileirão, MLS, ligas nórdicas/asiáticas incluídas).
+  Isto importa na prática: em Julho as 10 ligas da whitelist de produção
+  estão de pausa — um filtro por whitelist teria feito o probe correr
+  semanas sem ver um único jogo.
 - **Detecção de transição** — `TransitionTracker` (máquina de estados pura,
   sem I/O, testada com payloads sintéticos em
   `tests/scripts/test_probe_bsd_odds_transitions.py`) dispara sempre que
@@ -158,7 +167,7 @@ tentativa manual por **captura automática de transições**:
   de valor, mesmo sem a odd mudar. A leitura imediatamente anterior fica
   como `before`, a leitura que mostrou a mudança como `during`, e a leitura
   seguinte do mesmo evento (≈25s depois) como `after`. Cap de 5 transições por
-  corrida — atingido o cap, o script termina cedo em vez de esperar os 45 min.
+  corrida — atingido o cap, o script termina cedo em vez de esperar os 60 min.
 - **Auto-desligamento** — isto é diagnóstico *one-off*, não monitorização
   permanente. `data/probe_odds_transitions.json` funciona como marker E como
   ficheiro de diagnóstico ao mesmo tempo: se já contiver uma transição com
@@ -167,9 +176,11 @@ tentativa manual por **captura automática de transições**:
   runs nunca ignoram este marker; `workflow_dispatch` com `force=true` ignora
   deliberadamente, para permitir capturar mais exemplos depois do primeiro.
 - **Agendamento** — `.github/workflows/probe_bsd_odds_transitions.yml`:
-  `cron: "0 20 * * 3,6"` (quarta e sábado às 20:00 UTC — ligas europeias
-  tipicamente a decorrer nessas janelas), mais `workflow_dispatch` para
-  corridas extra (inputs `force` e `run_minutes`).
+  `cron: "0 20 * * 3,6"` (quarta e sábado às 20:00 UTC — janela ampla o
+  suficiente para apanhar futebol a decorrer nalgum lado do mundo, mesmo
+  fora da época europeia; como o probe é agnóstico de liga, não depende de
+  nenhuma competição específica estar a jogar), mais `workflow_dispatch`
+  para corridas extra (inputs `force` e `run_minutes`).
 - **Output** — `data/probe_odds_transitions.json` (lista de registos
   `before`/`during`/`after`, anonimizados recursivamente antes de serem
   escritos — `_anonymize_payload()`, cobre qualquer profundidade, não só o

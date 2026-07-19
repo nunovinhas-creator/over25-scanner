@@ -17,7 +17,7 @@ on:
       run_minutes:
         description: "Duração do polling em minutos"
         type: number
-        default: 45
+        default: 60
 
 concurrency:
   group: probe-odds-transitions
@@ -26,8 +26,8 @@ concurrency:
 jobs:
   probe:
     runs-on: ubuntu-latest
-    # run_minutes (45 por omissão) + margem para setup/checkout/commit
-    timeout-minutes: 55
+    # run_minutes (60 por omissão) + margem para setup/checkout/commit
+    timeout-minutes: 70
     permissions:
       contents: write
 
@@ -51,7 +51,7 @@ jobs:
           PYTHONPATH: ${{ github.workspace }}
           BSD_API_KEY: ${{ secrets.BSD_API_KEY }}
           PROBE_FORCE: ${{ github.event.inputs.force }}
-          PROBE_RUN_MINUTES: ${{ github.event.inputs.run_minutes || '45' }}
+          PROBE_RUN_MINUTES: ${{ github.event.inputs.run_minutes || '60' }}
         run: python scripts/probe_bsd_odds_transitions.py
 
       - name: Upload captured transitions as artifact

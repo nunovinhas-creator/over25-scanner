@@ -50,7 +50,7 @@ BASE = "https://sports.bzzoiro.com"
 TIMEOUT = 20
 
 POLL_INTERVAL_SECONDS = int(os.environ.get("PROBE_POLL_INTERVAL", "25"))
-RUN_MINUTES_DEFAULT = 45
+RUN_MINUTES_DEFAULT = 60
 LIVE_REFRESH_SECONDS = 180  # actualiza a lista de jogos ao vivo a cada 3 min, não a cada poll
 MAX_TRACKED_EVENTS = 20     # protege a BSD de um poll amplo demais se houver muitos jogos
 MAX_TRANSITIONS = 5
