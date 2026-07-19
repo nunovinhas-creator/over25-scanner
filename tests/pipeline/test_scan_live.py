@@ -19,6 +19,7 @@ from pipeline.scan_live import (
     _looks_live,
     build_live_pick_msg,
     detect_patterns,
+    enrich_event,
     is_live_pick,
     passes_telegram_gate,
     pattern_score,
@@ -202,3 +203,102 @@ def test_build_msg_contains_key_fields():
     assert "APOSTAR AGORA" in msg
     assert "50'" in msg
     assert "2-0" in msg
+
+
+# ── issue #127: odds suspensas (sentinela 1.00) tratadas como preço real ──────
+
+
+def _mock_bsd(monkeypatch, stats: dict, odds: dict):
+    """Substitui _bsd_get_dict por respostas fixas (sem rede)."""
+    import pipeline.scan_live as mod
+
+    def fake(_api_key, path):
+        if path.endswith("/stats/"):
+            return stats
+        if path.endswith("/odds/"):
+            return odds
+        return {}
+
+    monkeypatch.setattr(mod, "_bsd_get_dict", fake)
+
+
+def _live_ev(**over):  # synthetic
+    ev = {"id": 555, "home_team": "Casa", "away_team": "Fora", "status": "2nd_half",
+          "current_minute": 70, "home_score": 1, "away_score": 1, "league_id": 4}
+    ev.update(over)
+    return ev
+
+
+@pytest.mark.parametrize("raw_over_odds,expected_status", [  # synthetic
+    (1.00, "SUSPENDED"),   # sentinela confirmada (issue #127)
+    (0, "SUSPENDED"),
+    (None, "MISSING"),
+])
+def test_enrich_event_never_fabricates_price_from_sentinel(monkeypatch, capsys, raw_over_odds, expected_status):
+    """enrich_event() nunca transforma uma odd sentinela/ausente num preço real
+    — overOdds/probLive ficam None, o estado fica explícito em oddsStatus, e o
+    achado é impresso em stdout (visível, não só stderr)."""
+    _mock_bsd(monkeypatch, stats={"stats": {"home": {}, "away": {}}, "momentum": []},
+              odds={"odds": {"over_25_goals": raw_over_odds}})
+
+    e = enrich_event("fake_key", _live_ev(), set())
+
+    assert e["overOdds"] is None
+    assert e["probLive"] is None
+    assert e["oddsStatus"] == expected_status
+
+    out = capsys.readouterr().out
+    assert f"ODDS_STATUS={expected_status}" in out
+    assert "ev=555" in out
+
+
+def test_enrich_event_keeps_valid_odds_as_real_price(monkeypatch):
+    """Odd normal (>1.01) continua a ser lida como preço real — a correcção
+    não introduz falsos negativos."""
+    _mock_bsd(monkeypatch, stats={"stats": {"home": {}, "away": {}}, "momentum": []},
+              odds={"odds": {"over_25_goals": 1.85}})
+
+    e = enrich_event("fake_key", _live_ev(), set())
+
+    assert e["overOdds"] == 1.85
+    assert e["probLive"] == round((1 / 1.85) * 100)
+    assert e["oddsStatus"] == "VALID"
+
+
+def test_suspended_odds_message_shows_dash_never_fake_100_percent(monkeypatch):
+    """Caminho completo enrich → patterns → mensagem TG: com odds suspensas,
+    a mensagem mostra '—', nunca o sintoma reportado 'Prob Over 100% · Odd 1.00'."""
+    _mock_bsd(monkeypatch, stats={"stats": {"home": {}, "away": {}}, "momentum": []},
+              odds={"odds": {"over_25_goals": 1.00}})
+
+    e = enrich_event("fake_key", _live_ev(), set())
+    e = _score(e)
+    msg = build_live_pick_msg(e)
+
+    assert "Prob Over 100%" not in msg
+    assert "Odd 1.00" not in msg
+    assert "Prob Over —" in msg
+    assert "Odd —" in msg
+
+
+def test_suspended_odds_do_not_fabricate_sharp_money_signal():
+    """Regressão directa do bug: antes da correcção, uma odd sentinela (1.00)
+    durante a suspensão do mercado seria lida como queda de -50% face à odd de
+    intervalo — um falso sinal 'sharp money' (padrão 'mkt', nível critical).
+    Com over_odds=None (SUSPENDED), o padrão não dispara e o baseline real
+    fica preservado para quando o mercado reabrir."""  # synthetic
+    state = {"ht": {}, "mkt": {}}
+    ht = _base_event(min=45, status="half_time", period="half_time", overOdds=2.00)
+    detect_patterns(ht, state)
+    assert state["mkt"][1] == 2.00
+
+    live_suspended = _base_event(min=60, status="2nd_half", period="2nd_half", overOdds=None)
+    pats = detect_patterns(live_suspended, state)
+    assert "mkt" not in {p["id"] for p in pats}
+    assert state["mkt"][1] == 2.00  # baseline preservado, não corrompido para 1.00
+
+    # mercado reabre com preço real mais baixo — deteção de queda retoma normalmente
+    live_resumed = _base_event(min=61, status="2nd_half", period="2nd_half", overOdds=1.80)
+    pats2 = detect_patterns(live_resumed, state)
+    ids2 = {p["id"] for p in pats2}
+    assert "mkt" in ids2  # (2.00-1.80)/2.00=10% >= 6% -> critical

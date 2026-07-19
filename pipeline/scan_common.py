@@ -46,6 +46,55 @@ BSD_LEAGUE_ID_MAP: dict[int, str] = {
 # da whitelist (ex.: "MLS", "USL League One"), que mantém o nome real.
 UNKNOWN_LEAGUE = "DESCONHECIDA"
 
+# Piso de odds válida — abaixo disto (ou igual) a odd implica margem <=0%,
+# matematicamente impossível para um preço real (ver issue #127). 1.00 é a
+# sentinela confirmada que a BSD devolve nos feeds live quando um mercado
+# está suspenso (golo/VAR); alinhado com o piso já usado em
+# data/schema/bsd_schema.py (pinnNow/oddsOver) e models/math/kelly.py.
+MIN_VALID_ODDS = 1.01
+
+# Tokens de estado de mercado suspenso/fechado que a BSD *poderia* expor num
+# campo de status dedicado. NÃO confirmados numa resposta real da BSD nesta
+# sessão (sem acesso a rede/API key) — mantidos defensivamente para quando a
+# API os expuser (ver scripts/probe_bsd_markets.py). O piso numérico
+# MIN_VALID_ODDS é o único mecanismo confirmado.
+_SUSPENDED_STATUS_TOKENS = {"suspended", "stopped", "closed", "paused", "off", "inactive"}
+
+
+def classify_odds(raw_odds, market_status=None) -> tuple[str, float | None]:
+    """
+    Classifica uma odd crua da BSD em VALID / SUSPENDED / MISSING. Nunca deixar
+    uma odd suspensa (ou ausente) entrar no cálculo de probabilidade/de-vig
+    como se fosse um preço real (issue #127 — "Prob Over 100% · Odd 1.00").
+
+    VALID     — número > MIN_VALID_ODDS: preço negociável.
+    SUSPENDED — número <= MIN_VALID_ODDS (inclui a sentinela confirmada 1.00,
+                0 e negativos) OU market_status indica mercado suspenso/
+                fechado. A BSD respondeu, mas não há preço real.
+    MISSING   — odds ausentes (None / não numérico). A BSD não devolveu nada.
+
+    Devolve (status, valor) — valor é sempre None excepto quando VALID.
+    """
+    status_token = (
+        str(market_status or "")
+        .strip().lower()
+        .replace("_", "").replace("-", "").replace(" ", "")
+    )
+    if status_token in _SUSPENDED_STATUS_TOKENS:
+        return "SUSPENDED", None
+
+    if raw_odds is None:
+        return "MISSING", None
+    try:
+        value = float(raw_odds)
+    except (TypeError, ValueError):
+        return "MISSING", None
+
+    if value <= MIN_VALID_ODDS:
+        return "SUSPENDED", None
+
+    return "VALID", value
+
 
 def send_telegram(text: str) -> None:
     if not TG_TOKEN:

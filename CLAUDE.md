@@ -272,6 +272,7 @@ TH_MOVE   = 1.0   // minimum % Pinnacle movement
 DIV_MIN   = 2.0   // minimum % Pin vs recreational divergence
 DIV_STEAM = 8.0   // % threshold for STEAM classification
 RECR = ['bet365','bwin','unibet', ...]  // recreational bookmaker slugs
+MIN_VALID_ODDS = 1.01  // floor below which an odd is SUSPENDED, never a real price (issue #127)
 ```
 
 ## UI Structure (index.html)

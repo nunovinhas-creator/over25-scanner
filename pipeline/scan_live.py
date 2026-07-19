@@ -40,6 +40,7 @@ import requests
 
 from pipeline.scan_common import (
     BSD_LEAGUE_ID_MAP,
+    classify_odds,
     send_telegram,
 )
 
@@ -203,6 +204,18 @@ def _dump_raw(api_key: str, ev_id) -> None:
         print(f"  [debug {label}] ev={ev_id} keys={kind}\n    {snippet}")
 
 
+def _log_odds_status(ev_id, ev: dict, odds_status: str, raw_value) -> None:
+    """Regista de forma explícita e visível (stdout — 'não só stderr') sempre
+    que a odd ao vivo não é um preço negociável. Nunca deixar 'Odd 1.00 ·
+    Prob Over 100%' passar como sucesso (issue #127) — a ausência/suspensão
+    de preço fica visível nos logs do scan em vez de escondida atrás de um
+    número fabricado."""
+    home = ev.get("home_team") or ev.get("home") or "?"
+    away = ev.get("away_team") or ev.get("away") or "?"
+    ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    print(f"ODDS_STATUS={odds_status} ev={ev_id} {home} vs {away} raw_over_odds={raw_value!r} ts={ts}")
+
+
 def enrich_event(api_key: str, ev: dict, pick_ids: set[str]) -> dict:
     """Constrói o objecto de evento com stats + odds (equivalente ao map JS)."""
     ev_id = ev.get("id")
@@ -215,8 +228,16 @@ def enrich_event(api_key: str, ev: dict, pick_ids: set[str]) -> dict:
     xg_a = _num((sa.get("xg") or {}).get("actual"))
     mom = stats.get("momentum") or []
     last_mom = _num(mom[-1].get("v")) if mom and isinstance(mom[-1], dict) else None
-    over_odds = _num((odds.get("odds") or {}).get("over_25_goals"))
-    prob_live = round((1 / over_odds) * 100) if over_odds else None
+
+    odds_block = odds.get("odds") or {}
+    raw_over_odds = odds_block.get("over_25_goals")
+    # over_25_goals_status: campo defensivo, não confirmado numa resposta BSD
+    # real nesta sessão (ver classify_odds em scan_common.py).
+    market_status = odds_block.get("over_25_goals_status") or odds.get("status")
+    odds_status, over_odds = classify_odds(raw_over_odds, market_status)
+    if odds_status != "VALID":
+        _log_odds_status(ev_id, ev, odds_status, raw_over_odds)
+    prob_live = round((1 / over_odds) * 100) if over_odds is not None else None
 
     h_score = ev.get("home_score") or 0
     a_score = ev.get("away_score") or 0
@@ -237,6 +258,7 @@ def enrich_event(api_key: str, ev: dict, pick_ids: set[str]) -> dict:
         "league_id": ev.get("league_id"),
         "xgH": xg_h, "xgA": xg_a, "xgTotal": xg_total,
         "lastMom": last_mom, "overOdds": over_odds, "probLive": prob_live,
+        "oddsStatus": odds_status,
         "shots": {"h": _num(sh.get("total_shots")), "a": _num(sa.get("total_shots"))},
         "sot": {"h": _num(sh.get("shots_on_target")), "a": _num(sa.get("shots_on_target"))},
         "da": {"h": _num(sh.get("dangerous_attack")), "a": _num(sa.get("dangerous_attack"))},
