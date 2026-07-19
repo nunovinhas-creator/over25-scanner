@@ -1236,6 +1236,20 @@ const DIV_STEAM      = 8.0;    // % threshold STEAM
 const TH_LIVE_PICK   = 12;     // patternScore mínimo para classificar como sinal live (calibrado: N=35, score≥12→46% WR vs score<12→24% WR)
 // Piso de odds válida (issue #127) — espelha MIN_VALID_ODDS em pipeline/scan_common.py.
 // 1.00 é a sentinela confirmada da BSD para mercado suspenso (golo/VAR); nunca um preço real.
+//
+// Duplicação deliberada (não eliminável): loadLive() faz fetch directo à BSD a
+// partir do browser (setInterval de 30s, ver linha ~3664) — o pipeline Python
+// nunca vê essas respostas, por isso não há forma de "o Python ser o único
+// juiz" aqui sem introduzir um proxy server-side que este projecto (100%
+// browser/mobile, sem backend próprio) não tem. Em vez de uma única fonte de
+// código, as duas implementações (esta e classify_odds() em
+// pipeline/scan_common.py) partilham uma única spec de testes —
+// tests/fixtures/odds_classification_spec.json — validada por
+// tests/pipeline/test_scan_common.py (Python) E tests/js/test_classify_odds.mjs
+// (Node, extrai este bloco literal do ficheiro entre os marcadores abaixo e
+// corre-o contra a mesma spec). Qualquer divergência futura entre as duas
+// implementações parte um dos dois testes. Ver docs/odds_validation.md.
+// ODDS_CLASSIFICATION_JS:START
 const MIN_VALID_ODDS = 1.01;
 const SUSPENDED_ODDS_STATUS_TOKENS = new Set(['suspended','stopped','closed','paused','off','inactive']);
 function classifyOdds(rawOdds, marketStatus){
@@ -1248,6 +1262,7 @@ function classifyOdds(rawOdds, marketStatus){
   if(value<=MIN_VALID_ODDS) return {status:'SUSPENDED', value:null};
   return {status:'VALID', value};
 }
+// ODDS_CLASSIFICATION_JS:END
 // ── Pick qualification gates (baseados em análise de ROI dos dados históricos) ──
 const PICKS_MIN_ODDS = 1.65;   // odds mínimas — abaixo destroem ROI apesar do WR
 const PICKS_MAX_PROB = 0.73;   // prob máxima — acima é overconfidence (modelo perde edge)

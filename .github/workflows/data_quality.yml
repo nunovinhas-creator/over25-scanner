@@ -11,6 +11,27 @@ on:
 
 jobs:
   # ---------------------------------------------------------------------------
+  # Job 0: odds-classification-js — classifyOdds() (index.html) vs a mesma
+  # spec partilhada que valida classify_odds() (Python). Ver
+  # docs/odds_validation.md e tests/fixtures/odds_classification_spec.json.
+  # ---------------------------------------------------------------------------
+  odds-classification-js:
+    name: Odds classification (JS vs spec partilhada)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Run classifyOdds() against shared spec
+        run: node tests/js/test_classify_odds.mjs
+
+  # ---------------------------------------------------------------------------
   # Job 1: validate — schema checks + data quality tests
   # ---------------------------------------------------------------------------
   validate:
