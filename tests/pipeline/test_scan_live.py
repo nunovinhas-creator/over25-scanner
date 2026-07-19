@@ -12,12 +12,15 @@ from __future__ import annotations
 import pytest
 
 from pipeline.scan_live import (
+    PRESSAO_MIN_TELEGRAM,
+    SCORE_MIN_TELEGRAM,
     TH_LIVE_PICK,
     _extract_events,
     _looks_live,
     build_live_pick_msg,
     detect_patterns,
     is_live_pick,
+    passes_telegram_gate,
     pattern_score,
 )
 
@@ -167,6 +170,27 @@ def test_extract_events_handles_list_and_envelope():
     assert _extract_events({"events": [{"id": 3}]}) == [{"id": 3}]
     assert _extract_events({"nope": 1}) == []
     assert _extract_events(None) == []
+
+
+def test_telegram_gate_requires_pressao_and_score():
+    """Gate de envio TG: só passa com Pressão>=90 E Score>=20."""  # synthetic
+    e = {"patterns": [{"id": "pressure", "label": f"Pressão {PRESSAO_MIN_TELEGRAM}"}],
+         "patternScore": SCORE_MIN_TELEGRAM}
+    assert passes_telegram_gate(e)
+
+    e_low_pressure = {"patterns": [{"id": "pressure", "label": "Pressão 89"}],
+                       "patternScore": SCORE_MIN_TELEGRAM}
+    assert not passes_telegram_gate(e_low_pressure)
+
+    e_low_score = {"patterns": [{"id": "pressure", "label": f"Pressão {PRESSAO_MIN_TELEGRAM}"}],
+                   "patternScore": SCORE_MIN_TELEGRAM - 1}
+    assert not passes_telegram_gate(e_low_score)
+
+
+def test_telegram_gate_fails_closed_without_pressao():
+    """Sem padrão 'pressure' (Pressão ausente), o gate falha fechado — não envia."""  # synthetic
+    e = {"patterns": [], "patternScore": 100}
+    assert not passes_telegram_gate(e)
 
 
 def test_build_msg_contains_key_fields():
