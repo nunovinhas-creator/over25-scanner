@@ -74,6 +74,19 @@ def classify_odds(raw_odds, market_status=None) -> tuple[str, float | None]:
     MISSING   — odds ausentes (None / não numérico). A BSD não devolveu nada.
 
     Devolve (status, valor) — valor é sempre None excepto quando VALID.
+
+    Duplicação deliberada com classifyOdds() em index.html (não eliminável):
+    loadLive() faz fetch directo à BSD a partir do browser — este pipeline
+    Python nunca vê essas respostas, por isso o Python não pode ser "juiz
+    único" sem um proxy server-side que este projecto (100% browser/mobile,
+    sem backend próprio) não tem. Em vez disso, as duas implementações
+    partilham uma spec de testes única —
+    tests/fixtures/odds_classification_spec.json — validada por
+    tests/pipeline/test_scan_common.py (aqui) E tests/js/test_classify_odds.mjs
+    (extrai o bloco real de index.html e corre-o contra a mesma spec).
+    Qualquer divergência futura entre as duas implementações parte um dos
+    dois testes. Ver docs/odds_validation.md para o detalhe da decisão e para
+    os estados da API BSD confirmados/por confirmar.
     """
     status_token = (
         str(market_status or "")

@@ -1,0 +1,24 @@
+{
+  "_comment": "Spec partilhada: casos input -> classificacao esperada para classify_odds() (Python, pipeline/scan_common.py) e classifyOdds() (JS, index.html). Fonte unica de verdade para os dois testes (tests/pipeline/test_scan_common.py e tests/js/test_classify_odds.mjs) -- ver docs/odds_validation.md para a justificacao da opcao (b) (duas implementacoes, uma spec). Alterar aqui obriga os dois lados a re-validar.",
+  "min_valid_odds": 1.01,
+  "cases": [
+    {"name": "valid_normal_odds", "raw_odds": 1.90, "market_status": null, "expected_status": "VALID", "expected_value": 1.90},
+    {"name": "valid_higher_odds", "raw_odds": 2.50, "market_status": null, "expected_status": "VALID", "expected_value": 2.50},
+    {"name": "valid_just_above_floor", "raw_odds": 1.02, "market_status": null, "expected_status": "VALID", "expected_value": 1.02},
+    {"name": "valid_numeric_string", "raw_odds": "1.85", "market_status": null, "expected_status": "VALID", "expected_value": 1.85},
+    {"name": "suspended_sentinel_1_00", "raw_odds": 1.00, "market_status": null, "expected_status": "SUSPENDED", "expected_value": null},
+    {"name": "suspended_at_floor", "raw_odds": 1.01, "market_status": null, "expected_status": "SUSPENDED", "expected_value": null},
+    {"name": "suspended_zero", "raw_odds": 0, "market_status": null, "expected_status": "SUSPENDED", "expected_value": null},
+    {"name": "suspended_negative", "raw_odds": -1.5, "market_status": null, "expected_status": "SUSPENDED", "expected_value": null},
+    {"name": "missing_null", "raw_odds": null, "market_status": null, "expected_status": "MISSING", "expected_value": null},
+    {"name": "missing_non_numeric", "raw_odds": "n/a", "market_status": null, "expected_status": "MISSING", "expected_value": null},
+    {"name": "suspended_status_wins_over_valid_odds", "raw_odds": 1.90, "market_status": "suspended", "expected_status": "SUSPENDED", "expected_value": null},
+    {"name": "suspended_status_case_insensitive", "raw_odds": 1.90, "market_status": "SUSPENDED", "expected_status": "SUSPENDED", "expected_value": null},
+    {"name": "stopped_status", "raw_odds": 1.90, "market_status": "stopped", "expected_status": "SUSPENDED", "expected_value": null},
+    {"name": "closed_status", "raw_odds": 1.90, "market_status": "closed", "expected_status": "SUSPENDED", "expected_value": null},
+    {"name": "paused_status", "raw_odds": 1.90, "market_status": "paused", "expected_status": "SUSPENDED", "expected_value": null},
+    {"name": "off_status", "raw_odds": 1.90, "market_status": "off", "expected_status": "SUSPENDED", "expected_value": null},
+    {"name": "inactive_status_with_dash", "raw_odds": 1.90, "market_status": "in-active", "expected_status": "SUSPENDED", "expected_value": null},
+    {"name": "unknown_status_does_not_block", "raw_odds": 1.90, "market_status": "open", "expected_status": "VALID", "expected_value": 1.90}
+  ]
+}
