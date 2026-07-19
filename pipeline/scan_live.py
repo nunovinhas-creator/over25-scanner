@@ -30,6 +30,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 import time
 from datetime import datetime, timedelta, timezone
@@ -48,6 +49,11 @@ BSD_BASE_URL = "https://sports.bzzoiro.com"
 
 TH_LIVE_PICK = 12  # patternScore mínimo (calibrado: N=35, score>=12→46% WR vs <12→24%)
 BSD_TIMEOUT = 20
+
+# Filtro de envio Telegram (aplica-se SÓ ao envio — deteção/logging/registo
+# interno em scan_once() não são afectados). Fail-closed: Pressão ausente → não envia.
+PRESSAO_MIN_TELEGRAM = 90
+SCORE_MIN_TELEGRAM = 20
 
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 _PICKS_PATH = _PROJECT_ROOT / "data" / "picks.json"
@@ -462,6 +468,29 @@ def is_live_pick(e: dict) -> bool:
     return (score >= TH_LIVE_PICK and (e.get("isSavedPick") or e["goals"] >= 1)) or has_conv
 
 
+_PRESSAO_RE = re.compile(r"Pressão (\d+)")
+
+
+def _pressao_value(e: dict) -> float | None:
+    """Valor numérico do padrão 'pressure' (ex.: 'Pressão 87 (2ªP)' → 87.0).
+    None se o padrão não estiver presente (jogo sem sinal de pressão detectado)."""
+    for pt in e.get("patterns", []):
+        if pt.get("id") == "pressure":
+            m = _PRESSAO_RE.search(pt.get("label", ""))
+            if m:
+                return float(m.group(1))
+    return None
+
+
+def passes_telegram_gate(e: dict) -> bool:
+    """Filtro de envio Telegram: Pressão >= PRESSAO_MIN_TELEGRAM E
+    Score >= SCORE_MIN_TELEGRAM. Fail-closed: Pressão ausente/None → não envia."""
+    pressao = _pressao_value(e)
+    if pressao is None:
+        return False
+    return pressao >= PRESSAO_MIN_TELEGRAM and e.get("patternScore", 0) >= SCORE_MIN_TELEGRAM
+
+
 # ---------------------------------------------------------------------------
 # Mensagem TG (mirror de buildLivePickMsg do index.html)
 # ---------------------------------------------------------------------------
@@ -532,6 +561,8 @@ def scan_once(api_key: str, state: dict, pick_ids: set[str], alerted: set[str],
         if key in alerted:
             continue
         alerted.add(key)
+        if not passes_telegram_gate(e):
+            continue
         send_telegram(build_live_pick_msg(e))
         sent += 1
         print(f"ALERTA: {e['home']} vs {e['away']} ({e['min']}') score={e['patternScore']}")
