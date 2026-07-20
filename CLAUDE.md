@@ -100,6 +100,7 @@ Estado do sistema a **21 jun 2026** — três módulos em produção, todos em M
 - Dixon-Coles por liga (`models/train_dc.py`) → `data/dc_ratings.json`
 - Calibrador isotónico LOEO-CV (`backtesting/run_calibration.py`) → `data/calibrator.json`
 - Três scanners automáticos (`pipeline/scan_over25.py`, `pipeline/scan_sharp1x2.py`) — correm a cada 30 min
+- Scanner LIVE (`pipeline/scan_live.py`) — loop ao minuto, alertas TG independentes da whitelist
 
 Open either HTML file directly in a browser to run. No build steps, no tests, no linters for the front-end.
 
@@ -178,6 +179,7 @@ Bundesliga 2 e Serie B: ausentes da BSD (65 ligas disponíveis) — presentes no
 | Workflow | Trigger | O que faz |
 |---|---|---|
 | `scanner.yml` | a cada 30 min | Over 2.5 scan + Sharp 1X2 scan + commit `data/picks*.json` |
+| `live_scanner.yml` | 6×/dia (00:07/04:07/08:07/12:07/16:07/20:07 UTC), loop interno ao minuto | Scanner LIVE — alertas TG "🔥 APOSTAR AGORA" (`pipeline/scan_live.py`), independente da whitelist e do browser |
 | `historical_data.yml` | seg 06:00 UTC | Actualiza `data/historical/matches.csv` (football-data.co.uk) |
 | `retrain_dc.yml` | seg 07:00 UTC | Re-treina DC + calibrador + relatório TG Sharp 1X2 semanal |
 | `deploy_version.yml` | cada push main | Actualiza `version.json` + `BUILD_SHA` em `index.html` [skip ci] |
@@ -342,6 +344,8 @@ backtesting/
 pipeline/
   scan_over25.py      — Over 2.5 scan + BTTS+Over 2.5 scan (30 min cron)
   scan_sharp1x2.py    — Sharp 1X2 scan (30 min cron)
+  scan_live.py        — Scanner LIVE ao minuto: detectPatterns() (12 padrões), alertas TG "🔥 APOSTAR AGORA",
+                        independente da whitelist (não usa DC nem histórico por liga)
   scan_common.py      — whitelist, BSD_LEAGUE_ID_MAP, Telegram, git e I/O partilhados pelos scanners
   transform.py        — compute_final_probability, compute_final_probability_dc
   etl.py              — ETL orchestration: coordena extract → transform → load
