@@ -94,6 +94,7 @@ pytest tests/ -v --tb=short                  # testes unitários
 | Workflow | Trigger | Acção |
 |---|---|---|
 | `scanner.yml` | a cada 30 min | Over 2.5 + Sharp 1X2 scan + commit picks |
+| `live_scanner.yml` | 6×/dia, loop ao minuto (~5h50/arranque) | Scanner LIVE (`pipeline/scan_live.py`) — alertas TG ao minuto, independente da whitelist |
 | `historical_data.yml` | seg 06:00 UTC | actualiza matches.csv |
 | `retrain_dc.yml` | seg 07:00 UTC | re-treina DC + calibrador + relatório TG |
 | `deploy_version.yml` | push main | version.json + BUILD_SHA [skip ci] |
