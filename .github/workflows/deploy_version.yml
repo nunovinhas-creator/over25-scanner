@@ -39,12 +39,20 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git fetch origin main
-          git reset --soft origin/main
-          git add version.json index.html
-          if git diff --cached --quiet; then
-            echo "Sem alterações para commitar."
-          else
+          for tentativa in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --soft origin/main
+            git add version.json index.html
+            if git diff --cached --quiet; then
+              echo "Sem alterações para commitar."
+              exit 0
+            fi
             git commit -m "chore: version bump ${{ steps.sha.outputs.short }} [skip ci]"
-            git push origin main
-          fi
+            if git push origin main; then
+              exit 0
+            fi
+            echo "Push rejeitado (tentativa ${tentativa}/5) — outro workflow avançou main entretanto. A repetir após novo fetch..."
+            sleep $((tentativa * 3))
+          done
+          echo "Falha a fazer push do version bump após 5 tentativas." >&2
+          exit 1
