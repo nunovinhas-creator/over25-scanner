@@ -7,10 +7,29 @@ Preenche odds_fecho (Pinnacle) e calcula CLV para picks Sharp 1X2 settled.
 Lógica:
 - Lê picks_1x2.json
 - Filtra: resultado_outcome in (WIN, LOSS) AND odds_fecho vazio
-  AND KO entre CLOSE_MIN_MIN e CLOSE_MAX_H atrás
+  AND settled_at entre CLOSE_MIN_MIN e CLOSE_MAX_H atrás
 - Para cada pick, chama BSD API via fetch_closing_odds()
 - Grava odds_fecho e clv = round((odds_entrada / odds_fecho - 1) * 100, 4)
 - Faz commit dos picks actualizados [skip ci]
+
+Janela ancorada em settled_at, NUNCA em data/KO (correcção da causa raiz
+diagnosticada nesta sessão): settle_sharp1x2.py pode legitimamente demorar
+até SETTLE_MAX_H=48h pós-KO a definir resultado_outcome (ver
+pipeline/settle_sharp1x2.py). A janela antiga (CLOSE_MAX_H=24h desde o KO)
+descartava, sem nunca tentar o fetch, qualquer pick cujo settlement
+acontecesse entre as 24h e as 48h pós-KO — e todo o backlog histórico, cujo
+settlement só aconteceu muito depois do KO original. Ancorando a
+CLOSE_MIN_MIN/CLOSE_MAX_H a settled_at (o momento em que settle_sharp1x2.py
+definiu resultado_outcome), a janela deixa de competir com a janela de
+settlement — já não precisa de reservar margem para os 48h do settle,
+porque só começa a contar depois de o settlement estar feito.
+
+Picks sem settled_at (backlog anterior a esta correcção, settled antes de
+settle_sharp1x2.py gravar esse campo) ficam não-elegíveis de forma
+silenciosa e correcta — ausência de settled_at nunca é um fetch_error
+(não sabemos há quanto tempo foram settled; inventar essa informação
+violaria a invariante "nenhum estado de erro pode parecer sucesso" ao
+contrário — aqui seria "ausência de dado pode parecer erro").
 
 Pré-requisito: BSD API devolve odds para eventos settled.
 Confirmar com scripts/probe_bsd_closing_odds.py antes de usar em produção.
@@ -35,9 +54,18 @@ PICKS_FILE = DATA_DIR / "picks_1x2.json"
 
 BSD_API_KEY = os.environ.get("BSD_API_KEY", "")
 
-# Janela temporal: só tenta fetch entre 15min e 24h após KO
+# Janela temporal: só tenta fetch entre 15min e 12h após settled_at (NUNCA
+# após o KO — ver docstring do módulo). CLOSE_MIN_MIN mantém-se em 15min por
+# margem de segurança (mesmo critério de antes, só que agora conta a partir
+# do settlement, não do KO — dá tempo ao preço de fecho estabilizar do lado
+# da BSD). CLOSE_MAX_H desce de 24h (desde o KO) para 12h (desde settled_at):
+# já não precisa de cobrir os 48h de SETTLE_MAX_H, porque só começa a contar
+# depois de settle_sharp1x2.py já ter definido resultado_outcome. Com o cron
+# de 30 em 30 min (sharp1x2_analysis.yml), 12h dão ~24 tentativas — margem
+# ampla para falhas transitórias da BSD sem deixar a janela aberta mais
+# tempo do que o necessário.
 CLOSE_MIN_MIN: float = 15.0
-CLOSE_MAX_H: float = 24.0
+CLOSE_MAX_H: float = 12.0
 
 
 def _load_picks() -> list[dict]:
@@ -102,15 +130,23 @@ def update() -> None:
         if str(pick.get("odds_fecho", "")).strip():
             continue  # já preenchido
 
-        ko_raw = pick.get("data") or pick.get("commence_time", "")
-        if not ko_raw:
+        settled_at_raw = pick.get("settled_at") or ""
+        if not settled_at_raw:
+            # Backlog anterior a esta correcção (settle_sharp1x2.py ainda não
+            # gravava settled_at) — não-elegível, mas NUNCA um erro: não
+            # sabemos há quanto tempo foi settled, e inventar essa informação
+            # violaria a invariante de nunca fabricar dados. Fica pendente
+            # silenciosamente, sem fetch_error, para sempre (ou até um
+            # backfill manual decidido à parte — fora do âmbito aqui).
             continue
         try:
-            ko = datetime.fromisoformat(ko_raw.replace("Z", "+00:00"))
+            settled_at = datetime.fromisoformat(str(settled_at_raw).replace("Z", "+00:00"))
         except Exception:
+            # settled_at ilegível — trata-se como ausente pela mesma razão:
+            # não inventamos elegibilidade a partir de dados corrompidos.
             continue
 
-        elapsed_min = (now - ko).total_seconds() / 60.0
+        elapsed_min = (now - settled_at).total_seconds() / 60.0
         pick_id = str(pick.get("id", ""))
 
         if elapsed_min < CLOSE_MIN_MIN:

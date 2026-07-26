@@ -12,6 +12,7 @@ API — sem rede, sem secrets.
 from __future__ import annotations
 
 import json
+import re
 import tempfile
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -20,6 +21,8 @@ from unittest.mock import patch
 import pytest
 
 from pipeline.settle_sharp1x2 import resolve_outcome, settle
+
+_ISO_TS_RE = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
 
 
 def _iso(hours_ago: float) -> str:
@@ -169,6 +172,31 @@ class TestSettle:
                 second = json.loads(picks_file.read_text())[0]
                 assert second["settlement_error_at"] == first["settlement_error_at"]  # não reescrito
                 assert len(commit_calls) == 1  # sem novo commit
+
+    def test_settled_at_written_on_success(self):
+        """Ao settlar um pick (WIN/LOSS), grava settled_at no mesmo formato de
+        settlement_error_at — update_closing_odds.py vai ancorar a janela de
+        closing odds a este campo, não ao KO (data)."""
+        picks = [_pick(id="10_home_sh", outcome="HOME", data=_iso(3.0))]
+        out = self._run(
+            picks,
+            fetch_result_side_effect=lambda eid: {"status": "finished", "home_score": 2, "away_score": 0},
+        )
+        assert out[0]["resultado_outcome"] == "WIN"
+        assert _ISO_TS_RE.match(out[0]["settled_at"])
+
+    def test_settled_at_idempotent_not_overwritten(self):
+        """settled_at nunca é reescrito se já existir — protege a janela de
+        closing odds de reiniciar o relógio numa eventual segunda passagem
+        pelo ramo de sucesso."""
+        sentinel = "2026-01-01T00:00:00Z"
+        picks = [_pick(id="11_home_sh", outcome="HOME", data=_iso(3.0), settled_at=sentinel)]
+        out = self._run(
+            picks,
+            fetch_result_side_effect=lambda eid: {"status": "finished", "home_score": 2, "away_score": 0},
+        )
+        assert out[0]["resultado_outcome"] == "WIN"
+        assert out[0]["settled_at"] == sentinel
 
     def test_no_bsd_api_key_aborts_cleanly(self):
         import pipeline.settle_sharp1x2 as mod

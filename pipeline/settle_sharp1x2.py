@@ -206,6 +206,11 @@ def settle() -> None:
         pick_outcome = str(pick.get("outcome", "")).upper()
         pick["resultado_jogo"] = f"{result['home_score']}-{result['away_score']}"
         pick["resultado_outcome"] = "WIN" if actual_outcome == pick_outcome else "LOSS"
+        # Idempotente: nunca reescrever settled_at se já existir — é a âncora
+        # da janela de closing odds em update_closing_odds.py; reescrevê-lo
+        # reiniciaria essa janela (ver pipeline/update_closing_odds.py).
+        if not pick.get("settled_at"):
+            pick["settled_at"] = ts
         pick.pop("settlement_error", None)
         pick.pop("settlement_error_at", None)
         n_settled += 1
