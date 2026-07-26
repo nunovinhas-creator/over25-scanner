@@ -109,10 +109,15 @@ def classify_odds(raw_odds, market_status=None) -> tuple[str, float | None]:
     return "VALID", value
 
 
-def send_telegram(text: str) -> None:
+def send_telegram(text: str) -> bool:
+    """Envia uma mensagem TG. Devolve True se o envio teve sucesso (2xx),
+    False em qualquer falha (token ausente, excepção de rede/HTTP) — nunca
+    propaga excepção, continua a logar como antes. Callers que não precisam
+    do resultado (scan_over25.py, scan_sharp1x2.py) continuam a funcionar
+    sem alterações, pois ignoram o valor de retorno."""
     if not TG_TOKEN:
         print("TG_TOKEN não definido — skip TG", file=sys.stderr)
-        return
+        return False
     url = f"https://api.telegram.org/bot{TG_TOKEN}/sendMessage"
     data = urllib.parse.urlencode({"chat_id": TG_CHAT_ID, "text": text}).encode()
     try:
@@ -120,8 +125,10 @@ def send_telegram(text: str) -> None:
             urllib.request.Request(url, data=data, method="POST"), timeout=10
         ) as resp:
             print(f"TG enviado (status {resp.status})")
+            return True
     except Exception as exc:
         print(f"TG falhou (não fatal): {exc}", file=sys.stderr)
+        return False
 
 
 def git_commit_push(files: list[str], msg: str) -> None:

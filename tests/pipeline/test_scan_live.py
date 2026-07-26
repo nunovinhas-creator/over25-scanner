@@ -302,3 +302,167 @@ def test_suspended_odds_do_not_fabricate_sharp_money_signal():
     pats2 = detect_patterns(live_resumed, state)
     ids2 = {p["id"] for p in pats2}
     assert "mkt" in ids2  # (2.00-1.80)/2.00=10% >= 6% -> critical
+
+
+# ── regressão: dedup não pode "queimar" um jogo antes do gate de TG ──────────
+#
+# Bug diagnosticado: scan_once() fazia `alerted.add(key)` logo que um jogo
+# atingia is_live_pick() (score>=TH_LIVE_PICK=12), ANTES de verificar
+# passes_telegram_gate() (Pressão>=90 E Score>=20 — limiar mais exigente).
+# Um jogo que qualificasse com Pressão<90 ficava marcado "alertado" para
+# sempre nessa execução, mesmo que a Pressão subisse acima de 90 minutos
+# depois — o alerta real nunca era reavaliado nem enviado.
+
+
+def _fake_enriched_event(ev_id: int, goals: int = 1) -> dict:  # synthetic
+    """Evento já enriquecido — mínimo necessário para is_live_pick/gate/msg."""
+    return {
+        "id": ev_id, "home": "Casa", "away": "Fora", "hScore": goals, "aScore": 0,
+        "goals": goals, "min": 60, "status": "2nd_half", "league": "Serie A",
+        "overOdds": 1.7, "xgTotal": 3.0, "probLive": 55, "isSavedPick": False,
+    }
+
+
+def test_alerted_not_burned_before_telegram_gate_passes(monkeypatch):
+    """Jogo que atinge is_live_pick (score>=12) com Pressão<90 num ciclo, e só
+    passa o gate de TG (Pressão>=90 E Score>=20) num ciclo posterior: deve
+    resultar em exactamente 1 alerta, enviado no 2º ciclo — nunca 'queimado'
+    no 1º."""  # synthetic
+    import pipeline.scan_live as mod
+
+    raw_event = {"id": 777}
+    monkeypatch.setattr(mod, "fetch_live_events", lambda api_key, verbose=False: [raw_event])
+    monkeypatch.setattr(mod, "enrich_event", lambda api_key, ev, pick_ids: _fake_enriched_event(777))
+
+    # ciclo 1: score 14 (>=12) qualifica is_live_pick, mas Pressão=55 (<90)
+    # não cumpre o gate de TG.
+    patterns_cycle_1 = [
+        {"id": "pressure", "label": "Pressão 55", "emoji": "🔥", "level": "critical", "detail": "d"},
+        {"id": "mom", "label": "Casa domina", "emoji": "💥", "level": "high", "detail": "d"},
+    ]
+    monkeypatch.setattr(mod, "detect_patterns", lambda e, state: patterns_cycle_1)
+
+    sent_msgs: list[str] = []
+    monkeypatch.setattr(mod, "send_telegram", lambda text: (sent_msgs.append(text), True)[1])
+
+    state = {"ht": {}, "mkt": {}}
+    alerted: set[str] = set()
+
+    n1 = mod.scan_once("fake_key", state, set(), alerted, verbose=False)
+    assert n1 == 0
+    assert sent_msgs == []
+    assert "777" not in alerted  # não pode ficar queimado sem passar o gate
+
+    # ciclo 2: Pressão sobe para 92 (>=90) e score sobe para 24 (>=20) → alerta agora
+    patterns_cycle_2 = [
+        {"id": "pressure", "label": "Pressão 92", "emoji": "🔥", "level": "critical", "detail": "d"},
+        {"id": "mom", "label": "Casa domina", "emoji": "💥", "level": "high", "detail": "d"},
+        {"id": "xg_delta", "label": "xG +2.6 acima", "emoji": "🎲", "level": "critical", "detail": "d"},
+    ]
+    monkeypatch.setattr(mod, "detect_patterns", lambda e, state: patterns_cycle_2)
+
+    n2 = mod.scan_once("fake_key", state, set(), alerted, verbose=False)
+    assert n2 == 1
+    assert len(sent_msgs) == 1
+    assert "777" in alerted
+
+
+def test_alerted_not_marked_when_send_telegram_fails(monkeypatch):
+    """Se o envio TG falhar (send_telegram devolve False), o jogo NÃO fica
+    marcado em `alerted` — tem de ser reavaliado (e re-enviado) no ciclo
+    seguinte."""  # synthetic
+    import pipeline.scan_live as mod
+
+    raw_event = {"id": 888}
+    monkeypatch.setattr(mod, "fetch_live_events", lambda api_key, verbose=False: [raw_event])
+    monkeypatch.setattr(mod, "enrich_event", lambda api_key, ev, pick_ids: _fake_enriched_event(888))
+
+    patterns = [
+        {"id": "pressure", "label": "Pressão 92", "emoji": "🔥", "level": "critical", "detail": "d"},
+        {"id": "mom", "label": "Casa domina", "emoji": "💥", "level": "high", "detail": "d"},
+        {"id": "xg_delta", "label": "xG +2.6 acima", "emoji": "🎲", "level": "critical", "detail": "d"},
+    ]
+    monkeypatch.setattr(mod, "detect_patterns", lambda e, state: patterns)
+
+    calls = {"n": 0}
+
+    def failing_send(_text):
+        calls["n"] += 1
+        return False
+
+    monkeypatch.setattr(mod, "send_telegram", failing_send)
+
+    state = {"ht": {}, "mkt": {}}
+    alerted: set[str] = set()
+
+    n1 = mod.scan_once("fake_key", state, set(), alerted, verbose=False)
+    assert n1 == 0
+    assert calls["n"] == 1
+    assert "888" not in alerted
+
+    sent_msgs: list[str] = []
+    monkeypatch.setattr(mod, "send_telegram", lambda text: (sent_msgs.append(text), True)[1])
+
+    n2 = mod.scan_once("fake_key", state, set(), alerted, verbose=False)
+    assert n2 == 1
+    assert len(sent_msgs) == 1
+    assert "888" in alerted
+
+
+# ── LIVE_SCAN_STATUS: distinguir janela sem jogos de falha de fetch ──────────
+
+
+def test_live_scan_status_distinguishes_api_error_from_no_live_games(monkeypatch, capsys):
+    """Erro de rede/HTTP no fetch tem de ficar marcado como API_ERROR com
+    n_failures>0 — nunca igual, nos logs, a uma janela genuinamente sem jogos
+    (NO_LIVE_GAMES, n_failures=0)."""  # synthetic
+    import pipeline.scan_live as mod
+
+    def raise_get(*_a, **_k):
+        raise Exception("boom")  # noqa: TRY002 - simula falha genérica de rede
+
+    monkeypatch.setattr(mod.requests, "get", raise_get)
+    events = mod.fetch_live_events("fake_key", verbose=False)
+    assert events == []
+    out = capsys.readouterr().out
+    assert "LIVE_SCAN_STATUS=API_ERROR" in out
+    assert "n_failures=2" in out  # falha na tentativa primária E na secundária
+
+
+def test_live_scan_status_ok_when_no_errors_and_no_games(monkeypatch, capsys):
+    """Sem falhas de fetch e sem jogos a decorrer → NO_LIVE_GAMES, n_failures=0
+    (comportamento correcto de pré-época, distinto de um erro de API)."""  # synthetic
+    import pipeline.scan_live as mod
+
+    class FakeResp:
+        def raise_for_status(self):
+            pass
+
+        def json(self):
+            return {"results": []}
+
+    monkeypatch.setattr(mod.requests, "get", lambda *a, **k: FakeResp())
+    events = mod.fetch_live_events("fake_key", verbose=False)
+    assert events == []
+    out = capsys.readouterr().out
+    assert "LIVE_SCAN_STATUS=NO_LIVE_GAMES" in out
+    assert "n_failures=0" in out
+
+
+def test_live_scan_status_ok_when_live_games_present(monkeypatch, capsys):
+    """Com jogos live devolvidos e sem falhas de fetch → OK, n_failures=0."""  # synthetic
+    import pipeline.scan_live as mod
+
+    class FakeResp:
+        def raise_for_status(self):
+            pass
+
+        def json(self):
+            return {"results": [{"id": 1, "status": "inplay", "current_minute": 10}]}
+
+    monkeypatch.setattr(mod.requests, "get", lambda *a, **k: FakeResp())
+    events = mod.fetch_live_events("fake_key", verbose=False)
+    assert len(events) == 1
+    out = capsys.readouterr().out
+    assert "LIVE_SCAN_STATUS=OK" in out
+    assert "n_failures=0" in out

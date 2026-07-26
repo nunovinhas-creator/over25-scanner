@@ -76,6 +76,7 @@ def _bsd_get(api_key: str, path: str):
         resp.raise_for_status()
         return resp.json()
     except Exception as exc:  # noqa: BLE001
+        _bsd_get_stats["failures"] += 1
         print(f"BSD GET falhou ({path}): {exc}", file=sys.stderr)
         return {}
 
@@ -119,6 +120,15 @@ def _looks_live(ev: dict) -> bool:
     return False
 
 
+def _log_live_scan_status(status: str, n_failures: int) -> None:
+    """Regista, uma vez por ciclo de fetch, o estado agregado do scan LIVE —
+    mesmo espírito do ODDS_STATUS= (~216): nunca deixar '0 eventos' por falha
+    de fetch parecer igual a '0 eventos' por não haver jogos live (ex.:
+    pré-época). status: OK | NO_LIVE_GAMES | API_ERROR."""
+    ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    print(f"LIVE_SCAN_STATUS={status} n_failures={n_failures} ts={ts}")
+
+
 def fetch_live_events(api_key: str, verbose: bool = False) -> list[dict]:
     """
     Eventos a decorrer, via o endpoint comprovado /api/v2/events/.
@@ -129,8 +139,10 @@ def fetch_live_events(api_key: str, verbose: bool = False) -> list[dict]:
     tentativas aqui são delimitadas por data (hoje→amanhã, cobre jogos que
     cruzam a meia-noite UTC), e filtramos os que estão em jogo client-side.
 
-    Fail-safe: [] em erro.
+    Fail-safe: [] em erro. Emite sempre LIVE_SCAN_STATUS= (ver
+    _log_live_scan_status) para distinguir esse [] de uma janela sem jogos.
     """
+    _bsd_get_stats["failures"] = 0
     today = datetime.now(timezone.utc).date().isoformat()
     tomorrow = (datetime.now(timezone.utc).date() + timedelta(days=1)).isoformat()
     date_q = f"date_from={today}&date_to={tomorrow}&limit=200"
@@ -143,6 +155,7 @@ def fetch_live_events(api_key: str, verbose: bool = False) -> list[dict]:
     if verbose:
         print(f"fetch_live_events: {len(fetched)} eventos na janela, {len(live)} a decorrer.")
     if live:
+        _log_live_scan_status("OK", _bsd_get_stats["failures"])
         return live
 
     # 2) secundária: filtro directo por status de jogo (também delimitado por data).
@@ -150,6 +163,15 @@ def fetch_live_events(api_key: str, verbose: bool = False) -> list[dict]:
     live2 = [e for e in _extract_events(payload2) if _looks_live(e)]
     if verbose and live2:
         print(f"fetch_live_events: status=inplay devolveu {len(live2)} a decorrer.")
+
+    failures = _bsd_get_stats["failures"]
+    if live2:
+        status = "OK"
+    elif failures > 0:
+        status = "API_ERROR"
+    else:
+        status = "NO_LIVE_GAMES"
+    _log_live_scan_status(status, failures)
     return live2
 
 
@@ -185,6 +207,11 @@ def _num(v):
     except (TypeError, ValueError):
         return None
 
+
+# Contador de falhas de _bsd_get, reposto a cada fetch_live_events() — permite
+# distinguir "janela sem jogos" (n_failures=0) de "BSD indisponível"
+# (n_failures>0), que de outra forma dariam o mesmo resultado ([] eventos).
+_bsd_get_stats = {"failures": 0}
 
 _RAW_DUMPED = False
 
@@ -582,12 +609,19 @@ def scan_once(api_key: str, state: dict, pick_ids: set[str], alerted: set[str],
         key = str(e["id"])
         if key in alerted:
             continue
-        alerted.add(key)
+        # NOTA (correcção bug #8): só marcar `alerted` DEPOIS de confirmar o
+        # gate de TG e de o envio ter sucesso. Antes desta correcção,
+        # alerted.add(key) corria logo que is_live_pick() era True — um jogo
+        # que qualificasse com Pressão<90 ficava "queimado" para sempre nesta
+        # execução, mesmo que a Pressão subisse e cumprisse o gate minutos
+        # depois. Também não se marca em caso de falha de envio (send_telegram
+        # devolve False), para o jogo ser reavaliado no ciclo seguinte.
         if not passes_telegram_gate(e):
             continue
-        send_telegram(build_live_pick_msg(e))
-        sent += 1
-        print(f"ALERTA: {e['home']} vs {e['away']} ({e['min']}') score={e['patternScore']}")
+        if send_telegram(build_live_pick_msg(e)):
+            alerted.add(key)
+            sent += 1
+            print(f"ALERTA: {e['home']} vs {e['away']} ({e['min']}') score={e['patternScore']}")
 
     return sent
 
