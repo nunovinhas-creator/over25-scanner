@@ -4,7 +4,7 @@
 > Treino/Calibração: épocas 2122, 2223, 2324, 2425
 > Validação (intocada): época **2526**
 
-Generated: 2026-07-20T10:04:29+00:00 UTC
+Generated: 2026-07-27T10:46:47+00:00 UTC
 
 ## Calibrador seleccionado
 
