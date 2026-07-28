@@ -21,7 +21,7 @@ Sistema automatizado de identificação de valor em mercados de apostas de futeb
 | Sharp 1X2 | 1 | 1 | — | CLV>+1% n≥200 | OBSERVAÇÃO |
 | BTTS+O2.5 | — | — | — | CLV>+5% n≥100 | OBSERVAÇÃO |
 
-_Actualizado: 2026-07-27 10:56 UTC_
+_Actualizado: 2026-07-28 10:14 UTC_
 <!-- DYNAMIC_STATUS_END -->
 
 **Observação efectiva:** Over 2.5 e Sharp 1X2 desde 17 Jun 2026 · BTTS+O2.5 desde 21 Jun 2026
