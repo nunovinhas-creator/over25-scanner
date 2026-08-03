@@ -69,6 +69,9 @@ jobs:
       - name: Run data quality tests
         run: pytest tests/data_quality/ -v --tb=short
 
+      - name: Run pipeline tests
+        run: pytest tests/pipeline/ -v --tb=short
+
   # ---------------------------------------------------------------------------
   # Job 2: backtest — walk-forward backtesting across all strategies
   # ---------------------------------------------------------------------------
