@@ -12,6 +12,7 @@ from __future__ import annotations
 import pytest
 
 from pipeline.scan_live import (
+    ALERT_FILTERS,
     PRESSAO_MIN_TELEGRAM,
     SCORE_MIN_TELEGRAM,
     TH_LIVE_PICK,
@@ -192,6 +193,125 @@ def test_telegram_gate_fails_closed_without_pressao():
     """Sem padrão 'pressure' (Pressão ausente), o gate falha fechado — não envia."""  # synthetic
     e = {"patterns": [], "patternScore": 100}
     assert not passes_telegram_gate(e)
+
+
+# ── ALERT_FILTERS: filtros extra do gate de envio Telegram ───────────────────
+
+
+def _gate_event(**over):  # synthetic
+    """Evento mínimo que já passa o gate base (Pressão>=90 E Score>=20);
+    sobrepõe campos via kwargs para testar os filtros extra isoladamente."""
+    e = {
+        "id": 42,
+        "patterns": [{"id": "pressure", "label": f"Pressão {PRESSAO_MIN_TELEGRAM}"}],
+        "patternScore": SCORE_MIN_TELEGRAM,
+    }
+    e.update(over)
+    return e
+
+
+@pytest.mark.parametrize("xg,blocked", [  # synthetic
+    (0.99, False),
+    (1.0, True),
+    (1.49, True),
+    (1.5, False),
+    (2.49, False),
+    (2.5, False),
+])
+def test_filtro_xg_banda_morta_boundaries(xg, blocked):
+    """Banda 1.0<=xG<1.5 bloqueia (pior conversão na amostra); fora da banda passa."""
+    e = _gate_event(xgTotal=xg, min=50)
+    assert passes_telegram_gate(e) is not blocked
+
+
+def test_filtro_xg_banda_morta_blocks_and_logs(capsys):
+    e = _gate_event(xgTotal=1.2, min=50)
+    assert passes_telegram_gate(e) is False
+    out = capsys.readouterr().out
+    assert "alerta_bloqueado motivo=xg_banda_morta ev=42" in out
+
+
+def test_filtro_xg_banda_morta_missing_field_passes_and_logs(capsys):
+    """xG ausente: fail-open — não bloqueia, só regista campo_ausente."""
+    e = _gate_event(min=50)  # sem xgTotal
+    assert passes_telegram_gate(e) is True
+    out = capsys.readouterr().out
+    assert "campo_ausente campo=xgTotal ev=42" in out
+
+
+@pytest.mark.parametrize("minuto,blocked", [  # synthetic
+    (84, False),
+    (85, True),
+    (86, True),
+])
+def test_filtro_minuto_tardio_boundaries(minuto, blocked):
+    """minuto>=85: tempo estrutural insuficiente — bloqueia a partir daqui (inclusive)."""
+    e = _gate_event(xgTotal=2.0, min=minuto)
+    assert passes_telegram_gate(e) is not blocked
+
+
+def test_filtro_minuto_tardio_blocks_and_logs(capsys):
+    e = _gate_event(xgTotal=2.0, min=85)
+    assert passes_telegram_gate(e) is False
+    out = capsys.readouterr().out
+    assert "alerta_bloqueado motivo=minuto_tardio ev=42" in out
+
+
+def test_filtro_minuto_tardio_missing_field_passes_and_logs(capsys):
+    """minuto ausente: fail-open — não bloqueia, só regista campo_ausente."""
+    e = _gate_event(xgTotal=2.0)  # sem min
+    assert passes_telegram_gate(e) is True
+    out = capsys.readouterr().out
+    assert "campo_ausente campo=min ev=42" in out
+
+
+def test_filtros_extra_disabled_ignore_thresholds(monkeypatch):
+    """Com os toggles desligados, os filtros extra não bloqueiam mesmo dentro
+    dos limiares que normalmente bloqueariam."""
+    monkeypatch.setitem(ALERT_FILTERS["FILTRO_XG_BANDA_MORTA"], "enabled", False)
+    monkeypatch.setitem(ALERT_FILTERS["FILTRO_MINUTO_TARDIO"], "enabled", False)
+    e = _gate_event(xgTotal=1.2, min=90)
+    assert passes_telegram_gate(e) is True
+
+
+def test_msg_includes_alta_conviccao_marker_when_xg_high():
+    """TIER_ALTA_CONVICCAO_XG: xG>=2.5 marca a mensagem, não bloqueia nada."""
+    e = _score(_base_event(min=60, xgTotal=2.5, da={"h": 20, "a": 10}))
+    msg = build_live_pick_msg(e)
+    assert "⭐ ALTA CONVICÇÃO" in msg
+
+
+def test_msg_omits_alta_conviccao_marker_when_xg_below_threshold():
+    e = _score(_base_event(min=60, xgTotal=2.49, da={"h": 20, "a": 10}))
+    msg = build_live_pick_msg(e)
+    assert "⭐ ALTA CONVICÇÃO" not in msg
+
+
+def test_msg_omits_alta_conviccao_marker_when_xg_missing():
+    e = _score(_base_event(min=60, xgTotal=None, da={"h": 20, "a": 10}))
+    msg = build_live_pick_msg(e)
+    assert "⭐ ALTA CONVICÇÃO" not in msg
+
+
+def test_msg_includes_vantagem_numerica_warning_when_enabled(monkeypatch):
+    """DESCONTO_VANTAGEM_NUMERICA activado: aviso na mensagem quando há +1
+    homem detectado (reusa o padrão 'numerical' já produzido por detect_patterns,
+    sem novo cálculo no live)."""
+    monkeypatch.setitem(ALERT_FILTERS["DESCONTO_VANTAGEM_NUMERICA"], "enabled", True)
+    e = _score(_base_event(min=60, redCards={"h": 0, "a": 1}))
+    assert any(p["id"] == "numerical" for p in e["patterns"])
+    msg = build_live_pick_msg(e)
+    assert "⚠️" in msg
+    assert "Casa +1 homem" in msg
+
+
+def test_msg_omits_vantagem_numerica_warning_when_disabled():
+    """Default desligado (n=1 na amostra): mesmo com vantagem numérica
+    detectada, a mensagem não muda."""
+    e = _score(_base_event(min=60, redCards={"h": 0, "a": 1}))
+    assert any(p["id"] == "numerical" for p in e["patterns"])
+    msg = build_live_pick_msg(e)
+    assert "⚠️" not in msg
 
 
 def test_build_msg_contains_key_fields():

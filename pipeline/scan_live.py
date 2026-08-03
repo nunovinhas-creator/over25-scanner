@@ -51,10 +51,45 @@ BSD_BASE_URL = "https://sports.bzzoiro.com"
 TH_LIVE_PICK = 12  # patternScore mínimo (calibrado: N=35, score>=12→46% WR vs <12→24%)
 BSD_TIMEOUT = 20
 
-# Filtro de envio Telegram (aplica-se SÓ ao envio — deteção/logging/registo
-# interno em scan_once() não são afectados). Fail-closed: Pressão ausente → não envia.
-PRESSAO_MIN_TELEGRAM = 90
-SCORE_MIN_TELEGRAM = 20
+# Filtros de envio Telegram (aplicam-se SÓ ao envio — deteção/logging/registo
+# interno em scan_once() não são afectados). Thresholds e toggles num único
+# bloco nomeado — nada hardcoded na lógica de passes_telegram_gate()/
+# build_live_pick_msg(). GATE_BASE é o gate pré-existente (fail-closed: Pressão
+# ausente/None → não envia); os restantes filtros são fail-open a campos
+# ausentes (regista campo_ausente, não bloqueia).
+ALERT_FILTERS = {
+    "GATE_BASE": {
+        "PRESSAO_MIN_TELEGRAM": 90,
+        "SCORE_MIN_TELEGRAM": 20,
+    },
+    "FILTRO_XG_BANDA_MORTA": {
+        # 1.0 <= xG < 1.5: pior banda de conversão na amostra (1G/5R) — bloqueia.
+        "enabled": True,
+        "XG_MIN": 1.0,
+        "XG_MAX": 1.5,
+    },
+    "TIER_ALTA_CONVICCAO_XG": {
+        # xG >= 2.5: 3/3 green na amostra. Não bloqueia — só marca a mensagem.
+        "enabled": True,
+        "XG_MIN": 2.5,
+    },
+    "FILTRO_MINUTO_TARDIO": {
+        # A partir daqui, tempo estrutural insuficiente para o jogo virar Over — bloqueia.
+        "enabled": True,
+        "MINUTO_MAX": 85,
+    },
+    "DESCONTO_VANTAGEM_NUMERICA": {
+        # Amostra n=1 — só instrumenta (aviso na mensagem quando há +1 homem
+        # detectado), nunca bloqueia nem altera o gate.
+        "enabled": False,
+    },
+}
+
+# Aliases de topo — mantidos para não partir os imports existentes em
+# tests/pipeline/test_scan_live.py. ALERT_FILTERS["GATE_BASE"] é a fonte de
+# verdade; estas constantes derivam dele, nunca o inverso.
+PRESSAO_MIN_TELEGRAM = ALERT_FILTERS["GATE_BASE"]["PRESSAO_MIN_TELEGRAM"]
+SCORE_MIN_TELEGRAM = ALERT_FILTERS["GATE_BASE"]["SCORE_MIN_TELEGRAM"]
 
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 _PICKS_PATH = _PROJECT_ROOT / "data" / "picks.json"
@@ -531,13 +566,50 @@ def _pressao_value(e: dict) -> float | None:
     return None
 
 
+def _log_alert_blocked(motivo: str, e: dict) -> None:
+    """Log estruturado (stdout) de alerta bloqueado por um filtro de
+    ALERT_FILTERS — permite contabilizar no backtest quantos alertas cada
+    filtro removeu."""
+    print(f"alerta_bloqueado motivo={motivo} ev={e.get('id')}")
+
+
+def _log_campo_ausente(campo: str, e: dict) -> None:
+    """Log estruturado (stdout) quando um filtro de ALERT_FILTERS não
+    consegue avaliar por falta do campo — fail-open: não bloqueia, só regista."""
+    print(f"campo_ausente campo={campo} ev={e.get('id')}")
+
+
 def passes_telegram_gate(e: dict) -> bool:
     """Filtro de envio Telegram: Pressão >= PRESSAO_MIN_TELEGRAM E
-    Score >= SCORE_MIN_TELEGRAM. Fail-closed: Pressão ausente/None → não envia."""
+    Score >= SCORE_MIN_TELEGRAM (fail-closed: Pressão ausente/None → não
+    envia), mais os filtros opcionais em ALERT_FILTERS (fail-open a campos
+    ausentes — regista campo_ausente e deixa passar, para não perder greens
+    por dados em falta)."""
     pressao = _pressao_value(e)
     if pressao is None:
         return False
-    return pressao >= PRESSAO_MIN_TELEGRAM and e.get("patternScore", 0) >= SCORE_MIN_TELEGRAM
+    if not (pressao >= PRESSAO_MIN_TELEGRAM and e.get("patternScore", 0) >= SCORE_MIN_TELEGRAM):
+        return False
+
+    banda = ALERT_FILTERS["FILTRO_XG_BANDA_MORTA"]
+    if banda["enabled"]:
+        xg = e.get("xgTotal")
+        if xg is None:
+            _log_campo_ausente("xgTotal", e)
+        elif banda["XG_MIN"] <= xg < banda["XG_MAX"]:
+            _log_alert_blocked("xg_banda_morta", e)
+            return False
+
+    tardio = ALERT_FILTERS["FILTRO_MINUTO_TARDIO"]
+    if tardio["enabled"]:
+        minuto = e.get("min")
+        if minuto is None:
+            _log_campo_ausente("min", e)
+        elif minuto >= tardio["MINUTO_MAX"]:
+            _log_alert_blocked("minuto_tardio", e)
+            return False
+
+    return True
 
 
 # ---------------------------------------------------------------------------
@@ -549,9 +621,22 @@ def build_live_pick_msg(e: dict) -> str:
     pats = " · ".join(f"{pt['emoji']} {pt['label']}" for pt in e.get("patterns", [])) or "—"
     prob = f"{e['probLive']}%" if e.get("probLive") is not None else "—"
     odd = f"{e['overOdds']:.2f}" if e.get("overOdds") else "—"
-    xg = f"{e['xgTotal']:.2f}" if e.get("xgTotal") is not None else "—"
+    xg_total = e.get("xgTotal")
+    xg = f"{xg_total:.2f}" if xg_total is not None else "—"
+
+    header = "🔥 APOSTAR AGORA — LIVE OVER 2.5"
+    tier = ALERT_FILTERS["TIER_ALTA_CONVICCAO_XG"]
+    if tier["enabled"] and xg_total is not None and xg_total >= tier["XG_MIN"]:
+        header += "\n⭐ ALTA CONVICÇÃO"
+
+    aviso_vantagem = ""
+    if ALERT_FILTERS["DESCONTO_VANTAGEM_NUMERICA"]["enabled"]:
+        numerical = next((pt for pt in e.get("patterns", []) if pt.get("id") == "numerical"), None)
+        if numerical:
+            aviso_vantagem = f"\n⚠️ {numerical['label']}"
+
     return (
-        "🔥 APOSTAR AGORA — LIVE OVER 2.5\n"
+        f"{header}\n"
         "━━━━━━━━━━━━━━━━━━\n"
         f"⚽ {e['home']} vs {e['away']}\n"
         f"🏆 {e['league']}\n"
@@ -559,6 +644,7 @@ def build_live_pick_msg(e: dict) -> str:
         f"📊 Prob Over {prob}  ·  Odd {odd}  ·  xG {xg}\n"
         f"🎯 Sinais: {pats}\n"
         f"Score {e.get('patternScore', 0)}"
+        f"{aviso_vantagem}"
     )
 
 
