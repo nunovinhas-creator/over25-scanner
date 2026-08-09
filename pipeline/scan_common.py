@@ -131,7 +131,14 @@ def send_telegram(text: str) -> bool:
         return False
 
 
-def git_commit_push(files: list[str], msg: str) -> None:
+def git_commit_push(files: list[str], msg: str) -> bool:
+    """Commita e faz push de `files` para origin/main. Devolve True se o
+    remoto reflecte agora o conteúdo pretendido (push confirmado, ou nada
+    havia para commitar); False se houve alterações mas o push falhou (ex.:
+    GITHUB_TOKEN sem `permissions: contents: write` — 403 Permission denied).
+    O caller NUNCA deve tratar False como sucesso silencioso: ver
+    run_observations() em pipeline/scan_live.py para o caso em que uma falha
+    aqui tem de impedir o Telegram e o avanço da deduplicação."""
     try:
         subprocess.run(["git", "config", "user.name", "github-actions[bot]"], check=True)
         subprocess.run(["git", "config", "user.email", "github-actions[bot]@users.noreply.github.com"], check=True)
@@ -144,8 +151,25 @@ def git_commit_push(files: list[str], msg: str) -> None:
             print(f"Commit feito: {msg}")
         else:
             print("Sem alterações para commitar.")
+        return True
     except subprocess.CalledProcessError as exc:
         print(f"git commit/push falhou: {exc}", file=sys.stderr)
+        return False
+
+
+def git_discard_local_changes(files: list[str]) -> None:
+    """Repõe `files` no estado real de origin/main — usar depois de um
+    git_commit_push() falhado. Sem isto, quem faz merge-from-disk (ex.:
+    run_observations(), que lê o ficheiro local para juntar novas entradas)
+    voltaria a ler no próximo ciclo um conteúdo que nunca chegou a ser
+    persistido, e acumularia entradas duplicadas nunca pushadas a cada retry.
+    Best-effort/não fatal: só regista se falhar (ex.: ficheiro ainda não
+    existe em origin/main)."""
+    try:
+        subprocess.run(["git", "fetch", "origin", "main"], check=True)
+        subprocess.run(["git", "checkout", "origin/main", "--", *files], check=True)
+    except subprocess.CalledProcessError as exc:
+        print(f"revert de {files} falhou (não fatal): {exc}", file=sys.stderr)
 
 
 def load_json_list(path: Path) -> list[dict]:

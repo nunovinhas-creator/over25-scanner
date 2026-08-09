@@ -34,6 +34,8 @@ concurrency:
 jobs:
   live:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     timeout-minutes: 358  # < 360 (limite do runner); o loop sai antes por --minutes
 
     steps:

@@ -62,6 +62,7 @@ from pipeline.scan_common import (
     WHITELIST,
     classify_odds,
     git_commit_push,
+    git_discard_local_changes,
     load_json_list,
     save_json_list,
     send_telegram,
@@ -824,7 +825,11 @@ def run_observations(events: list[dict], obs_state: dict, verbose: bool = False)
     """Um ciclo do fluxo OBSERVAÇÕES: detecção -> gate -> dedup -> guardar ->
     Telegram. `obs_state` (seen_event_ids/unresolved) vive em memória durante
     o loop e é inicializado por load_observation_state(). Devolve o nº de
-    observações novas guardadas neste ciclo."""
+    observações novas guardadas E PERSISTIDAS neste ciclo — 0 também quando a
+    persistência falha (git push), caso em que nem o Telegram é enviado nem o
+    dedup em memória avança, para o mesmo evento ser reavaliado no próximo
+    ciclo sem duplicar nem ficar "queimado" (bug de infraestrutura encontrado
+    em produção: live_scanner.yml sem `permissions: contents: write`)."""
     if not events:
         return 0
 
@@ -849,10 +854,23 @@ def run_observations(events: list[dict], obs_state: dict, verbose: bool = False)
     for entry in new_entries:
         by_id[entry["id"]] = entry
     save_json_list(_OBS_PATH, list(by_id.values()))
-    git_commit_push(
+    persisted = git_commit_push(
         [str(_OBS_PATH)],
         f"obs: {len(new_entries)} new, {len(updates)} updated [skip ci]",
     )
+    if not persisted:
+        # Falha de persistência: repõe o ficheiro local (evita acumular
+        # entradas nunca pushadas a cada retry — ver git_discard_local_changes),
+        # não considera a observação concluída, não avança dedup nem envia
+        # Telegram. O erro fica bem visível nos logs do worker.
+        git_discard_local_changes([str(_OBS_PATH)])
+        print(
+            f"obs_persist_failed novos={len(new_entries)} updates={len(updates)} "
+            "— git push falhou; observação(ões) NÃO consideradas concluídas "
+            "(sem Telegram, sem avanço de dedup, reavaliadas no próximo ciclo)",
+            file=sys.stderr,
+        )
+        return 0
 
     for e in new_events:
         obs_state["seen_event_ids"].add(str(e["id"]))
