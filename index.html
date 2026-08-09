@@ -3534,7 +3534,13 @@ function detectPatterns(e){
   const adjSoT    =(is2H&&htBase)?Math.max(0,totalSoT     -(htBase.sot||0)    ):totalSoT;
   const adjCorners=(is2H&&htBase)?Math.max(0,totalCorners -(htBase.corners||0)):totalCorners;
   const adjMin    =is2H?Math.max(1,min-45):min;
-  const suppressVolume=isHT||(is2H&&!htBase);
+  // Guarda contra extrapolação no arranque da 2ª parte: com poucos minutos
+  // decorridos, adj/adjMin*90 dá valores absurdos (ex.: 4 DA em 2 min →
+  // "Pressão 100"; "7 remates 2ªP" ao 47'). Só confia no rácio da 2ª parte
+  // após MIN_2H_WINDOW min — espelha early_2h em pipeline/scan_live.py.
+  const MIN_2H_WINDOW=15;
+  const early2H=is2H&&htBase&&adjMin<MIN_2H_WINDOW;
+  const suppressVolume=isHT||(is2H&&!htBase)||early2H;
   const halfSfx=is2H?' (2ªP)':'';
 
   // 1. PRESSÃO (DA) — ataques perigosos/min: sinal primário dos sistemas profissionais
