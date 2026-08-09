@@ -407,9 +407,15 @@ def scan() -> None:
 
     _save_list(PICKS_FILE, list(existing_picks.values()))
 
-    rej_index = {r.get("id", "") + r.get("saved_at", ""): r for r in existing_rejected}
+    # Dedup por id puro — igual ao padrão já usado para existing_picks acima.
+    # A chave anterior (id + saved_at) mudava a cada ciclo de 30 min, por isso o
+    # mesmo candidato ainda-rejeitado nunca substituía o registo anterior e
+    # rejected_picks_1x2.json crescia sem limite (achado da auditoria de
+    # continuidade, 9 ago 2026). Um id só tem sentido como "a rejeição mais
+    # recente conhecida" — não há histórico a preservar aqui.
+    rej_index = {r.get("id", ""): r for r in existing_rejected}
     for r in new_rejected:
-        rej_index[r.get("id", "") + r.get("saved_at", "")] = r
+        rej_index[r.get("id", "")] = r
     _save_list(REJECTED_FILE, list(rej_index.values()))
 
     print(

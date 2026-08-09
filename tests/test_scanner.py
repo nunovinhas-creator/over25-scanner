@@ -63,7 +63,8 @@ def _bsd_event(
 
 class TestScanOver25(unittest.TestCase):
 
-    def _run_scan(self, bsd_events: list[dict], existing_picks: list | None = None):
+    def _run_scan(self, bsd_events: list[dict], existing_picks: list | None = None,
+                  existing_rejected: list | None = None, git_push_ok: bool = True):
         """
         Corre scan() com data dir temporária e mocks.
         bsd_events: lista de eventos BSD simulados.
@@ -78,6 +79,8 @@ class TestScanOver25(unittest.TestCase):
             state_file = tmp_path / "scan_state_over25.json"
             if existing_picks:
                 picks_file.write_text(json.dumps(existing_picks))
+            if existing_rejected:
+                rejected_file.write_text(json.dumps(existing_rejected))
 
             def fake_fetch():
                 return bsd_events
@@ -103,7 +106,7 @@ class TestScanOver25(unittest.TestCase):
                 patch.object(mod, "_fetch_lineup_info", return_value={}),
                 patch.object(mod, "compute_prob", side_effect=fake_compute_prob),
                 patch.object(mod, "send_telegram", side_effect=lambda t: tg_calls.append(t)),
-                patch.object(mod, "git_commit_push"),
+                patch.object(mod, "git_commit_push", return_value=git_push_ok),
             ):
                 mod.scan()
 
@@ -170,6 +173,75 @@ class TestScanOver25(unittest.TestCase):
         self.assertNotEqual(unknown_rej[0]["liga"], "")
         self.assertEqual(unknown_rej[0]["reject_reason"], "liga_desconhecida")
 
+    # ── Regressão: deduplicação de rejected_picks.json (auditoria 9 ago 2026) ──
+    # Bug: rej_index era chaveado por id+scanned_at, que muda a cada ciclo de
+    # 30 min — o mesmo evento ainda-rejeitado nunca substituía o registo
+    # anterior. Fix: chave por id puro, igual a existing_picks/existing_btts.
+
+    def test_rejected_same_event_repeated_scan_no_duplicate(self):
+        """MESMO EVENTO + MESMA REJEIÇÃO em scans sucessivos → 1 registo, não 2."""
+        ev = _bsd_event("ev_rej_dup", "Sevilla", "Betis", league="La Liga", hours_to_ko=10.0)
+
+        _, rejected1, _ = self._run_scan([ev])
+        self.assertEqual(len(rejected1), 1)
+        self.assertEqual(rejected1[0]["reject_reason"], "timing_apos_6h")
+
+        _, rejected2, _ = self._run_scan([ev], existing_rejected=rejected1)
+        self.assertEqual(len(rejected2), 1, "não deve duplicar o mesmo evento rejeitado")
+        self.assertEqual(rejected2[0]["id"], "ev_rej_dup")
+
+    def test_rejected_legitimate_update_replaces_old_reason(self):
+        """MESMO EVENTO + ACTUALIZAÇÃO LEGÍTIMA → o motivo mais recente
+        substitui o anterior; não acumula os dois registos."""
+        ev1 = _bsd_event("ev_rej_upd", "Milan", "Inter", league="Serie A", hours_to_ko=10.0)
+        _, rejected1, _ = self._run_scan([ev1])
+        self.assertEqual(rejected1[0]["reject_reason"], "timing_apos_6h")
+
+        # Mesmo evento, agora dentro da janela de timing mas com odds fora da banda
+        ev2 = _bsd_event("ev_rej_upd", "Milan", "Inter", league="Serie A",
+                          hours_to_ko=3.0, odds_over=4.50)
+        _, rejected2, _ = self._run_scan([ev2], existing_rejected=rejected1)
+        self.assertEqual(len(rejected2), 1, "deve substituir, não duplicar")
+        self.assertEqual(rejected2[0]["reject_reason"], "odds_fora_banda")
+
+    def test_rejected_new_event_adds_separate_record(self):
+        """NOVO EVENTO → gera registo adicional, sem tocar no anterior."""
+        ev_a = _bsd_event("ev_rej_a", "Ajax", "PSV", league="Eredivisie", hours_to_ko=10.0)
+        _, rejected1, _ = self._run_scan([ev_a])
+
+        ev_b = _bsd_event("ev_rej_b", "Feyenoord", "AZ", league="Eredivisie", hours_to_ko=10.0)
+        _, rejected2, _ = self._run_scan([ev_b], existing_rejected=rejected1)
+
+        self.assertEqual(len(rejected2), 2)
+        self.assertEqual({r["id"] for r in rejected2}, {"ev_rej_a", "ev_rej_b"})
+
+    def test_rejected_dedup_survives_multiple_restarts(self):
+        """RESTART DO WORKFLOW (simulado por chamadas sucessivas que só veem o
+        output persistido da corrida anterior) → deduplicação mantém-se."""
+        ev = _bsd_event("ev_rej_restart", "Villarreal", "Getafe", league="La Liga", hours_to_ko=10.0)
+        rejected = None
+        for _ in range(4):
+            _, rejected, _ = self._run_scan([ev], existing_rejected=rejected)
+        self.assertEqual(len(rejected), 1)
+
+    def test_rejected_dedup_unaffected_by_persistence_failure(self):
+        """FALHA DE PERSISTÊNCIA → não avança/corrompe o estado de dedup.
+
+        Em produção (scanner.yml) cada execução faz `actions/checkout` de
+        origin/main sem estado local entre corridas — por isso uma falha de
+        git_commit_push() já não pode, por construção, fazer o próximo scan
+        herdar duplicados (o próximo scan volta a partir do último estado
+        realmente publicado). Este teste cobre o cenário pior dentro de um
+        único processo: mesmo com o push a falhar, o ficheiro local nunca é
+        escrito com registos duplicados.
+        """
+        ev = _bsd_event("ev_rej_pushfail", "Napoli", "Roma", league="Serie A", hours_to_ko=10.0)
+        _, rejected1, _ = self._run_scan([ev], git_push_ok=False)
+        self.assertEqual(len(rejected1), 1)
+
+        _, rejected2, _ = self._run_scan([ev], existing_rejected=rejected1, git_push_ok=False)
+        self.assertEqual(len(rejected2), 1, "falha de push não deve introduzir duplicados")
+
     def test_dedup_no_double_alert(self):
         """Mesmo evento em duas corridas → só 1 alerta TG."""
         events = [_bsd_event("ev_dedup", "Man City", "Liverpool", hours_to_ko=4.0)]
@@ -233,7 +305,8 @@ class TestScanOver25(unittest.TestCase):
 
 class TestScanSharp1x2(unittest.TestCase):
 
-    def _run_scan(self, bsd_events: list[dict], existing_picks: list | None = None):
+    def _run_scan(self, bsd_events: list[dict], existing_picks: list | None = None,
+                  existing_rejected: list | None = None, git_push_ok: bool = True):
         import pipeline.scan_sharp1x2 as mod
 
         with tempfile.TemporaryDirectory() as tmp:
@@ -242,6 +315,8 @@ class TestScanSharp1x2(unittest.TestCase):
             rejected_file = tmp_path / "rejected_picks_1x2.json"
             if existing_picks:
                 picks_file.write_text(json.dumps(existing_picks))
+            if existing_rejected:
+                rejected_file.write_text(json.dumps(existing_rejected))
 
             def fake_fetch():
                 return bsd_events
@@ -256,7 +331,7 @@ class TestScanSharp1x2(unittest.TestCase):
                 patch.object(mod, "_fetch_all_events", side_effect=fake_fetch),
                 patch.object(mod, "_fetch_lineup_info", return_value={}),
                 patch.object(mod, "send_telegram", side_effect=lambda t: tg_calls.append(t)),
-                patch.object(mod, "git_commit_push"),
+                patch.object(mod, "git_commit_push", return_value=git_push_ok),
             ):
                 mod.scan()
 
@@ -346,6 +421,78 @@ class TestScanSharp1x2(unittest.TestCase):
 
         picks2, _, tg2 = self._run_scan([ev], existing_picks=picks1)
         self.assertEqual(len(tg2), 0, "Sem alerta duplicado")
+
+    # ── Regressão: deduplicação de rejected_picks_1x2.json (auditoria 9 ago 2026) ──
+    # Mesmo bug/fix do Over 2.5: rej_index chaveado por id+saved_at → agora id puro.
+
+    def test_rejected_same_event_repeated_scan_no_duplicate(self):
+        """MESMO EVENTO + MESMA REJEIÇÃO em scans sucessivos → sem duplicar
+        nenhum dos 3 outcomes (HOME/DRAW/AWAY) rejeitados."""
+        ev = self._ev_with_1x2("g_rej_dup", league="La Liga",
+                                pinn=(1.50, 4.00, 6.00), b365=(1.50, 4.30, 6.00))
+        _, rejected1, _ = self._run_scan([ev])
+        self.assertEqual(len(rejected1), 3)  # HOME div_baixa, DRAW draw_suspenso, AWAY div_baixa
+
+        _, rejected2, _ = self._run_scan([ev], existing_rejected=rejected1)
+        self.assertEqual(len(rejected2), 3, "não deve duplicar nenhum dos 3 outcomes")
+        self.assertEqual({r["id"] for r in rejected1}, {r["id"] for r in rejected2})
+
+    def test_rejected_legitimate_update_replaces_old_reason(self):
+        """MESMO EVENTO + ACTUALIZAÇÃO LEGÍTIMA → o motivo mais recente
+        substitui o anterior para o mesmo outcome, sem duplicar."""
+        ev1 = self._ev_with_1x2("g_rej_upd", league="La Liga", hours_to_ko=10.0,
+                                 pinn=(1.85, 3.50, 4.20), b365=(1.85, 3.50, 4.20))
+        _, rejected1, _ = self._run_scan([ev1])
+        away_rej1 = [r for r in rejected1 if r["id"] == "g_rej_upd_away_sh"]
+        self.assertEqual(len(away_rej1), 1)
+        self.assertEqual(away_rej1[0]["gate_blocked_reason"], "timing_apos_6h")
+
+        # Mesmo evento, agora dentro da janela de timing mas div_baixa (AWAY sem movimento)
+        ev2 = self._ev_with_1x2("g_rej_upd", league="La Liga", hours_to_ko=3.0,
+                                 pinn=(1.85, 3.50, 4.20), b365=(1.85, 3.50, 4.20))
+        _, rejected2, _ = self._run_scan([ev2], existing_rejected=rejected1)
+        away_rej2 = [r for r in rejected2 if r["id"] == "g_rej_upd_away_sh"]
+        self.assertEqual(len(away_rej2), 1, "deve substituir, não duplicar")
+        self.assertEqual(away_rej2[0]["gate_blocked_reason"], "div_baixa")
+
+    def test_rejected_new_event_adds_separate_record(self):
+        """NOVO EVENTO → gera registo(s) adicional(is), sem tocar nos anteriores."""
+        ev_a = self._ev_with_1x2("g_rej_a", hours_to_ko=10.0,
+                                  pinn=(1.85, 3.50, 4.20), b365=(1.85, 3.50, 4.41))
+        _, rejected1, _ = self._run_scan([ev_a])
+
+        ev_b = self._ev_with_1x2("g_rej_b", hours_to_ko=10.0,
+                                  pinn=(1.85, 3.50, 4.20), b365=(1.85, 3.50, 4.41))
+        _, rejected_b_alone, _ = self._run_scan([ev_b])
+        _, rejected2, _ = self._run_scan([ev_b], existing_rejected=rejected1)
+
+        self.assertEqual(len(rejected2), len(rejected1) + len(rejected_b_alone))
+        ids1 = {r["id"] for r in rejected1}
+        ids2 = {r["id"] for r in rejected2}
+        self.assertTrue(ids1.issubset(ids2))
+
+    def test_rejected_dedup_survives_multiple_restarts(self):
+        """RESTART DO WORKFLOW (simulado por chamadas sucessivas que só veem o
+        output persistido da corrida anterior) → deduplicação mantém-se."""
+        ev = self._ev_with_1x2("g_rej_restart", hours_to_ko=10.0,
+                                pinn=(1.85, 3.50, 4.20), b365=(1.85, 3.50, 4.41))
+        rejected = None
+        for _ in range(4):
+            _, rejected, _ = self._run_scan([ev], existing_rejected=rejected)
+        ids = {r["id"] for r in rejected}
+        self.assertEqual(len(rejected), len(ids))
+
+    def test_rejected_dedup_unaffected_by_persistence_failure(self):
+        """FALHA DE PERSISTÊNCIA → não avança/corrompe o estado de dedup (ver
+        justificação equivalente em TestScanOver25 — mesma arquitectura de
+        fresh-checkout por corrida em scanner.yml)."""
+        ev = self._ev_with_1x2("g_rej_pushfail", league="La Liga",
+                                pinn=(1.50, 4.00, 6.00), b365=(1.50, 4.30, 6.00))
+        _, rejected1, _ = self._run_scan([ev], git_push_ok=False)
+        self.assertEqual(len(rejected1), 3)
+
+        _, rejected2, _ = self._run_scan([ev], existing_rejected=rejected1, git_push_ok=False)
+        self.assertEqual(len(rejected2), 3, "falha de push não deve introduzir duplicados")
 
     def test_liga_irresolvel_nunca_string_vazia(self):
         """Liga irresolúvel no Sharp 1X2 grava 'DESCONHECIDA' + reject_reason
