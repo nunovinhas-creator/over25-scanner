@@ -29,6 +29,11 @@ away_score). Falha de fetch, evento não finalizado dentro da janela, ou
 score inválido → `settlement_error` + `settlement_error_at` explícitos no
 próprio pick (nunca silencioso — invariante do projecto).
 
+Quando o evento cai em VOID, `settlement_void_status` grava o token BSD
+exacto (já normalizado lower/strip) que disparou essa decisão — só
+observabilidade, não altera a semântica de VOID nem o conjunto
+_VOID_STATUS (auditoria de continuidade, 9 ago 2026).
+
 Uso: python -m pipeline.settle_sharp1x2
 """
 
@@ -199,6 +204,18 @@ def settle() -> None:
 
         if status in _VOID_STATUS:
             pick["resultado_outcome"] = "VOID"
+            # Observabilidade pura (auditoria de continuidade, 9 ago 2026):
+            # antes disto, o token exacto da BSD que despoletou VOID (qual dos
+            # 5 de _VOID_STATUS) era decidido e imediatamente descartado — só
+            # ficava "VOID" no pick, sem forma de saber, em produção, se foi
+            # "cancelled", "postponed", "suspended", etc. `status` aqui já
+            # vem normalizado (lower/strip) por fetch_event_result() — não há
+            # nova normalização, só preservação do valor já usado na decisão.
+            # Nunca reescrito numa eventual segunda passagem (mesmo padrão de
+            # settled_at) — na prática, o guard de topo já impede qualquer
+            # pick "VOID" de voltar a este ramo, isto é defesa em profundidade.
+            if not pick.get("settlement_void_status"):
+                pick["settlement_void_status"] = status
             pick.pop("settlement_error", None)
             pick.pop("settlement_error_at", None)
             n_void += 1

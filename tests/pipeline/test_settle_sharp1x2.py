@@ -440,6 +440,112 @@ class TestSettle:
         assert out[0]["resultado_outcome"] == "WIN"
         assert "settlement_error" not in out[0]
 
+    # ── Observabilidade do token VOID — settlement_void_status ────────────
+    # (auditoria de continuidade, 9 ago 2026). Estes testes documentam o
+    # COMPORTAMENTO ACTUAL do código (que tokens já disparam VOID hoje) —
+    # NÃO afirmam que estes 5 tokens estão semanticamente correctos face à
+    # BSD real. Em particular "suspended" continua sem decisão semântica
+    # (ver relatório da auditoria) — testado aqui só porque já está em
+    # _VOID_STATUS, tal como estava antes desta instrumentação.
+
+    @pytest.mark.parametrize("bsd_status", [
+        "cancelled", "canceled", "postponed", "abandoned", "suspended",
+    ])
+    def test_void_status_records_exact_bsd_token(self, bsd_status):
+        """Cada token de _VOID_STATUS continua a produzir VOID (comportamento
+        inalterado) e passa a registar o token exacto em
+        settlement_void_status — antes desta instrumentação, essa informação
+        era decidida e imediatamente descartada."""
+        picks = [_pick(id="60_home_sh", data=_iso(3.0))]
+        out = self._run(
+            picks,
+            fetch_result_side_effect=lambda eid: {
+                "status": bsd_status, "home_score": None, "away_score": None,
+            },
+        )
+        assert out[0]["resultado_outcome"] == "VOID"
+        assert out[0]["settlement_void_status"] == bsd_status
+
+    def test_non_void_status_never_gets_void_status_field(self):
+        """Um pick que resolve para WIN (status="finished") nunca ganha
+        settlement_void_status — o campo é exclusivo do ramo VOID."""
+        picks = [_pick(id="61_home_sh", outcome="HOME", data=_iso(3.0))]
+        out = self._run(
+            picks,
+            fetch_result_side_effect=lambda eid: {"status": "finished", "home_score": 2, "away_score": 0},
+        )
+        assert out[0]["resultado_outcome"] == "WIN"
+        assert "settlement_void_status" not in out[0]
+
+    def test_loss_never_gets_void_status_field(self):
+        """LOSS também nunca ganha settlement_void_status."""
+        picks = [_pick(id="62_home_sh", outcome="HOME", data=_iso(3.0))]
+        out = self._run(
+            picks,
+            fetch_result_side_effect=lambda eid: {"status": "finished", "home_score": 0, "away_score": 1},
+        )
+        assert out[0]["resultado_outcome"] == "LOSS"
+        assert "settlement_void_status" not in out[0]
+
+    def test_fetch_failure_never_gets_void_status_field(self):
+        """Falha de fetch (mesmo além das 48h, gerando settlement_error) nunca
+        gera settlement_void_status — o campo é exclusivo do ramo VOID, não
+        de qualquer erro genérico."""
+        picks = [_pick(id="63_home_sh", data=_iso(50.0))]
+        out = self._run(picks, fetch_result_side_effect=lambda eid: None)
+        assert out[0]["resultado_outcome"] == ""
+        assert out[0]["settlement_error"] == "bsd_fetch_falhou_apos_48h"
+        assert "settlement_void_status" not in out[0]
+
+    def test_pending_status_never_gets_void_status_field(self):
+        """Um status desconhecido/pendente (nem finished nem VOID) dentro da
+        janela nunca gera settlement_void_status."""
+        picks = [_pick(id="64_home_sh", data=_iso(3.0))]
+        out = self._run(
+            picks,
+            fetch_result_side_effect=lambda eid: {"status": "notstarted", "home_score": None, "away_score": None},
+        )
+        assert out[0]["resultado_outcome"] == ""
+        assert "settlement_void_status" not in out[0]
+
+    def test_void_pick_idempotent_never_reprocessed_or_rewritten(self):
+        """Um pick já VOID (com settlement_void_status já gravado) nunca é
+        reprocessado — o guard de topo intercepta antes de qualquer fetch, e
+        o campo nunca é reescrito mesmo que a BSD "mude de ideias" numa
+        corrida futura."""
+        picks = [_pick(id="65_home_sh", resultado_outcome="VOID", data=_iso(50.0))]
+        picks[0]["settlement_void_status"] = "postponed"
+
+        def _fail_fetch(eid):
+            pytest.fail("pick já VOID não devia chamar fetch_event_result")
+
+        out = self._run(picks, fetch_result_side_effect=_fail_fetch)
+        assert out[0]["resultado_outcome"] == "VOID"
+        assert out[0]["settlement_void_status"] == "postponed"
+
+        # Segunda corrida — mesmo resultado, sem reescrita.
+        out2 = self._run(out, fetch_result_side_effect=_fail_fetch)
+        assert out2[0]["settlement_void_status"] == "postponed"
+
+    def test_void_status_push_failure_still_persists_full_local_state(self):
+        """Mesma garantia de atomicidade já validada para WIN/LOSS (Settlement
+        Bug 1): falha de push não deixa settlement_void_status parcialmente
+        gravado nem corrompe o resto do lote."""
+        picks = [
+            _pick(id="66_home_sh", data=_iso(3.0)),
+            _pick(id="67_home_sh", outcome="HOME", data=_iso(3.0)),
+        ]
+
+        def fake_fetch(eid):
+            if eid == "66":
+                return {"status": "abandoned", "home_score": None, "away_score": None}
+            return {"status": "finished", "home_score": 2, "away_score": 0}
+
+        out = self._run(picks, fetch_result_side_effect=fake_fetch, git_commit_push_return=False)
+        assert out[0]["resultado_outcome"] == "VOID"
+        assert out[0]["settlement_void_status"] == "abandoned"
+        assert out[1]["resultado_outcome"] == "WIN"
+
     def test_no_bsd_api_key_aborts_cleanly(self):
         import pipeline.settle_sharp1x2 as mod
 
