@@ -1234,6 +1234,10 @@ const TH_MOVE       = 1.0;    // % movimento mínimo Pinnacle (ruído <1% filtra
 const DIV_MIN        = 2.0;    // % divergência mínima Pin vs recreativas
 const DIV_STEAM      = 8.0;    // % threshold STEAM
 const TH_LIVE_PICK   = 12;     // patternScore mínimo para classificar como sinal live (calibrado: N=35, score≥12→46% WR vs score<12→24% WR)
+// Alertas TG "🔥 APOSTAR AGORA — LIVE OVER 2.5" desactivados (pedido do autor, 9 ago 2026).
+// isLivePick/patterns continuam a alimentar o card "APOSTAR AGORA" na tab Live — só o
+// push para o Telegram foi desligado. OBSERVAÇÕES (autoLogObservations) não é afectado.
+const LIVE_ALERTS_TG_ENABLED = false;
 // Piso de odds válida (issue #127) — espelha MIN_VALID_ODDS em pipeline/scan_common.py.
 // 1.00 é a sentinela confirmada da BSD para mercado suspenso (golo/VAR); nunca um preço real.
 //
@@ -3750,14 +3754,17 @@ async function loadLive(){
 
     // Alertas TG "🔥 APOSTAR AGORA" — sinais live qualificados (não picks pré-jogo).
     // Dispara 1 vez por jogo (dedup via localStorage), só para os que já entraram no over.
-    enriched
-      .filter(e=>e.isLivePick && !e.isSavedPick && e.goals<3)
-      .forEach(e=>{
-        const k=LSKEY.livePick(e.id);
-        if(localStorage.getItem(k)) return;
-        localStorage.setItem(k,'1'); // marca já para evitar duplicados em corridas paralelas
-        sendTG(buildLivePickMsg(e)).then(ok=>{ if(!ok) localStorage.removeItem(k); });
-      });
+    // Desactivado (LIVE_ALERTS_TG_ENABLED=false) — o card na tab Live continua a aparecer.
+    if(LIVE_ALERTS_TG_ENABLED){
+      enriched
+        .filter(e=>e.isLivePick && !e.isSavedPick && e.goals<3)
+        .forEach(e=>{
+          const k=LSKEY.livePick(e.id);
+          if(localStorage.getItem(k)) return;
+          localStorage.setItem(k,'1'); // marca já para evitar duplicados em corridas paralelas
+          sendTG(buildLivePickMsg(e)).then(ok=>{ if(!ok) localStorage.removeItem(k); });
+        });
+    }
 
     // Auto-guardar observações com padrões fortes
     autoLogObservations().catch(()=>{});

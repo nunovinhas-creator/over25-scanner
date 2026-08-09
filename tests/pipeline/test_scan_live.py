@@ -450,6 +450,7 @@ def test_alerted_not_burned_before_telegram_gate_passes(monkeypatch):
     no 1º."""  # synthetic
     import pipeline.scan_live as mod
 
+    monkeypatch.setattr(mod, "LIVE_ALERTS_ENABLED", True)  # testa a lógica de dedup, não o interruptor global
     raw_event = {"id": 777}
     monkeypatch.setattr(mod, "fetch_live_events", lambda api_key, verbose=False: [raw_event])
     monkeypatch.setattr(mod, "enrich_event", lambda api_key, ev, pick_ids: _fake_enriched_event(777))
@@ -493,6 +494,7 @@ def test_alerted_not_marked_when_send_telegram_fails(monkeypatch):
     seguinte."""  # synthetic
     import pipeline.scan_live as mod
 
+    monkeypatch.setattr(mod, "LIVE_ALERTS_ENABLED", True)  # testa a lógica de retry, não o interruptor global
     raw_event = {"id": 888}
     monkeypatch.setattr(mod, "fetch_live_events", lambda api_key, verbose=False: [raw_event])
     monkeypatch.setattr(mod, "enrich_event", lambda api_key, ev, pick_ids: _fake_enriched_event(888))
@@ -527,6 +529,46 @@ def test_alerted_not_marked_when_send_telegram_fails(monkeypatch):
     assert n2 == 1
     assert len(sent_msgs) == 1
     assert "888" in alerted
+
+
+# ── LIVE_ALERTS_ENABLED: interruptor global "🔥 APOSTAR AGORA" (pedido 9 ago 2026) ──
+
+
+def test_live_alerts_disabled_by_default():
+    """Produção não envia mais o alerta '🔥 APOSTAR AGORA — LIVE OVER 2.5'."""
+    import pipeline.scan_live as mod
+
+    assert mod.LIVE_ALERTS_ENABLED is False
+
+
+def test_scan_once_never_sends_when_live_alerts_disabled(monkeypatch):
+    """Mesmo com o gate de TG totalmente cumprido, LIVE_ALERTS_ENABLED=False
+    bloqueia o envio — a detecção/scoring continua a correr (não afecta
+    is_live_pick/patternScore), só o push para o Telegram é suprimido."""  # synthetic
+    import pipeline.scan_live as mod
+
+    monkeypatch.setattr(mod, "LIVE_ALERTS_ENABLED", False)
+    raw_event = {"id": 999}
+    monkeypatch.setattr(mod, "fetch_live_events", lambda api_key, verbose=False: [raw_event])
+    monkeypatch.setattr(mod, "enrich_event", lambda api_key, ev, pick_ids: _fake_enriched_event(999))
+
+    patterns = [
+        {"id": "pressure", "label": "Pressão 92", "emoji": "🔥", "level": "critical", "detail": "d"},
+        {"id": "mom", "label": "Casa domina", "emoji": "💥", "level": "high", "detail": "d"},
+        {"id": "xg_delta", "label": "xG +2.6 acima", "emoji": "🎲", "level": "critical", "detail": "d"},
+    ]
+    monkeypatch.setattr(mod, "detect_patterns", lambda e, state: patterns)
+
+    sent_msgs: list[str] = []
+    monkeypatch.setattr(mod, "send_telegram", lambda text: (sent_msgs.append(text), True)[1])
+
+    state = {"ht": {}, "mkt": {}}
+    alerted: set[str] = set()
+    n = mod.scan_once("fake_key", state, set(), alerted, verbose=False)
+
+    assert n == 0
+    assert sent_msgs == []
+    assert "999" not in alerted
 
 
 # ── LIVE_SCAN_STATUS: distinguir janela sem jogos de falha de fetch ──────────
