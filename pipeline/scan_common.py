@@ -138,12 +138,33 @@ def git_commit_push(files: list[str], msg: str) -> bool:
     GITHUB_TOKEN sem `permissions: contents: write` — 403 Permission denied).
     O caller NUNCA deve tratar False como sucesso silencioso: ver
     run_observations() em pipeline/scan_live.py para o caso em que uma falha
-    aqui tem de impedir o Telegram e o avanço da deduplicação."""
+    aqui tem de impedir o Telegram e o avanço da deduplicação.
+
+    `--mixed` (nunca `--soft`) na linha do reset abaixo — ver auditoria de
+    continuidade, 9 ago 2026. `--soft` move o HEAD local para origin/main mas
+    NÃO sincroniza o index; num processo de vida curta (checkout acabado de
+    fazer, scan_over25.py/scan_sharp1x2.py) isso é inofensivo porque o index
+    já está em sincronia. Mas live_scanner.yml corre um único checkout durante
+    ~5h50 (loop ao minuto) chamando esta função repetidamente — com `--soft`,
+    o index fica preso ao conteúdo do checkout inicial para qualquer ficheiro
+    fora de `files`, e o commit resultante é construído a partir desse index
+    obsoleto: qualquer ficheiro alterado por OUTRO processo em origin/main
+    entretanto é silenciosamente revertido, mesmo sem constar de `files`.
+    Incidentes reais confirmados em produção (mesma corrida de
+    live_scanner.yml, 9 ago 2026): commit 0eef16e reverteu
+    data/rejected_picks.json e data/scan_state_over25.json; commit d7a0e92
+    reverteu pipeline/settle_sharp1x2.py, o seu ficheiro de testes,
+    index.html e version.json — apagando a instrumentação do PR #145 poucos
+    minutos depois do merge; commit 171214c reverteu ainda README.md,
+    dashboard/analytics.html, data/picks.json, index.html e version.json.
+    `--mixed` sincroniza o index com origin/main antes do `git add` seletivo
+    — só os ficheiros em `files` passam a divergir do último origin/main
+    fetchado, tal como pretendido."""
     try:
         subprocess.run(["git", "config", "user.name", "github-actions[bot]"], check=True)
         subprocess.run(["git", "config", "user.email", "github-actions[bot]@users.noreply.github.com"], check=True)
         subprocess.run(["git", "fetch", "origin", "main"], check=True)
-        subprocess.run(["git", "reset", "--soft", "origin/main"], check=True)
+        subprocess.run(["git", "reset", "--mixed", "origin/main"], check=True)
         subprocess.run(["git", "add"] + files, check=True)
         if subprocess.run(["git", "diff", "--cached", "--quiet"]).returncode != 0:
             subprocess.run(["git", "commit", "-m", msg], check=True)
