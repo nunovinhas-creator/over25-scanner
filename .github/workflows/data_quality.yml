@@ -34,6 +34,9 @@ jobs:
       - name: Sharp 1X2 — browser must not write settlement (Settlement Bug 1)
         run: node tests/js/test_sharp1x2_settlement_authority.mjs
 
+      - name: Over 2.5 — score integrity (Settlement Bug — never fabricate 0-0)
+        run: node tests/js/test_over25_score_integrity.mjs
+
   # ---------------------------------------------------------------------------
   # Job 1: validate — schema checks + data quality tests
   # ---------------------------------------------------------------------------

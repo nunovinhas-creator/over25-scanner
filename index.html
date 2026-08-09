@@ -1339,6 +1339,29 @@ const calcCLV = (entry, closing) =>
   entry>1.01&&closing>1.01 ? ((entry/(closing*CLV_DEVIG)-1)*100).toFixed(2) : '';
 const pinnacleRow = (rows, outcome=null) =>
   arr(rows).find(o=>o.bookmaker_slug==='pinnacle'&&(!outcome||o.outcome===outcome));
+// SCORE_VALIDATION_JS:START
+// Score ausente/inválido nunca pode fabricar um "0-0" (auditoria de
+// continuidade — Settlement Over 2.5, integridade do score, 9 ago 2026).
+// Antes disto, os 3 caminhos de settlement client-side (syncResults(),
+// silentSync(), reactSync()/syncAgentThink()) faziam
+// `ev.home_score??0, ev.away_score??0` — um score em falta virava 0-0 e
+// gravava result_over25="LOSS" silenciosamente errado. Mesmo contrato de
+// validação que pipeline/settle_sharp1x2.py::resolve_outcome() (Python) —
+// aceita inteiro ou string numérica não-negativa, rejeita null/undefined/
+// string vazia/não-numérico/decimal/negativo. Nunca inventa um valor por
+// omissão. Devolve null (sem settlement) ou {h,a} (inteiros validados).
+function _validMatchScore(homeScoreRaw, awayScoreRaw){
+  const parseOne = raw => {
+    if(raw==null) return null;
+    if(typeof raw==='string' && raw.trim()==='') return null;
+    const n = Number(raw);
+    if(!Number.isFinite(n) || !Number.isInteger(n) || n<0) return null;
+    return n;
+  };
+  const h = parseOne(homeScoreRaw), a = parseOne(awayScoreRaw);
+  return (h===null || a===null) ? null : {h, a};
+}
+// SCORE_VALIDATION_JS:END
 const pickProfit  = p => p.result_over25==='WIN'     ? parseFloat(p.odds_over    ||0)-1 : -1;
 const sharpProfit = p => p.resultado_outcome==='WIN'  ? parseFloat(p.odds_entrada||0)-1 : -1;
 const LSKEY = {
@@ -4794,6 +4817,7 @@ async function syncResults(){
     }
 
     status.textContent=`A verificar ${pending.length} picks na BSD...`;
+    // SYNCRESULTS_CORE_JS:START
     let updated=0, notFound=0;
 
     // 2. Actualiza em memória — consulta BSD para cada pick pendente
@@ -4806,13 +4830,27 @@ async function syncResults(){
         if(!ev){ notFound++; continue; }
         if(ev.status!=='finished'&&ev.period!=='FT') continue;
 
-        const h=ev.home_score??0, a=ev.away_score??0;
-        const total=h+a;
-        pick.resultado    = `${h}-${a}`;
-        pick.golos_total  = String(total);
-        pick.result_over25 = total>2.5?'WIN':'LOSS';
+        // status="finished" mas score ausente/inválido → nunca fabrica
+        // "0-0"/LOSS. Fica sem resultado, elegível para nova tentativa no
+        // próximo sync (não persiste nada errado, não regride para "" um
+        // resultado já correcto).
+        const score = _validMatchScore(ev.home_score, ev.away_score);
+        let scoreWritten = false;
+        if(score){
+          const total=score.h+score.a;
+          pick.resultado    = `${score.h}-${score.a}`;
+          pick.golos_total  = String(total);
+          pick.result_over25 = total>2.5?'WIN':'LOSS';
+          scoreWritten = true;
+          status.textContent=`✅ ${updated+1}/${pending.length} — ${pick.casa} vs ${pick.fora}: ${score.h}-${score.a} → ${pick.result_over25}`;
+        } else {
+          notFound++;
+        }
 
-        // CLV: busca odds pinnacle de fecho para calcular edge
+        // CLV: busca odds pinnacle de fecho para calcular edge — independente
+        // do score (não é Closing Odds que este PR altera; mantém-se a correr
+        // mesmo quando o score ainda não é válido).
+        let clvCaptured = false;
         if(!pick.odds_over_close){
           try{
             const pr=await get('/api/v2/odds/?event_id='+eventId+'&market=over_under_25&outcome=over&limit=30').catch(()=>null);
@@ -4823,13 +4861,13 @@ async function syncResults(){
                 pick.odds_over_close=String(closingOdds);
                 const entryOdds=parseFloat(pick.odds_over||0);
                 if(entryOdds>1.01) pick.clv=calcCLV(entryOdds,closingOdds);
+                clvCaptured = true;
               }
             }
           }catch(e){}
         }
 
-        updated++;
-        status.textContent=`✅ ${updated}/${pending.length} — ${pick.casa} vs ${pick.fora}: ${h}-${a} → ${pick.result_over25}`;
+        if(scoreWritten || clvCaptured) updated++;
       }catch(e){ notFound++; }
     }
 
@@ -4837,6 +4875,7 @@ async function syncResults(){
     if(updated>0){
       await ghWrite(PICKS_FILE, picks, `sync: ${updated} resultados actualizados`);
     }
+    // SYNCRESULTS_CORE_JS:END
 
     status.textContent=`✅ Sync completo: ${updated} actualizados, ${notFound} não encontrados`;
     btn.textContent='🔄 Sincronizar resultados';btn.disabled=false;
@@ -5547,6 +5586,7 @@ function syncAgentThink(state) {
           const err=results.filter(r=>r.error||r.skip).length;
           return `${fin} terminados → resultado disponível · ${run} ainda em curso · ${err} erros/não encontrados`;
         },
+        // SYNCAGENT_UPDATE_JS:START
         update:results=>{
           let delta=0;
           const newPicks=[...state.picks];
@@ -5556,12 +5596,17 @@ function syncAgentThink(state) {
             if(ev.status!=='finished'&&ev.period!=='FT') return;
             const idx=newPicks.findIndex(p=>String(p.id)===String(r.id));
             if(idx<0) return;
-            const h=ev.home_score??0,a=ev.away_score??0,total=h+a;
-            newPicks[idx]={...newPicks[idx],resultado:`${h}-${a}`,golos_total:String(total),result_over25:total>2.5?'WIN':'LOSS'};
+            // score ausente/inválido → nunca fabrica "0-0"/LOSS (ver
+            // _validMatchScore); pick fica sem resultado nesta corrida.
+            const score=_validMatchScore(ev.home_score, ev.away_score);
+            if(!score) return;
+            const total=score.h+score.a;
+            newPicks[idx]={...newPicks[idx],resultado:`${score.h}-${score.a}`,golos_total:String(total),result_over25:total>2.5?'WIN':'LOSS'};
             delta++;
           });
           return {picks:newPicks,updated:(state.updated||0)+delta,fetched:true};
         }
+        // SYNCAGENT_UPDATE_JS:END
       }
     };
   }
@@ -5639,6 +5684,7 @@ async function silentSync(){
     // 1. Sync picks Over 2.5
     const {data:picks}=await ghRead(PICKS_FILE);
     if(Array.isArray(picks)&&picks.length){
+      // SILENTSYNC_OVER25_CORE_JS:START
       const pending=picks.filter(p=>
         p.id&&(!p.result_over25||p.result_over25==='')&&
         p.data&&new Date(p.data)<new Date()
@@ -5650,15 +5696,22 @@ async function silentSync(){
           if(!eid||isNaN(+eid)) return null;
           const ev=await get('/api/v2/events/'+eid+'/').catch(()=>null);
           if(!ev||(ev.status!=='finished'&&ev.period!=='FT')) return null;
-          const h=ev.home_score??0,a=ev.away_score??0,total=h+a;
-          pick.resultado=`${h}-${a}`;pick.golos_total=String(total);
-          pick.result_over25=total>2.5?'WIN':'LOSS';
+          // score ausente/inválido → nunca fabrica "0-0"/LOSS (ver
+          // _validMatchScore) — CLV mantém-se independente do score.
+          const score=_validMatchScore(ev.home_score, ev.away_score);
+          let touched=false;
+          if(score){
+            const total=score.h+score.a;
+            pick.resultado=`${score.h}-${score.a}`;pick.golos_total=String(total);
+            pick.result_over25=total>2.5?'WIN':'LOSS';
+            touched=true;
+          }
           if(!pick.odds_over_close){
             const pr=await get('/api/v2/odds/?event_id='+eid+'&market=over_under_25&outcome=over&limit=30').catch(()=>null);
             const pin=pinnacleRow(pr?.results);
-            if(pin){const co=parseFloat(pin.decimal_odds||0);if(co>1.01){pick.odds_over_close=String(co);const eo=parseFloat(pick.odds_over||0);if(eo>1.01)pick.clv=calcCLV(eo,co);}}
+            if(pin){const co=parseFloat(pin.decimal_odds||0);if(co>1.01){pick.odds_over_close=String(co);const eo=parseFloat(pick.odds_over||0);if(eo>1.01)pick.clv=calcCLV(eo,co);touched=true;}}
           }
-          return true;
+          return touched ? true : null;
         }catch(e){return null;}
       }));
       const upd=results.filter(Boolean).length;
@@ -5667,6 +5720,7 @@ async function silentSync(){
         allPicks=picks.map(normalizePick);
         if(el('panel-dash')?.classList.contains('active')) renderDash();
       }
+      // SILENTSYNC_OVER25_CORE_JS:END
     }
   }catch(e){}
   try{
