@@ -20,6 +20,7 @@ nenhum destes testes toca no disco do repositório nem invoca git.
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 import pytest
 
@@ -205,10 +206,28 @@ def isolated_obs_env(tmp_path, monkeypatch):
     monkeypatch.setattr(mod, "_PICKS_PATH", picks_file)
     monkeypatch.setattr(mod, "_PICKS_1X2_PATH", picks1x2_file)
     commits = []
-    monkeypatch.setattr(mod, "git_commit_push", lambda files, msg: commits.append((files, msg)))
+    # git_commit_push devolve bool desde a correcção do bug de permissions
+    # (live_scanner.yml sem `contents: write` — push falhava 403 em produção).
+    # Aqui simula sempre sucesso; ver isolated_obs_env_persist_fails para o
+    # caminho de falha.
+    monkeypatch.setattr(mod, "git_commit_push", lambda files, msg: (commits.append((files, msg)), True)[1])
+    discards = []
+    monkeypatch.setattr(mod, "git_discard_local_changes", lambda files: discards.append(files))
     sent = []
     monkeypatch.setattr(mod, "send_telegram", lambda text: (sent.append(text), True)[1])
-    return {"obs_file": obs_file, "commits": commits, "sent": sent}
+    return {"obs_file": obs_file, "commits": commits, "sent": sent, "discards": discards}
+
+
+@pytest.fixture
+def isolated_obs_env_persist_fails(isolated_obs_env, monkeypatch):
+    """Variante de isolated_obs_env em que git_commit_push falha sempre
+    (simula o 403 real de GITHUB_TOKEN sem `contents: write`) — para testar
+    que run_observations() nunca produz um falso sucesso."""
+    monkeypatch.setattr(
+        mod, "git_commit_push",
+        lambda files, msg: (isolated_obs_env["commits"].append((files, msg)), False)[1],
+    )
+    return isolated_obs_env
 
 
 def test_run_observations_saves_new_qualifying_game(isolated_obs_env):
@@ -315,6 +334,105 @@ def test_run_observations_empty_events_short_circuits(isolated_obs_env):
     obs_state = {"seen_event_ids": set(), "unresolved": {}}
     assert run_observations([], obs_state) == 0
     assert isolated_obs_env["commits"] == []
+
+
+# ── run_observations — falha de persistência (bug real: live_scanner.yml ──
+# sem `permissions: contents: write` → git push 403 → run #150, 2026-08-09).
+# Uma falha de git_commit_push() nunca pode produzir um falso sucesso: sem
+# Telegram, sem avanço de dedup, sem ficar "queimado" para sempre.
+
+
+def test_run_observations_returns_zero_when_persist_fails(isolated_obs_env_persist_fails):
+    obs_state = {"seen_event_ids": set(), "unresolved": {}}
+    events = [_obs_event(id=1)]
+
+    added = run_observations(events, obs_state)
+
+    assert added == 0
+
+
+def test_run_observations_does_not_send_telegram_when_persist_fails(isolated_obs_env_persist_fails):
+    """O requisito central: nunca 'Telegram enviado, persistência falhou'."""
+    obs_state = {"seen_event_ids": set(), "unresolved": {}}
+    run_observations([_obs_event(id=1)], obs_state)
+
+    assert isolated_obs_env_persist_fails["sent"] == []
+
+
+def test_run_observations_does_not_advance_dedup_when_persist_fails(isolated_obs_env_persist_fails):
+    """Sem persistência confirmada, o evento tem de continuar elegível no
+    próximo ciclo — não pode ficar marcado como já visto."""
+    obs_state = {"seen_event_ids": set(), "unresolved": {}}
+    run_observations([_obs_event(id=1)], obs_state)
+
+    assert "1" not in obs_state["seen_event_ids"]
+    assert obs_state["unresolved"] == {}
+
+
+def test_run_observations_retries_successfully_after_persist_recovers(isolated_obs_env_persist_fails, monkeypatch):
+    """Depois de uma falha, o mesmo evento tem de ser retomado com sucesso
+    assim que git_commit_push voltar a funcionar (ex.: permissions corrigidas) —
+    sem ficar 'queimado' pelo ciclo anterior falhado."""
+    obs_state = {"seen_event_ids": set(), "unresolved": {}}
+    events = [_obs_event(id=1)]
+
+    n1 = run_observations(events, obs_state)
+    assert n1 == 0
+    assert isolated_obs_env_persist_fails["sent"] == []
+
+    # "permissions corrigidas": git_commit_push volta a ter sucesso
+    commits = isolated_obs_env_persist_fails["commits"]
+    monkeypatch.setattr(mod, "git_commit_push", lambda files, msg: (commits.append((files, msg)), True)[1])
+
+    n2 = run_observations(events, obs_state)
+    assert n2 == 1
+    assert "1" in obs_state["seen_event_ids"]
+    assert len(isolated_obs_env_persist_fails["sent"]) == 1
+
+
+def test_run_observations_discards_local_file_when_persist_fails(isolated_obs_env_persist_fails):
+    """Reverte o ficheiro local para o estado de origin/main — evita que o
+    próximo ciclo releia do disco um conteúdo nunca pushado e acumule
+    entradas duplicadas a cada retry (ver git_discard_local_changes)."""
+    obs_state = {"seen_event_ids": set(), "unresolved": {}}
+    run_observations([_obs_event(id=1)], obs_state)
+
+    assert isolated_obs_env_persist_fails["discards"] == [
+        [str(isolated_obs_env_persist_fails["obs_file"])]
+    ]
+
+
+def test_run_observations_persist_failure_logs_clear_error(isolated_obs_env_persist_fails, capsys):
+    obs_state = {"seen_event_ids": set(), "unresolved": {}}
+    run_observations([_obs_event(id=1)], obs_state)
+
+    err = capsys.readouterr().err
+    assert "obs_persist_failed" in err
+    assert "novos=1" in err
+
+
+def test_run_observations_result_update_not_lost_when_persist_fails(isolated_obs_env_persist_fails, monkeypatch):
+    """Um update de resultado (WIN/LOSS) pendente também não pode ser dado
+    como resolvido se a persistência falhar — tem de ser recalculado no
+    próximo ciclo a partir do mesmo `unresolved`."""
+    obs_state = {"seen_event_ids": set(), "unresolved": {}}
+    # 1º ciclo com sucesso: observação guardada e pendente
+    monkeypatch.setattr(
+        mod, "git_commit_push",
+        lambda files, msg: (isolated_obs_env_persist_fails["commits"].append((files, msg)), True)[1],
+    )
+    run_observations([_obs_event(id=1, goals=1, min=40)], obs_state)
+    assert obs_state["unresolved"] == {"1": obs_state["unresolved"]["1"]}
+
+    # 2º ciclo: jogo termina (LOSS), mas a persistência falha
+    monkeypatch.setattr(
+        mod, "git_commit_push",
+        lambda files, msg: (isolated_obs_env_persist_fails["commits"].append((files, msg)), False)[1],
+    )
+    added = run_observations([_obs_event(id=1, goals=1, hScore=1, aScore=0, min=90)], obs_state)
+
+    assert added == 0
+    assert "1" in obs_state["unresolved"]  # continua pendente, não foi dado como resolvido
 
 
 # ── build_observations_message ───────────────────────────────────────────
@@ -494,3 +612,31 @@ def test_maybe_commit_health_throttles_repeated_commits(tmp_path, monkeypatch):
 
     maybe_commit_health(h, running=True, force=True)  # force ignora o throttle
     assert len(commits) == 2
+
+
+# ── infra: live_scanner.yml precisa de permissions: contents: write ──────
+#
+# Causa raiz do bug real (run #150, workflow_dispatch, 2026-08-09): sem esta
+# permissão o GITHUB_TOKEN do job só tem "Contents: read" e qualquer
+# git_commit_push() falha com 403, 4/4 vezes seguidas nos logs reais. Ver
+# .github/workflows/scanner.yml para o mesmo padrão já usado nos outros
+# workflows que fazem auto-commit.
+
+
+def test_live_scanner_workflow_has_contents_write_permission():
+    workflow_path = (
+        Path(__file__).resolve().parents[2] / ".github" / "workflows" / "live_scanner.yml"
+    )
+    content = workflow_path.read_text(encoding="utf-8")
+
+    job_marker = "\n  live:\n"
+    assert job_marker in content, "job 'live:' não encontrado em live_scanner.yml"
+    job_section = content[content.index(job_marker):]
+
+    steps_marker = "\n    steps:"
+    assert steps_marker in job_section
+    steps_idx = job_section.index(steps_marker)
+    header = job_section[:steps_idx]  # só o cabeçalho do job, antes dos steps
+
+    assert "permissions:" in header
+    assert "contents: write" in header
