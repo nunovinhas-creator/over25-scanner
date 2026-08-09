@@ -132,10 +132,33 @@ def settle() -> None:
         if pick.get("resultado_outcome") in ("WIN", "LOSS", "VOID"):
             continue  # já settled — nada a fazer
 
+        # "data" (KO) ausente ou ilegível não tem âncora temporal nenhuma —
+        # elapsed_h/past_deadline (usados por todos os outros ramos de erro
+        # abaixo) não podem ser calculados a partir daqui. Sem isto, o pick
+        # era descartado da corrida em silêncio, para sempre, em todas as
+        # execuções futuras (nunca atingia "past_deadline" porque isso exige
+        # elapsed_h) — violava directamente o invariante do módulo (nunca
+        # fica pendente para sempre silenciosamente). Não há deadline a
+        # esperar aqui: um "data" inválido não fica válido com o tempo, por
+        # isso o erro é imediato, não condicional a SETTLE_MAX_H. Nunca
+        # inventa nem substitui "data" — só regista o erro explícito e
+        # continua para o próximo pick.
         ko_raw = pick.get("data") or ""
+        if not str(ko_raw).strip():
+            if not pick.get("settlement_error"):
+                pick["settlement_error"] = "data_ausente"
+                pick["settlement_error_at"] = ts
+                n_error += 1
+                changed = True
+            continue
         try:
             ko = datetime.fromisoformat(str(ko_raw).replace("Z", "+00:00"))
         except Exception:
+            if not pick.get("settlement_error"):
+                pick["settlement_error"] = "data_invalida"
+                pick["settlement_error_at"] = ts
+                n_error += 1
+                changed = True
             continue
         elapsed_h = (now - ko).total_seconds() / 3600.0
 
