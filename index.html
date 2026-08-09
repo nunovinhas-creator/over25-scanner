@@ -1276,12 +1276,8 @@ const CLV_DEVIG      = 1.01;   // overround assumido para devigging do CLV (1%)
 const CALIB = { N:44, WR:0.591, K:10 };
 const TH_SCORE_HIGH  = 70;     // score ≥70 = candidato forte (verde)
 const TH_SCORE_MED   = 50;     // score ≥50 = candidato (âmbar)
-// ── Auditoria 16 jul 2026: "Failed to fetch" / lentidão — mitigação da tempestade
-// de pedidos per-event no Sharp 1X2 e do auto-load repetido. Ver secção 2 do relatório.
+// ── Auditoria 16 jul 2026: "Failed to fetch" / lentidão — mitigação do auto-load repetido.
 const AUTO_LOAD_TTL_MS   = 5*60*1000;   // não repete loadAll() automático se já correu há <5min
-const SHARP_CACHE_TTL_MS = 10*60*1000;  // cache sessionStorage do Sharp 1X2 (evita refetch per-event)
-const SHARP_CACHE_KEY    = 'ov_sharp_cache_v1';
-const SHARP_MAX_EVENTS   = 80;          // cap duro de eventos com fetch per-event de odds 1X2
 // 1xbet/onexbet removidos — copiam preços sharp, distorcem divergência
 // Substituído pelo workflow deploy_version.yml em cada push para main
 const BUILD_SHA = '940666e';
@@ -1447,15 +1443,13 @@ function loadCfg(){
     if(c.e&&el('emailTo'))el('emailTo').value=c.e;
     if(el('autoLogChk')) el('autoLogChk').checked = c.autoLog!==false;
     if(c.phase) setCurrentPhase(c.phase);
-    // Auto-carregar só se API key guardada E o último load tiver expirado — evita repetir a
-    // tempestade de ~500 pedidos sempre que a página é reaberta (auditoria 16 jul 2026).
-    // Caso contrário fica no estado idle; o botão ▶ Carregar faz o load explícito.
-    if(c.k){
-      const lastLoad=parseInt(localStorage.getItem('ov_last_load_ts')||'0',10);
-      if(Date.now()-lastLoad>AUTO_LOAD_TTL_MS) setTimeout(()=>loadAll(), 300);
-      else el('scanList').innerHTML='<div class="empty">✅ Dados carregados há menos de '+Math.round(AUTO_LOAD_TTL_MS/60000)+' min. Clica em <strong>▶ Carregar</strong> para atualizar.</div>';
-    }
-    else setTimeout(()=>openCfg(), 400);
+    // Scanner/Sharp 1X2/Dashboard lêem data/picks*.json (mesma origem do GitHub Pages,
+    // sem CORS) — já não dependem da BSD Key. Só o separador Live continua a precisar
+    // dela. Por isso o auto-load corre sempre, sujeito ao debounce de AUTO_LOAD_TTL_MS,
+    // e já não força a abertura do modal de configuração por falta da BSD Key.
+    const lastLoad=parseInt(localStorage.getItem('ov_last_load_ts')||'0',10);
+    if(Date.now()-lastLoad>AUTO_LOAD_TTL_MS) setTimeout(()=>loadAll(), 300);
+    else el('scanList').innerHTML='<div class="empty">✅ Dados carregados há menos de '+Math.round(AUTO_LOAD_TTL_MS/60000)+' min. Clica em <strong>▶ Carregar</strong> para atualizar.</div>';
   }catch(e){}
 }
 
@@ -1740,6 +1734,156 @@ function setProgress(pct,step){
   if(pct>=100&&wrap) setTimeout(()=>wrap.classList.remove('visible'),600);
 }
 
+// A BSD não envia Access-Control-Allow-Origin para a origem do GitHub Pages —
+// nenhuma chamada do browser à BSD funciona (diagnóstico confirmado, com ou sem
+// Authorization). O GitHub Actions não é afectado e continua a escrever
+// data/picks.json, data/picks_1x2.json e data/picks_btts_over25.json a cada
+// 30 min (scanner.yml). loadAll() lê esses ficheiros — mesma origem do
+// GitHub Pages, sem CORS — em vez de chamar a BSD directamente. O separador
+// Live (loadLive(), FORA DO ÂMBITO) continua a precisar da BSD Key.
+
+// Janela de relevância mostrada no Scanner/Sharp 1X2 — picks.json e
+// picks_1x2.json são um log histórico contínuo (nunca podado, usado também
+// para backtesting), não só "os jogos de agora". Sem esta janela a lista
+// mostraria anos de jogos já terminados.
+const SNAPSHOT_PAST_H   = 3;      // horas após o KO ainda mostradas
+const SNAPSHOT_FUTURE_H = 24*7;   // horas antes do KO ainda mostradas
+
+function withinSnapshotWindow(dateStr){
+  const koMs = new Date(dateStr).getTime();
+  if(isNaN(koMs)) return false;
+  const hFromNow = (koMs - Date.now())/3600000;
+  return hFromNow >= -SNAPSHOT_PAST_H && hFromNow <= SNAPSHOT_FUTURE_H;
+}
+
+// fetch same-origin com cache-busting — mesmo padrão já usado em renderDashBtts().
+// Nunca engole silenciosamente um ficheiro em falta ou inválido: lança sempre
+// com uma mensagem explícita, para que o estado de erro nunca pareça sucesso.
+async function fetchLocalJson(path){
+  let resp;
+  try{
+    resp = await fetch(path+'?t='+Date.now(), {cache:'no-store'});
+  }catch(e){
+    throw new Error('falha de rede — '+(e.message||e));
+  }
+  if(!resp.ok) throw new Error('HTTP '+resp.status);
+  let data;
+  try{ data = await resp.json(); }
+  catch(e){ throw new Error('JSON inválido'); }
+  if(!Array.isArray(data)) throw new Error('formato inesperado (esperava um array)');
+  return data;
+}
+
+function loadErrorBlock(file, msg){
+  return `<div class="empty" style="padding:30px">
+    <div style="font-size:24px;margin-bottom:10px">⚠️</div>
+    <div style="font-weight:700;margin-bottom:6px">Erro ao ler ${esc(file)}</div>
+    <div style="font-size:12px;color:var(--text3)">${esc(msg||'Erro desconhecido')}</div>
+    <div style="font-size:12px;margin-top:10px;color:var(--text3)">Este ficheiro é escrito pelo GitHub Actions (workflow <strong>scanner.yml</strong>, a cada 30 min). Confirma que o workflow correu com sucesso.</div>
+  </div>`;
+}
+
+// Mapeia um registo de data/picks.json para a forma usada pelo Scanner
+// (gameCard/calcScore/getQualifiedPicks). Campos sem equivalente no ficheiro
+// (recrAvg, pinnPrev, det/h2h, conf, recommend) ficam null — os templates já
+// tratam isso como "—", sem fingir um valor que não existe.
+function mapPickToGame(p){
+  const numOrNull = v => (v!=null && v!=='') ? parseFloat(v) : null;
+  const prob25  = numOrNull(p.prob_over25)!=null ? numOrNull(p.prob_over25)/100 : null;
+  const bttsN   = numOrNull(p.btts_prob);
+  const xgTotal = numOrNull(p.xg_total);
+  // xgH/xgA não vêm separados no ficheiro, só o total — divide a meio: calcScore
+  // e gameCard só usam a soma (xgH+xgA), nunca os valores individuais, por isso
+  // o total exibido mantém-se correcto.
+  const xgH = xgTotal!=null ? xgTotal/2 : null;
+  const xgA = xgTotal!=null ? xgTotal/2 : null;
+  const movement    = p.movimento || null;
+  const sharpLabel  = p.sharp_label || null;
+  const div         = numOrNull(p.div);
+  const oddsOver    = numOrNull(p.odds_over);
+  const oddsUnder   = numOrNull(p.odds_under);
+  const league      = p.liga || '';
+  const edgeVsMarketPct = numOrNull(p.edge_vs_market);
+
+  // Reaproveita calcScore() só para as etiquetas (signals) — o score fica o do
+  // pipeline (score_sistema), que já passou pelos gates de produção.
+  const {signals} = calcScore({
+    prob25, bttsN, xgH, xgA, movement, div, sharpLabel,
+    pinnNow:oddsOver, recrAvg:null, rec:{}, mdl:{}, h2h:undefined, league
+  });
+
+  return {
+    id: isNaN(Number(p.id)) ? p.id : Number(p.id),
+    home: p.casa||'', away: p.fora||'',
+    date: p.data||'', league, league_id: undefined,
+    score: Number(p.score_sistema)||0, signals,
+    prob25, bttsN, xgH, xgA,
+    movement, div, sharpLabel,
+    pinnNow: oddsOver, recrAvg: null, pinnPrev: null,
+    oddsOver, oddsUnder,
+    predScore: p.score_previsto || null,
+    recommend: false, conf: null,
+    edgeVsMarket: edgeVsMarketPct!=null ? edgeVsMarketPct/100 : null,
+    pinnActual: p.pinn_actual==='1'||p.pinn_actual===1,
+    det: undefined
+  };
+}
+
+// Mapeia um registo de data/picks_1x2.json para um "sig" (um outcome). Cobre os
+// dois formatos que coexistem no ficheiro: pipeline (odds_pinnacle, sem nvp/
+// drop_pct) e legado gravado pelo browser (nvp, drop_pct, sem odds_pinnacle).
+function mapPick1x2ToSig(p){
+  const numOrNull = v => (v!=null && v!=='') ? parseFloat(v) : null;
+  const pinRaw = numOrNull(p.odds_pinnacle) ?? numOrNull(p.nvp);
+  const nvp    = numOrNull(p.nvp) ?? (pinRaw!=null ? pinRaw*0.975 : null);
+  const b365   = numOrNull(p.odds_entrada);
+  const divB365 = numOrNull(p.div_b365_pin)!=null ? numOrNull(p.div_b365_pin)/100 : null;
+  const dropPct = numOrNull(p.drop_pct);
+  return {
+    out: (p.outcome||'').toUpperCase(),
+    label: p.label || 'WATCH',
+    score: Number(p.score)||0,
+    pin: pinRaw, prev: null, recrAvg: null,
+    div: divB365!=null ? Math.abs(divB365*100) : null,
+    divHasValue: divB365!=null ? divB365>=0 : null,
+    pinnMove: dropPct, pinnMovePct: dropPct!=null?Math.abs(dropPct):0,
+    movement: dropPct!=null ? (dropPct>0?'SHORTENING':'DRIFTING') : null,
+    hoursToKO: Math.max(0,(new Date(p.data).getTime()-Date.now())/3600000),
+    timingBonus:1, multiBook:false, recrMoving:0,
+    b365, nvp, divB365
+  };
+}
+
+// Agrupa data/picks_1x2.json (um registo por outcome, id "{event}_{out}_sh" no
+// pipeline ou "{event}_sh" no legado) em cards por evento — mesma forma que
+// sharpCard1x2() já espera (um card com vários "sigs").
+function buildSharpFromPicks1x2(picks1x2){
+  const groups = new Map();
+  picks1x2.forEach(p=>{
+    if(!withinSnapshotWindow(p.data)) return;
+    const baseId = String(p.id).replace(/_update$/,'').replace(/_(home|draw|away)_sh$/i,'').replace(/_sh$/,'');
+    if(!groups.has(baseId)){
+      groups.set(baseId, {
+        id: isNaN(Number(baseId))?baseId:Number(baseId),
+        home:p.casa||'', away:p.fora||'', date:p.data||'',
+        league:p.liga||'', sigs:[], scanScore:0
+      });
+    }
+    groups.get(baseId).sigs.push(mapPick1x2ToSig(p));
+  });
+  const out=[];
+  groups.forEach(g=>{
+    if(!g.sigs.length) return;
+    const hasSTEAM=g.sigs.some(s=>s.label==='STEAM');
+    const hasSHARP=g.sigs.some(s=>s.label==='SHARP');
+    g.totalScore=Math.max(...g.sigs.map(s=>s.score));
+    g.hoursToKO=Math.round(Math.max(0,(new Date(g.date).getTime()-Date.now())/3600000)*10)/10;
+    g.label=hasSTEAM?'STEAM':hasSHARP?'SHARP':'WATCH';
+    out.push(g);
+  });
+  return out;
+}
+
 async function loadAll(){
   saveCfg();
   try{ localStorage.setItem('ov_last_load_ts', String(Date.now())); }catch(e){}
@@ -1747,426 +1891,98 @@ async function loadAll(){
   el('statusDot').style.background='var(--amber)';
   el('statusDot').style.boxShadow='none';
   el('statusTxt').textContent='a carregar';
-  el('scanList').innerHTML='<div class="loading"><div class="spinner"></div>A carregar eventos...</div>';
+  el('scanList').innerHTML='<div class="loading"><div class="spinner"></div>A ler data/picks.json...</div>';
   el('dbgScan').style.display='none';
-  if(!el('bsdKey').value.trim()){
-    el('scanList').innerHTML='<div class="empty">🔑 Preenche a BSD API Key primeiro</div>';
-    el('statusTxt').textContent='offline';
-    setProgress(0,'');
-    openCfg();
-    return;
+
+  setProgress(30,'A ler ficheiros locais…');
+  const [picksR, picks1x2R, bttsR] = await Promise.allSettled([
+    fetchLocalJson('data/picks.json'),
+    fetchLocalJson('data/picks_1x2.json'),
+    fetchLocalJson('data/picks_btts_over25.json'),
+  ]);
+  setProgress(70,'A processar…');
+
+  // ── Scanner (Over 2.5) ──
+  if(picksR.status==='fulfilled'){
+    try{
+      allGames = picksR.value.filter(p=>withinSnapshotWindow(p.data)).map(mapPickToGame);
+      updateScanStats();
+      renderScan();
+      const _qCount = getQualifiedPicks().length;
+      const _pFb = el('picksFb');
+      if(_pFb) _pFb.textContent = _qCount > 0 ? `📌 Picks (${_qCount})` : '📌 Picks';
+      if(scanFilter==='picks') renderPicksPub();
+    }catch(e){
+      allGames=[];
+      el('scanList').innerHTML=loadErrorBlock('data/picks.json', 'erro ao processar — '+e.message);
+    }
+  } else {
+    allGames=[];
+    el('scanList').innerHTML=loadErrorBlock('data/picks.json', picksR.reason?.message);
   }
 
-  try{
-    const now=new Date();
-    const df=now.toISOString().split('T')[0];
-    const dt=new Date(now.getTime()+30*3600000).toISOString().split('T')[0];
-    const dt7=new Date(now.getTime()+7*24*3600000).toISOString().split('T')[0];
-
-    setProgress(15,'A buscar eventos e odds…');
-    // Fetch paralelo: eventos + predictions + odds
-    const [evData, evData7, predData, oddsOverData, oddsUnderData] = await Promise.all([
-      get('/api/v2/events/?status=notstarted&date_from='+df+'&date_to='+dt+'&limit=200'),
-      get('/api/v2/events/?status=notstarted&date_from='+df+'&date_to='+dt7+'&limit=500'),
-      get('/api/v2/predictions/?status=upcoming&date_from='+df+'&date_to='+dt+'&limit=200'),
-      get('/api/v2/odds/?market=over_under_25&outcome=over&limit=200&updated_after='+df+'T00:00:00Z'),
-      get('/api/v2/odds/?market=over_under_25&outcome=under&limit=200&updated_after='+df+'T00:00:00Z'),
-    ]);
-
-    setProgress(35,'A processar eventos…');
-    const events = arr(evData);
-    const events7 = arr(evData7);
-
-    // Mapas
-    const predMap={};
-    arr(predData).forEach(p=>{ if(p.event?.id) predMap[p.event.id]=p; });
-
-    const oddsOver={}, oddsUnder={}, movMap={}, prevMap={};
-    arr(oddsOverData).forEach(o=>{
-      const eid=o.event_id; if(!eid) return;
-      const isRef=(o.bookmaker_slug||'').includes('consensus')||o.is_max_quote;
-      if(!oddsOver[eid]||isRef){
-        oddsOver[eid]=parseFloat(o.decimal_odds);
-        if(o.movement) movMap[eid]=o.movement;
-        if(o.previous_decimal_odds) prevMap[eid]=parseFloat(o.previous_decimal_odds);
-      }
-    });
-    arr(oddsUnderData).forEach(o=>{
-      const eid=o.event_id; if(!eid) return;
-      if(!oddsUnder[eid]||o.is_max_quote) oddsUnder[eid]=parseFloat(o.decimal_odds);
-    });
-
-    // Liga names (usar eventos de 7 dias para Sharp ter nomes completos)
-    events7.forEach(ev=>{ if(ev.league_id&&ev.league_name) lgNames[ev.league_id]=ev.league_name; });
-allGames.forEach(g=>{ if(g.det&&g.det.league_id&&!lgNames[g.det.league_id]) lgNames[g.det.league_id]='Liga '+g.det.league_id; });
-
-    // ── Sharp Detector v2 — critérios profissionais ──────────────
-    // Critério 1 (principal):  Movimento Pinnacle ≥2% desde abertura
-    // Critério 2 (amplifier):  Timing ≤6h antes do jogo
-    // Critério 3 (confirmador): Divergência Pin vs recr
-    // Critério 4 (bonus):      Múltiplos books a mover na mesma direcção
-    //
-    // Labels:
-    //   🔥 STEAM  — Pin moveu ≥5% + timing ≤30min (move muito forte e imediato)
-    //   🎯 SHARP  — Pin moveu ≥2% + timing ≤12h
-    //   👁 WATCH  — Pin moveu ≥1% ou divergência ≥5% sem movimento claro
-
-    // Auditoria 16 jul 2026: fetch per-event de odds 1X2 chegava a ~500 pedidos (1 por
-    // evento nos próximos 7 dias) → 15-60s de load + rate-limiting BSD → "Failed to fetch"
-    // intermitente. Mitigação: (a) só ligas whitelisted + janela igual ao gate hoursToKO
-    // (36h, ver abaixo) entram no fetch per-event, com cap duro de SHARP_MAX_EVENTS;
-    // (b) cache em sessionStorage com TTL de 10min evita repetir tudo a cada reload.
-    // sh1x2/sharpEventsMatched/sharpEventsSkippedTime são consumidos bem depois deste bloco
-    // (stats de debug em #dbgSharp) — têm de viver no escopo de loadAll(), não só dentro do
-    // ramo que os popula, senão rebentam com "sh1x2 is not defined" em AMBOS os caminhos
-    // (cache hit e cache miss) assim que a execução chega lá.
-    let sharpRaw, sh1x2={}, sharpEventsMatched=0, sharpEventsSkippedTime=0;
-    const _sharpCache=(()=>{
-      try{
-        const c=JSON.parse(sessionStorage.getItem(SHARP_CACHE_KEY)||'null');
-        if(c&&Array.isArray(c.data)&&(Date.now()-c.ts)<SHARP_CACHE_TTL_MS) return c;
-      }catch(e){}
-      return null;
-    })();
-
-    if(_sharpCache){
-      sharpRaw=_sharpCache.data;
-      sh1x2=_sharpCache.sh1x2||{};
-      sharpEventsMatched=_sharpCache.sharpEventsMatched||0;
-      sharpEventsSkippedTime=_sharpCache.sharpEventsSkippedTime||0;
-      sharpEligibleCount=_sharpCache.eligibleCount||0;
-    }else{
-      const _nowMsFilter=Date.now();
-      const events7Sharp=events7
-        .filter(ev=>{
-          const liga=BSD_LEAGUE_ID_MAP[ev.league_id]||'';
-          if(!liga||!SHARP1X2_WHITELIST.has(liga)) return false;
-          const hToKO=(new Date(ev.event_date).getTime()-_nowMsFilter)/3600000;
-          return hToKO>0&&hToKO<=36;
-        })
-        .sort((a,b)=>new Date(a.event_date)-new Date(b.event_date))
-        .slice(0,SHARP_MAX_EVENTS);
-      sharpEligibleCount=events7Sharp.length;
-
-    // 1. Agrupar odds 1X2 por evento — fetch per-event para garantir ID correto
-    function _parse1x2(eid, oddsArr){
-      if(!sh1x2[eid]) sh1x2[eid]={};
-      arr(oddsArr).forEach(o=>{
-        const slug=o.bookmaker_slug||'';
-        const price=parseFloat(o.decimal_odds||0);
-        const prev=parseFloat(o.previous_decimal_odds||0);
-        const rawOut=(o.outcome||'').toUpperCase();
-        const out=rawOut==='HOME'||rawOut==='HOME_WIN'?'HOME':
-                  rawOut==='DRAW'?'DRAW':
-                  rawOut==='AWAY'||rawOut==='AWAY_WIN'?'AWAY':rawOut;
-        if(!price||!['HOME','DRAW','AWAY'].includes(out)) return;
-        if(!sh1x2[eid][out]) sh1x2[eid][out]={pin:null,prev:null,mov:null,updatedAt:null,recr:[],recrMoving:0,b365:null};
-        const d=sh1x2[eid][out];
-        if(slug==='pinnacle'){
-          d.pin=price;
-          if(prev&&Math.abs(prev-price)>0.005) d.prev=prev;
-          if(o.movement) d.mov=o.movement;
-          if(o.updated_at) d.updatedAt=o.updated_at;
-        } else if((slug==='bet365'||slug==='bet-365')&&price>0){
-          d.b365=price;
-          d.recr.push(price);
-          if(prev&&Math.abs(prev-price)>0.005){
-            const recrMov=prev>price?'SHORTENING':'DRIFTING';
-            if(o.movement&&o.movement===recrMov) d.recrMoving++;
-          }
-        } else if(RECR.includes(slug)&&price>0){
-          d.recr.push(price);
-          if(prev&&Math.abs(prev-price)>0.005){
-            const recrMov=prev>price?'SHORTENING':'DRIFTING';
-            if(o.movement&&o.movement===recrMov) d.recrMoving++;
-          }
-        }
+  // ── Sharp 1X2 ──
+  if(picks1x2R.status==='fulfilled'){
+    try{
+      allSharp1x2 = buildSharpFromPicks1x2(picks1x2R.value);
+      sharpEligibleCount = allSharp1x2.length;
+      sharpLoaded = true;
+      allSharp1x2.forEach(s=>{
+        const g=allGames.find(x=>String(x.id)===String(s.id));
+        if(g) s.scanScore=g.score;
       });
+      el('sh1Total').textContent=allSharp1x2.length;
+      el('sh1Steam').textContent=allSharp1x2.filter(s=>s.label==='STEAM').length;
+      el('sh1Sharp').textContent=allSharp1x2.filter(s=>s.label==='SHARP').length;
+      el('sh1Watch').textContent=allSharp1x2.filter(s=>s.label==='WATCH').length;
+      renderSharp();
+    }catch(e){
+      allSharp1x2=[]; sharpLoaded=false;
+      el('sharpList').innerHTML=loadErrorBlock('data/picks_1x2.json', 'erro ao processar — '+e.message);
     }
-    const SH_BATCH=10;
-    for(let i=0;i<events7Sharp.length;i+=SH_BATCH){
-      const batch=events7Sharp.slice(i,i+SH_BATCH);
-      await Promise.all(batch.map(async ev=>{
-        try{
-          const d=await get('/api/v2/odds/?event_id='+ev.id+'&market=1x2&limit=50');
-          _parse1x2(ev.id, d);
-        }catch(e){}
-      }));
-    }
+  } else {
+    allSharp1x2=[]; sharpLoaded=false;
+    el('sharpList').innerHTML=loadErrorBlock('data/picks_1x2.json', picks1x2R.reason?.message);
+  }
 
-    // 2. Calcular sinais por evento
-    sharpRaw=[];
-    const nowMs=Date.now();
+  // ── Snapshot — data do registo mais recente lido, para ficar claro que isto
+  // é uma fotografia dos últimos dados do pipeline e não tempo real. ──
+  const okLists=[picksR,picks1x2R,bttsR].filter(r=>r.status==='fulfilled').map(r=>r.value);
+  const allTs=okLists.flat().map(p=>p.saved_at||p.scanned_at||p.data).filter(Boolean)
+    .map(t=>new Date(t).getTime()).filter(t=>!isNaN(t));
+  const latestTs=allTs.length?Math.max(...allTs):null;
+  el('tsLabel').textContent = latestTs
+    ? '📸 Snapshot: '+new Date(latestTs).toLocaleString('pt-PT',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})
+    : '⚠️ Sem dados — falha a ler ficheiros locais';
 
-    events7Sharp.forEach(ev=>{
-      const d=sh1x2[ev.id]; if(!d) return;
-      sharpEventsMatched++;
-      const kickoffMs=new Date(ev.event_date).getTime();
-      const hoursToKO=Math.max(0,(kickoffMs-nowMs)/3600000);
+  el('dbgScan').style.display='block';
+  el('dbgScan').textContent =
+    (picksR.status==='fulfilled'?picksR.value.length+' picks.json':'✗ picks.json ('+picksR.reason?.message+')')+' · '+
+    (picks1x2R.status==='fulfilled'?picks1x2R.value.length+' picks_1x2.json':'✗ picks_1x2.json ('+picks1x2R.reason?.message+')')+' · '+
+    (bttsR.status==='fulfilled'?bttsR.value.length+' picks_btts_over25.json':'✗ picks_btts_over25.json ('+bttsR.reason?.message+')')+' · '+
+    allGames.length+' jogos na janela · '+allSharp1x2.length+' sinais Sharp 1X2';
 
-      // Só analisa jogos que ainda não começaram
-      if(hoursToKO<=0||hoursToKO>36){ sharpEventsSkippedTime++; return; }
-
-      const sigs=[];
-
-      // NVP — Pinnacle fair (de-vig multiplicativo 3-way)
-      const _pinH=d.HOME?.pin||0,_pinD=d.DRAW?.pin||0,_pinA=d.AWAY?.pin||0;
-      if(_pinH&&_pinD&&_pinA){
-        const _ovr=1/_pinH+1/_pinD+1/_pinA;
-        if(d.HOME) d.HOME.nvp=+(_ovr*_pinH).toFixed(3);
-        if(d.DRAW) d.DRAW.nvp=+(_ovr*_pinD).toFixed(3);
-        if(d.AWAY) d.AWAY.nvp=+(_ovr*_pinA).toFixed(3);
-      }
-
-      ['HOME','AWAY'].forEach(out=>{
-        const o=d[out]; if(!o||!o.pin) return;
-
-        // ── Critério 1: Movimento Pinnacle desde abertura ──
-        const pinnMove = o.prev?((o.prev-o.pin)/o.prev)*100:null; // positivo = odds baixaram = SHORTENING
-        const pinnMovePct = pinnMove!=null?Math.abs(pinnMove):0;
-        const movement = o.mov||(pinnMove!=null?pinnMove>0?'SHORTENING':'DRIFTING':null);
-
-        // Divergência B365 vs Pinnacle NVP (de-vig mult): positivo = B365 mais generosa = potencial value
-        const divB365=(o.b365&&o.nvp)?+(o.b365/o.nvp-1).toFixed(4):null;
-
-        // Timing: sinais perto do KO têm maior urgência (mercado profissional fecha posição)
-        const timingBonus = hoursToKO<=2?3:hoursToKO<=6?2:hoursToKO<=12?1.5:1.0;
-
-        // ── Critério 3: Divergência Pinnacle vs recreativas ──
-        const recrAvg=o.recr.length?o.recr.reduce((s,v)=>s+v,0)/o.recr.length:null;
-        // div positivo = recreativas > pin = value (recreativas ainda não copiaram)
-        // div negativo = pin > recreativas = sem value (recreativas já baixaram mais)
-        const divRaw=recrAvg&&o.pin?((recrAvg-o.pin)/o.pin)*100:0;
-        const div=Math.abs(divRaw); // para score usa valor absoluto
-        const divHasValue=divRaw>0; // true = recreativas ainda mais altas = value real
-
-        // ── Critério 4: Múltiplos books a mover ──
-        const multiBook = o.recrMoving>=2; // 2+ books recreativas também moveram
-
-        let score=0;
-        if(pinnMovePct>=5) score+=50;
-        else if(pinnMovePct>=3) score+=35;
-        else if(pinnMovePct>=2) score+=20;
-        else if(pinnMovePct>=1) score+=10;
-        else if(div>=5) score+=8;
-
-        score = Math.round(score * timingBonus);
-        if(multiBook) score+=15;
-        if(movement==='SHORTENING') score+=5;
-
-        if(score<8) return;
-
-        // ── Label ──
-        let label;
-        if(pinnMovePct>=5&&hoursToKO<=0.5) label='STEAM';
-        else if(pinnMovePct>=5||(pinnMovePct>=2&&hoursToKO<=12)) label='SHARP';
-        else label='WATCH';
-
-        sigs.push({
-          out, label, score,
-          pin:o.pin, prev:o.prev, recrAvg, div,
-          pinnMove, pinnMovePct, movement,
-          hoursToKO:Math.round(hoursToKO*10)/10,
-          timingBonus, multiBook, recrMoving:o.recrMoving,
-          b365:o.b365, nvp:o.nvp, divB365
-        });
-      });
-
-      if(!sigs.length) return;
-
-      // Score total do evento = máximo dos outcomes
-      const maxScore=Math.max(...sigs.map(s=>s.score));
-      const hasSTEAM=sigs.some(s=>s.label==='STEAM');
-      const hasSHARP=sigs.some(s=>s.label==='SHARP');
-
-      sharpRaw.push({
-        id:ev.id, home:ev.home_team, away:ev.away_team,
-        date:ev.event_date, league:BSD_LEAGUE_ID_MAP[ev.league_id]||ev.league_name||lgNames[ev.league_id]||'',
-        sigs, totalScore:maxScore, hoursToKO:Math.round(hoursToKO*10)/10,
-        label:hasSTEAM?'STEAM':hasSHARP?'SHARP':'WATCH',
-        scanScore:0
-      });
-    });
-
-      try{
-        sessionStorage.setItem(SHARP_CACHE_KEY, JSON.stringify({
-          ts:Date.now(), data:sharpRaw, sh1x2, sharpEventsMatched, sharpEventsSkippedTime,
-          eligibleCount:sharpEligibleCount
-        }));
-      }catch(e){}
-    }
-    sharpLoaded=true;
-
-    // Ligar ao allGames para score Over
-    allSharp1x2=sharpRaw;
-
-    // Enrich com detalhe + sharp (batch)
-    el('scanList').innerHTML='<div class="loading"><div class="spinner"></div>A enriquecer '+events.length+' jogos...</div>';
-
-    const BATCH=8;
-    const enriched=[];
-
-    for(let i=0;i<events.length;i+=BATCH){
-      const batch=events.slice(i,i+BATCH);
-      await Promise.all(batch.map(async ev=>{
-        try{
-          // Detalhe + odds pinnacle em paralelo
-          const [det, pinnOdds] = await Promise.all([
-            get('/api/v2/events/'+ev.id+'/').catch(()=>({})),
-            get('/api/v2/odds/?event_id='+ev.id+'&market=over_under_25&limit=30').catch(()=>({results:[]})),
-          ]);
-
-          const pred = predMap[ev.id]||null;
-          const ou   = pred?.markets?.over_under||{};
-          const btts = pred?.markets?.btts||{};
-          const xg   = pred?.markets?.expected_goals||{};
-          const rec  = pred?.recommendations||{};
-          const mdl  = pred?.model||{};
-
-          const prob25 = ou.prob_over_25!=null ? (ou.prob_over_25>1?ou.prob_over_25/100:ou.prob_over_25) : null;
-          // normaliza bttsN para 0-100 uma única vez
-          const bttsRaw = btts.prob_yes!=null ? btts.prob_yes : null;
-          const bttsN  = bttsRaw!=null ? (bttsRaw>1?bttsRaw:bttsRaw*100) : null;
-          const xgH    = xg.home??null;
-          const xgA    = xg.away??null;
-
-          // ── Sharp: pinnacle vs recreativas via odds endpoint ──
-          let pinnNow=null, recrAvg=null, movement=movMap[ev.id]||null, div=null, sharpLabel=null;
-          let pinnPrev=prevMap[ev.id]||null, pinnActual=false;
-
-          const oddsRows = arr(pinnOdds).filter(o=>o.outcome==='over');
-          let recrSum=0, recrCnt=0;
-          oddsRows.forEach(o=>{
-            const slug=o.bookmaker_slug||'';
-            const price=parseFloat(o.decimal_odds||0);
-            const prev=parseFloat(o.previous_decimal_odds||0);
-            if(!price) return;
-            if(slug==='pinnacle'){
-              pinnNow=price;
-              pinnActual=true;
-              if(prev&&prev!==price) pinnPrev=prev;
-              if(o.movement) movement=o.movement;
-            } else if(RECR.includes(slug)){
-              recrSum+=price; recrCnt++;
-            }
-          });
-          if(recrCnt>0) recrAvg=recrSum/recrCnt;
-
-          // Fallbacks do mapa global
-          if(!pinnNow) pinnNow=oddsOver[ev.id]||null;
-          if(!recrAvg) recrAvg=oddsOver[ev.id]||null;
-          if(!pinnPrev&&prevMap[ev.id]) pinnPrev=prevMap[ev.id];
-
-          // Movimento real via previous_decimal_odds
-          if(pinnNow&&pinnPrev&&Math.abs(pinnPrev-pinnNow)>0.01){
-            const mv=((pinnPrev-pinnNow)/pinnPrev)*100;
-            if(!movement) movement=mv>0?'SHORTENING':'DRIFTING';
-          }
-
-          // Divergência Pin vs recreativas
-          if(pinnNow&&recrAvg&&pinnNow>0){
-            div=Math.abs(((recrAvg-pinnNow)/pinnNow)*100);
-          }
-
-          // Label sharp — STEAM só ≤30min ao KO
-          const koMs=new Date(ev.event_date).getTime();
-          const hToKO=Math.max(0,(koMs-Date.now())/3600000);
-          if(div!=null&&div>=DIV_MIN){
-            if(movement==='SHORTENING'&&div>=DIV_STEAM&&hToKO<=0.5) sharpLabel='STEAM';
-            else if(movement==='SHORTENING'&&div>=DIV_MIN) sharpLabel='SHARP';
-            else if(div>=DIV_MIN) sharpLabel='WATCH';
-          }
-
-          // Score
-          const {score,signals}=calcScore({prob25,bttsN,xgH,xgA,movement,div,sharpLabel,
-            pinnNow,recrAvg,rec,mdl,
-            h2h:det?.h2h,
-            league:BSD_LEAGUE_ID_MAP[ev.league_id]||ev.league_name||lgNames[ev.league_id]||''});
-
-          const edgeVsMarket=(prob25!=null&&pinnNow!=null)?(prob25-(1/pinnNow)):null;
-          enriched.push({
-            id:ev.id, home:ev.home_team, away:ev.away_team,
-            date:ev.event_date, league:BSD_LEAGUE_ID_MAP[ev.league_id]||ev.league_name||lgNames[ev.league_id]||'',
-            league_id:ev.league_id,
-            score, signals, prob25, bttsN, xgH, xgA,
-            movement, div, sharpLabel, pinnNow, recrAvg, pinnPrev,
-            oddsOver:oddsOver[ev.id]||pinnNow, oddsUnder:oddsUnder[ev.id]||null,
-            predScore:pred?.markets?.score?.most_likely||null,
-            recommend:rec.over_25||false,
-            conf:mdl.confidence||null,
-            edgeVsMarket, pinnActual,
-            det
-          });
-        }catch(e){ console.warn('enrich game', ev?.id, e.message); }
-      }));
-    }
-
-    setProgress(80,'A calcular scores…');
-    allGames=enriched;
-    // Ligar score Over ao sharp
-    allSharp1x2.forEach(s=>{
-      const g=allGames.find(x=>x.id===s.id);
-      if(g) s.scanScore=g.score;
-    });
-
-    updateScanStats();
-    renderScan();
-
-    // Auto-log serializado — candidatos → sharp → closing odds (evita conflitos de SHA no mesmo ficheiro)
-    const _autoLog=el('autoLogChk')?.checked;
-    if(_autoLog) _autoLogRunning = true;
-    (_autoLog ? autoLogCandidatos().catch(e=>{console.warn('autoLogCandidatos:',e.message);}) : Promise.resolve())
-      .then(()=>_autoLog ? autoLogSharp1x2().catch(e=>{console.warn('autoLogSharp1x2:',e.message);}) : Promise.resolve())
-      .then(()=>_autoLog ? captureClosingOdds().catch(e=>{console.warn('captureClosingOdds:',e.message);}) : Promise.resolve())
-      .finally(()=>{ if(_autoLog) _autoLogRunning = false; });
-
-    // Actualizar stats Sharp
-    el('sh1Total').textContent=allSharp1x2.length;
-    el('sh1Steam').textContent=allSharp1x2.filter(s=>s.label==='STEAM').length;
-    el('sh1Sharp').textContent=allSharp1x2.filter(s=>s.label==='SHARP').length;
-    el('sh1Watch').textContent=allSharp1x2.filter(s=>s.label==='WATCH').length;
-    el('dbgSharp').style.display='block';
-    const eventsWithPin=Object.keys(sh1x2).filter(k=>sh1x2[k].HOME?.pin||sh1x2[k].AWAY?.pin).length;
-    const eventsWithRecr=Object.values(sh1x2).filter(d=>(d.HOME?.recr?.length||0)+(d.AWAY?.recr?.length||0)>0).length;
-    const eventsWithPrev=Object.values(sh1x2).filter(d=>d.HOME?.prev||d.AWAY?.prev).length;
-    const steamCount=allSharp1x2.filter(s=>s.label==='STEAM').length;
-    const sharpCount=allSharp1x2.filter(s=>s.label==='SHARP').length;
-    const lt6h=allSharp1x2.filter(s=>s.hoursToKO<=6).length;
-    el('dbgSharp').textContent=events7.length+' ev7 · '+eventsWithPin+' c/Pinnacle · '+eventsWithRecr+' c/recr · '+eventsWithPrev+' c/prev · '+sharpEventsMatched+' match('+sharpEventsSkippedTime+' skip) · '+
-      allSharp1x2.length+' sinais · '+steamCount+' STEAM · '+sharpCount+' SHARP · '+lt6h+' <6h KO';
-
-    renderSharp();
-
+  const anyOk = picksR.status==='fulfilled' || picks1x2R.status==='fulfilled';
+  if(anyOk){
     setProgress(100,'Pronto');
     el('statusDot').style.background='var(--green)';
     el('statusDot').style.boxShadow='0 0 6px var(--green)';
-    el('statusTxt').textContent='live';
-    el('tsLabel').textContent='Actualizado: '+new Date().toLocaleTimeString('pt-PT');
-    el('dbgScan').style.display='block';
-    el('dbgScan').textContent=events.length+' eventos · '+enriched.length+' enriquecidos · '+
-      enriched.filter(g=>g.sharpLabel).length+' sinais sharp · '+
-      enriched.filter(g=>g.prob25).length+' com ML';
-
-    // Actualizar badge do filtro Picks com número de picks qualificados
-    const _qCount = getQualifiedPicks().length;
-    const _pFb = el('picksFb');
-    if(_pFb) _pFb.textContent = _qCount > 0 ? `📌 Picks (${_qCount})` : '📌 Picks';
-    if(scanFilter==='picks') renderPicksPub();
-
-  }catch(err){
-    const msg = err.message||'Erro desconhecido';
-    const is401 = msg.includes('401');
-    el('scanList').innerHTML=`<div class="empty" style="padding:30px">
-      <div style="font-size:24px;margin-bottom:10px">${is401?'🔑':'⚠️'}</div>
-      <div style="font-weight:700;margin-bottom:6px">${is401?'BSD Key inválida ou expirada':'Erro ao carregar'}</div>
-      <div style="font-size:12px;color:var(--text3)">${msg}</div>
-      ${is401?'<div style="font-size:12px;margin-top:10px">Vai a <strong>sports.bzzoiro.com</strong> → login → gera nova API key</div>':''}
-    </div>`;
+    el('statusTxt').textContent='snapshot';
+  }else{
     setProgress(0,'');
     el('statusDot').style.background='var(--red)';
+    el('statusDot').style.boxShadow='none';
     el('statusTxt').textContent='erro';
-    console.error('loadAll error:', err);
   }
+
+  // Auto-log serializado — candidatos → sharp → closing odds (evita conflitos de SHA no mesmo ficheiro)
+  const _autoLog=el('autoLogChk')?.checked;
+  if(_autoLog) _autoLogRunning = true;
+  (_autoLog ? autoLogCandidatos().catch(e=>{console.warn('autoLogCandidatos:',e.message);}) : Promise.resolve())
+    .then(()=>_autoLog ? autoLogSharp1x2().catch(e=>{console.warn('autoLogSharp1x2:',e.message);}) : Promise.resolve())
+    .then(()=>_autoLog ? captureClosingOdds().catch(e=>{console.warn('captureClosingOdds:',e.message);}) : Promise.resolve())
+    .finally(()=>{ if(_autoLog) _autoLogRunning = false; });
+
   // Sync silencioso 90s após carregar + relatório diário se for após as 22h
   setTimeout(async()=>{
     await silentSync().catch(e=>{console.warn('silentSync:',e.message);});
