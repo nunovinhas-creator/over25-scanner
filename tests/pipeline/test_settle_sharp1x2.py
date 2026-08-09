@@ -58,18 +58,20 @@ class TestResolveOutcome:
 
 
 class TestSettle:
-    def _run(self, picks: list[dict], fetch_result_side_effect=None):
+    def _run(self, picks: list[dict], fetch_result_side_effect=None,
+             git_commit_push_return=None):
         import pipeline.settle_sharp1x2 as mod
 
         with tempfile.TemporaryDirectory() as tmp:
             picks_file = Path(tmp) / "picks_1x2.json"
             picks_file.write_text(json.dumps(picks), encoding="utf-8")
 
+            commit_kwargs = {} if git_commit_push_return is None else {"return_value": git_commit_push_return}
             with (
                 patch.object(mod, "PICKS_FILE", picks_file),
                 patch.object(mod, "BSD_API_KEY", "fake_key"),
                 patch.object(mod, "fetch_event_result", side_effect=fetch_result_side_effect),
-                patch.object(mod, "git_commit_push"),
+                patch.object(mod, "git_commit_push", **commit_kwargs),
             ):
                 mod.settle()
 
@@ -197,6 +199,71 @@ class TestSettle:
         )
         assert out[0]["resultado_outcome"] == "WIN"
         assert out[0]["settled_at"] == sentinel
+
+    # ── Settlement Bug 1 (auditoria de continuidade, 9 ago 2026) ──────────
+    # O servidor (este módulo) é a ÚNICA autoridade de settlement de Sharp
+    # 1X2 — index.html deixou de escrever resultado_outcome/resultado_jogo
+    # (ver tests/js/test_sharp1x2_settlement_authority.mjs para a prova do
+    # lado browser). Estes testes cobrem os invariantes do lado servidor:
+    # um settlement já decidido nunca é revertido/reprocessado, e uma falha
+    # de push nunca deixa o ficheiro local com estado parcial.
+
+    @pytest.mark.parametrize("outcome_val,resultado_jogo,has_settled_at", [
+        ("WIN", "2-0", True),
+        ("LOSS", "0-1", True),
+        ("VOID", "", False),  # VOID nunca teve settled_at — comportamento
+                               # pré-existente, não alterado por esta correcção
+                               # (ver relatório: "outros riscos, não corrigidos").
+    ])
+    def test_already_settled_pick_never_reprocessed_across_multiple_runs(
+        self, outcome_val, resultado_jogo, has_settled_at,
+    ):
+        """TESTE 1/2/3 (Settlement Bug 1): um pick já WIN/LOSS/VOID mantém-se
+        exactamente assim ao longo de várias corridas de settle() — nunca
+        volta para "" nem é reprocessado, mesmo repetindo a corrida."""
+        base = _pick(
+            id=f"30_{outcome_val.lower()}_sh", outcome="HOME",
+            resultado_outcome=outcome_val, resultado_jogo=resultado_jogo,
+            data=_iso(10.0),
+        )
+        if has_settled_at:
+            base["settled_at"] = "2026-01-01T00:00:00Z"
+        picks = [base]
+
+        def _fail_fetch(eid):
+            pytest.fail(f"pick já {outcome_val} não devia chamar fetch_event_result")
+
+        out = self._run(picks, fetch_result_side_effect=_fail_fetch)
+        assert out[0]["resultado_outcome"] == outcome_val
+        if has_settled_at:
+            assert out[0]["settled_at"] == "2026-01-01T00:00:00Z"
+
+        # Segunda corrida (simula reprocessamento pelo servidor) — mesmo resultado.
+        out2 = self._run(out, fetch_result_side_effect=_fail_fetch)
+        assert out2[0]["resultado_outcome"] == outcome_val
+        if has_settled_at:
+            assert out2[0]["settled_at"] == "2026-01-01T00:00:00Z"
+
+    def test_git_push_failure_still_persists_full_local_state(self):
+        """TESTE 7 (Settlement Bug 1): falha de persistência (push) nunca
+        deixa o ficheiro local com estado parcial — save_json_list() escreve
+        sempre o batch completo desta corrida antes de git_commit_push() ser
+        sequer chamado, por isso uma falha de push não corrompe nem trunca o
+        resultado do settlement; só impede que chegue a origin/main (a
+        corrida seguinte retoma de forma idempotente, ver teste anterior)."""
+        picks = [
+            _pick(id="31_home_sh", outcome="HOME", data=_iso(3.0)),
+            _pick(id="32_away_sh", outcome="AWAY", data=_iso(3.0)),
+        ]
+
+        def fake_fetch(eid):
+            return {"status": "finished", "home_score": 2, "away_score": 0}
+
+        out = self._run(picks, fetch_result_side_effect=fake_fetch, git_commit_push_return=False)
+        assert out[0]["resultado_outcome"] == "WIN"   # HOME, 2-0 → WIN
+        assert out[1]["resultado_outcome"] == "LOSS"  # AWAY, 2-0 → LOSS
+        assert out[0]["settled_at"]
+        assert out[1]["settled_at"]
 
     def test_no_bsd_api_key_aborts_cleanly(self):
         import pipeline.settle_sharp1x2 as mod

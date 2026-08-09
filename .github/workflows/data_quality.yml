@@ -31,6 +31,9 @@ jobs:
       - name: Run classifyOdds() against shared spec
         run: node tests/js/test_classify_odds.mjs
 
+      - name: Sharp 1X2 — browser must not write settlement (Settlement Bug 1)
+        run: node tests/js/test_sharp1x2_settlement_authority.mjs
+
   # ---------------------------------------------------------------------------
   # Job 1: validate — schema checks + data quality tests
   # ---------------------------------------------------------------------------
