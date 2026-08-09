@@ -3042,7 +3042,15 @@ async function loadDash1x2(){
   }
 }
 
+// SYNCRESULTS1X2_JS:START
 async function syncResults1x2(){
+  // Settlement Sharp 1X2 é responsabilidade exclusiva do servidor
+  // (pipeline/settle_sharp1x2.py, cron 30 min). Esta função escrevia
+  // resultado_outcome/resultado_jogo a partir do browser, competindo sem
+  // coordenação com o servidor — um retry 409 podia reenviar o array
+  // obsoleto e apagar settlement já gravado (auditoria de continuidade —
+  // Settlement Bug 1, 9 ago 2026). Passou a ser só leitura: confirma o
+  // estado actual sem escrever nada em picks_1x2.json.
   const btn=el('btnSync1x2');
   const st=el('syncStatus1x2');
   if(btn){btn.disabled=true;btn.textContent='⏳...';}
@@ -3053,44 +3061,23 @@ async function syncResults1x2(){
       if(st) st.textContent='Sem picks 1X2 para sincronizar.';
       return;
     }
+    sharp1x2Picks=picks;
+    if(el('spanel-dash1x2')?.style.display!=='none') renderDash1x2();
+
     const pending = picks.filter(p=>
       p.id && (!p.resultado_outcome||p.resultado_outcome==='') &&
       p.data && new Date(p.data)<new Date()
     );
-    if(!pending.length){
-      if(st) st.textContent='✅ Todos os picks 1X2 já têm resultado!';
-      return;
-    }
-    if(st) st.textContent=`A verificar ${pending.length} picks na BSD...`;
-    let updated=0, notFound=0;
-    for(const pick of pending){
-      try{
-        const eventId = String(pick.id||'').replace('_sh','').split('_')[0];
-        if(!eventId||isNaN(parseInt(eventId))){ notFound++; continue; }
-        const ev = await get('/api/v2/events/'+eventId+'/').catch(()=>null);
-        if(!ev||( ev.status!=='finished'&&ev.period!=='FT')) continue;
-        const h=ev.home_score??0, a=ev.away_score??0;
-        const out=(pick.outcome||'').toUpperCase();
-        const won = out==='HOME'?(h>a):out==='AWAY'?(a>h):out==='DRAW'?(h===a):null;
-        if(won===null){ notFound++; continue; }
-        pick.resultado_jogo = `${h}-${a}`;
-        pick.resultado_outcome = won?'WIN':'LOSS';
-        updated++;
-        if(st) st.textContent=`✅ ${updated} actualizados... (${pick.casa} vs ${pick.fora}: ${h}-${a} → ${pick.resultado_outcome})`;
-      }catch(e){ notFound++; }
-    }
-    if(updated>0){
-      await ghWrite(PICKS1X2_FILE, picks, `sync 1x2: ${updated} resultados actualizados`);
-    }
-    if(st) st.textContent=`✅ Sync completo: ${updated} actualizados, ${notFound} não encontrados`;
-    if(updated>0) await loadDash1x2();
+    if(st) st.textContent = pending.length
+      ? `${pending.length} picks 1X2 aguardam settlement do servidor (até 30 min).`
+      : '✅ Todos os picks 1X2 já têm resultado!';
+
     // Aviso CLV: picks settled sem odds_fecho → CLV não calculável (TAREFA 1.4)
     const _1x2Settled = picks.filter(p=>p.resultado_outcome==='WIN'||p.resultado_outcome==='LOSS');
     const _1x2SemClose = _1x2Settled.filter(p=>!String(p.odds_fecho||'').trim());
     if(_1x2SemClose.length > 0){
       console.warn('Sharp 1X2:', _1x2SemClose.length, 'picks settled sem odds_fecho — CLV não calculado (TAREFA 1.4, Prompt 3)');
-      const tgWarn = `⚠️ ${_1x2SemClose.length} picks Sharp 1X2 settled sem odds_fecho — CLV não calculado`;
-      sendTG(tgWarn).catch(()=>{});
+      sendTG(`⚠️ ${_1x2SemClose.length} picks Sharp 1X2 settled sem odds_fecho — CLV não calculado`).catch(()=>{});
       if(st) st.textContent += ` · ⚠️ ${_1x2SemClose.length} sem odds_fecho (CLV pendente)`;
     }
   }catch(e){
@@ -3099,6 +3086,7 @@ async function syncResults1x2(){
     if(btn){btn.disabled=false;btn.textContent='🔄 Sincronizar';}
   }
 }
+// SYNCRESULTS1X2_JS:END
 
 function _renderObsN1(){
   // ── DRAW N1 ──
@@ -5708,38 +5696,25 @@ async function silentSync(){
       }
     }
   }catch(e){}
-  // 3. Sync picks Sharp 1X2 — resultados de jogos terminados
+  // SHARP1X2_SETTLEMENT_JS:START
+  // 3. Sharp 1X2 — settlement é responsabilidade exclusiva do servidor
+  // (pipeline/settle_sharp1x2.py, cron 30 min, sharp1x2_analysis.yml). O
+  // browser deixou de escrever resultado_outcome/resultado_jogo aqui: fazia-o
+  // desde antes de settle_sharp1x2.py existir, competindo sem coordenação
+  // com o servidor — um ghWrite() em conflito (409) reenviava o array
+  // obsoleto sem se fundir com o conteúdo fresco, podendo apagar
+  // resultado_outcome/settled_at que o servidor tinha acabado de gravar
+  // (auditoria de continuidade — Settlement Bug 1, 9 ago 2026). Mantém-se só
+  // a leitura, para o dashboard reflectir o settlement mais recente do
+  // servidor sem depender de reload da página.
   try{
     const {data:picks1x2}=await ghRead(PICKS1X2_FILE);
     if(Array.isArray(picks1x2)&&picks1x2.length){
-      const pending1x2=picks1x2.filter(p=>
-        p.id&&(!p.resultado_outcome||p.resultado_outcome==='')&&
-        p.data&&new Date(p.data)<new Date()
-      );
-      let upd1x2=0;
-      for(const pick of pending1x2){
-        try{
-          const eid=String(pick.id||'').replace('_sh','').split('_')[0];
-          if(!eid||isNaN(+eid)) continue;
-          await new Promise(r=>setTimeout(r,200));
-          const ev=await get('/api/v2/events/'+eid+'/').catch(()=>null);
-          if(!ev||(ev.status!=='finished'&&ev.period!=='FT')) continue;
-          const h=ev.home_score??0,a=ev.away_score??0;
-          const out=(pick.outcome||'').toUpperCase();
-          const won=out==='HOME'?(h>a):out==='AWAY'?(a>h):out==='DRAW'?(h===a):null;
-          if(won===null) continue;
-          pick.resultado_jogo=`${h}-${a}`;
-          pick.resultado_outcome=won?'WIN':'LOSS';
-          upd1x2++;
-        }catch(e){}
-      }
-      if(upd1x2>0){
-        await ghWrite(PICKS1X2_FILE,picks1x2,`auto-sync 1x2: ${upd1x2} resultados`);
-        sharp1x2Picks=picks1x2;
-        if(el('spanel-dash1x2')?.style.display!=='none') renderDash1x2();
-      }
+      sharp1x2Picks=picks1x2;
+      if(el('spanel-dash1x2')?.style.display!=='none') renderDash1x2();
     }
   }catch(e){}
+  // SHARP1X2_SETTLEMENT_JS:END
   // 4. Captura closing odds para picks na janela ≤2h do KO
   try{ await captureClosingOdds(); }catch(e){}
 }
