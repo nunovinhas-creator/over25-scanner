@@ -15,6 +15,10 @@ pipeline/update_closing_odds.py — fetch odds_fecho Pinnacle pós-KO + CLV (15m
 pipeline/scan_common.py  — whitelist, BSD_LEAGUE_ID_MAP, UNKNOWN_LEAGUE, TG, git, I/O partilhados
 pipeline/config.py       — MODEL_WEIGHT=0.30 (não alterar sem nova validação LOEO-CV)
 pipeline/historical.py   — download football-data.co.uk → matches.csv
+pipeline/scan_live.py    — loop ao minuto (live_scanner.yml): detecção/scoring/padrões live +
+                            👁 OBSERVAÇÕES autónomas (gate → data/observations.json → TG) e health
+                            check (data/live_scanner_health.json); "🔥 APOSTAR AGORA" desactivado
+                            (LIVE_ALERTS_ENABLED=False — não reactivar sem decisão explícita)
 ```
 
 ## Modelos
@@ -94,7 +98,7 @@ pytest tests/ -v --tb=short                  # testes unitários
 | Workflow | Trigger | Acção |
 |---|---|---|
 | `scanner.yml` | a cada 30 min | Over 2.5 + Sharp 1X2 scan + commit picks |
-| `live_scanner.yml` | 6×/dia, loop ao minuto (~5h50/arranque) | Scanner LIVE (`pipeline/scan_live.py`) — alertas TG ao minuto, independente da whitelist |
+| `live_scanner.yml` | 6×/dia, loop ao minuto (~5h50/arranque) | Scanner LIVE (`pipeline/scan_live.py`) — 👁 OBSERVAÇÕES autónomas (TG + `data/observations.json`) + health check, independente da whitelist e do browser; "🔥 APOSTAR AGORA" desactivado |
 | `historical_data.yml` | seg 06:00 UTC | actualiza matches.csv |
 | `retrain_dc.yml` | seg 07:00 UTC | re-treina DC + calibrador + relatório TG |
 | `deploy_version.yml` | push main | version.json + BUILD_SHA [skip ci] |

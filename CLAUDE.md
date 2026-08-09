@@ -100,7 +100,7 @@ Estado do sistema a **21 jun 2026** — três módulos em produção, todos em M
 - Dixon-Coles por liga (`models/train_dc.py`) → `data/dc_ratings.json`
 - Calibrador isotónico LOEO-CV (`backtesting/run_calibration.py`) → `data/calibrator.json`
 - Três scanners automáticos (`pipeline/scan_over25.py`, `pipeline/scan_sharp1x2.py`) — correm a cada 30 min
-- Scanner LIVE (`pipeline/scan_live.py`) — loop ao minuto, alertas TG independentes da whitelist
+- Scanner LIVE (`pipeline/scan_live.py`) — loop ao minuto, alertas TG independentes da whitelist; desde a sessão live-scanner-backend-autonomous corre também 100% autónomo as 👁 OBSERVAÇÕES (detecção → `data/observations.json` → Telegram), sem depender do browser (`index.html`) estar aberto
 
 Open either HTML file directly in a browser to run. No build steps, no tests, no linters for the front-end.
 
@@ -179,7 +179,7 @@ Bundesliga 2 e Serie B: ausentes da BSD (65 ligas disponíveis) — presentes no
 | Workflow | Trigger | O que faz |
 |---|---|---|
 | `scanner.yml` | a cada 30 min | Over 2.5 scan + Sharp 1X2 scan + commit `data/picks*.json` |
-| `live_scanner.yml` | 6×/dia (00:07/04:07/08:07/12:07/16:07/20:07 UTC), loop interno ao minuto | Scanner LIVE — alertas TG "🔥 APOSTAR AGORA" (`pipeline/scan_live.py`), independente da whitelist e do browser |
+| `live_scanner.yml` | 6×/dia (00:07/04:07/08:07/12:07/16:07/20:07 UTC), loop interno ao minuto | Scanner LIVE (`pipeline/scan_live.py`) — detecção/scoring/padrões + 👁 OBSERVAÇÕES (Telegram + `data/observations.json`) 100% autónomos, sem browser; "🔥 APOSTAR AGORA" continua desactivado (`LIVE_ALERTS_ENABLED=False`) |
 | `historical_data.yml` | seg 06:00 UTC | Actualiza `data/historical/matches.csv` (football-data.co.uk) |
 | `retrain_dc.yml` | seg 07:00 UTC | Re-treina DC + calibrador + relatório TG Sharp 1X2 semanal |
 | `deploy_version.yml` | cada push main | Actualiza `version.json` + `BUILD_SHA` em `index.html` [skip ci] |
@@ -344,8 +344,13 @@ backtesting/
 pipeline/
   scan_over25.py      — Over 2.5 scan + BTTS+Over 2.5 scan (30 min cron)
   scan_sharp1x2.py    — Sharp 1X2 scan (30 min cron)
-  scan_live.py        — Scanner LIVE ao minuto: detectPatterns() (12 padrões), alertas TG "🔥 APOSTAR AGORA",
-                        independente da whitelist (não usa DC nem histórico por liga)
+  scan_live.py        — Scanner LIVE ao minuto: detectPatterns() (12 padrões), alertas TG "🔥 APOSTAR AGORA"
+                        (LIVE_ALERTS_ENABLED=False, desactivado — só detecção/scoring correm),
+                        independente da whitelist (não usa DC nem histórico por liga). Corre também
+                        👁 OBSERVAÇÕES (autónomo, porta de autoLogObservations() do index.html): gate
+                        (liga whitelisted + patternScore≥6 + probLive≥25% + não tardio sem golos) →
+                        data/observations.json (dedup persistente por event_id, sobrevive a restart) →
+                        Telegram. Health check em data/live_scanner_health.json
   scan_common.py      — whitelist, BSD_LEAGUE_ID_MAP, Telegram, git e I/O partilhados pelos scanners
   transform.py        — compute_final_probability, compute_final_probability_dc
   etl.py              — ETL orchestration: coordena extract → transform → load
@@ -361,7 +366,10 @@ data/
   rejected_picks.json      — Over 2.5 rejeitados (para análise de gates)
   rejected_picks_1x2.json  — Sharp 1X2 rejeitados
   scan_state_over25.json   — estado do scan anterior (odds + movimento por event_id)
-  observations.json        — observações live (tab Live)
+  observations.json        — 👁 observações live, geradas autonomamente por pipeline/scan_live.py
+                              (também visível na tab Live do index.html, só leitura)
+  live_scanner_health.json — health check do worker LIVE (running, last_scan_at,
+                              live_games_found, observations_generated_total, errors)
   historical/              — matches.csv + matches.parquet (auto-updated Mondays)
   schema/
     bsd_schema.py    — BSD API event schema e validação
