@@ -91,6 +91,13 @@ ALERT_FILTERS = {
 PRESSAO_MIN_TELEGRAM = ALERT_FILTERS["GATE_BASE"]["PRESSAO_MIN_TELEGRAM"]
 SCORE_MIN_TELEGRAM = ALERT_FILTERS["GATE_BASE"]["SCORE_MIN_TELEGRAM"]
 
+# Alertas TG "🔥 APOSTAR AGORA — LIVE OVER 2.5" desactivados (pedido do autor,
+# 9 ago 2026). Detecção/scoring/log continuam a correr normalmente (scan_once
+# ainda regista "ALERTA:" em stdout) — só o envio para o Telegram é bloqueado.
+# Espelha LIVE_ALERTS_TG_ENABLED em index.html. OBSERVAÇÕES (index.html,
+# autoLogObservations) não é afectado — vive noutro caminho de código.
+LIVE_ALERTS_ENABLED = False
+
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 _PICKS_PATH = _PROJECT_ROOT / "data" / "picks.json"
 
@@ -703,6 +710,8 @@ def scan_once(api_key: str, state: dict, pick_ids: set[str], alerted: set[str],
         # depois. Também não se marca em caso de falha de envio (send_telegram
         # devolve False), para o jogo ser reavaliado no ciclo seguinte.
         if not passes_telegram_gate(e):
+            continue
+        if not LIVE_ALERTS_ENABLED:
             continue
         if send_telegram(build_live_pick_msg(e)):
             alerted.add(key)
