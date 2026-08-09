@@ -30,7 +30,11 @@ data/picks_btts_over25.json   — BTTS+O2.5 picks (id: {ev_id}_btts)
 data/rejected_picks.json      — Over 2.5 rejeitados (análise de gates)
 data/rejected_picks_1x2.json  — Sharp 1X2 rejeitados
 data/scan_state_over25.json   — estado anterior do scan (deteção de movimento/DRIFTING)
-data/observations.json        — observações live (tab Live)
+data/observations.json        — 👁 observações live, geradas autonomamente por pipeline/scan_live.py
+                                 (gate whitelist+patternScore≥6+probLive≥25%; dedup por event_id
+                                 persistido — sobrevive a restart do workflow live_scanner.yml)
+data/live_scanner_health.json — health check do worker LIVE (running, last_scan_at,
+                                 live_games_found, observations_generated_total, errors)
 data/historical/matches.csv   — histórico football-data.co.uk (auto-updated segundas)
 data/historical/matches.parquet — versão parquet do histórico
 data/schema/bsd_schema.py     — BSD API event schema e validação
