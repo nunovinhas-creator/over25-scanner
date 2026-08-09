@@ -559,9 +559,15 @@ def scan() -> None:
 
     _save_list(PICKS_FILE, list(existing_picks.values()))
 
-    rej_index = {r.get("id", "") + r.get("scanned_at", ""): r for r in existing_rejected}
+    # Dedup por id puro — igual ao padrão já usado para existing_picks/existing_btts
+    # acima. A chave anterior (id + scanned_at) mudava a cada ciclo de 30 min, por
+    # isso o mesmo evento ainda-rejeitado nunca substituía o registo anterior e
+    # rejected_picks.json crescia sem limite (achado da auditoria de continuidade,
+    # 9 ago 2026 — 2.562 ids duplicados, um até 11x). Um id só tem sentido como "a
+    # rejeição mais recente conhecida" — não há histórico a preservar aqui.
+    rej_index = {r.get("id", ""): r for r in existing_rejected}
     for r in new_rejected:
-        rej_index[r.get("id", "") + r.get("scanned_at", "")] = r
+        rej_index[r.get("id", "")] = r
     _save_list(REJECTED_FILE, list(rej_index.values()))
 
     _save_list(BTTS_O25_FILE, list(existing_btts.values()))
