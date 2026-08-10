@@ -14,7 +14,7 @@ import json
 import unittest
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 import tempfile
 
 
@@ -667,6 +667,85 @@ class TestRegressionWhitelist(unittest.TestCase):
         self.assertEqual(len(usl_picks), 0, "Oakland Roots SC não deve estar em picks")
         usl_rejected = [r for r in rejected if r.get("gate_blocked_reason") == "liga_fora_whitelist"]
         self.assertGreater(len(usl_rejected), 0, "Oakland Roots SC deve estar em rejected")
+
+
+# ── Regressão Bloco D: paginação de /api/v2/events/ no Sharp 1X2 ───────────────
+# scan_sharp1x2._fetch_all_events() lia só a 1ª página de eventos (cursor `next`
+# descartado) enquanto já paginava /odds/ correctamente — testes acima mockam
+# _fetch_all_events() directamente, por isso nunca exercitavam esta lógica.
+# Este teste mocka requests.get() para confirmar que um `next` não-vazio
+# resulta em mais do que uma request a /api/v2/events/.
+
+class TestFetchAllEventsPagination(unittest.TestCase):
+
+    def _fake_bsd_get(self, requested_urls, page1_events, page2_events):
+        def fake_get(url, headers=None, timeout=None):
+            requested_urls.append(url)
+            resp = Mock()
+            resp.raise_for_status = lambda: None
+            if "/api/v2/odds/" in url:
+                resp.json = lambda: {"results": [], "next": None}
+            elif "cursor=page2" in url:
+                resp.json = lambda: {"results": page2_events, "next": None}
+            else:
+                resp.json = lambda: {
+                    "results": page1_events,
+                    "next": "https://sports.bzzoiro.com/api/v2/events/?cursor=page2",
+                }
+            return resp
+        return fake_get
+
+    def test_events_pagination_follows_next_cursor(self):
+        """Uma resposta com `next` preenchido tem de gerar uma 2ª request a
+        /api/v2/events/ — e os eventos da 2ª página têm de chegar ao resultado."""
+        import pipeline.scan_sharp1x2 as mod
+
+        page1_events = [{"id": "1", "home_team": "Arsenal", "away_team": "Chelsea",
+                          "league_id": 1, "event_date": _future_iso(3.0)}]
+        page2_events = [{"id": "2", "home_team": "Milan", "away_team": "Inter",
+                          "league_id": 4, "event_date": _future_iso(3.0)}]
+        requested_urls: list[str] = []
+
+        with (
+            patch.object(mod, "BSD_API_KEY", "fake_key"),
+            patch("pipeline.scan_sharp1x2.requests.get",
+                  side_effect=self._fake_bsd_get(requested_urls, page1_events, page2_events)),
+        ):
+            result = mod._fetch_all_events()
+
+        events_urls = [u for u in requested_urls if "/api/v2/events/" in u]
+        self.assertEqual(len(events_urls), 2,
+                          "next preenchido na 1ª página deve gerar uma 2ª request a /events/")
+        self.assertEqual({e["event_id"] for e in result}, {"1", "2"},
+                          "eventos da 2ª página têm de chegar ao resultado final")
+
+    def test_events_single_page_no_extra_request(self):
+        """Sem `next` (ou `next=None`) não deve haver requests extra a /events/."""
+        import pipeline.scan_sharp1x2 as mod
+
+        page1_events = [{"id": "1", "home_team": "Arsenal", "away_team": "Chelsea",
+                          "league_id": 1, "event_date": _future_iso(3.0)}]
+        requested_urls: list[str] = []
+
+        def fake_get(url, headers=None, timeout=None):
+            requested_urls.append(url)
+            resp = Mock()
+            resp.raise_for_status = lambda: None
+            if "/api/v2/odds/" in url:
+                resp.json = lambda: {"results": [], "next": None}
+            else:
+                resp.json = lambda: {"results": page1_events, "next": None}
+            return resp
+
+        with (
+            patch.object(mod, "BSD_API_KEY", "fake_key"),
+            patch("pipeline.scan_sharp1x2.requests.get", side_effect=fake_get),
+        ):
+            result = mod._fetch_all_events()
+
+        events_urls = [u for u in requested_urls if "/api/v2/events/" in u]
+        self.assertEqual(len(events_urls), 1)
+        self.assertEqual({e["event_id"] for e in result}, {"1"})
 
 
 if __name__ == "__main__":
