@@ -778,6 +778,10 @@ select option{background:var(--laq-3);color:var(--text)}
 </div>
 
 <!-- hidden inputs kept for JS compatibility (values sync'd from modal) -->
+<!-- checked por omissão — autoLogCandidatos()/captureClosingOdds() (este último alimenta o
+     CLV, KPI primário) continuam a correr sozinhos. autoLogSharp1x2() (Bloco F, 2026-08-11)
+     é a excepção: foi removida da cadeia de loadAll() e nunca mais corre, mesmo com esta
+     checkbox ligada — ver comentário na própria função. -->
 <input type="checkbox" id="autoLogChk" checked style="display:none">
 <span id="autoLabel" style="display:none">DEV</span>
 
@@ -1786,18 +1790,43 @@ function loadErrorBlock(file, msg){
 }
 
 // Estado vazio honesto do Scanner/Sharp 1X2 — nunca inventa uma razão (ex.: "época baixa")
-// para o vazio. Lê os rejeitados desse scan com reject_reason="timing_apos_6h" — jogos de
-// ligas whitelisted que já passaram o gate 0 (liga) mas ainda estão fora da janela de 6h
-// antes do KO (Gate 1 de scan_over25.py / apply_sharp1x2_gates() de scan_sharp1x2.py) — e
-// distingue esse caso ("há jogos, ainda não é a hora") do caso em que não há mesmo nenhum
-// jogo whitelisted à vista.
+// para o vazio, e nunca diz "não há jogos" quando existem rejeitados com KO no futuro. Lê
+// os rejeitados desse scan (data/rejected_picks.json ou data/rejected_picks_1x2.json) e
+// distingue três casos:
+//   (a) reject_reason="timing_apos_6h" — jogo de liga whitelisted (passou o Gate 0) mas
+//       ainda fora da janela de 6h antes do KO (Gate 1 de scan_over25.py /
+//       apply_sharp1x2_gates() de scan_sharp1x2.py).
+//   (b) qualquer outro reject_reason (não é "liga_desconhecida"/"liga_fora_whitelist" nem
+//       "timing_apos_6h") com KO no futuro — jogo de liga whitelisted, já dentro da janela,
+//       que passou pelo modelo/gates e foi recusado (ex.: odds_drifting, ev_baixo,
+//       div_baixa, draw_suspenso). Tem precedência sobre (c): é prova de que o sistema
+//       trabalhou, não de que não há nada para ver (Bloco F).
+//   (c) nenhum dos anteriores — não há mesmo nenhum jogo whitelisted à vista.
 function _nextTimingRejected(rejectedList){
   const now=Date.now();
   return rejectedList
     .filter(r=>r.reject_reason==='timing_apos_6h' && !isNaN(new Date(r.data).getTime()) && new Date(r.data).getTime()>now)
     .sort((a,b)=>new Date(a.data)-new Date(b.data));
 }
+const _EMPTY_STATE_NON_MODEL_REASONS = ['liga_desconhecida', 'liga_fora_whitelist', 'timing_apos_6h'];
+function _modelRejectedInWindow(rejectedList){
+  const now=Date.now();
+  return rejectedList
+    .filter(r=>r.reject_reason && !_EMPTY_STATE_NON_MODEL_REASONS.includes(r.reject_reason)
+      && !isNaN(new Date(r.data).getTime()) && new Date(r.data).getTime()>now)
+    .sort((a,b)=>new Date(a.data)-new Date(b.data));
+}
 function _emptyStateHtml(rejectedList){
+  const modelRejected=_modelRejectedInWindow(rejectedList);
+  if(modelRejected.length){
+    const rows=modelRejected.map(r=>
+      `<li>${esc(r.casa)} vs ${esc(r.fora)} (${esc(r.liga)}) — ${esc(r.reject_reason)}</li>`
+    ).join('');
+    return `<div class="empty" style="padding:30px;text-align:left">
+      <p style="margin-bottom:8px;text-align:center">${modelRejected.length} jogo${modelRejected.length>1?'s':''} da whitelist já dentro da janela de 6h, recusado${modelRejected.length>1?'s':''} pelo modelo.</p>
+      <ul style="font-size:12px;color:var(--text3);margin:0;padding-left:18px">${rows}</ul>
+    </div>`;
+  }
   const upcoming=_nextTimingRejected(rejectedList);
   if(upcoming.length){
     const next=upcoming[0];
@@ -2010,11 +2039,17 @@ async function loadAll(){
     el('statusTxt').textContent='erro';
   }
 
-  // Auto-log serializado — candidatos → sharp → closing odds (evita conflitos de SHA no mesmo ficheiro)
+  // Auto-log serializado — candidatos → closing odds (evita conflitos de SHA no mesmo ficheiro).
+  // autoLogSharp1x2() removido desta cadeia (Bloco F, 2026-08-11): é o writer legacy de
+  // data/picks_1x2.json (formato de id "{id}_sh", campos label/score que o pipeline actual
+  // não produz) — parou de correr sozinho a 20/06/2026 quando pipeline/scan_sharp1x2.py
+  // assumiu, mas a função continuava viva: bastava a checkbox ligada + um GitHub token em
+  // localStorage para voltar a escrever registos legacy misturados com os do pipeline. Ver
+  // comentário em autoLogSharp1x2() — a função fica por chamar manualmente se precisares
+  // dela, nunca é invocada automaticamente.
   const _autoLog=el('autoLogChk')?.checked;
   if(_autoLog) _autoLogRunning = true;
   (_autoLog ? autoLogCandidatos().catch(e=>{console.warn('autoLogCandidatos:',e.message);}) : Promise.resolve())
-    .then(()=>_autoLog ? autoLogSharp1x2().catch(e=>{console.warn('autoLogSharp1x2:',e.message);}) : Promise.resolve())
     .then(()=>_autoLog ? captureClosingOdds().catch(e=>{console.warn('captureClosingOdds:',e.message);}) : Promise.resolve())
     .finally(()=>{ if(_autoLog) _autoLogRunning = false; });
 
@@ -2686,10 +2721,11 @@ function renderSharp(){
     el('sharpList').innerHTML='<div class="empty" style="padding:30px"><p style="margin-bottom:12px">Sem dados carregados.</p><button class="btn-load" onclick="loadAll()" style="font-size:13px;padding:8px 20px">▶ Carregar dados</button></div>';
     return;
   }
-  // Estado vazio honesto — nunca inventa uma razão sazonal (ex.: "época baixa").
-  // Ver sharpEmptyStateHtml(): distingue "há jogos whitelisted, ainda fora da janela de
-  // 6h antes do KO" de "não há mesmo jogos whitelisted no horizonte", lendo
-  // data/rejected_picks_1x2.json (reject_reason="timing_apos_6h").
+  // Estado vazio honesto — nunca inventa uma razão sazonal (ex.: "época baixa") e nunca diz
+  // "não há jogos" quando existem rejeitados com KO no futuro. Ver sharpEmptyStateHtml() /
+  // _emptyStateHtml() (Bloco F): distingue "ainda fora da janela de 6h antes do KO", "dentro
+  // da janela mas recusado pelo modelo/gates" (precedência) e "não há mesmo jogos
+  // whitelisted no horizonte", lendo data/rejected_picks_1x2.json.
   if(!allSharp1x2.length){
     el('sharpList').innerHTML = sharpEmptyStateHtml();
     return;
@@ -4197,6 +4233,18 @@ async function autoLogObservations(){
 }
 
 // AUTO-LOG Sharp 1X2 — guarda todos os sinais automaticamente
+//
+// DESACTIVADA desde o Bloco F (2026-08-11). Deixou de ser chamada pela cadeia de
+// loadAll() — a função em si não foi apagada, só deixou de correr automaticamente.
+// Motivo: escreve em data/picks_1x2.json em formato legacy (id "{id}_sh", campos
+// label/score) que o pipeline actual (pipeline/scan_sharp1x2.py, formato de id
+// "{id}_{outcome}_sh", sem label/score) não produz nem lê — misturar os dois formatos
+// no mesmo ficheiro reintroduz exactamente o problema encontrado na investigação de
+// 10/08/2026 (label sempre "WATCH" por fallback, nunca escrito pelo pipeline). Já não
+// corria sozinha desde 20/06/2026 (o pipeline assumiu o scan), mas o código ficou activo
+// à espera de qualquer sessão com a checkbox autoLogChk ligada + GitHub token em
+// localStorage. Se precisares dela pontualmente, chama-a manualmente pela consola —
+// não voltes a ligá-la à cadeia automática sem decisão explícita.
 async function autoLogSharp1x2(){
   if(!el('ghToken')?.value.trim()) return;
   const unsaved=allSharp1x2.filter(s=>!isSaved(s.id+'_sh'));
