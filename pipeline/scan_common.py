@@ -34,6 +34,12 @@ WHITELIST = {
 # Fail-closed: ID desconhecido → UNKNOWN_LEAGUE → WHITELIST rejeita.
 # BSD devolve nomes diferentes: id=2→"Liga Portugal Betclic",
 # id=14→"Pro League", id=38→"Segunda División" — o mapa tem prioridade.
+# Fonte de verdade única para league_id → nome (BSD API). Espelhado inline no
+# index.html (const BSD_LEAGUE_ID_MAP) — os dois têm de mudar juntos, nunca
+# separadamente. Validado contra a BSD API em 10/08/2026 via workflow
+# "Fetch BSD Leagues" (scripts/fetch_bsd_leagues.py). Não confundir com
+# CONFIG.LEAGUE_NAMES (js/config.js) — era um mapa morto com IDs diferentes,
+# removido em 10/08/2026 (ver docs/DEAD-CODE.md).
 BSD_LEAGUE_ID_MAP: dict[int, str] = {
     1: "Premier League", 2: "Primeira Liga", 3: "La Liga", 4: "Serie A",
     5: "Bundesliga", 6: "Ligue 1", 10: "Eredivisie",

@@ -18,22 +18,25 @@
   mas é carregado... depois do script inline — e `loadAll()` nunca o usa."
 - **Confirmado em:** 16 jul 2026.
 
-## `CONFIG.LEAGUE_NAMES` (`js/config.js`)
+## `CONFIG.LEAGUE_NAMES` (`js/config.js`) — REMOVIDO
 
 - **O quê:** mapeamento `league_id → nome` com um conjunto de IDs completamente diferente do
   usado em produção (ex.: `6: 'Liga Portugal'`, `7: 'La Liga'`, `9: 'Serie A'` — não bate
   certo com os IDs reais da BSD API nem com `BSD_LEAGUE_ID_MAP`).
-- **Porque é dead code:** zero referências a `CONFIG.LEAGUE_NAMES` em `index.html` ou em
+- **Porque era dead code:** zero referências a `CONFIG.LEAGUE_NAMES` em `index.html` ou em
   qualquer ficheiro `js/*.js` (confirmado por `grep`). O mapeamento realmente usado pela
   whitelist e pelo Sharp 1X2 é o `const BSD_LEAGUE_ID_MAP` inline no `index.html`
   (10 ligas, IDs 1/2/3/4/5/6/10/12/14/38 — o mesmo mapa espelhado em
   `pipeline/scan_common.py`).
-- **Risco se não for removido:** um IDE/linter futuro pode assumir que `CONFIG.LEAGUE_NAMES`
-  é a fonte de verdade e "corrigir" o `BSD_LEAGUE_ID_MAP` para bater certo com ele — o que
-  quebraria a whitelist de produção.
+- **Risco que motivou a remoção:** um IDE/linter futuro podia assumir que
+  `CONFIG.LEAGUE_NAMES` era a fonte de verdade e "corrigir" o `BSD_LEAGUE_ID_MAP` para bater
+  certo com ele — o que quebraria a whitelist de produção em silêncio.
 - **Evidência:** diagnóstico da aba Sharp 1X2 a zero jogos, 16 jul 2026 — `grep -n
   "CONFIG.LEAGUE_NAMES\|CONFIG\.LEAGUE" index.html js/*.js` devolveu zero resultados.
 - **Confirmado em:** 16 jul 2026.
+- **Removido em:** 10 ago 2026 — re-confirmado zero referências no repo inteiro antes da
+  remoção. A fonte de verdade única para IDs de liga é `BSD_LEAGUE_ID_MAP`
+  (`pipeline/scan_common.py`, espelhado no `index.html`).
 
 ---
 
