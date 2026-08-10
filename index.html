@@ -778,11 +778,11 @@ select option{background:var(--laq-3);color:var(--text)}
 </div>
 
 <!-- hidden inputs kept for JS compatibility (values sync'd from modal) -->
-<!-- Bloco F (desde 2026-08-11): unchecked por omissão — ver comentário em autoLogSharp1x2()
-     e na cadeia de loadAll(). autoLogCandidatos()/captureClosingOdds() continuam a respeitar
-     esta checkbox se o utilizador a ligar manualmente; autoLogSharp1x2() nunca mais corre,
-     mesmo ligada. -->
-<input type="checkbox" id="autoLogChk" style="display:none">
+<!-- checked por omissão — autoLogCandidatos()/captureClosingOdds() (este último alimenta o
+     CLV, KPI primário) continuam a correr sozinhos. autoLogSharp1x2() (Bloco F, 2026-08-11)
+     é a excepção: foi removida da cadeia de loadAll() e nunca mais corre, mesmo com esta
+     checkbox ligada — ver comentário na própria função. -->
+<input type="checkbox" id="autoLogChk" checked style="display:none">
 <span id="autoLabel" style="display:none">DEV</span>
 
 <!-- ── Tabs ── -->
@@ -1435,7 +1435,7 @@ function saveCfg(){
     k:el('bsdKey').value,g:el('ghToken').value,
     t:el('tgToken').value,c:el('tgChat').value,
     e:el('emailTo')?.value||'',
-    autoLog:el('autoLogChk')?el('autoLogChk').checked:false,
+    autoLog:el('autoLogChk')?el('autoLogChk').checked:true,
     phase:currentPhase
   })); }catch(e){}
 }
@@ -1447,9 +1447,7 @@ function loadCfg(){
     if(c.t)el('tgToken').value=c.t;
     if(c.c)el('tgChat').value=c.c;
     if(c.e&&el('emailTo'))el('emailTo').value=c.e;
-    // Bloco F (2026-08-11): unchecked por omissão. Só fica checked se o utilizador já
-    // tinha guardado autoLog:true explicitamente antes desta sessão (opt-in preservado).
-    if(el('autoLogChk')) el('autoLogChk').checked = c.autoLog===true;
+    if(el('autoLogChk')) el('autoLogChk').checked = c.autoLog!==false;
     if(c.phase) setCurrentPhase(c.phase);
     // Scanner/Sharp 1X2/Dashboard lêem data/picks*.json (mesma origem do GitHub Pages,
     // sem CORS) — já não dependem da BSD Key. Só o separador Live continua a precisar
