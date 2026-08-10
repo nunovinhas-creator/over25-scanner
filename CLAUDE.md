@@ -148,6 +148,8 @@ Open either HTML file directly in a browser to run. No build steps, no tests, no
 | Activação apostas reais | CLV rolling-30 > +1% com n ≥ 200 settled |
 | Observação efectiva | **17 jun 2026** — 351 picks anteriores com `data_quality_flag` excluídos dos KPIs |
 
+**As "estratégias 1X2" do dashboard (WATCH+HOME, HOME, etc.) são legacy sem evidência válida para o pipeline actual** — ver [`docs/SHARP1X2_LEGACY_EVIDENCE.md`](docs/SHARP1X2_LEGACY_EVIDENCE.md) antes de as citar como prova de edge.
+
 ### 3 — BTTS+Over 2.5
 
 | Campo | Valor |
