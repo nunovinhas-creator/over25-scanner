@@ -157,6 +157,31 @@ Resultados walk-forward out-of-sample (épocas 2122–2526). Estratégias defini
 
 ---
 
+## Estratégias 1X2 — legacy, sem evidência válida
+
+> Investigação de 10 ago 2026. Detalhe completo e reabertura do assunto em
+> [`docs/SHARP1X2_LEGACY_EVIDENCE.md`](docs/SHARP1X2_LEGACY_EVIDENCE.md).
+
+| Estratégia (legacy) | Amostra citada | Estado |
+|---|---|---|
+| 1X2 WATCH+HOME | 245 de 352 · +44% ROI · WR 82% | **SEM EVIDÊNCIA VÁLIDA** |
+| 1X2 HOME | +31% ROI · WR 76% | **SEM EVIDÊNCIA VÁLIDA** |
+| (+ 2 outras variantes 1X2 do mesmo dashboard) | mesma proveniência de dados | **SEM EVIDÊNCIA VÁLIDA** |
+
+Os números não foram apagados — pertencem ao sistema legacy (auto-log client-side
+`autoLogSharp1x2()`, que parou de correr sozinho a 20/06/2026) e ficam registados
+como tal. Todos os 352 registos de `data/picks_1x2.json` vêm desse auto-log; o
+pipeline actual (`pipeline/scan_sharp1x2.py`) nunca escreveu nenhum pick neste
+ficheiro. 97% dos registos (341/352) não têm o campo `liga` gravado
+(`data_quality_flag="pre_bugfix_liga_vazia"`), e ao correr os gates actuais contra
+os 352 registos, 0 passam (0/245 no subconjunto WATCH+HOME).
+
+**As estratégias Over 2.5 acima não são afectadas** — vêm de `data/picks.json`,
+escrito pelo pipeline actual (`pipeline/scan_over25.py`), fonte de dados diferente
+da usada pelas estratégias 1X2 legacy.
+
+---
+
 ## Ciclos de Revisão
 
 | Checkpoint | Data | Critério |
