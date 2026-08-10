@@ -127,6 +127,7 @@ _PICKS_PATH = _PROJECT_ROOT / "data" / "picks.json"
 _PICKS_1X2_PATH = _PROJECT_ROOT / "data" / "picks_1x2.json"
 _OBS_PATH = _PROJECT_ROOT / "data" / "observations.json"
 _HEALTH_PATH = _PROJECT_ROOT / "data" / "live_scanner_health.json"
+_SNAPSHOT_PATH = _PROJECT_ROOT / "data" / "live_snapshot.json"
 
 # ── OBSERVAÇÕES (👁) — porta fiel de autoLogObservations() (index.html) ──
 # Mesmos 4 filtros que o browser aplica de facto em `toSave` (não o comentário
@@ -140,6 +141,21 @@ OBS_PROB_LIVE_MIN = 25
 OBS_LATE_MINUTE = 75
 OBS_LATE_MIN_GOALS = 2
 HEALTH_COMMIT_INTERVAL_S = 300  # throttle de commits só-de-health (sem obs novas)
+
+# ── SNAPSHOT (Bloco J, 10 ago 2026) — jogos ao vivo enriquecidos para a tab Live ──
+# A BSD não envia Access-Control-Allow-Origin para a origem do GitHub Pages —
+# loadLive() (index.html) nunca conseguia falar com a BSD directamente do
+# browser (mesmo diagnóstico do PR #149 para os scanners pré-jogo), e o
+# .catch(()=>({events:[]})) que ali existia escondia esse erro atrás de
+# "AO VIVO 0 / Nenhum jogo ao vivo". Este módulo já enriquece os jogos ao vivo
+# (enrich_event) e já corre detect_patterns()/pattern_score() sobre eles a
+# cada ciclo (para 🔥/👁) — publicar essa mesma saída em disco/git elimina a
+# necessidade de o browser falar com a BSD nesta tab.
+# Mesmo throttle de commit que HEALTH_COMMIT_INTERVAL_S, por omissão — não
+# gerar um commit por ciclo de 60s durante 5h50 de loop (razão idêntica à de
+# maybe_commit_health()). Constante independente porque são ficheiros e
+# preocupações distintas, mesmo com o mesmo valor hoje.
+SNAPSHOT_COMMIT_INTERVAL_S = 300
 
 
 # ---------------------------------------------------------------------------
@@ -1168,6 +1184,50 @@ def maybe_commit_health(health: dict, running: bool = True, force: bool = False)
     health["_last_committed_at"] = time.time()
 
 
+def snapshot_status(enriched_events: list[dict], api_ok: bool) -> str:
+    """OK (há jogos enriquecidos) | NO_LIVE_GAMES (BSD respondeu, sem jogos a
+    decorrer) | API_ERROR (falha de fetch algures no ciclo — ver
+    _bsd_get_stats). Deriva de contadores já calculados em scan_once(), não
+    introduz nenhum threshold novo."""
+    if enriched_events:
+        return "OK"
+    if api_ok:
+        return "NO_LIVE_GAMES"
+    return "API_ERROR"
+
+
+def write_live_snapshot(events: list[dict], status: str) -> None:
+    """Publica data/live_snapshot.json — mesma saída de enrich_event() +
+    detect_patterns()/pattern_score() já calculada em scan_once() para os
+    fluxos 🔥/👁, agora também disponível para loadLive() (index.html) ler
+    same-origin em vez de chamar a BSD (ver comentário SNAPSHOT acima)."""
+    ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    payload = {
+        "generated_at": ts,
+        "status": status,
+        "count": len(events),
+        "events": events,
+    }
+    _SNAPSHOT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    _SNAPSHOT_PATH.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def maybe_commit_live_snapshot(events: list[dict], status: str, snapshot_state: dict,
+                                force: bool = False) -> None:
+    """Escreve sempre (mesmo padrão de maybe_commit_health: write_* corre em
+    todo o ciclo) e comita data/live_snapshot.json no máximo a cada
+    SNAPSHOT_COMMIT_INTERVAL_S — mesmo throttle e mesma razão de
+    maybe_commit_health(). `snapshot_state` é um dict próprio (não o `health`)
+    para o throttle de cada ficheiro poder divergir no futuro sem se
+    condicionarem um ao outro."""
+    write_live_snapshot(events, status)
+    last = snapshot_state.get("_last_committed_at", 0)
+    if not force and (time.time() - last) < SNAPSHOT_COMMIT_INTERVAL_S:
+        return
+    git_commit_push([str(_SNAPSHOT_PATH)], "snapshot: live games [skip ci]")
+    snapshot_state["_last_committed_at"] = time.time()
+
+
 # ---------------------------------------------------------------------------
 # Scan
 # ---------------------------------------------------------------------------
@@ -1192,7 +1252,8 @@ def scan_once(api_key: str, state: dict, pick_ids: set[str], alerted: set[str],
     usado pelos testes existentes), o passo de observações é ignorado por
     completo — sem qualquer leitura/escrita de ficheiros nem chamada a git.
     `health_stats` (opcional): dict mutado in-place com {"live_games":, "api_ok":,
-    "observations_added":} para quem quiser telemetria do ciclo (ver update_health()).
+    "observations_added":, "enriched_events":} para quem quiser telemetria do
+    ciclo (ver update_health()) ou publicar o snapshot (ver write_live_snapshot()).
     `shadow_state` (opcional): quando fornecido (produção, via load_shadow_state()),
     corre também o MODO SOMBRA (ver run_shadow_alerts) sobre os mesmos eventos
     enriquecidos — sem novo fetch à BSD, sem enviar Telegram. Quando None
@@ -1204,6 +1265,7 @@ def scan_once(api_key: str, state: dict, pick_ids: set[str], alerted: set[str],
     if not events:
         if health_stats is not None:
             health_stats["api_ok"] = _bsd_get_stats["failures"] == 0
+            health_stats["enriched_events"] = []
         return 0
 
     sent = 0
@@ -1253,6 +1315,7 @@ def scan_once(api_key: str, state: dict, pick_ids: set[str], alerted: set[str],
 
     if health_stats is not None:
         health_stats["api_ok"] = _bsd_get_stats["failures"] == 0
+        health_stats["enriched_events"] = enriched_events
 
     if obs_state is not None:
         added = run_observations(enriched_events, obs_state, verbose=verbose)
@@ -1289,6 +1352,10 @@ def main() -> None:
     # de data/live_shadow_alerts.json, não de memória — ver load_shadow_state().
     shadow_state = load_shadow_state()
     health = new_health_state()
+    # snapshot_state (Bloco J) segue o mesmo padrão de obs_state/shadow_state
+    # acima — dict próprio, só com o timestamp do último commit (ver
+    # maybe_commit_live_snapshot()).
+    snapshot_state: dict = {"_last_committed_at": 0.0}
 
     if args.once or not args.loop:
         pick_ids = load_today_pick_ids()
@@ -1299,11 +1366,17 @@ def main() -> None:
         except Exception as exc:  # noqa: BLE001
             update_health(health, live_games=0, observations_added=0, api_ok=False, error=str(exc))
             maybe_commit_health(health, running=False, force=True)
+            maybe_commit_live_snapshot([], "API_ERROR", snapshot_state, force=True)
             raise
         update_health(health, live_games=health_stats.get("live_games", 0),
                       observations_added=health_stats.get("observations_added", 0),
                       api_ok=health_stats.get("api_ok", False))
         maybe_commit_health(health, running=False, force=True)
+        _events = health_stats.get("enriched_events", [])
+        maybe_commit_live_snapshot(
+            _events, snapshot_status(_events, health_stats.get("api_ok", False)),
+            snapshot_state, force=True,
+        )
         print(f"Scan único terminado — {n} alerta(s), {health_stats.get('observations_added', 0)} observação(ões).")
         return
 
@@ -1311,6 +1384,11 @@ def main() -> None:
     cur_day = datetime.now(timezone.utc).date()
     pick_ids = load_today_pick_ids()
     write_health(health, running=True)
+    # Definidos antes do loop para o commit final (linha abaixo do `while`)
+    # nunca ler variáveis por definir se --minutes<=0 fizer o loop sair sem
+    # correr nenhum ciclo.
+    _events: list[dict] = []
+    _status = "API_ERROR"
     print(f"Loop LIVE iniciado — interval={args.interval}s, até {args.minutes}min.")
     while time.time() < deadline:
         # Recarrega picks e limpa dedup à mudança de dia (novos jogos). obs_state
@@ -1336,8 +1414,12 @@ def main() -> None:
             update_health(health, live_games=health_stats.get("live_games", 0),
                           observations_added=0, api_ok=False, error=str(exc))
         maybe_commit_health(health, running=True)
+        _events = health_stats.get("enriched_events", [])
+        _status = snapshot_status(_events, health_stats.get("api_ok", False))
+        maybe_commit_live_snapshot(_events, _status, snapshot_state)
         time.sleep(args.interval)
     maybe_commit_health(health, running=False, force=True)
+    maybe_commit_live_snapshot(_events, _status, snapshot_state, force=True)
     print("Loop LIVE terminado (deadline).")
 
 

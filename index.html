@@ -864,6 +864,7 @@ select option{background:var(--laq-3);color:var(--text)}
     <button class="stab active" id="ltab-jogos" onclick="switchLiveTab('jogos')">⚡ Jogos</button>
     <button class="stab" id="ltab-radar" onclick="switchLiveTab('radar')">📊 Radar</button>
     <div style="margin-left:auto;display:flex;align-items:center;gap:8px;padding-right:4px">
+      <span style="font-family:var(--mono);font-size:10px;color:var(--text3)" id="lSnapshotAge" title="Idade dos dados do snapshot (pipeline/scan_live.py) — há sempre alguma latência de commit">—</span>
       <span style="font-family:var(--mono);font-size:11px;color:var(--amber)" id="lTimer">—</span>
       <button class="btn-sm" onclick="loadLive()">↻</button>
     </div>
@@ -1234,6 +1235,19 @@ const REPO          = 'nunovinhas-creator/over25-scanner';
 const PICKS_FILE    = 'data/picks.json';
 const PICKS1X2_FILE = 'data/picks_1x2.json';
 const OBS_FILE      = 'data/observations.json';
+// Bloco J, 10 ago 2026: snapshot server-side dos jogos ao vivo, publicado por
+// pipeline/scan_live.py — substitui as chamadas directas de loadLive() à BSD
+// (/api/v2/events/live/, /stats/, /odds/), que nunca tinham sucesso no browser
+// (a BSD não envia Access-Control-Allow-Origin para a origem do GitHub Pages).
+// Fetch same-origin simples (como version.json), não via ghRead/GitHub API —
+// esta tab recarrega a cada 30s e não deve gastar o rate-limit da API do GitHub.
+const LIVE_SNAPSHOT_FILE = 'data/live_snapshot.json';
+// Acima disto, o snapshot é tratado como obsoleto e nunca mostrado como se
+// fosse "0 jogos". O writer escreve em disco a cada ciclo do loop (~60s) mas
+// só comita/publica no máximo a cada 5 min (SNAPSHOT_COMMIT_INTERVAL_S em
+// pipeline/scan_live.py) — este limiar dá margem a essa latência mais a
+// eventual cache do GitHub Pages/Fastly (ver checkVersion()).
+const LIVE_SNAPSHOT_STALE_MIN = 10;
 const GH_API        = 'https://api.github.com';
 const TH_MOVE       = 1.0;    // % movimento mínimo Pinnacle (ruído <1% filtrado)
 const DIV_MIN        = 2.0;    // % divergência mínima Pin vs recreativas
@@ -3681,16 +3695,63 @@ async function renderLiveCalibrationPanel(){
   }
 }
 
+function formatSnapshotAge(ms){
+  const s=Math.max(0,Math.floor(ms/1000));
+  if(s<60) return `${s}s`;
+  const m=Math.floor(s/60);
+  if(m<60) return `${m}min ${s%60}s`;
+  const h=Math.floor(m/60);
+  return `${h}h ${m%60}min`;
+}
+
+function renderLiveSnapshotAge(ageMs, status){
+  const elAge=el('lSnapshotAge');
+  if(!elAge) return;
+  const warn=status&&status!=='OK';
+  elAge.textContent=warn?`dados de ${formatSnapshotAge(ageMs)} · ${status}`:`dados de ${formatSnapshotAge(ageMs)}`;
+  elAge.style.color=warn?'var(--amber)':'var(--text3)';
+}
+
+async function loadLiveSnapshot(){
+  // Lê o snapshot server-side (pipeline/scan_live.py, Bloco J, 10 ago 2026)
+  // em vez de chamar a BSD directamente do browser — confirmado que a BSD
+  // não envia Access-Control-Allow-Origin para a origem do GitHub Pages,
+  // por isso /api/v2/events/live/, /stats/ e /odds/ nunca tinham sucesso
+  // aqui (mesmo diagnóstico do PR #149 para os scanners pré-jogo). Qualquer
+  // falha de fetch/parse/idade tem de propagar como erro explícito — nunca
+  // cair silenciosamente numa lista vazia (o antigo
+  // .catch(()=>({events:[]})) escondia exactamente este tipo de erro atrás
+  // de "AO VIVO 0 / Nenhum jogo ao vivo").
+  let r;
+  try{
+    r=await fetch(LIVE_SNAPSHOT_FILE,{cache:'no-store'});
+  }catch(e){
+    throw new Error(`Sem ligação a ${LIVE_SNAPSHOT_FILE}: ${e.message}`);
+  }
+  if(!r.ok) throw new Error(`${LIVE_SNAPSHOT_FILE} devolveu HTTP ${r.status}`);
+  let data;
+  try{ data=await r.json(); }
+  catch(e){ throw new Error(`${LIVE_SNAPSHOT_FILE}: JSON inválido`); }
+  if(!data||typeof data!=='object'||!Array.isArray(data.events)||!data.generated_at)
+    throw new Error(`${LIVE_SNAPSHOT_FILE}: formato inesperado (falta events[] ou generated_at)`);
+  const genAtMs=new Date(data.generated_at).getTime();
+  if(isNaN(genAtMs)) throw new Error(`${LIVE_SNAPSHOT_FILE}: generated_at inválido`);
+  const ageMs=Date.now()-genAtMs;
+  if(ageMs>LIVE_SNAPSHOT_STALE_MIN*60000)
+    throw new Error(`Snapshot obsoleto — dados de há ${formatSnapshotAge(ageMs)} (o worker LIVE pode estar parado)`);
+  return {events:data.events, status:data.status||'OK', ageMs};
+}
+
 async function loadLive(){
   el('liveList').innerHTML='<div class="loading"><div class="spinner"></div>A carregar jogos ao vivo...</div>';
   renderLiveCalibrationPanel().catch(()=>{}); // independente do fetch de jogos ao vivo
   try{
     // Usa cache allPicks se disponível — evita hit ao GitHub a cada 30s
-    const [liveRes, picks] = await Promise.all([
-      get('/api/v2/events/live/').catch(()=>({events:[]})),
+    const [snapshot, picks] = await Promise.all([
+      loadLiveSnapshot(),
       allPicks.length ? Promise.resolve(allPicks) : picksGet().catch(()=>[])
     ]);
-    const events = liveRes.events||[];
+    const events = snapshot.events;
 
     const pickIds=new Set(picks.filter(p=>isToday(p.data)&&!p.result_over25).map(p=>String(p.id)));
     const watchIds=new Set(allGames.filter(g=>g.score>=40).map(g=>String(g.id)));
@@ -3701,50 +3762,23 @@ async function loadLive(){
       const bP=pickIds.has(String(b.id))?2:watchIds.has(String(b.id))?1:0;
       return bP-aP;
     });
-    const enriched=await Promise.all(sortedEvents.slice(0,50).map(async ev=>{
-      const [stats,odds]=await Promise.all([
-        get('/api/v2/events/'+ev.id+'/stats/').catch(()=>({})),
-        get('/api/v2/events/'+ev.id+'/odds/').catch(()=>({})),
-      ]);
-      const goals=(ev.home_score||0)+(ev.away_score||0);
-      const sh=stats?.stats?.home||{}, sa=stats?.stats?.away||{};
-      const xgH=sh.xg?.actual??null;
-      const xgA=sa.xg?.actual??null;
-      const mom=stats?.momentum||[];
-      const lastMom=mom.length?mom[mom.length-1]?.v:null;
-      const rawOverOdds=odds?.odds?.over_25_goals??null;
-      // over_25_goals_status: campo defensivo, não confirmado numa resposta BSD real.
-      const marketStatus=odds?.odds?.over_25_goals_status??odds?.status??null;
-      const {status:oddsStatus, value:overOdds}=classifyOdds(rawOverOdds, marketStatus);
-      if(oddsStatus!=='VALID'){
-        // Registo explícito e visível (não silencioso) — nunca deixar 'Odd 1.00 · Prob 100%'
-        // passar como sucesso (issue #127). console.warn fica nos DevTools/GH Pages logs.
-        console.warn(`[live] odds ${oddsStatus} ev=${ev.id} raw=${JSON.stringify(rawOverOdds)}`);
-      }
-      const probLive=overOdds!=null?Math.round((1/overOdds)*100):null;
-      const shots   ={h:sh.total_shots     ??null, a:sa.total_shots     ??null};
-      const sot     ={h:sh.shots_on_target ??null, a:sa.shots_on_target ??null};
-      const da      ={h:sh.dangerous_attack??null, a:sa.dangerous_attack??null};
-      const corners ={h:sh.corners         ??null, a:sa.corners         ??null};
-      const possession={h:sh.possession    ??null, a:sa.possession      ??null};
-      const redCards={h:sh.red_cards       ??null, a:sa.red_cards       ??null};
-      const min=ev.current_minute||0;
+    // Os eventos já vêm enriquecidos (xG/odds/stats) por enrich_event()
+    // (pipeline/scan_live.py) — só falta o que é puramente do browser
+    // (isWatch/isDanger dependem de allGames/picks em memória, não da BSD).
+    // detectPatterns()/patternScore/isLivePick recalculam-se aqui tal como
+    // sempre fizeram — a única coisa que mudou é a origem dos dados.
+    const enriched=sortedEvents.slice(0,50).map(ev=>{
+      const goals=ev.goals??((ev.hScore||0)+(ev.aScore||0));
+      const min=ev.min||0;
       const isSavedPick=pickIds.has(String(ev.id));
       const isDanger=isSavedPick&&goals<3&&min>60;
-      const xgTotal=xgH!=null&&xgA!=null?xgH+xgA:null;
-      const evObj={id:ev.id,home:ev.home_team,away:ev.away_team,
-        hScore:ev.home_score||0,aScore:ev.away_score||0,
-        // Nome canónico via league_id (como no loadAll) — o league_name cru da BSD
-        // não bate com a whitelist em 3 ligas (Primeira Liga, Belgian Pro League, La Liga 2)
-        min,status:ev.status,period:ev.period||null,league:BSD_LEAGUE_ID_MAP[ev.league_id]||ev.league_name||'',
-        goals,xgH,xgA,xgTotal,lastMom,overOdds,probLive,oddsStatus,
-        shots,sot,da,corners,possession,redCards,
-        isSavedPick,isWatch:watchIds.has(String(ev.id)),isDanger};
+      const evObj={...ev,goals,min,isSavedPick,isWatch:watchIds.has(String(ev.id)),isDanger};
       evObj.patterns=detectPatterns(evObj);
       evObj.patternScore=evObj.patterns.reduce((s,p)=>s+(p.level==='critical'?10:p.level==='high'?4:p.level==='med'?2:p.level==='conv'?0:1),0);
       evObj.isLivePick=(evObj.patternScore>=TH_LIVE_PICK&&(evObj.isSavedPick||evObj.goals>=1))||(evObj.patterns||[]).some(p=>p.id==='conv');
       return evObj;
-    }));
+    });
+    renderLiveSnapshotAge(snapshot.ageMs, snapshot.status);
 
     liveData=enriched;
     const savedPicks=enriched.filter(e=>e.isSavedPick);
@@ -3791,6 +3825,7 @@ async function loadLive(){
     }
   }catch(err){
     el('liveList').innerHTML='<div class="empty">⚠ '+esc(err.message)+'</div>';
+    if(el('lSnapshotAge')){ el('lSnapshotAge').textContent='⚠ erro'; el('lSnapshotAge').style.color='var(--red)'; }
     liveActive=false; // permite re-arranque na próxima vez que a tab for aberta
     startLiveCountdown(); // tenta de novo em 30s
   }
