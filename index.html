@@ -4436,6 +4436,7 @@ async function loadDash(){
   }catch(e){el('picksBody').innerHTML='<div class="empty">Erro ao carregar picks: '+esc(e.message)+'</div>';}
 }
 
+// OBS_DASHBOARD_JS:START
 function renderObsDashboard(){
   const obs = allObs||[];
   const withResult = obs.filter(o=>o.result_over25==='WIN'||o.result_over25==='LOSS');
@@ -4461,16 +4462,9 @@ function renderObsDashboard(){
     mkt:      '📈 Mercado',
   };
 
-  // Para cada padrão, calcular taxa de acerto
-  const patternStats = {};
-  for(const o of withResult){
-    for(const pid of (o.patterns||[])){
-      if(!patternStats[pid]) patternStats[pid]={n:0,win:0};
-      patternStats[pid].n++;
-      if(o.result_over25==='WIN') patternStats[pid].win++;
-    }
-  }
-  // Incluir padrões sem resultado ainda (para contar totais)
+  // Total de observações por padrão (com ou sem resultado ainda) — WR/ROI
+  // por padrão são calculados abaixo via computeCalibSegment(), que já filtra
+  // settled+odds válidas por si só.
   const patternTotal = {};
   for(const o of obs){
     for(const pid of (o.patterns||[])){
@@ -4485,35 +4479,57 @@ function renderObsDashboard(){
     return;
   }
 
+  // Bloco H2b: mesmo tratamento do painel "📊 Calibração Live" (Bloco H2) —
+  // reaproveita computeCalibSegment()/calibSegColor() (LIVE_CALIB_STATS_JS)
+  // em vez de reimplementar WR/cor. n só conta picks com odds válidas; os
+  // sem odds ficam em `excluded`, nunca misturados no WR/ROI/break-even.
+  // Cor e ✓ dependem do ROI, nunca do WR sozinho.
   const cards = keys.map(pid=>{
-    const st = patternStats[pid]||{n:0,win:0};
+    const segObs = obs.filter(o=>(o.patterns||[]).includes(pid));
+    const stat = computeCalibSegment(segObs);
     const total = patternTotal[pid]||0;
-    const wr = st.n ? Math.round(st.win/st.n*100) : null;
-    const wrCol = wr===null?'var(--text3)':wr>=60?'var(--green)':wr>=45?'var(--amber)':'var(--red)';
+    const color = calibSegColor(stat);
     const label = PATTERN_LABELS[pid]||pid;
+    const roiTxt = stat.n ? `${stat.roi>=0?'+':''}${stat.roi.toFixed(1)}% ROI` : '—';
+    const detail = stat.n
+      ? `n=${stat.n} · odd média ${stat.avgOdds.toFixed(2)} · break-even ${stat.breakeven.toFixed(1)}%`
+      : (stat.excluded ? `${stat.excluded} sem odds registadas` : 'sem resultado ainda');
+    const excTxt = stat.n && stat.excluded ? ` · ${stat.excluded} s/odds excl.` : '';
     return `<div class="bk-card">
       <div class="bk-name">${label}</div>
-      <div class="bk-wr" style="color:${wrCol}">${wr!==null?wr+'%':'—'}</div>
-      <div class="bk-roi" style="color:var(--text3)">${st.win}/${st.n} c/resultado</div>
-      <div class="bk-n">${total} observações totais</div>
+      <div class="bk-wr" style="color:${color}">${stat.n?stat.wr.toFixed(1)+'%':'—'}</div>
+      <div class="bk-roi" style="color:${color}">${roiTxt}</div>
+      <div class="bk-n">${detail}${excTxt} · ${total} obs. totais</div>
     </div>`;
   });
 
-  // KPI global de observações
-  const globalWR = withResult.length ? Math.round(withResult.filter(o=>o.result_over25==='WIN').length/withResult.length*100) : null;
-  const globalCol = globalWR===null?'var(--text3)':globalWR>=60?'var(--green)':globalWR>=45?'var(--amber)':'var(--red)';
+  // KPI global — mesmo agregado "Todas" do Bloco H2, aplicado aqui
+  const totalStat = computeCalibSegment(obs);
+  const totalColor = calibSegColor(totalStat);
+  const totalSub = totalStat.n
+    ? `n=${totalStat.n} c/odds · odd média ${totalStat.avgOdds.toFixed(2)} · break-even ${totalStat.breakeven.toFixed(1)}% · ROI ${totalStat.roi>=0?'+':''}${totalStat.roi.toFixed(1)}%${totalStat.excluded?` · ${totalStat.excluded} s/odds excl.`:''}`
+    : `${pending.length} pendentes${totalStat.excluded?` · ${totalStat.excluded} s/odds excl.`:''}`;
 
-  // Score-bucket breakdown — valida calibração dos thresholds
+  // Score-bucket breakdown — mesmo tratamento
   const BUCKETS = [{lo:0,hi:7,lbl:'< 8'},{lo:8,hi:11,lbl:'8–11'},{lo:12,hi:15,lbl:'12–15'},{lo:16,hi:999,lbl:'≥ 16'}];
   const bucketCards = BUCKETS.map(b=>{
-    const bObs = withResult.filter(o=>{ const s=o.pattern_score||0; return s>=b.lo&&s<=b.hi; });
-    const bWR = bObs.length ? Math.round(bObs.filter(o=>o.result_over25==='WIN').length/bObs.length*100) : null;
-    const bCol = bWR===null?'var(--text3)':bWR>=55?'var(--green)':bWR>=40?'var(--amber)':'var(--red)';
-    const isActive = b.lo>=12; // threshold actual
-    return `<div class="bk-card" style="${isActive?'border-color:var(--green)':''}">
-      <div class="bk-name" style="${isActive?'color:var(--green)':''}">Score ${b.lbl}${isActive?' ✓':''}</div>
-      <div class="bk-wr" style="color:${bCol}">${bWR!==null?bWR+'%':'—'}</div>
-      <div class="bk-roi">${bObs.filter(o=>o.result_over25==='WIN').length}/${bObs.length} c/resultado</div>
+    const bObsAll = obs.filter(o=>{ const s=o.pattern_score||0; return s>=b.lo&&s<=b.hi; });
+    const stat = computeCalibSegment(bObsAll);
+    const color = calibSegColor(stat);
+    // "gate" é só informativo (dentro do threshold de produção actual) —
+    // não implica lucro, por isso nunca fica colorido a verde por si só.
+    const inGate = b.lo>=12;
+    const profitable = stat.n>0 && stat.roi>0;
+    const roiTxt = stat.n ? `${stat.roi>=0?'+':''}${stat.roi.toFixed(1)}% ROI` : '—';
+    const detail = stat.n
+      ? `n=${stat.n} · odd média ${stat.avgOdds.toFixed(2)} · break-even ${stat.breakeven.toFixed(1)}%`
+      : (stat.excluded ? `${stat.excluded} sem odds registadas` : 'sem resultado ainda');
+    const excTxt = stat.n && stat.excluded ? ` · ${stat.excluded} s/odds excl.` : '';
+    return `<div class="bk-card">
+      <div class="bk-name">Score ${b.lbl}${inGate?' <span style="color:var(--text3);font-weight:400;font-size:9px">(gate)</span>':''}${profitable?' ✓':''}</div>
+      <div class="bk-wr" style="color:${color}">${stat.n?stat.wr.toFixed(1)+'%':'—'}</div>
+      <div class="bk-roi" style="color:${color}">${roiTxt}</div>
+      <div class="bk-n">${detail}${excTxt}</div>
     </div>`;
   }).join('');
 
@@ -4521,8 +4537,8 @@ function renderObsDashboard(){
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
       <div class="kpi-card">
         <div class="kpi-label">Taxa acerto geral</div>
-        <div class="kpi-val" style="color:${globalCol}">${globalWR!==null?globalWR+'%':'—'}</div>
-        <div class="kpi-sub">${withResult.length} resolvidas · ${pending.length} pendentes</div>
+        <div class="kpi-val" style="color:${totalColor}">${totalStat.n?totalStat.wr.toFixed(1)+'%':'—'}</div>
+        <div class="kpi-sub">${totalSub}</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-label">Threshold activo</div>
@@ -4535,6 +4551,7 @@ function renderObsDashboard(){
     <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">WR por padrão</div>
     <div class="bk-grid">${cards.join('')}</div>`;
 }
+// OBS_DASHBOARD_JS:END
 
 async function fillObsResults(){
   // Cross-referencia observações pendentes com allPicks para preencher resultados
