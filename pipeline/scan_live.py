@@ -773,6 +773,23 @@ def build_observation(e: dict, pick_index: dict[str, dict], sharp_ids: set[str])
     }
 
 
+def _resolve_over25_result(e: dict) -> dict | None:
+    """Núcleo partilhado da decisão WIN/LOSS: golos>=3 -> WIN, jogo terminado
+    (min>=90 ou period FT) sem lá chegar -> LOSS, None enquanto ainda decorre.
+    Usado por compute_observation_result_updates() (👁 OBSERVAÇÕES, inalterado)
+    e por compute_shadow_result_updates() (modo sombra) — mesma lógica, nunca
+    duplicada."""
+    goals = e.get("goals", 0)
+    min_ = e.get("min", 0)
+    period = str(e.get("period") or "").upper()
+    final_score = f"{e.get('hScore', 0)}-{e.get('aScore', 0)}"
+    if goals >= 3:
+        return {"result_over25": "WIN", "final_score": final_score, "result_at_min": min_}
+    if min_ >= 90 or period == "FT":
+        return {"result_over25": "LOSS", "final_score": final_score, "result_at_min": min_}
+    return None
+
+
 def compute_observation_result_updates(events: list[dict], unresolved: dict[str, str]) -> dict[str, dict]:
     """Mirror do loop `updates` em autoLogObservations(): para observações já
     guardadas e ainda sem resultado (`unresolved`: event_id -> obs_id), marca
@@ -783,14 +800,9 @@ def compute_observation_result_updates(events: list[dict], unresolved: dict[str,
         obs_id = unresolved.get(str(e["id"]))
         if not obs_id:
             continue
-        goals = e.get("goals", 0)
-        min_ = e.get("min", 0)
-        period = str(e.get("period") or "").upper()
-        final_score = f"{e.get('hScore', 0)}-{e.get('aScore', 0)}"
-        if goals >= 3:
-            updates[obs_id] = {"result_over25": "WIN", "final_score": final_score, "result_at_min": min_}
-        elif min_ >= 90 or period == "FT":
-            updates[obs_id] = {"result_over25": "LOSS", "final_score": final_score, "result_at_min": min_}
+        patch = _resolve_over25_result(e)
+        if patch is not None:
+            updates[obs_id] = patch
     return updates
 
 
@@ -891,6 +903,218 @@ def run_observations(events: list[dict], obs_state: dict, verbose: bool = False)
 
 
 # ---------------------------------------------------------------------------
+# MODO SOMBRA — Bloco H1: regista, SEM enviar Telegram, o que o gate
+# "🔥 APOSTAR AGORA" (passes_telegram_gate) teria decidido — enviaria, ou
+# bloqueado por qual filtro de ALERT_FILTERS — com as odds ao vivo no
+# momento do sinal e, quando o jogo termina, a última odd VALID observada
+# (proxy de fecho) e o resultado. Nunca toca em LIVE_ALERTS_ENABLED,
+# ALERT_FILTERS, TH_LIVE_PICK, detect_patterns()/pattern_score() nem no
+# caminho de data/observations.json — reaproveita apenas o `e` já construído
+# por enrich_event() no mesmo ciclo (mesmo stats+odds já pedidos para
+# detecção/OBSERVAÇÕES), por isso não implica NENHUM pedido extra à BSD.
+# ---------------------------------------------------------------------------
+
+_SHADOW_PATH = _PROJECT_ROOT / "data" / "live_shadow_alerts.json"
+
+
+def _telegram_gate_block_reason(e: dict) -> str | None:
+    """Só chamar quando passes_telegram_gate(e) já devolveu False. Identifica
+    qual dos dois filtros opcionais bloqueou — xg_banda_morta ou
+    minuto_tardio, os únicos que o Bloco H1 precisa de instrumentar (avaliar
+    se estão a bloquear greens). Devolve None se o bloqueio foi do GATE_BASE
+    (Pressão/Score ausente ou abaixo do mínimo) — fora do âmbito pedido. Lê
+    os thresholds directamente de ALERT_FILTERS/PRESSAO_MIN_TELEGRAM/
+    SCORE_MIN_TELEGRAM (nunca duplica valores, só a leitura), por isso segue
+    automaticamente qualquer alteração futura a esses limiares."""
+    pressao = _pressao_value(e)
+    if pressao is None or not (pressao >= PRESSAO_MIN_TELEGRAM and e.get("patternScore", 0) >= SCORE_MIN_TELEGRAM):
+        return None
+
+    banda = ALERT_FILTERS["FILTRO_XG_BANDA_MORTA"]
+    if banda["enabled"]:
+        xg = e.get("xgTotal")
+        if xg is not None and banda["XG_MIN"] <= xg < banda["XG_MAX"]:
+            return "xg_banda_morta"
+
+    tardio = ALERT_FILTERS["FILTRO_MINUTO_TARDIO"]
+    if tardio["enabled"]:
+        minuto = e.get("min")
+        if minuto is not None and minuto >= tardio["MINUTO_MAX"]:
+            return "minuto_tardio"
+
+    return None
+
+
+def build_shadow_alert(e: dict, blocked_by: str | None) -> dict:
+    """Um registo do modo sombra. `blocked_by=None` significa que
+    passes_telegram_gate(e) devolveu True (o alerta real teria sido
+    enviado); caso contrário guarda qual filtro bloqueou
+    (xg_banda_morta/minuto_tardio)."""
+    base_id = str(e["id"])
+    now = datetime.now(timezone.utc)
+    category = blocked_by or "send"
+    # A categoria entra no id (não só o timestamp): dois ciclos muito
+    # próximos podem cair no mesmo milissegundo, e um evento pode ter
+    # registos de categorias diferentes pendentes ao mesmo tempo — sem a
+    # categoria, colidiam no mesmo id e o merge por id em run_shadow_alerts
+    # apagava silenciosamente um dos dois.
+    return {
+        "id": f"{base_id}_shadow_{category}_{int(time.time() * 1000)}",
+        "event_id": base_id,
+        "casa": e.get("home", ""), "fora": e.get("away", ""), "liga": e.get("league", ""),
+        "detected_at": now.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z",
+        "min": e.get("min", 0),
+        "score": f"{e.get('hScore', 0)}-{e.get('aScore', 0)}",
+        "goals": e.get("goals", 0),
+        "xg_total": e.get("xgTotal"),
+        "pattern_score": e.get("patternScore", 0),
+        "pressao": _pressao_value(e),
+        "odds_live": e.get("overOdds"),
+        "odds_status": e.get("oddsStatus", ""),
+        "blocked_by": blocked_by,
+        "result_over25": "",
+        "final_score": "",
+        "result_at_min": "",
+        "closing_odds_over25": None,
+    }
+
+
+def compute_shadow_result_updates(events: list[dict], unresolved: dict[str, list[str]],
+                                   last_valid_odds: dict[str, float]) -> dict[str, dict]:
+    """Como compute_observation_result_updates() (mesmo núcleo,
+    _resolve_over25_result), mas um event_id pode ter vários registos sombra
+    pendentes em simultâneo (uma categoria por "teria enviado" / cada filtro
+    que bloqueou) — todos recebem o mesmo patch de resultado. Acrescenta
+    closing_odds_over25 a partir da última odd VALID vista para o evento
+    (ver run_shadow_alerts) quando existir — nunca inventa um valor quando a
+    BSD não devolveu nenhuma odd válida antes do fim do jogo."""
+    updates: dict[str, dict] = {}
+    for e in events:
+        eid = str(e["id"])
+        ids = unresolved.get(eid)
+        if not ids:
+            continue
+        patch = _resolve_over25_result(e)
+        if patch is None:
+            continue
+        closing = last_valid_odds.get(eid)
+        if closing is not None:
+            patch = {**patch, "closing_odds_over25": round(closing, 3)}
+        for sid in ids:
+            updates[sid] = patch
+    return updates
+
+
+def load_shadow_state() -> dict:
+    """Estado inicial do modo sombra ao arrancar/reiniciar — mirror de
+    load_observation_state(), lido de data/live_shadow_alerts.json (sobrevive
+    aos restarts do workflow, tal como as OBSERVAÇÕES). `last_valid_odds`
+    reconstrói-se a partir da odd guardada em cada registo AINDA pendente —
+    só uma aproximação ao reiniciar (não guarda o histórico de ticks), mas
+    nunca pior que não ter closing odds nenhuma; eventos já resolvidos não
+    precisam de mais nenhum tick, por isso ficam de fora."""
+    current = load_json_list(_SHADOW_PATH)
+    logged_keys: set[str] = set()
+    unresolved: dict[str, list[str]] = {}
+    last_valid_odds: dict[str, float] = {}
+    for o in current:
+        eid = str(o.get("event_id") or "")
+        if not eid:
+            continue
+        logged_keys.add(f"{eid}:{o.get('blocked_by') or 'send'}")
+        if not o.get("result_over25") and o.get("id"):
+            unresolved.setdefault(eid, []).append(o["id"])
+            if o.get("odds_status") == "VALID" and o.get("odds_live"):
+                try:
+                    last_valid_odds[eid] = float(o["odds_live"])
+                except (TypeError, ValueError):
+                    pass
+    return {"logged_keys": logged_keys, "unresolved": unresolved, "last_valid_odds": last_valid_odds}
+
+
+def run_shadow_alerts(events: list[dict], shadow_state: dict, verbose: bool = False) -> int:
+    """Um ciclo do modo sombra: sobre os mesmos candidatos que scan_once()
+    avaliaria para o alerta real (is_live_pick, não é pick guardado, golos<3),
+    regista o que passes_telegram_gate() teria decidido — SEM NUNCA chamar
+    send_telegram(). Dedup por (event_id, categoria) sobrevive a restarts via
+    load_shadow_state(), tal como as OBSERVAÇÕES. Actualiza também
+    result_over25/closing_odds_over25 dos registos pendentes. Devolve o nº de
+    registos NOVOS persistidos neste ciclo — 0 também quando a persistência
+    falha (mesma semântica fail-safe de run_observations(): nada fica
+    'queimado', o próximo ciclo reavalia)."""
+    if not events:
+        return 0
+
+    # Vai actualizando a última odd VALID vista para qualquer evento já
+    # pendente — é o que compute_shadow_result_updates() usa como proxy de
+    # fecho. Corre sobre TODOS os eventos (não só candidatos), pois um jogo
+    # continua a decorrer depois de deixar de qualificar (ex.: golos>=3).
+    for e in events:
+        eid = str(e["id"])
+        if eid in shadow_state["unresolved"] and e.get("oddsStatus") == "VALID" and e.get("overOdds"):
+            shadow_state["last_valid_odds"][eid] = e["overOdds"]
+
+    new_entries: list[dict] = []
+    for e in events:
+        if not is_live_pick(e) or e.get("isSavedPick") or e.get("goals", 0) >= 3:
+            continue
+        eid = str(e["id"])
+        would_send = passes_telegram_gate(e)
+        blocked_by = None if would_send else _telegram_gate_block_reason(e)
+        if not would_send and blocked_by is None:
+            continue  # bloqueado pelo GATE_BASE (Pressão/Score) — fora do âmbito pedido
+        key = f"{eid}:{blocked_by or 'send'}"
+        if key in shadow_state["logged_keys"]:
+            continue
+        new_entries.append(build_shadow_alert(e, blocked_by))
+        if e.get("oddsStatus") == "VALID" and e.get("overOdds"):
+            shadow_state["last_valid_odds"][eid] = e["overOdds"]
+
+    updates = compute_shadow_result_updates(events, shadow_state["unresolved"], shadow_state["last_valid_odds"])
+
+    if not new_entries and not updates:
+        return 0
+
+    current = load_json_list(_SHADOW_PATH)
+    by_id = {o["id"]: o for o in current}
+    for sid, patch in updates.items():
+        if sid in by_id:
+            by_id[sid] = {**by_id[sid], **patch}
+    for entry in new_entries:
+        by_id[entry["id"]] = entry
+    save_json_list(_SHADOW_PATH, list(by_id.values()))
+    persisted = git_commit_push(
+        [str(_SHADOW_PATH)],
+        f"shadow: {len(new_entries)} new, {len(updates)} updated [skip ci]",
+    )
+    if not persisted:
+        git_discard_local_changes([str(_SHADOW_PATH)])
+        print(
+            f"shadow_persist_failed novos={len(new_entries)} updates={len(updates)} "
+            "— git push falhou; registo(s) NÃO considerados concluídos (sem avanço de "
+            "dedup, reavaliados no próximo ciclo)",
+            file=sys.stderr,
+        )
+        return 0
+
+    for entry in new_entries:
+        shadow_state["logged_keys"].add(f"{entry['event_id']}:{entry['blocked_by'] or 'send'}")
+        shadow_state["unresolved"].setdefault(entry["event_id"], []).append(entry["id"])
+    resolved_ids = set(updates.keys())
+    for eid, ids in list(shadow_state["unresolved"].items()):
+        remaining = [sid for sid in ids if sid not in resolved_ids]
+        if remaining:
+            shadow_state["unresolved"][eid] = remaining
+        else:
+            del shadow_state["unresolved"][eid]
+
+    if verbose:
+        print(f"SHADOW: {len(new_entries)} novo(s), {len(updates)} actualizado(s).")
+
+    return len(new_entries)
+
+
+# ---------------------------------------------------------------------------
 # Health check — visibilidade de que o worker está vivo sem depender do browser
 # ---------------------------------------------------------------------------
 
@@ -951,7 +1175,7 @@ def maybe_commit_health(health: dict, running: bool = True, force: bool = False)
 
 def scan_once(api_key: str, state: dict, pick_ids: set[str], alerted: set[str],
               verbose: bool = True, obs_state: dict | None = None,
-              health_stats: dict | None = None) -> int:
+              health_stats: dict | None = None, shadow_state: dict | None = None) -> int:
     """
     Um ciclo de scan. Envia TG para sinais qualificados novos (goals<3, ainda
     não alertados). Devolve nº de alertas "🔥 APOSTAR AGORA" enviados (o
@@ -969,6 +1193,10 @@ def scan_once(api_key: str, state: dict, pick_ids: set[str], alerted: set[str],
     completo — sem qualquer leitura/escrita de ficheiros nem chamada a git.
     `health_stats` (opcional): dict mutado in-place com {"live_games":, "api_ok":,
     "observations_added":} para quem quiser telemetria do ciclo (ver update_health()).
+    `shadow_state` (opcional): quando fornecido (produção, via load_shadow_state()),
+    corre também o MODO SOMBRA (ver run_shadow_alerts) sobre os mesmos eventos
+    enriquecidos — sem novo fetch à BSD, sem enviar Telegram. Quando None
+    (default), ignorado por completo.
     """
     events = fetch_live_events(api_key, verbose=verbose)
     if health_stats is not None:
@@ -1031,6 +1259,9 @@ def scan_once(api_key: str, state: dict, pick_ids: set[str], alerted: set[str],
         if health_stats is not None:
             health_stats["observations_added"] = added
 
+    if shadow_state is not None:
+        run_shadow_alerts(enriched_events, shadow_state, verbose=verbose)
+
     return sent
 
 
@@ -1054,13 +1285,17 @@ def main() -> None:
     # load_observation_state(). health não é reposto no reset diário (abaixo):
     # é telemetria do PROCESSO (este arranque do worker), não do dia de jogos.
     obs_state = load_observation_state()
+    # shadow_state (Bloco H1) sobrevive a restarts do mesmo modo — reconstruído
+    # de data/live_shadow_alerts.json, não de memória — ver load_shadow_state().
+    shadow_state = load_shadow_state()
     health = new_health_state()
 
     if args.once or not args.loop:
         pick_ids = load_today_pick_ids()
         health_stats: dict = {}
         try:
-            n = scan_once(api_key, state, pick_ids, alerted, obs_state=obs_state, health_stats=health_stats)
+            n = scan_once(api_key, state, pick_ids, alerted, obs_state=obs_state,
+                          health_stats=health_stats, shadow_state=shadow_state)
         except Exception as exc:  # noqa: BLE001
             update_health(health, live_games=0, observations_added=0, api_ok=False, error=str(exc))
             maybe_commit_health(health, running=False, force=True)
@@ -1089,7 +1324,8 @@ def main() -> None:
             state = {"ht": {}, "mkt": {}}
         health_stats = {}
         try:
-            n = scan_once(api_key, state, pick_ids, alerted, obs_state=obs_state, health_stats=health_stats)
+            n = scan_once(api_key, state, pick_ids, alerted, obs_state=obs_state,
+                          health_stats=health_stats, shadow_state=shadow_state)
             if n:
                 print(f"[{datetime.now(timezone.utc):%H:%M:%S}] {n} alerta(s) enviado(s).")
             update_health(health, live_games=health_stats.get("live_games", 0),
