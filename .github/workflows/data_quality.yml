@@ -43,6 +43,9 @@ jobs:
       - name: Dashboard — cards bkGrid usam a mesma cor no WR e no ROI
         run: node tests/js/test_bkgrid_wr_color.mjs
 
+      - name: Dashboard — painel "Padrões ao Vivo" usa ROI/break-even, não WR sozinho
+        run: node tests/js/test_dashboard_calibration.mjs
+
   # ---------------------------------------------------------------------------
   # Job 1: validate — schema checks + data quality tests
   # ---------------------------------------------------------------------------
