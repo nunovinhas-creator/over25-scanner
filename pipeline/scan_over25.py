@@ -40,6 +40,8 @@ BTTS_O25_FILE = DATA_DIR / "picks_btts_over25.json"
 # ── env ────────────────────────────────────────────────────────────────────────
 BSD_API_KEY = os.environ.get("BSD_API_KEY", "")
 
+BSD_BASE = "https://sports.bzzoiro.com"
+
 # ── constants ──────────────────────────────────────────────────────────────────
 MODEL_WEIGHT = 0.30
 MIN_EV = 0.03
@@ -254,6 +256,50 @@ def _event_fields(ev: dict) -> dict:
         "prob_over25_ml":  ev.get("prob_over25_ml"),
         "prob_btts_ml":    ev.get("prob_btts_ml"),
     }
+
+
+def fetch_closing_odds_over25(event_id: str) -> float | None:
+    """
+    Fetch odds Pinnacle Over 2.5 para um evento via BSD API — usado por
+    pipeline/update_closing_odds_over25.py (Bloco I) para preencher
+    odds_over_close/clv em data/picks.json server-side.
+
+    Chama GET /api/v2/odds/?market=over_under_25&outcome=over&event_id=<id>
+    e extrai decimal_odds da Pinnacle. Retorna None se a BSD não tiver odds
+    disponíveis para este evento. Mesmo endpoint e mesma lógica de extracção
+    que captureClosingOdds()/silentSync()/reactSync() já usam no browser
+    (index.html) — devolve o mesmo preço, só que sem depender de a página
+    estar aberta no momento certo.
+    """
+    if not BSD_API_KEY:
+        return None
+
+    headers = {"Authorization": f"Token {BSD_API_KEY}", "Accept": "application/json"}
+    try:
+        r = requests.get(
+            f"{BSD_BASE}/api/v2/odds/",
+            headers=headers,
+            params={"market": "over_under_25", "outcome": "over", "event_id": event_id, "limit": 30},
+            timeout=15,
+        )
+        r.raise_for_status()
+        payload = r.json()
+    except Exception as exc:
+        print(f"fetch_closing_odds_over25({event_id}): {exc}", file=sys.stderr)
+        return None
+
+    records = payload if isinstance(payload, list) else (
+        payload.get("results") or payload.get("data") or []
+    )
+    for rec in records:
+        if rec.get("bookmaker_slug") != "pinnacle":
+            continue
+        try:
+            price = float(rec.get("decimal_odds") or 0)
+            return price if price > 1.01 else None
+        except (TypeError, ValueError):
+            return None
+    return None
 
 
 # ── Pipeline ────────────────────────────────────────────────────────────────────
