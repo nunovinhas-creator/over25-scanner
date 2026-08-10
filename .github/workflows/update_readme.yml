@@ -44,16 +44,46 @@ jobs:
           PYTHONPATH: ${{ github.workspace }}
 
       - name: Commit updated README
+        # Mesmo padrão de retry que deploy_version.yml já usa: até 5 tentativas,
+        # fetch + reset origin/main antes de cada push (README.md já foi
+        # regenerado no passo anterior e fica inalterado no disco entre
+        # tentativas). Sem isto, um push concorrente de outro workflow no mesmo
+        # intervalo (ex.: deploy_version.yml, disparado pelo mesmo push a main)
+        # rejeita este push como non-fast-forward e o job falha — falha
+        # diagnosticada no commit 364da59 (run #85, 10 ago 2026): git pull
+        # --rebase + push únicos, sem retry.
+        #
+        # --mixed, não --soft (deploy_version.yml usa --soft): confirmado em
+        # sandbox local que --soft deixa o índice preso ao commit local
+        # anterior — numa 2ª tentativa, qualquer ficheiro alterado por OUTRO
+        # workflow entretanto (ex.: data/picks.json, CLAUDE.md — exactamente os
+        # ficheiros que disparam este workflow) fica silenciosamente revertido
+        # no commit resultante, porque só README.md é re-adicionado. É o mesmo
+        # bug já diagnosticado e corrigido com --mixed em git_commit_push()
+        # (pipeline/scan_common.py) — --mixed ressincroniza o índice inteiro
+        # com origin/main antes do git add seletivo, por isso só README.md
+        # passa a divergir do último origin/main.
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add README.md
+          for tentativa in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --mixed origin/main
+            git add README.md
 
-          if git diff --cached --quiet; then
-            echo "Sem alterações no README."
-          else
+            if git diff --cached --quiet; then
+              echo "Sem alterações no README."
+              exit 0
+            fi
+
             git commit -m "[skip ci] update README"
-            git pull --rebase origin main
-            git push origin main
-          fi
+            if git push origin main; then
+              exit 0
+            fi
+            echo "Push rejeitado (tentativa ${tentativa}/5) — outro workflow avançou main entretanto (corrida de push, não erro de geração do README). A repetir após novo fetch..."
+            sleep $((tentativa * 3))
+          done
+
+          echo "::error::update_readme: falha a fazer push do README após 5 tentativas — corrida persistente de push com outro workflow em main (git push rejeitado repetidamente). NÃO é um erro de scripts/generate_readme.py nem do conteúdo do README, que já correu com sucesso no passo anterior." >&2
+          exit 1
