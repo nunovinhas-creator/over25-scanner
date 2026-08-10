@@ -885,13 +885,14 @@ select option{background:var(--laq-3);color:var(--text)}
     </div>
     <div id="liveList"><div class="empty">Abre esta tab para carregar jogos ao vivo</div></div>
 
-    <!-- Calibração live — N=35 observações históricas -->
+    <!-- Calibração live — calculada em tempo real a partir de data/observations.json
+         (ver renderLiveCalibrationPanel() / computeCalibSegment()). A cor de cada
+         segmento depende do ROI (não do WR): WR sozinho não diz se um segmento é
+         lucrativo sem o break-even implícito pela odd média (Bloco H2). -->
     <div style="margin:12px 0;padding:10px 12px;background:var(--card);border:1px solid var(--border);border-radius:8px;font-family:var(--mono);font-size:11px;color:var(--text3)">
-      <div style="color:var(--amber);font-weight:700;margin-bottom:6px">📊 Calibração Live (N=35 observações)</div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px 20px">
-        <span><span style="color:var(--green);font-weight:700">Score≥12</span> → 46% WR &nbsp;|&nbsp; <span style="color:var(--red);font-weight:700">Score&lt;12</span> → 24% WR</span>
-        <span><span style="color:var(--green);font-weight:700">Goals≥1</span> → 44% WR &nbsp;|&nbsp; <span style="color:var(--red);font-weight:700">Goals=0</span> → 6.7% WR</span>
-        <span><span style="color:var(--green);font-weight:700">pressure</span> → 43.5% &nbsp;|&nbsp; <span style="color:var(--red);font-weight:700">late/open</span> → 0% WR</span>
+      <div style="color:var(--amber);font-weight:700;margin-bottom:6px">📊 Calibração Live <span id="liveCalibN"></span></div>
+      <div id="liveCalibBody" style="display:flex;flex-direction:column;gap:6px">
+        <div class="empty" style="padding:2px 0">A carregar…</div>
       </div>
     </div>
 
@@ -3577,8 +3578,112 @@ function detectPatterns(e){
   return p;
 }
 
+// ════════════════════════════════════════════════════════════════
+// CALIBRAÇÃO LIVE (Bloco H2) — painel "📊 Calibração Live" no separador
+// Live, calculado a partir de data/observations.json (a app já lê este
+// ficheiro para autoLogObservations()/renderObsDashboard() — aqui só
+// reaproveita allObs/obsRead(), sem novo endpoint).
+//
+// O painel antigo era texto estático ("Score≥12 → 46% WR", a verde) sem
+// referência ao break-even da odd — um WR abaixo do break-even implícito
+// aparecia como sucesso. computeCalibSegment() calcula, por segmento: n
+// (só picks com odds — os sem odds contam à parte em `excluded`, nunca
+// misturados no cálculo), WR, odd média, break-even implícito (100/odd
+// média) e ROI (stake unitário). calibSegColor() só devolve verde se
+// ROI>0 — nunca a partir do WR sozinho.
+// ════════════════════════════════════════════════════════════════
+
+// LIVE_CALIB_STATS_JS:START
+function _calibParseOdds(raw){
+  const v = parseFloat(raw);
+  return (isFinite(v) && v > 0) ? v : null;
+}
+
+function computeCalibSegment(obsList){
+  const settled = (obsList||[]).filter(o=>o.result_over25==='WIN'||o.result_over25==='LOSS');
+  const withOdds = settled
+    .map(o=>({o, odds:_calibParseOdds(o.odds_live)}))
+    .filter(x=>x.odds!==null);
+  const excluded = settled.length - withOdds.length;
+  if(!withOdds.length){
+    return {n:0, excluded, wr:null, avgOdds:null, breakeven:null, roi:null};
+  }
+  const wins = withOdds.filter(x=>x.o.result_over25==='WIN').length;
+  const wr = wins / withOdds.length * 100;
+  const avgOdds = withOdds.reduce((s,x)=>s+x.odds,0) / withOdds.length;
+  const breakeven = 100 / avgOdds;
+  const profit = withOdds.reduce((s,x)=>s+(x.o.result_over25==='WIN'?x.odds-1:-1), 0);
+  const roi = profit / withOdds.length * 100;
+  return {n:withOdds.length, excluded, wr, avgOdds, breakeven, roi};
+}
+
+function calibSegColor(stat){
+  if(!stat || !stat.n) return 'var(--text3)';
+  return stat.roi > 0 ? 'var(--green)' : 'var(--red)';
+}
+// LIVE_CALIB_STATS_JS:END
+
+function calibSegLabel(name, stat){
+  if(!stat || !stat.n){
+    const exc = stat ? stat.excluded : 0;
+    return `<span style="color:var(--text3)">${name}: sem odds${exc?` (n=${exc} excl.)`:' (n=0)'}</span>`;
+  }
+  const color = calibSegColor(stat);
+  const roiTxt = (stat.roi>=0?'+':'')+stat.roi.toFixed(1)+'%';
+  const exTxt = stat.excluded>0
+    ? ` <span style="color:var(--text3)">(+${stat.excluded} s/odds excl.)</span>`
+    : '';
+  return `<span style="color:${color};font-weight:700">${name}</span> `+
+    `<span style="color:var(--text3)">WR ${stat.wr.toFixed(1)}% · n=${stat.n} · `+
+    `odd média ${stat.avgOdds.toFixed(2)} · break-even ${stat.breakeven.toFixed(1)}% · `+
+    `ROI ${roiTxt}</span>${exTxt}`;
+}
+
+function renderLiveCalibrationHtml(obsList){
+  const list = obsList||[];
+  const settledTotal = list.filter(o=>o.result_over25==='WIN'||o.result_over25==='LOSS').length;
+  if(!settledTotal){
+    return '<div class="empty" style="padding:2px 0">Sem observações com resultado ainda.</div>';
+  }
+
+  const total     = computeCalibSegment(list);
+  const wl        = computeCalibSegment(list.filter(o=>SHARP1X2_WHITELIST.has(o.liga||'')));
+  const scoreHi   = computeCalibSegment(list.filter(o=>(o.pattern_score||0) >= TH_LIVE_PICK));
+  const scoreLo   = computeCalibSegment(list.filter(o=>(o.pattern_score||0) < TH_LIVE_PICK));
+  const goalsHi   = computeCalibSegment(list.filter(o=>(o.goals||0) >= 1));
+  const goalsZero = computeCalibSegment(list.filter(o=>(o.goals||0) === 0));
+  const pressureSeg = computeCalibSegment(list.filter(o=>(o.patterns||[]).includes('pressure')));
+  const lateOpenSeg = computeCalibSegment(list.filter(o=>{
+    const p = o.patterns||[];
+    return p.includes('late') || p.includes('open');
+  }));
+
+  return [
+    `<div>${calibSegLabel('Todas (agregado)', total)}</div>`,
+    `<div>${calibSegLabel('Apenas ligas whitelisted', wl)}</div>`,
+    `<div>${calibSegLabel('Score≥'+TH_LIVE_PICK, scoreHi)} &nbsp;|&nbsp; ${calibSegLabel('Score<'+TH_LIVE_PICK, scoreLo)}</div>`,
+    `<div>${calibSegLabel('Goals≥1', goalsHi)} &nbsp;|&nbsp; ${calibSegLabel('Goals=0', goalsZero)}</div>`,
+    `<div>${calibSegLabel('pressure', pressureSeg)} &nbsp;|&nbsp; ${calibSegLabel('late/open', lateOpenSeg)}</div>`,
+  ].join('');
+}
+
+async function renderLiveCalibrationPanel(){
+  const body = el('liveCalibBody');
+  if(!body) return;
+  try{
+    const obs = allObs.length ? allObs : await obsRead();
+    if(!allObs.length) allObs = obs;
+    const nEl = el('liveCalibN');
+    if(nEl) nEl.textContent = `(N=${obs.length} observações)`;
+    body.innerHTML = renderLiveCalibrationHtml(obs);
+  }catch(e){
+    body.innerHTML = '<div class="empty">Erro ao carregar calibração.</div>';
+  }
+}
+
 async function loadLive(){
   el('liveList').innerHTML='<div class="loading"><div class="spinner"></div>A carregar jogos ao vivo...</div>';
+  renderLiveCalibrationPanel().catch(()=>{}); // independente do fetch de jogos ao vivo
   try{
     // Usa cache allPicks se disponível — evita hit ao GitHub a cada 30s
     const [liveRes, picks] = await Promise.all([
