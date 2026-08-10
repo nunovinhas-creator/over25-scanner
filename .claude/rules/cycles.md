@@ -65,6 +65,6 @@ Nenhum módulo está em apostas reais. Picks são gerados e tracked mas não apo
 ## Regras de sessão (browser/mobile-only)
 
 1. **Ficheiros completos** — nunca diffs, nunca fragmentos parciais
-2. **Merge para main antes de fechar** — o Stop hook faz commit+push mas o merge PR→main deve ser feito durante a sessão
+2. **Sessão termina com o PR aberto, não fechado** — o Stop hook faz commit+push do branch, mas a sessão nunca faz merge do PR para `main`. O merge é sempre uma decisão do Nuno, feita à parte.
 3. **Sem terminal local** — se algo só for possível via terminal, dizer explicitamente e propor alternativa (GitHub Actions, workflow_dispatch)
 4. **Não iniciar apostas reais** sem passar pelos checkpoints C3→C4→C5

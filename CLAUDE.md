@@ -70,6 +70,22 @@ Alterações a `main` passam sempre por branch + PR. Nunca simular estados de ve
 
 O Stop hook (`/home/user/over25-scanner/.claude/auto-push.sh`) trata do commit+push do branch de trabalho para o que ficar por commitar no fim da sessão. Abrir e fazer merge do PR para `main` exige CI verde e é uma decisão explícita — nunca automática nem silenciosa.
 
+### Âmbito de sessão
+
+- **Um bloco = um branch = um PR.** Não misturar dois blocos de trabalho no mesmo branch/PR.
+- **Sem refactors não pedidos** — um bloco resolve o que foi pedido, nada mais (sem limpeza, sem abstracções, sem "já agora também...").
+- **Sem merge sem aprovação expressa do Nuno** — a sessão abre o PR e pára; o merge para `main` é sempre uma decisão dele, feita à parte.
+
+### Zona intocável (sem autorização expressa do Nuno)
+
+Estes ficheiros correm em produção 100% autónoma (detecção live, 👁 OBSERVAÇÕES, alertas TG e health check — ver Overview) e não devem ser alterados sem pedido explícito, mesmo dentro do âmbito de um bloco aprovado:
+
+- `.github/workflows/live_scanner.yml`
+- `pipeline/scan_live.py`
+- `pipeline/scan_common.py::send_telegram`
+- `data/observations.json`
+- `data/live_scanner_health.json`
+
 ---
 
 ## Governança — Regras Modulares
@@ -170,7 +186,11 @@ Open either HTML file directly in a browser to run. No build steps, no tests, no
 | 14 | Belgian Pro League |
 | 38 | La Liga 2 |
 
-Bundesliga 2 e Serie B: ausentes da BSD (65 ligas disponíveis) — presentes no histórico football-data.co.uk para backtesting, nunca geram picks em produção. `BSD_LEAGUE_ID_MAP` no código usa estes IDs para mapear `league_id` → nome canónico (fail-closed: ID desconhecido → `''` → whitelist rejeita).
+Bundesliga 2 e Serie B: ausentes da BSD (65 ligas disponíveis) — presentes no histórico football-data.co.uk para backtesting, nunca geram picks em produção.
+
+**`BSD_LEAGUE_ID_MAP` é a única fonte de verdade dos IDs de liga.** Existe em duas cópias que têm de mudar sempre juntas — `pipeline/scan_common.py` (Python) e `const BSD_LEAGUE_ID_MAP` inline em `index.html` (JS) — nunca só uma. Fail-closed: `league_id` desconhecido/irresolúvel → sentinela `UNKNOWN_LEAGUE` ("DESCONHECIDA", nunca `''`) → whitelist rejeita com `reject_reason="liga_desconhecida"`.
+
+`CONFIG.LEAGUE_NAMES` (`js/config.js`) foi **removido na PR #151** — era um segundo mapa `league_id → nome` com IDs contraditórios (ex.: `6: 'Liga Portugal'` vs o `6: 'Ligue 1'` real). Registo em `docs/DEAD-CODE.md`. **Não recriar um segundo mapa de ligas** — qualquer necessidade de mapear `league_id → nome` usa `BSD_LEAGUE_ID_MAP`.
 
 ---
 
@@ -227,7 +247,7 @@ All logic is inline JavaScript. Three external services are used:
 
 | Service | Purpose | Config |
 |---|---|---|
-| BSD Sports API (`https://sports.bzzoiro.com`) | Match data, odds, predictions, live events | API key entered at runtime, saved to `localStorage` |
+| BSD Sports API (`https://sports.bzzoiro.com`) | Live tab (`loadLive()`) + on-demand per-game "🧠 Análise" (`reactAnalyzeGame()`) — **not** the bulk Scanner/Sharp 1X2/Dashboard load, see Data Flow below | API key entered at runtime, saved to `localStorage` |
 | Google Apps Script (GAS) | Serverless data persistence for picks | Two hardcoded `SHEET_URL` constants (one per file) |
 | Telegram Bot API | Push notifications for picks and daily reports | Token + Chat ID entered at runtime |
 
@@ -242,10 +262,24 @@ Global variables hold all in-memory state:
 - `allPicks` — Over 2.5 picks from the sheet
 
 ### Data Flow
-1. `loadAll()` fetches events, predictions, over/under odds, and 1X2 odds from BSD in parallel
-2. Events are enriched in batches of 8 (detail + Pinnacle odds per event)
-3. `calcScore()` computes a 0–100 score per game from: ML probability (up to 40 pts), xG (up to 20 pts), BTTS (up to 15 pts), sharp money signals (up to 15 pts), divergence, H2H
-4. Sharp 1X2 detection runs separately on the 1X2 odds data and labels signals as STEAM/SHARP/WATCH based on Pinnacle movement % and timing
+
+**`loadAll()` (Scanner, Sharp 1X2, Dashboard) does not call the BSD API.** Since **PR
+#149** (10 ago 2026) it reads `data/picks.json`, `data/picks_1x2.json` and
+`data/picks_btts_over25.json` from the repo itself — same origin as GitHub Pages, no
+CORS. Reason: the BSD server does not send `Access-Control-Allow-Origin` for the
+GitHub Pages origin, so no browser call to BSD from these three tabs can ever succeed
+(confirmed by diagnostic, with or without `Authorization`). `scanner.yml` writes those
+files every 30 min via `pipeline/scan_over25.py` / `scan_sharp1x2.py`, which already
+compute `p_final`/`ev_final`/EV gates server-side; `mapPickToGame()` and
+`buildSharpFromPicks1x2()` just reshape those records for the UI, they don't fetch or
+recompute scores. **A future session proposing to "fix" this BSD fetch in the browser
+would be repeating work already diagnosed and deliberately routed around — don't.**
+
+Two call sites still hit BSD directly from the browser, both out of that scope:
+- **Live tab** (`loadLive()`) — needs the BSD key, auto-refreshes every 30s.
+- **Per-game "🧠 Análise" modal** (`reactAnalyzeGame()`, triggered from a Scanner card)
+  — an on-demand, single-event deep dive (detail/odds/predictions), independent of the
+  30-min scan cycle.
 
 ### CORS Workaround (GAS communication)
 Since GAS endpoints don't support CORS, all reads/writes use a JSONP pattern: a `<script>` tag is injected with a callback parameter. If JSONP fails, a fallback fires a GET via `<img src>` (pixel ping) — this write-only method still triggers the GAS doGet handler even without reading the response. See `sheetSave()` and `sheetGet()`.
@@ -465,7 +499,7 @@ Este projecto é gerido **100% via browser ou mobile** — sem terminal local.
 **Regras obrigatórias para cada sessão:**
 
 1. **Ficheiros completos** — quando partilhares código para colar, dá sempre o ficheiro completo. Nunca diffs, nunca fragmentos parciais.
-2. **Merge para main antes de fechar** — toda a sessão deve terminar com as alterações merged para `main`. O Stop hook (`auto-push.sh`) faz commit+push do branch, mas o merge PR→main deve ser feito durante a sessão.
+2. **Sessão termina com o PR aberto, não fechado** — o Stop hook (`auto-push.sh`) faz commit+push do branch, mas a sessão nunca faz merge do PR para `main`. O merge é sempre uma decisão do Nuno, feita à parte (ver "Âmbito de sessão" acima).
 3. **Sem terminal** — se algo só for possível via terminal local, dizer explicitamente e propor alternativa (GitHub Actions, GitHub web editor, ou workflow_dispatch).
 4. **Ciclos de revisão** — não iniciar apostas reais sem passar pelos checkpoints:
    - **C3 — 30 Jun 2026**: confirmar workflows + primeiros CLV com n suficiente
