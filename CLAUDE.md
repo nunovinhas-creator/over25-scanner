@@ -499,7 +499,7 @@ Este projecto é gerido **100% via browser ou mobile** — sem terminal local.
 **Regras obrigatórias para cada sessão:**
 
 1. **Ficheiros completos** — quando partilhares código para colar, dá sempre o ficheiro completo. Nunca diffs, nunca fragmentos parciais.
-2. **Merge para main antes de fechar** — toda a sessão deve terminar com as alterações merged para `main`. O Stop hook (`auto-push.sh`) faz commit+push do branch, mas o merge PR→main deve ser feito durante a sessão.
+2. **Sessão termina com o PR aberto, não fechado** — o Stop hook (`auto-push.sh`) faz commit+push do branch, mas a sessão nunca faz merge do PR para `main`. O merge é sempre uma decisão do Nuno, feita à parte (ver "Âmbito de sessão" acima).
 3. **Sem terminal** — se algo só for possível via terminal local, dizer explicitamente e propor alternativa (GitHub Actions, GitHub web editor, ou workflow_dispatch).
 4. **Ciclos de revisão** — não iniciar apostas reais sem passar pelos checkpoints:
    - **C3 — 30 Jun 2026**: confirmar workflows + primeiros CLV com n suficiente
