@@ -72,6 +72,33 @@ _Actualizado: 2026-08-10 13:02 UTC_
 | **Sharp 1X2** | Divergência Bet365/Pinnacle (`div_b365_pin > 3%`) | HOME/AWAY apenas, timing 0–6h KO |
 | **BTTS+O2.5** | Grid bivariada DC — `p_dc_conjunta = P(BTTS AND O2.5)` | `clv_btts_over25 ≥ 5%` + EV over25 ≥ 3% |
 
+> Jogos de ligas whitelisted fora da janela 0–6h antes do kick-off são rejeitados com `reject_reason="timing_apos_6h"` (ambos os scanners) — é o gate de timing a funcionar como esperado, não uma falha do scanner.
+
+### Frontend — leitura local, não BSD directa (desde PR #149)
+
+Os separadores **Scanner**, **Sharp 1X2** e **Dashboard** leem `data/picks.json`, `data/picks_1x2.json` e `data/picks_btts_over25.json` do próprio repositório (mesma origem do GitHub Pages, sem CORS) em vez de chamar a BSD API a partir do browser. Isto é uma decisão arquitectural, não um workaround temporário: diagnóstico confirmado a 10/08/2026 mostrou que a BSD não envia `Access-Control-Allow-Origin` para a origem do GitHub Pages — nenhuma chamada do browser à BSD funciona, com ou sem `Authorization`. Os GitHub Actions não são afectados e continuam a escrever esses três ficheiros a cada 30 min (`scanner.yml`).
+
+O separador **Live** é a excepção: continua a chamar a BSD directamente a partir do browser (`loadLive()`) e está sujeito à mesma limitação de CORS.
+
+### Scanner LIVE (`pipeline/scan_live.py`)
+
+Corre server-side via GitHub Actions (`live_scanner.yml`, loop ao minuto), independente do browser e da whitelist de 10 ligas. Dois fluxos partilham a mesma detecção/scoring por ciclo:
+
+- **👁 Observações** — activo: gate (liga whitelisted + patternScore≥6 + probLive≥25% + não tardio sem golos) → `data/observations.json` (dedup persistente por `event_id`) → Telegram.
+- **🔥 APOSTAR AGORA** — desactivado em produção desde 9 Ago 2026 (`LIVE_ALERTS_ENABLED=False`, pedido do autor). Detecção/scoring continuam a correr (alimentam a tab Live, só leitura); apenas o envio Telegram está bloqueado.
+
+Filtros de envio do alerta "🔥 APOSTAR AGORA" (`ALERT_FILTERS`, calibrados sobre uma amostra de n=17 — PR #136; só se aplicam a este alerta, hoje desactivado):
+
+| Filtro | Regra | Efeito |
+|---|---|---|
+| Zona morta xG | 1.0 ≤ xG < 1.5 | Bloqueia envio (pior banda de conversão na amostra) |
+| Minuto tardio | minuto ≥ 85 | Bloqueia envio (tempo estrutural insuficiente) |
+| Tier alta convicção | xG ≥ 2.5 | Marca a mensagem com ⭐, não bloqueia |
+
+Correcções recentes:
+- **PR #134** — dedup do alerta TG corrigido: um jogo só é marcado como `alertado` depois do envio Telegram confirmado (gate Pressão≥90 E Score≥20), não ao atingir o limiar mais brando de detecção interna (score≥12). Antes, uma qualificação prematura ou uma falha de envio bloqueava o jogo para o resto do ciclo (~5h50) sem nunca ser reavaliado.
+- **PR #135** — janela de fetch de `odds_fecho` pós-KO (Sharp 1X2) passou a contar a partir do settlement (`settled_at`), não do kick-off. Antes, `update_closing_odds.py` só tentava até 24h pós-KO, mas `settle_sharp1x2.py` pode legitimamente demorar até 48h a definir o resultado — qualquer settlement fora dessa janela nunca chegava a ser tentado. Janela actual: 15min–12h pós-settlement.
+
 ---
 
 ## Stack Técnica
@@ -108,6 +135,8 @@ _Actualizado: 2026-08-10 13:02 UTC_
 
 > Bundesliga 2 e Serie B: presentes no histórico para backtesting, ausentes da BSD API — nunca geram picks em produção.
 
+> `BSD_LEAGUE_ID_MAP` (`pipeline/scan_common.py`) é a única fonte de verdade dos IDs de liga — está espelhado no `const BSD_LEAGUE_ID_MAP` de `index.html` e os dois têm de mudar sempre juntos. Validado contra a BSD API a 10/08/2026 via o workflow **Fetch BSD Leagues (one-shot)**; essa revalidação deve repetir-se a cada viragem de época, já que a BSD pode alterar IDs. O mapa morto e desalinhado `CONFIG.LEAGUE_NAMES` (`js/config.js`) foi removido (PR #151).
+
 ---
 
 ## Estratégias — Backtesting Over 2.5
@@ -135,6 +164,8 @@ Resultados walk-forward out-of-sample (épocas 2122–2526). Estratégias defini
 | **C3** | 30 Jun 2026 | Workflows activos + primeiros CLV com n suficiente |
 | **C4** | 15 Jul 2026 | Primeira leitura estatística (n≈200 Over 2.5, n≈50 Sharp, n≈50 BTTS) |
 | **C5** | 31 Jul 2026 | Decisão de agosto: apostar ou manter MODO OBSERVAÇÃO |
+
+> Os três checkpoints já passaram no calendário (hoje: 10 Ago 2026). Não há registo de uma decisão explícita de activação — o sistema mantém-se em MODO OBSERVAÇÃO porque nenhum módulo atingiu ainda o `n` settled exigido pelos gates abaixo (ver *Estado Actual* no topo deste README), pelo que a regra "não iniciar apostas reais sem passar pelo checkpoint" continua a aplicar-se por defeito.
 
 Gates de activação para apostas reais:
 
@@ -224,7 +255,7 @@ pytest tests/ -v --tb=short
 ### Frontend
 
 Abrir `index.html` directamente no browser — sem build steps.
-Introduzir a `BSD_API_KEY` na interface → guardada em `localStorage`.
+Os separadores Scanner, Sharp 1X2 e Dashboard leem `data/picks*.json` do próprio repositório e não precisam de chave. Só o separador Live chama a BSD directamente e precisa da `BSD_API_KEY` (introduzida na interface → guardada em `localStorage`).
 
 ---
 
