@@ -1313,10 +1313,12 @@ const LEAGUE_BASE = {
 // ESTADO
 // ════════════════════════════════════════════════════════════════
 let allGames=[], scanFilter='all', lgNames={}, allSharp1x2=[];
-// Estado do empty-state da aba Sharp 1X2 — distingue "sem dados carregados" de
-// "carregado, zero eventos whitelisted na janela" de "eventos existem, zero sinais".
-// Ver renderSharp(). sharpEligibleCount = eventos que sobrevivem ao filtro whitelist+36h,
-// antes do cálculo de sinais (populado nos dois caminhos: cache-hit e cache-miss).
+// data/rejected_picks.json e data/rejected_picks_1x2.json — só para os estados
+// vazios honestos do Scanner e do Sharp 1X2 (scanEmptyStateHtml/sharpEmptyStateHtml).
+// Não são gates: uma falha a ler estes ficheiros não bloqueia o resto do loadAll().
+let rejectedOver25=[], rejectedSharp1x2=[];
+// Estado do empty-state da aba Sharp 1X2 — distingue "sem dados carregados" de "carregado,
+// zero sinais". Ver renderSharp().
 let sharpLoaded=false, sharpEligibleCount=0;
 let sharp1x2Picks=[];
 let liveData=[], liveFilter='all', liveTimer=null, liveActive=false;
@@ -1783,6 +1785,33 @@ function loadErrorBlock(file, msg){
   </div>`;
 }
 
+// Estado vazio honesto do Scanner/Sharp 1X2 — nunca inventa uma razão (ex.: "época baixa")
+// para o vazio. Lê os rejeitados desse scan com reject_reason="timing_apos_6h" — jogos de
+// ligas whitelisted que já passaram o gate 0 (liga) mas ainda estão fora da janela de 6h
+// antes do KO (Gate 1 de scan_over25.py / apply_sharp1x2_gates() de scan_sharp1x2.py) — e
+// distingue esse caso ("há jogos, ainda não é a hora") do caso em que não há mesmo nenhum
+// jogo whitelisted à vista.
+function _nextTimingRejected(rejectedList){
+  const now=Date.now();
+  return rejectedList
+    .filter(r=>r.reject_reason==='timing_apos_6h' && !isNaN(new Date(r.data).getTime()) && new Date(r.data).getTime()>now)
+    .sort((a,b)=>new Date(a.data)-new Date(b.data));
+}
+function _emptyStateHtml(rejectedList){
+  const upcoming=_nextTimingRejected(rejectedList);
+  if(upcoming.length){
+    const next=upcoming[0];
+    const when=new Date(next.data).toLocaleString('pt-PT',{weekday:'short',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+    return `<div class="empty" style="padding:30px">
+      <p style="margin-bottom:8px">${upcoming.length} jogo${upcoming.length>1?'s':''} da whitelist ainda fora da janela de 6h antes do KO.</p>
+      <p style="font-size:12px;color:var(--text3)">Próximo: ${esc(next.casa)} vs ${esc(next.fora)} (${esc(next.liga)}) — KO ${when}</p>
+    </div>`;
+  }
+  return `<div class="empty" style="padding:30px"><p>Não há jogos das ligas whitelisted no horizonte.</p></div>`;
+}
+function scanEmptyStateHtml(){ return _emptyStateHtml(rejectedOver25); }
+function sharpEmptyStateHtml(){ return _emptyStateHtml(rejectedSharp1x2); }
+
 // Mapeia um registo de data/picks.json para a forma usada pelo Scanner
 // (gameCard/calcScore/getQualifiedPicks). Campos sem equivalente no ficheiro
 // (recrAvg, pinnPrev, det/h2h, conf, recommend) ficam null — os templates já
@@ -1895,12 +1924,18 @@ async function loadAll(){
   el('dbgScan').style.display='none';
 
   setProgress(30,'A ler ficheiros locais…');
-  const [picksR, picks1x2R, bttsR] = await Promise.allSettled([
+  const [picksR, picks1x2R, bttsR, rejectedR, rejected1x2R] = await Promise.allSettled([
     fetchLocalJson('data/picks.json'),
     fetchLocalJson('data/picks_1x2.json'),
     fetchLocalJson('data/picks_btts_over25.json'),
+    fetchLocalJson('data/rejected_picks.json'),
+    fetchLocalJson('data/rejected_picks_1x2.json'),
   ]);
   setProgress(70,'A processar…');
+  // Informativos para o estado vazio (scanEmptyStateHtml/sharpEmptyStateHtml) — não são
+  // gates, por isso uma falha aqui não gera um bloco de erro, só fica sem esse detalhe.
+  rejectedOver25    = rejectedR.status==='fulfilled'    ? rejectedR.value    : [];
+  rejectedSharp1x2  = rejected1x2R.status==='fulfilled' ? rejected1x2R.value : [];
 
   // ── Scanner (Over 2.5) ──
   if(picksR.status==='fulfilled'){
@@ -2306,7 +2341,9 @@ function renderScan(){
   else if(so==='odds') list.sort((a,b)=>(b.oddsOver||0)-(a.oddsOver||0));
 
   if(!list.length){
-    el('scanList').innerHTML='<div class="empty">Nenhum jogo com estes filtros.</div>';
+    el('scanList').innerHTML = allGames.length
+      ? '<div class="empty">Nenhum jogo com estes filtros.</div>'
+      : scanEmptyStateHtml();
     return;
   }
   el('scanList').innerHTML=list.map(gameCard).join('');
@@ -2649,21 +2686,12 @@ function renderSharp(){
     el('sharpList').innerHTML='<div class="empty" style="padding:30px"><p style="margin-bottom:12px">Sem dados carregados.</p><button class="btn-load" onclick="loadAll()" style="font-size:13px;padding:8px 20px">▶ Carregar dados</button></div>';
     return;
   }
-  // Dois vazios distintos — nenhum deve parecer erro (auditoria 16 jul 2026, época baixa
-  // das 10 ligas whitelisted): (A) zero eventos sobrevivem ao filtro whitelist+36h;
-  // (B) há eventos elegíveis mas nenhum gerou sinal STEAM/SHARP/WATCH.
+  // Estado vazio honesto — nunca inventa uma razão sazonal (ex.: "época baixa").
+  // Ver sharpEmptyStateHtml(): distingue "há jogos whitelisted, ainda fora da janela de
+  // 6h antes do KO" de "não há mesmo jogos whitelisted no horizonte", lendo
+  // data/rejected_picks_1x2.json (reject_reason="timing_apos_6h").
   if(!allSharp1x2.length){
-    if(sharpEligibleCount===0){
-      el('sharpList').innerHTML='<div class="empty" style="padding:30px">'+
-        '<p style="margin-bottom:8px">Sem jogos das ligas whitelisted nas próximas 36h.</p>'+
-        '<p style="margin-bottom:12px;color:var(--text3);font-size:12px">Época baixa — as ligas europeias retomam em agosto.</p>'+
-        '<p style="font-size:11px;color:var(--text3)">'+allGames.length+' jogos no scanner, 0 elegíveis para Sharp 1X2</p>'+
-      '</div>';
-    }else{
-      el('sharpList').innerHTML='<div class="empty" style="padding:30px">'+
-        '<p>'+sharpEligibleCount+' jogos elegíveis analisados — nenhum movimento sharp detetado de momento.</p>'+
-      '</div>';
-    }
+    el('sharpList').innerHTML = sharpEmptyStateHtml();
     return;
   }
   let list=allSharp1x2.filter(s=>{
