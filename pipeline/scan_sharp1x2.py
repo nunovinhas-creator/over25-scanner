@@ -115,9 +115,22 @@ def _fetch_all_events() -> list[dict]:
             print(f"BSD fetch {path}: {exc}", file=sys.stderr)
             return [], None
 
-    events, _ = _get_list(
+    # Fetch events (paginated) — mesmo padrão do loop de odds abaixo, mesmo
+    # limite de 10 páginas que scan_over25._fetch_all_events() usa para o
+    # mesmo endpoint. Antes desta correcção só a 1ª página (≤200 eventos)
+    # era lida — com o calendário europeu cheio isso corta eventos fora do
+    # scan sem qualquer sinal de erro.
+    events: list[dict] = []
+    next_url: str | None = (
         f"/api/v2/events/?status=notstarted&date_from={today}&date_to={tomorrow}&limit=200"
     )
+    for _ in range(10):
+        if not next_url:
+            break
+        page, next_url = _get_list(next_url)
+        events.extend(page)
+        if not page:
+            break
 
     # Fetch 1X2 odds (paginated)
     odds_1x2: list[dict] = []
