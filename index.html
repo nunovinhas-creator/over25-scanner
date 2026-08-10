@@ -4738,21 +4738,26 @@ function renderDash(){
     ['⚡ xG≥2.0',       validPicks.filter(p=>parseFloat(p.xg_total||0)>=2.0&&res(p))],
     ['🔵 BTTS≥55',      validPicks.filter(p=>parseFloat(p.btts_prob||0)>=55&&res(p))],
   ];
-  el('bkGrid').innerHTML=bkGroups.map(([name,grp])=>{
+  // BKGRID_CARD_JS:START
+  const _bkGridCard = ([name,grp])=>{
     if(grp.length<2)return '';
     const gw=grp.filter(p=>p.result_over25==='WIN');
     const grpOdds=grp.filter(p=>parseFloat(p.odds_over||0)>=1.01);
     const gr=grpOdds.reduce((s,p)=>s+(p.result_over25==='WIN'?parseFloat(p.odds_over||0)-1:-1),0);
     const wr=(gw.length/grp.length*100).toFixed(0);
     const roi=grpOdds.length?(gr/grpOdds.length*100).toFixed(1):'—';
+    // WR usa a mesma cor do ROI (roiCol) — nunca verde com ROI negativo,
+    // mesmo que o WR pareça alto isoladamente (ver Bloco H2/H2b).
     const roiCol=parseFloat(roi)>=10?'var(--green)':parseFloat(roi)>=0?'var(--amber)':'var(--red)';
     return `<div class="bk-card">
       <div class="bk-name">${name}</div>
-      <div class="bk-wr" style="color:var(--green)">${wr}%</div>
+      <div class="bk-wr" style="color:${roiCol}">${wr}%</div>
       <div class="bk-roi" style="color:${roiCol}">ROI ${parseFloat(roi)>=0?'+':''}${roi}%</div>
       <div class="bk-n">${grp.length} picks${grpOdds.length<grp.length?' ('+grpOdds.length+' c/odds)':''}</div>
     </div>`;
-  }).filter(Boolean).join('');
+  };
+  // BKGRID_CARD_JS:END
+  el('bkGrid').innerHTML=bkGroups.map(_bkGridCard).filter(Boolean).join('');
 
   // Tabela picks
   const recent=[...validPicks].sort((a,b)=>new Date(b.data)-new Date(a.data)).slice(0,30);

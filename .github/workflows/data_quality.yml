@@ -40,6 +40,9 @@ jobs:
       - name: Live — painel de calibração usa ROI/break-even, não WR sozinho
         run: node tests/js/test_live_calibration.mjs
 
+      - name: Dashboard — cards bkGrid usam a mesma cor no WR e no ROI
+        run: node tests/js/test_bkgrid_wr_color.mjs
+
   # ---------------------------------------------------------------------------
   # Job 1: validate — schema checks + data quality tests
   # ---------------------------------------------------------------------------
