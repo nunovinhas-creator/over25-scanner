@@ -1,0 +1,46 @@
+name: Modo sombra — resumo diário Telegram
+
+# Bloco K: UMA mensagem por dia no Telegram com o resumo das últimas 24h de
+# data/live_shadow_alerts.json (o que o gate "🔥 APOSTAR AGORA" teria
+# enviado/bloqueado — ver pipeline/scan_live.py, Bloco H1). LIVE_ALERTS_ENABLED
+# continua False; este workflow nunca envia alertas por jogo, só o resumo.
+#
+# Cron do GitHub Actions é sempre UTC — para aproximar "fim do dia em hora de
+# Lisboa" (23:00 local) com o horário de Verão europeu (WEST=UTC+1, última
+# semana de Março a última semana de Outubro) usam-se dois cron distintos por
+# meses do ano. Nas semanas de transição real do DST pode haver ~1h de
+# desvio face às 23:00 exactas — aceitável para um resumo diário, que olha
+# sempre para uma janela deslizante das últimas 24h (não "desde a meia-noite").
+on:
+  schedule:
+    - cron: '0 23 * 11,12,1,2,3 *'    # 23:00 Lisboa (WET,  UTC+0) — nov a mar
+    - cron: '0 22 * 4,5,6,7,8,9,10 *' # 23:00 Lisboa (WEST, UTC+1) — abr a out
+  workflow_dispatch:
+
+jobs:
+  shadow_summary:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependências
+        run: pip install --quiet requests
+
+      - name: Enviar resumo diário do modo sombra
+        run: python -m pipeline.send_shadow_summary
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+          TG_TOKEN: ${{ secrets.TG_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
