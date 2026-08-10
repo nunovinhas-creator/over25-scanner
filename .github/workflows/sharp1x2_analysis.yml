@@ -46,6 +46,18 @@ jobs:
           TG_TOKEN: ${{ secrets.TG_TOKEN }}
           TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
 
+      # Over 2.5 (Bloco I, 10 ago 2026): ficheiro diferente (picks.json), sem
+      # dependência de settlement — janela ancorada no KO, não em settled_at
+      # (ver docstring de pipeline/update_closing_odds_over25.py). Passo
+      # sequencial pela mesma razão dos dois de cima: nunca correr em
+      # paralelo com escritas a ficheiros diferentes que partilham o mesmo
+      # padrão `git reset --soft origin/main` + commit + push.
+      - name: Update closing odds Over 2.5
+        run: python -m pipeline.update_closing_odds_over25
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+          BSD_API_KEY: ${{ secrets.BSD_API_KEY }}
+
   analyse:
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch'
