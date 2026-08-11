@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-11T19:12:58Z",
+  "generated_at": "2026-08-11T19:18:42Z",
   "status": "OK",
   "count": 10,
   "events": [
@@ -10,21 +10,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 12,
+      "min": 18,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 7,
       "xgH": null,
-      "xgA": 0.2,
+      "xgA": 0.14,
       "xgTotal": null,
-      "lastMom": -38,
-      "overOdds": 1.27,
-      "probLive": 79,
+      "lastMom": 9,
+      "overOdds": 1.47,
+      "probLive": 68,
       "oddsStatus": "VALID",
       "shots": {
         "h": 0,
-        "a": 1
+        "a": 3
       },
       "sot": {
         "h": 0,
@@ -32,7 +32,7 @@
       },
       "da": {
         "h": 5,
-        "a": 4
+        "a": 8
       },
       "corners": {
         "h": null,
@@ -62,20 +62,13 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 68",
+          "label": "Pressão 65",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "9 atq. perigosos · 0 ao alvo"
-        },
-        {
-          "id": "mkt",
-          "label": "Odds −13.6%",
-          "emoji": "📈",
-          "level": "critical",
-          "detail": "Mercado caiu de 1.47 → 1.27 (sharp money)"
+          "detail": "13 atq. perigosos · 0 ao alvo"
         }
       ],
-      "patternScore": 20
+      "patternScore": 10
     },
     {
       "id": 223231,
@@ -84,21 +77,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 41,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 7,
       "xgH": 0.89,
-      "xgA": 0.34,
-      "xgTotal": 1.23,
-      "lastMom": 74,
+      "xgA": 0.4,
+      "xgTotal": 1.29,
+      "lastMom": 4,
       "overOdds": 1.5,
       "probLive": 67,
       "oddsStatus": "VALID",
       "shots": {
         "h": 14,
-        "a": 4
+        "a": 5
       },
       "sot": {
         "h": 1,
@@ -106,7 +99,7 @@
       },
       "da": {
         "h": 26,
-        "a": 13
+        "a": 17
       },
       "corners": {
         "h": null,
@@ -133,55 +126,19 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "conv",
-          "label": "CONVERGÊNCIA",
-          "emoji": "🔮",
-          "level": "conv",
-          "detail": "4 padrões em simultâneo — sinal forte"
-        },
-        {
-          "id": "pressure",
-          "label": "Pressão 100",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "39 atq. perigosos · 4 ao alvo"
-        },
-        {
-          "id": "xg_pace",
-          "label": "xG 2.7/90",
-          "emoji": "⚡",
-          "level": "med",
-          "detail": "xG a ritmo de 2.7 por 90min"
-        },
-        {
-          "id": "shots",
-          "label": "18 remates",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "40 remates/90min (muito alto)"
-        },
-        {
-          "id": "mom",
-          "label": "Casa domina",
-          "emoji": "💥",
-          "level": "high",
-          "detail": "Momentum casa 74 — controlo total"
-        }
-      ],
-      "patternScore": 20
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 223233,
       "home": "ŠK Slovan Bratislava",
       "away": "Mjällby AIF",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 0,
-      "goals": 0,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "goals": 1,
+      "min": 47,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 7,
       "xgH": null,
@@ -200,7 +157,7 @@
         "a": 0
       },
       "da": {
-        "h": 25,
+        "h": 27,
         "a": 16
       },
       "corners": {
@@ -297,7 +254,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 47,
+      "min": 53,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -364,7 +321,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 51,
+      "min": 57,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -385,8 +342,8 @@
         "a": 3
       },
       "da": {
-        "h": 27,
-        "a": 25
+        "h": 33,
+        "a": 26
       },
       "corners": {
         "h": null,
@@ -423,7 +380,7 @@
       "hScore": 6,
       "aScore": 1,
       "goals": 7,
-      "min": 84,
+      "min": 90,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -479,32 +436,32 @@
       "id": 223404,
       "home": "FC CSKA 1948 Sofia",
       "away": "Panathinaikos FC",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 1,
-      "goals": 1,
-      "min": 83,
+      "goals": 2,
+      "min": 89,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 83,
-      "xgH": 0.18,
+      "xgH": 0.38,
       "xgA": 1.09,
-      "xgTotal": 1.27,
-      "lastMom": 34,
+      "xgTotal": 1.4700000000000002,
+      "lastMom": 4,
       "overOdds": 2.0,
       "probLive": 50,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 5,
+        "h": 7,
         "a": 17
       },
       "sot": {
-        "h": 3,
+        "h": 5,
         "a": 8
       },
       "da": {
-        "h": 48,
-        "a": 78
+        "h": 55,
+        "a": 79
       },
       "corners": {
         "h": null,
@@ -537,10 +494,24 @@
           "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "56 atq. perigosos · 7 ao alvo (2ªP)"
+          "detail": "64 atq. perigosos · 9 ao alvo (2ªP)"
+        },
+        {
+          "id": "shots",
+          "label": "11r 2ªP",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "22 remates/90min (2ªP)"
+        },
+        {
+          "id": "late",
+          "label": "1 gol em 1min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 50% · 1min"
         }
       ],
-      "patternScore": 10
+      "patternScore": 13
     },
     {
       "id": 220449,
@@ -549,29 +520,29 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 83,
+      "min": 88,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 7,
-      "xgH": 0.94,
-      "xgA": 0.4,
-      "xgTotal": 1.3399999999999999,
-      "lastMom": 23,
-      "overOdds": 1.71,
-      "probLive": 58,
-      "oddsStatus": "VALID",
+      "xgH": 1.01,
+      "xgA": 0.42,
+      "xgTotal": 1.43,
+      "lastMom": -29,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 9,
-        "a": 4
+        "h": 10,
+        "a": 5
       },
       "sot": {
         "h": 5,
         "a": 2
       },
       "da": {
-        "h": 48,
-        "a": 46
+        "h": 50,
+        "a": 49
       },
       "corners": {
         "h": null,
@@ -604,28 +575,14 @@
           "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "43 atq. perigosos · 5 ao alvo (2ªP)"
-        },
-        {
-          "id": "xg_pace",
-          "label": "xG 2.6/90 (2ªP)",
-          "emoji": "⚡",
-          "level": "med",
-          "detail": "xG a ritmo de 2.6 por 90min (2ªP)"
+          "detail": "48 atq. perigosos · 5 ao alvo (2ªP)"
         },
         {
           "id": "shots",
-          "label": "10r 2ªP",
+          "label": "12r 2ªP",
           "emoji": "🎯",
           "level": "med",
-          "detail": "24 remates/90min (2ªP)"
-        },
-        {
-          "id": "late",
-          "label": "1 gol em 7min",
-          "emoji": "⏰",
-          "level": "low",
-          "detail": "Falta 1 golo · mercado 58% · 7min"
+          "detail": "25 remates/90min (2ªP)"
         },
         {
           "id": "numerical",
@@ -635,38 +592,38 @@
           "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
         }
       ],
-      "patternScore": 17
+      "patternScore": 14
     },
     {
       "id": 221199,
       "home": "Apollon Limassol",
       "away": "SK Brann",
       "hScore": 2,
-      "aScore": 3,
-      "goals": 5,
-      "min": 102,
+      "aScore": 4,
+      "goals": 6,
+      "min": 105,
       "status": "extratime",
-      "period": "ET1",
+      "period": "ETHT",
       "league": "",
       "league_id": 83,
       "xgH": null,
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": 1.67,
-      "probLive": 60,
-      "oddsStatus": "VALID",
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": null,
         "a": null
       },
       "sot": {
         "h": 6,
-        "a": 5
+        "a": 6
       },
       "da": {
         "h": 74,
-        "a": 57
+        "a": 59
       },
       "corners": {
         "h": null,
@@ -699,7 +656,7 @@
           "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "131 atq. perigosos · 11 ao alvo"
+          "detail": "133 atq. perigosos · 12 ao alvo"
         }
       ],
       "patternScore": 10
