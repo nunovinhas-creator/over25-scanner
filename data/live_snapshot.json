@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-11T20:09:07Z",
+  "generated_at": "2026-08-11T20:14:24Z",
   "status": "OK",
-  "count": 3,
+  "count": 2,
   "events": [
     {
       "id": 220447,
@@ -10,28 +10,28 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 51,
+      "min": 56,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 7,
-      "xgH": 0.77,
+      "xgH": 0.87,
       "xgA": 0.53,
-      "xgTotal": 1.3,
-      "lastMom": -21,
+      "xgTotal": 1.4,
+      "lastMom": 44,
       "overOdds": 1.41,
       "probLive": 71,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 8,
+        "h": 10,
         "a": 5
       },
       "sot": {
-        "h": 4,
+        "h": 5,
         "a": 0
       },
       "da": {
-        "h": 24,
+        "h": 26,
         "a": 17
       },
       "corners": {
@@ -61,6 +61,13 @@
       },
       "patterns": [
         {
+          "id": "open",
+          "label": "JOGO ABERTO",
+          "emoji": "🎭",
+          "level": "low",
+          "detail": "34min, equipa a perder ataca"
+        },
+        {
           "id": "numerical",
           "label": "Casa +1 homem",
           "emoji": "🟥",
@@ -68,7 +75,7 @@
           "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
         }
       ],
-      "patternScore": 2
+      "patternScore": 3
     },
     {
       "id": 223231,
@@ -77,28 +84,28 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 80,
+      "min": 85,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 7,
       "xgH": 1.11,
-      "xgA": 1.61,
-      "xgTotal": 2.72,
-      "lastMom": 8,
+      "xgA": 1.73,
+      "xgTotal": 2.84,
+      "lastMom": 2,
       "overOdds": 1.5,
       "probLive": 67,
       "oddsStatus": "VALID",
       "shots": {
         "h": 18,
-        "a": 9
+        "a": 10
       },
       "sot": {
         "h": 2,
         "a": 5
       },
       "da": {
-        "h": 44,
+        "h": 48,
         "a": 25
       },
       "corners": {
@@ -139,91 +146,24 @@
           "label": "Pressão 82 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "26 atq. perigosos · 3 ao alvo (2ªP)"
+          "detail": "30 atq. perigosos · 3 ao alvo (2ªP)"
         },
         {
           "id": "xg_delta",
-          "label": "xG sobrevaloriza",
+          "label": "xG +1.8 acima",
           "emoji": "🎲",
-          "level": "med",
-          "detail": "xG 2.72 vs 1 golos"
+          "level": "high",
+          "detail": "xG 2.84 vs 1 golos"
         },
         {
           "id": "xg_pace",
-          "label": "xG 3.7/90 (2ªP)",
+          "label": "xG 3.5/90 (2ªP)",
           "emoji": "⚡",
           "level": "high",
-          "detail": "xG a ritmo de 3.7 por 90min (2ªP)"
+          "detail": "xG a ritmo de 3.5 por 90min (2ªP)"
         }
       ],
-      "patternScore": 16
-    },
-    {
-      "id": 222820,
-      "home": "NK Celje",
-      "away": "FC Ararat-Armenia",
-      "hScore": 2,
-      "aScore": 0,
-      "goals": 2,
-      "min": 94,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 7,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": 1.52,
-      "probLive": 66,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": 8,
-        "a": 3
-      },
-      "da": {
-        "h": 68,
-        "a": 43
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 2,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "late",
-          "label": "1 gol em 0min",
-          "emoji": "⏰",
-          "level": "low",
-          "detail": "Falta 1 golo · mercado 66% · 0min"
-        }
-      ],
-      "patternScore": 1
+      "patternScore": 18
     }
   ]
 }
