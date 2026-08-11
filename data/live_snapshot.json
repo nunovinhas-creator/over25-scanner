@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-11T16:12:22Z",
+  "generated_at": "2026-08-11T16:17:46Z",
   "status": "OK",
   "count": 4,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 12,
+      "min": 16,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -31,7 +31,7 @@
         "a": 0
       },
       "da": {
-        "h": 7,
+        "h": 9,
         "a": 6
       },
       "corners": {
@@ -62,10 +62,10 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 98",
+          "label": "Pressão 84",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "13 atq. perigosos · 0 ao alvo"
+          "detail": "15 atq. perigosos · 0 ao alvo"
         }
       ],
       "patternScore": 10
@@ -77,20 +77,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 10,
+      "min": 14,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 7,
-      "xgH": 0.08,
+      "xgH": 0.16,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 46,
+      "lastMom": 49,
       "overOdds": 1.65,
       "probLive": 61,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 2,
+        "h": 4,
         "a": 0
       },
       "sot": {
@@ -128,14 +128,21 @@
       },
       "patterns": [
         {
+          "id": "shots",
+          "label": "4 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "26 remates/90min"
+        },
+        {
           "id": "mom",
           "label": "Casa pressiona",
           "emoji": "💪",
           "level": "med",
-          "detail": "Momentum casa 46"
+          "detail": "Momentum casa 49"
         }
       ],
-      "patternScore": 2
+      "patternScore": 4
     },
     {
       "id": 220448,
@@ -144,96 +151,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 9,
+      "min": 13,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 7,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": 26,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 0,
-        "a": 1
-      },
-      "sot": {
-        "h": 0,
-        "a": 0
-      },
-      "da": {
-        "h": 9,
-        "a": 1
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "pressure",
-          "label": "Pressão 100",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "10 atq. perigosos · 0 ao alvo"
-        }
-      ],
-      "patternScore": 10
-    },
-    {
-      "id": 223235,
-      "home": "Kairat Almaty",
-      "away": "Levski Sofia",
-      "hScore": 0,
-      "aScore": 1,
-      "goals": 1,
-      "min": 48,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 7,
       "xgH": 0.36,
-      "xgA": 0.29,
-      "xgTotal": 0.6499999999999999,
-      "lastMom": 23,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgA": 0.18,
+      "xgTotal": 0.54,
+      "lastMom": 26,
+      "overOdds": 1.57,
+      "probLive": 64,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 6,
-        "a": 5
+        "h": 1,
+        "a": 1
       },
       "sot": {
-        "h": 1,
-        "a": 2
+        "h": 0,
+        "a": 0
       },
       "da": {
-        "h": 28,
-        "a": 13
+        "h": 16,
+        "a": 1
       },
       "corners": {
         "h": null,
@@ -260,8 +200,83 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 100",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "17 atq. perigosos · 0 ao alvo"
+        }
+      ],
+      "patternScore": 10
+    },
+    {
+      "id": 223235,
+      "home": "Kairat Almaty",
+      "away": "Levski Sofia",
+      "hScore": 0,
+      "aScore": 1,
+      "goals": 1,
+      "min": 53,
+      "status": "2nd_half",
+      "period": "2T",
+      "league": "",
+      "league_id": 7,
+      "xgH": 0.4,
+      "xgA": 0.38,
+      "xgTotal": 0.78,
+      "lastMom": 56,
+      "overOdds": 2.6,
+      "probLive": 38,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 8,
+        "a": 6
+      },
+      "sot": {
+        "h": 3,
+        "a": 2
+      },
+      "da": {
+        "h": 33,
+        "a": 14
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 4,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 56"
+        }
+      ],
+      "patternScore": 2
     }
   ]
 }
