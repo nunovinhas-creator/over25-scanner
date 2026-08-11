@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-11T23:20:45Z",
+  "generated_at": "2026-08-11T23:26:00Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -16,8 +16,8 @@
       "league": "",
       "league_id": 34,
       "xgH": 0.5,
-      "xgA": 0.53,
-      "xgTotal": 1.03,
+      "xgA": 0.56,
+      "xgTotal": 1.06,
       "lastMom": 47,
       "overOdds": null,
       "probLive": null,
@@ -74,32 +74,32 @@
       "id": 223423,
       "home": "Boca Juniors",
       "away": "Recoleta FC",
-      "hScore": 2,
+      "hScore": 3,
       "aScore": 1,
-      "goals": 3,
-      "min": 59,
+      "goals": 4,
+      "min": 65,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 33,
-      "xgH": 3.11,
-      "xgA": 0.41,
-      "xgTotal": 3.52,
-      "lastMom": 57,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgH": 3.25,
+      "xgA": 0.48,
+      "xgTotal": 3.73,
+      "lastMom": 36,
+      "overOdds": 1.52,
+      "probLive": 66,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 25,
-        "a": 4
+        "h": 26,
+        "a": 6
       },
       "sot": {
-        "h": 5,
+        "h": 6,
         "a": 3
       },
       "da": {
-        "h": 51,
-        "a": 12
+        "h": 56,
+        "a": 13
       },
       "corners": {
         "h": null,
@@ -128,13 +128,6 @@
       },
       "patterns": [
         {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 57"
-        },
-        {
           "id": "numerical",
           "label": "Casa +1 homem",
           "emoji": "🟥",
@@ -142,7 +135,7 @@
           "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
         }
       ],
-      "patternScore": 4
+      "patternScore": 2
     },
     {
       "id": 207958,
@@ -151,18 +144,18 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 60,
+      "min": 66,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 32,
-      "xgH": 0.53,
+      "xgH": 0.51,
       "xgA": 0.32,
-      "xgTotal": 0.8500000000000001,
-      "lastMom": 26,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgTotal": 0.8300000000000001,
+      "lastMom": -2,
+      "overOdds": 2.37,
+      "probLive": 42,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 12,
         "a": 8
@@ -172,8 +165,8 @@
         "a": 3
       },
       "da": {
-        "h": 33,
-        "a": 19
+        "h": 35,
+        "a": 20
       },
       "corners": {
         "h": null,
@@ -203,13 +196,20 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 94 (2ªP)",
+          "label": "Pressão 83 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "14 atq. perigosos · 2 ao alvo (2ªP)"
+          "detail": "17 atq. perigosos · 2 ao alvo (2ªP)"
+        },
+        {
+          "id": "shots",
+          "label": "7r 2ªP",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "30 remates/90min (2ªP) (muito alto)"
         }
       ],
-      "patternScore": 10
+      "patternScore": 14
     }
   ]
 }
