@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-11T23:04:59Z",
+  "generated_at": "2026-08-11T23:10:15Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -8,31 +8,31 @@
       "home": "Avaí",
       "away": "Clube De Regatas Brasil",
       "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 30,
+      "aScore": 1,
+      "goals": 1,
+      "min": 35,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
-      "xgH": 0.3,
-      "xgA": 0.14,
-      "xgTotal": 0.44,
-      "lastMom": 6,
+      "xgH": 0.31,
+      "xgA": 0.39,
+      "xgTotal": 0.7,
+      "lastMom": -44,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 7,
-        "a": 3
+        "h": 8,
+        "a": 5
       },
       "sot": {
         "h": 3,
-        "a": 1
+        "a": 2
       },
       "da": {
         "h": 15,
-        "a": 9
+        "a": 11
       },
       "corners": {
         "h": null,
@@ -65,14 +65,14 @@
           "label": "Pressão 92",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "24 atq. perigosos · 4 ao alvo"
+          "detail": "26 atq. perigosos · 5 ao alvo"
         },
         {
           "id": "shots",
-          "label": "10 remates",
+          "label": "13 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "30 remates/90min (muito alto)"
+          "detail": "33 remates/90min (muito alto)"
         }
       ],
       "patternScore": 14
@@ -84,28 +84,28 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 48,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 33,
-      "xgH": 2.3,
+      "xgH": 2.72,
       "xgA": 0.41,
-      "xgTotal": 2.71,
-      "lastMom": 84,
+      "xgTotal": 3.1300000000000003,
+      "lastMom": 47,
       "overOdds": 1.52,
       "probLive": 66,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 18,
+        "h": 21,
         "a": 4
       },
       "sot": {
-        "h": 3,
+        "h": 4,
         "a": 3
       },
       "da": {
-        "h": 34,
+        "h": 38,
         "a": 11
       },
       "corners": {
@@ -135,11 +135,18 @@
       },
       "patterns": [
         {
-          "id": "mom",
-          "label": "Casa domina",
-          "emoji": "💥",
+          "id": "xg_delta",
+          "label": "xG +2.1 acima",
+          "emoji": "🎲",
           "level": "high",
-          "detail": "Momentum casa 84 — controlo total"
+          "detail": "xG 3.13 vs 1 golos"
+        },
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 47"
         },
         {
           "id": "numerical",
@@ -149,7 +156,7 @@
           "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
         }
       ],
-      "patternScore": 6
+      "patternScore": 8
     },
     {
       "id": 207958,
@@ -158,29 +165,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 49,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 32,
-      "xgH": 0.34,
-      "xgA": 0.15,
-      "xgTotal": 0.49,
-      "lastMom": 0,
+      "xgH": 0.46,
+      "xgA": 0.3,
+      "xgTotal": 0.76,
+      "lastMom": 39,
       "overOdds": 2.37,
       "probLive": 42,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 7,
-        "a": 6
+        "h": 9,
+        "a": 7
       },
       "sot": {
-        "h": 0,
-        "a": 2
+        "h": 1,
+        "a": 3
       },
       "da": {
-        "h": 24,
-        "a": 14
+        "h": 28,
+        "a": 16
       },
       "corners": {
         "h": null,
