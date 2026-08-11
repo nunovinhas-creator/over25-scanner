@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-11T22:59:45Z",
+  "generated_at": "2026-08-11T23:04:59Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -10,29 +10,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 25,
+      "min": 30,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
-      "xgH": 0.24,
-      "xgA": 0.07,
-      "xgTotal": 0.31,
-      "lastMom": -32,
+      "xgH": 0.3,
+      "xgA": 0.14,
+      "xgTotal": 0.44,
+      "lastMom": 6,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 5,
-        "a": 1
+        "h": 7,
+        "a": 3
       },
       "sot": {
-        "h": 2,
-        "a": 0
+        "h": 3,
+        "a": 1
       },
       "da": {
-        "h": 10,
-        "a": 6
+        "h": 15,
+        "a": 9
       },
       "corners": {
         "h": null,
@@ -62,13 +62,20 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 68",
+          "label": "Pressão 92",
           "emoji": "🔥",
+          "level": "critical",
+          "detail": "24 atq. perigosos · 4 ao alvo"
+        },
+        {
+          "id": "shots",
+          "label": "10 remates",
+          "emoji": "🎯",
           "level": "high",
-          "detail": "16 atq. perigosos · 2 ao alvo"
+          "detail": "30 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 4
+      "patternScore": 14
     },
     {
       "id": 223423,
@@ -86,9 +93,9 @@
       "xgA": 0.41,
       "xgTotal": 2.71,
       "lastMom": 84,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "overOdds": 1.52,
+      "probLive": 66,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 18,
         "a": 4
@@ -159,10 +166,10 @@
       "xgH": 0.34,
       "xgA": 0.15,
       "xgTotal": 0.49,
-      "lastMom": -36,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "lastMom": 0,
+      "overOdds": 2.37,
+      "probLive": 42,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 7,
         "a": 6
