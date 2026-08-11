@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-11T23:36:27Z",
+  "generated_at": "2026-08-11T23:41:42Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -10,20 +10,20 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 50,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 34,
-      "xgH": 0.64,
+      "xgH": 0.71,
       "xgA": 0.5,
-      "xgTotal": 1.1400000000000001,
-      "lastMom": 0,
+      "xgTotal": 1.21,
+      "lastMom": 21,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 10,
+        "h": 12,
         "a": 9
       },
       "sot": {
@@ -31,8 +31,8 @@
         "a": 3
       },
       "da": {
-        "h": 26,
-        "a": 17
+        "h": 28,
+        "a": 19
       },
       "corners": {
         "h": null,
@@ -69,20 +69,20 @@
       "hScore": 3,
       "aScore": 1,
       "goals": 4,
-      "min": 75,
+      "min": 81,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 33,
-      "xgH": 3.44,
+      "xgH": 3.69,
       "xgA": 0.47,
-      "xgTotal": 3.91,
-      "lastMom": 61,
+      "xgTotal": 4.16,
+      "lastMom": 32,
       "overOdds": 1.55,
       "probLive": 65,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 29,
+        "h": 32,
         "a": 6
       },
       "sot": {
@@ -90,7 +90,7 @@
         "a": 3
       },
       "da": {
-        "h": 61,
+        "h": 65,
         "a": 14
       },
       "corners": {
@@ -120,13 +120,6 @@
       },
       "patterns": [
         {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 61"
-        },
-        {
           "id": "numerical",
           "label": "Casa +2 homens",
           "emoji": "🟥",
@@ -134,7 +127,7 @@
           "detail": "Fora com 2 vermelho(s) — Casa em vantagem numérica"
         }
       ],
-      "patternScore": 4
+      "patternScore": 2
     },
     {
       "id": 207958,
@@ -143,29 +136,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 76,
+      "min": 82,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 32,
-      "xgH": 0.55,
-      "xgA": 0.32,
-      "xgTotal": 0.8700000000000001,
-      "lastMom": 15,
-      "overOdds": 2.37,
-      "probLive": 42,
-      "oddsStatus": "VALID",
+      "xgH": 0.73,
+      "xgA": 0.36,
+      "xgTotal": 1.0899999999999999,
+      "lastMom": 86,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 12,
-        "a": 8
+        "h": 15,
+        "a": 9
       },
       "sot": {
-        "h": 1,
+        "h": 2,
         "a": 3
       },
       "da": {
-        "h": 40,
-        "a": 23
+        "h": 43,
+        "a": 24
       },
       "corners": {
         "h": null,
@@ -195,13 +188,20 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 83 (2ªP)",
+          "label": "Pressão 86 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "25 atq. perigosos · 2 ao alvo (2ªP)"
+          "detail": "29 atq. perigosos · 3 ao alvo (2ªP)"
+        },
+        {
+          "id": "mom",
+          "label": "Casa domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum casa 86 — controlo total"
         }
       ],
-      "patternScore": 10
+      "patternScore": 14
     }
   ]
 }
