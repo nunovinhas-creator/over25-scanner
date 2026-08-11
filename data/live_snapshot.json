@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-11T22:33:28Z",
+  "generated_at": "2026-08-11T22:38:45Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -10,15 +10,15 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 0,
+      "min": 5,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
+      "xgH": 0.05,
+      "xgA": 0.04,
+      "xgTotal": 0.09,
+      "lastMom": 28,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
@@ -49,14 +49,14 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
-          "lastMom": false
+          "lastMom": true
         },
-        "score": 1,
+        "score": 3,
         "total": 6
       },
       "patterns": [],
@@ -69,28 +69,28 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 32,
+      "min": 37,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 33,
-      "xgH": 0.57,
-      "xgA": 0.43,
-      "xgTotal": 1.0,
-      "lastMom": -16,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgH": 1.16,
+      "xgA": 0.4,
+      "xgTotal": 1.56,
+      "lastMom": 83,
+      "overOdds": 1.52,
+      "probLive": 66,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 7,
+        "h": 11,
         "a": 3
       },
       "sot": {
-        "h": 2,
+        "h": 3,
         "a": 2
       },
       "da": {
-        "h": 20,
+        "h": 25,
         "a": 8
       },
       "corners": {
@@ -124,31 +124,38 @@
           "label": "CONVERGÊNCIA",
           "emoji": "🔮",
           "level": "conv",
-          "detail": "3 padrões em simultâneo — sinal forte"
+          "detail": "4 padrões em simultâneo — sinal forte"
         },
         {
           "id": "pressure",
-          "label": "Pressão 99",
+          "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "28 atq. perigosos · 4 ao alvo"
+          "detail": "33 atq. perigosos · 5 ao alvo"
         },
         {
           "id": "xg_pace",
-          "label": "xG 2.8/90",
+          "label": "xG 3.8/90",
           "emoji": "⚡",
-          "level": "med",
-          "detail": "xG a ritmo de 2.8 por 90min"
+          "level": "high",
+          "detail": "xG a ritmo de 3.8 por 90min"
         },
         {
           "id": "shots",
-          "label": "10 remates",
+          "label": "14 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "28 remates/90min (muito alto)"
+          "detail": "34 remates/90min (muito alto)"
+        },
+        {
+          "id": "mom",
+          "label": "Casa domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum casa 83 — controlo total"
         }
       ],
-      "patternScore": 16
+      "patternScore": 22
     },
     {
       "id": 207958,
@@ -157,7 +164,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 32,
+      "min": 37,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -165,10 +172,10 @@
       "xgH": 0.11,
       "xgA": 0.1,
       "xgTotal": 0.21000000000000002,
-      "lastMom": 7,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "lastMom": 26,
+      "overOdds": 2.37,
+      "probLive": 42,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 4,
         "a": 4
@@ -178,8 +185,8 @@
         "a": 2
       },
       "da": {
-        "h": 15,
-        "a": 7
+        "h": 17,
+        "a": 8
       },
       "corners": {
         "h": null,
@@ -209,20 +216,13 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 72",
+          "label": "Pressão 71",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "22 atq. perigosos · 2 ao alvo"
-        },
-        {
-          "id": "shots",
-          "label": "8 remates",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "22 remates/90min"
+          "detail": "25 atq. perigosos · 2 ao alvo"
         }
       ],
-      "patternScore": 12
+      "patternScore": 10
     }
   ]
 }
