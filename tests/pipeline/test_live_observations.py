@@ -26,13 +26,17 @@ import pytest
 
 import pipeline.scan_live as mod
 from pipeline.scan_live import (
+    COVERAGE_FIELDS,
     LIVE_ALERTS_ENABLED,
+    build_coverage_entry,
     build_observation,
     build_observations_message,
+    compute_coverage,
     compute_observation_result_updates,
     load_observation_state,
     maybe_commit_health,
     new_health_state,
+    passes_coverage_log_gate,
     passes_observation_gate,
     run_observations,
     update_health,
@@ -134,6 +138,124 @@ def test_build_observation_handles_missing_xg_and_odds():
     assert obs["xg"] == "" and obs["odds_live"] == ""
 
 
+# ── Bloco L1 — compute_coverage() ─────────────────────────────────────────
+
+
+def _enriched_event(**over):  # synthetic — forma que sai de enrich_event()
+    e = {
+        "xgTotal": 2.0, "lastMom": 10,
+        "da": {"h": 5, "a": 3}, "sot": {"h": 2, "a": 1},
+        "corners": {"h": 4, "a": 2}, "possession": {"h": 60, "a": 40},
+    }
+    e.update(over)
+    return e
+
+
+def test_compute_coverage_full_when_all_fields_present():
+    cov = compute_coverage(_enriched_event())
+    assert cov["score"] == len(COVERAGE_FIELDS)
+    assert cov["total"] == len(COVERAGE_FIELDS)
+    assert all(cov["fields"].values())
+
+
+def test_compute_coverage_zero_when_fields_missing():
+    """xG em falta (ex.: liga sul-americana) não é um valor por omissão —
+    fica explicitamente ausente na cobertura, nunca conta como presente."""
+    e = _enriched_event(xgTotal=None, lastMom=None, da={}, sot={}, corners={}, possession={})
+    cov = compute_coverage(e)
+    assert cov["score"] == 0
+    assert cov["total"] == len(COVERAGE_FIELDS)
+    assert not any(cov["fields"].values())
+
+
+def test_compute_coverage_requires_both_sides_for_paired_fields():
+    """Um valor parcial (só casa) não conta como campo presente — mirror do
+    que detect_patterns() precisa (soma h+a, ver `_t()`)."""
+    e = _enriched_event(da={"h": 5, "a": None})
+    cov = compute_coverage(e)
+    assert cov["fields"]["da"] is False
+
+
+def test_compute_coverage_partial_score():
+    e = _enriched_event(xgTotal=None, lastMom=None)  # só os 4 campos pareados presentes
+    cov = compute_coverage(e)
+    assert cov["score"] == 4
+    assert cov["fields"]["xgTotal"] is False and cov["fields"]["lastMom"] is False
+
+
+# ── Bloco L1 — cobertura embutida em build_observation() ─────────────────
+
+
+def test_build_observation_marks_kind_observation():
+    obs = build_observation(_obs_event(id=1), pick_index={}, sharp_ids=set())
+    assert obs["kind"] == "observation"
+
+
+def test_build_observation_propagates_precomputed_coverage():
+    """build_observation() nunca recalcula cobertura — só propaga o que
+    enrich_event() já anexou em e['coverage'] (ver compute_coverage)."""
+    e = _obs_event(id=1, coverage=compute_coverage(_enriched_event()))
+    obs = build_observation(e, pick_index={}, sharp_ids=set())
+    assert obs["coverage_score"] == len(COVERAGE_FIELDS)
+    assert obs["coverage_total"] == len(COVERAGE_FIELDS)
+    assert all(obs["coverage_fields"].values())
+
+
+def test_build_observation_defaults_coverage_when_absent():
+    """Evento sem e['coverage'] (nunca deveria acontecer em produção — só
+    aqui, num evento sintético incompleto) não rebenta: cai num default
+    explícito de zero, nunca finge cobertura."""
+    e = _obs_event(id=1)  # sem chave "coverage"
+    obs = build_observation(e, pick_index={}, sharp_ids=set())
+    assert obs["coverage_score"] == 0
+    assert obs["coverage_total"] == len(COVERAGE_FIELDS)
+    assert obs["coverage_fields"] == {}
+
+
+# ── Bloco L1 — passes_coverage_log_gate / build_coverage_entry ───────────
+
+
+def test_coverage_gate_rejects_whitelisted_league():
+    """Dentro da whitelist a cobertura já vem embutida na observação real —
+    não gera um registo de cobertura em separado."""
+    e = _obs_event(league="Serie A", min=40)
+    assert not passes_coverage_log_gate(e)
+
+
+def test_coverage_gate_accepts_non_whitelisted_league():
+    e = _obs_event(league="MLS", min=40)
+    assert passes_coverage_log_gate(e)
+
+
+def test_coverage_gate_rejects_before_minute_eight():
+    """Mesmo corte de detect_patterns() — antes do min 8 a BSD tipicamente
+    ainda não populou stats."""
+    e = _obs_event(league="MLS", min=5)
+    assert not passes_coverage_log_gate(e)
+
+
+def test_coverage_gate_ignores_score_and_prob_thresholds():
+    """Ao contrário de passes_observation_gate(), a cobertura não filtra por
+    patternScore/probLive — filtrar pelos mesmos critérios que se pretende
+    avaliar enviesaria a amostra."""
+    e = _obs_event(league="MLS", min=40, patternScore=0, probLive=1)
+    assert passes_coverage_log_gate(e)
+
+
+def test_build_coverage_entry_schema():
+    e = _obs_event(id=999, league="MLS", min=52,
+                    xgTotal=None, lastMom=None, da={}, sot={}, corners={}, possession={})
+    entry = build_coverage_entry(e)
+    assert entry["kind"] == "coverage_only"
+    assert entry["event_id"] == "999"
+    assert entry["id"].startswith("999_cov_")
+    assert entry["liga"] == "MLS"
+    assert entry["min"] == 52
+    assert entry["coverage_score"] == 0
+    assert entry["coverage_total"] == len(COVERAGE_FIELDS)
+    assert "patterns" not in entry and "result_over25" not in entry
+
+
 # ── compute_observation_result_updates ───────────────────────────────────
 
 
@@ -184,12 +306,44 @@ def test_load_observation_state_builds_seen_and_unresolved_sets(monkeypatch, tmp
     state = load_observation_state()
     assert state["seen_event_ids"] == {"1", "2"}
     assert state["unresolved"] == {"1": "1_obs_1"}  # "2" já resolvido — fora
+    assert state["coverage_seen_event_ids"] == set()
+
+
+def test_load_observation_state_separates_coverage_only_entries(monkeypatch, tmp_path):
+    """Entradas kind='coverage_only' (Bloco L1) têm dedup próprio — nunca
+    entram em seen_event_ids/unresolved nem bloqueiam uma 👁 real futura
+    para o mesmo event_id."""
+    obs_file = tmp_path / "observations.json"
+    obs_file.write_text(json.dumps([
+        {"id": "1_obs_1", "event_id": "1", "result_over25": ""},
+        {"id": "9_cov_1", "event_id": "9", "kind": "coverage_only"},
+    ]), encoding="utf-8")
+    monkeypatch.setattr(mod, "_OBS_PATH", obs_file)
+
+    state = load_observation_state()
+    assert state["seen_event_ids"] == {"1"}
+    assert state["coverage_seen_event_ids"] == {"9"}
+    assert state["unresolved"] == {"1": "1_obs_1"}
+
+
+def test_load_observation_state_legacy_entries_without_kind_count_as_real(monkeypatch, tmp_path):
+    """Entradas anteriores ao Bloco L1 (sem campo 'kind') continuam a contar
+    como observação real — nunca reinterpretadas como cobertura."""
+    obs_file = tmp_path / "observations.json"
+    obs_file.write_text(json.dumps([
+        {"id": "1_obs_legacy", "event_id": "1", "liga": "MLS", "result_over25": ""},
+    ]), encoding="utf-8")
+    monkeypatch.setattr(mod, "_OBS_PATH", obs_file)
+
+    state = load_observation_state()
+    assert state["seen_event_ids"] == {"1"}
+    assert state["coverage_seen_event_ids"] == set()
 
 
 def test_load_observation_state_empty_when_file_missing(tmp_path, monkeypatch):
     monkeypatch.setattr(mod, "_OBS_PATH", tmp_path / "does_not_exist.json")
     state = load_observation_state()
-    assert state == {"seen_event_ids": set(), "unresolved": {}}
+    assert state == {"seen_event_ids": set(), "unresolved": {}, "coverage_seen_event_ids": set()}
 
 
 # ── run_observations — ciclo completo: gate -> dedup -> guardar -> Telegram ──
@@ -334,6 +488,120 @@ def test_run_observations_empty_events_short_circuits(isolated_obs_env):
     obs_state = {"seen_event_ids": set(), "unresolved": {}}
     assert run_observations([], obs_state) == 0
     assert isolated_obs_env["commits"] == []
+
+
+# ── run_observations — Bloco L1: registo de cobertura fora da whitelist ──
+
+
+def test_run_observations_logs_coverage_for_non_whitelisted_league(isolated_obs_env):
+    """Um jogo fora da whitelist (ex.: MLS) não qualifica para 👁 real, mas
+    agora gera um registo de cobertura mínimo no mesmo ficheiro — sem
+    Telegram, sem contar para o valor devolvido (que continua a ser só as
+    👁 reais)."""
+    obs_state = {"seen_event_ids": set(), "unresolved": {}, "coverage_seen_event_ids": set()}
+    e = _obs_event(id=1, league="MLS", min=45)
+
+    added = run_observations([e], obs_state)
+
+    assert added == 0  # nenhuma 👁 real — só cobertura
+    assert isolated_obs_env["sent"] == []  # nunca Telegram para cobertura
+    saved = json.loads(isolated_obs_env["obs_file"].read_text())
+    assert len(saved) == 1
+    assert saved[0]["kind"] == "coverage_only"
+    assert saved[0]["event_id"] == "1"
+    assert saved[0]["liga"] == "MLS"
+    assert "1" in obs_state["coverage_seen_event_ids"]
+    assert "1" not in obs_state["seen_event_ids"]
+    assert isolated_obs_env["commits"], "esperava um git_commit_push mesmo só com cobertura"
+
+
+def test_run_observations_coverage_and_real_observation_batched_together(isolated_obs_env):
+    """Um jogo dentro da whitelist (👁 real) e outro fora (cobertura) no
+    mesmo ciclo persistem no mesmo commit, sem interferirem um no outro."""
+    obs_state = {"seen_event_ids": set(), "unresolved": {}, "coverage_seen_event_ids": set()}
+    events = [_obs_event(id=1, league="Serie A"), _obs_event(id=2, league="MLS", min=45)]
+
+    added = run_observations(events, obs_state)
+
+    assert added == 1  # só a 👁 real conta
+    assert len(isolated_obs_env["sent"]) == 1  # 1 mensagem TG, só para a real
+    saved = json.loads(isolated_obs_env["obs_file"].read_text())
+    kinds = {o["event_id"]: o["kind"] for o in saved}
+    assert kinds == {"1": "observation", "2": "coverage_only"}
+    assert len(isolated_obs_env["commits"]) == 1  # um único commit para os dois
+
+
+def test_run_observations_coverage_never_duplicates_same_event(isolated_obs_env):
+    obs_state = {"seen_event_ids": set(), "unresolved": {}, "coverage_seen_event_ids": set()}
+    e = _obs_event(id=1, league="MLS", min=45)
+
+    run_observations([e], obs_state)
+    run_observations([e], obs_state)  # 2º ciclo de polling, mesmo jogo
+
+    saved = json.loads(isolated_obs_env["obs_file"].read_text())
+    assert len(saved) == 1
+
+
+def test_run_observations_coverage_gate_still_needs_minute_eight(isolated_obs_env):
+    obs_state = {"seen_event_ids": set(), "unresolved": {}, "coverage_seen_event_ids": set()}
+    e = _obs_event(id=1, league="MLS", min=3)
+
+    added = run_observations([e], obs_state)
+
+    assert added == 0
+    assert not isolated_obs_env["obs_file"].exists()
+    assert isolated_obs_env["commits"] == []
+
+
+def test_run_observations_never_double_logs_coverage_for_already_real_event(isolated_obs_env):
+    """Um evento cuja liga é whitelisted mas que falhou a 👁 real por outro
+    motivo (ex.: score baixo) fica fora da cobertura — dentro da whitelist a
+    cobertura já vem embutida em cada 👁 real que vier a qualificar."""
+    obs_state = {"seen_event_ids": set(), "unresolved": {}, "coverage_seen_event_ids": set()}
+    e = _obs_event(id=1, league="Serie A", patternScore=0, min=45)  # abaixo do THRESHOLD=6
+
+    added = run_observations([e], obs_state)
+
+    assert added == 0
+    assert not isolated_obs_env["obs_file"].exists()
+    assert isolated_obs_env["commits"] == []
+
+
+def test_run_observations_coverage_backward_compatible_with_obs_state_missing_key(isolated_obs_env):
+    """obs_state construído sem 'coverage_seen_event_ids' (chamadores/testes
+    antigos) não rebenta — a chave é inicializada em memória na primeira
+    chamada (setdefault)."""
+    obs_state = {"seen_event_ids": set(), "unresolved": {}}  # sem a chave nova
+    e = _obs_event(id=1, league="MLS", min=45)
+
+    added = run_observations([e], obs_state)
+
+    assert added == 0
+    assert "coverage_seen_event_ids" in obs_state
+    assert "1" in obs_state["coverage_seen_event_ids"]
+
+
+def test_run_observations_coverage_survives_restart_via_persisted_dedup(isolated_obs_env):
+    obs_state_1 = {"seen_event_ids": set(), "unresolved": {}, "coverage_seen_event_ids": set()}
+    run_observations([_obs_event(id=1, league="MLS", min=45)], obs_state_1)
+
+    obs_state_2 = load_observation_state()  # "restart"
+    n2 = run_observations([_obs_event(id=1, league="MLS", min=45)], obs_state_2)
+
+    assert n2 == 0
+    saved = json.loads(isolated_obs_env["obs_file"].read_text())
+    assert len(saved) == 1  # não duplicou o registo de cobertura após o restart
+
+
+def test_run_observations_coverage_persist_failure_never_advances_dedup(isolated_obs_env_persist_fails):
+    obs_state = {"seen_event_ids": set(), "unresolved": {}, "coverage_seen_event_ids": set()}
+    e = _obs_event(id=1, league="MLS", min=45)
+
+    added = run_observations([e], obs_state)
+
+    assert added == 0
+    assert "1" not in obs_state["coverage_seen_event_ids"]
+    assert isolated_obs_env_persist_fails["sent"] == []
 
 
 # ── run_observations — falha de persistência (bug real: live_scanner.yml ──

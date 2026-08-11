@@ -13,6 +13,16 @@ abertos). Dois fluxos partilham a mesma detecção/enriquecimento por ciclo:
      gate (liga whitelisted + patternScore>=6 + probLive>=25% + não tardio sem
      golos) -> guarda em data/observations.json (dedup persistente por
      event_id, git-committed) -> Telegram. Ver run_observations().
+  3. "Bloco L1 — cobertura" — activo, só registo (nunca Telegram nem gate):
+     mede, por jogo, quais os campos de stats (xG/DA/SOT/cantos/posse/
+     momentum) a BSD populou (ver compute_coverage()). Persistido em cada 👁
+     observação real (dentro da whitelist) e, para ligas FORA da whitelist —
+     hoje invisíveis a esta medição —, num registo mínimo próprio
+     (build_coverage_entry(), `kind="coverage_only"`, mesmo ficheiro
+     data/observations.json, dedup independente). Resumo diário agregado por
+     liga em pipeline/send_coverage_summary.py. Objectivo: decidir se um
+     gate de cobertura de dados pode substituir a whitelist como critério de
+     produção — sem depender da whitelist como proxy.
 
 Porta fiel da lógica do separador Live do index.html:
   - detect_patterns()  ← equivalente Python de detectPatterns() (12 padrões)
@@ -369,7 +379,7 @@ def enrich_event(api_key: str, ev: dict, pick_ids: set[str]) -> dict:
     goals = h_score + a_score
     xg_total = (xg_h + xg_a) if (xg_h is not None and xg_a is not None) else None
 
-    return {
+    result = {
         "id": ev_id,
         "home": ev.get("home_team") or ev.get("home") or "",
         "away": ev.get("away_team") or ev.get("away") or "",
@@ -392,6 +402,44 @@ def enrich_event(api_key: str, ev: dict, pick_ids: set[str]) -> dict:
         "redCards": {"h": _num(sh.get("red_cards")) or 0, "a": _num(sa.get("red_cards")) or 0},
         "isSavedPick": str(ev_id) in pick_ids,
     }
+    result["coverage"] = compute_coverage(result)
+    return result
+
+
+# ---------------------------------------------------------------------------
+# Bloco L1 — cobertura de dados: quais campos de stats a BSD populou, por
+# jogo. Puramente instrumentação (nunca decide nada) — ver investigação que
+# motivou este bloco: patternScore não distingue "jogo parado" de "jogo sem
+# instrumentação" (dado em falta e dado real-zero produzem o mesmo score),
+# e xG/DA/SOT/corners/posse/momentum nunca tinham sido medidos fora da
+# whitelist por não serem persistidos em data/observations.json. Aqui só
+# regista presença (não-None), nunca decide gates nem pontuação.
+# ---------------------------------------------------------------------------
+
+COVERAGE_FIELDS = ("xgTotal", "da", "sot", "corners", "possession", "lastMom")
+
+
+def compute_coverage(e: dict) -> dict:
+    """Quais de COVERAGE_FIELDS vieram preenchidos (não-None) neste jogo, já
+    enriquecido. `da`/`sot`/`corners`/`possession` só contam presentes
+    quando AMBOS os lados (h e a) vêm não-None — um valor parcial não é
+    utilizável por detect_patterns(), que soma h+a (ver `_t()`). `xgTotal`/
+    `lastMom` são escalares únicos. Devolve {fields: {campo: bool}, score:
+    nº de campos presentes, total: len(COVERAGE_FIELDS)} — score/total é a
+    mesma soma simples que patternScore usa para os padrões, mas aqui mede
+    dados disponíveis, não sinal de jogo."""
+    def _pair_present(d):
+        return isinstance(d, dict) and d.get("h") is not None and d.get("a") is not None
+
+    fields = {
+        "xgTotal": e.get("xgTotal") is not None,
+        "da": _pair_present(e.get("da")),
+        "sot": _pair_present(e.get("sot")),
+        "corners": _pair_present(e.get("corners")),
+        "possession": _pair_present(e.get("possession")),
+        "lastMom": e.get("lastMom") is not None,
+    }
+    return {"fields": fields, "score": sum(fields.values()), "total": len(COVERAGE_FIELDS)}
 
 
 # ---------------------------------------------------------------------------
@@ -732,6 +780,43 @@ def passes_observation_gate(e: dict) -> bool:
     return True
 
 
+def passes_coverage_log_gate(e: dict) -> bool:
+    """Gate mínimo de registo de cobertura (Bloco L1): liga FORA da
+    whitelist + min>=8 (mesmo corte de minuto que detect_patterns() usa —
+    antes disso a BSD tipicamente ainda não populou stats). Propositadamente
+    restrito às ligas fora da whitelist: dentro dela, a cobertura já fica
+    embutida em cada 👁 observação real (ver build_observation) — o gap que
+    faltava medir era precisamente o conjunto que passes_observation_gate()
+    exclui à partida, hoje invisível em data/observations.json. Nunca
+    decide envio de Telegram nem substitui passes_observation_gate()."""
+    if e.get("league") in WHITELIST:
+        return False
+    return (e.get("min") or 0) >= 8
+
+
+def build_coverage_entry(e: dict) -> dict:
+    """Registo mínimo de cobertura (Bloco L1) para jogos fora da whitelist —
+    id com sufixo `_cov_` (nunca colide com `_obs_` das 👁 reais, nem com o
+    seu dedup: seen_event_ids/coverage_seen_event_ids são conjuntos
+    separados, ver load_observation_state()). Não é uma observação de
+    padrão — sem patterns/resultado, serve só para medir, por liga, que
+    fracção dos campos de COVERAGE_FIELDS a BSD envia."""
+    base_id = str(e["id"])
+    now = datetime.now(timezone.utc)
+    cov = e.get("coverage") or {"fields": {}, "score": 0, "total": len(COVERAGE_FIELDS)}
+    return {
+        "id": f"{base_id}_cov_{int(time.time() * 1000)}",
+        "event_id": base_id,
+        "kind": "coverage_only",
+        "liga": e.get("league", ""),
+        "min": e.get("min", 0),
+        "detected_at": now.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z",
+        "coverage_score": cov["score"],
+        "coverage_total": cov["total"],
+        "coverage_fields": cov["fields"],
+    }
+
+
 def _load_pick_index() -> dict[str, dict]:
     """base_id -> pick Over 2.5 (data/picks.json) — para has_scan_pick/scan_score.
     Informativo apenas (não é gate); scanGame?.score do browser (score da tab
@@ -765,9 +850,11 @@ def build_observation(e: dict, pick_index: dict[str, dict], sharp_ids: set[str])
     xg_total = e.get("xgTotal")
     over_odds = e.get("overOdds")
     now = datetime.now(timezone.utc)
+    cov = e.get("coverage") or {"fields": {}, "score": 0, "total": len(COVERAGE_FIELDS)}
     return {
         "id": obs_id,
         "event_id": base_id,
+        "kind": "observation",
         "casa": e.get("home", ""), "fora": e.get("away", ""), "liga": e.get("league", ""),
         "data": now.date().isoformat(),
         "detected_at": now.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z",
@@ -783,6 +870,9 @@ def build_observation(e: dict, pick_index: dict[str, dict], sharp_ids: set[str])
         "has_scan_pick": "1" if pick else "",
         "scan_score": str(pick.get("score_sistema", "")) if pick else "",
         "has_sharp": "1" if base_id in sharp_ids else "",
+        "coverage_score": cov["score"],
+        "coverage_total": cov["total"],
+        "coverage_fields": cov["fields"],
         "result_over25": "",
         "final_score": "",
         "result_at_min": "",
@@ -837,16 +927,28 @@ def load_observation_state() -> dict:
     data/observations.json (fonte de verdade persistida via git — substitui o
     localStorage do browser, que não existe no backend). Sobrevive aos
     restarts do workflow live_scanner.yml (a cada ~4h) sem duplicar
-    observações já guardadas nem perder o histórico de pendentes."""
+    observações já guardadas nem perder o histórico de pendentes.
+
+    Bloco L1: separa entradas `kind="coverage_only"` (registos de cobertura,
+    ver build_coverage_entry) do resto — dedup próprio
+    (`coverage_seen_event_ids`), nunca misturado com `seen_event_ids`/
+    `unresolved` das 👁 observações reais. Entradas antigas sem `kind`
+    (anteriores ao Bloco L1) contam sempre como observação real, nunca como
+    cobertura — preserva o comportamento pré-existente."""
     current = load_json_list(_OBS_PATH)
-    seen = {str(o.get("event_id") or "") for o in current}
+    coverage_entries = [o for o in current if o.get("kind") == "coverage_only"]
+    real_entries = [o for o in current if o.get("kind") != "coverage_only"]
+
+    seen = {str(o.get("event_id") or "") for o in real_entries}
     seen.discard("")
     unresolved = {
         str(o["event_id"]): o["id"]
-        for o in current
+        for o in real_entries
         if not o.get("result_over25") and o.get("event_id") and o.get("id")
     }
-    return {"seen_event_ids": seen, "unresolved": unresolved}
+    coverage_seen = {str(o.get("event_id") or "") for o in coverage_entries}
+    coverage_seen.discard("")
+    return {"seen_event_ids": seen, "unresolved": unresolved, "coverage_seen_event_ids": coverage_seen}
 
 
 def run_observations(events: list[dict], obs_state: dict, verbose: bool = False) -> int:
@@ -857,7 +959,16 @@ def run_observations(events: list[dict], obs_state: dict, verbose: bool = False)
     persistência falha (git push), caso em que nem o Telegram é enviado nem o
     dedup em memória avança, para o mesmo evento ser reavaliado no próximo
     ciclo sem duplicar nem ficar "queimado" (bug de infraestrutura encontrado
-    em produção: live_scanner.yml sem `permissions: contents: write`)."""
+    em produção: live_scanner.yml sem `permissions: contents: write`).
+
+    Bloco L1 — cobertura: no MESMO ciclo (mesmo ficheiro, mesmo commit),
+    também regista jogos fora da whitelist via passes_coverage_log_gate()/
+    build_coverage_entry() — dedup próprio (`coverage_seen_event_ids`,
+    setdefault aqui para não partir chamadores que ainda constroem
+    `obs_state` à mão sem esta chave). Isto NUNCA altera o valor devolvido
+    (continua a ser só `len(new_entries)`, as 👁 reais) nem envia Telegram
+    para estas entradas — são só registo, para medir cobertura de dados por
+    liga sem depender da whitelist (ver pipeline/send_coverage_summary.py)."""
     if not events:
         return 0
 
@@ -865,14 +976,22 @@ def run_observations(events: list[dict], obs_state: dict, verbose: bool = False)
         e for e in events
         if str(e["id"]) not in obs_state["seen_event_ids"] and passes_observation_gate(e)
     ]
+    coverage_seen = obs_state.setdefault("coverage_seen_event_ids", set())
+    new_coverage = [
+        e for e in events
+        if str(e["id"]) not in coverage_seen
+        and str(e["id"]) not in obs_state["seen_event_ids"]
+        and passes_coverage_log_gate(e)
+    ]
     updates = compute_observation_result_updates(events, obs_state["unresolved"])
 
-    if not new_events and not updates:
+    if not new_events and not updates and not new_coverage:
         return 0
 
     pick_index = _load_pick_index()
     sharp_ids = _load_sharp_ids()
     new_entries = [build_observation(e, pick_index, sharp_ids) for e in new_events]
+    new_coverage_entries = [build_coverage_entry(e) for e in new_coverage]
 
     current = load_json_list(_OBS_PATH)
     by_id = {o["id"]: o for o in current}
@@ -881,10 +1000,13 @@ def run_observations(events: list[dict], obs_state: dict, verbose: bool = False)
             by_id[obs_id] = {**by_id[obs_id], **patch}
     for entry in new_entries:
         by_id[entry["id"]] = entry
+    for entry in new_coverage_entries:
+        by_id[entry["id"]] = entry
     save_json_list(_OBS_PATH, list(by_id.values()))
     persisted = git_commit_push(
         [str(_OBS_PATH)],
-        f"obs: {len(new_entries)} new, {len(updates)} updated [skip ci]",
+        f"obs: {len(new_entries)} new, {len(updates)} updated, "
+        f"{len(new_coverage_entries)} coverage [skip ci]",
     )
     if not persisted:
         # Falha de persistência: repõe o ficheiro local (evita acumular
@@ -894,6 +1016,7 @@ def run_observations(events: list[dict], obs_state: dict, verbose: bool = False)
         git_discard_local_changes([str(_OBS_PATH)])
         print(
             f"obs_persist_failed novos={len(new_entries)} updates={len(updates)} "
+            f"cobertura={len(new_coverage_entries)} "
             "— git push falhou; observação(ões) NÃO consideradas concluídas "
             "(sem Telegram, sem avanço de dedup, reavaliadas no próximo ciclo)",
             file=sys.stderr,
@@ -902,6 +1025,8 @@ def run_observations(events: list[dict], obs_state: dict, verbose: bool = False)
 
     for e in new_events:
         obs_state["seen_event_ids"].add(str(e["id"]))
+    for e in new_coverage:
+        coverage_seen.add(str(e["id"]))
     for entry in new_entries:
         obs_state["unresolved"][entry["event_id"]] = entry["id"]
     resolved_ids = set(updates.keys())
@@ -910,7 +1035,8 @@ def run_observations(events: list[dict], obs_state: dict, verbose: bool = False)
             del obs_state["unresolved"][event_id]
 
     if verbose:
-        print(f"OBSERVACOES: {len(new_entries)} nova(s), {len(updates)} actualizada(s).")
+        print(f"OBSERVACOES: {len(new_entries)} nova(s), {len(updates)} actualizada(s), "
+              f"{len(new_coverage_entries)} cobertura.")
 
     if new_entries:
         send_telegram(build_observations_message(new_events, new_entries))
@@ -969,6 +1095,7 @@ def build_shadow_alert(e: dict, blocked_by: str | None) -> dict:
     base_id = str(e["id"])
     now = datetime.now(timezone.utc)
     category = blocked_by or "send"
+    cov = e.get("coverage") or {"fields": {}, "score": 0, "total": len(COVERAGE_FIELDS)}
     # A categoria entra no id (não só o timestamp): dois ciclos muito
     # próximos podem cair no mesmo milissegundo, e um evento pode ter
     # registos de categorias diferentes pendentes ao mesmo tempo — sem a
@@ -987,6 +1114,9 @@ def build_shadow_alert(e: dict, blocked_by: str | None) -> dict:
         "pressao": _pressao_value(e),
         "odds_live": e.get("overOdds"),
         "odds_status": e.get("oddsStatus", ""),
+        "coverage_score": cov["score"],
+        "coverage_total": cov["total"],
+        "coverage_fields": cov["fields"],
         "blocked_by": blocked_by,
         "result_over25": "",
         "final_score": "",

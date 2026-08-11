@@ -1,0 +1,44 @@
+name: Cobertura de dados live — resumo diário Telegram
+
+# Bloco L1: UMA mensagem por dia no Telegram com a cobertura de dados
+# (xG/DA/SOT/cantos/posse/momentum) dos jogos observados pelo Scanner LIVE,
+# agregada por liga — inclui ligas fora da whitelist (ver
+# pipeline/send_coverage_summary.py, que lê data/observations.json).
+# Não altera detect_patterns()/pattern_score(), gates ou LIVE_ALERTS_ENABLED;
+# só lê o que run_observations() já escreveu.
+#
+# Cron do GitHub Actions é sempre UTC — mesmo esquema de dois cron (DST) já
+# usado em live_shadow_summary.yml, ~23:00 hora de Lisboa.
+on:
+  schedule:
+    - cron: '10 23 * 11,12,1,2,3 *'    # 23:10 Lisboa (WET,  UTC+0) — nov a mar
+    - cron: '10 22 * 4,5,6,7,8,9,10 *' # 23:10 Lisboa (WEST, UTC+1) — abr a out
+  workflow_dispatch:
+
+jobs:
+  coverage_summary:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependências
+        run: pip install --quiet requests
+
+      - name: Enviar resumo diário de cobertura de dados
+        run: python -m pipeline.send_coverage_summary
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+          TG_TOKEN: ${{ secrets.TG_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
