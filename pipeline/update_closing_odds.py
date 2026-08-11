@@ -41,11 +41,11 @@ from __future__ import annotations
 
 import json
 import os
-import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+from pipeline.scan_common import git_commit_push
 from pipeline.scan_sharp1x2 import fetch_closing_odds
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -83,26 +83,6 @@ def _save_picks(picks: list[dict]) -> None:
     PICKS_FILE.write_text(
         json.dumps(picks, ensure_ascii=False, indent=2), encoding="utf-8"
     )
-
-
-def _git_commit(msg: str) -> None:
-    try:
-        subprocess.run(["git", "config", "user.name", "github-actions[bot]"], check=True)
-        subprocess.run(
-            ["git", "config", "user.email", "github-actions[bot]@users.noreply.github.com"],
-            check=True,
-        )
-        subprocess.run(["git", "fetch", "origin", "main"], check=True)
-        subprocess.run(["git", "reset", "--soft", "origin/main"], check=True)
-        subprocess.run(["git", "add", str(PICKS_FILE)], check=True)
-        if subprocess.run(["git", "diff", "--cached", "--quiet"]).returncode != 0:
-            subprocess.run(["git", "commit", "-m", msg], check=True)
-            subprocess.run(["git", "push", "origin", "main"], check=True)
-            print(f"Commit: {msg}")
-        else:
-            print("Sem alterações para commitar.")
-    except subprocess.CalledProcessError as exc:
-        print(f"git falhou: {exc}", file=sys.stderr)
 
 
 def _event_id_from_pick_id(pick_id: str) -> str:
@@ -214,7 +194,7 @@ def update() -> None:
 
     if changed:
         _save_picks(picks)
-        _git_commit(f"auto-update closing odds sharp1x2 {ts} [skip ci]")
+        git_commit_push([str(PICKS_FILE)], f"auto-update closing odds sharp1x2 {ts} [skip ci]")
     else:
         print("Nenhuma alteração — sem commit.")
 

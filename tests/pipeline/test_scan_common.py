@@ -306,13 +306,15 @@ class TestGitCommitPushStaleIndexRealGit:
         # stray.json no remoto continua o original — nunca foi `git add`ado.
         assert _read_from_remote(remote, "stray.json") == "original"
 
-    def test_real_non_fast_forward_push_rejection_returns_false(self, tmp_path, monkeypatch):
-        """Concorrência real: dois clones do job longo tentam publicar ao
-        mesmo tempo. O segundo fetch+reset+add+commit já correu sobre um HEAD
-        que entretanto ficou desactualizado outra vez (outro processo pushou
-        entre o fetch e o push deste) — o push tem de ser rejeitado
-        (non-fast-forward) e git_commit_push() tem de devolver False, sem
-        levantar excepção nem corromper o estado local."""
+    def test_real_transient_non_fast_forward_recovers_via_retry(self, tmp_path, monkeypatch):
+        """Concorrência real, race de UMA vez só: dois clones do job longo
+        tentam publicar ao mesmo tempo. O primeiro push de job2 é rejeitado
+        (non-fast-forward) porque job1 publicou entretanto — mas
+        git_commit_push() agora repete (fetch + reset --mixed + add + commit
+        + push) até 5 vezes, e a 2ª tentativa já parte do HEAD actualizado.
+        Como a corrida não se repete na 2ª tentativa, o push converge e
+        git_commit_push() devolve True — nunca levanta excepção nem corrompe
+        o estado local."""
         remote = _init_bare_remote(tmp_path)
 
         job1 = _clone(remote, tmp_path / "job1", "job1")
@@ -332,7 +334,9 @@ class TestGitCommitPushStaleIndexRealGit:
         # antes de reset+add+commit, por isso simulamos a corrida real
         # forçando um push manual concorrente ENTRE o fetch e o push desta
         # chamada: monkeypatch subprocess.run para injectar um push externo
-        # depois do "git add" e antes do commit/push do próprio job2.
+        # depois do "git add" e antes do commit/push do próprio job2 — só uma
+        # vez (injected["done"]), simulando uma corrida transitória que não
+        # se repete na tentativa seguinte.
         real_run = subprocess.run
         injected = {"done": False}
 
@@ -348,6 +352,47 @@ class TestGitCommitPushStaleIndexRealGit:
         (job2 / "health.json").write_text("v2-de-job2")
         monkeypatch.chdir(job2)
         monkeypatch.setattr(sc.subprocess, "run", racing_run)
+        monkeypatch.setattr(sc.time, "sleep", lambda *_a, **_kw: None)  # sem espera real nos testes
+
+        assert sc.git_commit_push(["health.json"], "job2 health v2") is True
+        # A 2ª tentativa publica sobre o HEAD já actualizado (v3 de job1) —
+        # o conteúdo final é o que job2 tinha em disco, nunca o de job1.
+        assert _read_from_remote(remote, "health.json") == "v2-de-job2"
+
+    def test_real_persistent_non_fast_forward_exhausts_retries_and_returns_false(self, tmp_path, monkeypatch):
+        """Concorrência real, race persistente em TODAS as tentativas (ex.:
+        outro workflow em loop apertado a publicar constantemente): as 5
+        tentativas de git_commit_push() esgotam-se e a função devolve False,
+        sem levantar excepção nem corromper o estado local."""
+        remote = _init_bare_remote(tmp_path)
+
+        job1 = _clone(remote, tmp_path / "job1", "job1")
+        (job1 / "health.json").write_text("v1")
+        _commit_and_push(job1, ["health.json"], "A: commit inicial")
+
+        job2 = _clone(remote, tmp_path / "job2", "job2")
+        (job1 / "health.json").write_text("v2-de-job1")
+        monkeypatch.chdir(job1)
+        assert sc.git_commit_push(["health.json"], "job1 health v2") is True
+
+        real_run = subprocess.run
+        racing = {"n": 0}
+
+        def racing_run(cmd, check=False, **kwargs):
+            result = real_run(cmd, check=check, **kwargs)
+            if cmd[:2] == ["git", "add"]:
+                racing["n"] += 1
+                (job1 / "health.json").write_text(f"race-{racing['n']}-de-job1")
+                real_run(["git", "-C", str(job1), "commit", "-q", "-am", f"job1 corrida {racing['n']}"], check=True)
+                real_run(["git", "-C", str(job1), "push", "-q", "origin", "HEAD:main"], check=True)
+            return result
+
+        (job2 / "health.json").write_text("v2-de-job2")
+        monkeypatch.chdir(job2)
+        monkeypatch.setattr(sc.subprocess, "run", racing_run)
+        monkeypatch.setattr(sc.time, "sleep", lambda *_a, **_kw: None)  # sem espera real nos testes
 
         assert sc.git_commit_push(["health.json"], "job2 health v2") is False
-        assert _read_from_remote(remote, "health.json") == "v3-de-job1-durante-a-corrida"
+        # Esgotadas as 5 tentativas: o remoto reflecte a última corrida
+        # externa, nunca o commit (rejeitado) de job2.
+        assert _read_from_remote(remote, "health.json") == "race-5-de-job1"

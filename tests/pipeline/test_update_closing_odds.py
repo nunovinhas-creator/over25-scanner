@@ -58,7 +58,7 @@ def _run(picks: list[dict], fetch_closing_odds_side_effect):
             patch.object(mod, "PICKS_FILE", picks_file),
             patch.object(mod, "BSD_API_KEY", "fake_key"),
             patch.object(mod, "fetch_closing_odds", side_effect=fetch_closing_odds_side_effect),
-            patch.object(mod, "_git_commit"),
+            patch.object(mod, "git_commit_push"),
         ):
             mod.update()
 
