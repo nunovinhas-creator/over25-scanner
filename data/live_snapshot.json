@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-11T23:41:42Z",
+  "generated_at": "2026-08-11T23:46:55Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -10,29 +10,29 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 50,
+      "min": 55,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 34,
-      "xgH": 0.71,
-      "xgA": 0.5,
-      "xgTotal": 1.21,
-      "lastMom": 21,
+      "xgH": 0.69,
+      "xgA": 0.55,
+      "xgTotal": 1.24,
+      "lastMom": -47,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 12,
-        "a": 9
+        "h": 13,
+        "a": 11
       },
       "sot": {
-        "h": 4,
+        "h": 5,
         "a": 3
       },
       "da": {
-        "h": 28,
-        "a": 19
+        "h": 29,
+        "a": 22
       },
       "corners": {
         "h": null,
@@ -59,8 +59,23 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "open",
+          "label": "JOGO ABERTO",
+          "emoji": "🎭",
+          "level": "low",
+          "detail": "35min, equipa a perder ataca"
+        },
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 47"
+        }
+      ],
+      "patternScore": 3
     },
     {
       "id": 223423,
@@ -69,28 +84,28 @@
       "hScore": 3,
       "aScore": 1,
       "goals": 4,
-      "min": 81,
+      "min": 86,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 33,
-      "xgH": 3.69,
+      "xgH": 3.94,
       "xgA": 0.47,
-      "xgTotal": 4.16,
-      "lastMom": 32,
+      "xgTotal": 4.41,
+      "lastMom": 61,
       "overOdds": 1.55,
       "probLive": 65,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 32,
+        "h": 35,
         "a": 6
       },
       "sot": {
-        "h": 7,
+        "h": 8,
         "a": 3
       },
       "da": {
-        "h": 65,
+        "h": 70,
         "a": 14
       },
       "corners": {
@@ -120,6 +135,13 @@
       },
       "patterns": [
         {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 61"
+        },
+        {
           "id": "numerical",
           "label": "Casa +2 homens",
           "emoji": "🟥",
@@ -127,7 +149,7 @@
           "detail": "Fora com 2 vermelho(s) — Casa em vantagem numérica"
         }
       ],
-      "patternScore": 2
+      "patternScore": 4
     },
     {
       "id": 207958,
@@ -136,29 +158,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 82,
+      "min": 87,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 32,
-      "xgH": 0.73,
-      "xgA": 0.36,
-      "xgTotal": 1.0899999999999999,
-      "lastMom": 86,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgH": 0.68,
+      "xgA": 0.44,
+      "xgTotal": 1.12,
+      "lastMom": -19,
+      "overOdds": 2.37,
+      "probLive": 42,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 15,
-        "a": 9
+        "a": 11
       },
       "sot": {
         "h": 2,
         "a": 3
       },
       "da": {
-        "h": 43,
-        "a": 24
+        "h": 46,
+        "a": 29
       },
       "corners": {
         "h": null,
@@ -188,20 +210,20 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 86 (2ªP)",
+          "label": "Pressão 94 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "29 atq. perigosos · 3 ao alvo (2ªP)"
+          "detail": "37 atq. perigosos · 3 ao alvo (2ªP)"
         },
         {
-          "id": "mom",
-          "label": "Casa domina",
-          "emoji": "💥",
-          "level": "high",
-          "detail": "Momentum casa 86 — controlo total"
+          "id": "shots",
+          "label": "13r 2ªP",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "28 remates/90min (2ªP)"
         }
       ],
-      "patternScore": 14
+      "patternScore": 12
     }
   ]
 }
