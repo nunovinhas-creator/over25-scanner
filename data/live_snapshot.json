@@ -1,34 +1,34 @@
 {
-  "generated_at": "2026-08-11T17:31:25Z",
+  "generated_at": "2026-08-11T17:36:55Z",
   "status": "OK",
-  "count": 6,
+  "count": 8,
   "events": [
     {
-      "id": 220449,
-      "home": "NEC Nijmegen",
-      "away": "Olympiacos FC",
+      "id": 587658,
+      "home": "Marino Luanco",
+      "away": "UP Langreo",
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 0,
+      "min": 4,
       "status": "1st_half",
       "period": "1T",
       "league": "",
-      "league_id": 7,
+      "league_id": 79,
       "xgH": null,
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
       "overOdds": null,
       "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "oddsStatus": "MISSING",
       "shots": {
-        "h": 0,
-        "a": 0
+        "h": null,
+        "a": null
       },
       "sot": {
-        "h": 0,
-        "a": 0
+        "h": null,
+        "a": null
       },
       "da": {
         "h": null,
@@ -51,12 +51,130 @@
         "fields": {
           "xgTotal": false,
           "da": false,
+          "sot": false,
+          "corners": false,
+          "possession": false,
+          "lastMom": false
+        },
+        "score": 0,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 223404,
+      "home": "FC CSKA 1948 Sofia",
+      "away": "Panathinaikos FC",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 4,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 83,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": 1.98,
+      "probLive": 51,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": 3,
+        "a": 8
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": true,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": false
         },
-        "score": 1,
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 220449,
+      "home": "NEC Nijmegen",
+      "away": "Olympiacos FC",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 5,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 7,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": -11,
+      "overOdds": 1.75,
+      "probLive": 57,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": 0,
+        "a": 2
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
         "total": 6
       },
       "patterns": [],
@@ -69,7 +187,7 @@
       "hScore": 0,
       "aScore": 2,
       "goals": 2,
-      "min": 29,
+      "min": 35,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -78,19 +196,19 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "overOdds": 1.74,
+      "probLive": 57,
+      "oddsStatus": "VALID",
       "shots": {
         "h": null,
         "a": null
       },
       "sot": {
         "h": 0,
-        "a": 2
+        "a": 4
       },
       "da": {
-        "h": 13,
+        "h": 16,
         "a": 22
       },
       "corners": {
@@ -103,7 +221,7 @@
       },
       "redCards": {
         "h": 0,
-        "a": 0
+        "a": 1
       },
       "isSavedPick": false,
       "coverage": {
@@ -124,10 +242,17 @@
           "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "35 atq. perigosos · 2 ao alvo"
+          "detail": "38 atq. perigosos · 4 ao alvo"
+        },
+        {
+          "id": "numerical",
+          "label": "Casa +1 homem",
+          "emoji": "🟥",
+          "level": "med",
+          "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
         }
       ],
-      "patternScore": 10
+      "patternScore": 12
     },
     {
       "id": 221199,
@@ -136,7 +261,7 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 31,
+      "min": 36,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -145,20 +270,20 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "overOdds": 1.63,
+      "probLive": 61,
+      "oddsStatus": "VALID",
       "shots": {
         "h": null,
         "a": null
       },
       "sot": {
-        "h": 3,
+        "h": 4,
         "a": 1
       },
       "da": {
-        "h": 18,
-        "a": 17
+        "h": 22,
+        "a": 19
       },
       "corners": {
         "h": null,
@@ -191,7 +316,7 @@
           "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "35 atq. perigosos · 4 ao alvo"
+          "detail": "41 atq. perigosos · 5 ao alvo"
         }
       ],
       "patternScore": 10
@@ -201,9 +326,9 @@
       "home": "FC Iberia 1999",
       "away": "Larne FC",
       "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 74,
+      "aScore": 1,
+      "goals": 2,
+      "min": 80,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -212,20 +337,20 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "overOdds": 2.21,
+      "probLive": 45,
+      "oddsStatus": "VALID",
       "shots": {
         "h": null,
         "a": null
       },
       "sot": {
-        "h": 3,
-        "a": 0
+        "h": 4,
+        "a": 1
       },
       "da": {
-        "h": 41,
-        "a": 28
+        "h": 43,
+        "a": 29
       },
       "corners": {
         "h": null,
@@ -252,8 +377,16 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "late",
+          "label": "1 gol em 10min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 45% · 10min"
+        }
+      ],
+      "patternScore": 1
     },
     {
       "id": 223232,
@@ -262,21 +395,21 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 71,
+      "min": 77,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 7,
       "xgH": 1.62,
-      "xgA": 0.96,
-      "xgTotal": 2.58,
-      "lastMom": 36,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgA": 1.07,
+      "xgTotal": 2.6900000000000004,
+      "lastMom": 27,
+      "overOdds": 1.64,
+      "probLive": 61,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 19,
-        "a": 7
+        "a": 9
       },
       "sot": {
         "h": 6,
@@ -313,52 +446,52 @@
       },
       "patterns": [
         {
-          "id": "xg_pace",
-          "label": "xG 2.7/90 (2ªP)",
-          "emoji": "⚡",
-          "level": "med",
-          "detail": "xG a ritmo de 2.7 por 90min (2ªP)"
-        },
-        {
           "id": "shots",
-          "label": "9r 2ªP",
+          "label": "11r 2ªP",
           "emoji": "🎯",
           "level": "high",
           "detail": "31 remates/90min (2ªP) (muito alto)"
+        },
+        {
+          "id": "late",
+          "label": "1 gol em 13min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 61% · 13min"
         }
       ],
-      "patternScore": 6
+      "patternScore": 5
     },
     {
       "id": 220448,
       "home": "Bodø/Glimt",
       "away": "Royale Union Saint-Gilloise",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 1,
-      "goals": 2,
-      "min": 70,
+      "goals": 3,
+      "min": 76,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 7,
-      "xgH": 0.74,
-      "xgA": 1.77,
-      "xgTotal": 2.51,
-      "lastMom": 30,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgH": 1.66,
+      "xgA": 1.86,
+      "xgTotal": 3.52,
+      "lastMom": 27,
+      "overOdds": 1.49,
+      "probLive": 67,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 7,
-        "a": 12
+        "h": 8,
+        "a": 13
       },
       "sot": {
-        "h": 1,
+        "h": 2,
         "a": 3
       },
       "da": {
-        "h": 63,
-        "a": 27
+        "h": 67,
+        "a": 30
       },
       "corners": {
         "h": null,
@@ -385,37 +518,8 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "conv",
-          "label": "CONVERGÊNCIA",
-          "emoji": "🔮",
-          "level": "conv",
-          "detail": "3 padrões em simultâneo — sinal forte"
-        },
-        {
-          "id": "pressure",
-          "label": "Pressão 96 (2ªP)",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "24 atq. perigosos · 2 ao alvo (2ªP)"
-        },
-        {
-          "id": "xg_pace",
-          "label": "xG 3.3/90 (2ªP)",
-          "emoji": "⚡",
-          "level": "high",
-          "detail": "xG a ritmo de 3.3 por 90min (2ªP)"
-        },
-        {
-          "id": "shots",
-          "label": "8r 2ªP",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "29 remates/90min (2ªP) (muito alto)"
-        }
-      ],
-      "patternScore": 18
+      "patterns": [],
+      "patternScore": 0
     }
   ]
 }
