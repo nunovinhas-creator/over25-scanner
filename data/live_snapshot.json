@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-11T20:24:52Z",
+  "generated_at": "2026-08-11T20:30:02Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -10,28 +10,28 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 66,
+      "min": 71,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 7,
-      "xgH": 1.6,
+      "xgH": 1.74,
       "xgA": 0.53,
-      "xgTotal": 2.13,
-      "lastMom": 33,
+      "xgTotal": 2.27,
+      "lastMom": 50,
       "overOdds": 1.41,
       "probLive": 71,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 14,
+        "h": 15,
         "a": 5
       },
       "sot": {
-        "h": 7,
+        "h": 8,
         "a": 0
       },
       "da": {
-        "h": 38,
+        "h": 41,
         "a": 19
       },
       "corners": {
@@ -65,28 +65,42 @@
           "label": "CONVERGÊNCIA",
           "emoji": "🔮",
           "level": "conv",
-          "detail": "4 padrões em simultâneo — sinal forte"
+          "detail": "6 padrões em simultâneo — sinal forte"
         },
         {
           "id": "pressure",
           "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "23 atq. perigosos · 3 ao alvo (2ªP)"
+          "detail": "26 atq. perigosos · 4 ao alvo (2ªP)"
         },
         {
           "id": "xg_pace",
-          "label": "xG 3.6/90 (2ªP)",
+          "label": "xG 3.4/90 (2ªP)",
           "emoji": "⚡",
           "level": "high",
-          "detail": "xG a ritmo de 3.6 por 90min (2ªP)"
+          "detail": "xG a ritmo de 3.4 por 90min (2ªP)"
         },
         {
           "id": "shots",
-          "label": "6r 2ªP",
+          "label": "7r 2ªP",
           "emoji": "🎯",
           "level": "med",
-          "detail": "26 remates/90min (2ªP)"
+          "detail": "24 remates/90min (2ªP)"
+        },
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 50"
+        },
+        {
+          "id": "late",
+          "label": "1 gol em 19min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 71% · 19min"
         },
         {
           "id": "numerical",
@@ -96,7 +110,7 @@
           "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
         }
       ],
-      "patternScore": 18
+      "patternScore": 21
     }
   ]
 }
