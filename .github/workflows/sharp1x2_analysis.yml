@@ -119,15 +119,32 @@ jobs:
           PYTHONPATH: ${{ github.workspace }}
 
       - name: Commit analysis report
+        # Mesmo padrão de retry usado em deploy_version.yml/update_readme.yml: até 5
+        # tentativas, fetch + `git reset --mixed origin/main` antes de cada push
+        # (sharp1x2_signal.md já foi gerado no passo anterior e fica inalterado no
+        # disco entre tentativas — --mixed não toca na working tree). `--mixed`,
+        # nunca `--soft`: ver git_commit_push() em pipeline/scan_common.py.
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add backtesting/reports/sharp1x2_signal.md || true
+          for tentativa in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --mixed origin/main
+            git add backtesting/reports/sharp1x2_signal.md || true
 
-          if git diff --cached --quiet; then
-            echo "Sem alterações no relatório."
-          else
+            if git diff --cached --quiet; then
+              echo "Sem alterações no relatório."
+              exit 0
+            fi
+
             git commit -m "analysis: sharp 1X2 signal report [skip ci]"
-            git push origin main
-          fi
+            if git push origin main; then
+              exit 0
+            fi
+            echo "Push rejeitado (tentativa ${tentativa}/5) — outro workflow avançou main entretanto. A repetir após novo fetch..."
+            sleep $((tentativa * 3))
+          done
+
+          echo "::error::sharp1x2_analysis (analyse): falha a fazer push após 5 tentativas — corrida persistente de push com outro workflow em main." >&2
+          exit 1

@@ -69,12 +69,34 @@ jobs:
 
       - name: Commit and push updated dashboard
         if: steps.diff.outputs.changed == 'true'
+        # Mesmo padrão de retry usado em deploy_version.yml/update_readme.yml: até 5
+        # tentativas, fetch + `git reset --mixed origin/main` antes de cada push
+        # (analytics.html já foi gerado no passo anterior e fica inalterado no
+        # disco entre tentativas — --mixed não toca na working tree). Substitui o
+        # `git pull --rebase -X theirs` anterior, que não tinha retry nenhum: uma
+        # rejeição de push por corrida com outro workflow (ex.: deploy_version.yml,
+        # scanner.yml) fazia o job falhar directamente.
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add dashboard/analytics.html
-          git commit -m "chore: regenerate analytics dashboard [skip ci]"
-          # --autostash handles __pycache__ unstaged files
-          # -X theirs keeps our generated file when a concurrent run already pushed
-          git pull --rebase --autostash -X theirs origin main
-          git push
+
+          for tentativa in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --mixed origin/main
+            git add dashboard/analytics.html
+
+            if git diff --cached --quiet; then
+              echo "Sem alterações para commitar (outro workflow já publicou o mesmo dashboard)."
+              exit 0
+            fi
+
+            git commit -m "chore: regenerate analytics dashboard [skip ci]"
+            if git push origin main; then
+              exit 0
+            fi
+            echo "Push rejeitado (tentativa ${tentativa}/5) — outro workflow avançou main entretanto. A repetir após novo fetch..."
+            sleep $((tentativa * 3))
+          done
+
+          echo "::error::dashboard: falha a fazer push após 5 tentativas — corrida persistente de push com outro workflow em main." >&2
+          exit 1

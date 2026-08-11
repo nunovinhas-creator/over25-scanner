@@ -41,7 +41,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           for tentativa in 1 2 3 4 5; do
             git fetch origin main
-            git reset --soft origin/main
+            git reset --mixed origin/main
             git add version.json index.html
             if git diff --cached --quiet; then
               echo "Sem alterações para commitar."

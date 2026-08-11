@@ -15,6 +15,7 @@ import json
 import os
 import subprocess
 import sys
+import time
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -140,11 +141,12 @@ def send_telegram(text: str) -> bool:
 def git_commit_push(files: list[str], msg: str) -> bool:
     """Commita e faz push de `files` para origin/main. Devolve True se o
     remoto reflecte agora o conteúdo pretendido (push confirmado, ou nada
-    havia para commitar); False se houve alterações mas o push falhou (ex.:
-    GITHUB_TOKEN sem `permissions: contents: write` — 403 Permission denied).
-    O caller NUNCA deve tratar False como sucesso silencioso: ver
-    run_observations() em pipeline/scan_live.py para o caso em que uma falha
-    aqui tem de impedir o Telegram e o avanço da deduplicação.
+    havia para commitar); False se houve alterações mas todas as tentativas
+    de push falharam (ex.: GITHUB_TOKEN sem `permissions: contents: write`
+    — 403 Permission denied, que não se resolve por retry). O caller NUNCA
+    deve tratar False como sucesso silencioso: ver run_observations() em
+    pipeline/scan_live.py para o caso em que uma falha aqui tem de impedir
+    o Telegram e o avanço da deduplicação.
 
     `--mixed` (nunca `--soft`) na linha do reset abaixo — ver auditoria de
     continuidade, 9 ago 2026. `--soft` move o HEAD local para origin/main mas
@@ -165,20 +167,40 @@ def git_commit_push(files: list[str], msg: str) -> bool:
     dashboard/analytics.html, data/picks.json, index.html e version.json.
     `--mixed` sincroniza o index com origin/main antes do `git add` seletivo
     — só os ficheiros em `files` passam a divergir do último origin/main
-    fetchado, tal como pretendido."""
+    fetchado, tal como pretendido.
+
+    Retry (até 5 tentativas, fetch + reset --mixed + backoff — mesmo padrão
+    de deploy_version.yml/update_readme.yml/git_retry_workflows): um único
+    push sem retry ficava sujeito à mesma corrida em CI — non-fast-forward
+    quando outro workflow avança origin/main entre o fetch inicial e este
+    push. scan_live.py é o caller mais exposto (7+ pushes por ciclo, a cada
+    60s durante ~5h50 de loop) mas o mesmo `files`/conteúdo em disco é
+    reaproveitado em cada tentativa: --mixed não toca na working tree, só
+    HEAD/index, por isso re-adicionar e re-commitar `files` a cada iteração
+    reflecte sempre o estado actual do disco, nunca um commit obsoleto."""
     try:
         subprocess.run(["git", "config", "user.name", "github-actions[bot]"], check=True)
         subprocess.run(["git", "config", "user.email", "github-actions[bot]@users.noreply.github.com"], check=True)
-        subprocess.run(["git", "fetch", "origin", "main"], check=True)
-        subprocess.run(["git", "reset", "--mixed", "origin/main"], check=True)
-        subprocess.run(["git", "add"] + files, check=True)
-        if subprocess.run(["git", "diff", "--cached", "--quiet"]).returncode != 0:
+        for tentativa in range(1, 6):
+            subprocess.run(["git", "fetch", "origin", "main"], check=True)
+            subprocess.run(["git", "reset", "--mixed", "origin/main"], check=True)
+            subprocess.run(["git", "add"] + files, check=True)
+            if subprocess.run(["git", "diff", "--cached", "--quiet"]).returncode == 0:
+                print("Sem alterações para commitar.")
+                return True
             subprocess.run(["git", "commit", "-m", msg], check=True)
-            subprocess.run(["git", "push", "origin", "main"], check=True)
-            print(f"Commit feito: {msg}")
-        else:
-            print("Sem alterações para commitar.")
-        return True
+            if subprocess.run(["git", "push", "origin", "main"]).returncode == 0:
+                print(f"Commit feito: {msg}")
+                return True
+            print(
+                f"Push rejeitado (tentativa {tentativa}/5) — outro workflow avançou "
+                "main entretanto. A repetir após novo fetch...",
+                file=sys.stderr,
+            )
+            if tentativa < 5:
+                time.sleep(tentativa * 3)
+        print(f"git commit/push falhou após 5 tentativas: {msg}", file=sys.stderr)
+        return False
     except subprocess.CalledProcessError as exc:
         print(f"git commit/push falhou: {exc}", file=sys.stderr)
         return False
