@@ -1,38 +1,38 @@
 {
-  "generated_at": "2026-08-11T20:19:40Z",
+  "generated_at": "2026-08-11T20:24:52Z",
   "status": "OK",
-  "count": 2,
+  "count": 1,
   "events": [
     {
       "id": 220447,
       "home": "Olympique Lyonnais",
       "away": "AC Sparta Praha",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 0,
-      "goals": 1,
-      "min": 61,
+      "goals": 2,
+      "min": 66,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 7,
-      "xgH": 0.95,
+      "xgH": 1.6,
       "xgA": 0.53,
-      "xgTotal": 1.48,
-      "lastMom": 100,
+      "xgTotal": 2.13,
+      "lastMom": 33,
       "overOdds": 1.41,
       "probLive": 71,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 12,
+        "h": 14,
         "a": 5
       },
       "sot": {
-        "h": 6,
+        "h": 7,
         "a": 0
       },
       "da": {
-        "h": 34,
-        "a": 17
+        "h": 38,
+        "a": 19
       },
       "corners": {
         "h": null,
@@ -65,35 +65,28 @@
           "label": "CONVERGÊNCIA",
           "emoji": "🔮",
           "level": "conv",
-          "detail": "5 padrões em simultâneo — sinal forte"
+          "detail": "4 padrões em simultâneo — sinal forte"
         },
         {
           "id": "pressure",
           "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "17 atq. perigosos · 2 ao alvo (2ªP)"
+          "detail": "23 atq. perigosos · 3 ao alvo (2ªP)"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 3.6/90 (2ªP)",
+          "emoji": "⚡",
+          "level": "high",
+          "detail": "xG a ritmo de 3.6 por 90min (2ªP)"
         },
         {
           "id": "shots",
-          "label": "4r 2ªP",
+          "label": "6r 2ªP",
           "emoji": "🎯",
           "level": "med",
-          "detail": "22 remates/90min (2ªP)"
-        },
-        {
-          "id": "open",
-          "label": "JOGO ABERTO",
-          "emoji": "🎭",
-          "level": "low",
-          "detail": "29min, equipa a perder ataca"
-        },
-        {
-          "id": "mom",
-          "label": "Casa domina",
-          "emoji": "💥",
-          "level": "high",
-          "detail": "Momentum casa 100 — controlo total"
+          "detail": "26 remates/90min (2ªP)"
         },
         {
           "id": "numerical",
@@ -103,74 +96,7 @@
           "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
         }
       ],
-      "patternScore": 19
-    },
-    {
-      "id": 223231,
-      "home": "SK Sturm Graz",
-      "away": "Fenerbahçe",
-      "hScore": 0,
-      "aScore": 1,
-      "goals": 1,
-      "min": 90,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 7,
-      "xgH": 1.14,
-      "xgA": 1.82,
-      "xgTotal": 2.96,
-      "lastMom": 23,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 19,
-        "a": 11
-      },
-      "sot": {
-        "h": 2,
-        "a": 6
-      },
-      "da": {
-        "h": 50,
-        "a": 28
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "xg_delta",
-          "label": "xG +2.0 acima",
-          "emoji": "🎲",
-          "level": "high",
-          "detail": "xG 2.96 vs 1 golos"
-        }
-      ],
-      "patternScore": 4
+      "patternScore": 18
     }
   ]
 }
