@@ -86,6 +86,8 @@ Estes ficheiros correm em produção 100% autónoma (detecção live, 👁 OBSER
 - `data/observations.json`
 - `data/live_scanner_health.json`
 
+A zona intocável protege o comportamento de DECISÃO do live scanner — detecção, thresholds, gates, envio Telegram. Não protege infraestrutura de escrita partilhada (`git_commit_push`, retry, tratamento de erros de I/O). Correcções de fiabilidade que não alterem o que o scanner decide são permitidas, desde que declaradas no PR.
+
 ---
 
 ## Governança — Regras Modulares
