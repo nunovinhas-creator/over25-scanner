@@ -13,6 +13,7 @@ import pytest
 
 from pipeline.scan_live import (
     ALERT_FILTERS,
+    COVERAGE_FIELDS,
     PRESSAO_MIN_TELEGRAM,
     SCORE_MIN_TELEGRAM,
     TH_LIVE_PICK,
@@ -383,6 +384,31 @@ def test_enrich_event_keeps_valid_odds_as_real_price(monkeypatch):
     assert e["overOdds"] == 1.85
     assert e["probLive"] == round((1 / 1.85) * 100)
     assert e["oddsStatus"] == "VALID"
+
+
+def test_enrich_event_attaches_coverage_of_available_stat_fields(monkeypatch):
+    """Bloco L1: enrich_event() já anexa e['coverage'] — sem esperar por
+    detect_patterns()/pattern_score(). Aqui só DA/SOT vieram preenchidos
+    pela BSD (h e a); xG, cantos, posse e momentum ficam ausentes."""
+    _mock_bsd(monkeypatch, stats={
+        "stats": {
+            "home": {"dangerous_attack": 12, "shots_on_target": 3},
+            "away": {"dangerous_attack": 8, "shots_on_target": 1},
+        },
+        "momentum": [],
+    }, odds={"odds": {"over_25_goals": 1.85}})
+
+    e = enrich_event("fake_key", _live_ev(), set())
+
+    cov = e["coverage"]
+    assert cov["total"] == len(COVERAGE_FIELDS)
+    assert cov["fields"]["da"] is True
+    assert cov["fields"]["sot"] is True
+    assert cov["fields"]["xgTotal"] is False
+    assert cov["fields"]["corners"] is False
+    assert cov["fields"]["possession"] is False
+    assert cov["fields"]["lastMom"] is False
+    assert cov["score"] == 2
 
 
 def test_suspended_odds_message_shows_dash_never_fake_100_percent(monkeypatch):

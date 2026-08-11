@@ -21,9 +21,11 @@ import pytest
 
 import pipeline.scan_live as mod
 from pipeline.scan_live import (
+    COVERAGE_FIELDS,
     LIVE_ALERTS_ENABLED,
     _telegram_gate_block_reason,
     build_shadow_alert,
+    compute_coverage,
     compute_shadow_result_updates,
     load_shadow_state,
     passes_telegram_gate,
@@ -105,6 +107,30 @@ def test_build_shadow_alert_blocked_fields():
     e = _shadow_event(xgTotal=1.2)
     entry = build_shadow_alert(e, blocked_by="xg_banda_morta")
     assert entry["blocked_by"] == "xg_banda_morta"
+
+
+# ── Bloco L1 — cobertura propagada para o registo sombra ─────────────────
+
+
+def test_build_shadow_alert_propagates_precomputed_coverage():
+    cov = compute_coverage({
+        "xgTotal": 2.0, "lastMom": 10,
+        "da": {"h": 5, "a": 3}, "sot": {"h": 2, "a": 1},
+        "corners": {"h": 4, "a": 2}, "possession": {"h": 60, "a": 40},
+    })
+    e = _shadow_event(id=1, coverage=cov)
+    entry = build_shadow_alert(e, blocked_by=None)
+    assert entry["coverage_score"] == len(COVERAGE_FIELDS)
+    assert entry["coverage_total"] == len(COVERAGE_FIELDS)
+    assert all(entry["coverage_fields"].values())
+
+
+def test_build_shadow_alert_defaults_coverage_when_absent():
+    e = _shadow_event(id=1)  # sem chave "coverage" — fixture sintética antiga
+    entry = build_shadow_alert(e, blocked_by=None)
+    assert entry["coverage_score"] == 0
+    assert entry["coverage_total"] == len(COVERAGE_FIELDS)
+    assert entry["coverage_fields"] == {}
 
 
 # ── compute_shadow_result_updates ────────────────────────────────────────
