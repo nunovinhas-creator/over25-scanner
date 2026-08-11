@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-11T10:17:41Z",
+  "generated_at": "2026-08-11T10:22:49Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 4,
+      "min": 9,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -31,8 +31,8 @@
         "a": null
       },
       "da": {
-        "h": 1,
-        "a": 4
+        "h": 4,
+        "a": 9
       },
       "corners": {
         "h": null,
@@ -47,8 +47,16 @@
         "a": 0
       },
       "isSavedPick": false,
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 100",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "13 atq. perigosos · 0 ao alvo"
+        }
+      ],
+      "patternScore": 10
     },
     {
       "id": 587653,
@@ -57,7 +65,7 @@
       "hScore": 3,
       "aScore": 0,
       "goals": 3,
-      "min": 83,
+      "min": 88,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -78,7 +86,7 @@
         "a": null
       },
       "da": {
-        "h": 50,
+        "h": 53,
         "a": 32
       },
       "corners": {
