@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-12T23:15:44Z",
+  "generated_at": "2026-08-12T23:21:06Z",
   "status": "OK",
   "count": 4,
   "events": [
@@ -10,29 +10,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 56,
+      "min": 60,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 33,
-      "xgH": 0.68,
-      "xgA": 0.59,
-      "xgTotal": 1.27,
-      "lastMom": 19,
+      "xgH": 0.71,
+      "xgA": 0.65,
+      "xgTotal": 1.3599999999999999,
+      "lastMom": -3,
       "overOdds": 2.58,
       "probLive": 39,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 11,
-        "a": 6
+        "h": 12,
+        "a": 7
       },
       "sot": {
-        "h": 3,
+        "h": 4,
         "a": 1
       },
       "da": {
-        "h": 45,
-        "a": 42
+        "h": 48,
+        "a": 44
       },
       "corners": {
         "h": null,
@@ -61,14 +61,35 @@
       },
       "patterns": [
         {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "3 padrões em simultâneo — sinal forte"
+        },
+        {
+          "id": "pressure",
+          "label": "Pressão 100 (2ªP)",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "21 atq. perigosos · 1 ao alvo (2ªP)"
+        },
+        {
           "id": "xg_delta",
           "label": "xG sobrevaloriza",
           "emoji": "🎲",
           "level": "med",
-          "detail": "xG 1.27 vs 0 golos"
+          "detail": "xG 1.36 vs 0 golos"
+        },
+        {
+          "id": "shots",
+          "label": "4r 2ªP",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "24 remates/90min (2ªP)"
         }
       ],
-      "patternScore": 2
+      "patternScore": 14
     },
     {
       "id": 207987,
@@ -77,7 +98,7 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 56,
+      "min": 60,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -85,10 +106,10 @@
       "xgH": 0.6,
       "xgA": 0.28,
       "xgTotal": 0.88,
-      "lastMom": 13,
-      "overOdds": 2.65,
-      "probLive": 38,
-      "oddsStatus": "VALID",
+      "lastMom": 29,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 7,
         "a": 4
@@ -98,67 +119,8 @@
         "a": 2
       },
       "da": {
-        "h": 33,
-        "a": 23
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 207962,
-      "home": "Club Atlético Platense",
-      "away": "Coquimbo Unido",
-      "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 56,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 32,
-      "xgH": 0.6,
-      "xgA": 0.39,
-      "xgTotal": 0.99,
-      "lastMom": -63,
-      "overOdds": 3.17,
-      "probLive": 32,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 10,
-        "a": 6
-      },
-      "sot": {
-        "h": 5,
-        "a": 0
-      },
-      "da": {
-        "h": 24,
-        "a": 16
+        "h": 37,
+        "a": 24
       },
       "corners": {
         "h": null,
@@ -187,14 +149,102 @@
       },
       "patterns": [
         {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum fora 63"
+          "id": "pressure",
+          "label": "Pressão 100 (2ªP)",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "16 atq. perigosos · 1 ao alvo (2ªP)"
         }
       ],
-      "patternScore": 2
+      "patternScore": 10
+    },
+    {
+      "id": 207962,
+      "home": "Club Atlético Platense",
+      "away": "Coquimbo Unido",
+      "hScore": 1,
+      "aScore": 0,
+      "goals": 1,
+      "min": 60,
+      "status": "2nd_half",
+      "period": "2T",
+      "league": "",
+      "league_id": 32,
+      "xgH": 0.6,
+      "xgA": 0.49,
+      "xgTotal": 1.0899999999999999,
+      "lastMom": 18,
+      "overOdds": 3.17,
+      "probLive": 32,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 10,
+        "a": 8
+      },
+      "sot": {
+        "h": 5,
+        "a": 0
+      },
+      "da": {
+        "h": 27,
+        "a": 19
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 4,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "3 padrões em simultâneo — sinal forte"
+        },
+        {
+          "id": "pressure",
+          "label": "Pressão 89 (2ªP)",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "14 atq. perigosos · 1 ao alvo (2ªP)"
+        },
+        {
+          "id": "shots",
+          "label": "7r 2ªP",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "42 remates/90min (2ªP) (muito alto)"
+        },
+        {
+          "id": "open",
+          "label": "JOGO ABERTO",
+          "emoji": "🎭",
+          "level": "low",
+          "detail": "30min, equipa a perder ataca"
+        }
+      ],
+      "patternScore": 15
     },
     {
       "id": 207956,
@@ -203,28 +253,28 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 56,
+      "min": 60,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 32,
-      "xgH": 0.92,
-      "xgA": 0.08,
-      "xgTotal": 1.0,
-      "lastMom": 56,
-      "overOdds": 1.98,
-      "probLive": 51,
-      "oddsStatus": "VALID",
+      "xgH": 1.28,
+      "xgA": 0.1,
+      "xgTotal": 1.3800000000000001,
+      "lastMom": 33,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 16,
-        "a": 2
+        "h": 18,
+        "a": 3
       },
       "sot": {
         "h": 6,
         "a": 0
       },
       "da": {
-        "h": 37,
+        "h": 40,
         "a": 13
       },
       "corners": {
@@ -254,14 +304,21 @@
       },
       "patterns": [
         {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
+          "id": "pressure",
+          "label": "Pressão 72 (2ªP)",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "12 atq. perigosos · 0 ao alvo (2ªP)"
+        },
+        {
+          "id": "xg_delta",
+          "label": "xG sobrevaloriza",
+          "emoji": "🎲",
           "level": "med",
-          "detail": "Momentum casa 56"
+          "detail": "xG 1.38 vs 0 golos"
         }
       ],
-      "patternScore": 2
+      "patternScore": 12
     }
   ]
 }
