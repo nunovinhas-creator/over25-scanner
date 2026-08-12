@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-12T02:20:47Z",
+  "generated_at": "2026-08-12T02:26:03Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,29 +10,29 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 89,
+      "min": 94,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 33,
-      "xgH": 0.6,
+      "xgH": 0.76,
       "xgA": 0.61,
-      "xgTotal": 1.21,
-      "lastMom": 44,
+      "xgTotal": 1.37,
+      "lastMom": 119,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 18,
+        "h": 20,
         "a": 11
       },
       "sot": {
-        "h": 3,
+        "h": 4,
         "a": 2
       },
       "da": {
-        "h": 55,
-        "a": 29
+        "h": 60,
+        "a": 30
       },
       "corners": {
         "h": null,
@@ -61,21 +61,14 @@
       },
       "patterns": [
         {
-          "id": "pressure",
-          "label": "Pressão 100 (2ªP)",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "44 atq. perigosos · 3 ao alvo (2ªP)"
-        },
-        {
-          "id": "shots",
-          "label": "14r 2ªP",
-          "emoji": "🎯",
+          "id": "mom",
+          "label": "Casa domina",
+          "emoji": "💥",
           "level": "high",
-          "detail": "29 remates/90min (2ªP) (muito alto)"
+          "detail": "Momentum casa 119 — controlo total"
         }
       ],
-      "patternScore": 14
+      "patternScore": 4
     },
     {
       "id": 207961,
@@ -84,29 +77,29 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 90,
+      "min": 95,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 32,
-      "xgH": 1.14,
+      "xgH": 1.32,
       "xgA": 0.1,
-      "xgTotal": 1.24,
-      "lastMom": 16,
+      "xgTotal": 1.4200000000000002,
+      "lastMom": 54,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 14,
+        "h": 15,
         "a": 4
       },
       "sot": {
-        "h": 4,
+        "h": 5,
         "a": 1
       },
       "da": {
-        "h": 43,
-        "a": 29
+        "h": 45,
+        "a": 30
       },
       "corners": {
         "h": null,
@@ -133,8 +126,16 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 54"
+        }
+      ],
+      "patternScore": 2
     }
   ]
 }
