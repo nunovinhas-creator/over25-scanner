@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-12T02:10:17Z",
+  "generated_at": "2026-08-12T02:15:31Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,20 +10,20 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 78,
+      "min": 84,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 33,
-      "xgH": 0.59,
+      "xgH": 0.6,
       "xgA": 0.59,
-      "xgTotal": 1.18,
-      "lastMom": 1,
-      "overOdds": 2.03,
-      "probLive": 49,
-      "oddsStatus": "VALID",
+      "xgTotal": 1.19,
+      "lastMom": -8,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 16,
+        "h": 17,
         "a": 10
       },
       "sot": {
@@ -31,8 +31,82 @@
         "a": 2
       },
       "da": {
-        "h": 46,
-        "a": 22
+        "h": 49,
+        "a": 27
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 4,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 98 (2ªP)",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "36 atq. perigosos · 3 ao alvo (2ªP)"
+        },
+        {
+          "id": "shots",
+          "label": "12r 2ªP",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "28 remates/90min (2ªP)"
+        }
+      ],
+      "patternScore": 12
+    },
+    {
+      "id": 207961,
+      "home": "Estudiantes de La Plata",
+      "away": "Universidad Católica",
+      "hScore": 1,
+      "aScore": 1,
+      "goals": 2,
+      "min": 85,
+      "status": "2nd_half",
+      "period": "2T",
+      "league": "",
+      "league_id": 32,
+      "xgH": 1.14,
+      "xgA": 0.1,
+      "xgTotal": 1.24,
+      "lastMom": 83,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 14,
+        "a": 4
+      },
+      "sot": {
+        "h": 4,
+        "a": 1
+      },
+      "da": {
+        "h": 40,
+        "a": 26
       },
       "corners": {
         "h": null,
@@ -69,101 +143,27 @@
         },
         {
           "id": "pressure",
-          "label": "Pressão 91 (2ªP)",
+          "label": "Pressão 72 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "28 atq. perigosos · 3 ao alvo (2ªP)"
+          "detail": "30 atq. perigosos · 1 ao alvo (2ªP)"
         },
         {
           "id": "shots",
-          "label": "11r 2ªP",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "30 remates/90min (2ªP) (muito alto)"
-        },
-        {
-          "id": "late",
-          "label": "1 gol em 12min",
-          "emoji": "⏰",
-          "level": "low",
-          "detail": "Falta 1 golo · mercado 49% · 12min"
-        }
-      ],
-      "patternScore": 15
-    },
-    {
-      "id": 207961,
-      "home": "Estudiantes de La Plata",
-      "away": "Universidad Católica",
-      "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 79,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 32,
-      "xgH": 1.14,
-      "xgA": 0.08,
-      "xgTotal": 1.22,
-      "lastMom": 8,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 14,
-        "a": 3
-      },
-      "sot": {
-        "h": 4,
-        "a": 0
-      },
-      "da": {
-        "h": 36,
-        "a": 25
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "pressure",
-          "label": "Pressão 66 (2ªP)",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "25 atq. perigosos · 0 ao alvo (2ªP)"
-        },
-        {
-          "id": "shots",
-          "label": "9r 2ªP",
+          "label": "10r 2ªP",
           "emoji": "🎯",
           "level": "med",
-          "detail": "24 remates/90min (2ªP)"
+          "detail": "22 remates/90min (2ªP)"
+        },
+        {
+          "id": "mom",
+          "label": "Casa domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum casa 83 — controlo total"
         }
       ],
-      "patternScore": 12
+      "patternScore": 16
     }
   ]
 }
