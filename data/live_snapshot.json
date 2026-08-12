@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-12T20:21:37Z",
+  "generated_at": "2026-08-12T20:26:58Z",
   "status": "OK",
-  "count": 7,
+  "count": 6,
   "events": [
     {
       "id": 587659,
@@ -66,28 +66,28 @@
       "id": 587680,
       "home": "Paris Saint-Germain",
       "away": "Aston Villa",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 1,
-      "goals": 2,
-      "min": 59,
+      "goals": 3,
+      "min": 65,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 90,
-      "xgH": 0.41,
-      "xgA": 1.7,
-      "xgTotal": 2.11,
-      "lastMom": -11,
-      "overOdds": 1.53,
-      "probLive": 65,
-      "oddsStatus": "VALID",
+      "xgH": 0.5,
+      "xgA": 1.86,
+      "xgTotal": 2.3600000000000003,
+      "lastMom": 6,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 7,
-        "a": 12
+        "h": 8,
+        "a": 13
       },
       "sot": {
-        "h": 3,
-        "a": 3
+        "h": 4,
+        "a": 4
       },
       "da": {
         "h": null,
@@ -128,7 +128,7 @@
       "hScore": 3,
       "aScore": 1,
       "goals": 4,
-      "min": 57,
+      "min": 63,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -149,8 +149,8 @@
         "a": null
       },
       "da": {
-        "h": 40,
-        "a": 17
+        "h": 43,
+        "a": 18
       },
       "corners": {
         "h": null,
@@ -187,7 +187,7 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 59,
+      "min": 65,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -195,10 +195,10 @@
       "xgH": 0.06,
       "xgA": 0.93,
       "xgTotal": 0.99,
-      "lastMom": -26,
-      "overOdds": 1.43,
-      "probLive": 70,
-      "oddsStatus": "VALID",
+      "lastMom": 19,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 2,
         "a": 11
@@ -236,16 +236,8 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "open",
-          "label": "JOGO ABERTO",
-          "emoji": "🎭",
-          "level": "low",
-          "detail": "31min, equipa a perder ataca"
-        }
-      ],
-      "patternScore": 1
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 219693,
@@ -254,7 +246,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 74,
+      "min": 80,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -275,8 +267,8 @@
         "a": null
       },
       "da": {
-        "h": 31,
-        "a": 17
+        "h": 33,
+        "a": 18
       },
       "corners": {
         "h": null,
@@ -306,80 +298,13 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 59 (2ªP)",
+          "label": "Pressão 57 (2ªP)",
           "emoji": "🔥",
           "level": "high",
-          "detail": "19 atq. perigosos · 0 ao alvo (2ªP)"
+          "detail": "22 atq. perigosos · 0 ao alvo (2ªP)"
         }
       ],
       "patternScore": 4
-    },
-    {
-      "id": 219692,
-      "home": "Manchester United",
-      "away": "Leeds United",
-      "hScore": 1,
-      "aScore": 1,
-      "goals": 2,
-      "min": 90,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 79,
-      "xgH": 1.1,
-      "xgA": 1.27,
-      "xgTotal": 2.37,
-      "lastMom": 0,
-      "overOdds": 1.56,
-      "probLive": 64,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 15,
-        "a": 13
-      },
-      "sot": {
-        "h": 4,
-        "a": 5
-      },
-      "da": {
-        "h": 68,
-        "a": 40
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "late",
-          "label": "1 gol em 0min",
-          "emoji": "⏰",
-          "level": "low",
-          "detail": "Falta 1 golo · mercado 64% · 0min"
-        }
-      ],
-      "patternScore": 1
     },
     {
       "id": 587657,
@@ -388,7 +313,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 59,
+      "min": 64,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
