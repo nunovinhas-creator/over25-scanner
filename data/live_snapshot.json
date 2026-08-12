@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-12T17:07:19Z",
+  "generated_at": "2026-08-12T17:09:00Z",
   "status": "OK",
   "count": 10,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 0,
       "aScore": 3,
       "goals": 3,
-      "min": 33,
+      "min": 35,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -32,7 +32,7 @@
       },
       "da": {
         "h": 8,
-        "a": 28
+        "a": 31
       },
       "corners": {
         "h": null,
@@ -62,10 +62,10 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 98",
+          "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "36 atq. perigosos · 0 ao alvo"
+          "detail": "39 atq. perigosos · 0 ao alvo"
         }
       ],
       "patternScore": 10
@@ -136,7 +136,7 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 49,
+      "min": 51,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -157,7 +157,7 @@
         "a": null
       },
       "da": {
-        "h": 32,
+        "h": 34,
         "a": 25
       },
       "corners": {
@@ -195,7 +195,7 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 49,
+      "min": 51,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -254,7 +254,7 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 46,
+      "min": 48,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -275,7 +275,7 @@
         "a": 3
       },
       "da": {
-        "h": 30,
+        "h": 33,
         "a": 23
       },
       "corners": {
@@ -313,7 +313,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 50,
+      "min": 52,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -334,7 +334,7 @@
         "a": 0
       },
       "da": {
-        "h": 33,
+        "h": 34,
         "a": 14
       },
       "corners": {
@@ -372,7 +372,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 48,
+      "min": 51,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -380,13 +380,13 @@
       "xgH": 1.08,
       "xgA": 0.41,
       "xgTotal": 1.49,
-      "lastMom": -37,
+      "lastMom": -72,
       "overOdds": 1.42,
       "probLive": 70,
       "oddsStatus": "VALID",
       "shots": {
         "h": 9,
-        "a": 6
+        "a": 7
       },
       "sot": {
         "h": 5,
@@ -394,7 +394,7 @@
       },
       "da": {
         "h": 25,
-        "a": 15
+        "a": 19
       },
       "corners": {
         "h": null,
@@ -421,8 +421,16 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Fora domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum fora 72 — controlo total"
+        }
+      ],
+      "patternScore": 4
     },
     {
       "id": 220440,
@@ -490,7 +498,7 @@
       "hScore": 0,
       "aScore": 2,
       "goals": 2,
-      "min": 71,
+      "min": 72,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -541,21 +549,14 @@
       },
       "patterns": [
         {
-          "id": "pressure",
-          "label": "Pressão 100 (2ªP)",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "31 atq. perigosos · 0 ao alvo (2ªP)"
-        },
-        {
           "id": "late",
-          "label": "1 gol em 19min",
+          "label": "1 gol em 18min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 55% · 19min"
+          "detail": "Falta 1 golo · mercado 55% · 18min"
         }
       ],
-      "patternScore": 11
+      "patternScore": 1
     },
     {
       "id": 587672,
@@ -564,7 +565,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 51,
+      "min": 52,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
