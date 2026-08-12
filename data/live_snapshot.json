@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-12T01:38:20Z",
+  "generated_at": "2026-08-12T01:43:42Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -10,29 +10,29 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 45,
+      "min": 51,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 33,
-      "xgH": 0.36,
-      "xgA": 0.32,
-      "xgTotal": 0.6799999999999999,
-      "lastMom": 36,
+      "xgH": 0.43,
+      "xgA": 0.35,
+      "xgTotal": 0.78,
+      "lastMom": -1,
       "overOdds": 2.03,
       "probLive": 49,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 9,
-        "a": 6
+        "h": 10,
+        "a": 8
       },
       "sot": {
         "h": 1,
         "a": 1
       },
       "da": {
-        "h": 28,
-        "a": 13
+        "h": 33,
+        "a": 16
       },
       "corners": {
         "h": null,
@@ -59,23 +59,8 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "pressure",
-          "label": "Pressão 92",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "41 atq. perigosos · 2 ao alvo"
-        },
-        {
-          "id": "shots",
-          "label": "15 remates",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "30 remates/90min (muito alto)"
-        }
-      ],
-      "patternScore": 14
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 207961,
@@ -84,20 +69,20 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 47,
+      "min": 52,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 32,
-      "xgH": 0.4,
-      "xgA": 0.06,
-      "xgTotal": 0.46,
-      "lastMom": 46,
+      "xgH": 0.99,
+      "xgA": 0.07,
+      "xgTotal": 1.06,
+      "lastMom": 6,
       "overOdds": 2.24,
       "probLive": 45,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 8,
+        "h": 9,
         "a": 2
       },
       "sot": {
@@ -105,8 +90,8 @@
         "a": 0
       },
       "da": {
-        "h": 22,
-        "a": 17
+        "h": 23,
+        "a": 21
       },
       "corners": {
         "h": null,
@@ -133,47 +118,39 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 46"
-        }
-      ],
-      "patternScore": 2
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 223540,
       "home": "CA Talleres",
       "away": "CA Lanús",
       "hScore": 0,
-      "aScore": 1,
-      "goals": 1,
-      "min": 77,
+      "aScore": 2,
+      "goals": 2,
+      "min": 83,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 85,
-      "xgH": 0.62,
-      "xgA": 1.57,
-      "xgTotal": 2.19,
-      "lastMom": 50,
+      "xgH": 1.0,
+      "xgA": 2.17,
+      "xgTotal": 3.17,
+      "lastMom": -25,
       "overOdds": 2.57,
       "probLive": 39,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 12,
-        "a": 18
+        "h": 15,
+        "a": 21
       },
       "sot": {
-        "h": 4,
-        "a": 4
+        "h": 5,
+        "a": 6
       },
       "da": {
-        "h": 36,
-        "a": 38
+        "h": 37,
+        "a": 39
       },
       "corners": {
         "h": null,
@@ -206,31 +183,38 @@
           "label": "CONVERGÊNCIA",
           "emoji": "🔮",
           "level": "conv",
-          "detail": "3 padrões em simultâneo — sinal forte"
+          "detail": "4 padrões em simultâneo — sinal forte"
         },
         {
           "id": "pressure",
           "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "35 atq. perigosos · 5 ao alvo (2ªP)"
+          "detail": "37 atq. perigosos · 8 ao alvo (2ªP)"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 4.3/90 (2ªP)",
+          "emoji": "⚡",
+          "level": "critical",
+          "detail": "xG a ritmo de 4.3 por 90min (2ªP)"
         },
         {
           "id": "shots",
-          "label": "16r 2ªP",
+          "label": "22r 2ªP",
           "emoji": "🎯",
           "level": "high",
-          "detail": "45 remates/90min (2ªP) (muito alto)"
+          "detail": "52 remates/90min (2ªP) (muito alto)"
         },
         {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 50"
+          "id": "late",
+          "label": "1 gol em 7min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 39% · 7min"
         }
       ],
-      "patternScore": 16
+      "patternScore": 25
     }
   ]
 }
