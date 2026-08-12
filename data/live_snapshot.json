@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-12T23:10:22Z",
+  "generated_at": "2026-08-12T23:15:44Z",
   "status": "OK",
   "count": 4,
   "events": [
@@ -10,29 +10,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 50,
+      "min": 56,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 33,
-      "xgH": 0.67,
-      "xgA": 0.53,
-      "xgTotal": 1.2000000000000002,
-      "lastMom": 4,
+      "xgH": 0.68,
+      "xgA": 0.59,
+      "xgTotal": 1.27,
+      "lastMom": 19,
       "overOdds": 2.58,
       "probLive": 39,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 10,
-        "a": 5
+        "h": 11,
+        "a": 6
       },
       "sot": {
         "h": 3,
         "a": 1
       },
       "da": {
-        "h": 43,
-        "a": 38
+        "h": 45,
+        "a": 42
       },
       "corners": {
         "h": null,
@@ -59,39 +59,47 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "xg_delta",
+          "label": "xG sobrevaloriza",
+          "emoji": "🎲",
+          "level": "med",
+          "detail": "xG 1.27 vs 0 golos"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 207987,
       "home": "Tigre",
       "away": "Montevideo City Torque",
       "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 50,
+      "aScore": 1,
+      "goals": 1,
+      "min": 56,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 33,
-      "xgH": 0.35,
-      "xgA": 0.07,
-      "xgTotal": 0.42,
-      "lastMom": 10,
+      "xgH": 0.6,
+      "xgA": 0.28,
+      "xgTotal": 0.88,
+      "lastMom": 13,
       "overOdds": 2.65,
       "probLive": 38,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 6,
-        "a": 3
+        "h": 7,
+        "a": 4
       },
       "sot": {
         "h": 1,
-        "a": 1
+        "a": 2
       },
       "da": {
-        "h": 30,
-        "a": 21
+        "h": 33,
+        "a": 23
       },
       "corners": {
         "h": null,
@@ -128,21 +136,21 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 50,
+      "min": 56,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 32,
       "xgH": 0.6,
-      "xgA": 0.3,
-      "xgTotal": 0.8999999999999999,
-      "lastMom": -32,
+      "xgA": 0.39,
+      "xgTotal": 0.99,
+      "lastMom": -63,
       "overOdds": 3.17,
       "probLive": 32,
       "oddsStatus": "VALID",
       "shots": {
         "h": 10,
-        "a": 5
+        "a": 6
       },
       "sot": {
         "h": 5,
@@ -150,7 +158,7 @@
       },
       "da": {
         "h": 24,
-        "a": 14
+        "a": 16
       },
       "corners": {
         "h": null,
@@ -177,8 +185,16 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 63"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 207956,
@@ -187,20 +203,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 50,
+      "min": 56,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 32,
-      "xgH": 0.77,
+      "xgH": 0.92,
       "xgA": 0.08,
-      "xgTotal": 0.85,
-      "lastMom": 42,
+      "xgTotal": 1.0,
+      "lastMom": 56,
       "overOdds": 1.98,
       "probLive": 51,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 14,
+        "h": 16,
         "a": 2
       },
       "sot": {
@@ -208,7 +224,7 @@
         "a": 0
       },
       "da": {
-        "h": 34,
+        "h": 37,
         "a": 13
       },
       "corners": {
@@ -236,8 +252,16 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 56"
+        }
+      ],
+      "patternScore": 2
     }
   ]
 }
