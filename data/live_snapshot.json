@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-12T22:06:18Z",
+  "generated_at": "2026-08-12T22:11:41Z",
   "status": "OK",
   "count": 4,
   "events": [
@@ -10,29 +10,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 4,
+      "min": 10,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 33,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
+      "xgH": 0.02,
+      "xgA": 0.14,
+      "xgTotal": 0.16,
+      "lastMom": -14,
       "overOdds": 2.58,
       "probLive": 39,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
-        "a": 0
+        "h": 1,
+        "a": 1
       },
       "sot": {
         "h": 0,
         "a": 0
       },
       "da": {
-        "h": 4,
-        "a": 3
+        "h": 6,
+        "a": 5
       },
       "corners": {
         "h": null,
@@ -49,18 +49,26 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": true,
           "sot": true,
           "corners": false,
           "possession": false,
-          "lastMom": false
+          "lastMom": true
         },
-        "score": 2,
+        "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 99",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "11 atq. perigosos · 0 ao alvo"
+        }
+      ],
+      "patternScore": 10
     },
     {
       "id": 207987,
@@ -69,20 +77,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 4,
+      "min": 10,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 33,
-      "xgH": null,
+      "xgH": 0.07,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 9,
+      "lastMom": 28,
       "overOdds": 2.84,
       "probLive": 35,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
+        "h": 1,
         "a": 0
       },
       "sot": {
@@ -90,125 +98,7 @@
         "a": 0
       },
       "da": {
-        "h": 2,
-        "a": 1
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 207962,
-      "home": "Club Atlético Platense",
-      "away": "Coquimbo Unido",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 4,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 32,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": 31,
-      "overOdds": 3.07,
-      "probLive": 33,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 0,
-        "a": 0
-      },
-      "sot": {
-        "h": 0,
-        "a": 0
-      },
-      "da": {
-        "h": 3,
-        "a": 0
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 207956,
-      "home": "Palmeiras",
-      "away": "Cerro Porteño",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 4,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 32,
-      "xgH": 0.21,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": 93,
-      "overOdds": 2.01,
-      "probLive": 50,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 1,
-        "a": 0
-      },
-      "sot": {
-        "h": 1,
-        "a": 0
-      },
-      "da": {
-        "h": 1,
+        "h": 7,
         "a": 2
       },
       "corners": {
@@ -236,8 +126,157 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 81",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "9 atq. perigosos · 0 ao alvo"
+        }
+      ],
+      "patternScore": 10
+    },
+    {
+      "id": 207962,
+      "home": "Club Atlético Platense",
+      "away": "Coquimbo Unido",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 10,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 32,
+      "xgH": 0.05,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": 25,
+      "overOdds": 3.07,
+      "probLive": 33,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 1,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": 4,
+        "a": 0
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 36",
+          "emoji": "🔥",
+          "level": "med",
+          "detail": "4 atq. perigosos · 0 ao alvo"
+        }
+      ],
+      "patternScore": 2
+    },
+    {
+      "id": 207956,
+      "home": "Palmeiras",
+      "away": "Cerro Porteño",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 10,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 32,
+      "xgH": 0.14,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": -21,
+      "overOdds": 1.85,
+      "probLive": 54,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 2,
+        "a": 0
+      },
+      "sot": {
+        "h": 2,
+        "a": 0
+      },
+      "da": {
+        "h": 3,
+        "a": 3
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 64",
+          "emoji": "🔥",
+          "level": "high",
+          "detail": "6 atq. perigosos · 2 ao alvo"
+        },
+        {
+          "id": "mkt",
+          "label": "Odds −8.0%",
+          "emoji": "📈",
+          "level": "critical",
+          "detail": "Mercado caiu de 2.01 → 1.85 (sharp money)"
+        }
+      ],
+      "patternScore": 14
     }
   ]
 }
