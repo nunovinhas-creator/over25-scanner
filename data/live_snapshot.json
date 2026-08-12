@@ -1,8 +1,67 @@
 {
-  "generated_at": "2026-08-12T18:44:28Z",
+  "generated_at": "2026-08-12T18:49:39Z",
   "status": "OK",
-  "count": 2,
+  "count": 3,
   "events": [
+    {
+      "id": 219693,
+      "home": "Nottingham Forest",
+      "away": "Bayer 04 Leverkusen",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 2,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 79,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": null,
+        "a": null
+      },
+      "sot": {
+        "h": null,
+        "a": null
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": false,
+          "corners": false,
+          "possession": false,
+          "lastMom": false
+        },
+        "score": 0,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
     {
       "id": 221471,
       "home": "Arsenal",
@@ -10,20 +69,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 10,
+      "min": 17,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 79,
-      "xgH": 0.85,
+      "xgH": 0.91,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 32,
-      "overOdds": 1.43,
-      "probLive": 70,
-      "oddsStatus": "VALID",
+      "lastMom": 22,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 3,
+        "h": 4,
         "a": 0
       },
       "sot": {
@@ -31,8 +90,8 @@
         "a": 0
       },
       "da": {
-        "h": 10,
-        "a": 2
+        "h": 12,
+        "a": 3
       },
       "corners": {
         "h": null,
@@ -62,51 +121,44 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 100",
+          "label": "Pressão 84",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "12 atq. perigosos · 1 ao alvo"
-        },
-        {
-          "id": "shots",
-          "label": "3 remates",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "27 remates/90min"
+          "detail": "15 atq. perigosos · 1 ao alvo"
         }
       ],
-      "patternScore": 12
+      "patternScore": 10
     },
     {
       "id": 219692,
       "home": "Manchester United",
       "away": "Leeds United",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 0,
-      "goals": 0,
-      "min": 13,
+      "goals": 1,
+      "min": 18,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 79,
-      "xgH": 0.18,
-      "xgA": 0.01,
-      "xgTotal": 0.19,
-      "lastMom": 28,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgH": 0.02,
+      "xgA": 0.33,
+      "xgTotal": 0.35000000000000003,
+      "lastMom": 38,
+      "overOdds": 1.56,
+      "probLive": 64,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 3,
-        "a": 1
+        "h": 1,
+        "a": 4
       },
       "sot": {
-        "h": 2,
-        "a": 0
+        "h": 3,
+        "a": 3
       },
       "da": {
-        "h": 11,
-        "a": 6
+        "h": 13,
+        "a": 8
       },
       "corners": {
         "h": null,
@@ -139,14 +191,14 @@
           "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "17 atq. perigosos · 2 ao alvo"
+          "detail": "21 atq. perigosos · 6 ao alvo"
         },
         {
           "id": "shots",
-          "label": "4 remates",
+          "label": "5 remates",
           "emoji": "🎯",
           "level": "med",
-          "detail": "28 remates/90min"
+          "detail": "25 remates/90min"
         }
       ],
       "patternScore": 12
