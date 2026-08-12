@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-12T01:27:43Z",
+  "generated_at": "2026-08-12T01:33:02Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -19,9 +19,9 @@
       "xgA": 0.32,
       "xgTotal": 0.6799999999999999,
       "lastMom": 48,
-      "overOdds": 2.03,
-      "probLive": 49,
-      "oddsStatus": "VALID",
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 9,
         "a": 6
@@ -86,9 +86,9 @@
       "xgA": 0.05,
       "xgTotal": 0.39,
       "lastMom": 26,
-      "overOdds": 2.24,
-      "probLive": 45,
-      "oddsStatus": "VALID",
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 7,
         "a": 1
@@ -134,31 +134,31 @@
       "home": "CA Talleres",
       "away": "CA Lanús",
       "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 68,
+      "aScore": 1,
+      "goals": 1,
+      "min": 73,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 85,
-      "xgH": 0.59,
-      "xgA": 1.47,
-      "xgTotal": 2.06,
-      "lastMom": 15,
-      "overOdds": 2.57,
-      "probLive": 39,
-      "oddsStatus": "VALID",
+      "xgH": 0.58,
+      "xgA": 1.51,
+      "xgTotal": 2.09,
+      "lastMom": -26,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 10,
-        "a": 15
+        "a": 18
       },
       "sot": {
         "h": 3,
-        "a": 3
+        "a": 4
       },
       "da": {
-        "h": 27,
-        "a": 32
+        "h": 30,
+        "a": 34
       },
       "corners": {
         "h": null,
@@ -191,38 +191,31 @@
           "label": "CONVERGÊNCIA",
           "emoji": "🔮",
           "level": "conv",
-          "detail": "4 padrões em simultâneo — sinal forte"
+          "detail": "3 padrões em simultâneo — sinal forte"
         },
         {
           "id": "pressure",
-          "label": "Pressão 93 (2ªP)",
+          "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "20 atq. perigosos · 3 ao alvo (2ªP)"
-        },
-        {
-          "id": "xg_delta",
-          "label": "xG +2.1 acima",
-          "emoji": "🎲",
-          "level": "high",
-          "detail": "xG 2.06 vs 0 golos"
-        },
-        {
-          "id": "xg_pace",
-          "label": "xG 2.7/90 (2ªP)",
-          "emoji": "⚡",
-          "level": "med",
-          "detail": "xG a ritmo de 2.7 por 90min (2ªP)"
+          "detail": "25 atq. perigosos · 4 ao alvo (2ªP)"
         },
         {
           "id": "shots",
-          "label": "11r 2ªP",
+          "label": "14r 2ªP",
           "emoji": "🎯",
           "level": "high",
-          "detail": "43 remates/90min (2ªP) (muito alto)"
+          "detail": "45 remates/90min (2ªP) (muito alto)"
+        },
+        {
+          "id": "open",
+          "label": "JOGO ABERTO",
+          "emoji": "🎭",
+          "level": "low",
+          "detail": "17min, equipa a perder ataca"
         }
       ],
-      "patternScore": 20
+      "patternScore": 15
     }
   ]
 }
