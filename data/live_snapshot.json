@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-12T01:49:10Z",
+  "generated_at": "2026-08-12T01:54:32Z",
   "status": "OK",
-  "count": 3,
+  "count": 2,
   "events": [
     {
       "id": 223424,
@@ -10,29 +10,29 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 56,
+      "min": 62,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 33,
-      "xgH": 0.48,
-      "xgA": 0.35,
-      "xgTotal": 0.83,
-      "lastMom": 58,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgH": 0.53,
+      "xgA": 0.59,
+      "xgTotal": 1.12,
+      "lastMom": 6,
+      "overOdds": 2.03,
+      "probLive": 49,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 11,
-        "a": 8
+        "h": 13,
+        "a": 10
       },
       "sot": {
-        "h": 1,
-        "a": 1
+        "h": 2,
+        "a": 2
       },
       "da": {
-        "h": 39,
-        "a": 18
+        "h": 42,
+        "a": 20
       },
       "corners": {
         "h": null,
@@ -61,14 +61,21 @@
       },
       "patterns": [
         {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 58"
+          "id": "pressure",
+          "label": "Pressão 100 (2ªP)",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "22 atq. perigosos · 2 ao alvo (2ªP)"
+        },
+        {
+          "id": "shots",
+          "label": "8r 2ªP",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "42 remates/90min (2ªP) (muito alto)"
         }
       ],
-      "patternScore": 2
+      "patternScore": 14
     },
     {
       "id": 207961,
@@ -77,20 +84,20 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 57,
+      "min": 63,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 32,
-      "xgH": 1.03,
+      "xgH": 1.18,
       "xgA": 0.07,
-      "xgTotal": 1.1,
-      "lastMom": 22,
+      "xgTotal": 1.25,
+      "lastMom": 26,
       "overOdds": 2.24,
       "probLive": 45,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 11,
+        "h": 13,
         "a": 2
       },
       "sot": {
@@ -98,8 +105,8 @@
         "a": 0
       },
       "da": {
-        "h": 27,
-        "a": 21
+        "h": 30,
+        "a": 22
       },
       "corners": {
         "h": null,
@@ -128,73 +135,35 @@
       },
       "patterns": [
         {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "3 padrões em simultâneo — sinal forte"
+        },
+        {
+          "id": "pressure",
+          "label": "Pressão 80 (2ªP)",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "16 atq. perigosos · 0 ao alvo (2ªP)"
+        },
+        {
+          "id": "shots",
+          "label": "7r 2ªP",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "35 remates/90min (2ªP) (muito alto)"
+        },
+        {
           "id": "open",
           "label": "JOGO ABERTO",
           "emoji": "🎭",
           "level": "low",
-          "detail": "33min, equipa a perder ataca"
+          "detail": "27min, equipa a perder ataca"
         }
       ],
-      "patternScore": 1
-    },
-    {
-      "id": 223540,
-      "home": "CA Talleres",
-      "away": "CA Lanús",
-      "hScore": 0,
-      "aScore": 3,
-      "goals": 3,
-      "min": 88,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 85,
-      "xgH": 0.83,
-      "xgA": 2.34,
-      "xgTotal": 3.17,
-      "lastMom": -5,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 15,
-        "a": 22
-      },
-      "sot": {
-        "h": 5,
-        "a": 7
-      },
-      "da": {
-        "h": 42,
-        "a": 41
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
+      "patternScore": 15
     }
   ]
 }
