@@ -1,16 +1,75 @@
 {
-  "generated_at": "2026-08-12T19:00:02Z",
+  "generated_at": "2026-08-12T19:05:19Z",
   "status": "OK",
-  "count": 3,
+  "count": 7,
   "events": [
     {
-      "id": 219693,
-      "home": "Nottingham Forest",
-      "away": "Bayer 04 Leverkusen",
-      "hScore": 1,
+      "id": 587680,
+      "home": "Paris Saint-Germain",
+      "away": "Aston Villa",
+      "hScore": 0,
       "aScore": 0,
-      "goals": 1,
-      "min": 12,
+      "goals": 0,
+      "min": 3,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 90,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": -13,
+      "overOdds": 1.62,
+      "probLive": 62,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 223223,
+      "home": "SSC Napoli",
+      "away": "Aris Thessaloniki",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 0,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -21,7 +80,7 @@
       "lastMom": null,
       "overOdds": null,
       "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "oddsStatus": "MISSING",
       "shots": {
         "h": null,
         "a": null
@@ -31,8 +90,126 @@
         "a": null
       },
       "da": {
-        "h": 2,
-        "a": 3
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": false,
+          "corners": false,
+          "possession": false,
+          "lastMom": false
+        },
+        "score": 0,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 219694,
+      "home": "Deportivo de A Coruña",
+      "away": "Real Madrid",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 4,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 79,
+      "xgH": null,
+      "xgA": 0.04,
+      "xgTotal": null,
+      "lastMom": -45,
+      "overOdds": 1.43,
+      "probLive": 70,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 1
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 219693,
+      "home": "Nottingham Forest",
+      "away": "Bayer 04 Leverkusen",
+      "hScore": 1,
+      "aScore": 0,
+      "goals": 1,
+      "min": 17,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 79,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": 1.54,
+      "probLive": 65,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": null,
+        "a": null
+      },
+      "sot": {
+        "h": null,
+        "a": null
+      },
+      "da": {
+        "h": 7,
+        "a": 4
       },
       "corners": {
         "h": null,
@@ -62,13 +239,13 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 38",
+          "label": "Pressão 58",
           "emoji": "🔥",
-          "level": "med",
-          "detail": "5 atq. perigosos · 0 ao alvo"
+          "level": "high",
+          "detail": "11 atq. perigosos · 0 ao alvo"
         }
       ],
-      "patternScore": 2
+      "patternScore": 4
     },
     {
       "id": 221471,
@@ -77,20 +254,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 26,
+      "min": 32,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 79,
-      "xgH": 0.91,
+      "xgH": 0.85,
       "xgA": 0.08,
-      "xgTotal": 0.99,
-      "lastMom": -22,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgTotal": 0.9299999999999999,
+      "lastMom": -6,
+      "overOdds": 1.35,
+      "probLive": 74,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 4,
+        "h": 3,
         "a": 2
       },
       "sot": {
@@ -98,7 +275,7 @@
         "a": 1
       },
       "da": {
-        "h": 16,
+        "h": 18,
         "a": 9
       },
       "corners": {
@@ -129,20 +306,20 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 97",
+          "label": "Pressão 86",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "25 atq. perigosos · 2 ao alvo"
+          "detail": "27 atq. perigosos · 2 ao alvo"
         },
         {
           "id": "xg_pace",
-          "label": "xG 3.4/90",
+          "label": "xG 2.6/90",
           "emoji": "⚡",
-          "level": "high",
-          "detail": "xG a ritmo de 3.4 por 90min"
+          "level": "med",
+          "detail": "xG a ritmo de 2.6 por 90min"
         }
       ],
-      "patternScore": 14
+      "patternScore": 12
     },
     {
       "id": 219692,
@@ -151,18 +328,18 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 28,
+      "min": 34,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 79,
       "xgH": 0.57,
-      "xgA": 0.02,
-      "xgTotal": 0.59,
-      "lastMom": 36,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgA": 0.24,
+      "xgTotal": 0.8099999999999999,
+      "lastMom": -10,
+      "overOdds": 1.56,
+      "probLive": 64,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 7,
         "a": 2
@@ -172,8 +349,8 @@
         "a": 1
       },
       "da": {
-        "h": 19,
-        "a": 14
+        "h": 23,
+        "a": 16
       },
       "corners": {
         "h": null,
@@ -206,17 +383,76 @@
           "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "33 atq. perigosos · 5 ao alvo"
+          "detail": "39 atq. perigosos · 5 ao alvo"
         },
         {
           "id": "shots",
           "label": "9 remates",
           "emoji": "🎯",
-          "level": "high",
-          "detail": "29 remates/90min (muito alto)"
+          "level": "med",
+          "detail": "24 remates/90min"
         }
       ],
-      "patternScore": 14
+      "patternScore": 12
+    },
+    {
+      "id": 587657,
+      "home": "Zamora CF",
+      "away": "Cultural Leonesa",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 2,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 79,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
+      "shots": {
+        "h": null,
+        "a": null
+      },
+      "sot": {
+        "h": null,
+        "a": null
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": false,
+          "corners": false,
+          "possession": false,
+          "lastMom": false
+        },
+        "score": 0,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
     }
   ]
 }
