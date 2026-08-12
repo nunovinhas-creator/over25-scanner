@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-12T09:27:25Z",
+  "generated_at": "2026-08-12T09:32:34Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 66,
+      "min": 71,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -19,9 +19,9 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "MISSING",
+      "overOdds": 2.06,
+      "probLive": 49,
+      "oddsStatus": "VALID",
       "shots": {
         "h": null,
         "a": null
@@ -69,7 +69,7 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 73,
+      "min": 78,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -78,9 +78,9 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "MISSING",
+      "overOdds": 1.76,
+      "probLive": 57,
+      "oddsStatus": "VALID",
       "shots": {
         "h": null,
         "a": null
@@ -91,7 +91,7 @@
       },
       "da": {
         "h": 15,
-        "a": 20
+        "a": 21
       },
       "corners": {
         "h": null,
@@ -118,8 +118,16 @@
         "score": 1,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "late",
+          "label": "1 gol em 12min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 57% · 12min"
+        }
+      ],
+      "patternScore": 1
     }
   ]
 }
