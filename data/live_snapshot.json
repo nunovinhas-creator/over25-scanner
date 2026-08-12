@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-12T01:17:01Z",
+  "generated_at": "2026-08-12T01:22:25Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -10,20 +10,20 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 44,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 33,
-      "xgH": 0.24,
+      "xgH": 0.36,
       "xgA": 0.32,
-      "xgTotal": 0.56,
-      "lastMom": -20,
-      "overOdds": 2.03,
-      "probLive": 49,
-      "oddsStatus": "VALID",
+      "xgTotal": 0.6799999999999999,
+      "lastMom": 48,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 6,
+        "h": 9,
         "a": 6
       },
       "sot": {
@@ -31,8 +31,8 @@
         "a": 1
       },
       "da": {
-        "h": 25,
-        "a": 12
+        "h": 27,
+        "a": 13
       },
       "corners": {
         "h": null,
@@ -61,21 +61,14 @@
       },
       "patterns": [
         {
-          "id": "pressure",
-          "label": "Pressão 86",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "37 atq. perigosos · 2 ao alvo"
-        },
-        {
-          "id": "shots",
-          "label": "12 remates",
-          "emoji": "🎯",
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
           "level": "med",
-          "detail": "25 remates/90min"
+          "detail": "Momentum casa 48"
         }
       ],
-      "patternScore": 12
+      "patternScore": 2
     },
     {
       "id": 207961,
@@ -85,17 +78,17 @@
       "aScore": 0,
       "goals": 1,
       "min": 45,
-      "status": "1st_half",
-      "period": "1T",
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 32,
-      "xgH": 0.36,
+      "xgH": 0.34,
       "xgA": 0.05,
-      "xgTotal": 0.41,
-      "lastMom": 42,
-      "overOdds": 2.24,
-      "probLive": 45,
-      "oddsStatus": "VALID",
+      "xgTotal": 0.39,
+      "lastMom": 26,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 7,
         "a": 1
@@ -105,8 +98,67 @@
         "a": 0
       },
       "da": {
-        "h": 16,
-        "a": 13
+        "h": 18,
+        "a": 16
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 4,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 223540,
+      "home": "CA Talleres",
+      "away": "CA Lanús",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 62,
+      "status": "2nd_half",
+      "period": "2T",
+      "league": "",
+      "league_id": 85,
+      "xgH": 0.4,
+      "xgA": 1.39,
+      "xgTotal": 1.79,
+      "lastMom": 20,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 7,
+        "a": 14
+      },
+      "sot": {
+        "h": 2,
+        "a": 3
+      },
+      "da": {
+        "h": 25,
+        "a": 30
       },
       "corners": {
         "h": null,
@@ -136,80 +188,20 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 78",
+          "label": "Pressão 95 (2ªP)",
           "emoji": "🔥",
-          "level": "high",
-          "detail": "29 atq. perigosos · 4 ao alvo"
-        }
-      ],
-      "patternScore": 4
-    },
-    {
-      "id": 223540,
-      "home": "CA Talleres",
-      "away": "CA Lanús",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 57,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 85,
-      "xgH": 0.28,
-      "xgA": 1.37,
-      "xgTotal": 1.6500000000000001,
-      "lastMom": -4,
-      "overOdds": 2.57,
-      "probLive": 39,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 6,
-        "a": 13
-      },
-      "sot": {
-        "h": 2,
-        "a": 3
-      },
-      "da": {
-        "h": 23,
-        "a": 28
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
+          "level": "critical",
+          "detail": "16 atq. perigosos · 2 ao alvo (2ªP)"
         },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [
         {
           "id": "xg_delta",
           "label": "xG sobrevaloriza",
           "emoji": "🎲",
           "level": "med",
-          "detail": "xG 1.65 vs 0 golos"
+          "detail": "xG 1.79 vs 0 golos"
         }
       ],
-      "patternScore": 2
+      "patternScore": 12
     }
   ]
 }
