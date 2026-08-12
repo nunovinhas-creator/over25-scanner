@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-12T01:43:42Z",
+  "generated_at": "2026-08-12T01:49:10Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -10,20 +10,20 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 51,
+      "min": 56,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 33,
-      "xgH": 0.43,
+      "xgH": 0.48,
       "xgA": 0.35,
-      "xgTotal": 0.78,
-      "lastMom": -1,
-      "overOdds": 2.03,
-      "probLive": 49,
-      "oddsStatus": "VALID",
+      "xgTotal": 0.83,
+      "lastMom": 58,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 10,
+        "h": 11,
         "a": 8
       },
       "sot": {
@@ -31,126 +31,8 @@
         "a": 1
       },
       "da": {
-        "h": 33,
-        "a": 16
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 207961,
-      "home": "Estudiantes de La Plata",
-      "away": "Universidad Católica",
-      "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 52,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 32,
-      "xgH": 0.99,
-      "xgA": 0.07,
-      "xgTotal": 1.06,
-      "lastMom": 6,
-      "overOdds": 2.24,
-      "probLive": 45,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 9,
-        "a": 2
-      },
-      "sot": {
-        "h": 4,
-        "a": 0
-      },
-      "da": {
-        "h": 23,
-        "a": 21
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 223540,
-      "home": "CA Talleres",
-      "away": "CA Lanús",
-      "hScore": 0,
-      "aScore": 2,
-      "goals": 2,
-      "min": 83,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 85,
-      "xgH": 1.0,
-      "xgA": 2.17,
-      "xgTotal": 3.17,
-      "lastMom": -25,
-      "overOdds": 2.57,
-      "probLive": 39,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 15,
-        "a": 21
-      },
-      "sot": {
-        "h": 5,
-        "a": 6
-      },
-      "da": {
-        "h": 37,
-        "a": 39
+        "h": 39,
+        "a": 18
       },
       "corners": {
         "h": null,
@@ -179,42 +61,140 @@
       },
       "patterns": [
         {
-          "id": "conv",
-          "label": "CONVERGÊNCIA",
-          "emoji": "🔮",
-          "level": "conv",
-          "detail": "4 padrões em simultâneo — sinal forte"
-        },
-        {
-          "id": "pressure",
-          "label": "Pressão 100 (2ªP)",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "37 atq. perigosos · 8 ao alvo (2ªP)"
-        },
-        {
-          "id": "xg_pace",
-          "label": "xG 4.3/90 (2ªP)",
-          "emoji": "⚡",
-          "level": "critical",
-          "detail": "xG a ritmo de 4.3 por 90min (2ªP)"
-        },
-        {
-          "id": "shots",
-          "label": "22r 2ªP",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "52 remates/90min (2ªP) (muito alto)"
-        },
-        {
-          "id": "late",
-          "label": "1 gol em 7min",
-          "emoji": "⏰",
-          "level": "low",
-          "detail": "Falta 1 golo · mercado 39% · 7min"
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 58"
         }
       ],
-      "patternScore": 25
+      "patternScore": 2
+    },
+    {
+      "id": 207961,
+      "home": "Estudiantes de La Plata",
+      "away": "Universidad Católica",
+      "hScore": 1,
+      "aScore": 0,
+      "goals": 1,
+      "min": 57,
+      "status": "2nd_half",
+      "period": "2T",
+      "league": "",
+      "league_id": 32,
+      "xgH": 1.03,
+      "xgA": 0.07,
+      "xgTotal": 1.1,
+      "lastMom": 22,
+      "overOdds": 2.24,
+      "probLive": 45,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 11,
+        "a": 2
+      },
+      "sot": {
+        "h": 4,
+        "a": 0
+      },
+      "da": {
+        "h": 27,
+        "a": 21
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 4,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "open",
+          "label": "JOGO ABERTO",
+          "emoji": "🎭",
+          "level": "low",
+          "detail": "33min, equipa a perder ataca"
+        }
+      ],
+      "patternScore": 1
+    },
+    {
+      "id": 223540,
+      "home": "CA Talleres",
+      "away": "CA Lanús",
+      "hScore": 0,
+      "aScore": 3,
+      "goals": 3,
+      "min": 88,
+      "status": "2nd_half",
+      "period": "2T",
+      "league": "",
+      "league_id": 85,
+      "xgH": 0.83,
+      "xgA": 2.34,
+      "xgTotal": 3.17,
+      "lastMom": -5,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 15,
+        "a": 22
+      },
+      "sot": {
+        "h": 5,
+        "a": 7
+      },
+      "da": {
+        "h": 42,
+        "a": 41
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 4,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
     }
   ]
 }
