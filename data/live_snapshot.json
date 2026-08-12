@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-12T19:54:20Z",
+  "generated_at": "2026-08-12T19:59:46Z",
   "status": "OK",
   "count": 8,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 23,
+      "min": 29,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -31,7 +31,7 @@
         "a": null
       },
       "da": {
-        "h": 6,
+        "h": 8,
         "a": 13
       },
       "corners": {
@@ -62,10 +62,10 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 74",
+          "label": "Pressão 65",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "19 atq. perigosos · 0 ao alvo"
+          "detail": "21 atq. perigosos · 0 ao alvo"
         }
       ],
       "patternScore": 10
@@ -254,7 +254,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 48,
+      "min": 53,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -275,8 +275,8 @@
         "a": null
       },
       "da": {
-        "h": 18,
-        "a": 12
+        "h": 19,
+        "a": 15
       },
       "corners": {
         "h": null,
@@ -313,7 +313,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 64,
+      "min": 69,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -321,12 +321,12 @@
       "xgH": 1.57,
       "xgA": 0.17,
       "xgTotal": 1.74,
-      "lastMom": 55,
+      "lastMom": 10,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 10,
+        "h": 11,
         "a": 3
       },
       "sot": {
@@ -334,7 +334,7 @@
         "a": 2
       },
       "da": {
-        "h": 41,
+        "h": 44,
         "a": 14
       },
       "corners": {
@@ -365,27 +365,20 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 95 (2ªP)",
+          "label": "Pressão 89 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "18 atq. perigosos · 2 ao alvo (2ªP)"
+          "detail": "21 atq. perigosos · 2 ao alvo (2ªP)"
         },
         {
           "id": "shots",
-          "label": "5r 2ªP",
+          "label": "6r 2ªP",
           "emoji": "🎯",
           "level": "med",
-          "detail": "24 remates/90min (2ªP)"
-        },
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 55"
+          "detail": "22 remates/90min (2ªP)"
         }
       ],
-      "patternScore": 14
+      "patternScore": 12
     },
     {
       "id": 219692,
@@ -394,29 +387,29 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 64,
+      "min": 69,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 79,
       "xgH": 0.82,
-      "xgA": 0.78,
-      "xgTotal": 1.6,
-      "lastMom": 28,
+      "xgA": 0.96,
+      "xgTotal": 1.7799999999999998,
+      "lastMom": -8,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 10,
-        "a": 7
+        "h": 11,
+        "a": 8
       },
       "sot": {
         "h": 4,
         "a": 4
       },
       "da": {
-        "h": 50,
-        "a": 27
+        "h": 53,
+        "a": 30
       },
       "corners": {
         "h": null,
@@ -445,21 +438,35 @@
       },
       "patterns": [
         {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "3 padrões em simultâneo — sinal forte"
+        },
+        {
           "id": "pressure",
-          "label": "Pressão 96 (2ªP)",
+          "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "17 atq. perigosos · 3 ao alvo (2ªP)"
+          "detail": "23 atq. perigosos · 3 ao alvo (2ªP)"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 3.2/90 (2ªP)",
+          "emoji": "⚡",
+          "level": "high",
+          "detail": "xG a ritmo de 3.2 por 90min (2ªP)"
         },
         {
           "id": "shots",
-          "label": "5r 2ªP",
+          "label": "7r 2ªP",
           "emoji": "🎯",
           "level": "med",
-          "detail": "24 remates/90min (2ªP)"
+          "detail": "26 remates/90min (2ªP)"
         }
       ],
-      "patternScore": 12
+      "patternScore": 16
     },
     {
       "id": 587657,
