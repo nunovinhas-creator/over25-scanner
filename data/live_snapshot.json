@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-12T09:48:06Z",
+  "generated_at": "2026-08-12T09:53:14Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 86,
+      "min": 92,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -19,9 +19,9 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "overOdds": 2.06,
+      "probLive": 49,
+      "oddsStatus": "VALID",
       "shots": {
         "h": null,
         "a": null
@@ -59,8 +59,16 @@
         "score": 0,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "late",
+          "label": "1 gol em 0min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 49% · 0min"
+        }
+      ],
+      "patternScore": 1
     }
   ]
 }
