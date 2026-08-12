@@ -1,38 +1,97 @@
 {
-  "generated_at": "2026-08-12T00:28:30Z",
+  "generated_at": "2026-08-12T00:33:48Z",
   "status": "OK",
-  "count": 1,
+  "count": 3,
   "events": [
     {
-      "id": 223540,
-      "home": "CA Talleres",
-      "away": "CA Lanús",
+      "id": 223424,
+      "home": "Bolívar",
+      "away": "São Paulo",
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 26,
+      "min": 1,
       "status": "1st_half",
       "period": "1T",
       "league": "",
-      "league_id": 85,
+      "league_id": 33,
       "xgH": null,
-      "xgA": 0.27,
+      "xgA": 0.02,
       "xgTotal": null,
-      "lastMom": 37,
+      "lastMom": -23,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 1,
-        "a": 4
-      },
-      "sot": {
         "h": 0,
         "a": 1
       },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
       "da": {
-        "h": 8,
-        "a": 12
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 207961,
+      "home": "Estudiantes de La Plata",
+      "away": "Universidad Católica",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 2,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 32,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": -39,
+      "overOdds": 2.53,
+      "probLive": 40,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": 0,
+        "a": 3
       },
       "corners": {
         "h": null,
@@ -59,16 +118,89 @@
         "score": 3,
         "total": 6
       },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 223540,
+      "home": "CA Talleres",
+      "away": "CA Lanús",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 32,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 85,
+      "xgH": 0.12,
+      "xgA": 0.93,
+      "xgTotal": 1.05,
+      "lastMom": 37,
+      "overOdds": 2.57,
+      "probLive": 39,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 1,
+        "a": 7
+      },
+      "sot": {
+        "h": 0,
+        "a": 1
+      },
+      "da": {
+        "h": 11,
+        "a": 13
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 4,
+        "total": 6
+      },
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 74",
+          "label": "Pressão 72",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "20 atq. perigosos · 1 ao alvo"
+          "detail": "24 atq. perigosos · 1 ao alvo"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 3.0/90",
+          "emoji": "⚡",
+          "level": "med",
+          "detail": "xG a ritmo de 3.0 por 90min"
+        },
+        {
+          "id": "shots",
+          "label": "8 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "22 remates/90min"
         }
       ],
-      "patternScore": 10
+      "patternScore": 14
     }
   ]
 }
