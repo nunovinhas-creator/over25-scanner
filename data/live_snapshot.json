@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-12T16:04:55Z",
+  "generated_at": "2026-08-12T16:10:35Z",
   "status": "OK",
-  "count": 6,
+  "count": 8,
   "events": [
     {
       "id": 587675,
@@ -10,7 +10,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 5,
+      "min": 10,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -31,7 +31,74 @@
         "a": null
       },
       "da": {
-        "h": 2,
+        "h": 4,
+        "a": 8
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": true,
+          "sot": false,
+          "corners": false,
+          "possession": false,
+          "lastMom": false
+        },
+        "score": 1,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 100",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "12 atq. perigosos · 0 ao alvo"
+        }
+      ],
+      "patternScore": 10
+    },
+    {
+      "id": 587674,
+      "home": "Valencia",
+      "away": "CD Teruel",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 7,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 79,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
+      "shots": {
+        "h": null,
+        "a": null
+      },
+      "sot": {
+        "h": null,
+        "a": null
+      },
+      "da": {
+        "h": 4,
         "a": 2
       },
       "corners": {
@@ -63,13 +130,220 @@
       "patternScore": 0
     },
     {
-      "id": 587674,
-      "home": "Valencia",
-      "away": "CD Teruel",
+      "id": 223997,
+      "home": "GKS Katowice",
+      "away": "Hapoel Tel Aviv",
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 2,
+      "min": 7,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 83,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": null,
+        "a": null
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": 5,
+        "a": 2
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": false
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 223320,
+      "home": "SK Rapid Wien",
+      "away": "Paide Linnameeskond",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 8,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 83,
+      "xgH": 0.1,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": 25,
+      "overOdds": 1.29,
+      "probLive": 78,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 2,
+        "a": 0
+      },
+      "sot": {
+        "h": 1,
+        "a": 0
+      },
+      "da": {
+        "h": 5,
+        "a": 4
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 100",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "9 atq. perigosos · 1 ao alvo"
+        },
+        {
+          "id": "shots",
+          "label": "2 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "22 remates/90min"
+        }
+      ],
+      "patternScore": 12
+    },
+    {
+      "id": 223319,
+      "home": "FC København",
+      "away": "Debreceni VSC",
+      "hScore": 1,
+      "aScore": 0,
+      "goals": 1,
+      "min": 9,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 83,
+      "xgH": 0.24,
+      "xgA": 0.14,
+      "xgTotal": 0.38,
+      "lastMom": -34,
+      "overOdds": 1.46,
+      "probLive": 68,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 1,
+        "a": 3
+      },
+      "sot": {
+        "h": 1,
+        "a": 0
+      },
+      "da": {
+        "h": 1,
+        "a": 4
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 4,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 55",
+          "emoji": "🔥",
+          "level": "high",
+          "detail": "5 atq. perigosos · 1 ao alvo"
+        },
+        {
+          "id": "shots",
+          "label": "4 remates",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "40 remates/90min (muito alto)"
+        }
+      ],
+      "patternScore": 8
+    },
+    {
+      "id": 220440,
+      "home": "SSVg Velbert",
+      "away": "Borussia M'gladbach",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 10,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -122,190 +396,13 @@
       "patternScore": 0
     },
     {
-      "id": 223997,
-      "home": "GKS Katowice",
-      "away": "Hapoel Tel Aviv",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 2,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 83,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": null,
-        "a": null
-      },
-      "da": {
-        "h": 1,
-        "a": 1
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": true,
-          "sot": false,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 1,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 223320,
-      "home": "SK Rapid Wien",
-      "away": "Paide Linnameeskond",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 3,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 83,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": 13,
-      "overOdds": 1.29,
-      "probLive": 78,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 0,
-        "a": 0
-      },
-      "sot": {
-        "h": 0,
-        "a": 0
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 2,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 223319,
-      "home": "FC København",
-      "away": "Debreceni VSC",
-      "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 3,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 83,
-      "xgH": null,
-      "xgA": 0.08,
-      "xgTotal": null,
-      "lastMom": 11,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 0,
-        "a": 2
-      },
-      "sot": {
-        "h": 0,
-        "a": 0
-      },
-      "da": {
-        "h": 0,
-        "a": 2
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
       "id": 587673,
       "home": "Atlético Tordesillas",
       "away": "Real Ávila CF",
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 28,
+      "min": 33,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -326,8 +423,8 @@
         "a": null
       },
       "da": {
-        "h": 11,
-        "a": 24
+        "h": 12,
+        "a": 26
       },
       "corners": {
         "h": null,
@@ -360,10 +457,69 @@
           "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "35 atq. perigosos · 0 ao alvo"
+          "detail": "38 atq. perigosos · 0 ao alvo"
         }
       ],
       "patternScore": 10
+    },
+    {
+      "id": 587672,
+      "home": "CF Badalona",
+      "away": "Al Ahly FC",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 7,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 79,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
+      "shots": {
+        "h": null,
+        "a": null
+      },
+      "sot": {
+        "h": null,
+        "a": null
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": false,
+          "corners": false,
+          "possession": false,
+          "lastMom": false
+        },
+        "score": 0,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
     }
   ]
 }
