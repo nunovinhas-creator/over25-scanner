@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-13T00:39:43Z",
+  "generated_at": "2026-08-13T00:44:54Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -10,21 +10,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 7,
+      "min": 12,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 32,
       "xgH": 0.18,
-      "xgA": 0.29,
-      "xgTotal": 0.47,
-      "lastMom": 24,
-      "overOdds": 2.33,
-      "probLive": 43,
+      "xgA": 0.19,
+      "xgTotal": 0.37,
+      "lastMom": -19,
+      "overOdds": 2.09,
+      "probLive": 48,
       "oddsStatus": "VALID",
       "shots": {
         "h": 2,
-        "a": 2
+        "a": 1
       },
       "sot": {
         "h": 0,
@@ -32,7 +32,7 @@
       },
       "da": {
         "h": 3,
-        "a": 2
+        "a": 5
       },
       "corners": {
         "h": null,
@@ -59,8 +59,23 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 65",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "8 atq. perigosos · 1 ao alvo"
+        },
+        {
+          "id": "shots",
+          "label": "3 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "22 remates/90min"
+        }
+      ],
+      "patternScore": 12
     }
   ]
 }
