@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-13T23:35:55Z",
+  "generated_at": "2026-08-13T23:41:20Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -10,20 +10,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 72,
+      "min": 78,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 33,
-      "xgH": 1.63,
+      "xgH": 1.64,
       "xgA": 0.04,
-      "xgTotal": 1.67,
-      "lastMom": -1,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgTotal": 1.68,
+      "lastMom": 43,
+      "overOdds": 1.32,
+      "probLive": 76,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 15,
+        "h": 16,
         "a": 1
       },
       "sot": {
@@ -31,8 +31,8 @@
         "a": 0
       },
       "da": {
-        "h": 45,
-        "a": 9
+        "h": 47,
+        "a": 10
       },
       "corners": {
         "h": null,
@@ -69,24 +69,24 @@
         },
         {
           "id": "pressure",
-          "label": "Pressão 62 (2ªP)",
+          "label": "Pressão 60 (2ªP)",
           "emoji": "🔥",
           "level": "high",
-          "detail": "17 atq. perigosos · 1 ao alvo (2ªP)"
+          "detail": "20 atq. perigosos · 1 ao alvo (2ªP)"
         },
         {
           "id": "xg_delta",
           "label": "xG sobrevaloriza",
           "emoji": "🎲",
           "level": "med",
-          "detail": "xG 1.67 vs 0 golos"
+          "detail": "xG 1.68 vs 0 golos"
         },
         {
           "id": "xg_pace",
-          "label": "xG 5.6/90 (2ªP)",
+          "label": "xG 4.6/90 (2ªP)",
           "emoji": "⚡",
           "level": "critical",
-          "detail": "xG a ritmo de 5.6 por 90min (2ªP)"
+          "detail": "xG a ritmo de 4.6 por 90min (2ªP)"
         }
       ],
       "patternScore": 16
@@ -95,32 +95,32 @@
       "id": 223241,
       "home": "Santos",
       "away": "Macará",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 1,
-      "goals": 2,
-      "min": 71,
+      "goals": 3,
+      "min": 76,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 33,
-      "xgH": 1.38,
-      "xgA": 1.09,
-      "xgTotal": 2.4699999999999998,
-      "lastMom": 16,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgH": 1.64,
+      "xgA": 1.19,
+      "xgTotal": 2.83,
+      "lastMom": 36,
+      "overOdds": 1.18,
+      "probLive": 85,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 10,
-        "a": 5
+        "h": 11,
+        "a": 6
       },
       "sot": {
-        "h": 6,
+        "h": 7,
         "a": 1
       },
       "da": {
-        "h": 38,
-        "a": 20
+        "h": 43,
+        "a": 21
       },
       "corners": {
         "h": null,
@@ -157,21 +157,21 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 74,
+      "min": 80,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 32,
-      "xgH": 0.59,
-      "xgA": 1.31,
-      "xgTotal": 1.9,
-      "lastMom": 23,
+      "xgH": 0.66,
+      "xgA": 1.4,
+      "xgTotal": 2.06,
+      "lastMom": 7,
       "overOdds": 1.3,
       "probLive": 77,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 9,
-        "a": 11
+        "h": 11,
+        "a": 12
       },
       "sot": {
         "h": 3,
@@ -209,20 +209,13 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "8r 2ªP",
+          "label": "11r 2ªP",
           "emoji": "🎯",
-          "level": "med",
-          "detail": "25 remates/90min (2ªP)"
-        },
-        {
-          "id": "open",
-          "label": "JOGO ABERTO",
-          "emoji": "🎭",
-          "level": "low",
-          "detail": "16min, equipa a perder ataca"
+          "level": "high",
+          "detail": "28 remates/90min (2ªP) (muito alto)"
         }
       ],
-      "patternScore": 3
+      "patternScore": 4
     }
   ]
 }
