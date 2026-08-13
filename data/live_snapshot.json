@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-13T20:59:12Z",
+  "generated_at": "2026-08-13T21:04:47Z",
   "status": "OK",
-  "count": 3,
+  "count": 2,
   "events": [
     {
       "id": 223317,
@@ -10,7 +10,7 @@
       "hScore": 4,
       "aScore": 0,
       "goals": 4,
-      "min": 92,
+      "min": 98,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -19,9 +19,9 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": 1.36,
-      "probLive": 74,
-      "oddsStatus": "VALID",
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": null,
         "a": null
@@ -31,8 +31,8 @@
         "a": null
       },
       "da": {
-        "h": 29,
-        "a": 37
+        "h": 30,
+        "a": 40
       },
       "corners": {
         "h": null,
@@ -59,75 +59,16 @@
         "score": 1,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 223238,
-      "home": "KF Egnatia",
-      "away": "Shamrock Rovers",
-      "hScore": 5,
-      "aScore": 1,
-      "goals": 6,
-      "min": 96,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 8,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": 1.2,
-      "probLive": 83,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": 14,
-        "a": 2
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 1,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 1,
-        "total": 6
-      },
       "patterns": [
         {
-          "id": "numerical",
-          "label": "Fora +1 homem",
-          "emoji": "🟥",
-          "level": "med",
-          "detail": "Casa com 1 vermelho(s) — Fora em vantagem numérica"
+          "id": "pressure",
+          "label": "Pressão 64",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "70 atq. perigosos · 0 ao alvo"
         }
       ],
-      "patternScore": 2
+      "patternScore": 10
     },
     {
       "id": 223420,
@@ -136,29 +77,29 @@
       "hScore": 1,
       "aScore": 2,
       "goals": 3,
-      "min": 117,
-      "status": "extratime",
+      "min": 18,
+      "status": "inprogress",
       "period": "ETHT",
       "league": "",
       "league_id": 83,
       "xgH": 0.71,
-      "xgA": 1.57,
-      "xgTotal": 2.2800000000000002,
-      "lastMom": -30,
-      "overOdds": 1.18,
-      "probLive": 85,
+      "xgA": 1.61,
+      "xgTotal": 2.3200000000000003,
+      "lastMom": -24,
+      "overOdds": 1.14,
+      "probLive": 88,
       "oddsStatus": "VALID",
       "shots": {
         "h": 8,
-        "a": 19
+        "a": 20
       },
       "sot": {
         "h": 4,
-        "a": 8
+        "a": 9
       },
       "da": {
-        "h": 55,
-        "a": 67
+        "h": 57,
+        "a": 68
       },
       "corners": {
         "h": null,
@@ -191,10 +132,17 @@
           "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "122 atq. perigosos · 12 ao alvo"
+          "detail": "125 atq. perigosos · 13 ao alvo"
+        },
+        {
+          "id": "shots",
+          "label": "28 remates",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "140 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 10
+      "patternScore": 14
     }
   ]
 }
