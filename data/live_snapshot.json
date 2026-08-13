@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-13T01:51:29Z",
+  "generated_at": "2026-08-13T01:56:36Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -10,29 +10,29 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 59,
+      "min": 64,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 32,
       "xgH": 0.45,
-      "xgA": 0.55,
-      "xgTotal": 1.0,
-      "lastMom": 1,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgA": 0.64,
+      "xgTotal": 1.09,
+      "lastMom": -67,
+      "overOdds": 2.26,
+      "probLive": 44,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 9,
-        "a": 9
+        "a": 12
       },
       "sot": {
         "h": 1,
-        "a": 1
+        "a": 3
       },
       "da": {
         "h": 22,
-        "a": 31
+        "a": 33
       },
       "corners": {
         "h": null,
@@ -59,8 +59,37 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "3 padrões em simultâneo — sinal forte"
+        },
+        {
+          "id": "pressure",
+          "label": "Pressão 67 (2ªP)",
+          "emoji": "🔥",
+          "level": "high",
+          "detail": "12 atq. perigosos · 2 ao alvo (2ªP)"
+        },
+        {
+          "id": "shots",
+          "label": "7r 2ªP",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "33 remates/90min (2ªP) (muito alto)"
+        },
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 67"
+        }
+      ],
+      "patternScore": 10
     }
   ]
 }
