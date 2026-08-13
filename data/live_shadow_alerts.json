@@ -1007,10 +1007,10 @@
       "lastMom": true
     },
     "blocked_by": null,
-    "result_over25": "",
-    "final_score": "",
-    "result_at_min": "",
-    "closing_odds_over25": null
+    "result_over25": "LOSS",
+    "final_score": "1-1",
+    "result_at_min": 90,
+    "closing_odds_over25": 1.14
   },
   {
     "id": "223414_shadow_minuto_tardio_1786647800787",
@@ -1135,5 +1135,36 @@
     "final_score": "0-1",
     "result_at_min": 90,
     "closing_odds_over25": 1.25
+  },
+  {
+    "id": "223419_shadow_minuto_tardio_1786652535216",
+    "event_id": "223419",
+    "casa": "KAA Gent",
+    "fora": "IFK Göteborg",
+    "liga": "",
+    "detected_at": "2026-08-13T20:22:15.216Z",
+    "min": 89,
+    "score": "1-1",
+    "goals": 2,
+    "xg_total": null,
+    "pattern_score": 21,
+    "pressao": 90.0,
+    "odds_live": 1.04,
+    "odds_status": "VALID",
+    "coverage_score": 2,
+    "coverage_total": 6,
+    "coverage_fields": {
+      "xgTotal": false,
+      "da": true,
+      "sot": true,
+      "corners": false,
+      "possession": false,
+      "lastMom": false
+    },
+    "blocked_by": "minuto_tardio",
+    "result_over25": "",
+    "final_score": "",
+    "result_at_min": "",
+    "closing_odds_over25": null
   }
 ]
