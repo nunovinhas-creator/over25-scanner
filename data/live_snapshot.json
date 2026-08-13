@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-13T01:56:36Z",
+  "generated_at": "2026-08-13T02:01:43Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -8,27 +8,27 @@
       "home": "Cruzeiro",
       "away": "Flamengo",
       "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 64,
+      "aScore": 1,
+      "goals": 2,
+      "min": 69,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 32,
       "xgH": 0.45,
-      "xgA": 0.64,
-      "xgTotal": 1.09,
-      "lastMom": -67,
+      "xgA": 1.04,
+      "xgTotal": 1.49,
+      "lastMom": -57,
       "overOdds": 2.26,
       "probLive": 44,
       "oddsStatus": "VALID",
       "shots": {
         "h": 9,
-        "a": 12
+        "a": 14
       },
       "sot": {
         "h": 1,
-        "a": 3
+        "a": 4
       },
       "da": {
         "h": 22,
@@ -65,31 +65,38 @@
           "label": "CONVERGÊNCIA",
           "emoji": "🔮",
           "level": "conv",
-          "detail": "3 padrões em simultâneo — sinal forte"
+          "detail": "4 padrões em simultâneo — sinal forte"
         },
         {
           "id": "pressure",
-          "label": "Pressão 67 (2ªP)",
+          "label": "Pressão 60 (2ªP)",
           "emoji": "🔥",
           "level": "high",
-          "detail": "12 atq. perigosos · 2 ao alvo (2ªP)"
+          "detail": "12 atq. perigosos · 3 ao alvo (2ªP)"
         },
         {
           "id": "shots",
-          "label": "7r 2ªP",
+          "label": "9r 2ªP",
           "emoji": "🎯",
           "level": "high",
-          "detail": "33 remates/90min (2ªP) (muito alto)"
+          "detail": "34 remates/90min (2ªP) (muito alto)"
         },
         {
           "id": "mom",
           "label": "Fora pressiona",
           "emoji": "💪",
           "level": "med",
-          "detail": "Momentum fora 67"
+          "detail": "Momentum fora 57"
+        },
+        {
+          "id": "late",
+          "label": "1 gol em 21min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 44% · 21min"
         }
       ],
-      "patternScore": 10
+      "patternScore": 11
     }
   ]
 }
