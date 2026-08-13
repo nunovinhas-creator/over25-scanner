@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-13T23:04:20Z",
+  "generated_at": "2026-08-13T23:09:33Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -10,18 +10,18 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 46,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 33,
-      "xgH": 0.73,
+      "xgH": 0.77,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 11,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "lastMom": -3,
+      "overOdds": 1.63,
+      "probLive": 61,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 9,
         "a": 0
@@ -70,17 +70,17 @@
       "aScore": 1,
       "goals": 2,
       "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 33,
-      "xgH": 1.42,
-      "xgA": 1.04,
-      "xgTotal": 2.46,
-      "lastMom": 36,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgH": 1.08,
+      "xgA": 1.09,
+      "xgTotal": 2.17,
+      "lastMom": 0,
+      "overOdds": 1.37,
+      "probLive": 73,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 8,
         "a": 4
@@ -118,8 +118,37 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "3 padrões em simultâneo — sinal forte"
+        },
+        {
+          "id": "pressure",
+          "label": "Pressão 100",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "39 atq. perigosos · 5 ao alvo"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 4.3/90",
+          "emoji": "⚡",
+          "level": "critical",
+          "detail": "xG a ritmo de 4.3 por 90min"
+        },
+        {
+          "id": "shots",
+          "label": "12 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "24 remates/90min"
+        }
+      ],
+      "patternScore": 22
     },
     {
       "id": 207959,
@@ -128,17 +157,17 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 48,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 32,
       "xgH": 0.26,
-      "xgA": 1.24,
-      "xgTotal": 1.5,
-      "lastMom": -4,
-      "overOdds": 1.29,
-      "probLive": 78,
+      "xgA": 1.28,
+      "xgTotal": 1.54,
+      "lastMom": -11,
+      "overOdds": 1.59,
+      "probLive": 63,
       "oddsStatus": "VALID",
       "shots": {
         "h": 2,
