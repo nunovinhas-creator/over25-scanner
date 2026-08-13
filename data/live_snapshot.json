@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-13T23:30:40Z",
+  "generated_at": "2026-08-13T23:35:55Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 68,
+      "min": 72,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -18,7 +18,7 @@
       "xgH": 1.63,
       "xgA": 0.04,
       "xgTotal": 1.67,
-      "lastMom": 12,
+      "lastMom": -1,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
@@ -69,9 +69,9 @@
         },
         {
           "id": "pressure",
-          "label": "Pressão 72 (2ªP)",
+          "label": "Pressão 62 (2ªP)",
           "emoji": "🔥",
-          "level": "critical",
+          "level": "high",
           "detail": "17 atq. perigosos · 1 ao alvo (2ªP)"
         },
         {
@@ -83,13 +83,13 @@
         },
         {
           "id": "xg_pace",
-          "label": "xG 6.5/90 (2ªP)",
+          "label": "xG 5.6/90 (2ªP)",
           "emoji": "⚡",
           "level": "critical",
-          "detail": "xG a ritmo de 6.5 por 90min (2ªP)"
+          "detail": "xG a ritmo de 5.6 por 90min (2ªP)"
         }
       ],
-      "patternScore": 22
+      "patternScore": 16
     },
     {
       "id": 223241,
@@ -98,7 +98,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 66,
+      "min": 71,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -106,7 +106,7 @@
       "xgH": 1.38,
       "xgA": 1.09,
       "xgTotal": 2.4699999999999998,
-      "lastMom": 53,
+      "lastMom": 16,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
@@ -147,16 +147,8 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 53"
-        }
-      ],
-      "patternScore": 2
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 207959,
@@ -165,18 +157,18 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 69,
+      "min": 74,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 32,
-      "xgH": 0.8,
+      "xgH": 0.59,
       "xgA": 1.31,
-      "xgTotal": 2.1100000000000003,
-      "lastMom": 65,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgTotal": 1.9,
+      "lastMom": 23,
+      "overOdds": 1.3,
+      "probLive": 77,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 9,
         "a": 11
@@ -219,25 +211,18 @@
           "id": "shots",
           "label": "8r 2ªP",
           "emoji": "🎯",
-          "level": "high",
-          "detail": "30 remates/90min (2ªP) (muito alto)"
+          "level": "med",
+          "detail": "25 remates/90min (2ªP)"
         },
         {
           "id": "open",
           "label": "JOGO ABERTO",
           "emoji": "🎭",
           "level": "low",
-          "detail": "21min, equipa a perder ataca"
-        },
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 65"
+          "detail": "16min, equipa a perder ataca"
         }
       ],
-      "patternScore": 7
+      "patternScore": 3
     }
   ]
 }
