@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-14T20:47:23Z",
+  "generated_at": "2026-08-14T20:52:46Z",
   "status": "OK",
-  "count": 5,
+  "count": 4,
   "events": [
     {
       "id": 220836,
@@ -10,7 +10,7 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 59,
+      "min": 64,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -31,7 +31,7 @@
         "a": 2
       },
       "da": {
-        "h": 10,
+        "h": 12,
         "a": 16
       },
       "corners": {
@@ -77,7 +77,7 @@
       "hScore": 4,
       "aScore": 1,
       "goals": 5,
-      "min": 65,
+      "min": 71,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -85,21 +85,21 @@
       "xgH": 2.05,
       "xgA": 0.78,
       "xgTotal": 2.83,
-      "lastMom": -39,
+      "lastMom": -45,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 13,
-        "a": 9
+        "a": 10
       },
       "sot": {
         "h": 7,
-        "a": 4
+        "a": 5
       },
       "da": {
-        "h": 35,
-        "a": 31
+        "h": 36,
+        "a": 32
       },
       "corners": {
         "h": null,
@@ -126,35 +126,43 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 45"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 215508,
       "home": "Sporting CP",
       "away": "Vitória SC",
       "hScore": 3,
-      "aScore": 1,
-      "goals": 4,
-      "min": 65,
+      "aScore": 2,
+      "goals": 5,
+      "min": 71,
       "status": "2nd_half",
       "period": "2T",
       "league": "Primeira Liga",
       "league_id": 2,
       "xgH": 1.12,
-      "xgA": 0.74,
-      "xgTotal": 1.86,
-      "lastMom": -30,
+      "xgA": 1.13,
+      "xgTotal": 2.25,
+      "lastMom": -71,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 5,
-        "a": 9
+        "a": 10
       },
       "sot": {
         "h": 3,
-        "a": 2
+        "a": 3
       },
       "da": {
         "h": null,
@@ -185,98 +193,47 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Fora domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum fora 71 — controlo total"
+        }
+      ],
+      "patternScore": 4
     },
     {
       "id": 213974,
       "home": "Wolverhampton",
       "away": "Blackburn Rovers",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 2,
-      "goals": 3,
-      "min": 87,
+      "goals": 4,
+      "min": 93,
       "status": "2nd_half",
       "period": "2T",
       "league": "Championship",
       "league_id": 12,
-      "xgH": 1.16,
+      "xgH": 2.04,
       "xgA": 0.8,
-      "xgTotal": 1.96,
-      "lastMom": -38,
+      "xgTotal": 2.84,
+      "lastMom": 38,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 16,
+        "h": 18,
         "a": 9
       },
       "sot": {
-        "h": 2,
+        "h": 3,
         "a": 4
       },
       "da": {
-        "h": 54,
-        "a": 35
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 580486,
-      "home": "Stade Lavallois",
-      "away": "Nantes",
-      "hScore": 2,
-      "aScore": 1,
-      "goals": 3,
-      "min": 94,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 89,
-      "xgH": 1.22,
-      "xgA": 1.47,
-      "xgTotal": 2.69,
-      "lastMom": 1,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 7,
-        "a": 17
-      },
-      "sot": {
-        "h": 4,
-        "a": 3
-      },
-      "da": {
-        "h": 46,
-        "a": 58
+        "h": 56,
+        "a": 38
       },
       "corners": {
         "h": null,
