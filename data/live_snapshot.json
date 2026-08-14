@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-14T20:52:46Z",
+  "generated_at": "2026-08-14T20:58:08Z",
   "status": "OK",
-  "count": 4,
+  "count": 3,
   "events": [
     {
       "id": 220836,
@@ -10,7 +10,7 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 64,
+      "min": 69,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -19,9 +19,9 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "overOdds": 1.56,
+      "probLive": 64,
+      "oddsStatus": "VALID",
       "shots": {
         "h": null,
         "a": null
@@ -31,7 +31,7 @@
         "a": 2
       },
       "da": {
-        "h": 12,
+        "h": 15,
         "a": 16
       },
       "corners": {
@@ -77,29 +77,29 @@
       "hScore": 4,
       "aScore": 1,
       "goals": 5,
-      "min": 71,
+      "min": 77,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 42,
       "xgH": 2.05,
-      "xgA": 0.78,
-      "xgTotal": 2.83,
-      "lastMom": -45,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgA": 0.83,
+      "xgTotal": 2.88,
+      "lastMom": -18,
+      "overOdds": 1.18,
+      "probLive": 85,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 13,
         "a": 10
       },
       "sot": {
         "h": 7,
-        "a": 5
+        "a": 4
       },
       "da": {
-        "h": 36,
-        "a": 32
+        "h": 37,
+        "a": 33
       },
       "corners": {
         "h": null,
@@ -126,16 +126,8 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum fora 45"
-        }
-      ],
-      "patternScore": 2
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 215508,
@@ -144,21 +136,21 @@
       "hScore": 3,
       "aScore": 2,
       "goals": 5,
-      "min": 71,
+      "min": 76,
       "status": "2nd_half",
       "period": "2T",
       "league": "Primeira Liga",
       "league_id": 2,
       "xgH": 1.12,
-      "xgA": 1.13,
-      "xgTotal": 2.25,
-      "lastMom": -71,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgA": 1.16,
+      "xgTotal": 2.2800000000000002,
+      "lastMom": -37,
+      "overOdds": 1.1,
+      "probLive": 91,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 5,
-        "a": 10
+        "a": 11
       },
       "sot": {
         "h": 3,
@@ -191,73 +183,6 @@
           "lastMom": true
         },
         "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Fora domina",
-          "emoji": "💥",
-          "level": "high",
-          "detail": "Momentum fora 71 — controlo total"
-        }
-      ],
-      "patternScore": 4
-    },
-    {
-      "id": 213974,
-      "home": "Wolverhampton",
-      "away": "Blackburn Rovers",
-      "hScore": 2,
-      "aScore": 2,
-      "goals": 4,
-      "min": 93,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "Championship",
-      "league_id": 12,
-      "xgH": 2.04,
-      "xgA": 0.8,
-      "xgTotal": 2.84,
-      "lastMom": 38,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 18,
-        "a": 9
-      },
-      "sot": {
-        "h": 3,
-        "a": 4
-      },
-      "da": {
-        "h": 56,
-        "a": 38
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
         "total": 6
       },
       "patterns": [],
