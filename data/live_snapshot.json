@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-14T16:24:29Z",
+  "generated_at": "2026-08-14T16:29:36Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -10,29 +10,29 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 20,
+      "min": 26,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 42,
       "xgH": 1.13,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": 38,
+      "xgA": 0.06,
+      "xgTotal": 1.19,
+      "lastMom": -37,
       "overOdds": 1.15,
       "probLive": 87,
       "oddsStatus": "VALID",
       "shots": {
         "h": 5,
-        "a": 0
+        "a": 1
       },
       "sot": {
         "h": 2,
-        "a": 0
+        "a": 1
       },
       "da": {
-        "h": 14,
-        "a": 5
+        "h": 19,
+        "a": 8
       },
       "corners": {
         "h": null,
@@ -49,33 +49,33 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": true,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 3,
+        "score": 4,
         "total": 6
       },
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 96",
+          "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "19 atq. perigosos · 2 ao alvo"
+          "detail": "27 atq. perigosos · 3 ao alvo"
         },
         {
-          "id": "shots",
-          "label": "5 remates",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "22 remates/90min"
+          "id": "xg_pace",
+          "label": "xG 4.1/90",
+          "emoji": "⚡",
+          "level": "critical",
+          "detail": "xG a ritmo de 4.1 por 90min"
         }
       ],
-      "patternScore": 12
+      "patternScore": 20
     }
   ]
 }
