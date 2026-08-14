@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-14T16:19:23Z",
+  "generated_at": "2026-08-14T16:24:29Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -7,31 +7,31 @@
       "id": 587664,
       "home": "Parma",
       "away": "Catania",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 0,
-      "goals": 0,
-      "min": 15,
+      "goals": 1,
+      "min": 20,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 42,
-      "xgH": null,
-      "xgA": 0.03,
+      "xgH": 1.13,
+      "xgA": null,
       "xgTotal": null,
-      "lastMom": 19,
-      "overOdds": 1.02,
-      "probLive": 98,
+      "lastMom": 38,
+      "overOdds": 1.15,
+      "probLive": 87,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
+        "h": 5,
         "a": 0
       },
       "sot": {
-        "h": 0,
+        "h": 2,
         "a": 0
       },
       "da": {
-        "h": 8,
+        "h": 14,
         "a": 5
       },
       "corners": {
@@ -62,13 +62,20 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 78",
+          "label": "Pressão 96",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "13 atq. perigosos · 0 ao alvo"
+          "detail": "19 atq. perigosos · 2 ao alvo"
+        },
+        {
+          "id": "shots",
+          "label": "5 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "22 remates/90min"
         }
       ],
-      "patternScore": 10
+      "patternScore": 12
     }
   ]
 }
