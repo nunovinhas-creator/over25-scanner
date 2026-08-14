@@ -4050,5 +4050,104 @@
       "possession": false,
       "lastMom": false
     }
+  },
+  {
+    "id": "214775_obs_1786732851621",
+    "event_id": "214775",
+    "kind": "observation",
+    "casa": "Real Sociedad B",
+    "fora": "CD Castellón",
+    "liga": "La Liga 2",
+    "data": "2026-08-14",
+    "detected_at": "2026-08-14T18:40:51.621Z",
+    "min": 8,
+    "score": "0-1",
+    "goals": 1,
+    "xg": "",
+    "odds_live": "1.29",
+    "prob_live": 78,
+    "pattern_score": 16,
+    "patterns": [
+      "conv",
+      "pressure",
+      "shots",
+      "mom"
+    ],
+    "pattern_labels": [
+      "🔮 CONVERGÊNCIA",
+      "🔥 Pressão 100",
+      "🎯 3 remates",
+      "💪 Fora pressiona"
+    ],
+    "has_scan_pick": "",
+    "scan_score": "",
+    "has_sharp": "1",
+    "coverage_score": 3,
+    "coverage_total": 6,
+    "coverage_fields": {
+      "xgTotal": false,
+      "da": true,
+      "sot": true,
+      "corners": false,
+      "possession": false,
+      "lastMom": true
+    },
+    "result_over25": "",
+    "final_score": "",
+    "result_at_min": ""
+  },
+  {
+    "id": "215955_cov_1786732851621",
+    "event_id": "215955",
+    "kind": "coverage_only",
+    "liga": "",
+    "min": 8,
+    "detected_at": "2026-08-14T18:40:51.621Z",
+    "coverage_score": 3,
+    "coverage_total": 6,
+    "coverage_fields": {
+      "xgTotal": false,
+      "da": true,
+      "sot": true,
+      "corners": false,
+      "possession": false,
+      "lastMom": true
+    }
+  },
+  {
+    "id": "211863_cov_1786732851621",
+    "event_id": "211863",
+    "kind": "coverage_only",
+    "liga": "",
+    "min": 8,
+    "detected_at": "2026-08-14T18:40:51.621Z",
+    "coverage_score": 3,
+    "coverage_total": 6,
+    "coverage_fields": {
+      "xgTotal": false,
+      "da": true,
+      "sot": true,
+      "corners": false,
+      "possession": false,
+      "lastMom": true
+    }
+  },
+  {
+    "id": "221044_cov_1786732851621",
+    "event_id": "221044",
+    "kind": "coverage_only",
+    "liga": "",
+    "min": 10,
+    "detected_at": "2026-08-14T18:40:51.621Z",
+    "coverage_score": 1,
+    "coverage_total": 6,
+    "coverage_fields": {
+      "xgTotal": false,
+      "da": true,
+      "sot": false,
+      "corners": false,
+      "possession": false,
+      "lastMom": false
+    }
   }
 ]
