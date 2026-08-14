@@ -3993,9 +3993,9 @@
       "possession": false,
       "lastMom": true
     },
-    "result_over25": "",
-    "final_score": "",
-    "result_at_min": ""
+    "result_over25": "WIN",
+    "final_score": "1-2",
+    "result_at_min": 90
   },
   {
     "id": "587662_cov_1786731059039",
@@ -4485,5 +4485,46 @@
       "possession": false,
       "lastMom": false
     }
+  },
+  {
+    "id": "215508_obs_1786737048269",
+    "event_id": "215508",
+    "kind": "observation",
+    "casa": "Sporting CP",
+    "fora": "Vitória SC",
+    "liga": "Primeira Liga",
+    "data": "2026-08-14",
+    "detected_at": "2026-08-14T19:50:48.269Z",
+    "min": 30,
+    "score": "2-0",
+    "goals": 2,
+    "xg": "1.06",
+    "odds_live": "",
+    "prob_live": "",
+    "pattern_score": 6,
+    "patterns": [
+      "xg_pace",
+      "mom"
+    ],
+    "pattern_labels": [
+      "⚡ xG 3.2/90",
+      "💪 Fora pressiona"
+    ],
+    "has_scan_pick": "",
+    "scan_score": "",
+    "has_sharp": "",
+    "coverage_score": 3,
+    "coverage_total": 6,
+    "coverage_fields": {
+      "xgTotal": true,
+      "da": false,
+      "sot": true,
+      "corners": false,
+      "possession": false,
+      "lastMom": true
+    },
+    "result_over25": "",
+    "final_score": "",
+    "result_at_min": ""
   }
 ]
