@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-14T23:02:19Z",
+  "generated_at": "2026-08-14T23:08:07Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,29 +10,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 30,
+      "min": 36,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
-      "xgH": 0.37,
-      "xgA": 1.06,
-      "xgTotal": 1.4300000000000002,
-      "lastMom": -51,
-      "overOdds": 1.08,
-      "probLive": 93,
+      "xgH": 0.38,
+      "xgA": 1.11,
+      "xgTotal": 1.4900000000000002,
+      "lastMom": 17,
+      "overOdds": 1.31,
+      "probLive": 76,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 6,
-        "a": 8
+        "h": 7,
+        "a": 9
       },
       "sot": {
         "h": 0,
         "a": 0
       },
       "da": {
-        "h": 13,
-        "a": 19
+        "h": 16,
+        "a": 21
       },
       "corners": {
         "h": null,
@@ -65,45 +65,31 @@
           "label": "CONVERGÊNCIA",
           "emoji": "🔮",
           "level": "conv",
-          "detail": "5 padrões em simultâneo — sinal forte"
+          "detail": "3 padrões em simultâneo — sinal forte"
         },
         {
           "id": "pressure",
-          "label": "Pressão 96",
+          "label": "Pressão 92",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "32 atq. perigosos · 0 ao alvo"
+          "detail": "37 atq. perigosos · 0 ao alvo"
         },
         {
           "id": "xg_pace",
-          "label": "xG 4.3/90",
+          "label": "xG 3.7/90",
           "emoji": "⚡",
-          "level": "critical",
-          "detail": "xG a ritmo de 4.3 por 90min"
+          "level": "high",
+          "detail": "xG a ritmo de 3.7 por 90min"
         },
         {
           "id": "shots",
-          "label": "14 remates",
+          "label": "16 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "42 remates/90min (muito alto)"
-        },
-        {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum fora 51"
-        },
-        {
-          "id": "mkt",
-          "label": "Odds −18.2%",
-          "emoji": "📈",
-          "level": "critical",
-          "detail": "Mercado caiu de 1.32 → 1.08 (sharp money)"
+          "detail": "40 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 36
+      "patternScore": 18
     },
     {
       "id": 10071,
@@ -112,20 +98,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 30,
+      "min": 36,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
-      "xgH": 0.22,
+      "xgH": 0.2,
       "xgA": 0.56,
-      "xgTotal": 0.78,
-      "lastMom": 37,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgTotal": 0.76,
+      "lastMom": 49,
+      "overOdds": 1.2,
+      "probLive": 83,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 4,
+        "h": 5,
         "a": 5
       },
       "sot": {
@@ -133,8 +119,8 @@
         "a": 1
       },
       "da": {
-        "h": 17,
-        "a": 13
+        "h": 19,
+        "a": 18
       },
       "corners": {
         "h": null,
@@ -167,17 +153,24 @@
           "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "30 atq. perigosos · 3 ao alvo"
+          "detail": "37 atq. perigosos · 3 ao alvo"
         },
         {
           "id": "shots",
-          "label": "9 remates",
+          "label": "10 remates",
           "emoji": "🎯",
           "level": "med",
-          "detail": "27 remates/90min"
+          "detail": "25 remates/90min"
+        },
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 49"
         }
       ],
-      "patternScore": 12
+      "patternScore": 14
     }
   ]
 }
