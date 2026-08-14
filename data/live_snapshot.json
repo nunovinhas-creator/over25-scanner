@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-14T21:19:57Z",
+  "generated_at": "2026-08-14T21:25:17Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 91,
+      "min": 96,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -19,19 +19,19 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "overOdds": 1.58,
+      "probLive": 63,
+      "oddsStatus": "VALID",
       "shots": {
         "h": null,
         "a": null
       },
       "sot": {
-        "h": 2,
+        "h": 3,
         "a": 2
       },
       "da": {
-        "h": 27,
+        "h": 29,
         "a": 20
       },
       "corners": {
@@ -61,6 +61,20 @@
       },
       "patterns": [
         {
+          "id": "pressure",
+          "label": "Pressão 71",
+          "emoji": "🔥",
+          "level": "high",
+          "detail": "49 atq. perigosos · 5 ao alvo"
+        },
+        {
+          "id": "late",
+          "label": "1 gol em 0min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 63% · 0min"
+        },
+        {
           "id": "numerical",
           "label": "Casa +1 homem",
           "emoji": "🟥",
@@ -68,7 +82,7 @@
           "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
         }
       ],
-      "patternScore": 2
+      "patternScore": 7
     }
   ]
 }
