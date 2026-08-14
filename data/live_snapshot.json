@@ -1,8 +1,126 @@
 {
-  "generated_at": "2026-08-14T23:30:29Z",
+  "generated_at": "2026-08-14T23:35:59Z",
   "status": "OK",
-  "count": 2,
+  "count": 4,
   "events": [
+    {
+      "id": 223575,
+      "home": "Racing Club",
+      "away": "Banfield",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 4,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 85,
+      "xgH": 0.04,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": 26,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 1,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": 1,
+        "a": 1
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 10072,
+      "home": "Sport Recife",
+      "away": "Londrina",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 3,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 34,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": 11,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": 0,
+        "a": 1
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
     {
       "id": 10073,
       "home": "São Bernardo",
@@ -10,15 +128,15 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 46,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 34,
       "xgH": 0.38,
-      "xgA": 1.31,
-      "xgTotal": 1.69,
-      "lastMom": -31,
+      "xgA": 1.46,
+      "xgTotal": 1.8399999999999999,
+      "lastMom": 3,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
@@ -59,8 +177,16 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "xg_delta",
+          "label": "xG +1.8 acima",
+          "emoji": "🎲",
+          "level": "high",
+          "detail": "xG 1.84 vs 0 golos"
+        }
+      ],
+      "patternScore": 4
     },
     {
       "id": 10071,
@@ -70,17 +196,17 @@
       "aScore": 0,
       "goals": 1,
       "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 34,
       "xgH": 0.58,
       "xgA": 0.56,
       "xgTotal": 1.1400000000000001,
       "lastMom": -12,
-      "overOdds": 1.09,
-      "probLive": 92,
-      "oddsStatus": "VALID",
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 7,
         "a": 5
@@ -118,8 +244,23 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 100",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "43 atq. perigosos · 4 ao alvo"
+        },
+        {
+          "id": "shots",
+          "label": "12 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "24 remates/90min"
+        }
+      ],
+      "patternScore": 12
     }
   ]
 }
