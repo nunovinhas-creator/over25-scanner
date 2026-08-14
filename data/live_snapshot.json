@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-14T21:03:33Z",
+  "generated_at": "2026-08-14T21:09:07Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 75,
+      "min": 80,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -19,19 +19,19 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "overOdds": 1.56,
+      "probLive": 64,
+      "oddsStatus": "VALID",
       "shots": {
         "h": null,
         "a": null
       },
       "sot": {
-        "h": 1,
+        "h": 2,
         "a": 2
       },
       "da": {
-        "h": 18,
+        "h": 24,
         "a": 17
       },
       "corners": {
@@ -61,6 +61,13 @@
       },
       "patterns": [
         {
+          "id": "late",
+          "label": "1 gol em 10min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 64% · 10min"
+        },
+        {
           "id": "numerical",
           "label": "Casa +1 homem",
           "emoji": "🟥",
@@ -68,7 +75,7 @@
           "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
         }
       ],
-      "patternScore": 2
+      "patternScore": 3
     },
     {
       "id": 587666,
@@ -77,29 +84,29 @@
       "hScore": 4,
       "aScore": 1,
       "goals": 5,
-      "min": 81,
+      "min": 87,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 42,
-      "xgH": 2.05,
-      "xgA": 0.88,
-      "xgTotal": 2.9299999999999997,
-      "lastMom": -56,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgH": 2.09,
+      "xgA": 1.31,
+      "xgTotal": 3.4,
+      "lastMom": -28,
+      "overOdds": 1.18,
+      "probLive": 85,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 13,
-        "a": 14
+        "h": 14,
+        "a": 15
       },
       "sot": {
         "h": 7,
         "a": 4
       },
       "da": {
-        "h": 39,
-        "a": 38
+        "h": 40,
+        "a": 41
       },
       "corners": {
         "h": null,
@@ -126,16 +133,8 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum fora 56"
-        }
-      ],
-      "patternScore": 2
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 215508,
@@ -144,7 +143,7 @@
       "hScore": 3,
       "aScore": 2,
       "goals": 5,
-      "min": 82,
+      "min": 87,
       "status": "2nd_half",
       "period": "2T",
       "league": "Primeira Liga",
@@ -152,10 +151,10 @@
       "xgH": 1.12,
       "xgA": 1.14,
       "xgTotal": 2.26,
-      "lastMom": -16,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "lastMom": 4,
+      "overOdds": 1.1,
+      "probLive": 91,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 5,
         "a": 11
