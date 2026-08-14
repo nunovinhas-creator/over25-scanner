@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-14T16:45:05Z",
+  "generated_at": "2026-08-14T16:50:16Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,20 +10,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 12,
+      "min": 17,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 42,
-      "xgH": 0.03,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": -46,
+      "xgH": 0.07,
+      "xgA": 0.21,
+      "xgTotal": 0.28,
+      "lastMom": 79,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 1,
+        "h": 3,
         "a": 1
       },
       "sot": {
@@ -31,82 +31,8 @@
         "a": 1
       },
       "da": {
-        "h": 4,
-        "a": 3
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "pressure",
-          "label": "Pressão 58",
-          "emoji": "🔥",
-          "level": "high",
-          "detail": "7 atq. perigosos · 1 ao alvo"
-        },
-        {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum fora 46"
-        }
-      ],
-      "patternScore": 6
-    },
-    {
-      "id": 587664,
-      "home": "Parma",
-      "away": "Catania",
-      "hScore": 2,
-      "aScore": 0,
-      "goals": 2,
-      "min": 41,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 42,
-      "xgH": 1.88,
-      "xgA": 0.06,
-      "xgTotal": 1.94,
-      "lastMom": 21,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 7,
-        "a": 1
-      },
-      "sot": {
-        "h": 4,
-        "a": 1
-      },
-      "da": {
-        "h": 26,
-        "a": 14
+        "h": 9,
+        "a": 4
       },
       "corners": {
         "h": null,
@@ -136,20 +62,79 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 100",
+          "label": "Pressão 74",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "40 atq. perigosos · 5 ao alvo"
+          "detail": "13 atq. perigosos · 1 ao alvo"
         },
         {
-          "id": "xg_pace",
-          "label": "xG 4.3/90",
-          "emoji": "⚡",
-          "level": "critical",
-          "detail": "xG a ritmo de 4.3 por 90min"
+          "id": "mom",
+          "label": "Casa domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum casa 79 — controlo total"
         }
       ],
-      "patternScore": 20
+      "patternScore": 14
+    },
+    {
+      "id": 587664,
+      "home": "Parma",
+      "away": "Catania",
+      "hScore": 2,
+      "aScore": 0,
+      "goals": 2,
+      "min": 46,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 42,
+      "xgH": 2.0,
+      "xgA": 0.08,
+      "xgTotal": 2.08,
+      "lastMom": -8,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 8,
+        "a": 2
+      },
+      "sot": {
+        "h": 5,
+        "a": 1
+      },
+      "da": {
+        "h": 27,
+        "a": 18
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 4,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
     }
   ]
 }
