@@ -3953,5 +3953,66 @@
       "possession": false,
       "lastMom": true
     }
+  },
+  {
+    "id": "210808_obs_1786731059039",
+    "event_id": "210808",
+    "kind": "observation",
+    "casa": "SC Telstar",
+    "fora": "Sparta Rotterdam",
+    "liga": "Eredivisie",
+    "data": "2026-08-14",
+    "detected_at": "2026-08-14T18:10:59.039Z",
+    "min": 8,
+    "score": "0-1",
+    "goals": 1,
+    "xg": "0.56",
+    "odds_live": "1.11",
+    "prob_live": 90,
+    "pattern_score": 14,
+    "patterns": [
+      "pressure",
+      "shots",
+      "mom"
+    ],
+    "pattern_labels": [
+      "🔥 Pressão 100",
+      "🎯 2 remates",
+      "💪 Fora pressiona"
+    ],
+    "has_scan_pick": "",
+    "scan_score": "",
+    "has_sharp": "",
+    "coverage_score": 4,
+    "coverage_total": 6,
+    "coverage_fields": {
+      "xgTotal": true,
+      "da": true,
+      "sot": true,
+      "corners": false,
+      "possession": false,
+      "lastMom": true
+    },
+    "result_over25": "",
+    "final_score": "",
+    "result_at_min": ""
+  },
+  {
+    "id": "587662_cov_1786731059039",
+    "event_id": "587662",
+    "kind": "coverage_only",
+    "liga": "",
+    "min": 8,
+    "detected_at": "2026-08-14T18:10:59.039Z",
+    "coverage_score": 1,
+    "coverage_total": 6,
+    "coverage_fields": {
+      "xgTotal": false,
+      "da": true,
+      "sot": false,
+      "corners": false,
+      "possession": false,
+      "lastMom": false
+    }
   }
 ]
