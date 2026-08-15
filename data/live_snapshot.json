@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-15T22:39:36Z",
+  "generated_at": "2026-08-15T22:44:55Z",
   "status": "OK",
   "count": 5,
   "events": [
@@ -10,21 +10,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 6,
+      "min": 11,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 72,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": -7,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgH": 0.02,
+      "xgA": 0.59,
+      "xgTotal": 0.61,
+      "lastMom": -29,
+      "overOdds": 1.15,
+      "probLive": 87,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
-        "a": 0
+        "h": 1,
+        "a": 1
       },
       "sot": {
         "h": 0,
@@ -49,14 +49,14 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 3,
         "total": 6
       },
       "patterns": [],
@@ -69,20 +69,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 37,
+      "min": 43,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 85,
-      "xgH": 0.12,
+      "xgH": 0.11,
       "xgA": 0.39,
-      "xgTotal": 0.51,
-      "lastMom": 31,
-      "overOdds": 1.39,
-      "probLive": 72,
+      "xgTotal": 0.5,
+      "lastMom": -7,
+      "overOdds": 1.84,
+      "probLive": 54,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 4,
+        "h": 5,
         "a": 5
       },
       "sot": {
@@ -125,23 +125,23 @@
       "id": 223569,
       "home": "Club Atlético Belgrano",
       "away": "Independiente Rivadavia",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 0,
-      "goals": 0,
-      "min": 39,
+      "goals": 1,
+      "min": 44,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 85,
-      "xgH": 0.33,
+      "xgH": 0.36,
       "xgA": 0.13,
-      "xgTotal": 0.46,
-      "lastMom": -5,
-      "overOdds": 1.24,
-      "probLive": 81,
+      "xgTotal": 0.49,
+      "lastMom": -4,
+      "overOdds": 1.57,
+      "probLive": 64,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 4,
+        "h": 5,
         "a": 3
       },
       "sot": {
@@ -187,7 +187,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 49,
+      "min": 55,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -195,9 +195,9 @@
       "xgH": 1.16,
       "xgA": 0.13,
       "xgTotal": 1.29,
-      "lastMom": 9,
-      "overOdds": 1.31,
-      "probLive": 76,
+      "lastMom": -1,
+      "overOdds": 1.41,
+      "probLive": 71,
       "oddsStatus": "VALID",
       "shots": {
         "h": 5,
@@ -236,8 +236,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "xg_delta",
+          "label": "xG sobrevaloriza",
+          "emoji": "🎲",
+          "level": "med",
+          "detail": "xG 1.29 vs 0 golos"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 7214,
@@ -246,25 +254,25 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 46,
+      "min": 52,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 9,
-      "xgH": 1.33,
-      "xgA": 0.33,
-      "xgTotal": 1.6600000000000001,
-      "lastMom": 0,
+      "xgH": 1.66,
+      "xgA": 0.37,
+      "xgTotal": 2.03,
+      "lastMom": 36,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 11,
-        "a": 8
+        "h": 13,
+        "a": 9
       },
       "sot": {
-        "h": 4,
-        "a": 2
+        "h": 5,
+        "a": 3
       },
       "da": {
         "h": null,
@@ -295,8 +303,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "xg_delta",
+          "label": "xG +2.0 acima",
+          "emoji": "🎲",
+          "level": "high",
+          "detail": "xG 2.03 vs 0 golos"
+        }
+      ],
+      "patternScore": 4
     }
   ]
 }
