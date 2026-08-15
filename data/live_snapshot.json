@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-15T21:15:45Z",
+  "generated_at": "2026-08-15T21:21:11Z",
   "status": "OK",
   "count": 5,
   "events": [
@@ -10,18 +10,18 @@
       "hScore": 3,
       "aScore": 0,
       "goals": 3,
-      "min": 70,
+      "min": 77,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 85,
-      "xgH": 1.69,
+      "xgH": 2.06,
       "xgA": 0.54,
-      "xgTotal": 2.23,
-      "lastMom": 51,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgTotal": 2.6,
+      "lastMom": 87,
+      "overOdds": 1.15,
+      "probLive": 87,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 16,
         "a": 8
@@ -62,10 +62,10 @@
       "patterns": [
         {
           "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 51"
+          "label": "Casa domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum casa 87 — controlo total"
         },
         {
           "id": "numerical",
@@ -75,34 +75,34 @@
           "detail": "Fora com 2 vermelho(s) — Casa em vantagem numérica"
         }
       ],
-      "patternScore": 4
+      "patternScore": 6
     },
     {
       "id": 215506,
       "home": "Rio Ave",
       "away": "FC Porto",
       "hScore": 0,
-      "aScore": 1,
-      "goals": 1,
-      "min": 81,
+      "aScore": 2,
+      "goals": 2,
+      "min": 88,
       "status": "2nd_half",
       "period": "2T",
       "league": "Primeira Liga",
       "league_id": 2,
       "xgH": 0.54,
-      "xgA": 1.38,
-      "xgTotal": 1.92,
-      "lastMom": -48,
+      "xgA": 1.73,
+      "xgTotal": 2.27,
+      "lastMom": 53,
       "overOdds": 1.17,
       "probLive": 85,
       "oddsStatus": "VALID",
       "shots": {
         "h": 11,
-        "a": 12
+        "a": 13
       },
       "sot": {
         "h": 1,
-        "a": 4
+        "a": 5
       },
       "da": {
         "h": null,
@@ -136,24 +136,24 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "10r 2ªP",
+          "label": "11r 2ªP",
           "emoji": "🎯",
           "level": "med",
-          "detail": "25 remates/90min (2ªP)"
-        },
-        {
-          "id": "open",
-          "label": "JOGO ABERTO",
-          "emoji": "🎭",
-          "level": "low",
-          "detail": "9min, equipa a perder ataca"
+          "detail": "23 remates/90min (2ªP)"
         },
         {
           "id": "mom",
-          "label": "Fora pressiona",
+          "label": "Casa pressiona",
           "emoji": "💪",
           "level": "med",
-          "detail": "Momentum fora 48"
+          "detail": "Momentum casa 53"
+        },
+        {
+          "id": "late",
+          "label": "1 gol em 2min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 85% · 2min"
         }
       ],
       "patternScore": 5
@@ -165,25 +165,25 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 85,
+      "min": 91,
       "status": "2nd_half",
       "period": "2T",
       "league": "La Liga 2",
       "league_id": 38,
-      "xgH": 0.44,
+      "xgH": 0.77,
       "xgA": 1.03,
-      "xgTotal": 1.47,
-      "lastMom": 13,
-      "overOdds": 1.21,
-      "probLive": 83,
-      "oddsStatus": "VALID",
+      "xgTotal": 1.8,
+      "lastMom": 11,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 5,
-        "a": 10
+        "h": 8,
+        "a": 11
       },
       "sot": {
-        "h": 3,
-        "a": 0
+        "h": 4,
+        "a": 1
       },
       "da": {
         "h": null,
@@ -214,16 +214,8 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "late",
-          "label": "1 gol em 5min",
-          "emoji": "⏰",
-          "level": "low",
-          "detail": "Falta 1 golo · mercado 83% · 5min"
-        }
-      ],
-      "patternScore": 1
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 213528,
@@ -232,7 +224,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 71,
+      "min": 77,
       "status": "2nd_half",
       "period": "2T",
       "league": "La Liga",
@@ -240,12 +232,12 @@
       "xgH": 1.51,
       "xgA": 1.65,
       "xgTotal": 3.16,
-      "lastMom": 10,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "lastMom": 19,
+      "overOdds": 1.02,
+      "probLive": 98,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 11,
+        "h": 12,
         "a": 2
       },
       "sot": {
@@ -284,46 +276,53 @@
       "patterns": [
         {
           "id": "xg_pace",
-          "label": "xG 4.4/90 (2ªP)",
+          "label": "xG 3.6/90 (2ªP)",
           "emoji": "⚡",
-          "level": "critical",
-          "detail": "xG a ritmo de 4.4 por 90min (2ªP)"
+          "level": "high",
+          "detail": "xG a ritmo de 3.6 por 90min (2ªP)"
         },
         {
           "id": "shots",
-          "label": "7r 2ªP",
+          "label": "8r 2ªP",
           "emoji": "🎯",
           "level": "med",
-          "detail": "24 remates/90min (2ªP)"
+          "detail": "22 remates/90min (2ªP)"
+        },
+        {
+          "id": "late",
+          "label": "1 gol em 13min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 98% · 13min"
         }
       ],
-      "patternScore": 12
+      "patternScore": 7
     },
     {
       "id": 7218,
       "home": "Fluminense",
       "away": "Palmeiras",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 2,
-      "goals": 3,
-      "min": 83,
+      "goals": 4,
+      "min": 90,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 9,
-      "xgH": 1.24,
+      "xgH": 2.06,
       "xgA": 1.61,
-      "xgTotal": 2.85,
-      "lastMom": -10,
-      "overOdds": 1.25,
-      "probLive": 80,
-      "oddsStatus": "VALID",
+      "xgTotal": 3.67,
+      "lastMom": -18,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 12,
+        "h": 15,
         "a": 14
       },
       "sot": {
-        "h": 4,
+        "h": 5,
         "a": 6
       },
       "da": {
