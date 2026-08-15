@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-15T20:31:00Z",
+  "generated_at": "2026-08-15T20:35:46Z",
   "status": "OK",
-  "count": 16,
+  "count": 15,
   "events": [
     {
       "id": 223571,
@@ -10,24 +10,24 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 46,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 85,
-      "xgH": 0.91,
+      "xgH": 1.16,
       "xgA": 0.34,
-      "xgTotal": 1.25,
-      "lastMom": 17,
-      "overOdds": 1.31,
-      "probLive": 76,
+      "xgTotal": 1.5,
+      "lastMom": 81,
+      "overOdds": 1.45,
+      "probLive": 69,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 8,
+        "h": 10,
         "a": 5
       },
       "sot": {
-        "h": 2,
+        "h": 4,
         "a": 3
       },
       "da": {
@@ -61,6 +61,13 @@
       },
       "patterns": [
         {
+          "id": "mom",
+          "label": "Casa domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum casa 81 — controlo total"
+        },
+        {
           "id": "numerical",
           "label": "Casa +1 homem",
           "emoji": "🟥",
@@ -68,7 +75,7 @@
           "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
         }
       ],
-      "patternScore": 2
+      "patternScore": 6
     },
     {
       "id": 215506,
@@ -86,9 +93,9 @@
       "xgA": 0.87,
       "xgTotal": 1.21,
       "lastMom": 51,
-      "overOdds": 1.3,
-      "probLive": 77,
-      "oddsStatus": "VALID",
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 7,
         "a": 6
@@ -145,24 +152,24 @@
       "aScore": 0,
       "goals": 0,
       "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "status": "2nd_half",
+      "period": "2T",
       "league": "La Liga 2",
       "league_id": 38,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
+      "xgH": 0.22,
+      "xgA": 0.35,
+      "xgTotal": 0.57,
+      "lastMom": 0,
       "overOdds": null,
       "probLive": null,
-      "oddsStatus": "MISSING",
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": null,
-        "a": null
+        "h": 3,
+        "a": 8
       },
       "sot": {
-        "h": null,
-        "a": null
+        "h": 1,
+        "a": 0
       },
       "da": {
         "h": null,
@@ -183,18 +190,26 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
-          "sot": false,
+          "sot": true,
           "corners": false,
           "possession": false,
-          "lastMom": false
+          "lastMom": true
         },
-        "score": 0,
+        "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "11 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "22 remates/90min"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 213528,
@@ -212,8 +227,8 @@
       "xgA": 1.65,
       "xgTotal": 1.88,
       "lastMom": 43,
-      "overOdds": 1.2,
-      "probLive": 83,
+      "overOdds": 1.02,
+      "probLive": 98,
       "oddsStatus": "VALID",
       "shots": {
         "h": 4,
@@ -271,9 +286,9 @@
       "xgA": 0.78,
       "xgTotal": 1.23,
       "lastMom": 68,
-      "overOdds": 1.26,
-      "probLive": 79,
-      "oddsStatus": "VALID",
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 9,
         "a": 8
@@ -329,7 +344,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 53,
+      "min": 58,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -337,9 +352,9 @@
       "xgH": 1.69,
       "xgA": 0.38,
       "xgTotal": 2.07,
-      "lastMom": 20,
-      "overOdds": 1.2,
-      "probLive": 83,
+      "lastMom": 3,
+      "overOdds": 1.07,
+      "probLive": 93,
       "oddsStatus": "VALID",
       "shots": {
         "h": 9,
@@ -388,7 +403,7 @@
       "hScore": 4,
       "aScore": 0,
       "goals": 4,
-      "min": 74,
+      "min": 78,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -447,7 +462,7 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 71,
+      "min": 76,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -506,24 +521,24 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 71,
+      "min": 76,
       "status": "2nd_half",
       "period": "2T",
       "league": "Eredivisie",
       "league_id": 10,
-      "xgH": 1.0,
-      "xgA": 2.13,
-      "xgTotal": 3.13,
-      "lastMom": -50,
-      "overOdds": 1.14,
-      "probLive": 88,
-      "oddsStatus": "VALID",
+      "xgH": 1.22,
+      "xgA": 2.2,
+      "xgTotal": 3.42,
+      "lastMom": -28,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 14,
-        "a": 15
+        "h": 15,
+        "a": 16
       },
       "sot": {
-        "h": 4,
+        "h": 5,
         "a": 6
       },
       "da": {
@@ -555,16 +570,8 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum fora 50"
-        }
-      ],
-      "patternScore": 2
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 10068,
@@ -573,7 +580,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 65,
+      "min": 70,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -581,10 +588,10 @@
       "xgH": 0.85,
       "xgA": 0.7,
       "xgTotal": 1.5499999999999998,
-      "lastMom": -10,
-      "overOdds": 1.4,
-      "probLive": 71,
-      "oddsStatus": "VALID",
+      "lastMom": -3,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 13,
         "a": 8
@@ -622,23 +629,8 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "xg_pace",
-          "label": "xG 3.0/90 (2ªP)",
-          "emoji": "⚡",
-          "level": "med",
-          "detail": "xG a ritmo de 3.0 por 90min (2ªP)"
-        },
-        {
-          "id": "shots",
-          "label": "8r 2ªP",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "36 remates/90min (2ªP) (muito alto)"
-        }
-      ],
-      "patternScore": 6
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 10067,
@@ -647,25 +639,25 @@
       "hScore": 0,
       "aScore": 2,
       "goals": 2,
-      "min": 63,
+      "min": 68,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 34,
-      "xgH": 0.22,
-      "xgA": 1.51,
-      "xgTotal": 1.73,
-      "lastMom": -9,
-      "overOdds": 1.53,
-      "probLive": 65,
-      "oddsStatus": "VALID",
+      "xgH": 0.27,
+      "xgA": 1.53,
+      "xgTotal": 1.8,
+      "lastMom": 40,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 5,
-        "a": 8
+        "h": 6,
+        "a": 9
       },
       "sot": {
-        "h": 1,
-        "a": 3
+        "h": 2,
+        "a": 4
       },
       "da": {
         "h": null,
@@ -704,27 +696,27 @@
       "home": "Atlético Goianiense",
       "away": "Vila Nova FC",
       "hScore": 0,
-      "aScore": 1,
-      "goals": 1,
-      "min": 67,
+      "aScore": 2,
+      "goals": 2,
+      "min": 72,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 34,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": 1.34,
-      "probLive": 75,
-      "oddsStatus": "VALID",
+      "xgH": 0.59,
+      "xgA": 0.32,
+      "xgTotal": 0.9099999999999999,
+      "lastMom": -36,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": null,
-        "a": null
+        "h": 7,
+        "a": 7
       },
       "sot": {
-        "h": null,
-        "a": null
+        "h": 2,
+        "a": 3
       },
       "da": {
         "h": null,
@@ -745,14 +737,14 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
-          "sot": false,
+          "sot": true,
           "corners": false,
           "possession": false,
-          "lastMom": false
+          "lastMom": true
         },
-        "score": 0,
+        "score": 3,
         "total": 6
       },
       "patterns": [],
@@ -762,27 +754,27 @@
       "id": 215475,
       "home": "Venezia",
       "away": "Modena",
-      "hScore": 2,
+      "hScore": 3,
       "aScore": 2,
-      "goals": 4,
-      "min": 83,
+      "goals": 5,
+      "min": 88,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 42,
-      "xgH": 2.04,
+      "xgH": 2.2,
       "xgA": 1.1,
-      "xgTotal": 3.14,
-      "lastMom": 13,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "MISSING",
+      "xgTotal": 3.3000000000000003,
+      "lastMom": 25,
+      "overOdds": 1.08,
+      "probLive": 93,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 17,
+        "h": 20,
         "a": 10
       },
       "sot": {
-        "h": 6,
+        "h": 9,
         "a": 4
       },
       "da": {
@@ -824,21 +816,21 @@
       "hScore": 0,
       "aScore": 3,
       "goals": 3,
-      "min": 84,
+      "min": 89,
       "status": "2nd_half",
       "period": "2T",
       "league": "Belgian Pro League",
       "league_id": 14,
-      "xgH": 0.69,
-      "xgA": 2.81,
-      "xgTotal": 3.5,
-      "lastMom": -20,
-      "overOdds": 1.09,
-      "probLive": 92,
+      "xgH": 0.72,
+      "xgA": 2.89,
+      "xgTotal": 3.6100000000000003,
+      "lastMom": -1,
+      "overOdds": 1.05,
+      "probLive": 95,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 15,
-        "a": 25
+        "h": 16,
+        "a": 26
       },
       "sot": {
         "h": 1,
@@ -883,7 +875,7 @@
       "hScore": 3,
       "aScore": 2,
       "goals": 5,
-      "min": 80,
+      "min": 84,
       "status": "2nd_half",
       "period": "2T",
       "league": "Belgian Pro League",
@@ -891,9 +883,9 @@
       "xgH": 4.24,
       "xgA": 0.8,
       "xgTotal": 5.04,
-      "lastMom": 34,
-      "overOdds": 1.08,
-      "probLive": 93,
+      "lastMom": -11,
+      "overOdds": 1.04,
+      "probLive": 96,
       "oddsStatus": "VALID",
       "shots": {
         "h": 22,
@@ -930,65 +922,6 @@
           "lastMom": true
         },
         "score": 3,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 587940,
-      "home": "Pontevedra CF",
-      "away": "Ourense CF",
-      "hScore": 2,
-      "aScore": 1,
-      "goals": 3,
-      "min": 89,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 79,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "MISSING",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": null,
-        "a": null
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": false,
-          "sot": false,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 0,
         "total": 6
       },
       "patterns": [],
