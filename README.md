@@ -18,10 +18,10 @@ Sistema automatizado de identificação de valor em mercados de apostas de futeb
 | Módulo | Picks válidos | Settled | CLV rolling-30 | Gate | Estado |
 |---|---|---|---|---|---|
 | Over 2.5 | 8 | — | — | CLV>+1% n≥300 | OBSERVAÇÃO |
-| Sharp 1X2 | 3 | 1 | — | CLV>+1% n≥200 | OBSERVAÇÃO |
+| Sharp 1X2 | 3 | 3 | -10.67% | CLV>+1% n≥200 | OBSERVAÇÃO |
 | BTTS+O2.5 | — | — | — | CLV>+5% n≥100 | OBSERVAÇÃO |
 
-_Actualizado: 2026-08-14 19:29 UTC_
+_Actualizado: 2026-08-15 07:58 UTC_
 <!-- DYNAMIC_STATUS_END -->
 
 **Observação efectiva:** Over 2.5 e Sharp 1X2 desde 17 Jun 2026 · BTTS+O2.5 desde 21 Jun 2026
