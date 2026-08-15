@@ -1,8 +1,126 @@
 {
-  "generated_at": "2026-08-15T21:57:44Z",
+  "generated_at": "2026-08-15T22:02:57Z",
   "status": "OK",
-  "count": 2,
+  "count": 4,
   "events": [
+    {
+      "id": 223574,
+      "home": "Newell's Old Boys",
+      "away": "Deportivo Riestra",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 1,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 85,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": 0,
+      "overOdds": 2.68,
+      "probLive": 37,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 223569,
+      "home": "Club Atlético Belgrano",
+      "away": "Independiente Rivadavia",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 2,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 85,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": 1.98,
+      "probLive": 51,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": false
+        },
+        "score": 1,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
     {
       "id": 10069,
       "home": "Juventude",
@@ -10,24 +128,98 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 24,
+      "min": 30,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
-      "xgH": 0.64,
+      "xgH": 1.16,
       "xgA": 0.11,
-      "xgTotal": 0.75,
-      "lastMom": -19,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgTotal": 1.27,
+      "lastMom": 24,
+      "overOdds": 1.1,
+      "probLive": 91,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 3,
+        "h": 5,
         "a": 3
       },
       "sot": {
         "h": 0,
+        "a": 1
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "xg_pace",
+          "label": "xG 3.8/90",
+          "emoji": "⚡",
+          "level": "high",
+          "detail": "xG a ritmo de 3.8 por 90min"
+        },
+        {
+          "id": "shots",
+          "label": "8 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "24 remates/90min"
+        }
+      ],
+      "patternScore": 6
+    },
+    {
+      "id": 7214,
+      "home": "Athletico",
+      "away": "Red Bull Bragantino",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 30,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 9,
+      "xgH": 0.86,
+      "xgA": 0.09,
+      "xgTotal": 0.95,
+      "lastMom": 51,
+      "overOdds": 1.34,
+      "probLive": 75,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 6,
+        "a": 3
+      },
+      "sot": {
+        "h": 3,
         "a": 1
       },
       "da": {
@@ -69,87 +261,20 @@
         },
         {
           "id": "shots",
-          "label": "6 remates",
+          "label": "9 remates",
           "emoji": "🎯",
           "level": "med",
-          "detail": "22 remates/90min"
-        }
-      ],
-      "patternScore": 4
-    },
-    {
-      "id": 7214,
-      "home": "Athletico",
-      "away": "Red Bull Bragantino",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 24,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 9,
-      "xgH": 0.86,
-      "xgA": 0.06,
-      "xgTotal": 0.9199999999999999,
-      "lastMom": 44,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 6,
-        "a": 2
-      },
-      "sot": {
-        "h": 3,
-        "a": 0
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "xg_pace",
-          "label": "xG 3.4/90",
-          "emoji": "⚡",
-          "level": "high",
-          "detail": "xG a ritmo de 3.4 por 90min"
+          "detail": "27 remates/90min"
         },
         {
-          "id": "shots",
-          "label": "8 remates",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "30 remates/90min (muito alto)"
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 51"
         }
       ],
-      "patternScore": 8
+      "patternScore": 6
     }
   ]
 }
