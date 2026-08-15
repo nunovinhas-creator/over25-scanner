@@ -5988,67 +5988,62 @@
     }
   },
   {
-    "id": "211316_obs_1786821874280",
-    "event_id": "211316",
-    "casa": "Oud-Heverlee Leuven",
-    "fora": "Club Brugge KV",
-    "liga": "Belgian Pro League",
+    "id": "210812_obs_1786822011943",
+    "event_id": "210812",
+    "kind": "observation",
+    "casa": "Fortuna Sittard",
+    "fora": "SC Cambuur",
+    "liga": "Eredivisie",
     "data": "2026-08-15",
-    "detected_at": "2026-08-15T19:24:34.280Z",
-    "min": 29,
-    "score": "0-1",
-    "goals": 1,
-    "xg": "1.76",
-    "odds_live": "",
-    "prob_live": "",
-    "pattern_score": 16,
-    "patterns": [
-      "conv",
-      "xg_pace",
-      "shots",
-      "mom"
-    ],
-    "pattern_labels": [
-      "🔮 CONVERGÊNCIA",
-      "⚡ xG 5.5/90",
-      "🎯 14 remates",
-      "💪 Fora pressiona"
-    ],
-    "has_scan_pick": "",
-    "scan_score": "",
-    "has_sharp": "",
-    "result_over25": "",
-    "final_score": "",
-    "result_at_min": ""
-  },
-  {
-    "id": "211315_obs_1786821874281",
-    "event_id": "211315",
-    "casa": "KRC Genk",
-    "fora": "KVC Westerlo",
-    "liga": "Belgian Pro League",
-    "data": "2026-08-15",
-    "detected_at": "2026-08-15T19:24:34.280Z",
-    "min": 25,
-    "score": "0-2",
-    "goals": 2,
-    "xg": "1.25",
-    "odds_live": "",
-    "prob_live": "",
-    "pattern_score": 14,
+    "detected_at": "2026-08-15T19:26:51.943Z",
+    "min": 23,
+    "score": "2-1",
+    "goals": 3,
+    "xg": "1.10",
+    "odds_live": "1.11",
+    "prob_live": 90,
+    "pattern_score": 12,
     "patterns": [
       "xg_pace",
       "shots"
     ],
     "pattern_labels": [
-      "⚡ xG 4.5/90",
-      "🎯 9 remates"
+      "⚡ xG 4.3/90",
+      "🎯 7 remates"
     ],
     "has_scan_pick": "",
     "scan_score": "",
     "has_sharp": "",
+    "coverage_score": 3,
+    "coverage_total": 6,
+    "coverage_fields": {
+      "xgTotal": true,
+      "da": false,
+      "sot": true,
+      "corners": false,
+      "possession": false,
+      "lastMom": true
+    },
     "result_over25": "",
     "final_score": "",
     "result_at_min": ""
+  },
+  {
+    "id": "215476_cov_1786822011943",
+    "event_id": "215476",
+    "kind": "coverage_only",
+    "liga": "",
+    "min": 8,
+    "detected_at": "2026-08-15T19:26:51.943Z",
+    "coverage_score": 2,
+    "coverage_total": 6,
+    "coverage_fields": {
+      "xgTotal": false,
+      "da": false,
+      "sot": true,
+      "corners": false,
+      "possession": false,
+      "lastMom": true
+    }
   }
 ]
