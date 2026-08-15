@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-15T21:21:11Z",
+  "generated_at": "2026-08-15T21:26:29Z",
   "status": "OK",
-  "count": 5,
+  "count": 4,
   "events": [
     {
       "id": 223571,
@@ -10,20 +10,20 @@
       "hScore": 3,
       "aScore": 0,
       "goals": 3,
-      "min": 77,
+      "min": 82,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 85,
-      "xgH": 2.06,
+      "xgH": 2.2,
       "xgA": 0.54,
-      "xgTotal": 2.6,
-      "lastMom": 87,
-      "overOdds": 1.15,
-      "probLive": 87,
-      "oddsStatus": "VALID",
+      "xgTotal": 2.74,
+      "lastMom": 85,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 16,
+        "h": 18,
         "a": 8
       },
       "sot": {
@@ -65,7 +65,7 @@
           "label": "Casa domina",
           "emoji": "💥",
           "level": "high",
-          "detail": "Momentum casa 87 — controlo total"
+          "detail": "Momentum casa 85 — controlo total"
         },
         {
           "id": "numerical",
@@ -78,31 +78,31 @@
       "patternScore": 6
     },
     {
-      "id": 215506,
-      "home": "Rio Ave",
-      "away": "FC Porto",
-      "hScore": 0,
-      "aScore": 2,
+      "id": 214773,
+      "home": "Mallorca",
+      "away": "Real Valladolid",
+      "hScore": 2,
+      "aScore": 0,
       "goals": 2,
-      "min": 88,
+      "min": 95,
       "status": "2nd_half",
       "period": "2T",
-      "league": "Primeira Liga",
-      "league_id": 2,
+      "league": "La Liga 2",
+      "league_id": 38,
       "xgH": 0.54,
-      "xgA": 1.73,
-      "xgTotal": 2.27,
-      "lastMom": 53,
-      "overOdds": 1.17,
-      "probLive": 85,
+      "xgA": 1.03,
+      "xgTotal": 1.57,
+      "lastMom": -23,
+      "overOdds": 1.9,
+      "probLive": 53,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 11,
-        "a": 13
+        "h": 7,
+        "a": 11
       },
       "sot": {
-        "h": 1,
-        "a": 5
+        "h": 3,
+        "a": 1
       },
       "da": {
         "h": null,
@@ -135,87 +135,14 @@
       },
       "patterns": [
         {
-          "id": "shots",
-          "label": "11r 2ªP",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "23 remates/90min (2ªP)"
-        },
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 53"
-        },
-        {
           "id": "late",
-          "label": "1 gol em 2min",
+          "label": "1 gol em 0min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 85% · 2min"
+          "detail": "Falta 1 golo · mercado 53% · 0min"
         }
       ],
-      "patternScore": 5
-    },
-    {
-      "id": 214773,
-      "home": "Mallorca",
-      "away": "Real Valladolid",
-      "hScore": 2,
-      "aScore": 0,
-      "goals": 2,
-      "min": 91,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "La Liga 2",
-      "league_id": 38,
-      "xgH": 0.77,
-      "xgA": 1.03,
-      "xgTotal": 1.8,
-      "lastMom": 11,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 8,
-        "a": 11
-      },
-      "sot": {
-        "h": 4,
-        "a": 1
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
+      "patternScore": 1
     },
     {
       "id": 213528,
@@ -224,7 +151,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 77,
+      "min": 81,
       "status": "2nd_half",
       "period": "2T",
       "league": "La Liga",
@@ -232,9 +159,9 @@
       "xgH": 1.51,
       "xgA": 1.65,
       "xgTotal": 3.16,
-      "lastMom": 19,
-      "overOdds": 1.02,
-      "probLive": 98,
+      "lastMom": 3,
+      "overOdds": 1.22,
+      "probLive": 82,
       "oddsStatus": "VALID",
       "shots": {
         "h": 12,
@@ -276,54 +203,47 @@
       "patterns": [
         {
           "id": "xg_pace",
-          "label": "xG 3.6/90 (2ªP)",
+          "label": "xG 3.2/90 (2ªP)",
           "emoji": "⚡",
           "level": "high",
-          "detail": "xG a ritmo de 3.6 por 90min (2ªP)"
-        },
-        {
-          "id": "shots",
-          "label": "8r 2ªP",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "22 remates/90min (2ªP)"
+          "detail": "xG a ritmo de 3.2 por 90min (2ªP)"
         },
         {
           "id": "late",
-          "label": "1 gol em 13min",
+          "label": "1 gol em 9min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 98% · 13min"
+          "detail": "Falta 1 golo · mercado 82% · 9min"
         }
       ],
-      "patternScore": 7
+      "patternScore": 5
     },
     {
       "id": 7218,
       "home": "Fluminense",
       "away": "Palmeiras",
-      "hScore": 2,
+      "hScore": 3,
       "aScore": 2,
-      "goals": 4,
-      "min": 90,
+      "goals": 5,
+      "min": 93,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 9,
-      "xgH": 2.06,
-      "xgA": 1.61,
-      "xgTotal": 3.67,
-      "lastMom": -18,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgH": 2.8,
+      "xgA": 1.68,
+      "xgTotal": 4.4799999999999995,
+      "lastMom": -1,
+      "overOdds": 1.26,
+      "probLive": 79,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 15,
-        "a": 14
+        "h": 17,
+        "a": 15
       },
       "sot": {
-        "h": 5,
-        "a": 6
+        "h": 6,
+        "a": 7
       },
       "da": {
         "h": null,
