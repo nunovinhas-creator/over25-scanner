@@ -1,16 +1,150 @@
 {
-  "generated_at": "2026-08-15T14:03:19Z",
+  "generated_at": "2026-08-15T14:09:19Z",
   "status": "OK",
-  "count": 2,
+  "count": 8,
   "events": [
     {
-      "id": 224551,
-      "home": "Chesterfield",
-      "away": "Fleetwood Town",
+      "id": 224557,
+      "home": "York City",
+      "away": "Bristol Rovers",
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 2,
+      "min": 8,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 87,
+      "xgH": 0.16,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": 52,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 1,
+        "a": 0
+      },
+      "sot": {
+        "h": 1,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 52"
+        }
+      ],
+      "patternScore": 2
+    },
+    {
+      "id": 224556,
+      "home": "Tranmere Rovers",
+      "away": "Shrewsbury Town",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 8,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 87,
+      "xgH": null,
+      "xgA": 0.28,
+      "xgTotal": null,
+      "lastMom": -6,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 0,
+        "a": 2
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "2 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "22 remates/90min"
+        }
+      ],
+      "patternScore": 2
+    },
+    {
+      "id": 224555,
+      "home": "Northampton Town",
+      "away": "Swindon Town",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 8,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -18,7 +152,7 @@
       "xgH": null,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 28,
+      "lastMom": 11,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
@@ -63,21 +197,273 @@
       "patternScore": 0
     },
     {
+      "id": 224554,
+      "home": "Grimsby Town",
+      "away": "Exeter City",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 8,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 87,
+      "xgH": 0.02,
+      "xgA": 0.03,
+      "xgTotal": 0.05,
+      "lastMom": 11,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 1,
+        "a": 1
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "2 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "22 remates/90min"
+        }
+      ],
+      "patternScore": 2
+    },
+    {
+      "id": 224553,
+      "home": "Gillingham",
+      "away": "Walsall",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 8,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 87,
+      "xgH": 0.5,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": 6,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 1,
+        "a": 0
+      },
+      "sot": {
+        "h": 1,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 224552,
+      "home": "Crawley Town",
+      "away": "Crewe Alexandra",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 7,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 87,
+      "xgH": null,
+      "xgA": 0.02,
+      "xgTotal": null,
+      "lastMom": -12,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 0,
+        "a": 1
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 224551,
+      "home": "Chesterfield",
+      "away": "Fleetwood Town",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 8,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 87,
+      "xgH": 0.06,
+      "xgA": 0.2,
+      "xgTotal": 0.26,
+      "lastMom": -5,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 2,
+        "a": 1
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "3 remates",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "34 remates/90min (muito alto)"
+        }
+      ],
+      "patternScore": 4
+    },
+    {
       "id": 224550,
       "home": "Cheltenham Town",
       "away": "Rotherham United",
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 2,
+      "min": 8,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 87,
       "xgH": null,
-      "xgA": null,
+      "xgA": 0.03,
       "xgTotal": null,
-      "lastMom": -28,
+      "lastMom": -4,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
