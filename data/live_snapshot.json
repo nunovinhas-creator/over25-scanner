@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-15T23:27:25Z",
+  "generated_at": "2026-08-15T23:32:48Z",
   "status": "OK",
-  "count": 9,
+  "count": 8,
   "events": [
     {
       "id": 211525,
@@ -10,21 +10,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 26,
+      "min": 31,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 19,
       "xgH": 0.12,
-      "xgA": 0.26,
-      "xgTotal": 0.38,
-      "lastMom": 3,
-      "overOdds": 1.27,
-      "probLive": 79,
+      "xgA": 0.5,
+      "xgTotal": 0.62,
+      "lastMom": -55,
+      "overOdds": 1.13,
+      "probLive": 88,
       "oddsStatus": "VALID",
       "shots": {
         "h": 4,
-        "a": 2
+        "a": 4
       },
       "sot": {
         "h": 0,
@@ -59,8 +59,23 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "8 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "23 remates/90min"
+        },
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 55"
+        }
+      ],
+      "patternScore": 4
     },
     {
       "id": 207752,
@@ -69,25 +84,25 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 19,
+      "min": 24,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 57,
       "xgH": null,
-      "xgA": 0.08,
+      "xgA": 0.18,
       "xgTotal": null,
-      "lastMom": -7,
+      "lastMom": -18,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
         "h": 0,
-        "a": 2
+        "a": 3
       },
       "sot": {
         "h": 0,
-        "a": 0
+        "a": 1
       },
       "da": {
         "h": null,
@@ -128,25 +143,25 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 18,
+      "min": 23,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 57,
-      "xgH": 0.81,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": -13,
-      "overOdds": 1.25,
-      "probLive": 80,
+      "xgH": 0.82,
+      "xgA": 0.06,
+      "xgTotal": 0.8799999999999999,
+      "lastMom": -14,
+      "overOdds": 1.5,
+      "probLive": 67,
       "oddsStatus": "VALID",
       "shots": {
         "h": 4,
-        "a": 0
+        "a": 1
       },
       "sot": {
         "h": 3,
-        "a": 0
+        "a": 1
       },
       "da": {
         "h": null,
@@ -167,18 +182,26 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "xg_pace",
+          "label": "xG 3.4/90",
+          "emoji": "⚡",
+          "level": "high",
+          "detail": "xG a ritmo de 3.4 por 90min"
+        }
+      ],
+      "patternScore": 4
     },
     {
       "id": 207750,
@@ -187,24 +210,24 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 19,
+      "min": 24,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 57,
-      "xgH": 0.84,
-      "xgA": 0.15,
-      "xgTotal": 0.99,
-      "lastMom": 30,
-      "overOdds": 1.16,
-      "probLive": 86,
+      "xgH": 1.71,
+      "xgA": 0.27,
+      "xgTotal": 1.98,
+      "lastMom": -23,
+      "overOdds": 1.35,
+      "probLive": 74,
       "oddsStatus": "VALID",
       "shots": {
         "h": 5,
-        "a": 3
+        "a": 5
       },
       "sot": {
-        "h": 2,
+        "h": 3,
         "a": 0
       },
       "da": {
@@ -238,14 +261,21 @@
       },
       "patterns": [
         {
+          "id": "xg_pace",
+          "label": "xG 7.4/90",
+          "emoji": "⚡",
+          "level": "critical",
+          "detail": "xG a ritmo de 7.4 por 90min"
+        },
+        {
           "id": "shots",
-          "label": "8 remates",
+          "label": "10 remates",
           "emoji": "🎯",
           "level": "high",
           "detail": "38 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 4
+      "patternScore": 14
     },
     {
       "id": 207749,
@@ -254,7 +284,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 18,
+      "min": 24,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -262,10 +292,10 @@
       "xgH": 0.07,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 24,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "lastMom": 8,
+      "overOdds": 1.33,
+      "probLive": 75,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 3,
         "a": 0
@@ -318,12 +348,12 @@
       "period": "HT",
       "league": "",
       "league_id": 72,
-      "xgH": 0.72,
+      "xgH": 0.71,
       "xgA": 0.7,
-      "xgTotal": 1.42,
+      "xgTotal": 1.41,
       "lastMom": 13,
-      "overOdds": 1.12,
-      "probLive": 89,
+      "overOdds": 1.29,
+      "probLive": 78,
       "oddsStatus": "VALID",
       "shots": {
         "h": 8,
@@ -369,27 +399,27 @@
       "id": 223574,
       "home": "Newell's Old Boys",
       "away": "Deportivo Riestra",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 0,
-      "goals": 0,
-      "min": 65,
+      "goals": 1,
+      "min": 70,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 85,
-      "xgH": 0.18,
-      "xgA": 0.45,
-      "xgTotal": 0.63,
-      "lastMom": -45,
-      "overOdds": 1.45,
-      "probLive": 69,
+      "xgH": 0.24,
+      "xgA": 0.48,
+      "xgTotal": 0.72,
+      "lastMom": 37,
+      "overOdds": 1.84,
+      "probLive": 54,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 6,
+        "h": 7,
         "a": 6
       },
       "sot": {
-        "h": 0,
+        "h": 1,
         "a": 3
       },
       "da": {
@@ -423,14 +453,14 @@
       },
       "patterns": [
         {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum fora 45"
+          "id": "open",
+          "label": "JOGO ABERTO",
+          "emoji": "🎭",
+          "level": "low",
+          "detail": "20min, equipa a perder ataca"
         }
       ],
-      "patternScore": 2
+      "patternScore": 1
     },
     {
       "id": 223569,
@@ -439,7 +469,7 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 69,
+      "min": 74,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -447,9 +477,9 @@
       "xgH": 0.44,
       "xgA": 0.23,
       "xgTotal": 0.67,
-      "lastMom": -11,
-      "overOdds": 1.33,
-      "probLive": 75,
+      "lastMom": -23,
+      "overOdds": 1.57,
+      "probLive": 64,
       "oddsStatus": "VALID",
       "shots": {
         "h": 8,
@@ -491,80 +521,13 @@
       "patterns": [
         {
           "id": "late",
-          "label": "1 gol em 21min",
+          "label": "1 gol em 16min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 75% · 21min"
+          "detail": "Falta 1 golo · mercado 64% · 16min"
         }
       ],
       "patternScore": 1
-    },
-    {
-      "id": 7214,
-      "home": "Athletico",
-      "away": "Red Bull Bragantino",
-      "hScore": 1,
-      "aScore": 1,
-      "goals": 2,
-      "min": 94,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 9,
-      "xgH": 2.61,
-      "xgA": 1.25,
-      "xgTotal": 3.86,
-      "lastMom": -21,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 20,
-        "a": 16
-      },
-      "sot": {
-        "h": 7,
-        "a": 5
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "xg_delta",
-          "label": "xG +1.9 acima",
-          "emoji": "🎲",
-          "level": "high",
-          "detail": "xG 3.86 vs 2 golos"
-        }
-      ],
-      "patternScore": 4
     }
   ]
 }
