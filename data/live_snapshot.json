@@ -1,8 +1,67 @@
 {
-  "generated_at": "2026-08-15T22:29:07Z",
+  "generated_at": "2026-08-15T22:34:21Z",
   "status": "OK",
-  "count": 4,
+  "count": 5,
   "events": [
+    {
+      "id": 216410,
+      "home": "Racing Louisville",
+      "away": "Boston Legacy FC",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 0,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 72,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": false
+        },
+        "score": 1,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
     {
       "id": 223574,
       "home": "Newell's Old Boys",
@@ -10,25 +69,25 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 26,
+      "min": 32,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 85,
       "xgH": 0.09,
-      "xgA": 0.35,
-      "xgTotal": 0.43999999999999995,
-      "lastMom": 28,
+      "xgA": 0.39,
+      "xgTotal": 0.48,
+      "lastMom": -17,
       "overOdds": 1.48,
       "probLive": 68,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 2,
-        "a": 4
+        "h": 4,
+        "a": 5
       },
       "sot": {
         "h": 0,
-        "a": 2
+        "a": 3
       },
       "da": {
         "h": null,
@@ -59,8 +118,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "9 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "25 remates/90min"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 223569,
@@ -69,20 +136,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 27,
+      "min": 33,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 85,
-      "xgH": 0.3,
+      "xgH": 0.31,
       "xgA": 0.03,
-      "xgTotal": 0.32999999999999996,
-      "lastMom": 30,
+      "xgTotal": 0.33999999999999997,
+      "lastMom": 37,
       "overOdds": 1.33,
       "probLive": 75,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 3,
+        "h": 4,
         "a": 2
       },
       "sot": {
@@ -137,9 +204,9 @@
       "xgA": 0.13,
       "xgTotal": 1.29,
       "lastMom": -6,
-      "overOdds": 1.31,
-      "probLive": 76,
-      "oddsStatus": "VALID",
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 5,
         "a": 4
