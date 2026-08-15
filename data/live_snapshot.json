@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-15T21:42:06Z",
+  "generated_at": "2026-08-15T21:47:16Z",
   "status": "OK",
-  "count": 3,
+  "count": 2,
   "events": [
     {
       "id": 10069,
@@ -10,20 +10,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 9,
+      "min": 14,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
-      "xgH": 0.02,
+      "xgH": 0.61,
       "xgA": 0.02,
-      "xgTotal": 0.04,
-      "lastMom": -29,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgTotal": 0.63,
+      "lastMom": 25,
+      "overOdds": 1.37,
+      "probLive": 73,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 1,
+        "h": 2,
         "a": 1
       },
       "sot": {
@@ -69,21 +69,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 8,
+      "min": 14,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 9,
       "xgH": 0.85,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": 67,
+      "xgA": 0.04,
+      "xgTotal": 0.89,
+      "lastMom": 15,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 5,
-        "a": 0
+        "a": 1
       },
       "sot": {
         "h": 3,
@@ -108,80 +108,6 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 2,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "shots",
-          "label": "5 remates",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "56 remates/90min (muito alto)"
-        },
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 67"
-        }
-      ],
-      "patternScore": 6
-    },
-    {
-      "id": 213528,
-      "home": "Sevilla",
-      "away": "Rayo Vallecano",
-      "hScore": 2,
-      "aScore": 1,
-      "goals": 3,
-      "min": 97,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "La Liga",
-      "league_id": 3,
-      "xgH": 2.3,
-      "xgA": 2.0,
-      "xgTotal": 4.3,
-      "lastMom": 20,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 13,
-        "a": 6
-      },
-      "sot": {
-        "h": 4,
-        "a": 3
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 1,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
           "xgTotal": true,
           "da": false,
           "sot": true,
@@ -194,21 +120,14 @@
       },
       "patterns": [
         {
-          "id": "xg_pace",
-          "label": "xG 4.0/90",
-          "emoji": "⚡",
+          "id": "shots",
+          "label": "6 remates",
+          "emoji": "🎯",
           "level": "high",
-          "detail": "xG a ritmo de 4.0 por 90min"
-        },
-        {
-          "id": "numerical",
-          "label": "Fora +1 homem",
-          "emoji": "🟥",
-          "level": "med",
-          "detail": "Casa com 1 vermelho(s) — Fora em vantagem numérica"
+          "detail": "39 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 6
+      "patternScore": 4
     }
   ]
 }
