@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-15T21:52:32Z",
+  "generated_at": "2026-08-15T21:57:44Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 20,
+      "min": 24,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -18,7 +18,7 @@
       "xgH": 0.64,
       "xgA": 0.11,
       "xgTotal": 0.75,
-      "lastMom": -3,
+      "lastMom": -19,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
@@ -62,20 +62,20 @@
       "patterns": [
         {
           "id": "xg_pace",
-          "label": "xG 3.4/90",
+          "label": "xG 2.8/90",
           "emoji": "⚡",
-          "level": "high",
-          "detail": "xG a ritmo de 3.4 por 90min"
+          "level": "med",
+          "detail": "xG a ritmo de 2.8 por 90min"
         },
         {
           "id": "shots",
           "label": "6 remates",
           "emoji": "🎯",
           "level": "med",
-          "detail": "27 remates/90min"
+          "detail": "22 remates/90min"
         }
       ],
-      "patternScore": 6
+      "patternScore": 4
     },
     {
       "id": 7214,
@@ -84,7 +84,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 20,
+      "min": 24,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -92,7 +92,7 @@
       "xgH": 0.86,
       "xgA": 0.06,
       "xgTotal": 0.9199999999999999,
-      "lastMom": -28,
+      "lastMom": 44,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
@@ -136,20 +136,20 @@
       "patterns": [
         {
           "id": "xg_pace",
-          "label": "xG 4.1/90",
+          "label": "xG 3.4/90",
           "emoji": "⚡",
-          "level": "critical",
-          "detail": "xG a ritmo de 4.1 por 90min"
+          "level": "high",
+          "detail": "xG a ritmo de 3.4 por 90min"
         },
         {
           "id": "shots",
           "label": "8 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "36 remates/90min (muito alto)"
+          "detail": "30 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 14
+      "patternScore": 8
     }
   ]
 }
