@@ -1,33 +1,33 @@
 {
-  "generated_at": "2026-08-15T21:26:29Z",
+  "generated_at": "2026-08-15T21:31:41Z",
   "status": "OK",
-  "count": 4,
+  "count": 2,
   "events": [
     {
       "id": 223571,
       "home": "Estudiantes de La Plata",
       "away": "Gimnasia y Esgrima",
-      "hScore": 3,
+      "hScore": 4,
       "aScore": 0,
-      "goals": 3,
-      "min": 82,
+      "goals": 4,
+      "min": 87,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 85,
-      "xgH": 2.2,
+      "xgH": 2.33,
       "xgA": 0.54,
-      "xgTotal": 2.74,
-      "lastMom": 85,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgTotal": 2.87,
+      "lastMom": 78,
+      "overOdds": 1.31,
+      "probLive": 76,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 18,
+        "h": 20,
         "a": 8
       },
       "sot": {
-        "h": 7,
+        "h": 8,
         "a": 3
       },
       "da": {
@@ -65,7 +65,7 @@
           "label": "Casa domina",
           "emoji": "💥",
           "level": "high",
-          "detail": "Momentum casa 85 — controlo total"
+          "detail": "Momentum casa 78 — controlo total"
         },
         {
           "id": "numerical",
@@ -78,98 +78,31 @@
       "patternScore": 6
     },
     {
-      "id": 214773,
-      "home": "Mallorca",
-      "away": "Real Valladolid",
-      "hScore": 2,
-      "aScore": 0,
-      "goals": 2,
-      "min": 95,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "La Liga 2",
-      "league_id": 38,
-      "xgH": 0.54,
-      "xgA": 1.03,
-      "xgTotal": 1.57,
-      "lastMom": -23,
-      "overOdds": 1.9,
-      "probLive": 53,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 7,
-        "a": 11
-      },
-      "sot": {
-        "h": 3,
-        "a": 1
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "late",
-          "label": "1 gol em 0min",
-          "emoji": "⏰",
-          "level": "low",
-          "detail": "Falta 1 golo · mercado 53% · 0min"
-        }
-      ],
-      "patternScore": 1
-    },
-    {
       "id": 213528,
       "home": "Sevilla",
       "away": "Rayo Vallecano",
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 81,
+      "min": 87,
       "status": "2nd_half",
       "period": "2T",
       "league": "La Liga",
       "league_id": 3,
       "xgH": 1.51,
-      "xgA": 1.65,
-      "xgTotal": 3.16,
-      "lastMom": 3,
+      "xgA": 1.94,
+      "xgTotal": 3.45,
+      "lastMom": -52,
       "overOdds": 1.22,
       "probLive": 82,
       "oddsStatus": "VALID",
       "shots": {
         "h": 12,
-        "a": 2
+        "a": 5
       },
       "sot": {
         "h": 3,
-        "a": 1
+        "a": 3
       },
       "da": {
         "h": null,
@@ -202,80 +135,42 @@
       },
       "patterns": [
         {
+          "id": "xg_delta",
+          "label": "xG sobrevaloriza",
+          "emoji": "🎲",
+          "level": "med",
+          "detail": "xG 3.45 vs 2 golos"
+        },
+        {
           "id": "xg_pace",
-          "label": "xG 3.2/90 (2ªP)",
+          "label": "xG 3.4/90 (2ªP)",
           "emoji": "⚡",
           "level": "high",
-          "detail": "xG a ritmo de 3.2 por 90min (2ªP)"
+          "detail": "xG a ritmo de 3.4 por 90min (2ªP)"
+        },
+        {
+          "id": "shots",
+          "label": "11r 2ªP",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "24 remates/90min (2ªP)"
+        },
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 52"
         },
         {
           "id": "late",
-          "label": "1 gol em 9min",
+          "label": "1 gol em 3min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 82% · 9min"
+          "detail": "Falta 1 golo · mercado 82% · 3min"
         }
       ],
-      "patternScore": 5
-    },
-    {
-      "id": 7218,
-      "home": "Fluminense",
-      "away": "Palmeiras",
-      "hScore": 3,
-      "aScore": 2,
-      "goals": 5,
-      "min": 93,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 9,
-      "xgH": 2.8,
-      "xgA": 1.68,
-      "xgTotal": 4.4799999999999995,
-      "lastMom": -1,
-      "overOdds": 1.26,
-      "probLive": 79,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 17,
-        "a": 15
-      },
-      "sot": {
-        "h": 6,
-        "a": 7
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
+      "patternScore": 11
     }
   ]
 }
