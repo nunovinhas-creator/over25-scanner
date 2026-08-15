@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-15T16:55:04Z",
+  "generated_at": "2026-08-15T17:00:40Z",
   "status": "OK",
   "count": 18,
   "events": [
@@ -10,18 +10,18 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 4,
+      "min": 9,
       "status": "1st_half",
       "period": "1T",
       "league": "Eredivisie",
       "league_id": 10,
-      "xgH": 0.21,
+      "xgH": 0.26,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 54,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "lastMom": 38,
+      "overOdds": 1.12,
+      "probLive": 89,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 2,
         "a": 0
@@ -66,10 +66,10 @@
       "id": 220829,
       "home": "SC Vianense",
       "away": "CD Trofense",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 0,
-      "goals": 0,
-      "min": 23,
+      "goals": 1,
+      "min": 28,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -78,15 +78,15 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": 1.05,
-      "probLive": 95,
-      "oddsStatus": "VALID",
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": null,
         "a": null
       },
       "sot": {
-        "h": 0,
+        "h": 1,
         "a": 0
       },
       "da": {
@@ -128,7 +128,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 20,
+      "min": 25,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -146,7 +146,7 @@
       },
       "sot": {
         "h": 2,
-        "a": 0
+        "a": 1
       },
       "da": {
         "h": null,
@@ -187,20 +187,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 21,
+      "min": 26,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 42,
-      "xgH": 0.03,
+      "xgH": 0.13,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": -22,
-      "overOdds": 1.04,
-      "probLive": 96,
+      "lastMom": 30,
+      "overOdds": 1.15,
+      "probLive": 87,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 1,
+        "h": 3,
         "a": 0
       },
       "sot": {
@@ -246,21 +246,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 23,
+      "min": 28,
       "status": "1st_half",
       "period": "1T",
       "league": "Championship",
       "league_id": 12,
-      "xgH": 0.19,
-      "xgA": 0.04,
-      "xgTotal": 0.23,
-      "lastMom": -17,
+      "xgH": 0.28,
+      "xgA": 0.6,
+      "xgTotal": 0.88,
+      "lastMom": -33,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 1,
-        "a": 1
+        "h": 2,
+        "a": 2
       },
       "sot": {
         "h": 0,
@@ -295,8 +295,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "xg_pace",
+          "label": "xG 2.8/90",
+          "emoji": "⚡",
+          "level": "med",
+          "detail": "xG a ritmo de 2.8 por 90min"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 222614,
@@ -305,20 +313,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 37,
+      "min": 42,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 17,
-      "xgH": 0.16,
+      "xgH": 0.28,
       "xgA": 0.39,
-      "xgTotal": 0.55,
-      "lastMom": -10,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgTotal": 0.67,
+      "lastMom": 22,
+      "overOdds": 1.38,
+      "probLive": 72,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 3,
+        "h": 5,
         "a": 3
       },
       "sot": {
@@ -364,25 +372,25 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 38,
+      "min": 43,
       "status": "1st_half",
       "period": "1T",
       "league": "Belgian Pro League",
       "league_id": 14,
-      "xgH": 0.24,
-      "xgA": 0.21,
-      "xgTotal": 0.44999999999999996,
-      "lastMom": -30,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgH": 0.26,
+      "xgA": 0.24,
+      "xgTotal": 0.5,
+      "lastMom": -17,
+      "overOdds": 1.2,
+      "probLive": 83,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 5,
-        "a": 3
+        "h": 6,
+        "a": 5
       },
       "sot": {
-        "h": 0,
-        "a": 1
+        "h": 1,
+        "a": 2
       },
       "da": {
         "h": null,
@@ -413,8 +421,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "11 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "23 remates/90min"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 587938,
@@ -423,18 +439,18 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 48,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 79,
       "xgH": null,
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "overOdds": 1.31,
+      "probLive": 76,
+      "oddsStatus": "VALID",
       "shots": {
         "h": null,
         "a": null
@@ -482,7 +498,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 35,
+      "min": 37,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -491,8 +507,8 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": 1.1,
-      "probLive": 91,
+      "overOdds": 1.29,
+      "probLive": 78,
       "oddsStatus": "VALID",
       "shots": {
         "h": null,
@@ -500,7 +516,7 @@
       },
       "sot": {
         "h": 3,
-        "a": 1
+        "a": 2
       },
       "da": {
         "h": null,
@@ -550,9 +566,9 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "overOdds": 1.09,
+      "probLive": 92,
+      "oddsStatus": "VALID",
       "shots": {
         "h": null,
         "a": null
@@ -609,9 +625,9 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": 1.05,
-      "probLive": 95,
-      "oddsStatus": "VALID",
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": null,
         "a": null
@@ -727,9 +743,9 @@
       "xgA": 0.21,
       "xgTotal": 0.32999999999999996,
       "lastMom": -18,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "overOdds": 1.14,
+      "probLive": 88,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 3,
         "a": 4
@@ -786,9 +802,9 @@
       "xgA": 0.2,
       "xgTotal": 0.71,
       "lastMom": 8,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "overOdds": 1.27,
+      "probLive": 79,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 6,
         "a": 5
@@ -845,8 +861,8 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": 1.09,
-      "probLive": 92,
+      "overOdds": 1.12,
+      "probLive": 89,
       "oddsStatus": "VALID",
       "shots": {
         "h": null,
@@ -895,24 +911,24 @@
       "hScore": 2,
       "aScore": 2,
       "goals": 4,
-      "min": 59,
+      "min": 64,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 79,
-      "xgH": 1.9,
+      "xgH": 1.97,
       "xgA": 0.7,
-      "xgTotal": 2.5999999999999996,
-      "lastMom": 24,
+      "xgTotal": 2.67,
+      "lastMom": 25,
       "overOdds": 1.03,
       "probLive": 97,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 10,
+        "h": 12,
         "a": 6
       },
       "sot": {
-        "h": 5,
+        "h": 7,
         "a": 2
       },
       "da": {
@@ -944,25 +960,17 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "mkt",
-          "label": "Odds −10.4%",
-          "emoji": "📈",
-          "level": "critical",
-          "detail": "Mercado caiu de 1.15 → 1.03 (sharp money)"
-        }
-      ],
-      "patternScore": 10
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 219687,
       "home": "Angers",
       "away": "Paris FC",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 2,
-      "goals": 3,
-      "min": 63,
+      "goals": 4,
+      "min": 68,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -971,9 +979,9 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": 1.27,
-      "probLive": 79,
-      "oddsStatus": "VALID",
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": null,
         "a": null
@@ -1021,21 +1029,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 60,
+      "min": 65,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 23,
       "xgH": 0.7,
-      "xgA": 0.54,
-      "xgTotal": 1.24,
-      "lastMom": -2,
+      "xgA": 0.59,
+      "xgTotal": 1.29,
+      "lastMom": -15,
       "overOdds": 1.19,
       "probLive": 84,
       "oddsStatus": "VALID",
       "shots": {
         "h": 9,
-        "a": 7
+        "a": 8
       },
       "sot": {
         "h": 3,
@@ -1076,17 +1084,10 @@
           "label": "xG sobrevaloriza",
           "emoji": "🎲",
           "level": "med",
-          "detail": "xG 1.24 vs 0 golos"
-        },
-        {
-          "id": "mkt",
-          "label": "Odds −9.2%",
-          "emoji": "📈",
-          "level": "critical",
-          "detail": "Mercado caiu de 1.31 → 1.19 (sharp money)"
+          "detail": "xG 1.29 vs 0 golos"
         }
       ],
-      "patternScore": 12
+      "patternScore": 2
     }
   ]
 }
