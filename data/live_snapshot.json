@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-15T14:15:36Z",
+  "generated_at": "2026-08-15T14:21:26Z",
   "status": "OK",
   "count": 8,
   "events": [
@@ -10,18 +10,18 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 14,
+      "min": 20,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 87,
-      "xgH": 0.18,
+      "xgH": 0.12,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 52,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "lastMom": 38,
+      "overOdds": 1.23,
+      "probLive": 81,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 2,
         "a": 0
@@ -59,16 +59,8 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 52"
-        }
-      ],
-      "patternScore": 2
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 224556,
@@ -77,21 +69,88 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 14,
+      "min": 20,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 87,
-      "xgH": null,
+      "xgH": 0.04,
       "xgA": 0.28,
-      "xgTotal": null,
-      "lastMom": -17,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgTotal": 0.32,
+      "lastMom": 64,
+      "overOdds": 1.23,
+      "probLive": 81,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
+        "h": 1,
         "a": 2
+      },
+      "sot": {
+        "h": 1,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 64"
+        }
+      ],
+      "patternScore": 2
+    },
+    {
+      "id": 224555,
+      "home": "Northampton Town",
+      "away": "Swindon Town",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 20,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 87,
+      "xgH": 0.1,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": 21,
+      "overOdds": 1.19,
+      "probLive": 84,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 2,
+        "a": 0
       },
       "sot": {
         "h": 0,
@@ -130,94 +189,27 @@
       "patternScore": 0
     },
     {
-      "id": 224555,
-      "home": "Northampton Town",
-      "away": "Swindon Town",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 14,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 87,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": 49,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 0,
-        "a": 0
-      },
-      "sot": {
-        "h": 0,
-        "a": 0
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 2,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 49"
-        }
-      ],
-      "patternScore": 2
-    },
-    {
       "id": 224554,
       "home": "Grimsby Town",
       "away": "Exeter City",
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 14,
+      "min": 19,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 87,
       "xgH": 0.14,
-      "xgA": 0.03,
-      "xgTotal": 0.17,
-      "lastMom": 29,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgA": 0.08,
+      "xgTotal": 0.22000000000000003,
+      "lastMom": -58,
+      "overOdds": 1.17,
+      "probLive": 85,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 3,
-        "a": 1
+        "a": 2
       },
       "sot": {
         "h": 0,
@@ -255,13 +247,20 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "4 remates",
+          "label": "5 remates",
           "emoji": "🎯",
           "level": "med",
-          "detail": "26 remates/90min"
+          "detail": "24 remates/90min"
+        },
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 58"
         }
       ],
-      "patternScore": 2
+      "patternScore": 4
     },
     {
       "id": 224553,
@@ -270,7 +269,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 13,
+      "min": 20,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -278,10 +277,10 @@
       "xgH": 0.54,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": -18,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "lastMom": 21,
+      "overOdds": 1.22,
+      "probLive": 82,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 2,
         "a": 0
@@ -329,24 +328,24 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 13,
+      "min": 19,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 87,
-      "xgH": 0.23,
-      "xgA": 0.1,
-      "xgTotal": 0.33,
-      "lastMom": 5,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgH": 0.25,
+      "xgA": 0.14,
+      "xgTotal": 0.39,
+      "lastMom": 9,
+      "overOdds": 1.19,
+      "probLive": 84,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 1,
-        "a": 2
+        "h": 2,
+        "a": 3
       },
       "sot": {
-        "h": 0,
+        "h": 1,
         "a": 0
       },
       "da": {
@@ -378,8 +377,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "5 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "24 remates/90min"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 224551,
@@ -388,20 +395,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 14,
+      "min": 20,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 87,
-      "xgH": 0.82,
-      "xgA": 0.2,
-      "xgTotal": 1.02,
-      "lastMom": 40,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgH": 0.77,
+      "xgA": 0.22,
+      "xgTotal": 0.99,
+      "lastMom": 53,
+      "overOdds": 1.22,
+      "probLive": 82,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 4,
+        "h": 5,
         "a": 1
       },
       "sot": {
@@ -439,14 +446,28 @@
       },
       "patterns": [
         {
+          "id": "xg_pace",
+          "label": "xG 4.5/90",
+          "emoji": "⚡",
+          "level": "critical",
+          "detail": "xG a ritmo de 4.5 por 90min"
+        },
+        {
           "id": "shots",
-          "label": "5 remates",
+          "label": "6 remates",
           "emoji": "🎯",
-          "level": "high",
-          "detail": "32 remates/90min (muito alto)"
+          "level": "med",
+          "detail": "27 remates/90min"
+        },
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 53"
         }
       ],
-      "patternScore": 4
+      "patternScore": 14
     },
     {
       "id": 224550,
@@ -455,21 +476,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 14,
+      "min": 20,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 87,
-      "xgH": null,
-      "xgA": 0.03,
-      "xgTotal": null,
-      "lastMom": -42,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgH": 0.04,
+      "xgA": 0.08,
+      "xgTotal": 0.12,
+      "lastMom": -16,
+      "overOdds": 1.21,
+      "probLive": 83,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
-        "a": 1
+        "h": 1,
+        "a": 2
       },
       "sot": {
         "h": 0,
@@ -494,14 +515,14 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 3,
         "total": 6
       },
       "patterns": [],
