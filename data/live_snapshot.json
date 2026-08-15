@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-15T15:52:19Z",
+  "generated_at": "2026-08-15T15:58:24Z",
   "status": "OK",
-  "count": 15,
+  "count": 11,
   "events": [
     {
       "id": 219708,
@@ -10,20 +10,20 @@
       "hScore": 1,
       "aScore": 2,
       "goals": 3,
-      "min": 14,
+      "min": 20,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 79,
-      "xgH": null,
-      "xgA": 0.21,
-      "xgTotal": null,
-      "lastMom": 28,
+      "xgH": 0.79,
+      "xgA": 0.35,
+      "xgTotal": 1.1400000000000001,
+      "lastMom": 23,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 1,
+        "h": 2,
         "a": 5
       },
       "sot": {
@@ -49,26 +49,33 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 3,
         "total": 6
       },
       "patterns": [
         {
+          "id": "xg_pace",
+          "label": "xG 5.1/90",
+          "emoji": "⚡",
+          "level": "critical",
+          "detail": "xG a ritmo de 5.1 por 90min"
+        },
+        {
           "id": "shots",
-          "label": "6 remates",
+          "label": "7 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "39 remates/90min (muito alto)"
+          "detail": "31 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 4
+      "patternScore": 14
     },
     {
       "id": 219687,
@@ -77,7 +84,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 20,
+      "min": 26,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -136,7 +143,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 19,
+      "min": 25,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -144,12 +151,12 @@
       "xgH": 0.11,
       "xgA": 0.14,
       "xgTotal": 0.25,
-      "lastMom": -21,
+      "lastMom": -14,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 2,
+        "h": 3,
         "a": 3
       },
       "sot": {
@@ -185,16 +192,8 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "shots",
-          "label": "5 remates",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "24 remates/90min"
-        }
-      ],
-      "patternScore": 2
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 220442,
@@ -329,18 +328,18 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 49,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 79,
       "xgH": 0.48,
       "xgA": 1.12,
       "xgTotal": 1.6,
-      "lastMom": 8,
-      "overOdds": 1.02,
-      "probLive": 98,
-      "oddsStatus": "VALID",
+      "lastMom": 7,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 6,
         "a": 5
@@ -388,7 +387,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 61,
+      "min": 67,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -444,27 +443,27 @@
       "id": 215503,
       "home": "FC Alverca",
       "away": "CF Estrela Amadora",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 1,
-      "goals": 2,
-      "min": 59,
+      "goals": 3,
+      "min": 66,
       "status": "2nd_half",
       "period": "2T",
       "league": "Primeira Liga",
       "league_id": 2,
-      "xgH": 0.95,
+      "xgH": 1.72,
       "xgA": 1.29,
-      "xgTotal": 2.24,
-      "lastMom": 22,
+      "xgTotal": 3.01,
+      "lastMom": -9,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 12,
+        "h": 13,
         "a": 7
       },
       "sot": {
-        "h": 3,
+        "h": 4,
         "a": 5
       },
       "da": {
@@ -504,485 +503,27 @@
       "home": "Willem II Tilburg",
       "away": "NEC Nijmegen",
       "hScore": 0,
-      "aScore": 2,
-      "goals": 2,
-      "min": 58,
+      "aScore": 3,
+      "goals": 3,
+      "min": 65,
       "status": "2nd_half",
       "period": "2T",
       "league": "Eredivisie",
       "league_id": 10,
       "xgH": 0.54,
-      "xgA": 2.06,
-      "xgTotal": 2.6,
-      "lastMom": -58,
+      "xgA": 2.16,
+      "xgTotal": 2.7,
+      "lastMom": -29,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
         "h": 5,
-        "a": 11
-      },
-      "sot": {
-        "h": 1,
-        "a": 5
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum fora 58"
-        }
-      ],
-      "patternScore": 2
-    },
-    {
-      "id": 224555,
-      "home": "Northampton Town",
-      "away": "Swindon Town",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 94,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 87,
-      "xgH": 1.59,
-      "xgA": 0.2,
-      "xgTotal": 1.79,
-      "lastMom": 12,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 11,
-        "a": 3
-      },
-      "sot": {
-        "h": 3,
-        "a": 0
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "xg_delta",
-          "label": "xG sobrevaloriza",
-          "emoji": "🎲",
-          "level": "med",
-          "detail": "xG 1.79 vs 0 golos"
-        }
-      ],
-      "patternScore": 2
-    },
-    {
-      "id": 224554,
-      "home": "Grimsby Town",
-      "away": "Exeter City",
-      "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 94,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 87,
-      "xgH": 1.83,
-      "xgA": 0.86,
-      "xgTotal": 2.69,
-      "lastMom": -29,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 20,
-        "a": 8
-      },
-      "sot": {
-        "h": 4,
-        "a": 2
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "xg_delta",
-          "label": "xG sobrevaloriza",
-          "emoji": "🎲",
-          "level": "med",
-          "detail": "xG 2.69 vs 1 golos"
-        }
-      ],
-      "patternScore": 2
-    },
-    {
-      "id": 224553,
-      "home": "Gillingham",
-      "away": "Walsall",
-      "hScore": 0,
-      "aScore": 2,
-      "goals": 2,
-      "min": 89,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 87,
-      "xgH": 1.39,
-      "xgA": 1.41,
-      "xgTotal": 2.8,
-      "lastMom": -65,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 15,
-        "a": 12
-      },
-      "sot": {
-        "h": 7,
-        "a": 3
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "conv",
-          "label": "CONVERGÊNCIA",
-          "emoji": "🔮",
-          "level": "conv",
-          "detail": "3 padrões em simultâneo — sinal forte"
-        },
-        {
-          "id": "xg_pace",
-          "label": "xG 3.7/90 (2ªP)",
-          "emoji": "⚡",
-          "level": "high",
-          "detail": "xG a ritmo de 3.7 por 90min (2ªP)"
-        },
-        {
-          "id": "shots",
-          "label": "19r 2ªP",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "39 remates/90min (2ªP) (muito alto)"
-        },
-        {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum fora 65"
-        }
-      ],
-      "patternScore": 10
-    },
-    {
-      "id": 224552,
-      "home": "Crawley Town",
-      "away": "Crewe Alexandra",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 84,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 87,
-      "xgH": 0.76,
-      "xgA": 1.74,
-      "xgTotal": 2.5,
-      "lastMom": -65,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 7,
-        "a": 12
-      },
-      "sot": {
-        "h": 3,
-        "a": 2
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 2,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "conv",
-          "label": "CONVERGÊNCIA",
-          "emoji": "🔮",
-          "level": "conv",
-          "detail": "4 padrões em simultâneo — sinal forte"
-        },
-        {
-          "id": "xg_delta",
-          "label": "xG +2.5 acima",
-          "emoji": "🎲",
-          "level": "critical",
-          "detail": "xG 2.50 vs 0 golos — golo(s) em dívida"
-        },
-        {
-          "id": "xg_pace",
-          "label": "xG 4.0/90 (2ªP)",
-          "emoji": "⚡",
-          "level": "high",
-          "detail": "xG a ritmo de 4.0 por 90min (2ªP)"
-        },
-        {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum fora 65"
-        },
-        {
-          "id": "numerical",
-          "label": "Fora +2 homens",
-          "emoji": "🟥",
-          "level": "med",
-          "detail": "Casa com 2 vermelho(s) — Fora em vantagem numérica"
-        }
-      ],
-      "patternScore": 18
-    },
-    {
-      "id": 224551,
-      "home": "Chesterfield",
-      "away": "Fleetwood Town",
-      "hScore": 0,
-      "aScore": 1,
-      "goals": 1,
-      "min": 90,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 87,
-      "xgH": 2.37,
-      "xgA": 1.46,
-      "xgTotal": 3.83,
-      "lastMom": -39,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 15,
         "a": 14
       },
       "sot": {
-        "h": 3,
+        "h": 1,
         "a": 7
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "xg_delta",
-          "label": "xG +2.8 acima",
-          "emoji": "🎲",
-          "level": "critical",
-          "detail": "xG 3.83 vs 1 golos — golo(s) em dívida"
-        },
-        {
-          "id": "open",
-          "label": "JOGO ABERTO",
-          "emoji": "🎭",
-          "level": "low",
-          "detail": "0min, equipa a perder ataca"
-        }
-      ],
-      "patternScore": 11
-    },
-    {
-      "id": 224550,
-      "home": "Cheltenham Town",
-      "away": "Rotherham United",
-      "hScore": 2,
-      "aScore": 1,
-      "goals": 3,
-      "min": 92,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 87,
-      "xgH": 0.31,
-      "xgA": 2.0,
-      "xgTotal": 2.31,
-      "lastMom": -32,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 5,
-        "a": 19
-      },
-      "sot": {
-        "h": 3,
-        "a": 5
       },
       "da": {
         "h": null,
@@ -1015,6 +556,139 @@
       },
       "patterns": [],
       "patternScore": 0
+    },
+    {
+      "id": 224553,
+      "home": "Gillingham",
+      "away": "Walsall",
+      "hScore": 0,
+      "aScore": 3,
+      "goals": 3,
+      "min": 95,
+      "status": "2nd_half",
+      "period": "2T",
+      "league": "",
+      "league_id": 87,
+      "xgH": 1.39,
+      "xgA": 1.95,
+      "xgTotal": 3.34,
+      "lastMom": -24,
+      "overOdds": 1.29,
+      "probLive": 78,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 17,
+        "a": 15
+      },
+      "sot": {
+        "h": 7,
+        "a": 4
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 224552,
+      "home": "Crawley Town",
+      "away": "Crewe Alexandra",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 90,
+      "status": "2nd_half",
+      "period": "2T",
+      "league": "",
+      "league_id": 87,
+      "xgH": 0.76,
+      "xgA": 1.85,
+      "xgTotal": 2.6100000000000003,
+      "lastMom": -36,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 7,
+        "a": 16
+      },
+      "sot": {
+        "h": 3,
+        "a": 3
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 2,
+        "a": 1
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "xg_delta",
+          "label": "xG +2.6 acima",
+          "emoji": "🎲",
+          "level": "critical",
+          "detail": "xG 2.61 vs 0 golos — golo(s) em dívida"
+        },
+        {
+          "id": "numerical",
+          "label": "Fora +1 homem",
+          "emoji": "🟥",
+          "level": "med",
+          "detail": "Casa com 2 vermelho(s) — Fora em vantagem numérica"
+        }
+      ],
+      "patternScore": 12
     }
   ]
 }
