@@ -1,8 +1,67 @@
 {
-  "generated_at": "2026-08-15T22:55:23Z",
+  "generated_at": "2026-08-15T23:00:38Z",
   "status": "OK",
-  "count": 5,
+  "count": 6,
   "events": [
+    {
+      "id": 211525,
+      "home": "Atlante FC",
+      "away": "CD Toluca",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 0,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 19,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": 1.59,
+      "probLive": 63,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": null,
+        "a": null
+      },
+      "sot": {
+        "h": null,
+        "a": null
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": false,
+          "corners": false,
+          "possession": false,
+          "lastMom": false
+        },
+        "score": 0,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
     {
       "id": 216410,
       "home": "Racing Louisville",
@@ -10,21 +69,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 20,
+      "min": 26,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 72,
-      "xgH": 0.11,
-      "xgA": 0.59,
-      "xgTotal": 0.7,
-      "lastMom": -3,
+      "xgH": 0.25,
+      "xgA": 0.64,
+      "xgTotal": 0.89,
+      "lastMom": 16,
       "overOdds": 1.12,
       "probLive": 89,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 3,
-        "a": 1
+        "h": 5,
+        "a": 2
       },
       "sot": {
         "h": 0,
@@ -68,14 +127,14 @@
           "detail": "xG a ritmo de 3.1 por 90min"
         },
         {
-          "id": "mkt",
-          "label": "Odds −14.5%",
-          "emoji": "📈",
-          "level": "critical",
-          "detail": "Mercado caiu de 1.31 → 1.12 (sharp money)"
+          "id": "shots",
+          "label": "7 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "24 remates/90min"
         }
       ],
-      "patternScore": 14
+      "patternScore": 6
     },
     {
       "id": 223574,
@@ -202,21 +261,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 64,
+      "min": 70,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 34,
       "xgH": 1.27,
-      "xgA": 0.3,
-      "xgTotal": 1.57,
-      "lastMom": -28,
+      "xgA": 0.28,
+      "xgTotal": 1.55,
+      "lastMom": -19,
       "overOdds": 1.31,
       "probLive": 76,
       "oddsStatus": "VALID",
       "shots": {
         "h": 8,
-        "a": 5
+        "a": 7
       },
       "sot": {
         "h": 2,
@@ -257,44 +316,37 @@
           "label": "xG sobrevaloriza",
           "emoji": "🎲",
           "level": "med",
-          "detail": "xG 1.57 vs 0 golos"
-        },
-        {
-          "id": "mkt",
-          "label": "Odds −7.1%",
-          "emoji": "📈",
-          "level": "critical",
-          "detail": "Mercado caiu de 1.41 → 1.31 (sharp money)"
+          "detail": "xG 1.55 vs 0 golos"
         }
       ],
-      "patternScore": 12
+      "patternScore": 2
     },
     {
       "id": 7214,
       "home": "Athletico",
       "away": "Red Bull Bragantino",
       "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 61,
+      "aScore": 1,
+      "goals": 1,
+      "min": 67,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 9,
-      "xgH": 1.55,
-      "xgA": 0.37,
-      "xgTotal": 1.92,
-      "lastMom": 4,
+      "xgH": 2.35,
+      "xgA": 0.43,
+      "xgTotal": 2.7800000000000002,
+      "lastMom": -34,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 14,
-        "a": 9
+        "h": 17,
+        "a": 11
       },
       "sot": {
         "h": 5,
-        "a": 3
+        "a": 4
       },
       "da": {
         "h": null,
@@ -327,14 +379,42 @@
       },
       "patterns": [
         {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "4 padrões em simultâneo — sinal forte"
+        },
+        {
           "id": "xg_delta",
-          "label": "xG +1.9 acima",
+          "label": "xG sobrevaloriza",
           "emoji": "🎲",
+          "level": "med",
+          "detail": "xG 2.78 vs 1 golos"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 4.6/90 (2ªP)",
+          "emoji": "⚡",
+          "level": "critical",
+          "detail": "xG a ritmo de 4.6 por 90min (2ªP)"
+        },
+        {
+          "id": "shots",
+          "label": "9r 2ªP",
+          "emoji": "🎯",
           "level": "high",
-          "detail": "xG 1.92 vs 0 golos"
+          "detail": "37 remates/90min (2ªP) (muito alto)"
+        },
+        {
+          "id": "open",
+          "label": "JOGO ABERTO",
+          "emoji": "🎭",
+          "level": "low",
+          "detail": "23min, equipa a perder ataca"
         }
       ],
-      "patternScore": 4
+      "patternScore": 17
     }
   ]
 }
