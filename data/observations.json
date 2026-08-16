@@ -8036,5 +8036,64 @@
     "result_over25": "",
     "final_score": "",
     "result_at_min": ""
+  },
+  {
+    "id": "214767_obs_1786900382125",
+    "event_id": "214767",
+    "kind": "observation",
+    "casa": "Burgos Club de Fútbol",
+    "fora": "Córdoba",
+    "liga": "La Liga 2",
+    "data": "2026-08-16",
+    "detected_at": "2026-08-16T17:13:02.125Z",
+    "min": 10,
+    "score": "0-1",
+    "goals": 1,
+    "xg": "1.10",
+    "odds_live": "1.22",
+    "prob_live": 82,
+    "pattern_score": 6,
+    "patterns": [
+      "shots",
+      "mom"
+    ],
+    "pattern_labels": [
+      "🎯 5 remates",
+      "💪 Fora pressiona"
+    ],
+    "has_scan_pick": "",
+    "scan_score": "",
+    "has_sharp": "",
+    "coverage_score": 3,
+    "coverage_total": 6,
+    "coverage_fields": {
+      "xgTotal": true,
+      "da": false,
+      "sot": true,
+      "corners": false,
+      "possession": false,
+      "lastMom": true
+    },
+    "result_over25": "",
+    "final_score": "",
+    "result_at_min": ""
+  },
+  {
+    "id": "374845_cov_1786900382125",
+    "event_id": "374845",
+    "kind": "coverage_only",
+    "liga": "",
+    "min": 9,
+    "detected_at": "2026-08-16T17:13:02.125Z",
+    "coverage_score": 0,
+    "coverage_total": 6,
+    "coverage_fields": {
+      "xgTotal": false,
+      "da": false,
+      "sot": false,
+      "corners": false,
+      "possession": false,
+      "lastMom": false
+    }
   }
 ]
