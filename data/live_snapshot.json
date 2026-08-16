@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-16T12:12:39Z",
+  "generated_at": "2026-08-16T12:18:31Z",
   "status": "OK",
   "count": 9,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 11,
+      "min": 17,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -18,7 +18,7 @@
       "xgH": 0.16,
       "xgA": 0.02,
       "xgTotal": 0.18,
-      "lastMom": 65,
+      "lastMom": -31,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
@@ -59,23 +59,8 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "shots",
-          "label": "4 remates",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "33 remates/90min (muito alto)"
-        },
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 65"
-        }
-      ],
-      "patternScore": 6
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 221493,
@@ -84,87 +69,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 10,
+      "min": 16,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 84,
-      "xgH": 0.08,
+      "xgH": 0.55,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 48,
-      "overOdds": 1.22,
-      "probLive": 82,
-      "oddsStatus": "VALID",
+      "lastMom": 34,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 2,
-        "a": 0
-      },
-      "sot": {
-        "h": 0,
-        "a": 0
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 2,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 48"
-        }
-      ],
-      "patternScore": 2
-    },
-    {
-      "id": 46436,
-      "home": "IF Brommapojkarna",
-      "away": "Örgryte IS",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 11,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 26,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": -7,
-      "overOdds": 1.1,
-      "probLive": 91,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 0,
         "a": 0
       },
       "sot": {
@@ -204,19 +122,19 @@
       "patternScore": 0
     },
     {
-      "id": 46434,
-      "home": "Djurgårdens IF",
-      "away": "AIK",
+      "id": 46436,
+      "home": "IF Brommapojkarna",
+      "away": "Örgryte IS",
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 8,
+      "min": 16,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 26,
       "xgH": null,
-      "xgA": null,
+      "xgA": 0.16,
       "xgTotal": null,
       "lastMom": -15,
       "overOdds": null,
@@ -224,11 +142,78 @@
       "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 0,
-        "a": 0
+        "a": 4
       },
       "sot": {
         "h": 0,
+        "a": 2
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
         "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "4 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "22 remates/90min"
+        }
+      ],
+      "patternScore": 2
+    },
+    {
+      "id": 46434,
+      "home": "Djurgårdens IF",
+      "away": "AIK",
+      "hScore": 0,
+      "aScore": 1,
+      "goals": 1,
+      "min": 13,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 26,
+      "xgH": null,
+      "xgA": 0.12,
+      "xgTotal": null,
+      "lastMom": -2,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 0,
+        "a": 1
+      },
+      "sot": {
+        "h": 0,
+        "a": 1
       },
       "da": {
         "h": null,
@@ -269,7 +254,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 11,
+      "min": 16,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -277,7 +262,7 @@
       "xgH": 0.06,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 10,
+      "lastMom": 52,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
@@ -318,8 +303,16 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 52"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 211317,
@@ -328,7 +321,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 40,
+      "min": 46,
       "status": "1st_half",
       "period": "1T",
       "league": "Belgian Pro League",
@@ -336,7 +329,7 @@
       "xgH": 0.3,
       "xgA": 0.56,
       "xgTotal": 0.8600000000000001,
-      "lastMom": -25,
+      "lastMom": -38,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
@@ -387,7 +380,7 @@
       "hScore": 2,
       "aScore": 3,
       "goals": 5,
-      "min": 81,
+      "min": 87,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -396,9 +389,9 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": 1.19,
-      "probLive": 84,
-      "oddsStatus": "VALID",
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": null,
         "a": null
@@ -444,9 +437,9 @@
       "home": "Incheon United",
       "away": "Gimcheon Sangmu FC",
       "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 81,
+      "aScore": 1,
+      "goals": 2,
+      "min": 87,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -505,7 +498,7 @@
       "hScore": 3,
       "aScore": 2,
       "goals": 5,
-      "min": 80,
+      "min": 86,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
