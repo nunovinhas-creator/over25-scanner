@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-16T21:13:43Z",
+  "generated_at": "2026-08-16T21:19:05Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -10,20 +10,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 11,
+      "min": 16,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 85,
-      "xgH": null,
+      "xgH": 0.06,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 18,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "lastMom": 39,
+      "overOdds": 1.33,
+      "probLive": 75,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
+        "h": 2,
         "a": 0
       },
       "sot": {
@@ -69,88 +69,21 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 84,
+      "min": 89,
       "status": "2nd_half",
       "period": "2T",
       "league": "Primeira Liga",
       "league_id": 2,
-      "xgH": 0.48,
-      "xgA": 1.4,
-      "xgTotal": 1.88,
-      "lastMom": 50,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgH": 0.55,
+      "xgA": 1.48,
+      "xgTotal": 2.0300000000000002,
+      "lastMom": -24,
+      "overOdds": 1.2,
+      "probLive": 83,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 10,
-        "a": 7
-      },
-      "sot": {
-        "h": 3,
-        "a": 2
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 50"
-        }
-      ],
-      "patternScore": 2
-    },
-    {
-      "id": 214772,
-      "home": "UD Las Palmas",
-      "away": "Albacete Balompié",
-      "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 82,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "La Liga 2",
-      "league_id": 38,
-      "xgH": 0.66,
-      "xgA": 0.97,
-      "xgTotal": 1.63,
-      "lastMom": -18,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 10,
-        "a": 10
+        "h": 12,
+        "a": 8
       },
       "sot": {
         "h": 3,
@@ -185,8 +118,90 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "late",
+          "label": "1 gol em 1min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 83% · 1min"
+        }
+      ],
+      "patternScore": 1
+    },
+    {
+      "id": 214772,
+      "home": "UD Las Palmas",
+      "away": "Albacete Balompié",
+      "hScore": 1,
+      "aScore": 1,
+      "goals": 2,
+      "min": 87,
+      "status": "2nd_half",
+      "period": "2T",
+      "league": "La Liga 2",
+      "league_id": 38,
+      "xgH": 0.66,
+      "xgA": 1.39,
+      "xgTotal": 2.05,
+      "lastMom": 24,
+      "overOdds": 1.23,
+      "probLive": 81,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 10,
+        "a": 12
+      },
+      "sot": {
+        "h": 3,
+        "a": 4
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "xg_pace",
+          "label": "xG 3.0/90 (2ªP)",
+          "emoji": "⚡",
+          "level": "high",
+          "detail": "xG a ritmo de 3.0 por 90min (2ªP)"
+        },
+        {
+          "id": "late",
+          "label": "1 gol em 3min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 81% · 3min"
+        }
+      ],
+      "patternScore": 5
     }
   ]
 }
