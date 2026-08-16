@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-16T00:11:10Z",
+  "generated_at": "2026-08-16T00:16:16Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -10,24 +10,24 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 8,
+      "min": 13,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 9,
-      "xgH": 0.04,
+      "xgH": 0.22,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 10,
+      "lastMom": 62,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 0,
+        "h": 3,
         "a": 0
       },
       "sot": {
-        "h": 0,
+        "h": 1,
         "a": 0
       },
       "da": {
@@ -59,8 +59,16 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 62"
+        }
+      ],
+      "patternScore": 2
     }
   ]
 }
