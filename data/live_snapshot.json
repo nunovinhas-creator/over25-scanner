@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-16T01:55:01Z",
+  "generated_at": "2026-08-16T02:00:33Z",
   "status": "OK",
-  "count": 11,
+  "count": 10,
   "events": [
     {
       "id": 207756,
@@ -10,25 +10,25 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 18,
+      "min": 23,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 57,
       "xgH": 0.07,
-      "xgA": 0.13,
-      "xgTotal": 0.2,
-      "lastMom": -31,
-      "overOdds": 1.33,
-      "probLive": 75,
+      "xgA": 0.36,
+      "xgTotal": 0.43,
+      "lastMom": -23,
+      "overOdds": 1.2,
+      "probLive": 83,
       "oddsStatus": "VALID",
       "shots": {
         "h": 2,
-        "a": 2
+        "a": 4
       },
       "sot": {
         "h": 0,
-        "a": 1
+        "a": 2
       },
       "da": {
         "h": null,
@@ -59,8 +59,23 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "6 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "23 remates/90min"
+        },
+        {
+          "id": "mkt",
+          "label": "Odds −9.8%",
+          "emoji": "📈",
+          "level": "critical",
+          "detail": "Mercado caiu de 1.33 → 1.20 (sharp money)"
+        }
+      ],
+      "patternScore": 12
     },
     {
       "id": 5193,
@@ -69,20 +84,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 13,
+      "min": 19,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 18,
-      "xgH": 0.42,
+      "xgH": 0.61,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 9,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "lastMom": 78,
+      "overOdds": 1.12,
+      "probLive": 89,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 2,
+        "h": 4,
         "a": 0
       },
       "sot": {
@@ -118,8 +133,16 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Casa domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum casa 78 — controlo total"
+        }
+      ],
+      "patternScore": 4
     },
     {
       "id": 5192,
@@ -128,24 +151,24 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 13,
+      "min": 19,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 18,
-      "xgH": 0.05,
+      "xgH": 0.1,
       "xgA": 0.3,
-      "xgTotal": 0.35,
-      "lastMom": 7,
-      "overOdds": 1.15,
-      "probLive": 87,
+      "xgTotal": 0.4,
+      "lastMom": 50,
+      "overOdds": 1.03,
+      "probLive": 97,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 1,
+        "h": 3,
         "a": 2
       },
       "sot": {
-        "h": 1,
+        "h": 2,
         "a": 0
       },
       "da": {
@@ -177,34 +200,56 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "5 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "24 remates/90min"
+        },
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 50"
+        },
+        {
+          "id": "mkt",
+          "label": "Odds −10.4%",
+          "emoji": "📈",
+          "level": "critical",
+          "detail": "Mercado caiu de 1.15 → 1.03 (sharp money)"
+        }
+      ],
+      "patternScore": 14
     },
     {
       "id": 211526,
       "home": "CF Monterrey",
       "away": "FC Juárez",
-      "hScore": 3,
+      "hScore": 4,
       "aScore": 1,
-      "goals": 4,
-      "min": 43,
+      "goals": 5,
+      "min": 49,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 19,
-      "xgH": 1.77,
+      "xgH": 2.23,
       "xgA": 0.1,
-      "xgTotal": 1.87,
-      "lastMom": 23,
-      "overOdds": 1.24,
-      "probLive": 81,
-      "oddsStatus": "VALID",
+      "xgTotal": 2.33,
+      "lastMom": 48,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 14,
+        "h": 18,
         "a": 1
       },
       "sot": {
-        "h": 4,
+        "h": 8,
         "a": 1
       },
       "da": {
@@ -238,21 +283,14 @@
       },
       "patterns": [
         {
-          "id": "xg_pace",
-          "label": "xG 3.9/90",
-          "emoji": "⚡",
-          "level": "high",
-          "detail": "xG a ritmo de 3.9 por 90min"
-        },
-        {
-          "id": "shots",
-          "label": "15 remates",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "31 remates/90min (muito alto)"
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 48"
         }
       ],
-      "patternScore": 8
+      "patternScore": 2
     },
     {
       "id": 207755,
@@ -261,21 +299,21 @@
       "hScore": 0,
       "aScore": 3,
       "goals": 3,
-      "min": 47,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 57,
-      "xgH": 0.06,
-      "xgA": 0.74,
-      "xgTotal": 0.8,
-      "lastMom": -18,
+      "xgH": 0.08,
+      "xgA": 0.91,
+      "xgTotal": 0.99,
+      "lastMom": -28,
       "overOdds": 1.17,
       "probLive": 85,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 2,
-        "a": 4
+        "h": 3,
+        "a": 6
       },
       "sot": {
         "h": 0,
@@ -317,27 +355,27 @@
       "id": 207754,
       "home": "Colorado Springs Switchbacks FC",
       "away": "Birmingham Legion FC",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 1,
-      "goals": 1,
-      "min": 47,
-      "status": "1st_half",
-      "period": "1T",
+      "goals": 2,
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 57,
-      "xgH": 0.53,
+      "xgH": 0.72,
       "xgA": 0.15,
-      "xgTotal": 0.68,
-      "lastMom": 53,
+      "xgTotal": 0.87,
+      "lastMom": 21,
       "overOdds": 1.12,
       "probLive": 89,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 14,
+        "h": 16,
         "a": 3
       },
       "sot": {
-        "h": 4,
+        "h": 5,
         "a": 2
       },
       "da": {
@@ -369,16 +407,8 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 53"
-        }
-      ],
-      "patternScore": 2
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 216411,
@@ -387,20 +417,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 49,
+      "min": 54,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 72,
-      "xgH": 0.06,
+      "xgH": 0.07,
       "xgA": 0.51,
-      "xgTotal": 0.5700000000000001,
-      "lastMom": 30,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgTotal": 0.5800000000000001,
+      "lastMom": 20,
+      "overOdds": 1.06,
+      "probLive": 94,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 2,
+        "h": 3,
         "a": 9
       },
       "sot": {
@@ -446,21 +476,21 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 47,
+      "min": 53,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
       "xgH": 0.93,
-      "xgA": 0.51,
-      "xgTotal": 1.44,
-      "lastMom": 12,
-      "overOdds": 1.11,
-      "probLive": 90,
-      "oddsStatus": "VALID",
+      "xgA": 0.56,
+      "xgTotal": 1.4900000000000002,
+      "lastMom": -3,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 4,
-        "a": 6
+        "a": 7
       },
       "sot": {
         "h": 1,
@@ -502,28 +532,28 @@
       "id": 5189,
       "home": "Nashville SC",
       "away": "Inter Miami CF",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 1,
-      "goals": 2,
-      "min": 45,
+      "goals": 3,
+      "min": 51,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
-      "xgH": 0.75,
-      "xgA": 0.91,
-      "xgTotal": 1.6600000000000001,
-      "lastMom": 0,
-      "overOdds": 1.08,
-      "probLive": 93,
-      "oddsStatus": "VALID",
+      "xgH": 0.84,
+      "xgA": 0.95,
+      "xgTotal": 1.79,
+      "lastMom": 4,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 12,
-        "a": 2
+        "h": 13,
+        "a": 3
       },
       "sot": {
-        "h": 5,
-        "a": 1
+        "h": 6,
+        "a": 2
       },
       "da": {
         "h": null,
@@ -554,23 +584,8 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "xg_pace",
-          "label": "xG 3.3/90",
-          "emoji": "⚡",
-          "level": "high",
-          "detail": "xG a ritmo de 3.3 por 90min"
-        },
-        {
-          "id": "shots",
-          "label": "14 remates",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "28 remates/90min (muito alto)"
-        }
-      ],
-      "patternScore": 8
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 223570,
@@ -579,17 +594,17 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 81,
+      "min": 87,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 85,
-      "xgH": 0.84,
+      "xgH": 0.78,
       "xgA": 1.39,
-      "xgTotal": 2.23,
-      "lastMom": 44,
-      "overOdds": 1.34,
-      "probLive": 75,
+      "xgTotal": 2.17,
+      "lastMom": 22,
+      "overOdds": 1.2,
+      "probLive": 83,
       "oddsStatus": "VALID",
       "shots": {
         "h": 11,
@@ -631,80 +646,20 @@
       "patterns": [
         {
           "id": "late",
-          "label": "1 gol em 9min",
+          "label": "1 gol em 3min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 75% · 9min"
-        }
-      ],
-      "patternScore": 1
-    },
-    {
-      "id": 7221,
-      "home": "São Paulo",
-      "away": "Coritiba",
-      "hScore": 1,
-      "aScore": 1,
-      "goals": 2,
-      "min": 93,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 9,
-      "xgH": 1.13,
-      "xgA": 0.26,
-      "xgTotal": 1.39,
-      "lastMom": 3,
-      "overOdds": 1.09,
-      "probLive": 92,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 19,
-        "a": 7
-      },
-      "sot": {
-        "h": 6,
-        "a": 1
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
+          "detail": "Falta 1 golo · mercado 83% · 3min"
         },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
         {
-          "id": "late",
-          "label": "1 gol em 0min",
-          "emoji": "⏰",
-          "level": "low",
-          "detail": "Falta 1 golo · mercado 92% · 0min"
+          "id": "mkt",
+          "label": "Odds −22.1%",
+          "emoji": "📈",
+          "level": "critical",
+          "detail": "Mercado caiu de 1.54 → 1.20 (sharp money)"
         }
       ],
-      "patternScore": 1
+      "patternScore": 11
     }
   ]
 }
