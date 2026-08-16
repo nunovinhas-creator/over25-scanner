@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-16T12:34:59Z",
+  "generated_at": "2026-08-16T12:41:17Z",
   "status": "OK",
   "count": 10,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 2,
+      "min": 7,
       "status": "1st_half",
       "period": "1T",
       "league": "Championship",
@@ -18,10 +18,10 @@
       "xgH": null,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": -4,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "lastMom": -9,
+      "overOdds": 1.49,
+      "probLive": 67,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 0,
         "a": 0
@@ -69,25 +69,25 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 4,
+      "min": 8,
       "status": "1st_half",
       "period": "1T",
       "league": "Eredivisie",
       "league_id": 10,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": -38,
-      "overOdds": 1.07,
-      "probLive": 93,
+      "xgH": 0.02,
+      "xgA": 0.03,
+      "xgTotal": 0.05,
+      "lastMom": 32,
+      "overOdds": 1.06,
+      "probLive": 94,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
-        "a": 0
+        "h": 1,
+        "a": 1
       },
       "sot": {
-        "h": 0,
-        "a": 0
+        "h": 1,
+        "a": 1
       },
       "da": {
         "h": null,
@@ -108,18 +108,26 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "2 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "22 remates/90min"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 210814,
@@ -128,7 +136,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 2,
+      "min": 7,
       "status": "1st_half",
       "period": "1T",
       "league": "Eredivisie",
@@ -136,10 +144,10 @@
       "xgH": null,
       "xgA": 0.03,
       "xgTotal": null,
-      "lastMom": -28,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "lastMom": -6,
+      "overOdds": 1.09,
+      "probLive": 92,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 0,
         "a": 1
@@ -187,21 +195,21 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 3,
+      "min": 8,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 54,
-      "xgH": 0.79,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": 36,
+      "xgH": 0.87,
+      "xgA": 0.06,
+      "xgTotal": 0.9299999999999999,
+      "lastMom": 18,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 1,
-        "a": 0
+        "a": 1
       },
       "sot": {
         "h": 1,
@@ -226,45 +234,253 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "2 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "22 remates/90min"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 221494,
       "home": "Odense Boldklub",
       "away": "AC Horsens",
       "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 33,
+      "aScore": 1,
+      "goals": 2,
+      "min": 39,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 84,
-      "xgH": 0.38,
-      "xgA": 0.71,
-      "xgTotal": 1.0899999999999999,
-      "lastMom": 20,
-      "overOdds": 1.2,
-      "probLive": 83,
-      "oddsStatus": "VALID",
+      "xgH": 0.42,
+      "xgA": 0.95,
+      "xgTotal": 1.3699999999999999,
+      "lastMom": 18,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 5,
-        "a": 3
+        "a": 4
       },
       "sot": {
         "h": 1,
+        "a": 1
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
         "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "xg_pace",
+          "label": "xG 3.2/90",
+          "emoji": "⚡",
+          "level": "high",
+          "detail": "xG a ritmo de 3.2 por 90min"
+        }
+      ],
+      "patternScore": 4
+    },
+    {
+      "id": 221493,
+      "home": "FC Nordsjælland",
+      "away": "Silkeborg IF",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 39,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 84,
+      "xgH": 0.78,
+      "xgA": 0.06,
+      "xgTotal": 0.8400000000000001,
+      "lastMom": -20,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 8,
+        "a": 1
+      },
+      "sot": {
+        "h": 2,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 46436,
+      "home": "IF Brommapojkarna",
+      "away": "Örgryte IS",
+      "hScore": 1,
+      "aScore": 0,
+      "goals": 1,
+      "min": 39,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 26,
+      "xgH": 0.18,
+      "xgA": 0.27,
+      "xgTotal": 0.45,
+      "lastMom": -46,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 5,
+        "a": 5
+      },
+      "sot": {
+        "h": 1,
+        "a": 2
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "10 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "23 remates/90min"
+        },
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 46"
+        }
+      ],
+      "patternScore": 4
+    },
+    {
+      "id": 46434,
+      "home": "Djurgårdens IF",
+      "away": "AIK",
+      "hScore": 0,
+      "aScore": 2,
+      "goals": 2,
+      "min": 36,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 26,
+      "xgH": 0.53,
+      "xgA": 0.65,
+      "xgTotal": 1.1800000000000002,
+      "lastMom": 14,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 4,
+        "a": 4
+      },
+      "sot": {
+        "h": 0,
+        "a": 2
       },
       "da": {
         "h": null,
@@ -307,223 +523,30 @@
       "patternScore": 2
     },
     {
-      "id": 221493,
-      "home": "FC Nordsjælland",
-      "away": "Silkeborg IF",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 33,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 84,
-      "xgH": 0.78,
-      "xgA": 0.06,
-      "xgTotal": 0.8400000000000001,
-      "lastMom": 31,
-      "overOdds": 1.08,
-      "probLive": 93,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 8,
-        "a": 1
-      },
-      "sot": {
-        "h": 2,
-        "a": 0
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "shots",
-          "label": "9 remates",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "25 remates/90min"
-        }
-      ],
-      "patternScore": 2
-    },
-    {
-      "id": 46436,
-      "home": "IF Brommapojkarna",
-      "away": "Örgryte IS",
-      "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 34,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 26,
-      "xgH": 0.12,
-      "xgA": 0.16,
-      "xgTotal": 0.28,
-      "lastMom": 20,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 5,
-        "a": 4
-      },
-      "sot": {
-        "h": 1,
-        "a": 2
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "shots",
-          "label": "9 remates",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "24 remates/90min"
-        }
-      ],
-      "patternScore": 2
-    },
-    {
-      "id": 46434,
-      "home": "Djurgårdens IF",
-      "away": "AIK",
-      "hScore": 0,
-      "aScore": 2,
-      "goals": 2,
-      "min": 31,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 26,
-      "xgH": 0.15,
-      "xgA": 0.65,
-      "xgTotal": 0.8,
-      "lastMom": -18,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 3,
-        "a": 4
-      },
-      "sot": {
-        "h": 0,
-        "a": 2
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
       "id": 46433,
       "home": "Degerfors IF",
       "away": "IFK Göteborg",
       "hScore": 3,
       "aScore": 0,
       "goals": 3,
-      "min": 33,
+      "min": 38,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 26,
-      "xgH": 1.28,
+      "xgH": 1.64,
       "xgA": 0.06,
-      "xgTotal": 1.34,
-      "lastMom": 45,
+      "xgTotal": 1.7,
+      "lastMom": -27,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 6,
-        "a": 2
+        "h": 7,
+        "a": 3
       },
       "sot": {
-        "h": 3,
+        "h": 4,
         "a": 1
       },
       "da": {
@@ -558,20 +581,20 @@
       "patterns": [
         {
           "id": "xg_pace",
-          "label": "xG 3.7/90",
+          "label": "xG 4.0/90",
           "emoji": "⚡",
-          "level": "high",
-          "detail": "xG a ritmo de 3.7 por 90min"
+          "level": "critical",
+          "detail": "xG a ritmo de 4.0 por 90min"
         },
         {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
+          "id": "shots",
+          "label": "10 remates",
+          "emoji": "🎯",
           "level": "med",
-          "detail": "Momentum casa 45"
+          "detail": "24 remates/90min"
         }
       ],
-      "patternScore": 6
+      "patternScore": 12
     },
     {
       "id": 211317,
@@ -580,15 +603,15 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 50,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "Belgian Pro League",
       "league_id": 14,
       "xgH": 0.3,
-      "xgA": 0.6,
-      "xgTotal": 0.8999999999999999,
-      "lastMom": -29,
+      "xgA": 0.65,
+      "xgTotal": 0.95,
+      "lastMom": -4,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
