@@ -1,0 +1,48 @@
+name: Cobertura do modelo DC (Over 2.5) — resumo diário Telegram
+
+# Bloco P: UMA mensagem por dia no Telegram com a fracção de candidatos
+# Over 2.5 (que chegaram ao Gate 4 — EV) em que o modelo Dixon-Coles
+# encontrou as duas equipas em dc_ratings.json (p_model_source=="dc") vs
+# caiu no fallback de mercado (p_model_source=="market_only",
+# reject_reason="sem_modelo_dc") — ver pipeline/send_dc_model_coverage_summary.py,
+# que lê data/rejected_picks.json e data/picks.json.
+# Não altera MODEL_WEIGHT, o threshold de EV, nenhum gate, nem
+# scan_over25.py além de já ler o que ele escreve.
+#
+# Cron do GitHub Actions é sempre UTC — mesmo esquema de dois cron (DST) já
+# usado em live_coverage_summary.yml/live_shadow_summary.yml, ~23:00 hora
+# de Lisboa (offset de minutos diferente só para não colidir com os outros
+# resumos diários no mesmo minuto).
+on:
+  schedule:
+    - cron: '20 23 * 11,12,1,2,3 *'    # 23:20 Lisboa (WET,  UTC+0) — nov a mar
+    - cron: '20 22 * 4,5,6,7,8,9,10 *' # 23:20 Lisboa (WEST, UTC+1) — abr a out
+  workflow_dispatch:
+
+jobs:
+  dc_model_coverage_summary:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependências
+        run: pip install --quiet requests
+
+      - name: Enviar resumo diário de cobertura do modelo DC
+        run: python -m pipeline.send_dc_model_coverage_summary
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+          TG_TOKEN: ${{ secrets.TG_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}

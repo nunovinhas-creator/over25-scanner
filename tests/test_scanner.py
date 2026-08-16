@@ -64,10 +64,13 @@ def _bsd_event(
 class TestScanOver25(unittest.TestCase):
 
     def _run_scan(self, bsd_events: list[dict], existing_picks: list | None = None,
-                  existing_rejected: list | None = None, git_push_ok: bool = True):
+                  existing_rejected: list | None = None, git_push_ok: bool = True,
+                  compute_prob_fn=None):
         """
         Corre scan() com data dir temporária e mocks.
         bsd_events: lista de eventos BSD simulados.
+        compute_prob_fn: substitui o fake_compute_prob por omissão (que
+        passa sempre — ev_final=0.10), para testes do Gate 4 (Bloco P).
         Devolve (picks_list, rejected_list, tg_calls).
         """
         import pipeline.scan_over25 as mod
@@ -104,7 +107,7 @@ class TestScanOver25(unittest.TestCase):
                 patch.object(mod, "BSD_API_KEY", "fake_key"),
                 patch.object(mod, "_fetch_all_events", side_effect=fake_fetch),
                 patch.object(mod, "_fetch_lineup_info", return_value={}),
-                patch.object(mod, "compute_prob", side_effect=fake_compute_prob),
+                patch.object(mod, "compute_prob", side_effect=compute_prob_fn or fake_compute_prob),
                 patch.object(mod, "send_telegram", side_effect=lambda t: tg_calls.append(t)),
                 patch.object(mod, "git_commit_push", return_value=git_push_ok),
             ):
@@ -144,6 +147,119 @@ class TestScanOver25(unittest.TestCase):
         self.assertEqual(len(tg), 0)
         drift_rej = [r for r in rejected if r.get("reject_reason") == "odds_drifting"]
         self.assertEqual(len(drift_rej), 1)
+
+    # ── Bloco P — reject_reason distinto + visibilidade do fallback ──────────
+    # market_only (modelo nunca correu, ver Bloco O) tem de gerar
+    # reject_reason="sem_modelo_dc", nunca "ev_baixo" — as duas populações
+    # (modelo avaliou e disse não / modelo nunca foi consultado) não podem
+    # misturar-se na mesma métrica.
+
+    def test_market_only_low_ev_gets_distinct_reject_reason(self):
+        def fake_market_only(ev, dc_ratings, calibrator_fn):
+            return {
+                "p_model_source": "market_only", "p_dc_raw": None,
+                "p_model": 0.55, "p_market": 0.55,
+                "p_market_source": "devig",
+                "p_final": 0.55, "ev_final": -0.06,
+                "odds_band": "1.70–2.00",
+            }
+        events = [_bsd_event("ev_sem_modelo", "Blackburn", "Norwich", hours_to_ko=3.0)]
+
+        picks, rejected, tg = self._run_scan(events, compute_prob_fn=fake_market_only)
+
+        self.assertEqual(len(picks), 0)
+        self.assertEqual(len(tg), 0)
+        self.assertEqual(len(rejected), 1)
+        self.assertEqual(rejected[0]["reject_reason"], "sem_modelo_dc")
+        self.assertNotEqual(rejected[0]["reject_reason"], "ev_baixo")
+
+    def test_dc_model_low_ev_keeps_ev_baixo_reason(self):
+        """Quando o modelo REALMENTE correu (p_model_source='dc') mas o EV
+        continua abaixo do threshold, a rejeição continua a ser 'ev_baixo'
+        — só o caminho market_only muda de nome."""
+        def fake_dc_low_ev(ev, dc_ratings, calibrator_fn):
+            return {
+                "p_model_source": "dc", "p_dc_raw": 0.40,
+                "p_model": 0.42, "p_market": 0.55,
+                "p_market_source": "devig",
+                "p_final": 0.505, "ev_final": -0.02,
+                "odds_band": "1.70–2.00",
+            }
+        events = [_bsd_event("ev_com_modelo", "Ajax", "PSV", hours_to_ko=3.0)]
+
+        picks, rejected, tg = self._run_scan(events, compute_prob_fn=fake_dc_low_ev)
+
+        self.assertEqual(len(picks), 0)
+        self.assertEqual(len(rejected), 1)
+        self.assertEqual(rejected[0]["reject_reason"], "ev_baixo")
+
+    def test_market_only_fallback_logged_visibly_to_stdout(self):
+        """O fallback deixa de ser silencioso: DC_LOOKUP_STATUS=MISSING
+        aparece em stdout (visível nos logs do scanner.yml), não só num
+        campo p_model_source dentro do JSON."""
+        import io
+        import contextlib
+
+        def fake_market_only(ev, dc_ratings, calibrator_fn):
+            return {
+                "p_model_source": "market_only", "p_dc_raw": None,
+                "p_model": 0.55, "p_market": 0.55,
+                "p_market_source": "devig",
+                "p_final": 0.55, "ev_final": -0.06,
+                "odds_band": "1.70–2.00",
+            }
+        events = [_bsd_event("ev_visivel", "Blackburn", "Norwich", hours_to_ko=3.0)]
+
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            self._run_scan(events, compute_prob_fn=fake_market_only)
+        output = buf.getvalue()
+
+        self.assertIn("DC_LOOKUP_STATUS=MISSING", output)
+        self.assertIn("Blackburn", output)
+        self.assertIn("Norwich", output)
+
+    def test_dc_model_success_never_logged_as_missing(self):
+        """Quando o modelo corre com sucesso, não há nenhuma linha
+        DC_LOOKUP_STATUS= — só o caminho market_only gera esse log."""
+        import io
+        import contextlib
+
+        events = [_bsd_event("ev_ok", "Arsenal", "Chelsea", hours_to_ko=3.0)]
+
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            self._run_scan(events)  # fake_compute_prob por omissão: p_model_source="dc"
+        output = buf.getvalue()
+
+        self.assertNotIn("DC_LOOKUP_STATUS=MISSING", output)
+
+    def test_cycle_summary_reports_count_of_sem_modelo_dc(self):
+        """A linha de resumo do ciclo ('Over 2.5 scan: ...') passa a incluir
+        quantos dos rejeitados desse ciclo caíram em sem_modelo_dc —
+        visibilidade agregada, sem esperar por um relatório diário."""
+        import io
+        import contextlib
+
+        def fake_market_only(ev, dc_ratings, calibrator_fn):
+            return {
+                "p_model_source": "market_only", "p_dc_raw": None,
+                "p_model": 0.55, "p_market": 0.55,
+                "p_market_source": "devig",
+                "p_final": 0.55, "ev_final": -0.06,
+                "odds_band": "1.70–2.00",
+            }
+        events = [
+            _bsd_event("ev_sm1", "Blackburn", "Norwich", hours_to_ko=3.0),
+            _bsd_event("ev_sm2", "Watford", "Stoke", hours_to_ko=3.0),
+        ]
+
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            self._run_scan(events, compute_prob_fn=fake_market_only)
+        output = buf.getvalue()
+
+        self.assertIn("2 sem modelo DC", output)
 
     def test_liga_fora_whitelist(self):
         """Liga fora da whitelist → rejeitada."""
