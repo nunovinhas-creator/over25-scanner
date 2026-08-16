@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-16T21:35:23Z",
+  "generated_at": "2026-08-16T21:40:51Z",
   "status": "OK",
   "count": 5,
   "events": [
@@ -10,20 +10,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 3,
+      "min": 8,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
-      "xgH": 0.02,
+      "xgH": 0.09,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": -2,
+      "lastMom": 38,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 1,
+        "h": 5,
         "a": 0
       },
       "sot": {
@@ -59,8 +59,16 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "5 remates",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "56 remates/90min (muito alto)"
+        }
+      ],
+      "patternScore": 4
     },
     {
       "id": 10064,
@@ -69,21 +77,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 2,
+      "min": 8,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": 17,
+      "xgH": 0.01,
+      "xgA": 0.02,
+      "xgTotal": 0.03,
+      "lastMom": -8,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 0,
-        "a": 0
+        "h": 1,
+        "a": 1
       },
       "sot": {
         "h": 0,
@@ -108,18 +116,26 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "2 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "22 remates/90min"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 7223,
@@ -128,21 +144,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 3,
+      "min": 10,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 9,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": 4,
+      "xgH": 0.02,
+      "xgA": 0.03,
+      "xgTotal": 0.05,
+      "lastMom": -26,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 0,
-        "a": 0
+        "h": 1,
+        "a": 1
       },
       "sot": {
         "h": 0,
@@ -167,14 +183,14 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 3,
         "total": 6
       },
       "patterns": [],
@@ -187,24 +203,24 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 3,
+      "min": 9,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 9,
-      "xgH": null,
-      "xgA": 0.24,
-      "xgTotal": null,
-      "lastMom": -22,
+      "xgH": 0.06,
+      "xgA": 0.36,
+      "xgTotal": 0.42,
+      "lastMom": -19,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 0,
+        "h": 2,
         "a": 2
       },
       "sot": {
-        "h": 0,
+        "h": 1,
         "a": 1
       },
       "da": {
@@ -226,44 +242,52 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "4 remates",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "40 remates/90min (muito alto)"
+        }
+      ],
+      "patternScore": 4
     },
     {
       "id": 223576,
       "home": "River Plate",
       "away": "Argentinos Juniors",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 0,
-      "goals": 0,
-      "min": 32,
+      "goals": 1,
+      "min": 37,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 85,
-      "xgH": 0.12,
+      "xgH": 0.69,
       "xgA": 0.03,
-      "xgTotal": 0.15,
-      "lastMom": -1,
+      "xgTotal": 0.72,
+      "lastMom": 36,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 3,
+        "h": 6,
         "a": 2
       },
       "sot": {
-        "h": 0,
+        "h": 1,
         "a": 0
       },
       "da": {
