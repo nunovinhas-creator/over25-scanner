@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-16T23:41:19Z",
+  "generated_at": "2026-08-16T23:46:43Z",
   "status": "OK",
   "count": 6,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 25,
+      "min": 30,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -18,13 +18,72 @@
       "xgH": 0.15,
       "xgA": 0.21,
       "xgTotal": 0.36,
-      "lastMom": -36,
+      "lastMom": -19,
       "overOdds": 1.53,
       "probLive": 65,
       "oddsStatus": "VALID",
       "shots": {
         "h": 2,
-        "a": 4
+        "a": 5
+      },
+      "sot": {
+        "h": 0,
+        "a": 1
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 216412,
+      "home": "North Carolina Courage",
+      "away": "Houston Dash",
+      "hScore": 1,
+      "aScore": 0,
+      "goals": 1,
+      "min": 36,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 72,
+      "xgH": 0.15,
+      "xgA": 0.11,
+      "xgTotal": 0.26,
+      "lastMom": 28,
+      "overOdds": 1.09,
+      "probLive": 92,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 4,
+        "a": 3
       },
       "sot": {
         "h": 0,
@@ -63,98 +122,31 @@
       "patternScore": 0
     },
     {
-      "id": 216412,
-      "home": "North Carolina Courage",
-      "away": "Houston Dash",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 30,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 72,
-      "xgH": 0.1,
-      "xgA": 0.11,
-      "xgTotal": 0.21000000000000002,
-      "lastMom": 46,
-      "overOdds": 1.09,
-      "probLive": 92,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 3,
-        "a": 3
-      },
-      "sot": {
-        "h": 0,
-        "a": 0
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 46"
-        }
-      ],
-      "patternScore": 2
-    },
-    {
       "id": 211529,
       "home": "Club América",
       "away": "Atlético San Luis",
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 38,
+      "min": 44,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 19,
-      "xgH": 0.3,
-      "xgA": 0.53,
-      "xgTotal": 0.8300000000000001,
-      "lastMom": 72,
-      "overOdds": 1.14,
-      "probLive": 88,
-      "oddsStatus": "VALID",
+      "xgH": 0.29,
+      "xgA": 0.56,
+      "xgTotal": 0.8500000000000001,
+      "lastMom": -40,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 10,
-        "a": 7
+        "a": 8
       },
       "sot": {
         "h": 2,
-        "a": 1
+        "a": 2
       },
       "da": {
         "h": null,
@@ -188,20 +180,13 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "17 remates",
+          "label": "18 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "40 remates/90min (muito alto)"
-        },
-        {
-          "id": "mom",
-          "label": "Casa domina",
-          "emoji": "💥",
-          "level": "high",
-          "detail": "Momentum casa 72 — controlo total"
+          "detail": "37 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 8
+      "patternScore": 4
     },
     {
       "id": 7217,
@@ -210,25 +195,25 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 48,
+      "min": 54,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 9,
-      "xgH": 0.9,
-      "xgA": 0.72,
-      "xgTotal": 1.62,
-      "lastMom": 12,
-      "overOdds": 1.21,
-      "probLive": 83,
-      "oddsStatus": "VALID",
+      "xgH": 0.91,
+      "xgA": 0.83,
+      "xgTotal": 1.74,
+      "lastMom": -2,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 8,
-        "a": 6
+        "h": 11,
+        "a": 7
       },
       "sot": {
-        "h": 2,
-        "a": 4
+        "h": 3,
+        "a": 5
       },
       "da": {
         "h": null,
@@ -269,20 +254,20 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 70,
+      "min": 75,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
-      "xgH": 0.91,
+      "xgH": 1.09,
       "xgA": 0.34,
-      "xgTotal": 1.25,
-      "lastMom": -32,
+      "xgTotal": 1.4300000000000002,
+      "lastMom": 22,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 5,
+        "h": 6,
         "a": 7
       },
       "sot": {
@@ -326,27 +311,27 @@
       "home": "New York City FC",
       "away": "Philadelphia Union",
       "hScore": 2,
-      "aScore": 1,
-      "goals": 3,
-      "min": 65,
+      "aScore": 2,
+      "goals": 4,
+      "min": 70,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
       "xgH": 2.17,
-      "xgA": 0.81,
-      "xgTotal": 2.98,
-      "lastMom": -38,
-      "overOdds": 1.02,
-      "probLive": 98,
-      "oddsStatus": "VALID",
+      "xgA": 1.56,
+      "xgTotal": 3.73,
+      "lastMom": -26,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 15,
-        "a": 9
+        "a": 11
       },
       "sot": {
         "h": 4,
-        "a": 2
+        "a": 3
       },
       "da": {
         "h": null,
