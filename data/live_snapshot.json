@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-16T02:00:33Z",
+  "generated_at": "2026-08-16T02:06:04Z",
   "status": "OK",
   "count": 10,
   "events": [
@@ -10,21 +10,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 23,
+      "min": 28,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 57,
       "xgH": 0.07,
-      "xgA": 0.36,
-      "xgTotal": 0.43,
-      "lastMom": -23,
-      "overOdds": 1.2,
-      "probLive": 83,
-      "oddsStatus": "VALID",
+      "xgA": 0.38,
+      "xgTotal": 0.45,
+      "lastMom": -14,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 2,
-        "a": 4
+        "a": 5
       },
       "sot": {
         "h": 0,
@@ -62,20 +62,13 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "6 remates",
+          "label": "7 remates",
           "emoji": "🎯",
           "level": "med",
-          "detail": "23 remates/90min"
-        },
-        {
-          "id": "mkt",
-          "label": "Odds −9.8%",
-          "emoji": "📈",
-          "level": "critical",
-          "detail": "Mercado caiu de 1.33 → 1.20 (sharp money)"
+          "detail": "22 remates/90min"
         }
       ],
-      "patternScore": 12
+      "patternScore": 2
     },
     {
       "id": 5193,
@@ -84,20 +77,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 19,
+      "min": 23,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 18,
-      "xgH": 0.61,
+      "xgH": 0.67,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 78,
-      "overOdds": 1.12,
-      "probLive": 89,
-      "oddsStatus": "VALID",
+      "lastMom": 21,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 4,
+        "h": 5,
         "a": 0
       },
       "sot": {
@@ -133,16 +126,8 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Casa domina",
-          "emoji": "💥",
-          "level": "high",
-          "detail": "Momentum casa 78 — controlo total"
-        }
-      ],
-      "patternScore": 4
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 5192,
@@ -151,18 +136,18 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 19,
+      "min": 23,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 18,
-      "xgH": 0.1,
+      "xgH": 0.09,
       "xgA": 0.3,
-      "xgTotal": 0.4,
-      "lastMom": 50,
-      "overOdds": 1.03,
-      "probLive": 97,
-      "oddsStatus": "VALID",
+      "xgTotal": 0.39,
+      "lastMom": 38,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 3,
         "a": 2
@@ -200,30 +185,8 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "shots",
-          "label": "5 remates",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "24 remates/90min"
-        },
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 50"
-        },
-        {
-          "id": "mkt",
-          "label": "Odds −10.4%",
-          "emoji": "📈",
-          "level": "critical",
-          "detail": "Mercado caiu de 1.15 → 1.03 (sharp money)"
-        }
-      ],
-      "patternScore": 14
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 211526,
@@ -232,21 +195,21 @@
       "hScore": 4,
       "aScore": 1,
       "goals": 5,
-      "min": 49,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 19,
-      "xgH": 2.23,
-      "xgA": 0.1,
-      "xgTotal": 2.33,
-      "lastMom": 48,
+      "xgH": 2.08,
+      "xgA": 0.12,
+      "xgTotal": 2.2,
+      "lastMom": 29,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 18,
-        "a": 1
+        "a": 2
       },
       "sot": {
         "h": 8,
@@ -281,16 +244,8 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 48"
-        }
-      ],
-      "patternScore": 2
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 207755,
@@ -308,9 +263,9 @@
       "xgA": 0.91,
       "xgTotal": 0.99,
       "lastMom": -28,
-      "overOdds": 1.17,
-      "probLive": 85,
-      "oddsStatus": "VALID",
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 3,
         "a": 6
@@ -363,13 +318,13 @@
       "period": "HT",
       "league": "",
       "league_id": 57,
-      "xgH": 0.72,
+      "xgH": 0.73,
       "xgA": 0.15,
-      "xgTotal": 0.87,
+      "xgTotal": 0.88,
       "lastMom": 21,
-      "overOdds": 1.12,
-      "probLive": 89,
-      "oddsStatus": "VALID",
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 16,
         "a": 3
@@ -414,27 +369,27 @@
       "id": 216411,
       "home": "Portland Thorns FC",
       "away": "Orlando Pride",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 0,
-      "goals": 0,
-      "min": 54,
+      "goals": 1,
+      "min": 59,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 72,
-      "xgH": 0.07,
+      "xgH": 0.27,
       "xgA": 0.51,
-      "xgTotal": 0.5800000000000001,
-      "lastMom": 20,
-      "overOdds": 1.06,
-      "probLive": 94,
-      "oddsStatus": "VALID",
+      "xgTotal": 0.78,
+      "lastMom": 66,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 3,
+        "h": 6,
         "a": 9
       },
       "sot": {
-        "h": 0,
+        "h": 1,
         "a": 3
       },
       "da": {
@@ -466,8 +421,23 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "open",
+          "label": "JOGO ABERTO",
+          "emoji": "🎭",
+          "level": "low",
+          "detail": "31min, equipa a perder ataca"
+        },
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 66"
+        }
+      ],
+      "patternScore": 3
     },
     {
       "id": 5190,
@@ -476,7 +446,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 53,
+      "min": 57,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -484,7 +454,7 @@
       "xgH": 0.93,
       "xgA": 0.56,
       "xgTotal": 1.4900000000000002,
-      "lastMom": -3,
+      "lastMom": 5,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
@@ -510,7 +480,7 @@
       },
       "redCards": {
         "h": 0,
-        "a": 0
+        "a": 1
       },
       "isSavedPick": false,
       "coverage": {
@@ -525,8 +495,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "numerical",
+          "label": "Casa +1 homem",
+          "emoji": "🟥",
+          "level": "med",
+          "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 5189,
@@ -535,24 +513,24 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 51,
+      "min": 55,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
       "xgH": 0.84,
-      "xgA": 0.95,
-      "xgTotal": 1.79,
-      "lastMom": 4,
+      "xgA": 1.04,
+      "xgTotal": 1.88,
+      "lastMom": 27,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 13,
-        "a": 3
+        "h": 14,
+        "a": 4
       },
       "sot": {
-        "h": 6,
+        "h": 7,
         "a": 2
       },
       "da": {
@@ -594,21 +572,21 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 87,
+      "min": 91,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 85,
       "xgH": 0.78,
-      "xgA": 1.39,
-      "xgTotal": 2.17,
-      "lastMom": 22,
-      "overOdds": 1.2,
-      "probLive": 83,
-      "oddsStatus": "VALID",
+      "xgA": 1.74,
+      "xgTotal": 2.52,
+      "lastMom": -35,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 11,
-        "a": 10
+        "a": 12
       },
       "sot": {
         "h": 8,
@@ -643,23 +621,8 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "late",
-          "label": "1 gol em 3min",
-          "emoji": "⏰",
-          "level": "low",
-          "detail": "Falta 1 golo · mercado 83% · 3min"
-        },
-        {
-          "id": "mkt",
-          "label": "Odds −22.1%",
-          "emoji": "📈",
-          "level": "critical",
-          "detail": "Mercado caiu de 1.54 → 1.20 (sharp money)"
-        }
-      ],
-      "patternScore": 11
+      "patterns": [],
+      "patternScore": 0
     }
   ]
 }
