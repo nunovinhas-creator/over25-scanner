@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-16T16:13:49Z",
+  "generated_at": "2026-08-16T16:18:53Z",
   "status": "OK",
   "count": 22,
   "events": [
@@ -8,27 +8,27 @@
       "home": "Randers FC",
       "away": "FC København",
       "hScore": 0,
-      "aScore": 1,
-      "goals": 1,
-      "min": 11,
+      "aScore": 2,
+      "goals": 2,
+      "min": 16,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 84,
       "xgH": null,
-      "xgA": 0.2,
+      "xgA": 0.32,
       "xgTotal": null,
-      "lastMom": -15,
+      "lastMom": 24,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 0,
-        "a": 2
+        "a": 4
       },
       "sot": {
         "h": 0,
-        "a": 2
+        "a": 3
       },
       "da": {
         "h": null,
@@ -59,8 +59,16 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "4 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "22 remates/90min"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 220834,
@@ -69,7 +77,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 11,
+      "min": 16,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -128,7 +136,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 8,
+      "min": 13,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -187,24 +195,24 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 13,
+      "min": 18,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 11,
-      "xgH": 0.19,
+      "xgH": 0.69,
       "xgA": 0.13,
-      "xgTotal": 0.32,
-      "lastMom": 67,
+      "xgTotal": 0.82,
+      "lastMom": 24,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 3,
+        "h": 4,
         "a": 2
       },
       "sot": {
-        "h": 0,
+        "h": 1,
         "a": 2
       },
       "da": {
@@ -239,20 +247,13 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "5 remates",
+          "label": "6 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "35 remates/90min (muito alto)"
-        },
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 67"
+          "detail": "30 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 6
+      "patternScore": 4
     },
     {
       "id": 215477,
@@ -261,25 +262,25 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 7,
+      "min": 12,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 42,
-      "xgH": 0.14,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": 62,
+      "xgH": 0.27,
+      "xgA": 0.19,
+      "xgTotal": 0.46,
+      "lastMom": -59,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 3,
-        "a": 0
+        "h": 4,
+        "a": 3
       },
       "sot": {
         "h": 0,
-        "a": 0
+        "a": 1
       },
       "da": {
         "h": null,
@@ -300,18 +301,33 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "7 remates",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "52 remates/90min (muito alto)"
+        },
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 59"
+        }
+      ],
+      "patternScore": 6
     },
     {
       "id": 211680,
@@ -320,7 +336,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 12,
+      "min": 17,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -379,24 +395,24 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 41,
+      "min": 46,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 23,
-      "xgH": 0.41,
+      "xgH": 0.47,
       "xgA": 0.52,
-      "xgTotal": 0.9299999999999999,
-      "lastMom": 24,
+      "xgTotal": 0.99,
+      "lastMom": 23,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 4,
+        "h": 6,
         "a": 5
       },
       "sot": {
-        "h": 0,
+        "h": 1,
         "a": 0
       },
       "da": {
@@ -446,20 +462,20 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 38,
+      "min": 43,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 25,
-      "xgH": 0.37,
+      "xgH": 0.5,
       "xgA": 0.39,
-      "xgTotal": 0.76,
-      "lastMom": -27,
+      "xgTotal": 0.89,
+      "lastMom": 66,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 5,
+        "h": 6,
         "a": 6
       },
       "sot": {
@@ -498,40 +514,47 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "11 remates",
+          "label": "12 remates",
           "emoji": "🎯",
           "level": "med",
-          "detail": "26 remates/90min"
+          "detail": "25 remates/90min"
+        },
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 66"
         }
       ],
-      "patternScore": 2
+      "patternScore": 4
     },
     {
       "id": 223384,
       "home": "FC Schalke 04",
       "away": "Real Madrid",
       "hScore": 0,
-      "aScore": 2,
-      "goals": 2,
-      "min": 55,
+      "aScore": 3,
+      "goals": 3,
+      "min": 60,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 79,
       "xgH": 0.28,
-      "xgA": 0.78,
-      "xgTotal": 1.06,
-      "lastMom": -42,
+      "xgA": 1.01,
+      "xgTotal": 1.29,
+      "lastMom": -39,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 6,
-        "a": 8
+        "a": 9
       },
       "sot": {
         "h": 1,
-        "a": 5
+        "a": 6
       },
       "da": {
         "h": null,
@@ -572,21 +595,21 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 53,
+      "min": 58,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 79,
-      "xgH": 1.44,
-      "xgA": 0.73,
-      "xgTotal": 2.17,
-      "lastMom": 31,
+      "xgH": 1.53,
+      "xgA": 0.84,
+      "xgTotal": 2.37,
+      "lastMom": -4,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 10,
-        "a": 12
+        "h": 11,
+        "a": 13
       },
       "sot": {
         "h": 5,
@@ -621,8 +644,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "xg_delta",
+          "label": "xG sobrevaloriza",
+          "emoji": "🎲",
+          "level": "med",
+          "detail": "xG 2.37 vs 1 golos"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 214769,
@@ -631,24 +662,24 @@
       "hScore": 1,
       "aScore": 2,
       "goals": 3,
-      "min": 51,
+      "min": 55,
       "status": "2nd_half",
       "period": "2T",
       "league": "La Liga 2",
       "league_id": 38,
-      "xgH": 1.09,
+      "xgH": 1.2,
       "xgA": 0.17,
-      "xgTotal": 1.26,
-      "lastMom": 1,
+      "xgTotal": 1.3699999999999999,
+      "lastMom": 64,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 9,
+        "h": 12,
         "a": 5
       },
       "sot": {
-        "h": 3,
+        "h": 4,
         "a": 3
       },
       "da": {
@@ -680,8 +711,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 64"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 213984,
@@ -690,25 +729,92 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 53,
+      "min": 58,
       "status": "2nd_half",
       "period": "2T",
       "league": "Championship",
       "league_id": 12,
-      "xgH": 0.54,
+      "xgH": 0.59,
       "xgA": 0.61,
-      "xgTotal": 1.15,
-      "lastMom": 66,
+      "xgTotal": 1.2,
+      "lastMom": 50,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 8,
+        "h": 10,
         "a": 7
       },
       "sot": {
         "h": 2,
         "a": 1
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 50"
+        }
+      ],
+      "patternScore": 2
+    },
+    {
+      "id": 213527,
+      "home": "Real Racing Club",
+      "away": "Villarreal",
+      "hScore": 2,
+      "aScore": 2,
+      "goals": 4,
+      "min": 53,
+      "status": "2nd_half",
+      "period": "2T",
+      "league": "La Liga",
+      "league_id": 3,
+      "xgH": 1.82,
+      "xgA": 0.31,
+      "xgTotal": 2.13,
+      "lastMom": 66,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 14,
+        "a": 6
+      },
+      "sot": {
+        "h": 2,
+        "a": 4
       },
       "da": {
         "h": null,
@@ -751,90 +857,31 @@
       "patternScore": 2
     },
     {
-      "id": 213527,
-      "home": "Real Racing Club",
-      "away": "Villarreal",
-      "hScore": 2,
-      "aScore": 2,
-      "goals": 4,
-      "min": 48,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "La Liga",
-      "league_id": 3,
-      "xgH": 1.37,
-      "xgA": 0.31,
-      "xgTotal": 1.6800000000000002,
-      "lastMom": 0,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 11,
-        "a": 6
-      },
-      "sot": {
-        "h": 2,
-        "a": 4
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
       "id": 207051,
       "home": "Sarpsborg 08",
       "away": "Sandefjord Fotball",
       "hScore": 1,
-      "aScore": 1,
-      "goals": 2,
-      "min": 52,
+      "aScore": 2,
+      "goals": 3,
+      "min": 57,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 54,
-      "xgH": 1.56,
-      "xgA": 0.92,
-      "xgTotal": 2.48,
-      "lastMom": 29,
+      "xgH": 1.7,
+      "xgA": 1.13,
+      "xgTotal": 2.83,
+      "lastMom": -44,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 10,
-        "a": 7
+        "h": 12,
+        "a": 10
       },
       "sot": {
-        "h": 3,
-        "a": 3
+        "h": 4,
+        "a": 6
       },
       "da": {
         "h": null,
@@ -875,24 +922,24 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 49,
+      "min": 54,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 54,
-      "xgH": 1.39,
+      "xgH": 1.51,
       "xgA": 0.18,
-      "xgTotal": 1.5699999999999998,
-      "lastMom": 83,
+      "xgTotal": 1.69,
+      "lastMom": 95,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 15,
+        "h": 17,
         "a": 2
       },
       "sot": {
-        "h": 4,
+        "h": 6,
         "a": 0
       },
       "da": {
@@ -930,7 +977,7 @@
           "label": "Casa domina",
           "emoji": "💥",
           "level": "high",
-          "detail": "Momentum casa 83 — controlo total"
+          "detail": "Momentum casa 95 — controlo total"
         },
         {
           "id": "numerical",
@@ -946,28 +993,28 @@
       "id": 207048,
       "home": "Molde FK",
       "away": "Tromsø IL",
-      "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 51,
+      "hScore": 2,
+      "aScore": 1,
+      "goals": 3,
+      "min": 56,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 54,
-      "xgH": 0.93,
-      "xgA": 0.4,
-      "xgTotal": 1.33,
-      "lastMom": -15,
+      "xgH": 1.42,
+      "xgA": 0.5,
+      "xgTotal": 1.92,
+      "lastMom": 69,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 4,
-        "a": 5
+        "h": 6,
+        "a": 6
       },
       "sot": {
-        "h": 2,
-        "a": 1
+        "h": 3,
+        "a": 2
       },
       "da": {
         "h": null,
@@ -998,8 +1045,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 69"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 210816,
@@ -1008,25 +1063,25 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 70,
+      "min": 75,
       "status": "2nd_half",
       "period": "2T",
       "league": "Eredivisie",
       "league_id": 10,
-      "xgH": 1.59,
-      "xgA": 0.85,
-      "xgTotal": 2.44,
-      "lastMom": -33,
+      "xgH": 1.62,
+      "xgA": 0.93,
+      "xgTotal": 2.5500000000000003,
+      "lastMom": -5,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 17,
-        "a": 9
+        "h": 18,
+        "a": 11
       },
       "sot": {
         "h": 4,
-        "a": 6
+        "a": 7
       },
       "da": {
         "h": null,
@@ -1064,28 +1119,28 @@
       "id": 587944,
       "home": "Basel",
       "away": "FC Barcelona",
-      "hScore": 1,
-      "aScore": 2,
-      "goals": 3,
-      "min": 80,
+      "hScore": 2,
+      "aScore": 3,
+      "goals": 5,
+      "min": 85,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 79,
-      "xgH": 0.3,
-      "xgA": 2.32,
-      "xgTotal": 2.6199999999999997,
-      "lastMom": -17,
+      "xgH": 1.09,
+      "xgA": 3.24,
+      "xgTotal": 4.33,
+      "lastMom": 6,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 5,
-        "a": 17
+        "h": 6,
+        "a": 19
       },
       "sot": {
-        "h": 1,
-        "a": 2
+        "h": 2,
+        "a": 4
       },
       "da": {
         "h": null,
@@ -1126,7 +1181,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 77,
+      "min": 82,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -1185,24 +1240,24 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 80,
+      "min": 85,
       "status": "2nd_half",
       "period": "2T",
       "league": "Primeira Liga",
       "league_id": 2,
-      "xgH": 1.77,
+      "xgH": 2.1,
       "xgA": 0.72,
-      "xgTotal": 2.49,
-      "lastMom": 31,
+      "xgTotal": 2.8200000000000003,
+      "lastMom": 59,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 18,
+        "h": 20,
         "a": 8
       },
       "sot": {
-        "h": 2,
+        "h": 3,
         "a": 5
       },
       "da": {
@@ -1240,21 +1295,28 @@
           "label": "CONVERGÊNCIA",
           "emoji": "🔮",
           "level": "conv",
-          "detail": "3 padrões em simultâneo — sinal forte"
+          "detail": "4 padrões em simultâneo — sinal forte"
         },
         {
           "id": "xg_pace",
-          "label": "xG 3.2/90 (2ªP)",
+          "label": "xG 3.6/90 (2ªP)",
           "emoji": "⚡",
           "level": "high",
-          "detail": "xG a ritmo de 3.2 por 90min (2ªP)"
+          "detail": "xG a ritmo de 3.6 por 90min (2ªP)"
         },
         {
           "id": "shots",
-          "label": "13r 2ªP",
+          "label": "15r 2ªP",
           "emoji": "🎯",
           "level": "high",
-          "detail": "33 remates/90min (2ªP) (muito alto)"
+          "detail": "34 remates/90min (2ªP) (muito alto)"
+        },
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 59"
         },
         {
           "id": "numerical",
@@ -1264,7 +1326,7 @@
           "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
         }
       ],
-      "patternScore": 10
+      "patternScore": 12
     },
     {
       "id": 46438,
@@ -1273,24 +1335,24 @@
       "hScore": 0,
       "aScore": 4,
       "goals": 4,
-      "min": 85,
+      "min": 90,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 26,
-      "xgH": 0.13,
+      "xgH": 0.17,
       "xgA": 2.12,
-      "xgTotal": 2.25,
+      "xgTotal": 2.29,
       "lastMom": -4,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 2,
+        "h": 4,
         "a": 25
       },
       "sot": {
-        "h": 1,
+        "h": 2,
         "a": 13
       },
       "da": {
@@ -1332,7 +1394,7 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 84,
+      "min": 90,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -1340,16 +1402,16 @@
       "xgH": 0.5,
       "xgA": 0.31,
       "xgTotal": 0.81,
-      "lastMom": 25,
+      "lastMom": 38,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 9,
+        "h": 10,
         "a": 5
       },
       "sot": {
-        "h": 4,
+        "h": 5,
         "a": 1
       },
       "da": {
