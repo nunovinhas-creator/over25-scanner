@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-16T23:35:53Z",
+  "generated_at": "2026-08-16T23:41:19Z",
   "status": "OK",
   "count": 6,
   "events": [
@@ -10,88 +10,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 18,
+      "min": 25,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 85,
       "xgH": 0.15,
-      "xgA": 0.2,
-      "xgTotal": 0.35,
-      "lastMom": -12,
+      "xgA": 0.21,
+      "xgTotal": 0.36,
+      "lastMom": -36,
       "overOdds": 1.53,
       "probLive": 65,
       "oddsStatus": "VALID",
       "shots": {
         "h": 2,
-        "a": 3
-      },
-      "sot": {
-        "h": 0,
-        "a": 0
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "shots",
-          "label": "5 remates",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "25 remates/90min"
-        }
-      ],
-      "patternScore": 2
-    },
-    {
-      "id": 216412,
-      "home": "North Carolina Courage",
-      "away": "Houston Dash",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 24,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 72,
-      "xgH": 0.07,
-      "xgA": 0.11,
-      "xgTotal": 0.18,
-      "lastMom": 3,
-      "overOdds": 1.09,
-      "probLive": 92,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 2,
-        "a": 3
+        "a": 4
       },
       "sot": {
         "h": 0,
@@ -130,30 +63,97 @@
       "patternScore": 0
     },
     {
+      "id": 216412,
+      "home": "North Carolina Courage",
+      "away": "Houston Dash",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 30,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 72,
+      "xgH": 0.1,
+      "xgA": 0.11,
+      "xgTotal": 0.21000000000000002,
+      "lastMom": 46,
+      "overOdds": 1.09,
+      "probLive": 92,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 3,
+        "a": 3
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 46"
+        }
+      ],
+      "patternScore": 2
+    },
+    {
       "id": 211529,
       "home": "Club América",
       "away": "Atlético San Luis",
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 32,
+      "min": 38,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 19,
-      "xgH": 0.26,
+      "xgH": 0.3,
       "xgA": 0.53,
-      "xgTotal": 0.79,
-      "lastMom": 22,
+      "xgTotal": 0.8300000000000001,
+      "lastMom": 72,
       "overOdds": 1.14,
       "probLive": 88,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 8,
+        "h": 10,
         "a": 7
       },
       "sot": {
-        "h": 1,
+        "h": 2,
         "a": 1
       },
       "da": {
@@ -188,13 +188,20 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "15 remates",
+          "label": "17 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "42 remates/90min (muito alto)"
+          "detail": "40 remates/90min (muito alto)"
+        },
+        {
+          "id": "mom",
+          "label": "Casa domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum casa 72 — controlo total"
         }
       ],
-      "patternScore": 4
+      "patternScore": 8
     },
     {
       "id": 7217,
@@ -203,15 +210,15 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 48,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 9,
-      "xgH": 0.84,
-      "xgA": 0.59,
-      "xgTotal": 1.43,
-      "lastMom": -4,
+      "xgH": 0.9,
+      "xgA": 0.72,
+      "xgTotal": 1.62,
+      "lastMom": 12,
       "overOdds": 1.21,
       "probLive": 83,
       "oddsStatus": "VALID",
@@ -262,7 +269,7 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 63,
+      "min": 70,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -270,7 +277,7 @@
       "xgH": 0.91,
       "xgA": 0.34,
       "xgTotal": 1.25,
-      "lastMom": -14,
+      "lastMom": -32,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
@@ -321,21 +328,21 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 58,
+      "min": 65,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
       "xgH": 2.17,
-      "xgA": 0.67,
-      "xgTotal": 2.84,
-      "lastMom": 29,
+      "xgA": 0.81,
+      "xgTotal": 2.98,
+      "lastMom": -38,
       "overOdds": 1.02,
       "probLive": 98,
       "oddsStatus": "VALID",
       "shots": {
         "h": 15,
-        "a": 7
+        "a": 9
       },
       "sot": {
         "h": 4,
