@@ -1,8 +1,67 @@
 {
-  "generated_at": "2026-08-16T00:16:16Z",
+  "generated_at": "2026-08-16T00:21:27Z",
   "status": "OK",
-  "count": 1,
+  "count": 2,
   "events": [
+    {
+      "id": 223570,
+      "home": "Club Atlético Platense",
+      "away": "Boca Juniors",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 3,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 85,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": -43,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
     {
       "id": 7221,
       "home": "São Paulo",
@@ -10,20 +69,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 13,
+      "min": 19,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 9,
-      "xgH": 0.22,
+      "xgH": 0.29,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 62,
+      "lastMom": 33,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 3,
+        "h": 4,
         "a": 0
       },
       "sot": {
@@ -59,16 +118,8 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 62"
-        }
-      ],
-      "patternScore": 2
+      "patterns": [],
+      "patternScore": 0
     }
   ]
 }
