@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-16T04:52:37Z",
+  "generated_at": "2026-08-16T04:57:49Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 75,
+      "min": 80,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -18,9 +18,9 @@
       "xgH": 0.64,
       "xgA": 0.76,
       "xgTotal": 1.4,
-      "lastMom": -5,
-      "overOdds": 1.11,
-      "probLive": 90,
+      "lastMom": -11,
+      "overOdds": 1.33,
+      "probLive": 75,
       "oddsStatus": "VALID",
       "shots": {
         "h": 7,
@@ -62,10 +62,10 @@
       "patterns": [
         {
           "id": "late",
-          "label": "1 gol em 15min",
+          "label": "1 gol em 10min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 90% · 15min"
+          "detail": "Falta 1 golo · mercado 75% · 10min"
         },
         {
           "id": "numerical",
@@ -81,27 +81,27 @@
       "id": 207760,
       "home": "Sacramento Republic FC",
       "away": "Lexington SC",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 0,
-      "goals": 0,
-      "min": 82,
+      "goals": 1,
+      "min": 87,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 57,
-      "xgH": 0.8,
+      "xgH": 1.81,
       "xgA": 0.15,
-      "xgTotal": 0.9500000000000001,
-      "lastMom": 43,
+      "xgTotal": 1.96,
+      "lastMom": 49,
       "overOdds": 1.22,
       "probLive": 82,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 9,
+        "h": 11,
         "a": 3
       },
       "sot": {
-        "h": 0,
+        "h": 1,
         "a": 0
       },
       "da": {
@@ -133,8 +133,23 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "open",
+          "label": "JOGO ABERTO",
+          "emoji": "🎭",
+          "level": "low",
+          "detail": "3min, equipa a perder ataca"
+        },
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 49"
+        }
+      ],
+      "patternScore": 3
     }
   ]
 }
