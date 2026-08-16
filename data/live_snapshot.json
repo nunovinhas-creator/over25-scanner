@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-16T14:12:58Z",
+  "generated_at": "2026-08-16T14:19:07Z",
   "status": "OK",
   "count": 14,
   "events": [
@@ -10,20 +10,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 11,
+      "min": 18,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 84,
-      "xgH": null,
+      "xgH": 0.01,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 18,
-      "overOdds": 1.18,
-      "probLive": 85,
+      "lastMom": -12,
+      "overOdds": 1.16,
+      "probLive": 86,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
+        "h": 1,
         "a": 0
       },
       "sot": {
@@ -69,24 +69,24 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 10,
+      "min": 17,
       "status": "1st_half",
       "period": "1T",
       "league": "Belgian Pro League",
       "league_id": 14,
-      "xgH": 0.1,
+      "xgH": 0.39,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 20,
-      "overOdds": 1.34,
-      "probLive": 75,
-      "oddsStatus": "VALID",
+      "lastMom": 41,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 3,
+        "h": 6,
         "a": 0
       },
       "sot": {
-        "h": 1,
+        "h": 3,
         "a": 0
       },
       "da": {
@@ -121,13 +121,13 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "3 remates",
+          "label": "6 remates",
           "emoji": "🎯",
-          "level": "med",
-          "detail": "27 remates/90min"
+          "level": "high",
+          "detail": "32 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 2
+      "patternScore": 4
     },
     {
       "id": 207294,
@@ -136,7 +136,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 10,
+      "min": 17,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -145,9 +145,9 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "overOdds": 1.27,
+      "probLive": 79,
+      "oddsStatus": "VALID",
       "shots": {
         "h": null,
         "a": null
@@ -193,9 +193,9 @@
       "home": "FC Lahti",
       "away": "Kuopion Palloseura",
       "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 8,
+      "aScore": 1,
+      "goals": 2,
+      "min": 15,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -254,92 +254,25 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 9,
+      "min": 16,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
-      "xgH": 0.02,
+      "xgH": 0.08,
       "xgA": 0.79,
-      "xgTotal": 0.81,
-      "lastMom": -50,
+      "xgTotal": 0.87,
+      "lastMom": 16,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 1,
+        "h": 3,
         "a": 1
       },
       "sot": {
         "h": 0,
         "a": 0
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum fora 50"
-        }
-      ],
-      "patternScore": 2
-    },
-    {
-      "id": 7216,
-      "home": "Chapecoense",
-      "away": "Bahia",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 9,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 9,
-      "xgH": 0.08,
-      "xgA": 0.12,
-      "xgTotal": 0.2,
-      "lastMom": -17,
-      "overOdds": 1.26,
-      "probLive": 79,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 2,
-        "a": 2
-      },
-      "sot": {
-        "h": 0,
-        "a": 1
       },
       "da": {
         "h": null,
@@ -375,11 +308,85 @@
           "id": "shots",
           "label": "4 remates",
           "emoji": "🎯",
-          "level": "high",
-          "detail": "40 remates/90min (muito alto)"
+          "level": "med",
+          "detail": "22 remates/90min"
         }
       ],
-      "patternScore": 4
+      "patternScore": 2
+    },
+    {
+      "id": 7216,
+      "home": "Chapecoense",
+      "away": "Bahia",
+      "hScore": 0,
+      "aScore": 1,
+      "goals": 1,
+      "min": 16,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 9,
+      "xgH": 0.09,
+      "xgA": 0.97,
+      "xgTotal": 1.06,
+      "lastMom": -60,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 3,
+        "a": 4
+      },
+      "sot": {
+        "h": 0,
+        "a": 2
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "7 remates",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "39 remates/90min (muito alto)"
+        },
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 60"
+        }
+      ],
+      "patternScore": 6
     },
     {
       "id": 374787,
@@ -388,7 +395,7 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 52,
+      "min": 58,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -397,9 +404,9 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "overOdds": 1.25,
+      "probLive": 80,
+      "oddsStatus": "VALID",
       "shots": {
         "h": null,
         "a": null
@@ -447,7 +454,7 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 50,
+      "min": 56,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -456,9 +463,9 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": 1.15,
-      "probLive": 87,
-      "oddsStatus": "VALID",
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": null,
         "a": null
@@ -506,7 +513,7 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 54,
+      "min": 61,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -515,9 +522,9 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "overOdds": 1.08,
+      "probLive": 93,
+      "oddsStatus": "VALID",
       "shots": {
         "h": null,
         "a": null
@@ -565,20 +572,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 62,
+      "min": 69,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 25,
-      "xgH": 1.49,
+      "xgH": 1.95,
       "xgA": 0.81,
-      "xgTotal": 2.3,
-      "lastMom": 57,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgTotal": 2.76,
+      "lastMom": 17,
+      "overOdds": 1.26,
+      "probLive": 79,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 11,
+        "h": 12,
         "a": 8
       },
       "sot": {
@@ -617,20 +624,13 @@
       "patterns": [
         {
           "id": "xg_delta",
-          "label": "xG +2.3 acima",
+          "label": "xG +2.8 acima",
           "emoji": "🎲",
-          "level": "high",
-          "detail": "xG 2.30 vs 0 golos"
-        },
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 57"
+          "level": "critical",
+          "detail": "xG 2.76 vs 0 golos — golo(s) em dívida"
         }
       ],
-      "patternScore": 6
+      "patternScore": 10
     },
     {
       "id": 213983,
@@ -639,25 +639,25 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 79,
+      "min": 85,
       "status": "2nd_half",
       "period": "2T",
       "league": "Championship",
       "league_id": 12,
-      "xgH": 0.82,
-      "xgA": 0.72,
-      "xgTotal": 1.54,
-      "lastMom": 19,
-      "overOdds": 1.03,
-      "probLive": 97,
-      "oddsStatus": "VALID",
+      "xgH": 0.83,
+      "xgA": 1.11,
+      "xgTotal": 1.94,
+      "lastMom": -36,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 16,
-        "a": 12
+        "a": 14
       },
       "sot": {
         "h": 4,
-        "a": 2
+        "a": 3
       },
       "da": {
         "h": null,
@@ -698,25 +698,25 @@
       "hScore": 2,
       "aScore": 2,
       "goals": 4,
-      "min": 82,
+      "min": 89,
       "status": "2nd_half",
       "period": "2T",
       "league": "Eredivisie",
       "league_id": 10,
-      "xgH": 2.68,
-      "xgA": 1.31,
-      "xgTotal": 3.99,
-      "lastMom": -37,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgH": 2.76,
+      "xgA": 1.41,
+      "xgTotal": 4.17,
+      "lastMom": -22,
+      "overOdds": 1.06,
+      "probLive": 94,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 24,
-        "a": 9
+        "h": 25,
+        "a": 10
       },
       "sot": {
-        "h": 5,
-        "a": 3
+        "h": 6,
+        "a": 4
       },
       "da": {
         "h": null,
@@ -757,20 +757,20 @@
       "hScore": 3,
       "aScore": 1,
       "goals": 4,
-      "min": 81,
+      "min": 88,
       "status": "2nd_half",
       "period": "2T",
       "league": "Eredivisie",
       "league_id": 10,
-      "xgH": 1.57,
+      "xgH": 1.92,
       "xgA": 0.5,
-      "xgTotal": 2.0700000000000003,
-      "lastMom": 41,
+      "xgTotal": 2.42,
+      "lastMom": 17,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 21,
+        "h": 25,
         "a": 7
       },
       "sot": {
@@ -814,27 +814,27 @@
       "home": "Aalesunds FK",
       "away": "Vålerenga IF",
       "hScore": 5,
-      "aScore": 4,
-      "goals": 9,
-      "min": 81,
+      "aScore": 5,
+      "goals": 10,
+      "min": 88,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 54,
-      "xgH": 1.65,
-      "xgA": 2.49,
-      "xgTotal": 4.140000000000001,
-      "lastMom": 9,
+      "xgH": 1.79,
+      "xgA": 2.83,
+      "xgTotal": 4.62,
+      "lastMom": 15,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 17,
-        "a": 17
+        "h": 19,
+        "a": 19
       },
       "sot": {
         "h": 8,
-        "a": 7
+        "a": 9
       },
       "da": {
         "h": null,
