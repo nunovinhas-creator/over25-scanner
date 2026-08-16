@@ -102,6 +102,7 @@ def run_fast(df: pd.DataFrame) -> pd.DataFrame:
     """
     import json as _json
     from models.math.poisson import build_dc_grid, extract_btts_over25_prob, prob_over25_poisson
+    from pipeline.transform import normalize_team_names
 
     dc_path = DATA_DIR / "dc_ratings.json"
     if not dc_path.exists():
@@ -118,9 +119,14 @@ def run_fast(df: pd.DataFrame) -> pd.DataFrame:
         if not ld:
             continue
         teams = ld.get("teams", {})
-        # dc_ratings stores raw CSV team names (no normalisation)
-        home_n = str(row["HomeTeam"])
-        away_n = str(row["AwayTeam"])
+        # Bloco O: dc_ratings.json passou a guardar chaves normalizadas
+        # (normalize_team_names(), mesma convenção usada em
+        # pipeline/transform.py::compute_final_probability_dc para o
+        # consumo ao vivo) — este lookup tem de normalizar o mesmo nome de
+        # CSV do lado de cá, senão volta a falhar 100% das vezes, agora
+        # aqui em vez de na produção.
+        home_n = normalize_team_names(str(row["HomeTeam"]))
+        away_n = normalize_team_names(str(row["AwayTeam"]))
         hd = teams.get(home_n)
         ad = teams.get(away_n)
         if not hd or not ad:
