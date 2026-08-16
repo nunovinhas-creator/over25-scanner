@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-16T03:01:31Z",
+  "generated_at": "2026-08-16T03:07:10Z",
   "status": "OK",
-  "count": 11,
+  "count": 10,
   "events": [
     {
       "id": 207759,
@@ -10,20 +10,20 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 23,
+      "min": 29,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 57,
-      "xgH": 0.09,
+      "xgH": 0.43,
       "xgA": 0.35,
-      "xgTotal": 0.43999999999999995,
-      "lastMom": 28,
+      "xgTotal": 0.78,
+      "lastMom": 31,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 2,
+        "h": 6,
         "a": 4
       },
       "sot": {
@@ -62,13 +62,13 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "6 remates",
+          "label": "10 remates",
           "emoji": "🎯",
-          "level": "med",
-          "detail": "23 remates/90min"
+          "level": "high",
+          "detail": "31 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 2
+      "patternScore": 4
     },
     {
       "id": 5195,
@@ -77,15 +77,15 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 19,
+      "min": 25,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 18,
       "xgH": 0.04,
-      "xgA": 0.57,
-      "xgTotal": 0.61,
-      "lastMom": 1,
+      "xgA": 0.62,
+      "xgTotal": 0.66,
+      "lastMom": -6,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
@@ -126,16 +126,8 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "shots",
-          "label": "6 remates",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "28 remates/90min (muito alto)"
-        }
-      ],
-      "patternScore": 4
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 5194,
@@ -144,7 +136,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 19,
+      "min": 25,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -152,7 +144,7 @@
       "xgH": 0.05,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": -48,
+      "lastMom": -38,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
@@ -193,16 +185,8 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum fora 48"
-        }
-      ],
-      "patternScore": 2
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 207758,
@@ -329,20 +313,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 61,
+      "min": 67,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 57,
-      "xgH": 0.27,
+      "xgH": 0.46,
       "xgA": 0.51,
-      "xgTotal": 0.78,
-      "lastMom": 62,
+      "xgTotal": 0.97,
+      "lastMom": 8,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 6,
+        "h": 7,
         "a": 6
       },
       "sot": {
@@ -378,42 +362,34 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 62"
-        }
-      ],
-      "patternScore": 2
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 5193,
       "home": "Colorado Rapids",
       "away": "Sporting Kansas City",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 0,
-      "goals": 0,
-      "min": 60,
+      "goals": 1,
+      "min": 66,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
-      "xgH": 1.49,
+      "xgH": 1.93,
       "xgA": 0.44,
-      "xgTotal": 1.93,
-      "lastMom": 23,
+      "xgTotal": 2.37,
+      "lastMom": 21,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 19,
+        "h": 23,
         "a": 5
       },
       "sot": {
-        "h": 1,
+        "h": 2,
         "a": 3
       },
       "da": {
@@ -447,11 +423,39 @@
       },
       "patterns": [
         {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "5 padrões em simultâneo — sinal forte"
+        },
+        {
           "id": "xg_delta",
-          "label": "xG +1.9 acima",
+          "label": "xG sobrevaloriza",
           "emoji": "🎲",
+          "level": "med",
+          "detail": "xG 2.37 vs 1 golos"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 3.6/90 (2ªP)",
+          "emoji": "⚡",
           "level": "high",
-          "detail": "xG 1.93 vs 0 golos"
+          "detail": "xG a ritmo de 3.6 por 90min (2ªP)"
+        },
+        {
+          "id": "shots",
+          "label": "9r 2ªP",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "39 remates/90min (2ªP) (muito alto)"
+        },
+        {
+          "id": "open",
+          "label": "JOGO ABERTO",
+          "emoji": "🎭",
+          "level": "low",
+          "detail": "24min, equipa a perder ataca"
         },
         {
           "id": "numerical",
@@ -461,7 +465,7 @@
           "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
         }
       ],
-      "patternScore": 6
+      "patternScore": 13
     },
     {
       "id": 5192,
@@ -470,21 +474,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 61,
+      "min": 67,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
-      "xgH": 0.93,
-      "xgA": 0.92,
-      "xgTotal": 1.85,
-      "lastMom": 84,
+      "xgH": 1.56,
+      "xgA": 0.95,
+      "xgTotal": 2.51,
+      "lastMom": -17,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 7,
-        "a": 8
+        "h": 8,
+        "a": 9
       },
       "sot": {
         "h": 4,
@@ -522,20 +526,20 @@
       "patterns": [
         {
           "id": "xg_delta",
-          "label": "xG +1.9 acima",
+          "label": "xG +2.5 acima",
           "emoji": "🎲",
-          "level": "high",
-          "detail": "xG 1.85 vs 0 golos"
+          "level": "critical",
+          "detail": "xG 2.51 vs 0 golos — golo(s) em dívida"
         },
         {
-          "id": "mom",
-          "label": "Casa domina",
-          "emoji": "💥",
-          "level": "high",
-          "detail": "Momentum casa 84 — controlo total"
+          "id": "xg_pace",
+          "label": "xG 6.5/90 (2ªP)",
+          "emoji": "⚡",
+          "level": "critical",
+          "detail": "xG a ritmo de 6.5 por 90min (2ªP)"
         }
       ],
-      "patternScore": 8
+      "patternScore": 20
     },
     {
       "id": 211526,
@@ -544,20 +548,20 @@
       "hScore": 5,
       "aScore": 1,
       "goals": 6,
-      "min": 86,
+      "min": 91,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 19,
-      "xgH": 2.34,
+      "xgH": 2.37,
       "xgA": 0.33,
-      "xgTotal": 2.67,
-      "lastMom": -12,
+      "xgTotal": 2.7,
+      "lastMom": 10,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 25,
+        "h": 26,
         "a": 4
       },
       "sot": {
@@ -597,89 +601,30 @@
       "patternScore": 0
     },
     {
-      "id": 207755,
-      "home": "San Antonio FC",
-      "away": "El Paso Locomotive FC",
-      "hScore": 0,
-      "aScore": 3,
-      "goals": 3,
-      "min": 90,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 57,
-      "xgH": 0.72,
-      "xgA": 1.24,
-      "xgTotal": 1.96,
-      "lastMom": 31,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 11,
-        "a": 10
-      },
-      "sot": {
-        "h": 3,
-        "a": 7
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
       "id": 207754,
       "home": "Colorado Springs Switchbacks FC",
       "away": "Birmingham Legion FC",
-      "hScore": 2,
+      "hScore": 3,
       "aScore": 2,
-      "goals": 4,
-      "min": 94,
+      "goals": 5,
+      "min": 99,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 57,
-      "xgH": 2.69,
+      "xgH": 2.86,
       "xgA": 0.34,
-      "xgTotal": 3.03,
-      "lastMom": 46,
+      "xgTotal": 3.1999999999999997,
+      "lastMom": 95,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 39,
+        "h": 43,
         "a": 6
       },
       "sot": {
-        "h": 11,
+        "h": 13,
         "a": 4
       },
       "da": {
@@ -713,11 +658,32 @@
       },
       "patterns": [
         {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "4 padrões em simultâneo — sinal forte"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 2.9/90",
+          "emoji": "⚡",
           "level": "med",
-          "detail": "Momentum casa 46"
+          "detail": "xG a ritmo de 2.9 por 90min"
+        },
+        {
+          "id": "shots",
+          "label": "49 remates",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "45 remates/90min (muito alto)"
+        },
+        {
+          "id": "mom",
+          "label": "Casa domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum casa 95 — controlo total"
         },
         {
           "id": "numerical",
@@ -727,7 +693,7 @@
           "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
         }
       ],
-      "patternScore": 4
+      "patternScore": 12
     }
   ]
 }
