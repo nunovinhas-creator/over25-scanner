@@ -1,8 +1,67 @@
 {
-  "generated_at": "2026-08-16T22:30:11Z",
+  "generated_at": "2026-08-16T22:35:34Z",
   "status": "OK",
-  "count": 7,
+  "count": 8,
   "events": [
+    {
+      "id": 7217,
+      "home": "Corinthians",
+      "away": "Cruzeiro",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 2,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 9,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": -2,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
     {
       "id": 5197,
       "home": "Chicago Fire",
@@ -10,21 +69,21 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 18,
+      "min": 23,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 18,
       "xgH": 1.14,
-      "xgA": 0.05,
-      "xgTotal": 1.19,
-      "lastMom": 40,
+      "xgA": 0.35,
+      "xgTotal": 1.4899999999999998,
+      "lastMom": -16,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 4,
-        "a": 1
+        "a": 3
       },
       "sot": {
         "h": 2,
@@ -61,14 +120,21 @@
       },
       "patterns": [
         {
+          "id": "xg_pace",
+          "label": "xG 5.8/90",
+          "emoji": "⚡",
+          "level": "critical",
+          "detail": "xG a ritmo de 5.8 por 90min"
+        },
+        {
           "id": "shots",
-          "label": "5 remates",
+          "label": "7 remates",
           "emoji": "🎯",
           "level": "med",
-          "detail": "25 remates/90min"
+          "detail": "27 remates/90min"
         }
       ],
-      "patternScore": 2
+      "patternScore": 12
     },
     {
       "id": 5196,
@@ -77,21 +143,21 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 17,
+      "min": 22,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 18,
       "xgH": 0.86,
-      "xgA": 0.03,
-      "xgTotal": 0.89,
-      "lastMom": 19,
+      "xgA": 0.1,
+      "xgTotal": 0.96,
+      "lastMom": -27,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 3,
-        "a": 2
+        "a": 3
       },
       "sot": {
         "h": 1,
@@ -128,14 +194,21 @@
       },
       "patterns": [
         {
+          "id": "xg_pace",
+          "label": "xG 3.9/90",
+          "emoji": "⚡",
+          "level": "high",
+          "detail": "xG a ritmo de 3.9 por 90min"
+        },
+        {
           "id": "shots",
-          "label": "5 remates",
+          "label": "6 remates",
           "emoji": "🎯",
           "level": "med",
-          "detail": "26 remates/90min"
+          "detail": "25 remates/90min"
         }
       ],
-      "patternScore": 2
+      "patternScore": 6
     },
     {
       "id": 10066,
@@ -212,9 +285,9 @@
       "xgA": 0.34,
       "xgTotal": 0.77,
       "lastMom": 3,
-      "overOdds": 1.28,
-      "probLive": 78,
-      "oddsStatus": "VALID",
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 8,
         "a": 6
@@ -388,18 +461,18 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 67,
+      "min": 71,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 85,
-      "xgH": 0.79,
+      "xgH": 0.78,
       "xgA": 0.63,
-      "xgTotal": 1.42,
-      "lastMom": -8,
-      "overOdds": 1.27,
-      "probLive": 79,
-      "oddsStatus": "VALID",
+      "xgTotal": 1.4100000000000001,
+      "lastMom": -6,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 6,
         "a": 7
