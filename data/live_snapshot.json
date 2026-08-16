@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-16T20:35:17Z",
+  "generated_at": "2026-08-16T20:40:48Z",
   "status": "OK",
   "count": 7,
   "events": [
@@ -10,15 +10,15 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 50,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "Primeira Liga",
       "league_id": 2,
       "xgH": 0.15,
       "xgA": 1.4,
       "xgTotal": 1.5499999999999998,
-      "lastMom": 0,
+      "lastMom": 4,
       "overOdds": 1.2,
       "probLive": 83,
       "oddsStatus": "VALID",
@@ -69,20 +69,20 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 49,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "La Liga 2",
       "league_id": 38,
-      "xgH": 0.5,
+      "xgH": 0.56,
       "xgA": 0.13,
-      "xgTotal": 0.63,
-      "lastMom": -9,
-      "overOdds": 1.23,
-      "probLive": 81,
-      "oddsStatus": "VALID",
+      "xgTotal": 0.6900000000000001,
+      "lastMom": 21,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 8,
+        "h": 9,
         "a": 4
       },
       "sot": {
@@ -128,7 +128,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 58,
+      "min": 64,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -136,10 +136,10 @@
       "xgH": 0.85,
       "xgA": 0.52,
       "xgTotal": 1.37,
-      "lastMom": 7,
-      "overOdds": 1.29,
-      "probLive": 78,
-      "oddsStatus": "VALID",
+      "lastMom": 23,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 11,
         "a": 10
@@ -193,9 +193,9 @@
       "home": "Varzim SC",
       "away": "AD Marco 09",
       "hScore": 2,
-      "aScore": 0,
-      "goals": 2,
-      "min": 72,
+      "aScore": 1,
+      "goals": 3,
+      "min": 78,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -204,16 +204,16 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "overOdds": 1.28,
+      "probLive": 78,
+      "oddsStatus": "VALID",
       "shots": {
         "h": null,
         "a": null
       },
       "sot": {
         "h": 3,
-        "a": 2
+        "a": 3
       },
       "da": {
         "h": null,
@@ -252,9 +252,9 @@
       "home": "Vasco da Gama",
       "away": "Santos",
       "hScore": 0,
-      "aScore": 1,
-      "goals": 1,
-      "min": 71,
+      "aScore": 2,
+      "goals": 2,
+      "min": 77,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -262,17 +262,17 @@
       "xgH": 0.95,
       "xgA": 1.04,
       "xgTotal": 1.99,
-      "lastMom": 36,
+      "lastMom": -45,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 17,
-        "a": 6
+        "a": 7
       },
       "sot": {
         "h": 3,
-        "a": 2
+        "a": 3
       },
       "da": {
         "h": null,
@@ -303,8 +303,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 45"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 7215,
@@ -313,24 +321,24 @@
       "hScore": 3,
       "aScore": 0,
       "goals": 3,
-      "min": 72,
+      "min": 78,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 9,
-      "xgH": 1.65,
+      "xgH": 2.26,
       "xgA": 0.33,
-      "xgTotal": 1.98,
-      "lastMom": 29,
+      "xgTotal": 2.59,
+      "lastMom": 67,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 10,
+        "h": 12,
         "a": 6
       },
       "sot": {
-        "h": 3,
+        "h": 4,
         "a": 1
       },
       "da": {
@@ -362,35 +370,43 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 67"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 215478,
       "home": "Hellas Verona",
       "away": "Virtus Entella",
       "hScore": 2,
-      "aScore": 1,
-      "goals": 3,
-      "min": 82,
+      "aScore": 2,
+      "goals": 4,
+      "min": 88,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 42,
       "xgH": 1.52,
-      "xgA": 0.71,
-      "xgTotal": 2.23,
-      "lastMom": -30,
-      "overOdds": 1.59,
-      "probLive": 63,
-      "oddsStatus": "VALID",
+      "xgA": 1.5,
+      "xgTotal": 3.02,
+      "lastMom": 6,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 13,
-        "a": 11
+        "a": 12
       },
       "sot": {
         "h": 4,
-        "a": 3
+        "a": 4
       },
       "da": {
         "h": null,
