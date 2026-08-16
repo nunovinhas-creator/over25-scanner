@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-16T20:05:42Z",
+  "generated_at": "2026-08-16T20:10:57Z",
   "status": "OK",
   "count": 12,
   "events": [
@@ -10,21 +10,21 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 33,
+      "min": 39,
       "status": "1st_half",
       "period": "1T",
       "league": "Primeira Liga",
       "league_id": 2,
       "xgH": 0.13,
-      "xgA": 0.93,
-      "xgTotal": 1.06,
-      "lastMom": -23,
+      "xgA": 1.2,
+      "xgTotal": 1.33,
+      "lastMom": -13,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 2,
-        "a": 5
+        "a": 7
       },
       "sot": {
         "h": 1,
@@ -62,13 +62,13 @@
       "patterns": [
         {
           "id": "xg_pace",
-          "label": "xG 2.9/90",
+          "label": "xG 3.1/90",
           "emoji": "⚡",
-          "level": "med",
-          "detail": "xG a ritmo de 2.9 por 90min"
+          "level": "high",
+          "detail": "xG a ritmo de 3.1 por 90min"
         }
       ],
-      "patternScore": 2
+      "patternScore": 4
     },
     {
       "id": 214772,
@@ -77,20 +77,20 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 31,
+      "min": 38,
       "status": "1st_half",
       "period": "1T",
       "league": "La Liga 2",
       "league_id": 38,
-      "xgH": 0.3,
+      "xgH": 0.42,
       "xgA": 0.13,
-      "xgTotal": 0.43,
-      "lastMom": 43,
+      "xgTotal": 0.55,
+      "lastMom": 33,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 5,
+        "h": 6,
         "a": 4
       },
       "sot": {
@@ -129,10 +129,10 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "9 remates",
+          "label": "10 remates",
           "emoji": "🎯",
           "level": "med",
-          "detail": "26 remates/90min"
+          "detail": "24 remates/90min"
         }
       ],
       "patternScore": 2
@@ -144,9 +144,9 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 47,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 42,
       "xgH": 0.72,
@@ -203,9 +203,9 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 48,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 82,
       "xgH": null,
@@ -262,15 +262,15 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 47,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 9,
-      "xgH": 0.6,
+      "xgH": 0.71,
       "xgA": 0.71,
-      "xgTotal": 1.31,
-      "lastMom": -10,
+      "xgTotal": 1.42,
+      "lastMom": -5,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
@@ -321,18 +321,18 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 49,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 9,
       "xgH": 0.64,
       "xgA": 0.08,
       "xgTotal": 0.72,
-      "lastMom": -13,
-      "overOdds": 1.18,
-      "probLive": 85,
-      "oddsStatus": "VALID",
+      "lastMom": 3,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 6,
         "a": 1
@@ -380,21 +380,21 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 52,
+      "min": 58,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 42,
-      "xgH": 1.18,
-      "xgA": 0.38,
-      "xgTotal": 1.56,
-      "lastMom": 36,
+      "xgH": 1.21,
+      "xgA": 0.44,
+      "xgTotal": 1.65,
+      "lastMom": -18,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 12,
-        "a": 7
+        "h": 13,
+        "a": 8
       },
       "sot": {
         "h": 4,
@@ -439,20 +439,20 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 74,
+      "min": 80,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 11,
-      "xgH": 0.87,
-      "xgA": 0.09,
-      "xgTotal": 0.96,
-      "lastMom": -48,
+      "xgH": 1.08,
+      "xgA": 0.07,
+      "xgTotal": 1.1500000000000001,
+      "lastMom": 11,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 15,
+        "h": 17,
         "a": 4
       },
       "sot": {
@@ -490,11 +490,11 @@
       },
       "patterns": [
         {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
+          "id": "shots",
+          "label": "9r 2ªP",
+          "emoji": "🎯",
           "level": "med",
-          "detail": "Momentum fora 48"
+          "detail": "23 remates/90min (2ªP)"
         },
         {
           "id": "numerical",
@@ -513,24 +513,24 @@
       "hScore": 3,
       "aScore": 0,
       "goals": 3,
-      "min": 76,
+      "min": 82,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 11,
-      "xgH": 0.99,
+      "xgH": 1.1,
       "xgA": 0.14,
-      "xgTotal": 1.13,
-      "lastMom": 35,
-      "overOdds": 1.02,
-      "probLive": 98,
-      "oddsStatus": "VALID",
+      "xgTotal": 1.2400000000000002,
+      "lastMom": 50,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 11,
+        "h": 13,
         "a": 2
       },
       "sot": {
-        "h": 4,
+        "h": 5,
         "a": 0
       },
       "da": {
@@ -562,8 +562,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 50"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 214559,
@@ -572,7 +580,7 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 74,
+      "min": 80,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -580,12 +588,12 @@
       "xgH": 2.13,
       "xgA": 1.08,
       "xgTotal": 3.21,
-      "lastMom": 9,
+      "lastMom": 33,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 14,
+        "h": 15,
         "a": 7
       },
       "sot": {
@@ -638,17 +646,17 @@
         },
         {
           "id": "xg_pace",
-          "label": "xG 5.0/90 (2ªP)",
+          "label": "xG 4.2/90 (2ªP)",
           "emoji": "⚡",
           "level": "critical",
-          "detail": "xG a ritmo de 5.0 por 90min (2ªP)"
+          "detail": "xG a ritmo de 4.2 por 90min (2ªP)"
         },
         {
           "id": "shots",
-          "label": "10r 2ªP",
+          "label": "11r 2ªP",
           "emoji": "🎯",
           "level": "high",
-          "detail": "31 remates/90min (2ªP) (muito alto)"
+          "detail": "28 remates/90min (2ªP) (muito alto)"
         }
       ],
       "patternScore": 16
@@ -660,25 +668,25 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 85,
+      "min": 91,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 25,
       "xgH": 0.7,
-      "xgA": 1.49,
-      "xgTotal": 2.19,
-      "lastMom": -14,
-      "overOdds": 1.03,
-      "probLive": 97,
-      "oddsStatus": "VALID",
+      "xgA": 1.64,
+      "xgTotal": 2.34,
+      "lastMom": -15,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 9,
-        "a": 14
+        "a": 16
       },
       "sot": {
         "h": 5,
-        "a": 4
+        "a": 5
       },
       "da": {
         "h": null,
@@ -727,7 +735,7 @@
       "hScore": 1,
       "aScore": 2,
       "goals": 3,
-      "min": 90,
+      "min": 97,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
