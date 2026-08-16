@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-16T02:50:24Z",
+  "generated_at": "2026-08-16T02:55:59Z",
   "status": "OK",
-  "count": 11,
+  "count": 12,
   "events": [
     {
       "id": 207759,
@@ -10,77 +10,18 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 11,
+      "min": 18,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 57,
       "xgH": 0.01,
-      "xgA": 0.11,
-      "xgTotal": 0.12,
-      "lastMom": 27,
-      "overOdds": 1.14,
+      "xgA": 0.21,
+      "xgTotal": 0.22,
+      "lastMom": -94,
+      "overOdds": 1.13,
       "probLive": 88,
       "oddsStatus": "VALID",
-      "shots": {
-        "h": 1,
-        "a": 1
-      },
-      "sot": {
-        "h": 0,
-        "a": 1
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 5195,
-      "home": "San Jose Earthquakes",
-      "away": "St.Louis City",
-      "hScore": 0,
-      "aScore": 1,
-      "goals": 1,
-      "min": 7,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 18,
-      "xgH": 0.02,
-      "xgA": 0.48,
-      "xgTotal": 0.5,
-      "lastMom": -24,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 1,
         "a": 3
@@ -118,8 +59,83 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Fora domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum fora 94 — controlo total"
+        }
+      ],
+      "patternScore": 4
+    },
+    {
+      "id": 5195,
+      "home": "San Jose Earthquakes",
+      "away": "St.Louis City",
+      "hScore": 0,
+      "aScore": 1,
+      "goals": 1,
+      "min": 14,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 18,
+      "xgH": 0.04,
+      "xgA": 0.53,
+      "xgTotal": 0.5700000000000001,
+      "lastMom": -13,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 2,
+        "a": 4
+      },
+      "sot": {
+        "h": 0,
+        "a": 2
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "6 remates",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "39 remates/90min (muito alto)"
+        }
+      ],
+      "patternScore": 4
     },
     {
       "id": 5194,
@@ -128,7 +144,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 7,
+      "min": 14,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -136,7 +152,7 @@
       "xgH": 0.05,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 30,
+      "lastMom": -20,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
@@ -145,7 +161,7 @@
         "a": 0
       },
       "sot": {
-        "h": 0,
+        "h": 1,
         "a": 0
       },
       "da": {
@@ -187,20 +203,20 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 40,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 57,
-      "xgH": 0.08,
+      "xgH": 0.11,
       "xgA": 0.6,
-      "xgTotal": 0.6799999999999999,
-      "lastMom": 19,
-      "overOdds": 1.17,
-      "probLive": 85,
+      "xgTotal": 0.71,
+      "lastMom": 36,
+      "overOdds": 1.02,
+      "probLive": 98,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 2,
+        "h": 3,
         "a": 6
       },
       "sot": {
@@ -243,102 +259,28 @@
       "id": 207757,
       "home": "Oakland Roots SC",
       "away": "Monterey Bay FC",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 0,
-      "goals": 0,
-      "min": 41,
-      "status": "1st_half",
-      "period": "1T",
+      "goals": 1,
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 57,
-      "xgH": 0.88,
+      "xgH": 1.09,
       "xgA": 0.14,
-      "xgTotal": 1.02,
-      "lastMom": 100,
-      "overOdds": 1.15,
-      "probLive": 87,
+      "xgTotal": 1.23,
+      "lastMom": 20,
+      "overOdds": 1.03,
+      "probLive": 97,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 10,
+        "h": 11,
         "a": 2
       },
       "sot": {
-        "h": 4,
+        "h": 5,
         "a": 0
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "shots",
-          "label": "12 remates",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "26 remates/90min"
-        },
-        {
-          "id": "mom",
-          "label": "Casa domina",
-          "emoji": "💥",
-          "level": "high",
-          "detail": "Momentum casa 100 — controlo total"
-        }
-      ],
-      "patternScore": 6
-    },
-    {
-      "id": 207756,
-      "home": "New Mexico United",
-      "away": "FC Tulsa",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 49,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 57,
-      "xgH": 0.17,
-      "xgA": 0.51,
-      "xgTotal": 0.68,
-      "lastMom": 15,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 3,
-        "a": 6
-      },
-      "sot": {
-        "h": 1,
-        "a": 3
       },
       "da": {
         "h": null,
@@ -373,30 +315,97 @@
       "patternScore": 0
     },
     {
+      "id": 207756,
+      "home": "New Mexico United",
+      "away": "FC Tulsa",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 56,
+      "status": "2nd_half",
+      "period": "2T",
+      "league": "",
+      "league_id": 57,
+      "xgH": 0.27,
+      "xgA": 0.51,
+      "xgTotal": 0.78,
+      "lastMom": 53,
+      "overOdds": 1.34,
+      "probLive": 75,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 5,
+        "a": 6
+      },
+      "sot": {
+        "h": 3,
+        "a": 3
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 53"
+        }
+      ],
+      "patternScore": 2
+    },
+    {
       "id": 5193,
       "home": "Colorado Rapids",
       "away": "Sporting Kansas City",
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 48,
+      "min": 54,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
-      "xgH": 1.16,
+      "xgH": 1.49,
       "xgA": 0.44,
-      "xgTotal": 1.5999999999999999,
-      "lastMom": 22,
-      "overOdds": 1.11,
-      "probLive": 90,
+      "xgTotal": 1.93,
+      "lastMom": 90,
+      "overOdds": 1.12,
+      "probLive": 89,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 14,
+        "h": 19,
         "a": 5
       },
       "sot": {
-        "h": 0,
+        "h": 1,
         "a": 3
       },
       "da": {
@@ -430,6 +439,27 @@
       },
       "patterns": [
         {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "3 padrões em simultâneo — sinal forte"
+        },
+        {
+          "id": "xg_delta",
+          "label": "xG +1.9 acima",
+          "emoji": "🎲",
+          "level": "high",
+          "detail": "xG 1.93 vs 0 golos"
+        },
+        {
+          "id": "mom",
+          "label": "Casa domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum casa 90 — controlo total"
+        },
+        {
           "id": "numerical",
           "label": "Casa +1 homem",
           "emoji": "🟥",
@@ -437,7 +467,7 @@
           "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
         }
       ],
-      "patternScore": 2
+      "patternScore": 10
     },
     {
       "id": 5192,
@@ -446,21 +476,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 49,
+      "min": 56,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
-      "xgH": 0.1,
-      "xgA": 0.84,
-      "xgTotal": 0.94,
-      "lastMom": -72,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgH": 0.12,
+      "xgA": 0.92,
+      "xgTotal": 1.04,
+      "lastMom": 12,
+      "overOdds": 1.14,
+      "probLive": 88,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 3,
-        "a": 7
+        "h": 4,
+        "a": 8
       },
       "sot": {
         "h": 2,
@@ -495,16 +525,8 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Fora domina",
-          "emoji": "💥",
-          "level": "high",
-          "detail": "Momentum fora 72 — controlo total"
-        }
-      ],
-      "patternScore": 4
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 211526,
@@ -513,21 +535,21 @@
       "hScore": 5,
       "aScore": 1,
       "goals": 6,
-      "min": 74,
+      "min": 80,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 19,
-      "xgH": 2.28,
+      "xgH": 2.34,
       "xgA": 0.3,
-      "xgTotal": 2.5799999999999996,
-      "lastMom": -9,
-      "overOdds": 1.11,
-      "probLive": 90,
+      "xgTotal": 2.6399999999999997,
+      "lastMom": 67,
+      "overOdds": 1.24,
+      "probLive": 81,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 23,
-        "a": 2
+        "h": 25,
+        "a": 3
       },
       "sot": {
         "h": 9,
@@ -562,6 +584,73 @@
         "score": 3,
         "total": 6
       },
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 67"
+        }
+      ],
+      "patternScore": 2
+    },
+    {
+      "id": 587949,
+      "home": "Shimizu S-Pulse",
+      "away": "Shonan Bellmare",
+      "hScore": 1,
+      "aScore": 0,
+      "goals": 1,
+      "min": 100,
+      "status": "2nd_half",
+      "period": "2T",
+      "league": "",
+      "league_id": 79,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
+      "shots": {
+        "h": null,
+        "a": null
+      },
+      "sot": {
+        "h": null,
+        "a": null
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": false,
+          "corners": false,
+          "possession": false,
+          "lastMom": false
+        },
+        "score": 0,
+        "total": 6
+      },
       "patterns": [],
       "patternScore": 0
     },
@@ -572,20 +661,20 @@
       "hScore": 0,
       "aScore": 3,
       "goals": 3,
-      "min": 79,
+      "min": 85,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 57,
-      "xgH": 0.47,
+      "xgH": 0.64,
       "xgA": 1.2,
-      "xgTotal": 1.67,
-      "lastMom": 31,
-      "overOdds": 1.19,
-      "probLive": 84,
+      "xgTotal": 1.8399999999999999,
+      "lastMom": 17,
+      "overOdds": 1.17,
+      "probLive": 85,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 9,
+        "h": 10,
         "a": 10
       },
       "sot": {
@@ -629,27 +718,27 @@
       "home": "Colorado Springs Switchbacks FC",
       "away": "Birmingham Legion FC",
       "hScore": 1,
-      "aScore": 1,
-      "goals": 2,
-      "min": 82,
+      "aScore": 2,
+      "goals": 3,
+      "min": 88,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 57,
       "xgH": 2.39,
-      "xgA": 0.19,
-      "xgTotal": 2.58,
-      "lastMom": 52,
-      "overOdds": 1.13,
-      "probLive": 88,
+      "xgA": 0.34,
+      "xgTotal": 2.73,
+      "lastMom": 54,
+      "overOdds": 1.12,
+      "probLive": 89,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 34,
-        "a": 5
+        "h": 35,
+        "a": 6
       },
       "sot": {
-        "h": 10,
-        "a": 3
+        "h": 11,
+        "a": 4
       },
       "da": {
         "h": null,
@@ -682,39 +771,11 @@
       },
       "patterns": [
         {
-          "id": "conv",
-          "label": "CONVERGÊNCIA",
-          "emoji": "🔮",
-          "level": "conv",
-          "detail": "5 padrões em simultâneo — sinal forte"
-        },
-        {
-          "id": "xg_pace",
-          "label": "xG 4.1/90 (2ªP)",
-          "emoji": "⚡",
-          "level": "critical",
-          "detail": "xG a ritmo de 4.1 por 90min (2ªP)"
-        },
-        {
-          "id": "shots",
-          "label": "20r 2ªP",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "49 remates/90min (2ªP) (muito alto)"
-        },
-        {
           "id": "mom",
           "label": "Casa pressiona",
           "emoji": "💪",
           "level": "med",
-          "detail": "Momentum casa 52"
-        },
-        {
-          "id": "late",
-          "label": "1 gol em 8min",
-          "emoji": "⏰",
-          "level": "low",
-          "detail": "Falta 1 golo · mercado 88% · 8min"
+          "detail": "Momentum casa 54"
         },
         {
           "id": "numerical",
@@ -724,7 +785,7 @@
           "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
         }
       ],
-      "patternScore": 19
+      "patternScore": 4
     }
   ]
 }
