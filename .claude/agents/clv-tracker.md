@@ -14,14 +14,18 @@ Calcula métricas de CLV e ROI para os 3 módulos em produção usando `models/m
 
 ## Instruções
 
-1. **Lê os picks dos 3 módulos:**
+1. **Lê os picks dos 3 módulos** (Sharp 1X2 já deduplicado — ver ponto "Bloco M" abaixo):
    ```bash
    cd /home/user/over25-scanner
-   python -c "
+   PYTHONPATH=. python -c "
    import json
    from pathlib import Path
+   from pipeline.scan_common import dedup_sharp1x2_picks
+
    for f in ['data/picks.json','data/picks_1x2.json','data/picks_btts_over25.json']:
        picks = json.loads(Path(f).read_text()) if Path(f).exists() else []
+       if f == 'data/picks_1x2.json':
+           picks = dedup_sharp1x2_picks(picks)
        settled = [p for p in picks if p.get('resultado_outcome') in ('WIN','LOSS') or p.get('resultado_btts_over25') in ('WIN','LOSS')]
        flagged = [p for p in picks if p.get('data_quality_flag')]
        clean = [p for p in picks if not p.get('data_quality_flag')]
@@ -34,6 +38,7 @@ Calcula métricas de CLV e ROI para os 3 módulos em produção usando `models/m
    PYTHONPATH=. python -c "
    import json, sys
    from pathlib import Path
+   from pipeline.scan_common import dedup_sharp1x2_picks
 
    modules = {
        'Over 2.5':    ('data/picks.json',            'resultado_outcome',        'clv'),
@@ -46,6 +51,12 @@ Calcula métricas de CLV e ROI para os 3 módulos em produção usando `models/m
            print(f'{name}: ficheiro não encontrado')
            continue
        picks = json.loads(Path(path).read_text())
+       if name == 'Sharp 1X2':
+           # Bloco M: scan_sharp1x2.py grava um 2º registo '{id}_update'
+           # quando a odd B365 move >3% entre scans (mesmo jogo+outcome,
+           # não uma 2ª aposta) — deduplicar antes de contar settled/CLV,
+           # senão a mesma aposta real conta duas vezes na média.
+           picks = dedup_sharp1x2_picks(picks)
        clean = [p for p in picks if not p.get('data_quality_flag')]
        settled = [p for p in clean if p.get(res_field) in ('WIN','LOSS')]
        with_clv = [p for p in clean if p.get(clv_field) is not None]
@@ -91,3 +102,4 @@ BTTS+O2.5:
 - Picks com `data_quality_flag` não-vazio são SEMPRE excluídos dos KPIs
 - Picks anteriores a 17 jun 2026 (Over 2.5 / Sharp) e 21 jun 2026 (BTTS) têm `data_quality_flag`
 - CLV rolling-30 = média dos últimos 30 picks com CLV calculado, ordenados por `scanned_at` desc
+- **Sharp 1X2 (Bloco M):** SEMPRE passar `data/picks_1x2.json` por `dedup_sharp1x2_picks()` (`pipeline/scan_common.py`) antes de calcular qualquer KPI. Um registo `{id}_update` é o MESMO jogo+outcome do original (odd B365 moveu >3% entre scans) — nunca uma segunda aposta. Mesma regra usada por `filter_1x2_alert_candidates()` (pipeline/etl.py) e `backtesting/send_sharp1x2_weekly.py`, nunca reimplementada aqui.

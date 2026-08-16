@@ -15,7 +15,7 @@ import sys
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
-from pipeline.scan_common import send_telegram
+from pipeline.scan_common import dedup_sharp1x2_picks, send_telegram
 
 PICKS_FILE = Path(__file__).resolve().parent.parent / "data" / "picks_1x2.json"
 
@@ -56,6 +56,15 @@ def _parse_date(s: str) -> datetime | None:
 
 
 def compute_stats(picks: list[dict]) -> dict:
+    # Bloco M: deduplica ANTES de tudo o resto — quando scan_sharp1x2.py
+    # grava um segundo registo "{id}_update" para o mesmo jogo+outcome (odd
+    # B365 moveu >3% entre scans), contar os dois infla n_settled/alertados
+    # e distorce CLV/WR (a mesma aposta real entraria duas vezes na média).
+    # Ver dedup_sharp1x2_picks() — mesma regra usada por
+    # filter_1x2_alert_candidates() (pipeline/etl.py) e pelo agente
+    # clv-tracker, nunca reimplementada aqui.
+    picks = dedup_sharp1x2_picks(picks)
+
     today = datetime.now(timezone.utc)
     week_ago = today - timedelta(days=7)
 

@@ -29,7 +29,7 @@ from typing import Any, Optional
 import numpy as np
 import pandas as pd
 
-from pipeline.scan_common import UNKNOWN_LEAGUE
+from pipeline.scan_common import UNKNOWN_LEAGUE, dedup_sharp1x2_picks
 
 logger = logging.getLogger(__name__)
 
@@ -454,6 +454,13 @@ def filter_1x2_alert_candidates(
     2. DRAW outcome — WR histórico 4.5%, n=22, aguarda validação com n>=100
     3. Timing gate — só picks com 0 <= timing_h <= max_timing_h horas antes do KO
 
+    Antes de qualquer gate, deduplica via dedup_sharp1x2_picks() (Bloco M):
+    quando scan_sharp1x2.py grava um segundo registo `{id}_update` para o
+    mesmo jogo+outcome (odd B365 moveu >3% entre scans), só o mais recente
+    dos dois entra nos gates/contagens — evitar que a mesma aposta real seja
+    tratada como duas. Nada é removido de `picks_1x2.json`; a dedup é só em
+    memória, para estas stats.
+
     Side-effect: logs a warning if settled picks have empty odds_fecho (CLV not computable).
 
     Parameters
@@ -471,9 +478,13 @@ def filter_1x2_alert_candidates(
     -------
     tuple[list[dict], dict]
         (alert_candidates, stats) where stats has keys:
-        n_input, n_rejected_liga, n_draw_blocked, n_timing_blocked, n_alert
+        n_input, n_dedup_removed, n_rejected_liga, n_draw_blocked,
+        n_timing_blocked, n_alert
     """
     stats: dict = {}
+    n_input_raw = len(picks)
+    picks = dedup_sharp1x2_picks(picks)
+    stats["n_dedup_removed"] = n_input_raw - len(picks)
 
     # Gate 1: liga whitelist → rejeitos em rejected_picks_1x2.json
     after_liga, n_rejected_liga = filter_by_league(picks, leagues, Path(rejected_path))
