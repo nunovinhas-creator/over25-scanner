@@ -1,8 +1,67 @@
 {
-  "generated_at": "2026-08-16T18:12:20Z",
+  "generated_at": "2026-08-16T18:18:19Z",
   "status": "OK",
-  "count": 13,
+  "count": 14,
   "events": [
+    {
+      "id": 211683,
+      "home": "Lokomotiv Plovdiv",
+      "away": "FK Dunav Ruse",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 1,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 22,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": null,
+        "a": null
+      },
+      "sot": {
+        "h": null,
+        "a": null
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": false,
+          "corners": false,
+          "possession": false,
+          "lastMom": false
+        },
+        "score": 0,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
     {
       "id": 223578,
       "home": "Sarmiento",
@@ -10,21 +69,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 10,
+      "min": 16,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 85,
       "xgH": null,
-      "xgA": 0.05,
+      "xgA": 0.06,
       "xgTotal": null,
-      "lastMom": 37,
+      "lastMom": -22,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 0,
-        "a": 2
+        "a": 3
       },
       "sot": {
         "h": 0,
@@ -69,24 +128,24 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 11,
+      "min": 17,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 19,
-      "xgH": null,
+      "xgH": 0.03,
       "xgA": 0.01,
-      "xgTotal": null,
-      "lastMom": -5,
+      "xgTotal": 0.04,
+      "lastMom": 42,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 0,
+        "h": 1,
         "a": 1
       },
       "sot": {
-        "h": 0,
+        "h": 1,
         "a": 1
       },
       "da": {
@@ -108,14 +167,14 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 3,
         "total": 6
       },
       "patterns": [],
@@ -244,11 +303,11 @@
       "home": "FC Porto B",
       "away": "SC Farense",
       "hScore": 1,
-      "aScore": 1,
-      "goals": 2,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "aScore": 2,
+      "goals": 3,
+      "min": 50,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 88,
       "xgH": null,
@@ -305,24 +364,24 @@
       "hScore": 3,
       "aScore": 0,
       "goals": 3,
-      "min": 48,
+      "min": 55,
       "status": "2nd_half",
       "period": "2T",
       "league": "Primeira Liga",
       "league_id": 2,
-      "xgH": 1.34,
-      "xgA": 0.35,
-      "xgTotal": 1.69,
-      "lastMom": 13,
+      "xgH": 1.36,
+      "xgA": 0.37,
+      "xgTotal": 1.73,
+      "lastMom": -18,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 9,
-        "a": 2
+        "h": 10,
+        "a": 3
       },
       "sot": {
-        "h": 4,
+        "h": 5,
         "a": 1
       },
       "da": {
@@ -364,24 +423,24 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 52,
+      "min": 58,
       "status": "2nd_half",
       "period": "2T",
       "league": "La Liga 2",
       "league_id": 38,
-      "xgH": 0.59,
+      "xgH": 1.23,
       "xgA": 0.02,
-      "xgTotal": 0.61,
-      "lastMom": -14,
+      "xgTotal": 1.25,
+      "lastMom": 100,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 7,
+        "h": 12,
         "a": 1
       },
       "sot": {
-        "h": 1,
+        "h": 2,
         "a": 1
       },
       "da": {
@@ -413,8 +472,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Casa domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum casa 100 — controlo total"
+        }
+      ],
+      "patternScore": 4
     },
     {
       "id": 214767,
@@ -423,21 +490,21 @@
       "hScore": 2,
       "aScore": 2,
       "goals": 4,
-      "min": 48,
+      "min": 55,
       "status": "2nd_half",
       "period": "2T",
       "league": "La Liga 2",
       "league_id": 38,
       "xgH": 1.25,
-      "xgA": 1.34,
-      "xgTotal": 2.59,
-      "lastMom": -22,
+      "xgA": 1.41,
+      "xgTotal": 2.66,
+      "lastMom": -39,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 10,
-        "a": 10
+        "a": 12
       },
       "sot": {
         "h": 3,
@@ -482,20 +549,20 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 45,
+      "min": 51,
       "status": "2nd_half",
       "period": "2T",
       "league": "La Liga",
       "league_id": 3,
-      "xgH": 0.99,
+      "xgH": 1.01,
       "xgA": 0.17,
-      "xgTotal": 1.16,
-      "lastMom": 0,
+      "xgTotal": 1.18,
+      "lastMom": 14,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 10,
+        "h": 11,
         "a": 2
       },
       "sot": {
@@ -531,25 +598,17 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "shots",
-          "label": "12 remates",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "24 remates/90min"
-        }
-      ],
-      "patternScore": 2
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 587945,
       "home": "Huesca",
       "away": "CD Teruel",
-      "hScore": 2,
+      "hScore": 3,
       "aScore": 1,
-      "goals": 3,
-      "min": 82,
+      "goals": 4,
+      "min": 88,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -605,27 +664,27 @@
       "id": 587667,
       "home": "Genoa",
       "away": "Ascoli",
-      "hScore": 3,
+      "hScore": 4,
       "aScore": 1,
-      "goals": 4,
-      "min": 77,
+      "goals": 5,
+      "min": 83,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 42,
-      "xgH": 1.28,
+      "xgH": 1.41,
       "xgA": 0.29,
-      "xgTotal": 1.57,
-      "lastMom": 3,
+      "xgTotal": 1.7,
+      "lastMom": 43,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 20,
+        "h": 22,
         "a": 4
       },
       "sot": {
-        "h": 8,
+        "h": 10,
         "a": 1
       },
       "da": {
@@ -667,7 +726,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 78,
+      "min": 85,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -726,21 +785,21 @@
       "hScore": 1,
       "aScore": 3,
       "goals": 4,
-      "min": 79,
+      "min": 86,
       "status": "2nd_half",
       "period": "2T",
       "league": "Belgian Pro League",
       "league_id": 14,
       "xgH": 0.95,
-      "xgA": 1.14,
-      "xgTotal": 2.09,
-      "lastMom": 28,
+      "xgA": 1.21,
+      "xgTotal": 2.16,
+      "lastMom": 11,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 13,
-        "a": 14
+        "a": 15
       },
       "sot": {
         "h": 1,
