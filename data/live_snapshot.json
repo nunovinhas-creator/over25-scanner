@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-16T21:40:51Z",
+  "generated_at": "2026-08-16T21:46:18Z",
   "status": "OK",
   "count": 5,
   "events": [
@@ -10,20 +10,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 8,
+      "min": 14,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
-      "xgH": 0.09,
+      "xgH": 0.15,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 38,
+      "lastMom": 33,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 5,
+        "h": 7,
         "a": 0
       },
       "sot": {
@@ -62,10 +62,10 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "5 remates",
+          "label": "7 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "56 remates/90min (muito alto)"
+          "detail": "45 remates/90min (muito alto)"
         }
       ],
       "patternScore": 4
@@ -77,87 +77,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 8,
+      "min": 13,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
-      "xgH": 0.01,
+      "xgH": 0.04,
       "xgA": 0.02,
-      "xgTotal": 0.03,
-      "lastMom": -8,
+      "xgTotal": 0.06,
+      "lastMom": 33,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 1,
-        "a": 1
-      },
-      "sot": {
-        "h": 0,
-        "a": 0
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "shots",
-          "label": "2 remates",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "22 remates/90min"
-        }
-      ],
-      "patternScore": 2
-    },
-    {
-      "id": 7223,
-      "home": "Vitória",
-      "away": "Botafogo",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 10,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 9,
-      "xgH": 0.02,
-      "xgA": 0.03,
-      "xgTotal": 0.05,
-      "lastMom": -26,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 1,
+        "h": 2,
         "a": 1
       },
       "sot": {
@@ -197,27 +130,101 @@
       "patternScore": 0
     },
     {
+      "id": 7223,
+      "home": "Vitória",
+      "away": "Botafogo",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 15,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 9,
+      "xgH": 0.02,
+      "xgA": 0.12,
+      "xgTotal": 0.13999999999999999,
+      "lastMom": -48,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 1,
+        "a": 3
+      },
+      "sot": {
+        "h": 0,
+        "a": 1
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "4 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "24 remates/90min"
+        },
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 48"
+        }
+      ],
+      "patternScore": 4
+    },
+    {
       "id": 7220,
       "home": "Mirassol",
       "away": "Flamengo",
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 9,
+      "min": 14,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 9,
-      "xgH": 0.06,
-      "xgA": 0.36,
-      "xgTotal": 0.42,
-      "lastMom": -19,
+      "xgH": 0.1,
+      "xgA": 0.32,
+      "xgTotal": 0.42000000000000004,
+      "lastMom": 17,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 2,
-        "a": 2
+        "h": 3,
+        "a": 3
       },
       "sot": {
         "h": 1,
@@ -255,10 +262,10 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "4 remates",
+          "label": "6 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "40 remates/90min (muito alto)"
+          "detail": "39 remates/90min (muito alto)"
         }
       ],
       "patternScore": 4
@@ -270,25 +277,25 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 37,
+      "min": 44,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 85,
-      "xgH": 0.69,
-      "xgA": 0.03,
-      "xgTotal": 0.72,
-      "lastMom": 36,
+      "xgH": 0.77,
+      "xgA": 0.05,
+      "xgTotal": 0.8200000000000001,
+      "lastMom": 26,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 6,
-        "a": 2
+        "h": 5,
+        "a": 3
       },
       "sot": {
         "h": 1,
-        "a": 0
+        "a": 1
       },
       "da": {
         "h": null,
