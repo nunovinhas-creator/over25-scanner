@@ -159,7 +159,8 @@ Resultados walk-forward out-of-sample (épocas 2122–2526). Estratégias defini
 
 ## Estratégias 1X2 — legacy, sem evidência válida
 
-> Investigação de 10 ago 2026. Detalhe completo e reabertura do assunto em
+> Investigação de 10 ago 2026, **causa da ausência de picks do pipeline corrigida em
+> 16 ago 2026**. Detalhe completo e reabertura do assunto em
 > [`docs/SHARP1X2_LEGACY_EVIDENCE.md`](docs/SHARP1X2_LEGACY_EVIDENCE.md).
 
 | Estratégia (legacy) | Amostra citada | Estado |
@@ -170,11 +171,16 @@ Resultados walk-forward out-of-sample (épocas 2122–2526). Estratégias defini
 
 Os números não foram apagados — pertencem ao sistema legacy (auto-log client-side
 `autoLogSharp1x2()`, que parou de correr sozinho a 20/06/2026) e ficam registados
-como tal. Todos os 352 registos de `data/picks_1x2.json` vêm desse auto-log; o
-pipeline actual (`pipeline/scan_sharp1x2.py`) nunca escreveu nenhum pick neste
-ficheiro. 97% dos registos (341/352) não têm o campo `liga` gravado
+como tal. `data/picks_1x2.json` tem hoje 354 registos: 352 desse auto-log legacy + 2
+do pipeline actual (`pipeline/scan_sharp1x2.py`, `fonte="auto-scan"`, ambos de
+14/08/2026 — os primeiros picks reais que o pipeline alguma vez gerou). O pipeline
+não escreveu nenhum pick antes disso não por os gates rejeitarem tudo, mas por um bug
+de paginação silencioso (`_fetch_all_events()` só via a 1ª página de eventos do dia,
+sem erro nos logs), corrigido no PR #154 (10/08/2026); os gates não mudaram nesse
+período. 97% dos registos legacy (341/352) não têm o campo `liga` gravado
 (`data_quality_flag="pre_bugfix_liga_vazia"`), e ao correr os gates actuais contra
-os 352 registos, 0 passam (0/245 no subconjunto WATCH+HOME).
+esses 352 registos legacy, 0 passam (0/245 no subconjunto WATCH+HOME) — detalhe
+completo em `docs/SHARP1X2_LEGACY_EVIDENCE.md`.
 
 **As estratégias Over 2.5 acima não são afectadas** — vêm de `data/picks.json`,
 escrito pelo pipeline actual (`pipeline/scan_over25.py`), fonte de dados diferente

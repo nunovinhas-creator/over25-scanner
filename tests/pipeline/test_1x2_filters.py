@@ -34,6 +34,25 @@ _WHITELIST = [
 _PICKS1X2_PATH = Path(__file__).resolve().parents[2] / "data" / "picks_1x2.json"
 
 
+def _settled_missing_odds_fecho_silently(picks: list) -> list:
+    """Settled picks (WIN/LOSS, sem data_quality_flag) sem odds_fecho E sem
+    fetch_error — a falha silenciosa que test_all_settled_picks_have_odds_fecho
+    existe para apanhar. Um settled sem odds_fecho MAS com fetch_error
+    gravado (ver update_closing_odds.py) é uma falha terminal explícita, não
+    um bug — não entra aqui (mesma filosofia de settlement_error em
+    settle_sharp1x2.py). Extraído para ser testável com fixtures sintéticas,
+    sem depender do estado real de data/picks_1x2.json — usado também pelo
+    teste que lê o ficheiro real, nunca duplicado."""
+    settled = [
+        p for p in picks
+        if p.get("resultado_outcome") in ("WIN", "LOSS") and not p.get("data_quality_flag")
+    ]
+    return [
+        p for p in settled
+        if not str(p.get("odds_fecho", "")).strip() and not p.get("fetch_error")
+    ]
+
+
 def _pick(**kwargs: Any) -> Dict[str, Any]:
     base: Dict[str, Any] = {
         "id": "1_sh",
@@ -236,12 +255,19 @@ class TestCLVTracking1x2:
 
     def test_all_settled_picks_have_odds_fecho(self) -> None:
         """
-        Valida que picks settled têm odds_fecho preenchido (CLV calculável).
+        Valida que picks settled ou têm odds_fecho preenchido (CLV
+        calculável) ou têm fetch_error gravado (falha terminal explícita de
+        update_closing_odds.py — ex.: "janela_fechada_sem_odds_fecho" —
+        nunca uma bug silenciosa). Mesma filosofia já usada para
+        settlement_error em settle_sharp1x2.py: uma falha explícita e
+        registada não é o mesmo que um pick preso sem explicação nenhuma —
+        só o segundo caso é o que este teste existe para apanhar.
 
         CLV = odds_entrada / odds_fecho - 1 (Pinnacle closing line).
         Implementação: pipeline/update_closing_odds.py + sharp1x2_analysis.yml.
 
-        Salta se o mecanismo ainda não populou dados (estado inicial após deploy).
+        Salta se o mecanismo ainda não populou dados nenhuns (nem
+        odds_fecho, nem fetch_error) — estado inicial após deploy.
         """
         if not _PICKS1X2_PATH.exists():
             pytest.skip("data/picks_1x2.json não encontrado")
@@ -257,25 +283,79 @@ class TestCLVTracking1x2:
             pytest.skip("Sem picks settled sem data_quality_flag")
 
         settled_com_close = [p for p in settled if str(p.get("odds_fecho", "")).strip()]
-        if not settled_com_close:
+        settled_com_fetch_error = [
+            p for p in settled
+            if not str(p.get("odds_fecho", "")).strip() and p.get("fetch_error")
+        ]
+        if not settled_com_close and not settled_com_fetch_error:
             pytest.skip(
-                "update_closing_odds ainda não correu — nenhum pick tem odds_fecho. "
-                "Executar sharp1x2_analysis workflow ou aguardar próximo ciclo de 30min."
+                "update_closing_odds ainda não correu — nenhum pick tem odds_fecho "
+                "nem fetch_error. Executar sharp1x2_analysis workflow ou aguardar "
+                "próximo ciclo de 30min."
             )
 
-        settled_sem_close = [
-            p for p in settled if not str(p.get("odds_fecho", "")).strip()
-        ]
+        # "Sem dados" (falha silenciosa: nem odds_fecho nem fetch_error) é o
+        # único caso que reprova — settled_com_fetch_error documenta uma
+        # tentativa que falhou de forma terminal e explícita, não um bug.
+        settled_sem_close = _settled_missing_odds_fecho_silently(picks)
         assert len(settled_sem_close) == 0, (
-            f"{len(settled_sem_close)}/{len(settled)} picks settled sem odds_fecho — "
-            f"({len(settled_com_close)} já preenchidos). "
-            "Verificar logs de update_closing_odds para picks em falta."
+            f"{len(settled_sem_close)}/{len(settled)} picks settled sem odds_fecho e sem "
+            f"fetch_error (falha silenciosa) — ({len(settled_com_close)} preenchidos, "
+            f"{len(settled_com_fetch_error)} com fetch_error terminal explícito, excluídos "
+            "desta assert). Verificar logs de update_closing_odds para picks em falta."
         )
 
 
 # ---------------------------------------------------------------------------
 # Bloco M — dedup de registos "_update" antes dos gates
 # ---------------------------------------------------------------------------
+
+
+class TestSettledMissingOddsFechoSilently:
+    """Fixtures sintéticas para _settled_missing_odds_fecho_silently() —
+    a mesma função usada por test_all_settled_picks_have_odds_fecho, aqui
+    isolada do estado real de data/picks_1x2.json."""
+
+    def test_settled_with_odds_fecho_not_flagged(self) -> None:
+        p = _pick(id="1_sh", resultado_outcome="WIN", odds_fecho="2.10")
+        assert _settled_missing_odds_fecho_silently([p]) == []
+
+    def test_settled_without_odds_fecho_and_without_fetch_error_is_flagged(self) -> None:
+        """O caso que o teste existe para apanhar: preso sem explicação."""
+        p = _pick(id="2_sh", resultado_outcome="LOSS", odds_fecho="")
+        assert _settled_missing_odds_fecho_silently([p]) == [p]
+
+    def test_settled_without_odds_fecho_but_with_fetch_error_not_flagged(self) -> None:
+        """Mirror do caso real: 209508_sh (fetch_error=janela_fechada_sem_odds_fecho)
+        é uma falha terminal explícita, não uma falha silenciosa."""
+        p = _pick(
+            id="209508_sh", resultado_outcome="LOSS", odds_fecho="",
+            fetch_error="janela_fechada_sem_odds_fecho",
+        )
+        assert _settled_missing_odds_fecho_silently([p]) == []
+
+    def test_data_quality_flagged_pick_excluded_regardless_of_odds_fecho(self) -> None:
+        p = _pick(
+            id="3_sh", resultado_outcome="LOSS", odds_fecho="",
+            data_quality_flag=True,
+        )
+        assert _settled_missing_odds_fecho_silently([p]) == []
+
+    def test_pending_pick_never_flagged(self) -> None:
+        """resultado_outcome vazio (ainda a decorrer) não é settled — fora
+        do âmbito deste teste, mesmo sem odds_fecho nem fetch_error."""
+        p = _pick(id="4_sh", resultado_outcome="", odds_fecho="")
+        assert _settled_missing_odds_fecho_silently([p]) == []
+
+    def test_mixed_batch_only_flags_the_silent_failure(self) -> None:
+        ok = _pick(id="5_sh", resultado_outcome="WIN", odds_fecho="1.90")
+        explicit_failure = _pick(
+            id="6_sh", resultado_outcome="LOSS", odds_fecho="",
+            fetch_error="bsd_sem_odds_pinnacle_pos_ko",
+        )
+        silent_failure = _pick(id="7_sh", resultado_outcome="WIN", odds_fecho="")
+        result = _settled_missing_odds_fecho_silently([ok, explicit_failure, silent_failure])
+        assert result == [silent_failure]
 
 
 class TestDedupUpdateRecords:
