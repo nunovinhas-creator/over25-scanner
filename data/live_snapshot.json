@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-16T23:46:43Z",
+  "generated_at": "2026-08-16T23:52:08Z",
   "status": "OK",
-  "count": 6,
+  "count": 7,
   "events": [
     {
       "id": 223568,
@@ -10,24 +10,24 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 30,
+      "min": 35,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 85,
-      "xgH": 0.15,
+      "xgH": 0.45,
       "xgA": 0.21,
-      "xgTotal": 0.36,
-      "lastMom": -19,
-      "overOdds": 1.53,
-      "probLive": 65,
-      "oddsStatus": "VALID",
+      "xgTotal": 0.66,
+      "lastMom": -15,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 2,
+        "h": 3,
         "a": 5
       },
       "sot": {
-        "h": 0,
+        "h": 1,
         "a": 1
       },
       "da": {
@@ -63,27 +63,27 @@
       "patternScore": 0
     },
     {
-      "id": 216412,
-      "home": "North Carolina Courage",
-      "away": "Houston Dash",
-      "hScore": 1,
+      "id": 223566,
+      "home": "Barracas Central",
+      "away": "Rosario Central",
+      "hScore": 0,
       "aScore": 0,
-      "goals": 1,
-      "min": 36,
+      "goals": 0,
+      "min": 0,
       "status": "1st_half",
       "period": "1T",
       "league": "",
-      "league_id": 72,
-      "xgH": 0.15,
-      "xgA": 0.11,
-      "xgTotal": 0.26,
-      "lastMom": 28,
-      "overOdds": 1.09,
-      "probLive": 92,
-      "oddsStatus": "VALID",
+      "league_id": 85,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 4,
-        "a": 3
+        "h": 0,
+        "a": 0
       },
       "sot": {
         "h": 0,
@@ -108,45 +108,45 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": true,
+          "xgTotal": false,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
-          "lastMom": true
+          "lastMom": false
         },
-        "score": 3,
+        "score": 1,
         "total": 6
       },
       "patterns": [],
       "patternScore": 0
     },
     {
-      "id": 211529,
-      "home": "Club América",
-      "away": "Atlético San Luis",
+      "id": 216412,
+      "home": "North Carolina Courage",
+      "away": "Houston Dash",
       "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 44,
+      "aScore": 1,
+      "goals": 2,
+      "min": 41,
       "status": "1st_half",
       "period": "1T",
       "league": "",
-      "league_id": 19,
-      "xgH": 0.29,
-      "xgA": 0.56,
-      "xgTotal": 0.8500000000000001,
-      "lastMom": -40,
+      "league_id": 72,
+      "xgH": 0.77,
+      "xgA": 0.14,
+      "xgTotal": 0.91,
+      "lastMom": 30,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 10,
-        "a": 8
+        "h": 7,
+        "a": 4
       },
       "sot": {
         "h": 2,
-        "a": 2
+        "a": 0
       },
       "da": {
         "h": null,
@@ -180,39 +180,106 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "18 remates",
+          "label": "11 remates",
           "emoji": "🎯",
-          "level": "high",
-          "detail": "37 remates/90min (muito alto)"
+          "level": "med",
+          "detail": "24 remates/90min"
         }
       ],
-      "patternScore": 4
+      "patternScore": 2
+    },
+    {
+      "id": 211529,
+      "home": "Club América",
+      "away": "Atlético San Luis",
+      "hScore": 1,
+      "aScore": 0,
+      "goals": 1,
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
+      "league": "",
+      "league_id": 19,
+      "xgH": 0.29,
+      "xgA": 0.62,
+      "xgTotal": 0.9099999999999999,
+      "lastMom": -53,
+      "overOdds": 1.14,
+      "probLive": 88,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 10,
+        "a": 10
+      },
+      "sot": {
+        "h": 2,
+        "a": 3
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 53"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 7217,
       "home": "Corinthians",
       "away": "Cruzeiro",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 1,
-      "goals": 1,
-      "min": 54,
+      "goals": 2,
+      "min": 59,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 9,
-      "xgH": 0.91,
+      "xgH": 1.02,
       "xgA": 0.83,
-      "xgTotal": 1.74,
-      "lastMom": -2,
+      "xgTotal": 1.85,
+      "lastMom": 10,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 11,
+        "h": 13,
         "a": 7
       },
       "sot": {
-        "h": 3,
+        "h": 5,
         "a": 5
       },
       "da": {
@@ -254,21 +321,21 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 75,
+      "min": 81,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
-      "xgH": 1.09,
-      "xgA": 0.34,
-      "xgTotal": 1.4300000000000002,
-      "lastMom": 22,
+      "xgH": 1.42,
+      "xgA": 0.41,
+      "xgTotal": 1.8299999999999998,
+      "lastMom": -35,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 6,
-        "a": 7
+        "h": 7,
+        "a": 8
       },
       "sot": {
         "h": 3,
@@ -311,23 +378,23 @@
       "home": "New York City FC",
       "away": "Philadelphia Union",
       "hScore": 2,
-      "aScore": 2,
-      "goals": 4,
-      "min": 70,
+      "aScore": 3,
+      "goals": 5,
+      "min": 76,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
       "xgH": 2.17,
-      "xgA": 1.56,
-      "xgTotal": 3.73,
-      "lastMom": -26,
+      "xgA": 1.62,
+      "xgTotal": 3.79,
+      "lastMom": -49,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 15,
-        "a": 11
+        "a": 13
       },
       "sot": {
         "h": 4,
@@ -362,8 +429,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 49"
+        }
+      ],
+      "patternScore": 2
     }
   ]
 }
