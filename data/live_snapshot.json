@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-16T11:55:11Z",
+  "generated_at": "2026-08-16T12:00:44Z",
   "status": "OK",
-  "count": 6,
+  "count": 5,
   "events": [
     {
       "id": 211317,
@@ -10,21 +10,21 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 23,
+      "min": 28,
       "status": "1st_half",
       "period": "1T",
       "league": "Belgian Pro League",
       "league_id": 14,
       "xgH": 0.3,
-      "xgA": 0.45,
-      "xgTotal": 0.75,
-      "lastMom": 15,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgA": 0.5,
+      "xgTotal": 0.8,
+      "lastMom": -18,
+      "overOdds": 1.64,
+      "probLive": 61,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 1,
-        "a": 3
+        "a": 4
       },
       "sot": {
         "h": 1,
@@ -62,10 +62,10 @@
       "patterns": [
         {
           "id": "xg_pace",
-          "label": "xG 2.9/90",
+          "label": "xG 2.6/90",
           "emoji": "⚡",
           "level": "med",
-          "detail": "xG a ritmo de 2.9 por 90min"
+          "detail": "xG a ritmo de 2.6 por 90min"
         }
       ],
       "patternScore": 2
@@ -77,7 +77,7 @@
       "hScore": 2,
       "aScore": 2,
       "goals": 4,
-      "min": 64,
+      "min": 69,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -133,10 +133,10 @@
       "id": 205128,
       "home": "Incheon United",
       "away": "Gimcheon Sangmu FC",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 0,
-      "goals": 0,
-      "min": 64,
+      "goals": 1,
+      "min": 69,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -145,9 +145,9 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "overOdds": 1.49,
+      "probLive": 67,
+      "oddsStatus": "VALID",
       "shots": {
         "h": null,
         "a": null
@@ -195,7 +195,7 @@
       "hScore": 3,
       "aScore": 1,
       "goals": 4,
-      "min": 63,
+      "min": 68,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -204,9 +204,9 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "overOdds": 1.36,
+      "probLive": 74,
+      "oddsStatus": "VALID",
       "shots": {
         "h": null,
         "a": null
@@ -252,27 +252,27 @@
       "home": "ADO Den Haag",
       "away": "FC Groningen",
       "hScore": 1,
-      "aScore": 3,
-      "goals": 4,
-      "min": 77,
+      "aScore": 4,
+      "goals": 5,
+      "min": 83,
       "status": "2nd_half",
       "period": "2T",
       "league": "Eredivisie",
       "league_id": 10,
-      "xgH": 0.87,
-      "xgA": 3.08,
-      "xgTotal": 3.95,
-      "lastMom": -12,
-      "overOdds": 1.14,
-      "probLive": 88,
+      "xgH": 0.89,
+      "xgA": 3.19,
+      "xgTotal": 4.08,
+      "lastMom": 12,
+      "overOdds": 1.46,
+      "probLive": 68,
       "oddsStatus": "VALID",
       "shots": {
         "h": 8,
-        "a": 14
+        "a": 17
       },
       "sot": {
         "h": 4,
-        "a": 11
+        "a": 14
       },
       "da": {
         "h": null,
@@ -305,73 +305,6 @@
       },
       "patterns": [],
       "patternScore": 0
-    },
-    {
-      "id": 374756,
-      "home": "Portimonense SAD",
-      "away": "Vizela",
-      "hScore": 2,
-      "aScore": 0,
-      "goals": 2,
-      "min": 87,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 88,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": null,
-        "a": null
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 1
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": false,
-          "sot": false,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 0,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "numerical",
-          "label": "Casa +1 homem",
-          "emoji": "🟥",
-          "level": "med",
-          "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
-        }
-      ],
-      "patternScore": 2
     }
   ]
 }
