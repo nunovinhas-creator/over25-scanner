@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-16T23:52:08Z",
+  "generated_at": "2026-08-16T23:57:33Z",
   "status": "OK",
   "count": 7,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 35,
+      "min": 41,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -18,10 +18,10 @@
       "xgH": 0.45,
       "xgA": 0.21,
       "xgTotal": 0.66,
-      "lastMom": -15,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "lastMom": 5,
+      "overOdds": 1.53,
+      "probLive": 65,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 3,
         "a": 5
@@ -69,21 +69,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 0,
+      "min": 6,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 85,
       "xgH": null,
-      "xgA": null,
+      "xgA": 0.03,
       "xgTotal": null,
-      "lastMom": null,
+      "lastMom": -19,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 0,
-        "a": 0
+        "a": 1
       },
       "sot": {
         "h": 0,
@@ -113,9 +113,9 @@
           "sot": true,
           "corners": false,
           "possession": false,
-          "lastMom": false
+          "lastMom": true
         },
-        "score": 1,
+        "score": 2,
         "total": 6
       },
       "patterns": [],
@@ -128,25 +128,25 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 41,
+      "min": 46,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 72,
       "xgH": 0.77,
-      "xgA": 0.14,
-      "xgTotal": 0.91,
-      "lastMom": 30,
+      "xgA": 1.18,
+      "xgTotal": 1.95,
+      "lastMom": -34,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 7,
-        "a": 4
+        "a": 8
       },
       "sot": {
         "h": 2,
-        "a": 0
+        "a": 2
       },
       "da": {
         "h": null,
@@ -177,16 +177,8 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "shots",
-          "label": "11 remates",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "24 remates/90min"
-        }
-      ],
-      "patternScore": 2
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 211529,
@@ -262,21 +254,21 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 59,
+      "min": 64,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 9,
-      "xgH": 1.02,
-      "xgA": 0.83,
-      "xgTotal": 1.85,
-      "lastMom": 10,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgH": 1.05,
+      "xgA": 0.87,
+      "xgTotal": 1.92,
+      "lastMom": -14,
+      "overOdds": 1.21,
+      "probLive": 83,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 13,
-        "a": 7
+        "h": 14,
+        "a": 8
       },
       "sot": {
         "h": 5,
@@ -311,35 +303,43 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "8r 2ªP",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "38 remates/90min (2ªP) (muito alto)"
+        }
+      ],
+      "patternScore": 4
     },
     {
       "id": 5197,
       "home": "Chicago Fire",
       "away": "Portland Timbers",
       "hScore": 2,
-      "aScore": 0,
-      "goals": 2,
-      "min": 81,
+      "aScore": 1,
+      "goals": 3,
+      "min": 86,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
-      "xgH": 1.42,
-      "xgA": 0.41,
-      "xgTotal": 1.8299999999999998,
-      "lastMom": -35,
+      "xgH": 1.48,
+      "xgA": 0.99,
+      "xgTotal": 2.4699999999999998,
+      "lastMom": -26,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 7,
-        "a": 8
+        "h": 8,
+        "a": 10
       },
       "sot": {
-        "h": 3,
-        "a": 1
+        "h": 4,
+        "a": 2
       },
       "da": {
         "h": null,
@@ -380,25 +380,25 @@
       "hScore": 2,
       "aScore": 3,
       "goals": 5,
-      "min": 76,
+      "min": 81,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
       "xgH": 2.17,
-      "xgA": 1.62,
-      "xgTotal": 3.79,
-      "lastMom": -49,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgA": 2.32,
+      "xgTotal": 4.49,
+      "lastMom": -36,
+      "overOdds": 1.02,
+      "probLive": 98,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 15,
-        "a": 13
+        "a": 15
       },
       "sot": {
         "h": 4,
-        "a": 3
+        "a": 4
       },
       "da": {
         "h": null,
@@ -429,16 +429,8 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum fora 49"
-        }
-      ],
-      "patternScore": 2
+      "patterns": [],
+      "patternScore": 0
     }
   ]
 }
