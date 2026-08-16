@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-16T04:57:49Z",
+  "generated_at": "2026-08-16T05:03:02Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -7,28 +7,28 @@
       "id": 211527,
       "home": "Atlas FC",
       "away": "Tigres UANL",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 1,
-      "goals": 2,
-      "min": 80,
+      "goals": 3,
+      "min": 85,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 19,
-      "xgH": 0.64,
-      "xgA": 0.76,
-      "xgTotal": 1.4,
-      "lastMom": -11,
-      "overOdds": 1.33,
-      "probLive": 75,
-      "oddsStatus": "VALID",
+      "xgH": 0.66,
+      "xgA": 1.55,
+      "xgTotal": 2.21,
+      "lastMom": -60,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 7,
-        "a": 16
+        "h": 8,
+        "a": 17
       },
       "sot": {
-        "h": 2,
-        "a": 4
+        "h": 3,
+        "a": 5
       },
       "da": {
         "h": null,
@@ -61,11 +61,11 @@
       },
       "patterns": [
         {
-          "id": "late",
-          "label": "1 gol em 10min",
-          "emoji": "⏰",
-          "level": "low",
-          "detail": "Falta 1 golo · mercado 75% · 10min"
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 60"
         },
         {
           "id": "numerical",
@@ -75,7 +75,7 @@
           "detail": "Casa com 1 vermelho(s) — Fora em vantagem numérica"
         }
       ],
-      "patternScore": 3
+      "patternScore": 4
     },
     {
       "id": 207760,
@@ -84,7 +84,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 87,
+      "min": 92,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -92,10 +92,10 @@
       "xgH": 1.81,
       "xgA": 0.15,
       "xgTotal": 1.96,
-      "lastMom": 49,
-      "overOdds": 1.22,
-      "probLive": 82,
-      "oddsStatus": "VALID",
+      "lastMom": 11,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 11,
         "a": 3
@@ -133,23 +133,8 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "open",
-          "label": "JOGO ABERTO",
-          "emoji": "🎭",
-          "level": "low",
-          "detail": "3min, equipa a perder ataca"
-        },
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 49"
-        }
-      ],
-      "patternScore": 3
+      "patterns": [],
+      "patternScore": 0
     }
   ]
 }
