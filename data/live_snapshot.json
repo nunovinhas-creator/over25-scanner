@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-16T05:08:14Z",
+  "generated_at": "2026-08-16T05:13:24Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -10,25 +10,25 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 90,
+      "min": 96,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 19,
       "xgH": 0.66,
-      "xgA": 1.66,
-      "xgTotal": 2.32,
-      "lastMom": -48,
+      "xgA": 1.69,
+      "xgTotal": 2.35,
+      "lastMom": -111,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 8,
-        "a": 18
+        "a": 20
       },
       "sot": {
         "h": 3,
-        "a": 5
+        "a": 6
       },
       "da": {
         "h": null,
@@ -61,11 +61,18 @@
       },
       "patterns": [
         {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
+          "id": "shots",
+          "label": "28 remates",
+          "emoji": "🎯",
           "level": "med",
-          "detail": "Momentum fora 48"
+          "detail": "26 remates/90min"
+        },
+        {
+          "id": "mom",
+          "label": "Fora domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum fora 111 — controlo total"
         },
         {
           "id": "numerical",
@@ -75,7 +82,7 @@
           "detail": "Casa com 1 vermelho(s) — Fora em vantagem numérica"
         }
       ],
-      "patternScore": 4
+      "patternScore": 8
     }
   ]
 }
