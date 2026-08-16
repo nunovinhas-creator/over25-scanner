@@ -360,6 +360,25 @@ def compute_prob(ev: dict, dc_ratings: dict, calibrator_fn) -> dict | None:
         return None
 
 
+# Bloco P — o fallback "modelo não encontrou as duas equipas em
+# dc_ratings.json" (compute_final_probability_dc, p_model_source=
+# "market_only") deixou de ser silencioso. Quando isto acontece, p_model
+# colapsa em p_market e ev_final vira o simétrico do vig — nunca um EV real
+# (ver Bloco O). REJECT_REASON_SEM_MODELO distingue essa rejeição de
+# "ev_baixo" (modelo correu, teve opinião, não teve edge suficiente) — as
+# duas populações nunca podem ser tratadas como a mesma métrica.
+REJECT_REASON_SEM_MODELO = "sem_modelo_dc"
+
+
+def _log_dc_lookup_missing(ev: dict) -> None:
+    """Regista de forma explícita e visível em stdout (não só num campo
+    JSON que ninguém agrega) sempre que compute_prob() cai no fallback
+    market_only — mesmo espírito de ODDS_STATUS= em scan_live.py/scan_common.py
+    (issue #127: nunca deixar uma ausência de sinal passar por um valor
+    real)."""
+    print(f"DC_LOOKUP_STATUS=MISSING liga={ev['liga']!r} casa={ev['casa']!r} fora={ev['fora']!r}")
+
+
 # ── Telegram ────────────────────────────────────────────────────────────────────
 
 def _build_msg(ev: dict, prob: dict, prefix: str = "") -> str:
@@ -538,8 +557,12 @@ def scan() -> None:
         if prob is None:
             new_rejected.append({**ev, "reject_reason": "pipeline_error", "scanned_at": ts})
             continue
+        sem_modelo = prob.get("p_model_source") == "market_only"
+        if sem_modelo:
+            _log_dc_lookup_missing(ev)
         if prob["ev_final"] < MIN_EV:
-            new_rejected.append({**ev, **prob, "reject_reason": "ev_baixo", "scanned_at": ts})
+            reason = REJECT_REASON_SEM_MODELO if sem_modelo else "ev_baixo"
+            new_rejected.append({**ev, **prob, "reject_reason": reason, "scanned_at": ts})
             continue
 
         # ── Passou todos os gates ─────────────────────────────────────────────
@@ -619,9 +642,10 @@ def scan() -> None:
     _save_list(BTTS_O25_FILE, list(existing_btts.values()))
     SCAN_STATE_FILE.write_text(json.dumps(scan_state, indent=2, ensure_ascii=False))
 
+    n_sem_modelo = sum(1 for r in new_rejected if r.get("reject_reason") == REJECT_REASON_SEM_MODELO)
     print(
         f"Over 2.5 scan: {len(new_picks)} novos picks | "
-        f"{len(new_rejected)} rejeitados | {alerts_sent} TG enviados | "
+        f"{len(new_rejected)} rejeitados ({n_sem_modelo} sem modelo DC) | {alerts_sent} TG enviados | "
         f"{len(new_btts_picks)} BTTS+O2.5 novos"
     )
 
