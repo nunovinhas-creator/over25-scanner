@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-16T20:27:23Z",
+  "generated_at": "2026-08-16T20:33:08Z",
   "status": "OK",
   "count": 7,
   "events": [
@@ -78,9 +78,9 @@
       "xgA": 0.13,
       "xgTotal": 0.63,
       "lastMom": -9,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "overOdds": 1.23,
+      "probLive": 81,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 8,
         "a": 4
@@ -128,20 +128,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 50,
+      "min": 57,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 42,
-      "xgH": 0.73,
+      "xgH": 0.85,
       "xgA": 0.52,
-      "xgTotal": 1.25,
-      "lastMom": -14,
+      "xgTotal": 1.37,
+      "lastMom": 5,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 9,
+        "h": 11,
         "a": 10
       },
       "sot": {
@@ -177,8 +177,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "xg_delta",
+          "label": "xG sobrevaloriza",
+          "emoji": "🎲",
+          "level": "med",
+          "detail": "xG 1.37 vs 0 golos"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 220830,
@@ -187,7 +195,7 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 64,
+      "min": 71,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -244,23 +252,90 @@
       "home": "Vasco da Gama",
       "away": "Santos",
       "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 63,
+      "aScore": 1,
+      "goals": 1,
+      "min": 70,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 9,
-      "xgH": 0.87,
-      "xgA": 0.73,
-      "xgTotal": 1.6,
-      "lastMom": 13,
+      "xgH": 0.97,
+      "xgA": 1.04,
+      "xgTotal": 2.01,
+      "lastMom": 7,
+      "overOdds": 1.17,
+      "probLive": 85,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 16,
+        "a": 6
+      },
+      "sot": {
+        "h": 3,
+        "a": 2
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "xg_pace",
+          "label": "xG 2.5/90 (2ªP)",
+          "emoji": "⚡",
+          "level": "med",
+          "detail": "xG a ritmo de 2.5 por 90min (2ªP)"
+        }
+      ],
+      "patternScore": 2
+    },
+    {
+      "id": 7215,
+      "home": "Atlético Mineiro",
+      "away": "Grêmio",
+      "hScore": 3,
+      "aScore": 0,
+      "goals": 3,
+      "min": 71,
+      "status": "2nd_half",
+      "period": "2T",
+      "league": "",
+      "league_id": 9,
+      "xgH": 1.65,
+      "xgA": 0.33,
+      "xgTotal": 1.98,
+      "lastMom": 47,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 15,
-        "a": 5
+        "h": 10,
+        "a": 6
       },
       "sot": {
         "h": 3,
@@ -297,81 +372,14 @@
       },
       "patterns": [
         {
-          "id": "xg_delta",
-          "label": "xG sobrevaloriza",
-          "emoji": "🎲",
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
           "level": "med",
-          "detail": "xG 1.60 vs 0 golos"
+          "detail": "Momentum casa 47"
         }
       ],
       "patternScore": 2
-    },
-    {
-      "id": 7215,
-      "home": "Atlético Mineiro",
-      "away": "Grêmio",
-      "hScore": 2,
-      "aScore": 0,
-      "goals": 2,
-      "min": 64,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 9,
-      "xgH": 1.0,
-      "xgA": 0.33,
-      "xgTotal": 1.33,
-      "lastMom": -14,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 8,
-        "a": 6
-      },
-      "sot": {
-        "h": 2,
-        "a": 1
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "shots",
-          "label": "7r 2ªP",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "33 remates/90min (2ªP) (muito alto)"
-        }
-      ],
-      "patternScore": 4
     },
     {
       "id": 215478,
@@ -380,21 +388,21 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 74,
+      "min": 81,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 42,
       "xgH": 1.52,
-      "xgA": 0.62,
-      "xgTotal": 2.14,
-      "lastMom": 6,
+      "xgA": 0.71,
+      "xgTotal": 2.23,
+      "lastMom": -12,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 13,
-        "a": 10
+        "a": 11
       },
       "sot": {
         "h": 4,
