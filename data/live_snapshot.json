@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-16T20:51:54Z",
+  "generated_at": "2026-08-16T20:57:30Z",
   "status": "OK",
-  "count": 7,
+  "count": 6,
   "events": [
     {
       "id": 215505,
@@ -10,24 +10,24 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 62,
+      "min": 68,
       "status": "2nd_half",
       "period": "2T",
       "league": "Primeira Liga",
       "league_id": 2,
-      "xgH": 0.3,
+      "xgH": 0.37,
       "xgA": 1.4,
-      "xgTotal": 1.7,
+      "xgTotal": 1.77,
       "lastMom": 30,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 4,
+        "h": 6,
         "a": 7
       },
       "sot": {
-        "h": 2,
+        "h": 3,
         "a": 2
       },
       "da": {
@@ -69,25 +69,25 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 60,
+      "min": 66,
       "status": "2nd_half",
       "period": "2T",
       "league": "La Liga 2",
       "league_id": 38,
       "xgH": 0.56,
-      "xgA": 0.66,
-      "xgTotal": 1.2200000000000002,
-      "lastMom": -46,
+      "xgA": 0.8,
+      "xgTotal": 1.36,
+      "lastMom": -87,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 9,
-        "a": 6
+        "a": 8
       },
       "sot": {
         "h": 3,
-        "a": 1
+        "a": 3
       },
       "da": {
         "h": null,
@@ -120,14 +120,21 @@
       },
       "patterns": [
         {
+          "id": "xg_pace",
+          "label": "xG 3.1/90 (2ªP)",
+          "emoji": "⚡",
+          "level": "high",
+          "detail": "xG a ritmo de 3.1 por 90min (2ªP)"
+        },
+        {
           "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum fora 46"
+          "label": "Fora domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum fora 87 — controlo total"
         }
       ],
-      "patternScore": 2
+      "patternScore": 8
     },
     {
       "id": 215479,
@@ -136,7 +143,7 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 76,
+      "min": 81,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -144,7 +151,7 @@
       "xgH": 1.79,
       "xgA": 1.17,
       "xgTotal": 2.96,
-      "lastMom": 6,
+      "lastMom": -3,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
@@ -203,7 +210,7 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 90,
+      "min": 95,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -262,21 +269,21 @@
       "hScore": 0,
       "aScore": 3,
       "goals": 3,
-      "min": 89,
+      "min": 94,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 9,
-      "xgH": 0.99,
-      "xgA": 1.85,
-      "xgTotal": 2.84,
-      "lastMom": -4,
+      "xgH": 1.04,
+      "xgA": 1.89,
+      "xgTotal": 2.9299999999999997,
+      "lastMom": 26,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 18,
-        "a": 10
+        "h": 19,
+        "a": 11
       },
       "sot": {
         "h": 3,
@@ -315,80 +322,13 @@
       "patternScore": 0
     },
     {
-      "id": 7215,
-      "home": "Atlético Mineiro",
-      "away": "Grêmio",
-      "hScore": 3,
-      "aScore": 0,
-      "goals": 3,
-      "min": 90,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 9,
-      "xgH": 2.47,
-      "xgA": 0.41,
-      "xgTotal": 2.8800000000000003,
-      "lastMom": -47,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 14,
-        "a": 9
-      },
-      "sot": {
-        "h": 5,
-        "a": 1
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum fora 47"
-        }
-      ],
-      "patternScore": 2
-    },
-    {
       "id": 215478,
       "home": "Hellas Verona",
       "away": "Virtus Entella",
       "hScore": 2,
       "aScore": 2,
       "goals": 4,
-      "min": 54,
+      "min": 60,
       "status": "inprogress",
       "period": "2T",
       "league": "",
