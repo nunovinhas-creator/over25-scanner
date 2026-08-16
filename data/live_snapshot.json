@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-16T21:51:38Z",
+  "generated_at": "2026-08-16T21:56:57Z",
   "status": "OK",
   "count": 5,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 20,
+      "min": 25,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -18,7 +18,7 @@
       "xgH": 0.27,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 42,
+      "lastMom": 16,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
@@ -65,7 +65,7 @@
           "label": "8 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "36 remates/90min (muito alto)"
+          "detail": "29 remates/90min (muito alto)"
         }
       ],
       "patternScore": 4
@@ -77,25 +77,25 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 19,
+      "min": 24,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
-      "xgH": 0.04,
-      "xgA": 0.02,
-      "xgTotal": 0.06,
-      "lastMom": -17,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgH": 0.05,
+      "xgA": 0.05,
+      "xgTotal": 0.1,
+      "lastMom": -31,
+      "overOdds": 1.28,
+      "probLive": 78,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 2,
-        "a": 1
+        "a": 3
       },
       "sot": {
         "h": 0,
-        "a": 0
+        "a": 1
       },
       "da": {
         "h": null,
@@ -136,21 +136,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 20,
+      "min": 25,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 9,
-      "xgH": 0.04,
-      "xgA": 0.14,
-      "xgTotal": 0.18000000000000002,
+      "xgH": 0.05,
+      "xgA": 0.16,
+      "xgTotal": 0.21000000000000002,
       "lastMom": 27,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "overOdds": 1.14,
+      "probLive": 88,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 2,
-        "a": 5
+        "h": 3,
+        "a": 6
       },
       "sot": {
         "h": 0,
@@ -188,10 +188,10 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "7 remates",
+          "label": "9 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "31 remates/90min (muito alto)"
+          "detail": "32 remates/90min (muito alto)"
         }
       ],
       "patternScore": 4
@@ -201,27 +201,27 @@
       "home": "Mirassol",
       "away": "Flamengo",
       "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 20,
+      "aScore": 1,
+      "goals": 1,
+      "min": 25,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 9,
-      "xgH": 0.1,
-      "xgA": 0.35,
-      "xgTotal": 0.44999999999999996,
-      "lastMom": -23,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgH": 0.18,
+      "xgA": 0.59,
+      "xgTotal": 0.77,
+      "lastMom": -32,
+      "overOdds": 1.12,
+      "probLive": 89,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 3,
-        "a": 4
+        "h": 4,
+        "a": 5
       },
       "sot": {
         "h": 1,
-        "a": 1
+        "a": 2
       },
       "da": {
         "h": null,
@@ -254,14 +254,21 @@
       },
       "patterns": [
         {
+          "id": "xg_pace",
+          "label": "xG 2.8/90",
+          "emoji": "⚡",
+          "level": "med",
+          "detail": "xG a ritmo de 2.8 por 90min"
+        },
+        {
           "id": "shots",
-          "label": "7 remates",
+          "label": "9 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "31 remates/90min (muito alto)"
+          "detail": "32 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 4
+      "patternScore": 6
     },
     {
       "id": 223576,
@@ -279,9 +286,9 @@
       "xgA": 0.13,
       "xgTotal": 0.9,
       "lastMom": 7,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "overOdds": 1.27,
+      "probLive": 79,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 5,
         "a": 4
