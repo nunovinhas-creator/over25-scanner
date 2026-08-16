@@ -341,6 +341,123 @@ def normalize_team_names(name: str) -> str:
 
 
 # ---------------------------------------------------------------------------
+# Bloco P (parte 1) — aliases explícitos BSD -> football-data.co.uk
+# ---------------------------------------------------------------------------
+#
+# Bloco O corrigiu o mismatch de convenção (normalize_team_names() nas duas
+# pontas do lookup em dc_ratings.json), mas football-data.co.uk e a BSD
+# continuam a usar grafias substancialmente diferentes para a mesma equipa
+# em muitos casos — não é só maiúsculas/acentos/pontuação (ex.: CSV
+# "Blackburn" vs BSD "Blackburn Rovers", CSV "Celta" vs BSD "Celta Vigo").
+# Medido nos últimos 7 dias (16 ago 2026): 38/125 (30,4%) de correspondência
+# real, liga a liga. Esta tabela cobre os pares confirmados manualmente,
+# revistos e aprovados pelo autor (Bloco P) — cada par foi cruzado contra
+# TODAS as ligas de dc_ratings.json antes de entrar aqui, para excluir:
+#   - mudanças de divisão (ex. Girona relegado — dc só o tem em "La Liga",
+#     a BSD tagga o jogo actual "La Liga 2"; usar o rating errado da
+#     divisão distorceria sistematicamente, não é diferença de grafia)
+#   - equipas B/reserva (ex. "Real Sociedad B" nunca herda o rating do
+#     1º time)
+#   - equipas sem qualquer histórico em dc_ratings.json (promovidas de uma
+#     divisão não coberta — precisam de retrain, não de alias)
+#   - contaminação legacy (picks antigos com liga mal atribuída — assunto
+#     à parte, não corrigível por alias)
+#
+# CHAVE POR LIGA + NOME EXACTO DA BSD (não por prefixo/substring): um par
+# só é aplicado quando ev["liga"] e ev["casa"]/ev["fora"] batem
+# EXACTAMENTE com a entrada — "Vitória SC" (Guimarães) nunca reutiliza o
+# rating de "Vitória FC" (Setúbal) nem vice-versa, mesmo que um dia as duas
+# apareçam na mesma liga: são chaves de dicionário distintas, resolve_dc_team_key()
+# nunca faz correspondência parcial.
+DC_TEAM_ALIASES: dict[str, dict[str, str]] = {
+    "Belgian Pro League": {
+        "Club Brugge KV": "Club Brugge",
+        "KAA Gent": "Gent",
+        "KRC Genk": "Genk",
+        "KV Kortrijk": "Kortrijk",
+        "KV Mechelen": "Mechelen",
+        "KVC Westerlo": "Westerlo",
+        "RC Sporting Charleroi": "Charleroi",
+        "RSC Anderlecht": "Anderlecht",
+        "Royal Antwerp FC": "Antwerp",
+        "Royale Union Saint-Gilloise": "St. Gilloise",
+        "SV Zulte Waregem": "Waregem",
+        "Standard Liège": "Standard",
+        "Sint-Truidense VV": "St Truiden",
+    },
+    "Championship": {
+        "Birmingham City": "Birmingham",
+        "Blackburn Rovers": "Blackburn",
+        "Cardiff City": "Cardiff",
+        "Charlton Athletic": "Charlton",
+        "Derby County": "Derby",
+        "Preston North End": "Preston",
+        "Queens Park Rangers": "QPR",
+        "Stoke City": "Stoke",
+        "Swansea City": "Swansea",
+        "West Bromwich Albion": "West Brom",
+    },
+    "Eredivisie": {
+        "FC Groningen": "Groningen",
+        "FC Twente": "Twente",
+        "FC Utrecht": "Utrecht",
+        "Fortuna Sittard": "For Sittard",
+        "NEC Nijmegen": "Nijmegen",
+        "PEC Zwolle": "Zwolle",
+        "SC Heerenveen": "Heerenveen",
+        "SC Telstar": "Telstar",
+        "Willem II Tilburg": "Willem II",
+    },
+    "La Liga": {
+        "Celta Vigo": "Celta",
+        "Deportivo Alavés": "Alaves",
+        "Levante UD": "Levante",
+        "Rayo Vallecano": "Vallecano",
+        "Espanyol": "Espanol",
+    },
+    "La Liga 2": {
+        "AD Ceuta": "Ceuta",
+        "Albacete Balompié": "Albacete",
+        "Burgos Club de Fútbol": "Burgos",
+        "CD Castellón": "Castellon",
+        "CD Eldense": "Eldense",
+        "CD Tenerife": "Tenerife",
+        "FC Andorra": "Andorra",
+        "Málaga CF": "Malaga",
+        "Sporting Gijón": "Sp Gijon",
+    },
+    "Primeira Liga": {
+        "CD Nacional": "Nacional",
+        "CF Estrela Amadora": "Estrela",
+        "Estoril Praia": "Estoril",
+        "FC Alverca": "Alverca",
+        "FC Arouca": "Arouca",
+        "FC Porto": "Porto",
+        "Sporting Braga": "Sp Braga",
+        "Sporting CP": "Sp Lisbon",
+        "Vitória SC": "Guimaraes",
+    },
+}
+
+
+def resolve_dc_team_key(league: str, raw_name: str) -> str:
+    """
+    Chave de lookup em dc_ratings.json para uma equipa da BSD.
+
+    Correspondência exacta por (league, raw_name) em DC_TEAM_ALIASES — nunca
+    por prefixo/substring. Quando não há alias, cai no normalize_team_names()
+    genérico (mesmo comportamento de sempre — maiúsculas/acentos/pontuação e
+    o _TEAM_ABBREVS já existente). O nome-alvo do alias passa também por
+    normalize_team_names() antes de ser devolvido, para bater certo com as
+    chaves de dc_ratings.json (normalizadas desde o Bloco O).
+    """
+    alias_target = DC_TEAM_ALIASES.get(league, {}).get(raw_name)
+    if alias_target is not None:
+        return normalize_team_names(alias_target)
+    return normalize_team_names(raw_name)
+
+
+# ---------------------------------------------------------------------------
 # Pick enrichment
 # ---------------------------------------------------------------------------
 
