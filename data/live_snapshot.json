@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-08-16T12:29:54Z",
+  "generated_at": "2026-08-16T12:34:59Z",
   "status": "OK",
-  "count": 9,
+  "count": 10,
   "events": [
     {
-      "id": 221494,
-      "home": "Odense Boldklub",
-      "away": "AC Horsens",
-      "hScore": 1,
+      "id": 213983,
+      "home": "Watford",
+      "away": "Southampton",
+      "hScore": 0,
       "aScore": 0,
-      "goals": 1,
-      "min": 28,
+      "goals": 0,
+      "min": 2,
       "status": "1st_half",
       "period": "1T",
-      "league": "",
-      "league_id": 84,
-      "xgH": 0.16,
-      "xgA": 0.71,
-      "xgTotal": 0.87,
-      "lastMom": 10,
-      "overOdds": 1.2,
-      "probLive": 83,
-      "oddsStatus": "VALID",
+      "league": "Championship",
+      "league_id": 12,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": -4,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 3,
-        "a": 3
+        "h": 0,
+        "a": 0
       },
       "sot": {
         "h": 0,
@@ -49,49 +49,218 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": true,
+          "xgTotal": false,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 3,
+        "score": 2,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "xg_pace",
-          "label": "xG 2.8/90",
-          "emoji": "⚡",
-          "level": "med",
-          "detail": "xG a ritmo de 2.8 por 90min"
-        }
-      ],
-      "patternScore": 2
+      "patterns": [],
+      "patternScore": 0
     },
     {
-      "id": 221493,
-      "home": "FC Nordsjælland",
-      "away": "Silkeborg IF",
+      "id": 210815,
+      "home": "Feyenoord",
+      "away": "Go Ahead Eagles",
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 28,
+      "min": 4,
       "status": "1st_half",
       "period": "1T",
-      "league": "",
-      "league_id": 84,
-      "xgH": 0.48,
-      "xgA": 0.06,
-      "xgTotal": 0.54,
-      "lastMom": 55,
+      "league": "Eredivisie",
+      "league_id": 10,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": -38,
+      "overOdds": 1.07,
+      "probLive": 93,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 210814,
+      "home": "FC Twente",
+      "away": "PEC Zwolle",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 2,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "Eredivisie",
+      "league_id": 10,
+      "xgH": null,
+      "xgA": 0.03,
+      "xgTotal": null,
+      "lastMom": -28,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 5,
+        "h": 0,
         "a": 1
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 207045,
+      "home": "Aalesunds FK",
+      "away": "Vålerenga IF",
+      "hScore": 1,
+      "aScore": 0,
+      "goals": 1,
+      "min": 3,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 54,
+      "xgH": 0.79,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": 36,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 1,
+        "a": 0
+      },
+      "sot": {
+        "h": 1,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 221494,
+      "home": "Odense Boldklub",
+      "away": "AC Horsens",
+      "hScore": 1,
+      "aScore": 0,
+      "goals": 1,
+      "min": 33,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 84,
+      "xgH": 0.38,
+      "xgA": 0.71,
+      "xgTotal": 1.0899999999999999,
+      "lastMom": 20,
+      "overOdds": 1.2,
+      "probLive": 83,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 5,
+        "a": 3
       },
       "sot": {
         "h": 1,
@@ -128,11 +297,78 @@
       },
       "patterns": [
         {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
+          "id": "xg_pace",
+          "label": "xG 3.0/90",
+          "emoji": "⚡",
           "level": "med",
-          "detail": "Momentum casa 55"
+          "detail": "xG a ritmo de 3.0 por 90min"
+        }
+      ],
+      "patternScore": 2
+    },
+    {
+      "id": 221493,
+      "home": "FC Nordsjælland",
+      "away": "Silkeborg IF",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 33,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 84,
+      "xgH": 0.78,
+      "xgA": 0.06,
+      "xgTotal": 0.8400000000000001,
+      "lastMom": 31,
+      "overOdds": 1.08,
+      "probLive": 93,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 8,
+        "a": 1
+      },
+      "sot": {
+        "h": 2,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "9 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "25 remates/90min"
         }
       ],
       "patternScore": 2
@@ -144,20 +380,20 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 28,
+      "min": 34,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 26,
-      "xgH": 0.03,
+      "xgH": 0.12,
       "xgA": 0.16,
-      "xgTotal": 0.19,
-      "lastMom": 64,
-      "overOdds": 1.12,
-      "probLive": 89,
-      "oddsStatus": "VALID",
+      "xgTotal": 0.28,
+      "lastMom": 20,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 4,
+        "h": 5,
         "a": 4
       },
       "sot": {
@@ -196,20 +432,13 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "8 remates",
+          "label": "9 remates",
           "emoji": "🎯",
           "level": "med",
-          "detail": "26 remates/90min"
-        },
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 64"
+          "detail": "24 remates/90min"
         }
       ],
-      "patternScore": 4
+      "patternScore": 2
     },
     {
       "id": 46434,
@@ -218,7 +447,7 @@
       "hScore": 0,
       "aScore": 2,
       "goals": 2,
-      "min": 25,
+      "min": 31,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -226,16 +455,75 @@
       "xgH": 0.15,
       "xgA": 0.65,
       "xgTotal": 0.8,
-      "lastMom": -38,
-      "overOdds": 1.1,
-      "probLive": 91,
-      "oddsStatus": "VALID",
+      "lastMom": -18,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 3,
-        "a": 3
+        "a": 4
       },
       "sot": {
         "h": 0,
+        "a": 2
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 46433,
+      "home": "Degerfors IF",
+      "away": "IFK Göteborg",
+      "hScore": 3,
+      "aScore": 0,
+      "goals": 3,
+      "min": 33,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 26,
+      "xgH": 1.28,
+      "xgA": 0.06,
+      "xgTotal": 1.34,
+      "lastMom": 45,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 6,
+        "a": 2
+      },
+      "sot": {
+        "h": 3,
         "a": 1
       },
       "da": {
@@ -270,87 +558,20 @@
       "patterns": [
         {
           "id": "xg_pace",
-          "label": "xG 2.9/90",
+          "label": "xG 3.7/90",
           "emoji": "⚡",
-          "level": "med",
-          "detail": "xG a ritmo de 2.9 por 90min"
-        }
-      ],
-      "patternScore": 2
-    },
-    {
-      "id": 46433,
-      "home": "Degerfors IF",
-      "away": "IFK Göteborg",
-      "hScore": 2,
-      "aScore": 0,
-      "goals": 2,
-      "min": 28,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 26,
-      "xgH": 0.69,
-      "xgA": 0.06,
-      "xgTotal": 0.75,
-      "lastMom": -52,
-      "overOdds": 1.21,
-      "probLive": 83,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 5,
-        "a": 2
-      },
-      "sot": {
-        "h": 2,
-        "a": 1
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "shots",
-          "label": "7 remates",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "22 remates/90min"
+          "level": "high",
+          "detail": "xG a ritmo de 3.7 por 90min"
         },
         {
           "id": "mom",
-          "label": "Fora pressiona",
+          "label": "Casa pressiona",
           "emoji": "💪",
           "level": "med",
-          "detail": "Momentum fora 52"
+          "detail": "Momentum casa 45"
         }
       ],
-      "patternScore": 4
+      "patternScore": 6
     },
     {
       "id": 211317,
@@ -368,9 +589,9 @@
       "xgA": 0.6,
       "xgTotal": 0.8999999999999999,
       "lastMom": -29,
-      "overOdds": 1.6,
-      "probLive": 62,
-      "oddsStatus": "VALID",
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 1,
         "a": 6
@@ -406,191 +627,6 @@
           "lastMom": true
         },
         "score": 3,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 205129,
-      "home": "Ulsan HD",
-      "away": "Gangwon FC",
-      "hScore": 2,
-      "aScore": 3,
-      "goals": 5,
-      "min": 98,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 50,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": 1.27,
-      "probLive": 79,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": null,
-        "a": null
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": false,
-          "sot": false,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 0,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 205128,
-      "home": "Incheon United",
-      "away": "Gimcheon Sangmu FC",
-      "hScore": 1,
-      "aScore": 1,
-      "goals": 2,
-      "min": 98,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 50,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": 1.27,
-      "probLive": 79,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": null,
-        "a": null
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": false,
-          "sot": false,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 0,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "late",
-          "label": "1 gol em 0min",
-          "emoji": "⏰",
-          "level": "low",
-          "detail": "Falta 1 golo · mercado 79% · 0min"
-        }
-      ],
-      "patternScore": 1
-    },
-    {
-      "id": 205127,
-      "home": "Bucheon FC 1995",
-      "away": "Jeonbuk Hyundai Motors",
-      "hScore": 3,
-      "aScore": 2,
-      "goals": 5,
-      "min": 97,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 50,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": 1.21,
-      "probLive": 83,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": null,
-        "a": null
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": false,
-          "sot": false,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 0,
         "total": 6
       },
       "patterns": [],
