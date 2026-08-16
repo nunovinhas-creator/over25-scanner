@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-16T21:08:15Z",
+  "generated_at": "2026-08-16T21:13:43Z",
   "status": "OK",
-  "count": 4,
+  "count": 3,
   "events": [
     {
       "id": 223576,
@@ -10,7 +10,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 5,
+      "min": 11,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -18,7 +18,7 @@
       "xgH": null,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 9,
+      "lastMom": 18,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
@@ -69,20 +69,20 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 78,
+      "min": 84,
       "status": "2nd_half",
       "period": "2T",
       "league": "Primeira Liga",
       "league_id": 2,
-      "xgH": 0.46,
+      "xgH": 0.48,
       "xgA": 1.4,
-      "xgTotal": 1.8599999999999999,
-      "lastMom": -15,
+      "xgTotal": 1.88,
+      "lastMom": 50,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 9,
+        "h": 10,
         "a": 7
       },
       "sot": {
@@ -118,8 +118,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 50"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 214772,
@@ -128,21 +136,21 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 76,
+      "min": 82,
       "status": "2nd_half",
       "period": "2T",
       "league": "La Liga 2",
       "league_id": 38,
       "xgH": 0.66,
-      "xgA": 0.84,
-      "xgTotal": 1.5,
-      "lastMom": -19,
+      "xgA": 0.97,
+      "xgTotal": 1.63,
+      "lastMom": -18,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 10,
-        "a": 9
+        "a": 10
       },
       "sot": {
         "h": 3,
@@ -177,83 +185,8 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "xg_pace",
-          "label": "xG 2.5/90 (2ªP)",
-          "emoji": "⚡",
-          "level": "med",
-          "detail": "xG a ritmo de 2.5 por 90min (2ªP)"
-        }
-      ],
-      "patternScore": 2
-    },
-    {
-      "id": 215479,
-      "home": "Lazio",
-      "away": "Mantova",
-      "hScore": 0,
-      "aScore": 1,
-      "goals": 1,
-      "min": 91,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 42,
-      "xgH": 2.59,
-      "xgA": 1.17,
-      "xgTotal": 3.76,
-      "lastMom": 5,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 19,
-        "a": 11
-      },
-      "sot": {
-        "h": 2,
-        "a": 6
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "xg_delta",
-          "label": "xG +2.8 acima",
-          "emoji": "🎲",
-          "level": "critical",
-          "detail": "xG 3.76 vs 1 golos — golo(s) em dívida"
-        }
-      ],
-      "patternScore": 10
+      "patterns": [],
+      "patternScore": 0
     }
   ]
 }
