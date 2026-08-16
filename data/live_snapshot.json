@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-16T20:21:42Z",
+  "generated_at": "2026-08-16T20:27:23Z",
   "status": "OK",
-  "count": 10,
+  "count": 7,
   "events": [
     {
       "id": 215505,
@@ -128,7 +128,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 46,
+      "min": 50,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -136,7 +136,7 @@
       "xgH": 0.73,
       "xgA": 0.52,
       "xgTotal": 1.25,
-      "lastMom": 0,
+      "lastMom": -14,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
@@ -187,7 +187,7 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 59,
+      "min": 64,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -246,20 +246,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 58,
+      "min": 63,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 9,
-      "xgH": 0.79,
+      "xgH": 0.87,
       "xgA": 0.73,
-      "xgTotal": 1.52,
-      "lastMom": -29,
+      "xgTotal": 1.6,
+      "lastMom": 13,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 14,
+        "h": 15,
         "a": 5
       },
       "sot": {
@@ -301,7 +301,7 @@
           "label": "xG sobrevaloriza",
           "emoji": "🎲",
           "level": "med",
-          "detail": "xG 1.52 vs 0 golos"
+          "detail": "xG 1.60 vs 0 golos"
         }
       ],
       "patternScore": 2
@@ -310,145 +310,27 @@
       "id": 7215,
       "home": "Atlético Mineiro",
       "away": "Grêmio",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 0,
-      "goals": 1,
-      "min": 59,
+      "goals": 2,
+      "min": 64,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 9,
-      "xgH": 0.77,
-      "xgA": 0.25,
-      "xgTotal": 1.02,
-      "lastMom": -41,
+      "xgH": 1.0,
+      "xgA": 0.33,
+      "xgTotal": 1.33,
+      "lastMom": -14,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 7,
-        "a": 5
+        "h": 8,
+        "a": 6
       },
       "sot": {
-        "h": 1,
-        "a": 0
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 215478,
-      "home": "Hellas Verona",
-      "away": "Virtus Entella",
-      "hScore": 2,
-      "aScore": 1,
-      "goals": 3,
-      "min": 69,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 42,
-      "xgH": 1.52,
-      "xgA": 0.61,
-      "xgTotal": 2.13,
-      "lastMom": -30,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 13,
-        "a": 9
-      },
-      "sot": {
-        "h": 4,
-        "a": 3
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 215954,
-      "home": "Beşiktaş JK",
-      "away": "Eyüpspor",
-      "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 91,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 11,
-      "xgH": 1.19,
-      "xgA": 0.07,
-      "xgTotal": 1.26,
-      "lastMom": 2,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 18,
-        "a": 4
-      },
-      "sot": {
-        "h": 4,
+        "h": 2,
         "a": 1
       },
       "da": {
@@ -465,7 +347,7 @@
       },
       "redCards": {
         "h": 0,
-        "a": 1
+        "a": 0
       },
       "isSavedPick": false,
       "coverage": {
@@ -482,100 +364,41 @@
       },
       "patterns": [
         {
-          "id": "numerical",
-          "label": "Casa +1 homem",
-          "emoji": "🟥",
-          "level": "med",
-          "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
+          "id": "shots",
+          "label": "7r 2ªP",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "33 remates/90min (2ªP) (muito alto)"
         }
       ],
-      "patternScore": 2
+      "patternScore": 4
     },
     {
-      "id": 215952,
-      "home": "Amed Sportif Faaliyetler",
-      "away": "Erzurumspor FK",
-      "hScore": 3,
-      "aScore": 0,
+      "id": 215478,
+      "home": "Hellas Verona",
+      "away": "Virtus Entella",
+      "hScore": 2,
+      "aScore": 1,
       "goals": 3,
-      "min": 93,
+      "min": 74,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
-      "league_id": 11,
-      "xgH": 1.12,
-      "xgA": 0.26,
-      "xgTotal": 1.3800000000000001,
-      "lastMom": -31,
+      "league_id": 42,
+      "xgH": 1.52,
+      "xgA": 0.62,
+      "xgTotal": 2.14,
+      "lastMom": 6,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 13,
-        "a": 4
+        "a": 10
       },
       "sot": {
-        "h": 5,
-        "a": 1
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 214559,
-      "home": "FC Corvinul Hunedoara",
-      "away": "CFR 1907 Cluj",
-      "hScore": 3,
-      "aScore": 0,
-      "goals": 3,
-      "min": 91,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 23,
-      "xgH": 2.67,
-      "xgA": 1.13,
-      "xgTotal": 3.8,
-      "lastMom": -2,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 20,
-        "a": 9
-      },
-      "sot": {
-        "h": 7,
-        "a": 1
+        "h": 4,
+        "a": 3
       },
       "da": {
         "h": null,
