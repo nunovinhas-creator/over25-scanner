@@ -1,8 +1,67 @@
 {
-  "generated_at": "2026-08-16T22:57:25Z",
+  "generated_at": "2026-08-16T23:02:51Z",
   "status": "OK",
   "count": 8,
   "events": [
+    {
+      "id": 211529,
+      "home": "Club América",
+      "away": "Atlético San Luis",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 0,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 19,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": false
+        },
+        "score": 1,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
     {
       "id": 7217,
       "home": "Corinthians",
@@ -10,20 +69,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 23,
+      "min": 30,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 9,
-      "xgH": 0.19,
+      "xgH": 0.52,
       "xgA": 0.02,
-      "xgTotal": 0.21,
-      "lastMom": 29,
+      "xgTotal": 0.54,
+      "lastMom": 13,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 3,
+        "h": 4,
         "a": 1
       },
       "sot": {
@@ -69,21 +128,21 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 44,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 18,
       "xgH": 0.87,
-      "xgA": 0.29,
-      "xgTotal": 1.16,
-      "lastMom": -34,
+      "xgA": 0.33,
+      "xgTotal": 1.2,
+      "lastMom": -14,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 4,
-        "a": 5
+        "a": 6
       },
       "sot": {
         "h": 2,
@@ -125,27 +184,27 @@
       "id": 5196,
       "home": "New York City FC",
       "away": "Philadelphia Union",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 0,
-      "goals": 1,
-      "min": 43,
+      "goals": 2,
+      "min": 49,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 18,
-      "xgH": 1.09,
+      "xgH": 1.93,
       "xgA": 0.4,
-      "xgTotal": 1.4900000000000002,
-      "lastMom": 11,
+      "xgTotal": 2.33,
+      "lastMom": 30,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 9,
+        "h": 12,
         "a": 6
       },
       "sot": {
-        "h": 2,
+        "h": 3,
         "a": 1
       },
       "da": {
@@ -177,23 +236,8 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "xg_pace",
-          "label": "xG 3.1/90",
-          "emoji": "⚡",
-          "level": "high",
-          "detail": "xG a ritmo de 3.1 por 90min"
-        },
-        {
-          "id": "shots",
-          "label": "15 remates",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "31 remates/90min (muito alto)"
-        }
-      ],
-      "patternScore": 8
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 10066,
@@ -202,7 +246,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 60,
+      "min": 66,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -210,7 +254,7 @@
       "xgH": 0.62,
       "xgA": 0.31,
       "xgTotal": 0.9299999999999999,
-      "lastMom": -20,
+      "lastMom": -22,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
@@ -259,27 +303,27 @@
       "home": "América Mineiro",
       "away": "Athletic Club",
       "hScore": 0,
-      "aScore": 2,
-      "goals": 2,
-      "min": 64,
+      "aScore": 3,
+      "goals": 3,
+      "min": 70,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 34,
-      "xgH": 1.61,
-      "xgA": 0.67,
-      "xgTotal": 2.2800000000000002,
-      "lastMom": 40,
+      "xgH": 1.72,
+      "xgA": 1.31,
+      "xgTotal": 3.0300000000000002,
+      "lastMom": 50,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 15,
-        "a": 10
+        "a": 11
       },
       "sot": {
         "h": 3,
-        "a": 3
+        "a": 4
       },
       "da": {
         "h": null,
@@ -312,14 +356,14 @@
       },
       "patterns": [
         {
-          "id": "shots",
-          "label": "11r 2ªP",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "52 remates/90min (2ªP) (muito alto)"
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 50"
         }
       ],
-      "patternScore": 4
+      "patternScore": 2
     },
     {
       "id": 7223,
@@ -328,15 +372,15 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 63,
+      "min": 69,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 9,
-      "xgH": 1.55,
-      "xgA": 0.61,
-      "xgTotal": 2.16,
-      "lastMom": -9,
+      "xgH": 1.58,
+      "xgA": 0.81,
+      "xgTotal": 2.39,
+      "lastMom": 7,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
@@ -379,100 +423,62 @@
       },
       "patterns": [
         {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "3 padrões em simultâneo — sinal forte"
+        },
+        {
+          "id": "xg_delta",
+          "label": "xG sobrevaloriza",
+          "emoji": "🎲",
+          "level": "med",
+          "detail": "xG 2.39 vs 1 golos"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 4.5/90 (2ªP)",
+          "emoji": "⚡",
+          "level": "critical",
+          "detail": "xG a ritmo de 4.5 por 90min (2ªP)"
+        },
+        {
           "id": "shots",
           "label": "9r 2ªP",
           "emoji": "🎯",
           "level": "high",
-          "detail": "45 remates/90min (2ªP) (muito alto)"
+          "detail": "34 remates/90min (2ªP) (muito alto)"
         }
       ],
-      "patternScore": 4
+      "patternScore": 16
     },
     {
       "id": 7220,
       "home": "Mirassol",
       "away": "Flamengo",
       "hScore": 0,
-      "aScore": 3,
-      "goals": 3,
-      "min": 65,
+      "aScore": 4,
+      "goals": 4,
+      "min": 71,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 9,
-      "xgH": 0.55,
-      "xgA": 1.94,
-      "xgTotal": 2.49,
-      "lastMom": 14,
+      "xgH": 0.6,
+      "xgA": 2.07,
+      "xgTotal": 2.67,
+      "lastMom": 23,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 9,
-        "a": 13
+        "h": 10,
+        "a": 14
       },
       "sot": {
         "h": 4,
-        "a": 6
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 223576,
-      "home": "River Plate",
-      "away": "Argentinos Juniors",
-      "hScore": 2,
-      "aScore": 0,
-      "goals": 2,
-      "min": 94,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 85,
-      "xgH": 1.58,
-      "xgA": 0.7,
-      "xgTotal": 2.2800000000000002,
-      "lastMom": -43,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 8,
-        "a": 9
-      },
-      "sot": {
-        "h": 3,
-        "a": 1
+        "a": 7
       },
       "da": {
         "h": null,
