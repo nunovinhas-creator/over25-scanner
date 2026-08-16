@@ -271,3 +271,69 @@ class TestCLVTracking1x2:
             f"({len(settled_com_close)} já preenchidos). "
             "Verificar logs de update_closing_odds para picks em falta."
         )
+
+
+# ---------------------------------------------------------------------------
+# Bloco M — dedup de registos "_update" antes dos gates
+# ---------------------------------------------------------------------------
+
+
+class TestDedupUpdateRecords:
+    def test_update_pair_counted_once_in_candidates(self, tmp_path: Path) -> None:
+        """214775_home_sh / 214775_home_sh_update (mesmo jogo+outcome) só
+        gera 1 candidato a alerta, não 2."""
+        original = _pick(
+            id="214775_home_sh", timing_h="5.65", saved_at="2026-08-14T12:50:29Z",
+        )
+        update = _pick(
+            id="214775_home_sh_update", timing_h="3.24", saved_at="2026-08-14T15:14:42Z",
+        )
+        candidates, stats = filter_1x2_alert_candidates(
+            [original, update], _WHITELIST, tmp_path / "rejected_picks_1x2.json"
+        )
+        assert len(candidates) == 1
+        assert candidates[0]["id"] == "214775_home_sh_update"  # o mais recente
+        assert stats["n_dedup_removed"] == 1
+
+    def test_dedup_removed_reported_as_zero_without_pairs(self, tmp_path: Path) -> None:
+        pick = _pick(id="50_sh", timing_h="2.0")
+        _, stats = filter_1x2_alert_candidates(
+            [pick], _WHITELIST, tmp_path / "rejected_picks_1x2.json"
+        )
+        assert stats["n_dedup_removed"] == 0
+
+    def test_settled_sem_clv_not_double_counted_for_update_pair(self, tmp_path: Path) -> None:
+        """Se só o registo vencedor (mais recente) não tem odds_fecho, conta
+        1 vez — não 2 só porque o par existe no input."""
+        original = _pick(
+            id="60_sh", resultado_outcome="WIN", odds_fecho="2.10",
+            saved_at="2026-08-14T12:00:00Z",
+        )
+        update = _pick(
+            id="60_sh_update", resultado_outcome="WIN", odds_fecho="",
+            saved_at="2026-08-14T15:00:00Z",
+        )
+        _, stats = filter_1x2_alert_candidates(
+            [original, update], _WHITELIST, tmp_path / "rejected_picks_1x2.json"
+        )
+        assert stats["n_settled_sem_clv"] == 1
+
+    def test_dedup_never_mutates_caller_list(self, tmp_path: Path) -> None:
+        """Nada é removido do que o caller passou — a dedup é só em memória
+        para as contagens/candidatos devolvidos."""
+        original = _pick(id="70_sh", saved_at="2026-08-14T12:00:00Z")
+        update = _pick(id="70_sh_update", saved_at="2026-08-14T15:00:00Z")
+        picks = [original, update]
+        filter_1x2_alert_candidates(picks, _WHITELIST, tmp_path / "rejected_picks_1x2.json")
+        assert picks == [original, update]
+
+    def test_picks_without_pairs_unaffected_by_dedup(self, tmp_path: Path) -> None:
+        picks = [
+            _pick(id="80_sh", timing_h="2.0"),
+            _pick(id="81_sh", timing_h="3.0"),
+        ]
+        candidates, stats = filter_1x2_alert_candidates(
+            picks, _WHITELIST, tmp_path / "rejected_picks_1x2.json"
+        )
+        assert len(candidates) == 2
+        assert stats["n_dedup_removed"] == 0

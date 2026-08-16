@@ -5,6 +5,11 @@ Constantes e helpers partilhados pelos dois scanners de produção
 (scan_over25.py e scan_sharp1x2.py). Fonte única de verdade para a
 whitelist de ligas, o mapa de IDs BSD, Telegram, git e I/O JSON.
 
+Também a fonte única de verdade para dedup_sharp1x2_picks() — usada por
+todos os consumidores de KPIs de data/picks_1x2.json (pipeline/etl.py,
+backtesting/send_sharp1x2_weekly.py, agente clv-tracker), nunca reimplementada
+em cada um.
+
 Nota para testes: os scanners re-exportam estes nomes ao nível do módulo,
 por isso `patch.object(mod, "send_telegram", ...)` continua a funcionar.
 """
@@ -18,6 +23,7 @@ import sys
 import time
 import urllib.parse
 import urllib.request
+from datetime import datetime, timezone
 from pathlib import Path
 
 TG_TOKEN = os.environ.get("TG_TOKEN", "")
@@ -234,3 +240,67 @@ def load_json_list(path: Path) -> list[dict]:
 def save_json_list(path: Path, data: list[dict]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+# ---------------------------------------------------------------------------
+# Bloco M — dedup de registos Sharp 1X2 "_update" para efeitos de KPIs
+# ---------------------------------------------------------------------------
+
+_SHARP1X2_UPDATE_SUFFIX = "_update"
+
+
+def _sharp1x2_base_pick_id(pick_id: str) -> str:
+    """`214775_home_sh_update` -> `214775_home_sh`; ids sem o sufixo ficam
+    inalterados. Espelha exactamente `update_id = f"{pick_id}_update"` em
+    scan_sharp1x2.py — nunca reimplementar essa regra noutro sítio."""
+    if pick_id.endswith(_SHARP1X2_UPDATE_SUFFIX):
+        return pick_id[: -len(_SHARP1X2_UPDATE_SUFFIX)]
+    return pick_id
+
+
+def _sharp1x2_saved_at_key(pick: dict) -> datetime:
+    """Chave de ordenação por `saved_at`, tolerante a valores ausentes/
+    malformados (fica sempre no fim, nunca escolhido como "mais recente")."""
+    raw = pick.get("saved_at") or ""
+    try:
+        return datetime.fromisoformat(str(raw).replace("Z", "+00:00"))
+    except (ValueError, TypeError):
+        return datetime.min.replace(tzinfo=timezone.utc)
+
+
+def dedup_sharp1x2_picks(picks: list[dict]) -> list[dict]:
+    """
+    Deduplica, para efeitos de KPIs, registos Sharp 1X2 que representam o
+    MESMO jogo+outcome mas foram gravados duas vezes por scan_sharp1x2.py —
+    quando a odd B365 move mais de ODDS_UPDATE_THRESHOLD entre scans, o
+    pipeline cria um segundo registo completo com id `{pick_id}_update` em
+    vez de actualizar o original (scan_sharp1x2.py, `update_id = f"{pick_id}
+    _update"`). Confirmado em produção com 214775_home_sh /
+    214775_home_sh_update: mesmo jogo, mesmo outcome, mesma odds_fecho, dois
+    settlements — contar os dois infla n_settled e distorce o CLV médio.
+
+    Regra: para o mesmo id base (id sem o sufixo `_update`), mantém só o
+    registo com `saved_at` mais recente — as odds mais próximas do momento
+    de decisão; o registo mais antigo já estava desactualizado (>3% de
+    movimento) no instante em que o `_update` foi criado, logo já não
+    reflectia um preço ainda disponível no mercado.
+
+    NUNCA remove nada do ficheiro em disco — recebe e devolve listas em
+    memória; quem persiste (scan_sharp1x2.py) continua a gravar os dois
+    registos, o histórico de odds fica intacto. Isto só filtra o que conta
+    para KPIs (CLV rolling, WR, contagens de settled/alertados).
+
+    Picks cujo id base não tem par (sem sufixo `_update` no input, ou com
+    sufixo mas sem o original correspondente) passam inalterados. Ordem de
+    saída: primeira ocorrência de cada id base, na ordem do input.
+    """
+    winners: dict[str, dict] = {}
+    order: list[str] = []
+    for p in picks:
+        base = _sharp1x2_base_pick_id(str(p.get("id", "")))
+        if base not in winners:
+            order.append(base)
+            winners[base] = p
+        elif _sharp1x2_saved_at_key(p) >= _sharp1x2_saved_at_key(winners[base]):
+            winners[base] = p
+    return [winners[b] for b in order]

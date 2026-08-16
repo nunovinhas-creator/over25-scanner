@@ -24,7 +24,7 @@ from pathlib import Path
 import pytest
 
 from pipeline import scan_common as sc
-from pipeline.scan_common import MIN_VALID_ODDS, classify_odds
+from pipeline.scan_common import MIN_VALID_ODDS, classify_odds, dedup_sharp1x2_picks
 
 SPEC_PATH = Path(__file__).resolve().parents[1] / "fixtures" / "odds_classification_spec.json"
 SPEC = json.loads(SPEC_PATH.read_text(encoding="utf-8"))
@@ -396,3 +396,100 @@ class TestGitCommitPushStaleIndexRealGit:
         # Esgotadas as 5 tentativas: o remoto reflecte a última corrida
         # externa, nunca o commit (rejeitado) de job2.
         assert _read_from_remote(remote, "health.json") == "race-5-de-job1"
+
+
+# ---------------------------------------------------------------------------
+# Bloco M — dedup_sharp1x2_picks()
+# ---------------------------------------------------------------------------
+
+
+def _p1x2(**over):  # synthetic
+    base = {"id": "1_home_sh", "saved_at": "2026-08-14T12:00:00Z", "casa": "A", "fora": "B"}
+    base.update(over)
+    return base
+
+
+class TestDedupSharp1x2Picks:
+    def test_pair_keeps_the_one_with_latest_saved_at(self):
+        original = _p1x2(id="214775_home_sh", saved_at="2026-08-14T12:50:29Z", odds_entrada=3.75)
+        update = _p1x2(id="214775_home_sh_update", saved_at="2026-08-14T15:14:42Z", odds_entrada=4.20)
+
+        result = dedup_sharp1x2_picks([original, update])
+
+        assert len(result) == 1
+        assert result[0]["id"] == "214775_home_sh_update"
+        assert result[0]["odds_entrada"] == 4.20
+
+    def test_pair_order_in_input_does_not_matter(self):
+        """A regra é sobre saved_at, não sobre a ordem em que aparecem no ficheiro."""
+        original = _p1x2(id="1_home_sh", saved_at="2026-08-14T12:00:00Z")
+        update = _p1x2(id="1_home_sh_update", saved_at="2026-08-14T15:00:00Z")
+
+        result_fwd = dedup_sharp1x2_picks([original, update])
+        result_rev = dedup_sharp1x2_picks([update, original])
+
+        assert len(result_fwd) == 1 and result_fwd[0]["id"] == "1_home_sh_update"
+        assert len(result_rev) == 1 and result_rev[0]["id"] == "1_home_sh_update"
+
+    def test_pick_without_update_pair_passes_through_unchanged(self):
+        solo = _p1x2(id="2_away_sh")
+        result = dedup_sharp1x2_picks([solo])
+        assert result == [solo]
+
+    def test_orphan_update_without_original_passes_through_unchanged(self):
+        """Não deveria acontecer em produção (scan_sharp1x2.py só cria
+        _update quando o original já existe), mas se acontecer não deve
+        desaparecer silenciosamente — conta como o único registo do seu id base."""
+        orphan = _p1x2(id="3_home_sh_update")
+        result = dedup_sharp1x2_picks([orphan])
+        assert result == [orphan]
+
+    def test_multiple_independent_base_ids_all_kept(self):
+        picks = [
+            _p1x2(id="1_home_sh"), _p1x2(id="1_home_sh_update", saved_at="2026-08-14T13:00:00Z"),
+            _p1x2(id="2_away_sh"),
+            _p1x2(id="3_home_sh"), _p1x2(id="3_home_sh_update", saved_at="2026-08-14T13:00:00Z"),
+        ]
+        result = dedup_sharp1x2_picks(picks)
+        ids = {p["id"] for p in result}
+        assert ids == {"1_home_sh_update", "2_away_sh", "3_home_sh_update"}
+
+    def test_preserves_order_of_first_occurrence_of_each_base_id(self):
+        picks = [
+            _p1x2(id="2_away_sh"),
+            _p1x2(id="1_home_sh"),
+            _p1x2(id="1_home_sh_update", saved_at="2026-08-14T13:00:00Z"),
+        ]
+        result = dedup_sharp1x2_picks(picks)
+        assert [p["id"] for p in result] == ["2_away_sh", "1_home_sh_update"]
+
+    def test_missing_saved_at_never_wins_over_a_dated_pair(self):
+        original = _p1x2(id="1_home_sh", saved_at="2026-08-14T12:00:00Z")
+        update_no_date = _p1x2(id="1_home_sh_update", saved_at="")
+        result = dedup_sharp1x2_picks([original, update_no_date])
+        assert result[0]["id"] == "1_home_sh"  # a data válida ganha à ausente
+
+    def test_malformed_saved_at_treated_as_missing(self):
+        original = _p1x2(id="1_home_sh", saved_at="2026-08-14T12:00:00Z")
+        update_bad_date = _p1x2(id="1_home_sh_update", saved_at="not-a-date")
+        result = dedup_sharp1x2_picks([original, update_bad_date])
+        assert result[0]["id"] == "1_home_sh"
+
+    def test_does_not_mutate_or_drop_fields_of_the_winning_record(self):
+        update = _p1x2(
+            id="1_home_sh_update", saved_at="2026-08-14T15:00:00Z",
+            resultado_outcome="LOSS", odds_fecho="4.45", clv="-5.618",
+        )
+        original = _p1x2(id="1_home_sh", saved_at="2026-08-14T12:00:00Z")
+        result = dedup_sharp1x2_picks([original, update])
+        assert result[0] == update  # devolve o registo tal e qual, sem merge
+
+    def test_empty_input_returns_empty_list(self):
+        assert dedup_sharp1x2_picks([]) == []
+
+    def test_never_mutates_input_list(self):
+        original = _p1x2(id="1_home_sh")
+        update = _p1x2(id="1_home_sh_update", saved_at="2026-08-14T13:00:00Z")
+        picks = [original, update]
+        dedup_sharp1x2_picks(picks)
+        assert picks == [original, update]  # input inalterado — nunca apaga do ficheiro
