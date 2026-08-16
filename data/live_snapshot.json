@@ -1,16 +1,75 @@
 {
-  "generated_at": "2026-08-16T01:08:23Z",
+  "generated_at": "2026-08-16T01:13:43Z",
   "status": "OK",
-  "count": 6,
+  "count": 8,
   "events": [
     {
-      "id": 207754,
-      "home": "Colorado Springs Switchbacks FC",
-      "away": "Birmingham Legion FC",
+      "id": 211526,
+      "home": "CF Monterrey",
+      "away": "FC Juárez",
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 0,
+      "min": 1,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 19,
+      "xgH": 0.11,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": 41,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 1,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 207755,
+      "home": "San Antonio FC",
+      "away": "El Paso Locomotive FC",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 5,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -18,7 +77,7 @@
       "xgH": null,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": null,
+      "lastMom": -9,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
@@ -54,9 +113,68 @@
           "sot": true,
           "corners": false,
           "possession": false,
-          "lastMom": false
+          "lastMom": true
         },
-        "score": 1,
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 207754,
+      "home": "Colorado Springs Switchbacks FC",
+      "away": "Birmingham Legion FC",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 5,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 57,
+      "xgH": 0.06,
+      "xgA": 0.03,
+      "xgTotal": 0.09,
+      "lastMom": 12,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 2,
+        "a": 1
+      },
+      "sot": {
+        "h": 0,
+        "a": 1
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
         "total": 6
       },
       "patterns": [],
@@ -69,21 +187,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 17,
+      "min": 24,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 72,
       "xgH": 0.03,
-      "xgA": 0.25,
-      "xgTotal": 0.28,
-      "lastMom": -9,
+      "xgA": 0.31,
+      "xgTotal": 0.33999999999999997,
+      "lastMom": -39,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 1,
-        "a": 5
+        "a": 6
       },
       "sot": {
         "h": 0,
@@ -121,13 +239,13 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "6 remates",
+          "label": "7 remates",
           "emoji": "🎯",
-          "level": "high",
-          "detail": "32 remates/90min (muito alto)"
+          "level": "med",
+          "detail": "26 remates/90min"
         }
       ],
-      "patternScore": 4
+      "patternScore": 2
     },
     {
       "id": 5190,
@@ -136,20 +254,20 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 25,
+      "min": 30,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 18,
-      "xgH": 0.88,
+      "xgH": 0.93,
       "xgA": 0.2,
-      "xgTotal": 1.08,
-      "lastMom": -13,
+      "xgTotal": 1.1300000000000001,
+      "lastMom": 14,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 2,
+        "h": 4,
         "a": 2
       },
       "sot": {
@@ -188,10 +306,10 @@
       "patterns": [
         {
           "id": "xg_pace",
-          "label": "xG 3.9/90",
+          "label": "xG 3.4/90",
           "emoji": "⚡",
           "level": "high",
-          "detail": "xG a ritmo de 3.9 por 90min"
+          "detail": "xG a ritmo de 3.4 por 90min"
         }
       ],
       "patternScore": 4
@@ -203,7 +321,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 24,
+      "min": 31,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -211,7 +329,7 @@
       "xgH": 0.62,
       "xgA": 0.79,
       "xgTotal": 1.4100000000000001,
-      "lastMom": -35,
+      "lastMom": 7,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
@@ -255,20 +373,20 @@
       "patterns": [
         {
           "id": "xg_pace",
-          "label": "xG 5.3/90",
+          "label": "xG 4.1/90",
           "emoji": "⚡",
           "level": "critical",
-          "detail": "xG a ritmo de 5.3 por 90min"
+          "detail": "xG a ritmo de 4.1 por 90min"
         },
         {
           "id": "shots",
           "label": "8 remates",
           "emoji": "🎯",
-          "level": "high",
-          "detail": "30 remates/90min (muito alto)"
+          "level": "med",
+          "detail": "23 remates/90min"
         }
       ],
-      "patternScore": 14
+      "patternScore": 12
     },
     {
       "id": 223570,
@@ -344,7 +462,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 46,
+      "min": 51,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -352,7 +470,7 @@
       "xgH": 0.47,
       "xgA": 0.08,
       "xgTotal": 0.5499999999999999,
-      "lastMom": -21,
+      "lastMom": 16,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
