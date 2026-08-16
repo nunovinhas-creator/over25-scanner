@@ -342,12 +342,17 @@ def _fetch_lineup_info(ev_id: str) -> dict:
 
 
 def compute_prob(ev: dict, dc_ratings: dict, calibrator_fn) -> dict | None:
-    """Executa pipeline DC+calibrador. None em caso de erro."""
+    """Executa pipeline DC+calibrador. None em caso de erro.
+
+    Bloco P: resolve_dc_team_key() substitui normalize_team_names() puro —
+    tenta primeiro a tabela de aliases explícita BSD -> football-data.co.uk
+    (DC_TEAM_ALIASES, correspondência exacta por liga+nome, nunca por
+    prefixo/substring) antes de cair na normalização genérica."""
     try:
-        from pipeline.transform import compute_final_probability_dc, normalize_team_names
+        from pipeline.transform import compute_final_probability_dc, resolve_dc_team_key
         return compute_final_probability_dc(
-            home=normalize_team_names(ev["casa"]),
-            away=normalize_team_names(ev["fora"]),
+            home=resolve_dc_team_key(ev["liga"], ev["casa"]),
+            away=resolve_dc_team_key(ev["liga"], ev["fora"]),
             league=ev["liga"],
             dc_ratings=dc_ratings,
             calibrator_fn=calibrator_fn,
