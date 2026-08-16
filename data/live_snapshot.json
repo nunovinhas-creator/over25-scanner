@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-16T03:57:12Z",
+  "generated_at": "2026-08-16T04:02:31Z",
   "status": "OK",
-  "count": 7,
+  "count": 5,
   "events": [
     {
       "id": 211527,
@@ -10,21 +10,21 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 37,
+      "min": 44,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 19,
-      "xgH": 0.39,
-      "xgA": 0.27,
-      "xgTotal": 0.66,
-      "lastMom": -24,
-      "overOdds": 1.22,
-      "probLive": 82,
-      "oddsStatus": "VALID",
+      "xgH": 0.41,
+      "xgA": 0.29,
+      "xgTotal": 0.7,
+      "lastMom": 3,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 3,
-        "a": 8
+        "a": 9
       },
       "sot": {
         "h": 1,
@@ -62,10 +62,10 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "11 remates",
+          "label": "12 remates",
           "emoji": "🎯",
           "level": "med",
-          "detail": "27 remates/90min"
+          "detail": "25 remates/90min"
         }
       ],
       "patternScore": 2
@@ -77,20 +77,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 44,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 57,
-      "xgH": 0.22,
+      "xgH": 0.27,
       "xgA": 0.15,
-      "xgTotal": 0.37,
-      "lastMom": 5,
+      "xgTotal": 0.42000000000000004,
+      "lastMom": 26,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 2,
+        "h": 4,
         "a": 3
       },
       "sot": {
@@ -136,20 +136,20 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 57,
+      "min": 63,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 57,
-      "xgH": 1.04,
+      "xgH": 1.09,
       "xgA": 0.52,
-      "xgTotal": 1.56,
-      "lastMom": 10,
+      "xgTotal": 1.61,
+      "lastMom": -31,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 14,
+        "h": 15,
         "a": 6
       },
       "sot": {
@@ -185,8 +185,23 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "7r 2ªP",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "35 remates/90min (2ªP) (muito alto)"
+        },
+        {
+          "id": "open",
+          "label": "JOGO ABERTO",
+          "emoji": "🎭",
+          "level": "low",
+          "detail": "27min, equipa a perder ataca"
+        }
+      ],
+      "patternScore": 5
     },
     {
       "id": 5195,
@@ -195,25 +210,25 @@
       "hScore": 1,
       "aScore": 3,
       "goals": 4,
-      "min": 56,
+      "min": 63,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
-      "xgH": 0.18,
-      "xgA": 1.98,
-      "xgTotal": 2.16,
-      "lastMom": -7,
+      "xgH": 0.19,
+      "xgA": 2.17,
+      "xgTotal": 2.36,
+      "lastMom": 17,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 5,
-        "a": 10
+        "h": 6,
+        "a": 11
       },
       "sot": {
         "h": 1,
-        "a": 5
+        "a": 6
       },
       "da": {
         "h": null,
@@ -254,15 +269,15 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 56,
+      "min": 63,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
-      "xgH": 0.5,
+      "xgH": 0.55,
       "xgA": 0.22,
-      "xgTotal": 0.72,
-      "lastMom": 8,
+      "xgTotal": 0.77,
+      "lastMom": -14,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
@@ -273,132 +288,6 @@
       "sot": {
         "h": 2,
         "a": 1
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 207758,
-      "home": "Orange County SC",
-      "away": "Louisville City FC",
-      "hScore": 2,
-      "aScore": 3,
-      "goals": 5,
-      "min": 91,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 57,
-      "xgH": 1.19,
-      "xgA": 1.09,
-      "xgTotal": 2.2800000000000002,
-      "lastMom": 56,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 11,
-        "a": 9
-      },
-      "sot": {
-        "h": 3,
-        "a": 4
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 56"
-        }
-      ],
-      "patternScore": 2
-    },
-    {
-      "id": 207757,
-      "home": "Oakland Roots SC",
-      "away": "Monterey Bay FC",
-      "hScore": 1,
-      "aScore": 1,
-      "goals": 2,
-      "min": 92,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 57,
-      "xgH": 1.15,
-      "xgA": 0.79,
-      "xgTotal": 1.94,
-      "lastMom": 12,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 13,
-        "a": 9
-      },
-      "sot": {
-        "h": 5,
-        "a": 4
       },
       "da": {
         "h": null,
