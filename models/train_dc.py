@@ -109,6 +109,7 @@ def train_all(
     }
     """
     from models.math.poisson import fit_dixon_coles_fast
+    from pipeline.transform import normalize_team_names  # lazy import, mirrors fit_dixon_coles_fast above
 
     ratings: dict = {}
     fitted_at = datetime.utcnow().isoformat()
@@ -135,9 +136,23 @@ def train_all(
         logger.info("  → converged=%s  rho=%.4f  home_adv=%.4f  (%.2fs)",
                     model["converged"], model["rho"], model["home_adv"], elapsed)
 
+        # Bloco O — causa raiz confirmada: dc_ratings.json guardava as chaves
+        # cruas do CSV (football-data.co.uk), enquanto compute_final_probability_dc()
+        # (pipeline/transform.py) procura sempre por normalize_team_names(casa/fora)
+        # — a mesma normalização usada do lado da BSD em scan_over25.py::compute_prob().
+        # Convenções diferentes nos dois lados do mesmo lookup = falha 100% das
+        # vezes, sem excepção nem aviso (teams.get() devolve None em silêncio).
+        # Normalizar aqui, na escrita, alinha as chaves com o que o consumo já usa.
         teams_out: dict[str, dict] = {}
         for team in model["teams"]:
-            teams_out[team] = {
+            key = normalize_team_names(team)
+            if key in teams_out:
+                logger.warning(
+                    "train_all: colisão de nome normalizado em %s — '%s' e outra equipa "
+                    "colapsam ambas em '%s'; a manter a última processada",
+                    league, team, key,
+                )
+            teams_out[key] = {
                 "attack":  round(model["attack"][team],  6),
                 "defence": round(model["defence"][team], 6),
             }
