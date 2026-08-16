@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-16T01:40:30Z",
+  "generated_at": "2026-08-16T01:45:58Z",
   "status": "OK",
-  "count": 9,
+  "count": 11,
   "events": [
     {
       "id": 207756,
@@ -10,15 +10,133 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 4,
+      "min": 9,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 57,
-      "xgH": null,
+      "xgH": 0.02,
       "xgA": null,
       "xgTotal": null,
       "lastMom": 6,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 1,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 5193,
+      "home": "Colorado Rapids",
+      "away": "Sporting Kansas City",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 4,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 18,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": 36,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 1,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 5192,
+      "home": "Real Salt Lake",
+      "away": "Minnesota United",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 4,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 18,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": 15,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
@@ -67,27 +185,27 @@
       "home": "CF Monterrey",
       "away": "FC Juárez",
       "hScore": 3,
-      "aScore": 0,
-      "goals": 3,
-      "min": 28,
+      "aScore": 1,
+      "goals": 4,
+      "min": 35,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 19,
-      "xgH": 0.96,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": 30,
+      "xgH": 1.08,
+      "xgA": 0.08,
+      "xgTotal": 1.1600000000000001,
+      "lastMom": -10,
       "overOdds": 1.11,
       "probLive": 90,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 10,
-        "a": 0
+        "h": 11,
+        "a": 1
       },
       "sot": {
-        "h": 3,
-        "a": 0
+        "h": 4,
+        "a": 1
       },
       "da": {
         "h": null,
@@ -108,26 +226,33 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 3,
         "total": 6
       },
       "patterns": [
         {
+          "id": "xg_pace",
+          "label": "xG 3.0/90",
+          "emoji": "⚡",
+          "level": "med",
+          "detail": "xG a ritmo de 3.0 por 90min"
+        },
+        {
           "id": "shots",
-          "label": "10 remates",
+          "label": "12 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "32 remates/90min (muito alto)"
+          "detail": "31 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 4
+      "patternScore": 6
     },
     {
       "id": 207755,
@@ -136,25 +261,25 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 32,
+      "min": 39,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 57,
       "xgH": 0.06,
-      "xgA": 0.02,
-      "xgTotal": 0.08,
-      "lastMom": -11,
+      "xgA": 0.1,
+      "xgTotal": 0.16,
+      "lastMom": -37,
       "overOdds": 1.16,
       "probLive": 86,
       "oddsStatus": "VALID",
       "shots": {
         "h": 2,
-        "a": 1
+        "a": 2
       },
       "sot": {
         "h": 0,
-        "a": 1
+        "a": 2
       },
       "da": {
         "h": null,
@@ -195,24 +320,24 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 32,
+      "min": 38,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 57,
-      "xgH": 0.46,
+      "xgH": 0.47,
       "xgA": 0.15,
-      "xgTotal": 0.61,
-      "lastMom": 3,
+      "xgTotal": 0.62,
+      "lastMom": 13,
       "overOdds": 1.13,
       "probLive": 88,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 11,
+        "h": 12,
         "a": 3
       },
       "sot": {
-        "h": 3,
+        "h": 4,
         "a": 2
       },
       "da": {
@@ -247,10 +372,10 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "14 remates",
+          "label": "15 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "39 remates/90min (muito alto)"
+          "detail": "36 remates/90min (muito alto)"
         }
       ],
       "patternScore": 4
@@ -268,8 +393,8 @@
       "league": "",
       "league_id": 72,
       "xgH": 0.06,
-      "xgA": 0.44,
-      "xgTotal": 0.5,
+      "xgA": 0.51,
+      "xgTotal": 0.5700000000000001,
       "lastMom": 6,
       "overOdds": 1.14,
       "probLive": 88,
@@ -436,27 +561,27 @@
       "id": 223570,
       "home": "Club Atlético Platense",
       "away": "Boca Juniors",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 0,
-      "goals": 1,
-      "min": 67,
+      "goals": 2,
+      "min": 72,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 85,
-      "xgH": 0.76,
-      "xgA": 0.47,
-      "xgTotal": 1.23,
-      "lastMom": 21,
-      "overOdds": 1.34,
-      "probLive": 75,
-      "oddsStatus": "VALID",
+      "xgH": 0.97,
+      "xgA": 0.48,
+      "xgTotal": 1.45,
+      "lastMom": 32,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 10,
-        "a": 7
+        "h": 11,
+        "a": 8
       },
       "sot": {
-        "h": 7,
+        "h": 8,
         "a": 2
       },
       "da": {
@@ -491,20 +616,13 @@
       "patterns": [
         {
           "id": "xg_pace",
-          "label": "xG 3.1/90 (2ªP)",
+          "label": "xG 3.2/90 (2ªP)",
           "emoji": "⚡",
           "level": "high",
-          "detail": "xG a ritmo de 3.1 por 90min (2ªP)"
-        },
-        {
-          "id": "open",
-          "label": "JOGO ABERTO",
-          "emoji": "🎭",
-          "level": "low",
-          "detail": "23min, equipa a perder ataca"
+          "detail": "xG a ritmo de 3.2 por 90min (2ªP)"
         }
       ],
-      "patternScore": 5
+      "patternScore": 4
     },
     {
       "id": 7221,
@@ -513,24 +631,24 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 79,
+      "min": 84,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 9,
-      "xgH": 0.74,
+      "xgH": 1.05,
       "xgA": 0.24,
-      "xgTotal": 0.98,
-      "lastMom": 53,
+      "xgTotal": 1.29,
+      "lastMom": 87,
       "overOdds": 1.2,
       "probLive": 83,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 13,
+        "h": 18,
         "a": 6
       },
       "sot": {
-        "h": 4,
+        "h": 6,
         "a": 1
       },
       "da": {
@@ -564,28 +682,35 @@
       },
       "patterns": [
         {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "3 padrões em simultâneo — sinal forte"
+        },
+        {
           "id": "shots",
-          "label": "9r 2ªP",
+          "label": "14r 2ªP",
           "emoji": "🎯",
-          "level": "med",
-          "detail": "24 remates/90min (2ªP)"
+          "level": "high",
+          "detail": "32 remates/90min (2ªP) (muito alto)"
         },
         {
           "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 53"
+          "label": "Casa domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum casa 87 — controlo total"
         },
         {
           "id": "late",
-          "label": "1 gol em 11min",
+          "label": "1 gol em 6min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 83% · 11min"
+          "detail": "Falta 1 golo · mercado 83% · 6min"
         }
       ],
-      "patternScore": 5
+      "patternScore": 9
     }
   ]
 }
