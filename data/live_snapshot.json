@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-16T13:43:18Z",
+  "generated_at": "2026-08-16T13:49:06Z",
   "status": "OK",
   "count": 13,
   "events": [
@@ -10,9 +10,9 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 41,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 88,
       "xgH": null,
@@ -69,9 +69,9 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 39,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 79,
       "xgH": null,
@@ -128,9 +128,9 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 41,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 55,
       "xgH": null,
@@ -254,25 +254,92 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 48,
+      "min": 55,
       "status": "2nd_half",
       "period": "2T",
       "league": "Championship",
       "league_id": 12,
-      "xgH": 0.58,
+      "xgH": 0.6,
       "xgA": 0.27,
-      "xgTotal": 0.85,
-      "lastMom": 2,
+      "xgTotal": 0.87,
+      "lastMom": -55,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 12,
+        "h": 13,
         "a": 6
       },
       "sot": {
-        "h": 3,
+        "h": 4,
         "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 55"
+        }
+      ],
+      "patternScore": 2
+    },
+    {
+      "id": 210815,
+      "home": "Feyenoord",
+      "away": "Go Ahead Eagles",
+      "hScore": 2,
+      "aScore": 0,
+      "goals": 2,
+      "min": 59,
+      "status": "2nd_half",
+      "period": "2T",
+      "league": "Eredivisie",
+      "league_id": 10,
+      "xgH": 2.24,
+      "xgA": 0.16,
+      "xgTotal": 2.4000000000000004,
+      "lastMom": 27,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 20,
+        "a": 4
+      },
+      "sot": {
+        "h": 5,
+        "a": 1
       },
       "da": {
         "h": null,
@@ -307,98 +374,31 @@
       "patternScore": 0
     },
     {
-      "id": 210815,
-      "home": "Feyenoord",
-      "away": "Go Ahead Eagles",
-      "hScore": 2,
-      "aScore": 0,
-      "goals": 2,
-      "min": 52,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "Eredivisie",
-      "league_id": 10,
-      "xgH": 2.01,
-      "xgA": 0.16,
-      "xgTotal": 2.17,
-      "lastMom": 49,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
-      "shots": {
-        "h": 18,
-        "a": 4
-      },
-      "sot": {
-        "h": 4,
-        "a": 1
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 49"
-        }
-      ],
-      "patternScore": 2
-    },
-    {
       "id": 210814,
       "home": "FC Twente",
       "away": "PEC Zwolle",
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 51,
+      "min": 57,
       "status": "2nd_half",
       "period": "2T",
       "league": "Eredivisie",
       "league_id": 10,
-      "xgH": 0.75,
-      "xgA": 0.35,
-      "xgTotal": 1.1,
-      "lastMom": -23,
+      "xgH": 1.32,
+      "xgA": 0.38,
+      "xgTotal": 1.7000000000000002,
+      "lastMom": -30,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 11,
-        "a": 2
+        "h": 12,
+        "a": 3
       },
       "sot": {
         "h": 6,
-        "a": 1
+        "a": 2
       },
       "da": {
         "h": null,
@@ -436,27 +436,27 @@
       "id": 207045,
       "home": "Aalesunds FK",
       "away": "Vålerenga IF",
-      "hScore": 4,
+      "hScore": 5,
       "aScore": 2,
-      "goals": 6,
-      "min": 51,
+      "goals": 7,
+      "min": 57,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 54,
-      "xgH": 1.48,
-      "xgA": 2.07,
-      "xgTotal": 3.55,
-      "lastMom": 23,
+      "xgH": 1.55,
+      "xgA": 2.18,
+      "xgTotal": 3.7300000000000004,
+      "lastMom": 21,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 13,
-        "a": 11
+        "h": 15,
+        "a": 12
       },
       "sot": {
-        "h": 7,
+        "h": 8,
         "a": 5
       },
       "da": {
@@ -498,20 +498,20 @@
       "hScore": 1,
       "aScore": 2,
       "goals": 3,
-      "min": 82,
+      "min": 89,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 84,
-      "xgH": 1.07,
+      "xgH": 1.16,
       "xgA": 1.29,
-      "xgTotal": 2.3600000000000003,
-      "lastMom": 18,
+      "xgTotal": 2.45,
+      "lastMom": 34,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 13,
+        "h": 15,
         "a": 10
       },
       "sot": {
@@ -557,24 +557,24 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 85,
+      "min": 91,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 84,
-      "xgH": 2.43,
+      "xgH": 2.44,
       "xgA": 0.13,
-      "xgTotal": 2.56,
-      "lastMom": 19,
-      "overOdds": 1.06,
-      "probLive": 94,
-      "oddsStatus": "VALID",
+      "xgTotal": 2.57,
+      "lastMom": 5,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 19,
+        "h": 20,
         "a": 4
       },
       "sot": {
-        "h": 6,
+        "h": 7,
         "a": 0
       },
       "da": {
@@ -612,57 +612,36 @@
           "label": "xG sobrevaloriza",
           "emoji": "🎲",
           "level": "med",
-          "detail": "xG 2.56 vs 1 golos"
-        },
-        {
-          "id": "xg_pace",
-          "label": "xG 3.8/90 (2ªP)",
-          "emoji": "⚡",
-          "level": "high",
-          "detail": "xG a ritmo de 3.8 por 90min (2ªP)"
-        },
-        {
-          "id": "shots",
-          "label": "12r 2ªP",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "27 remates/90min (2ªP)"
-        },
-        {
-          "id": "open",
-          "label": "JOGO ABERTO",
-          "emoji": "🎭",
-          "level": "low",
-          "detail": "5min, equipa a perder ataca"
+          "detail": "xG 2.57 vs 1 golos"
         }
       ],
-      "patternScore": 9
+      "patternScore": 2
     },
     {
       "id": 46436,
       "home": "IF Brommapojkarna",
       "away": "Örgryte IS",
-      "hScore": 2,
+      "hScore": 3,
       "aScore": 1,
-      "goals": 3,
-      "min": 83,
+      "goals": 4,
+      "min": 90,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 26,
-      "xgH": 2.21,
+      "xgH": 2.23,
       "xgA": 0.65,
-      "xgTotal": 2.86,
-      "lastMom": -11,
-      "overOdds": 1.1,
-      "probLive": 91,
-      "oddsStatus": "VALID",
+      "xgTotal": 2.88,
+      "lastMom": 9,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 14,
+        "h": 15,
         "a": 9
       },
       "sot": {
-        "h": 1,
+        "h": 2,
         "a": 4
       },
       "da": {
@@ -704,7 +683,7 @@
       "hScore": 1,
       "aScore": 3,
       "goals": 4,
-      "min": 80,
+      "min": 87,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -712,7 +691,7 @@
       "xgH": 1.49,
       "xgA": 1.82,
       "xgTotal": 3.31,
-      "lastMom": -1,
+      "lastMom": 10,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
@@ -763,7 +742,7 @@
       "hScore": 3,
       "aScore": 0,
       "goals": 3,
-      "min": 84,
+      "min": 91,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -771,7 +750,7 @@
       "xgH": 2.12,
       "xgA": 0.83,
       "xgTotal": 2.95,
-      "lastMom": -43,
+      "lastMom": -2,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
