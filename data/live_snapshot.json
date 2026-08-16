@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-16T04:23:55Z",
+  "generated_at": "2026-08-16T04:29:18Z",
   "status": "OK",
   "count": 5,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 46,
+      "min": 52,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -18,9 +18,9 @@
       "xgH": 0.5,
       "xgA": 0.49,
       "xgTotal": 0.99,
-      "lastMom": 0,
-      "overOdds": 1.11,
-      "probLive": 90,
+      "lastMom": -2,
+      "overOdds": 1.22,
+      "probLive": 82,
       "oddsStatus": "VALID",
       "shots": {
         "h": 5,
@@ -59,8 +59,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mkt",
+          "label": "Odds −8.3%",
+          "emoji": "📈",
+          "level": "critical",
+          "detail": "Mercado caiu de 1.33 → 1.22 (sharp money)"
+        }
+      ],
+      "patternScore": 10
     },
     {
       "id": 207760,
@@ -69,17 +77,17 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 53,
+      "min": 58,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 57,
-      "xgH": 0.54,
+      "xgH": 0.52,
       "xgA": 0.15,
-      "xgTotal": 0.6900000000000001,
-      "lastMom": 29,
-      "overOdds": 1.22,
-      "probLive": 82,
+      "xgTotal": 0.67,
+      "lastMom": -9,
+      "overOdds": 1.43,
+      "probLive": 70,
       "oddsStatus": "VALID",
       "shots": {
         "h": 6,
@@ -125,27 +133,27 @@
       "id": 207759,
       "home": "Las Vegas Lights",
       "away": "Brooklyn FC",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 1,
-      "goals": 2,
-      "min": 84,
+      "goals": 3,
+      "min": 90,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 57,
-      "xgH": 2.54,
+      "xgH": 2.62,
       "xgA": 0.72,
-      "xgTotal": 3.26,
-      "lastMom": 24,
-      "overOdds": 1.27,
-      "probLive": 79,
+      "xgTotal": 3.34,
+      "lastMom": 57,
+      "overOdds": 1.15,
+      "probLive": 87,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 21,
+        "h": 23,
         "a": 10
       },
       "sot": {
-        "h": 5,
+        "h": 6,
         "a": 4
       },
       "da": {
@@ -179,42 +187,14 @@
       },
       "patterns": [
         {
-          "id": "conv",
-          "label": "CONVERGÊNCIA",
-          "emoji": "🔮",
-          "level": "conv",
-          "detail": "4 padrões em simultâneo — sinal forte"
-        },
-        {
-          "id": "xg_delta",
-          "label": "xG sobrevaloriza",
-          "emoji": "🎲",
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
           "level": "med",
-          "detail": "xG 3.26 vs 2 golos"
-        },
-        {
-          "id": "xg_pace",
-          "label": "xG 4.5/90 (2ªP)",
-          "emoji": "⚡",
-          "level": "critical",
-          "detail": "xG a ritmo de 4.5 por 90min (2ªP)"
-        },
-        {
-          "id": "shots",
-          "label": "17r 2ªP",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "39 remates/90min (2ªP) (muito alto)"
-        },
-        {
-          "id": "late",
-          "label": "1 gol em 6min",
-          "emoji": "⏰",
-          "level": "low",
-          "detail": "Falta 1 golo · mercado 79% · 6min"
+          "detail": "Momentum casa 57"
         }
       ],
-      "patternScore": 17
+      "patternScore": 2
     },
     {
       "id": 5195,
@@ -223,7 +203,7 @@
       "hScore": 1,
       "aScore": 3,
       "goals": 4,
-      "min": 84,
+      "min": 89,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -231,10 +211,10 @@
       "xgH": 0.19,
       "xgA": 2.63,
       "xgTotal": 2.82,
-      "lastMom": -4,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "lastMom": 38,
+      "overOdds": 1.1,
+      "probLive": 91,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 6,
         "a": 14
@@ -280,27 +260,27 @@
       "home": "Los Angeles FC",
       "away": "San Diego FC",
       "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 84,
+      "aScore": 1,
+      "goals": 1,
+      "min": 89,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
       "xgH": 0.8,
-      "xgA": 0.22,
-      "xgTotal": 1.02,
-      "lastMom": 28,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgA": 1.01,
+      "xgTotal": 1.81,
+      "lastMom": -35,
+      "overOdds": 1.11,
+      "probLive": 90,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 12,
-        "a": 7
+        "a": 8
       },
       "sot": {
         "h": 3,
-        "a": 1
+        "a": 2
       },
       "da": {
         "h": null,
@@ -331,8 +311,30 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "xg_pace",
+          "label": "xG 3.3/90 (2ªP)",
+          "emoji": "⚡",
+          "level": "high",
+          "detail": "xG a ritmo de 3.3 por 90min (2ªP)"
+        },
+        {
+          "id": "shots",
+          "label": "12r 2ªP",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "25 remates/90min (2ªP)"
+        },
+        {
+          "id": "open",
+          "label": "JOGO ABERTO",
+          "emoji": "🎭",
+          "level": "low",
+          "detail": "1min, equipa a perder ataca"
+        }
+      ],
+      "patternScore": 7
     }
   ]
 }
