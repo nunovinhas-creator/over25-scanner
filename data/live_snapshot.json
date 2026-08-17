@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-17T01:35:52Z",
+  "generated_at": "2026-08-17T01:41:07Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 22,
+      "min": 27,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -19,9 +19,9 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "MISSING",
+      "overOdds": 1.04,
+      "probLive": 96,
+      "oddsStatus": "VALID",
       "shots": {
         "h": null,
         "a": null
@@ -69,25 +69,25 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 26,
+      "min": 31,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 72,
       "xgH": 0.33,
-      "xgA": 0.13,
-      "xgTotal": 0.46,
-      "lastMom": -41,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgA": 0.24,
+      "xgTotal": 0.5700000000000001,
+      "lastMom": -83,
+      "overOdds": 1.14,
+      "probLive": 88,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 4,
-        "a": 1
+        "a": 3
       },
       "sot": {
         "h": 0,
-        "a": 0
+        "a": 1
       },
       "da": {
         "h": null,
@@ -118,8 +118,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Fora domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum fora 83 — controlo total"
+        }
+      ],
+      "patternScore": 4
     },
     {
       "id": 5191,
@@ -137,9 +145,9 @@
       "xgA": 0.66,
       "xgTotal": 0.74,
       "lastMom": -48,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "overOdds": 1.02,
+      "probLive": 98,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 1,
         "a": 10
