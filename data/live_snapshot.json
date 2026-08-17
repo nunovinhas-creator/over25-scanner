@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-17T02:44:25Z",
+  "generated_at": "2026-08-17T02:49:41Z",
   "status": "OK",
-  "count": 4,
+  "count": 3,
   "events": [
     {
       "id": 5198,
@@ -10,7 +10,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 0,
+      "min": 5,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -18,10 +18,10 @@
       "xgH": null,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": null,
+      "lastMom": 2,
       "overOdds": null,
       "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "oddsStatus": "MISSING",
       "shots": {
         "h": 0,
         "a": 0
@@ -54,9 +54,9 @@
           "sot": true,
           "corners": false,
           "possession": false,
-          "lastMom": false
+          "lastMom": true
         },
-        "score": 1,
+        "score": 2,
         "total": 6
       },
       "patterns": [],
@@ -67,27 +67,27 @@
       "home": "Santos Laguna",
       "away": "CD Guadalajara",
       "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 71,
+      "aScore": 1,
+      "goals": 1,
+      "min": 76,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 19,
       "xgH": 0.55,
-      "xgA": 0.63,
-      "xgTotal": 1.1800000000000002,
-      "lastMom": 43,
+      "xgA": 0.83,
+      "xgTotal": 1.38,
+      "lastMom": -18,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 9,
-        "a": 8
+        "a": 9
       },
       "sot": {
         "h": 2,
-        "a": 3
+        "a": 4
       },
       "da": {
         "h": null,
@@ -120,14 +120,35 @@
       },
       "patterns": [
         {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "3 padrões em simultâneo — sinal forte"
+        },
+        {
           "id": "xg_pace",
-          "label": "xG 4.1/90 (2ªP)",
+          "label": "xG 4.0/90 (2ªP)",
           "emoji": "⚡",
           "level": "critical",
-          "detail": "xG a ritmo de 4.1 por 90min (2ªP)"
+          "detail": "xG a ritmo de 4.0 por 90min (2ªP)"
+        },
+        {
+          "id": "shots",
+          "label": "18r 2ªP",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "52 remates/90min (2ªP) (muito alto)"
+        },
+        {
+          "id": "open",
+          "label": "JOGO ABERTO",
+          "emoji": "🎭",
+          "level": "low",
+          "detail": "14min, equipa a perder ataca"
         }
       ],
-      "patternScore": 10
+      "patternScore": 15
     },
     {
       "id": 216413,
@@ -136,21 +157,21 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 71,
+      "min": 77,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 72,
       "xgH": 0.5,
-      "xgA": 1.06,
-      "xgTotal": 1.56,
-      "lastMom": 22,
+      "xgA": 1.23,
+      "xgTotal": 1.73,
+      "lastMom": 13,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 7,
-        "a": 9
+        "a": 11
       },
       "sot": {
         "h": 1,
@@ -188,79 +209,20 @@
       "patterns": [
         {
           "id": "xg_pace",
-          "label": "xG 5.4/90 (2ªP)",
+          "label": "xG 4.9/90 (2ªP)",
           "emoji": "⚡",
           "level": "critical",
-          "detail": "xG a ritmo de 5.4 por 90min (2ªP)"
+          "detail": "xG a ritmo de 4.9 por 90min (2ªP)"
         },
         {
           "id": "shots",
-          "label": "16r 2ªP",
+          "label": "18r 2ªP",
           "emoji": "🎯",
           "level": "high",
-          "detail": "55 remates/90min (2ªP) (muito alto)"
+          "detail": "51 remates/90min (2ªP) (muito alto)"
         }
       ],
       "patternScore": 14
-    },
-    {
-      "id": 5191,
-      "home": "Austin FC",
-      "away": "FC Dallas",
-      "hScore": 1,
-      "aScore": 2,
-      "goals": 3,
-      "min": 99,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 18,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "MISSING",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": null,
-        "a": null
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": false,
-          "sot": false,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 0,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
     }
   ]
 }
