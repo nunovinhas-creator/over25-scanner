@@ -1,8 +1,67 @@
 {
-  "generated_at": "2026-08-17T02:39:12Z",
+  "generated_at": "2026-08-17T02:44:25Z",
   "status": "OK",
-  "count": 3,
+  "count": 4,
   "events": [
+    {
+      "id": 5198,
+      "home": "Seattle Sounders FC",
+      "away": "Vancouver Whitecaps",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 0,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 18,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": false
+        },
+        "score": 1,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
     {
       "id": 211530,
       "home": "Santos Laguna",
@@ -10,24 +69,24 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 65,
+      "min": 71,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 19,
-      "xgH": 0.43,
+      "xgH": 0.55,
       "xgA": 0.63,
-      "xgTotal": 1.06,
-      "lastMom": -10,
-      "overOdds": 1.04,
-      "probLive": 96,
-      "oddsStatus": "VALID",
+      "xgTotal": 1.1800000000000002,
+      "lastMom": 43,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 5,
+        "h": 9,
         "a": 8
       },
       "sot": {
-        "h": 1,
+        "h": 2,
         "a": 3
       },
       "da": {
@@ -62,20 +121,13 @@
       "patterns": [
         {
           "id": "xg_pace",
-          "label": "xG 4.8/90 (2ªP)",
+          "label": "xG 4.1/90 (2ªP)",
           "emoji": "⚡",
           "level": "critical",
-          "detail": "xG a ritmo de 4.8 por 90min (2ªP)"
-        },
-        {
-          "id": "shots",
-          "label": "13r 2ªP",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "58 remates/90min (2ªP) (muito alto)"
+          "detail": "xG a ritmo de 4.1 por 90min (2ªP)"
         }
       ],
-      "patternScore": 14
+      "patternScore": 10
     },
     {
       "id": 216413,
@@ -84,20 +136,20 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 66,
+      "min": 71,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 72,
-      "xgH": 0.4,
-      "xgA": 1.16,
+      "xgH": 0.5,
+      "xgA": 1.06,
       "xgTotal": 1.56,
-      "lastMom": -8,
-      "overOdds": 1.14,
-      "probLive": 88,
-      "oddsStatus": "VALID",
+      "lastMom": 22,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 5,
+        "h": 7,
         "a": 9
       },
       "sot": {
@@ -136,17 +188,17 @@
       "patterns": [
         {
           "id": "xg_pace",
-          "label": "xG 6.7/90 (2ªP)",
+          "label": "xG 5.4/90 (2ªP)",
           "emoji": "⚡",
           "level": "critical",
-          "detail": "xG a ritmo de 6.7 por 90min (2ªP)"
+          "detail": "xG a ritmo de 5.4 por 90min (2ªP)"
         },
         {
           "id": "shots",
-          "label": "14r 2ªP",
+          "label": "16r 2ªP",
           "emoji": "🎯",
           "level": "high",
-          "detail": "60 remates/90min (2ªP) (muito alto)"
+          "detail": "55 remates/90min (2ªP) (muito alto)"
         }
       ],
       "patternScore": 14
@@ -158,25 +210,25 @@
       "hScore": 1,
       "aScore": 2,
       "goals": 3,
-      "min": 94,
+      "min": 99,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
-      "xgH": 0.51,
-      "xgA": 0.91,
-      "xgTotal": 1.42,
-      "lastMom": 51,
-      "overOdds": 1.02,
-      "probLive": 98,
-      "oddsStatus": "VALID",
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
       "shots": {
-        "h": 9,
-        "a": 14
+        "h": null,
+        "a": null
       },
       "sot": {
-        "h": 4,
-        "a": 6
+        "h": null,
+        "a": null
       },
       "da": {
         "h": null,
@@ -197,26 +249,18 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": true,
+          "xgTotal": false,
           "da": false,
-          "sot": true,
+          "sot": false,
           "corners": false,
           "possession": false,
-          "lastMom": true
+          "lastMom": false
         },
-        "score": 3,
+        "score": 0,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 51"
-        }
-      ],
-      "patternScore": 2
+      "patterns": [],
+      "patternScore": 0
     }
   ]
 }
