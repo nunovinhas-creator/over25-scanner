@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-17T04:18:03Z",
+  "generated_at": "2026-08-17T04:23:13Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,18 +10,18 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 46,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 19,
-      "xgH": 0.7,
+      "xgH": 0.71,
       "xgA": 0.53,
-      "xgTotal": 1.23,
-      "lastMom": -40,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgTotal": 1.24,
+      "lastMom": 9,
+      "overOdds": 1.07,
+      "probLive": 93,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 8,
         "a": 8
@@ -67,27 +67,27 @@
       "home": "Seattle Sounders FC",
       "away": "Vancouver Whitecaps",
       "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 72,
+      "aScore": 1,
+      "goals": 1,
+      "min": 78,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
-      "xgH": 0.5,
-      "xgA": 0.81,
-      "xgTotal": 1.31,
-      "lastMom": 12,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgH": 0.55,
+      "xgA": 1.24,
+      "xgTotal": 1.79,
+      "lastMom": -9,
+      "overOdds": 1.1,
+      "probLive": 91,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 3,
-        "a": 14
+        "h": 4,
+        "a": 15
       },
       "sot": {
         "h": 0,
-        "a": 3
+        "a": 4
       },
       "da": {
         "h": null,
@@ -120,21 +120,21 @@
       },
       "patterns": [
         {
-          "id": "xg_delta",
-          "label": "xG sobrevaloriza",
-          "emoji": "🎲",
-          "level": "med",
-          "detail": "xG 1.31 vs 0 golos"
+          "id": "xg_pace",
+          "label": "xG 3.6/90 (2ªP)",
+          "emoji": "⚡",
+          "level": "high",
+          "detail": "xG a ritmo de 3.6 por 90min (2ªP)"
         },
         {
-          "id": "xg_pace",
-          "label": "xG 2.8/90 (2ªP)",
-          "emoji": "⚡",
+          "id": "shots",
+          "label": "9r 2ªP",
+          "emoji": "🎯",
           "level": "med",
-          "detail": "xG a ritmo de 2.8 por 90min (2ªP)"
+          "detail": "25 remates/90min (2ªP)"
         }
       ],
-      "patternScore": 4
+      "patternScore": 6
     }
   ]
 }
