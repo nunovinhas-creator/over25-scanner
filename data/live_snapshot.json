@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-17T16:52:26Z",
+  "generated_at": "2026-08-17T16:57:59Z",
   "status": "OK",
-  "count": 6,
+  "count": 5,
   "events": [
     {
       "id": 215481,
@@ -10,25 +10,25 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 19,
+      "min": 23,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 42,
-      "xgH": 0.32,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": 43,
+      "xgH": 0.34,
+      "xgA": 0.05,
+      "xgTotal": 0.39,
+      "lastMom": 22,
       "overOdds": 1.53,
       "probLive": 65,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 3,
-        "a": 0
+        "h": 4,
+        "a": 1
       },
       "sot": {
         "h": 1,
-        "a": 0
+        "a": 1
       },
       "da": {
         "h": null,
@@ -49,14 +49,14 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 3,
         "total": 6
       },
       "patterns": [],
@@ -70,8 +70,8 @@
       "aScore": 0,
       "goals": 2,
       "min": 45,
-      "status": "1st_half",
-      "period": "1T",
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 79,
       "xgH": null,
@@ -246,21 +246,21 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 54,
+      "min": 59,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 23,
-      "xgH": 1.69,
-      "xgA": 1.17,
-      "xgTotal": 2.86,
-      "lastMom": -80,
+      "xgH": 1.75,
+      "xgA": 1.31,
+      "xgTotal": 3.06,
+      "lastMom": -30,
       "overOdds": 1.95,
       "probLive": 51,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 8,
-        "a": 12
+        "h": 9,
+        "a": 14
       },
       "sot": {
         "h": 3,
@@ -298,79 +298,13 @@
       "patterns": [
         {
           "id": "xg_delta",
-          "label": "xG +1.9 acima",
+          "label": "xG +2.1 acima",
           "emoji": "🎲",
           "level": "high",
-          "detail": "xG 2.86 vs 1 golos"
-        },
-        {
-          "id": "mom",
-          "label": "Fora domina",
-          "emoji": "💥",
-          "level": "high",
-          "detail": "Momentum fora 80 — controlo total"
+          "detail": "xG 3.06 vs 1 golos"
         }
       ],
-      "patternScore": 8
-    },
-    {
-      "id": 207297,
-      "home": "IF Gnistan",
-      "away": "Ilves",
-      "hScore": 3,
-      "aScore": 2,
-      "goals": 5,
-      "min": 93,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 55,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": 1.58,
-      "probLive": 63,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": null,
-        "a": null
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": false,
-          "sot": false,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 0,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
+      "patternScore": 4
     }
   ]
 }
