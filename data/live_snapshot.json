@@ -1,8 +1,126 @@
 {
-  "generated_at": "2026-08-17T16:04:29Z",
+  "generated_at": "2026-08-17T16:09:33Z",
   "status": "OK",
-  "count": 3,
+  "count": 5,
   "events": [
+    {
+      "id": 221046,
+      "home": "Juventus",
+      "away": "Juventus Next Gen U23",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 3,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 79,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
+      "shots": {
+        "h": null,
+        "a": null
+      },
+      "sot": {
+        "h": null,
+        "a": null
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": false,
+          "corners": false,
+          "possession": false,
+          "lastMom": false
+        },
+        "score": 0,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 215480,
+      "home": "Pisa",
+      "away": "Empoli",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 6,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 42,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": 30,
+      "overOdds": 1.88,
+      "probLive": 53,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
     {
       "id": 211682,
       "home": "FK Spartak Varna",
@@ -10,7 +128,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 1,
+      "min": 8,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -69,25 +187,25 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 26,
+      "min": 32,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 23,
-      "xgH": 0.43,
-      "xgA": 0.35,
-      "xgTotal": 0.78,
-      "lastMom": 6,
+      "xgH": 0.52,
+      "xgA": 0.68,
+      "xgTotal": 1.2000000000000002,
+      "lastMom": -7,
       "overOdds": 1.95,
       "probLive": 51,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 2,
-        "a": 4
+        "h": 3,
+        "a": 6
       },
       "sot": {
         "h": 0,
-        "a": 0
+        "a": 1
       },
       "da": {
         "h": null,
@@ -121,13 +239,20 @@
       "patterns": [
         {
           "id": "xg_pace",
-          "label": "xG 2.7/90",
+          "label": "xG 3.4/90",
           "emoji": "⚡",
+          "level": "high",
+          "detail": "xG a ritmo de 3.4 por 90min"
+        },
+        {
+          "id": "shots",
+          "label": "9 remates",
+          "emoji": "🎯",
           "level": "med",
-          "detail": "xG a ritmo de 2.7 por 90min"
+          "detail": "25 remates/90min"
         }
       ],
-      "patternScore": 2
+      "patternScore": 6
     },
     {
       "id": 207297,
@@ -136,9 +261,9 @@
       "hScore": 2,
       "aScore": 2,
       "goals": 4,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 49,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 55,
       "xgH": null,
