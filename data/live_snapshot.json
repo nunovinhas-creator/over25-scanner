@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-17T04:12:49Z",
+  "generated_at": "2026-08-17T04:18:03Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -19,9 +19,9 @@
       "xgA": 0.53,
       "xgTotal": 1.23,
       "lastMom": -40,
-      "overOdds": 1.07,
-      "probLive": 93,
-      "oddsStatus": "VALID",
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 8,
         "a": 8
@@ -69,21 +69,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 67,
+      "min": 72,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
       "xgH": 0.5,
-      "xgA": 0.75,
-      "xgTotal": 1.25,
-      "lastMom": -30,
-      "overOdds": 1.1,
-      "probLive": 91,
-      "oddsStatus": "VALID",
+      "xgA": 0.81,
+      "xgTotal": 1.31,
+      "lastMom": 12,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": 3,
-        "a": 13
+        "a": 14
       },
       "sot": {
         "h": 0,
@@ -124,24 +124,17 @@
           "label": "xG sobrevaloriza",
           "emoji": "🎲",
           "level": "med",
-          "detail": "xG 1.25 vs 0 golos"
+          "detail": "xG 1.31 vs 0 golos"
         },
         {
           "id": "xg_pace",
-          "label": "xG 3.2/90 (2ªP)",
+          "label": "xG 2.8/90 (2ªP)",
           "emoji": "⚡",
-          "level": "high",
-          "detail": "xG a ritmo de 3.2 por 90min (2ªP)"
-        },
-        {
-          "id": "shots",
-          "label": "6r 2ªP",
-          "emoji": "🎯",
           "level": "med",
-          "detail": "25 remates/90min (2ªP)"
+          "detail": "xG a ritmo de 2.8 por 90min (2ªP)"
         }
       ],
-      "patternScore": 8
+      "patternScore": 4
     }
   ]
 }
