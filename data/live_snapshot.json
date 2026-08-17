@@ -1,8 +1,126 @@
 {
-  "generated_at": "2026-08-17T18:57:18Z",
+  "generated_at": "2026-08-17T19:02:50Z",
   "status": "OK",
-  "count": 6,
+  "count": 8,
   "events": [
+    {
+      "id": 213985,
+      "home": "Cardiff City",
+      "away": "Wrexham",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 1,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "Championship",
+      "league_id": 12,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": -10,
+      "overOdds": 1.68,
+      "probLive": 60,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 213523,
+      "home": "Deportivo de A Coruña",
+      "away": "Elche",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 0,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "La Liga",
+      "league_id": 3,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": 2.26,
+      "probLive": 44,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": false
+        },
+        "score": 1,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
     {
       "id": 215482,
       "home": "Cremonese",
@@ -10,15 +128,15 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 9,
+      "min": 15,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 42,
       "xgH": 0.05,
-      "xgA": 0.05,
-      "xgTotal": 0.1,
-      "lastMom": -25,
+      "xgA": 0.08,
+      "xgTotal": 0.13,
+      "lastMom": -11,
       "overOdds": 2.06,
       "probLive": 49,
       "oddsStatus": "VALID",
@@ -59,42 +177,34 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "shots",
-          "label": "3 remates",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "30 remates/90min (muito alto)"
-        }
-      ],
-      "patternScore": 4
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 215960,
       "home": "Samsunspor",
       "away": "Göztepe",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 1,
-      "goals": 1,
-      "min": 26,
+      "goals": 2,
+      "min": 31,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 11,
-      "xgH": 0.12,
+      "xgH": 0.91,
       "xgA": 0.28,
-      "xgTotal": 0.4,
-      "lastMom": -9,
+      "xgTotal": 1.19,
+      "lastMom": 18,
       "overOdds": 1.9,
       "probLive": 53,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 4,
+        "h": 5,
         "a": 6
       },
       "sot": {
-        "h": 0,
+        "h": 1,
         "a": 2
       },
       "da": {
@@ -128,14 +238,21 @@
       },
       "patterns": [
         {
+          "id": "xg_pace",
+          "label": "xG 3.5/90",
+          "emoji": "⚡",
+          "level": "high",
+          "detail": "xG a ritmo de 3.5 por 90min"
+        },
+        {
           "id": "shots",
-          "label": "10 remates",
+          "label": "11 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "35 remates/90min (muito alto)"
+          "detail": "32 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 4
+      "patternScore": 8
     },
     {
       "id": 214563,
@@ -144,24 +261,24 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 25,
+      "min": 31,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 23,
-      "xgH": 0.45,
-      "xgA": 0.08,
-      "xgTotal": 0.53,
-      "lastMom": 25,
+      "xgH": 0.9,
+      "xgA": 0.22,
+      "xgTotal": 1.12,
+      "lastMom": 20,
       "overOdds": 1.54,
       "probLive": 65,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 6,
-        "a": 2
+        "h": 9,
+        "a": 5
       },
       "sot": {
-        "h": 2,
+        "h": 4,
         "a": 0
       },
       "da": {
@@ -195,14 +312,21 @@
       },
       "patterns": [
         {
+          "id": "xg_pace",
+          "label": "xG 3.3/90",
+          "emoji": "⚡",
+          "level": "high",
+          "detail": "xG a ritmo de 3.3 por 90min"
+        },
+        {
           "id": "shots",
-          "label": "8 remates",
+          "label": "14 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "29 remates/90min (muito alto)"
+          "detail": "41 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 4
+      "patternScore": 8
     },
     {
       "id": 211679,
@@ -211,7 +335,7 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 40,
+      "min": 45,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -270,7 +394,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 55,
+      "min": 60,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -329,7 +453,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 90,
+      "min": 96,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
