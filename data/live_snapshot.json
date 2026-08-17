@@ -1,8 +1,67 @@
 {
-  "generated_at": "2026-08-17T18:45:48Z",
+  "generated_at": "2026-08-17T18:51:47Z",
   "status": "OK",
   "count": 8,
   "events": [
+    {
+      "id": 215482,
+      "home": "Cremonese",
+      "away": "Sampdoria",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 4,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 42,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": -5,
+      "overOdds": 2.06,
+      "probLive": 49,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
     {
       "id": 215960,
       "home": "Samsunspor",
@@ -10,25 +69,25 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 13,
+      "min": 21,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 11,
-      "xgH": 0.02,
-      "xgA": 0.09,
-      "xgTotal": 0.11,
-      "lastMom": 17,
+      "xgH": 0.03,
+      "xgA": 0.18,
+      "xgTotal": 0.21,
+      "lastMom": -22,
       "overOdds": 1.9,
       "probLive": 53,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 1,
-        "a": 3
+        "h": 2,
+        "a": 5
       },
       "sot": {
         "h": 0,
-        "a": 1
+        "a": 2
       },
       "da": {
         "h": null,
@@ -62,13 +121,13 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "4 remates",
+          "label": "7 remates",
           "emoji": "🎯",
-          "level": "med",
-          "detail": "28 remates/90min"
+          "level": "high",
+          "detail": "30 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 2
+      "patternScore": 4
     },
     {
       "id": 214563,
@@ -77,7 +136,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 13,
+      "min": 20,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -85,7 +144,7 @@
       "xgH": 0.41,
       "xgA": 0.08,
       "xgTotal": 0.49,
-      "lastMom": 60,
+      "lastMom": -29,
       "overOdds": 1.54,
       "probLive": 65,
       "oddsStatus": "VALID",
@@ -132,26 +191,19 @@
           "label": "7 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "48 remates/90min (muito alto)"
-        },
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 60"
+          "detail": "31 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 6
+      "patternScore": 4
     },
     {
       "id": 211679,
       "home": "Arda Kardzhali",
       "away": "Lokomotiv Sofia",
-      "hScore": 0,
+      "hScore": 2,
       "aScore": 0,
-      "goals": 0,
-      "min": 28,
+      "goals": 2,
+      "min": 35,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -210,20 +262,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 50,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 85,
-      "xgH": 0.14,
-      "xgA": 0.2,
-      "xgTotal": 0.34,
-      "lastMom": 32,
+      "xgH": 0.15,
+      "xgA": 0.21,
+      "xgTotal": 0.36,
+      "lastMom": 11,
       "overOdds": 2.88,
       "probLive": 35,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 6,
+        "h": 7,
         "a": 5
       },
       "sot": {
@@ -269,7 +321,7 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 78,
+      "min": 85,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -328,20 +380,20 @@
       "hScore": 3,
       "aScore": 2,
       "goals": 5,
-      "min": 85,
+      "min": 92,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 84,
-      "xgH": 1.32,
+      "xgH": 1.38,
       "xgA": 0.82,
-      "xgTotal": 2.14,
-      "lastMom": -5,
+      "xgTotal": 2.1999999999999997,
+      "lastMom": 28,
       "overOdds": 1.54,
       "probLive": 65,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 17,
+        "h": 18,
         "a": 10
       },
       "sot": {
@@ -381,94 +433,27 @@
       "patternScore": 0
     },
     {
-      "id": 214776,
-      "home": "Sporting Gijón",
-      "away": "CE Sabadell",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 86,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "La Liga 2",
-      "league_id": 38,
-      "xgH": 0.54,
-      "xgA": 1.82,
-      "xgTotal": 2.3600000000000003,
-      "lastMom": 11,
-      "overOdds": 2.23,
-      "probLive": 45,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 8,
-        "a": 14
-      },
-      "sot": {
-        "h": 5,
-        "a": 2
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "xg_delta",
-          "label": "xG +2.4 acima",
-          "emoji": "🎲",
-          "level": "high",
-          "detail": "xG 2.36 vs 0 golos"
-        }
-      ],
-      "patternScore": 4
-    },
-    {
       "id": 46432,
       "home": "BK Häcken",
       "away": "Halmstads BK",
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 86,
+      "min": 92,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 26,
-      "xgH": 1.9,
-      "xgA": 0.63,
-      "xgTotal": 2.53,
-      "lastMom": -11,
+      "xgH": 2.14,
+      "xgA": 0.73,
+      "xgTotal": 2.87,
+      "lastMom": 12,
       "overOdds": 1.38,
       "probLive": 72,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 21,
-        "a": 10
+        "h": 24,
+        "a": 11
       },
       "sot": {
         "h": 7,
@@ -505,35 +490,14 @@
       },
       "patterns": [
         {
-          "id": "conv",
-          "label": "CONVERGÊNCIA",
-          "emoji": "🔮",
-          "level": "conv",
-          "detail": "3 padrões em simultâneo — sinal forte"
-        },
-        {
           "id": "xg_delta",
-          "label": "xG sobrevaloriza",
+          "label": "xG +1.9 acima",
           "emoji": "🎲",
-          "level": "med",
-          "detail": "xG 2.53 vs 1 golos"
-        },
-        {
-          "id": "xg_pace",
-          "label": "xG 3.6/90 (2ªP)",
-          "emoji": "⚡",
           "level": "high",
-          "detail": "xG a ritmo de 3.6 por 90min (2ªP)"
-        },
-        {
-          "id": "shots",
-          "label": "17r 2ªP",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "37 remates/90min (2ªP) (muito alto)"
+          "detail": "xG 2.87 vs 1 golos"
         }
       ],
-      "patternScore": 10
+      "patternScore": 4
     }
   ]
 }
