@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-17T04:38:44Z",
+  "generated_at": "2026-08-17T04:43:52Z",
   "status": "OK",
-  "count": 2,
+  "count": 1,
   "events": [
     {
       "id": 211531,
@@ -10,84 +10,25 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 61,
+      "min": 66,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 19,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
+      "xgH": 0.91,
+      "xgA": 0.6,
+      "xgTotal": 1.51,
+      "lastMom": -13,
       "overOdds": 1.07,
       "probLive": 93,
       "oddsStatus": "VALID",
       "shots": {
-        "h": null,
-        "a": null
+        "h": 11,
+        "a": 9
       },
       "sot": {
-        "h": null,
-        "a": null
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": false,
-          "sot": false,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 0,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 5198,
-      "home": "Seattle Sounders FC",
-      "away": "Vancouver Whitecaps",
-      "hScore": 0,
-      "aScore": 2,
-      "goals": 2,
-      "min": 94,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 18,
-      "xgH": 0.57,
-      "xgA": 1.44,
-      "xgTotal": 2.01,
-      "lastMom": -34,
-      "overOdds": 1.1,
-      "probLive": 91,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 5,
-        "a": 17
-      },
-      "sot": {
-        "h": 0,
-        "a": 5
+        "h": 3,
+        "a": 4
       },
       "da": {
         "h": null,
@@ -118,16 +59,8 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "late",
-          "label": "1 gol em 0min",
-          "emoji": "⏰",
-          "level": "low",
-          "detail": "Falta 1 golo · mercado 91% · 0min"
-        }
-      ],
-      "patternScore": 1
+      "patterns": [],
+      "patternScore": 0
     }
   ]
 }
