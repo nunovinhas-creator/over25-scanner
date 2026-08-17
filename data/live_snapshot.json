@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-17T23:37:44Z",
+  "generated_at": "2026-08-17T23:43:01Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 37,
+      "min": 42,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -18,7 +18,7 @@
       "xgH": 0.8,
       "xgA": 0.04,
       "xgTotal": 0.8400000000000001,
-      "lastMom": -5,
+      "lastMom": 22,
       "overOdds": 1.83,
       "probLive": 55,
       "oddsStatus": "VALID",
@@ -69,21 +69,21 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 60,
+      "min": 65,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 85,
       "xgH": 0.44,
-      "xgA": 0.47,
-      "xgTotal": 0.9099999999999999,
-      "lastMom": -23,
+      "xgA": 0.82,
+      "xgTotal": 1.26,
+      "lastMom": -31,
       "overOdds": 2.22,
       "probLive": 45,
       "oddsStatus": "VALID",
       "shots": {
         "h": 7,
-        "a": 10
+        "a": 12
       },
       "sot": {
         "h": 3,
@@ -118,8 +118,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "5r 2ªP",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "22 remates/90min (2ªP)"
+        }
+      ],
+      "patternScore": 2
     }
   ]
 }
