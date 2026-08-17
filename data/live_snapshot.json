@@ -1,8 +1,67 @@
 {
-  "generated_at": "2026-08-17T17:03:46Z",
+  "generated_at": "2026-08-17T17:09:44Z",
   "status": "OK",
-  "count": 8,
+  "count": 9,
   "events": [
+    {
+      "id": 374741,
+      "home": "Felgueiras",
+      "away": "AVS - Futebol SAD",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 1,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 88,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": 2.26,
+      "probLive": 44,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": null,
+        "a": null
+      },
+      "sot": {
+        "h": null,
+        "a": null
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": false,
+          "corners": false,
+          "possession": false,
+          "lastMom": false
+        },
+        "score": 0,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
     {
       "id": 221497,
       "home": "Brøndby IF",
@@ -10,25 +69,25 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 0,
+      "min": 6,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 84,
       "xgH": null,
-      "xgA": 0.05,
+      "xgA": 0.31,
       "xgTotal": null,
-      "lastMom": -28,
+      "lastMom": -15,
       "overOdds": 1.54,
       "probLive": 65,
       "oddsStatus": "VALID",
       "shots": {
         "h": 0,
-        "a": 1
+        "a": 4
       },
       "sot": {
         "h": 0,
-        "a": 0
+        "a": 1
       },
       "da": {
         "h": null,
@@ -69,21 +128,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 0,
+      "min": 7,
       "status": "1st_half",
       "period": "1T",
       "league": "La Liga 2",
       "league_id": 38,
       "xgH": null,
-      "xgA": null,
+      "xgA": 0.03,
       "xgTotal": null,
-      "lastMom": -8,
-      "overOdds": 2.19,
-      "probLive": 46,
+      "lastMom": -29,
+      "overOdds": 2.23,
+      "probLive": 45,
       "oddsStatus": "VALID",
       "shots": {
         "h": 0,
-        "a": 0
+        "a": 1
       },
       "sot": {
         "h": 0,
@@ -128,83 +187,24 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 1,
+      "min": 7,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 26,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
+      "xgH": 0.2,
+      "xgA": 0.08,
+      "xgTotal": 0.28,
+      "lastMom": 56,
       "overOdds": 1.38,
       "probLive": 72,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
-        "a": 0
+        "h": 2,
+        "a": 2
       },
       "sot": {
-        "h": 0,
-        "a": 0
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 1,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 215481,
-      "home": "Sassuolo",
-      "away": "Cesena",
-      "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 28,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 42,
-      "xgH": 0.43,
-      "xgA": 0.05,
-      "xgTotal": 0.48,
-      "lastMom": 28,
-      "overOdds": 1.53,
-      "probLive": 65,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 6,
-        "a": 1
-      },
-      "sot": {
-        "h": 3,
+        "h": 1,
         "a": 1
       },
       "da": {
@@ -236,16 +236,67 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "shots",
-          "label": "7 remates",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "22 remates/90min"
-        }
-      ],
-      "patternScore": 2
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 215481,
+      "home": "Sassuolo",
+      "away": "Cesena",
+      "hScore": 1,
+      "aScore": 0,
+      "goals": 1,
+      "min": 34,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 42,
+      "xgH": 0.5,
+      "xgA": 0.05,
+      "xgTotal": 0.55,
+      "lastMom": -16,
+      "overOdds": 1.53,
+      "probLive": 65,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 7,
+        "a": 1
+      },
+      "sot": {
+        "h": 4,
+        "a": 1
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 221046,
@@ -313,15 +364,15 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 47,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 42,
       "xgH": 0.27,
       "xgA": 0.7,
       "xgTotal": 0.97,
-      "lastMom": 24,
+      "lastMom": 0,
       "overOdds": 1.88,
       "probLive": 53,
       "oddsStatus": "VALID",
@@ -372,9 +423,9 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 49,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 22,
       "xgH": null,
@@ -431,7 +482,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 65,
+      "min": 71,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -439,12 +490,12 @@
       "xgH": 1.75,
       "xgA": 1.41,
       "xgTotal": 3.16,
-      "lastMom": -30,
+      "lastMom": 9,
       "overOdds": 1.95,
       "probLive": 51,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 9,
+        "h": 10,
         "a": 15
       },
       "sot": {
@@ -490,13 +541,13 @@
         },
         {
           "id": "shots",
-          "label": "7r 2ªP",
+          "label": "8r 2ªP",
           "emoji": "🎯",
-          "level": "high",
-          "detail": "31 remates/90min (2ªP) (muito alto)"
+          "level": "med",
+          "detail": "28 remates/90min (2ªP)"
         }
       ],
-      "patternScore": 8
+      "patternScore": 6
     }
   ]
 }
