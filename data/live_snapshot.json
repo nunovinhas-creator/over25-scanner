@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-17T04:07:37Z",
+  "generated_at": "2026-08-17T04:12:49Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -16,19 +16,19 @@
       "league": "",
       "league_id": 19,
       "xgH": 0.7,
-      "xgA": 0.47,
-      "xgTotal": 1.17,
+      "xgA": 0.53,
+      "xgTotal": 1.23,
       "lastMom": -40,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "overOdds": 1.07,
+      "probLive": 93,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 8,
-        "a": 7
+        "a": 8
       },
       "sot": {
         "h": 2,
-        "a": 2
+        "a": 3
       },
       "da": {
         "h": null,
@@ -69,25 +69,25 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 62,
+      "min": 67,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
       "xgH": 0.5,
-      "xgA": 0.49,
-      "xgTotal": 0.99,
-      "lastMom": -23,
+      "xgA": 0.75,
+      "xgTotal": 1.25,
+      "lastMom": -30,
       "overOdds": 1.1,
       "probLive": 91,
       "oddsStatus": "VALID",
       "shots": {
         "h": 3,
-        "a": 11
+        "a": 13
       },
       "sot": {
         "h": 0,
-        "a": 2
+        "a": 3
       },
       "da": {
         "h": null,
@@ -118,8 +118,30 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "xg_delta",
+          "label": "xG sobrevaloriza",
+          "emoji": "🎲",
+          "level": "med",
+          "detail": "xG 1.25 vs 0 golos"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 3.2/90 (2ªP)",
+          "emoji": "⚡",
+          "level": "high",
+          "detail": "xG a ritmo de 3.2 por 90min (2ªP)"
+        },
+        {
+          "id": "shots",
+          "label": "6r 2ªP",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "25 remates/90min (2ªP)"
+        }
+      ],
+      "patternScore": 8
     }
   ]
 }
