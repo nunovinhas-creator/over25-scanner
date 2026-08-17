@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-17T01:52:18Z",
+  "generated_at": "2026-08-17T01:57:32Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -10,25 +10,25 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 38,
+      "min": 44,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 19,
       "xgH": 0.21,
-      "xgA": 0.01,
-      "xgTotal": 0.22,
-      "lastMom": -15,
+      "xgA": 0.11,
+      "xgTotal": 0.32,
+      "lastMom": -51,
       "overOdds": 1.04,
       "probLive": 96,
       "oddsStatus": "VALID",
       "shots": {
         "h": 3,
-        "a": 1
+        "a": 3
       },
       "sot": {
         "h": 0,
-        "a": 1
+        "a": 2
       },
       "da": {
         "h": null,
@@ -59,8 +59,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 51"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 216413,
@@ -69,21 +77,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 42,
+      "min": 48,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 72,
       "xgH": 0.33,
-      "xgA": 0.54,
-      "xgTotal": 0.8700000000000001,
-      "lastMom": -13,
+      "xgA": 0.7,
+      "xgTotal": 1.03,
+      "lastMom": 36,
       "overOdds": 1.14,
       "probLive": 88,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 4,
-        "a": 3
+        "h": 5,
+        "a": 4
       },
       "sot": {
         "h": 1,
@@ -128,25 +136,25 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 48,
+      "min": 54,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
-      "xgH": 0.12,
-      "xgA": 0.66,
-      "xgTotal": 0.78,
-      "lastMom": 44,
+      "xgH": 0.11,
+      "xgA": 0.75,
+      "xgTotal": 0.86,
+      "lastMom": 13,
       "overOdds": 1.02,
       "probLive": 98,
       "oddsStatus": "VALID",
       "shots": {
         "h": 2,
-        "a": 10
+        "a": 11
       },
       "sot": {
         "h": 1,
-        "a": 4
+        "a": 5
       },
       "da": {
         "h": null,
