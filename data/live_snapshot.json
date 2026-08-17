@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-17T19:19:35Z",
+  "generated_at": "2026-08-17T19:25:12Z",
   "status": "OK",
-  "count": 8,
+  "count": 9,
   "events": [
     {
       "id": 215502,
@@ -10,21 +10,80 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 2,
+      "min": 7,
       "status": "1st_half",
       "period": "1T",
       "league": "Primeira Liga",
       "league_id": 2,
       "xgH": null,
-      "xgA": null,
+      "xgA": 0.09,
       "xgTotal": null,
-      "lastMom": 0,
+      "lastMom": -15,
       "overOdds": 1.5,
       "probLive": 67,
       "oddsStatus": "VALID",
       "shots": {
         "h": 0,
+        "a": 2
+      },
+      "sot": {
+        "h": 0,
+        "a": 2
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
         "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 215483,
+      "home": "Palermo",
+      "away": "Lecce",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 3,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 42,
+      "xgH": null,
+      "xgA": 0.04,
+      "xgTotal": null,
+      "lastMom": -2,
+      "overOdds": 1.97,
+      "probLive": 51,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 1
       },
       "sot": {
         "h": 0,
@@ -69,24 +128,24 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 16,
+      "min": 22,
       "status": "1st_half",
       "period": "1T",
       "league": "Championship",
       "league_id": 12,
-      "xgH": null,
+      "xgH": 0.11,
       "xgA": 0.26,
-      "xgTotal": null,
-      "lastMom": -1,
+      "xgTotal": 0.37,
+      "lastMom": 44,
       "overOdds": 1.68,
       "probLive": 60,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
+        "h": 1,
         "a": 3
       },
       "sot": {
-        "h": 0,
+        "h": 1,
         "a": 2
       },
       "da": {
@@ -108,14 +167,14 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 3,
         "total": 6
       },
       "patterns": [],
@@ -125,27 +184,27 @@
       "id": 213523,
       "home": "Deportivo de A Coruña",
       "away": "Elche",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 0,
-      "goals": 0,
-      "min": 16,
+      "goals": 1,
+      "min": 21,
       "status": "1st_half",
       "period": "1T",
       "league": "La Liga",
       "league_id": 3,
-      "xgH": 0.07,
+      "xgH": 0.11,
       "xgA": 0.64,
-      "xgTotal": 0.71,
-      "lastMom": 49,
+      "xgTotal": 0.75,
+      "lastMom": 11,
       "overOdds": 2.27,
       "probLive": 44,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 2,
+        "h": 3,
         "a": 3
       },
       "sot": {
-        "h": 1,
+        "h": 2,
         "a": 1
       },
       "da": {
@@ -179,18 +238,18 @@
       },
       "patterns": [
         {
-          "id": "shots",
-          "label": "5 remates",
-          "emoji": "🎯",
+          "id": "xg_pace",
+          "label": "xG 3.2/90",
+          "emoji": "⚡",
           "level": "high",
-          "detail": "28 remates/90min (muito alto)"
+          "detail": "xG a ritmo de 3.2 por 90min"
         },
         {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
+          "id": "shots",
+          "label": "6 remates",
+          "emoji": "🎯",
           "level": "med",
-          "detail": "Momentum casa 49"
+          "detail": "26 remates/90min"
         }
       ],
       "patternScore": 6
@@ -202,20 +261,20 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 30,
+      "min": 35,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 42,
-      "xgH": 0.37,
+      "xgH": 0.43,
       "xgA": 0.1,
-      "xgTotal": 0.47,
-      "lastMom": -13,
+      "xgTotal": 0.53,
+      "lastMom": -17,
       "overOdds": 2.06,
       "probLive": 49,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 3,
+        "h": 4,
         "a": 3
       },
       "sot": {
@@ -261,25 +320,25 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 47,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 11,
-      "xgH": 1.27,
-      "xgA": 0.31,
-      "xgTotal": 1.58,
-      "lastMom": -11,
+      "xgH": 1.25,
+      "xgA": 0.39,
+      "xgTotal": 1.6400000000000001,
+      "lastMom": -75,
       "overOdds": 1.9,
       "probLive": 53,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 7,
-        "a": 8
+        "h": 8,
+        "a": 12
       },
       "sot": {
         "h": 2,
-        "a": 3
+        "a": 4
       },
       "da": {
         "h": null,
@@ -310,8 +369,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Fora domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum fora 75 — controlo total"
+        }
+      ],
+      "patternScore": 4
     },
     {
       "id": 214563,
@@ -320,14 +387,14 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 46,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 23,
       "xgH": 1.34,
-      "xgA": 0.36,
-      "xgTotal": 1.7000000000000002,
+      "xgA": 0.37,
+      "xgTotal": 1.71,
       "lastMom": -25,
       "overOdds": 1.54,
       "probLive": 65,
@@ -379,16 +446,16 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 48,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 22,
       "xgH": null,
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": 1.93,
+      "overOdds": 1.92,
       "probLive": 52,
       "oddsStatus": "VALID",
       "shots": {
@@ -436,27 +503,27 @@
       "home": "Estudiantes de Río Cuarto",
       "away": "Atlético Tucumán",
       "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 76,
+      "aScore": 1,
+      "goals": 1,
+      "min": 81,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 85,
-      "xgH": 0.25,
-      "xgA": 0.26,
-      "xgTotal": 0.51,
-      "lastMom": -4,
+      "xgH": 0.27,
+      "xgA": 0.32,
+      "xgTotal": 0.5900000000000001,
+      "lastMom": -24,
       "overOdds": 2.88,
       "probLive": 35,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 8,
-        "a": 7
+        "h": 9,
+        "a": 8
       },
       "sot": {
         "h": 1,
-        "a": 2
+        "a": 3
       },
       "da": {
         "h": null,
@@ -487,8 +554,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "open",
+          "label": "JOGO ABERTO",
+          "emoji": "🎭",
+          "level": "low",
+          "detail": "9min, equipa a perder ataca"
+        }
+      ],
+      "patternScore": 1
     }
   ]
 }
