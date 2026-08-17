@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-17T02:49:41Z",
+  "generated_at": "2026-08-17T02:54:55Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -10,21 +10,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 5,
+      "min": 10,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 18,
       "xgH": null,
-      "xgA": null,
+      "xgA": 0.19,
       "xgTotal": null,
-      "lastMom": 2,
+      "lastMom": -20,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
         "h": 0,
-        "a": 0
+        "a": 1
       },
       "sot": {
         "h": 0,
@@ -69,7 +69,7 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 76,
+      "min": 81,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -77,10 +77,10 @@
       "xgH": 0.55,
       "xgA": 0.83,
       "xgTotal": 1.38,
-      "lastMom": -18,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "lastMom": 9,
+      "overOdds": 1.04,
+      "probLive": 96,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 9,
         "a": 9
@@ -120,35 +120,21 @@
       },
       "patterns": [
         {
-          "id": "conv",
-          "label": "CONVERGÊNCIA",
-          "emoji": "🔮",
-          "level": "conv",
-          "detail": "3 padrões em simultâneo — sinal forte"
-        },
-        {
           "id": "xg_pace",
-          "label": "xG 4.0/90 (2ªP)",
+          "label": "xG 3.4/90 (2ªP)",
           "emoji": "⚡",
-          "level": "critical",
-          "detail": "xG a ritmo de 4.0 por 90min (2ªP)"
+          "level": "high",
+          "detail": "xG a ritmo de 3.4 por 90min (2ªP)"
         },
         {
           "id": "shots",
           "label": "18r 2ªP",
           "emoji": "🎯",
           "level": "high",
-          "detail": "52 remates/90min (2ªP) (muito alto)"
-        },
-        {
-          "id": "open",
-          "label": "JOGO ABERTO",
-          "emoji": "🎭",
-          "level": "low",
-          "detail": "14min, equipa a perder ataca"
+          "detail": "45 remates/90min (2ªP) (muito alto)"
         }
       ],
-      "patternScore": 15
+      "patternScore": 8
     },
     {
       "id": 216413,
@@ -157,24 +143,24 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 77,
+      "min": 82,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 72,
-      "xgH": 0.5,
+      "xgH": 1.22,
       "xgA": 1.23,
-      "xgTotal": 1.73,
-      "lastMom": 13,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgTotal": 2.45,
+      "lastMom": 79,
+      "overOdds": 1.14,
+      "probLive": 88,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 7,
+        "h": 14,
         "a": 11
       },
       "sot": {
-        "h": 1,
+        "h": 3,
         "a": 2
       },
       "da": {
@@ -208,21 +194,42 @@
       },
       "patterns": [
         {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "4 padrões em simultâneo — sinal forte"
+        },
+        {
+          "id": "xg_delta",
+          "label": "xG sobrevaloriza",
+          "emoji": "🎲",
+          "level": "med",
+          "detail": "xG 2.45 vs 1 golos"
+        },
+        {
           "id": "xg_pace",
-          "label": "xG 4.9/90 (2ªP)",
+          "label": "xG 6.0/90 (2ªP)",
           "emoji": "⚡",
           "level": "critical",
-          "detail": "xG a ritmo de 4.9 por 90min (2ªP)"
+          "detail": "xG a ritmo de 6.0 por 90min (2ªP)"
         },
         {
           "id": "shots",
-          "label": "18r 2ªP",
+          "label": "25r 2ªP",
           "emoji": "🎯",
           "level": "high",
-          "detail": "51 remates/90min (2ªP) (muito alto)"
+          "detail": "61 remates/90min (2ªP) (muito alto)"
+        },
+        {
+          "id": "mom",
+          "label": "Casa domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum casa 79 — controlo total"
         }
       ],
-      "patternScore": 14
+      "patternScore": 20
     }
   ]
 }
