@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-17T18:00:35Z",
+  "generated_at": "2026-08-17T18:06:16Z",
   "status": "OK",
   "count": 7,
   "events": [
@@ -10,24 +10,24 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 13,
+      "min": 19,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 85,
-      "xgH": null,
-      "xgA": 0.06,
-      "xgTotal": null,
-      "lastMom": 12,
+      "xgH": 0.08,
+      "xgA": 0.13,
+      "xgTotal": 0.21000000000000002,
+      "lastMom": 14,
       "overOdds": 2.87,
       "probLive": 35,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
-        "a": 2
+        "h": 3,
+        "a": 3
       },
       "sot": {
-        "h": 0,
+        "h": 1,
         "a": 1
       },
       "da": {
@@ -49,18 +49,26 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "6 remates",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "28 remates/90min (muito alto)"
+        }
+      ],
+      "patternScore": 4
     },
     {
       "id": 374741,
@@ -129,14 +137,14 @@
       "aScore": 0,
       "goals": 3,
       "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 84,
-      "xgH": 0.94,
+      "xgH": 0.93,
       "xgA": 0.38,
-      "xgTotal": 1.3199999999999998,
-      "lastMom": 15,
+      "xgTotal": 1.31,
+      "lastMom": 0,
       "overOdds": 1.54,
       "probLive": 65,
       "oddsStatus": "VALID",
@@ -177,8 +185,23 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "xg_pace",
+          "label": "xG 2.6/90",
+          "emoji": "⚡",
+          "level": "med",
+          "detail": "xG a ritmo de 2.6 por 90min"
+        },
+        {
+          "id": "shots",
+          "label": "16 remates",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "32 remates/90min (muito alto)"
+        }
+      ],
+      "patternScore": 6
     },
     {
       "id": 214776,
@@ -187,15 +210,15 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 47,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "La Liga 2",
       "league_id": 38,
       "xgH": 0.29,
       "xgA": 1.49,
       "xgTotal": 1.78,
-      "lastMom": 29,
+      "lastMom": 10,
       "overOdds": 2.23,
       "probLive": 45,
       "oddsStatus": "VALID",
@@ -246,15 +269,15 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 46,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 26,
       "xgH": 0.51,
       "xgA": 0.39,
       "xgTotal": 0.9,
-      "lastMom": 24,
+      "lastMom": 10,
       "overOdds": 1.38,
       "probLive": 72,
       "oddsStatus": "VALID",
@@ -305,20 +328,20 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 66,
+      "min": 72,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 42,
-      "xgH": 1.25,
+      "xgH": 1.33,
       "xgA": 0.57,
-      "xgTotal": 1.8199999999999998,
-      "lastMom": 29,
+      "xgTotal": 1.9,
+      "lastMom": 15,
       "overOdds": 1.53,
       "probLive": 65,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 13,
+        "h": 15,
         "a": 7
       },
       "sot": {
@@ -357,13 +380,20 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "8r 2ªP",
+          "label": "10r 2ªP",
           "emoji": "🎯",
           "level": "high",
-          "detail": "34 remates/90min (2ªP) (muito alto)"
+          "detail": "33 remates/90min (2ªP) (muito alto)"
+        },
+        {
+          "id": "late",
+          "label": "1 gol em 18min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 65% · 18min"
         }
       ],
-      "patternScore": 4
+      "patternScore": 5
     },
     {
       "id": 215480,
@@ -372,7 +402,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 53,
+      "min": 59,
       "status": "inprogress",
       "period": "2T",
       "league": "",
