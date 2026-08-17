@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-17T17:49:09Z",
+  "generated_at": "2026-08-17T17:54:44Z",
   "status": "OK",
-  "count": 8,
+  "count": 7,
   "events": [
     {
       "id": 223572,
@@ -10,21 +10,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 2,
+      "min": 8,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 85,
       "xgH": null,
-      "xgA": 0.04,
+      "xgA": 0.06,
       "xgTotal": null,
-      "lastMom": -70,
-      "overOdds": 2.85,
+      "lastMom": -4,
+      "overOdds": 2.87,
       "probLive": 35,
       "oddsStatus": "VALID",
       "shots": {
         "h": 0,
-        "a": 1
+        "a": 2
       },
       "sot": {
         "h": 0,
@@ -59,8 +59,16 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "2 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "22 remates/90min"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 374741,
@@ -69,7 +77,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 41,
+      "min": 46,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -128,9 +136,9 @@
       "hScore": 3,
       "aScore": 0,
       "goals": 3,
-      "min": 46,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 84,
       "xgH": 0.94,
@@ -246,20 +254,20 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 46,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 26,
-      "xgH": 0.46,
+      "xgH": 0.51,
       "xgA": 0.39,
-      "xgTotal": 0.8500000000000001,
+      "xgTotal": 0.9,
       "lastMom": 24,
       "overOdds": 1.38,
       "probLive": 72,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 8,
+        "h": 9,
         "a": 5
       },
       "sot": {
@@ -305,25 +313,25 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 55,
+      "min": 60,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 42,
       "xgH": 1.2,
-      "xgA": 0.38,
-      "xgTotal": 1.58,
-      "lastMom": -31,
+      "xgA": 0.43,
+      "xgTotal": 1.63,
+      "lastMom": -65,
       "overOdds": 1.53,
       "probLive": 65,
       "oddsStatus": "VALID",
       "shots": {
         "h": 12,
-        "a": 4
+        "a": 6
       },
       "sot": {
         "h": 6,
-        "a": 2
+        "a": 3
       },
       "da": {
         "h": null,
@@ -354,8 +362,23 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "6r 2ªP",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "36 remates/90min (2ªP) (muito alto)"
+        },
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 65"
+        }
+      ],
+      "patternScore": 6
     },
     {
       "id": 215480,
@@ -364,15 +387,15 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 87,
+      "min": 92,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 42,
-      "xgH": 0.8,
+      "xgH": 1.17,
       "xgA": 0.73,
-      "xgTotal": 1.53,
-      "lastMom": 55,
+      "xgTotal": 1.9,
+      "lastMom": 1,
       "overOdds": 1.88,
       "probLive": 53,
       "oddsStatus": "VALID",
@@ -415,80 +438,14 @@
       },
       "patterns": [
         {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 55"
-        },
-        {
           "id": "late",
-          "label": "1 gol em 3min",
+          "label": "1 gol em 0min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 53% · 3min"
+          "detail": "Falta 1 golo · mercado 53% · 0min"
         }
       ],
-      "patternScore": 3
-    },
-    {
-      "id": 211682,
-      "home": "FK Spartak Varna",
-      "away": "FK Septemvri Sofia",
-      "hScore": 0,
-      "aScore": 1,
-      "goals": 1,
-      "min": 89,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 22,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": 2.07,
-      "probLive": 48,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": null,
-        "a": null
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": false,
-          "sot": false,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 0,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
+      "patternScore": 1
     }
   ]
 }
