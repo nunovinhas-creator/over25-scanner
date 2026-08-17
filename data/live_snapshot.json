@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-17T02:02:45Z",
+  "generated_at": "2026-08-17T02:07:56Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -21,7 +21,7 @@
       "lastMom": 6,
       "overOdds": null,
       "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "oddsStatus": "MISSING",
       "shots": {
         "h": 3,
         "a": 3
@@ -78,9 +78,9 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": 1.14,
-      "probLive": 88,
-      "oddsStatus": "VALID",
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
       "shots": {
         "h": null,
         "a": null
@@ -128,7 +128,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 59,
+      "min": 64,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -136,10 +136,10 @@
       "xgH": 0.27,
       "xgA": 0.75,
       "xgTotal": 1.02,
-      "lastMom": 58,
-      "overOdds": 1.02,
-      "probLive": 98,
-      "oddsStatus": "VALID",
+      "lastMom": 13,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
       "shots": {
         "h": 4,
         "a": 11
@@ -177,16 +177,8 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 58"
-        }
-      ],
-      "patternScore": 2
+      "patterns": [],
+      "patternScore": 0
     }
   ]
 }
