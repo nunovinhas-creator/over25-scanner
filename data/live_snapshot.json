@@ -1,8 +1,67 @@
 {
-  "generated_at": "2026-08-17T23:00:43Z",
+  "generated_at": "2026-08-17T23:05:51Z",
   "status": "OK",
-  "count": 1,
+  "count": 2,
   "events": [
+    {
+      "id": 7219,
+      "home": "Internacional",
+      "away": "Remo",
+      "hScore": 1,
+      "aScore": 0,
+      "goals": 1,
+      "min": 4,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 9,
+      "xgH": 0.2,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": 7,
+      "overOdds": 1.83,
+      "probLive": 55,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 1,
+        "a": 0
+      },
+      "sot": {
+        "h": 1,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
     {
       "id": 223579,
       "home": "Vélez Sarsfield",
@@ -10,21 +69,21 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 43,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 85,
-      "xgH": 0.37,
-      "xgA": 0.4,
-      "xgTotal": 0.77,
-      "lastMom": 6,
+      "xgH": 0.38,
+      "xgA": 0.42,
+      "xgTotal": 0.8,
+      "lastMom": 43,
       "overOdds": 2.22,
       "probLive": 45,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 5,
-        "a": 7
+        "h": 6,
+        "a": 8
       },
       "sot": {
         "h": 1,
@@ -59,16 +118,8 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "shots",
-          "label": "12 remates",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "25 remates/90min"
-        }
-      ],
-      "patternScore": 2
+      "patterns": [],
+      "patternScore": 0
     }
   ]
 }
