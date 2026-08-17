@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-17T03:31:24Z",
+  "generated_at": "2026-08-17T03:36:37Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,20 +10,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 13,
+      "min": 18,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 19,
-      "xgH": 0.01,
-      "xgA": 0.14,
-      "xgTotal": 0.15000000000000002,
-      "lastMom": -15,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "xgH": 0.32,
+      "xgA": 0.12,
+      "xgTotal": 0.44,
+      "lastMom": 13,
+      "overOdds": 1.07,
+      "probLive": 93,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 1,
+        "h": 3,
         "a": 2
       },
       "sot": {
@@ -59,8 +59,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "5 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "25 remates/90min"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 5198,
@@ -69,18 +77,18 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 47,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 18,
       "xgH": 0.1,
       "xgA": 0.37,
       "xgTotal": 0.47,
-      "lastMom": -5,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "SUSPENDED",
+      "lastMom": -11,
+      "overOdds": 1.1,
+      "probLive": 91,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 2,
         "a": 8
