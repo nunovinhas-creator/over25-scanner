@@ -1,8 +1,67 @@
 {
-  "generated_at": "2026-08-17T18:11:46Z",
+  "generated_at": "2026-08-17T18:17:12Z",
   "status": "OK",
-  "count": 6,
+  "count": 7,
   "events": [
+    {
+      "id": 211679,
+      "home": "Arda Kardzhali",
+      "away": "Lokomotiv Sofia",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 0,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 22,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": 1.92,
+      "probLive": 52,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": null,
+        "a": null
+      },
+      "sot": {
+        "h": null,
+        "a": null
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": false,
+          "corners": false,
+          "possession": false,
+          "lastMom": false
+        },
+        "score": 0,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
     {
       "id": 223572,
       "home": "Estudiantes de Río Cuarto",
@@ -10,21 +69,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 26,
+      "min": 32,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 85,
-      "xgH": 0.13,
-      "xgA": 0.13,
+      "xgH": 0.12,
+      "xgA": 0.14,
       "xgTotal": 0.26,
-      "lastMom": 57,
+      "lastMom": 15,
       "overOdds": 2.87,
       "probLive": 35,
       "oddsStatus": "VALID",
       "shots": {
         "h": 4,
-        "a": 3
+        "a": 4
       },
       "sot": {
         "h": 1,
@@ -62,20 +121,13 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "7 remates",
+          "label": "8 remates",
           "emoji": "🎯",
           "level": "med",
-          "detail": "24 remates/90min"
-        },
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 57"
+          "detail": "22 remates/90min"
         }
       ],
-      "patternScore": 4
+      "patternScore": 2
     },
     {
       "id": 374741,
@@ -84,9 +136,9 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 51,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 88,
       "xgH": null,
@@ -141,22 +193,22 @@
       "home": "Brøndby IF",
       "away": "Sønderjyske Fodbold",
       "hScore": 3,
-      "aScore": 0,
-      "goals": 3,
-      "min": 52,
+      "aScore": 1,
+      "goals": 4,
+      "min": 57,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 84,
-      "xgH": 0.93,
+      "xgH": 0.97,
       "xgA": 0.38,
-      "xgTotal": 1.31,
-      "lastMom": 17,
+      "xgTotal": 1.35,
+      "lastMom": 25,
       "overOdds": 1.54,
       "probLive": 65,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 10,
+        "h": 11,
         "a": 6
       },
       "sot": {
@@ -202,88 +254,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 54,
+      "min": 59,
       "status": "2nd_half",
       "period": "2T",
       "league": "La Liga 2",
       "league_id": 38,
-      "xgH": 0.29,
+      "xgH": 0.49,
       "xgA": 1.63,
-      "xgTotal": 1.92,
-      "lastMom": -3,
+      "xgTotal": 2.12,
+      "lastMom": 6,
       "overOdds": 2.23,
       "probLive": 45,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 5,
+        "h": 7,
         "a": 11
-      },
-      "sot": {
-        "h": 2,
-        "a": 2
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "xg_delta",
-          "label": "xG +1.9 acima",
-          "emoji": "🎲",
-          "level": "high",
-          "detail": "xG 1.92 vs 0 golos"
-        }
-      ],
-      "patternScore": 4
-    },
-    {
-      "id": 46432,
-      "home": "BK Häcken",
-      "away": "Halmstads BK",
-      "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 53,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 26,
-      "xgH": 0.86,
-      "xgA": 0.42,
-      "xgTotal": 1.28,
-      "lastMom": 3,
-      "overOdds": 1.38,
-      "probLive": 72,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 11,
-        "a": 6
       },
       "sot": {
         "h": 4,
@@ -318,8 +303,83 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "xg_delta",
+          "label": "xG +2.1 acima",
+          "emoji": "🎲",
+          "level": "high",
+          "detail": "xG 2.12 vs 0 golos"
+        }
+      ],
+      "patternScore": 4
+    },
+    {
+      "id": 46432,
+      "home": "BK Häcken",
+      "away": "Halmstads BK",
+      "hScore": 1,
+      "aScore": 0,
+      "goals": 1,
+      "min": 58,
+      "status": "2nd_half",
+      "period": "2T",
+      "league": "",
+      "league_id": 26,
+      "xgH": 0.94,
+      "xgA": 0.56,
+      "xgTotal": 1.5,
+      "lastMom": 18,
+      "overOdds": 1.38,
+      "probLive": 72,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 12,
+        "a": 8
+      },
+      "sot": {
+        "h": 4,
+        "a": 3
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "open",
+          "label": "JOGO ABERTO",
+          "emoji": "🎭",
+          "level": "low",
+          "detail": "32min, equipa a perder ataca"
+        }
+      ],
+      "patternScore": 1
     },
     {
       "id": 215481,
@@ -328,7 +388,7 @@
       "hScore": 3,
       "aScore": 0,
       "goals": 3,
-      "min": 78,
+      "min": 84,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -336,7 +396,7 @@
       "xgH": 1.64,
       "xgA": 0.57,
       "xgTotal": 2.21,
-      "lastMom": 10,
+      "lastMom": -12,
       "overOdds": 1.53,
       "probLive": 65,
       "oddsStatus": "VALID",
