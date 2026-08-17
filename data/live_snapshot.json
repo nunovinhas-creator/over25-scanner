@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-17T04:59:50Z",
+  "generated_at": "2026-08-17T05:04:58Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -10,20 +10,20 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 81,
+      "min": 86,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 19,
-      "xgH": 0.91,
-      "xgA": 0.64,
-      "xgTotal": 1.55,
-      "lastMom": -20,
+      "xgH": 1.41,
+      "xgA": 0.63,
+      "xgTotal": 2.04,
+      "lastMom": 73,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "SUSPENDED",
       "shots": {
-        "h": 11,
+        "h": 12,
         "a": 11
       },
       "sot": {
@@ -59,8 +59,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Casa domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum casa 73 — controlo total"
+        }
+      ],
+      "patternScore": 4
     }
   ]
 }
