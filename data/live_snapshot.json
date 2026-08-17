@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-17T20:51:36Z",
+  "generated_at": "2026-08-17T20:57:02Z",
   "status": "OK",
-  "count": 6,
+  "count": 5,
   "events": [
     {
       "id": 223567,
@@ -69,25 +69,25 @@
       "hScore": 3,
       "aScore": 0,
       "goals": 3,
-      "min": 54,
+      "min": 60,
       "status": "2nd_half",
       "period": "2T",
       "league": "La Liga 2",
       "league_id": 38,
       "xgH": 1.59,
-      "xgA": 0.21,
-      "xgTotal": 1.8,
-      "lastMom": -12,
+      "xgA": 0.32,
+      "xgTotal": 1.9100000000000001,
+      "lastMom": -53,
       "overOdds": 1.59,
       "probLive": 63,
       "oddsStatus": "VALID",
       "shots": {
         "h": 11,
-        "a": 4
+        "a": 6
       },
       "sot": {
         "h": 4,
-        "a": 1
+        "a": 2
       },
       "da": {
         "h": null,
@@ -118,8 +118,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 53"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 215502,
@@ -128,7 +136,7 @@
       "hScore": 0,
       "aScore": 7,
       "goals": 7,
-      "min": 75,
+      "min": 82,
       "status": "2nd_half",
       "period": "2T",
       "league": "Primeira Liga",
@@ -136,7 +144,7 @@
       "xgH": 0.11,
       "xgA": 3.02,
       "xgTotal": 3.13,
-      "lastMom": -34,
+      "lastMom": -35,
       "overOdds": 1.49,
       "probLive": 67,
       "oddsStatus": "VALID",
@@ -187,25 +195,25 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 63,
+      "min": 69,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 42,
-      "xgH": 1.09,
-      "xgA": 2.66,
-      "xgTotal": 3.75,
-      "lastMom": -90,
+      "xgH": 1.16,
+      "xgA": 3.92,
+      "xgTotal": 5.08,
+      "lastMom": 38,
       "overOdds": 1.97,
       "probLive": 51,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 9,
-        "a": 12
+        "h": 11,
+        "a": 13
       },
       "sot": {
-        "h": 4,
-        "a": 2
+        "h": 5,
+        "a": 3
       },
       "da": {
         "h": null,
@@ -242,31 +250,38 @@
           "label": "CONVERGÊNCIA",
           "emoji": "🔮",
           "level": "conv",
-          "detail": "3 padrões em simultâneo — sinal forte"
+          "detail": "4 padrões em simultâneo — sinal forte"
         },
         {
           "id": "xg_delta",
-          "label": "xG sobrevaloriza",
+          "label": "xG +3.1 acima",
           "emoji": "🎲",
-          "level": "med",
-          "detail": "xG 3.75 vs 2 golos"
+          "level": "critical",
+          "detail": "xG 5.08 vs 2 golos — golo(s) em dívida"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 10.7/90 (2ªP)",
+          "emoji": "⚡",
+          "level": "critical",
+          "detail": "xG a ritmo de 10.7 por 90min (2ªP)"
         },
         {
           "id": "shots",
-          "label": "6r 2ªP",
+          "label": "9r 2ªP",
           "emoji": "🎯",
           "level": "high",
-          "detail": "30 remates/90min (2ªP) (muito alto)"
+          "detail": "34 remates/90min (2ªP) (muito alto)"
         },
         {
-          "id": "mom",
-          "label": "Fora domina",
-          "emoji": "💥",
-          "level": "high",
-          "detail": "Momentum fora 90 — controlo total"
+          "id": "late",
+          "label": "1 gol em 21min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 51% · 21min"
         }
       ],
-      "patternScore": 10
+      "patternScore": 25
     },
     {
       "id": 213985,
@@ -275,84 +290,25 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 90,
+      "min": 97,
       "status": "2nd_half",
       "period": "2T",
       "league": "Championship",
       "league_id": 12,
-      "xgH": 0.5,
-      "xgA": 1.46,
-      "xgTotal": 1.96,
-      "lastMom": -15,
+      "xgH": 0.77,
+      "xgA": 1.56,
+      "xgTotal": 2.33,
+      "lastMom": 4,
       "overOdds": 1.67,
       "probLive": 60,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 8,
-        "a": 17
+        "h": 10,
+        "a": 18
       },
       "sot": {
         "h": 2,
-        "a": 7
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 213523,
-      "home": "Deportivo de A Coruña",
-      "away": "Elche",
-      "hScore": 1,
-      "aScore": 1,
-      "goals": 2,
-      "min": 89,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "La Liga",
-      "league_id": 3,
-      "xgH": 0.23,
-      "xgA": 1.45,
-      "xgTotal": 1.68,
-      "lastMom": 21,
-      "overOdds": 2.27,
-      "probLive": 44,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 7,
-        "a": 11
-      },
-      "sot": {
-        "h": 3,
-        "a": 6
+        "a": 8
       },
       "da": {
         "h": null,
@@ -385,14 +341,21 @@
       },
       "patterns": [
         {
-          "id": "late",
-          "label": "1 gol em 1min",
-          "emoji": "⏰",
-          "level": "low",
-          "detail": "Falta 1 golo · mercado 44% · 1min"
+          "id": "xg_delta",
+          "label": "xG sobrevaloriza",
+          "emoji": "🎲",
+          "level": "med",
+          "detail": "xG 2.33 vs 1 golos"
+        },
+        {
+          "id": "shots",
+          "label": "28 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "26 remates/90min"
         }
       ],
-      "patternScore": 1
+      "patternScore": 4
     }
   ]
 }
