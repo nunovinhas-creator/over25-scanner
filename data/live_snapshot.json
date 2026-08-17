@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-17T17:26:43Z",
+  "generated_at": "2026-08-17T17:31:50Z",
   "status": "OK",
   "count": 8,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 19,
+      "min": 22,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -69,20 +69,20 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 24,
+      "min": 27,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 84,
-      "xgH": 0.36,
+      "xgH": 0.42,
       "xgA": 0.32,
-      "xgTotal": 0.6799999999999999,
-      "lastMom": 24,
-      "overOdds": 1.54,
-      "probLive": 65,
-      "oddsStatus": "VALID",
+      "xgTotal": 0.74,
+      "lastMom": 63,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
       "shots": {
-        "h": 2,
+        "h": 4,
         "a": 5
       },
       "sot": {
@@ -120,21 +120,21 @@
       },
       "patterns": [
         {
-          "id": "xg_pace",
-          "label": "xG 2.5/90",
-          "emoji": "⚡",
-          "level": "med",
-          "detail": "xG a ritmo de 2.5 por 90min"
+          "id": "shots",
+          "label": "9 remates",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "30 remates/90min (muito alto)"
         },
         {
-          "id": "shots",
-          "label": "7 remates",
-          "emoji": "🎯",
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
           "level": "med",
-          "detail": "26 remates/90min"
+          "detail": "Momentum casa 63"
         }
       ],
-      "patternScore": 4
+      "patternScore": 6
     },
     {
       "id": 214776,
@@ -143,7 +143,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 24,
+      "min": 27,
       "status": "1st_half",
       "period": "1T",
       "league": "La Liga 2",
@@ -151,7 +151,7 @@
       "xgH": 0.2,
       "xgA": 0.97,
       "xgTotal": 1.17,
-      "lastMom": 17,
+      "lastMom": -12,
       "overOdds": 2.23,
       "probLive": 45,
       "oddsStatus": "VALID",
@@ -195,20 +195,20 @@
       "patterns": [
         {
           "id": "xg_pace",
-          "label": "xG 4.4/90",
+          "label": "xG 3.9/90",
           "emoji": "⚡",
-          "level": "critical",
-          "detail": "xG a ritmo de 4.4 por 90min"
+          "level": "high",
+          "detail": "xG a ritmo de 3.9 por 90min"
         },
         {
           "id": "shots",
           "label": "7 remates",
           "emoji": "🎯",
           "level": "med",
-          "detail": "26 remates/90min"
+          "detail": "23 remates/90min"
         }
       ],
-      "patternScore": 12
+      "patternScore": 6
     },
     {
       "id": 46432,
@@ -217,25 +217,25 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 25,
+      "min": 27,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 26,
-      "xgH": 0.36,
-      "xgA": 0.22,
-      "xgTotal": 0.58,
-      "lastMom": -12,
-      "overOdds": 1.38,
-      "probLive": 72,
-      "oddsStatus": "VALID",
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
       "shots": {
-        "h": 5,
-        "a": 4
+        "h": null,
+        "a": null
       },
       "sot": {
-        "h": 2,
-        "a": 2
+        "h": null,
+        "a": null
       },
       "da": {
         "h": null,
@@ -256,26 +256,18 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": true,
+          "xgTotal": false,
           "da": false,
-          "sot": true,
+          "sot": false,
           "corners": false,
           "possession": false,
-          "lastMom": true
+          "lastMom": false
         },
-        "score": 3,
+        "score": 0,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "shots",
-          "label": "9 remates",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "32 remates/90min (muito alto)"
-        }
-      ],
-      "patternScore": 4
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 215481,
@@ -343,20 +335,20 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 65,
+      "min": 68,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 42,
-      "xgH": 0.68,
+      "xgH": 0.71,
       "xgA": 0.73,
-      "xgTotal": 1.4100000000000001,
-      "lastMom": -10,
-      "overOdds": 1.88,
-      "probLive": 53,
-      "oddsStatus": "VALID",
+      "xgTotal": 1.44,
+      "lastMom": 13,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
       "shots": {
-        "h": 7,
+        "h": 8,
         "a": 8
       },
       "sot": {
@@ -402,7 +394,7 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 67,
+      "min": 70,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -461,25 +453,25 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 89,
+      "min": 92,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 23,
-      "xgH": 2.67,
-      "xgA": 1.77,
-      "xgTotal": 4.4399999999999995,
-      "lastMom": -23,
+      "xgH": 2.77,
+      "xgA": 1.82,
+      "xgTotal": 4.59,
+      "lastMom": -15,
       "overOdds": 1.95,
       "probLive": 51,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 12,
-        "a": 19
+        "h": 13,
+        "a": 20
       },
       "sot": {
-        "h": 5,
-        "a": 5
+        "h": 6,
+        "a": 6
       },
       "da": {
         "h": null,
@@ -494,7 +486,7 @@
         "a": null
       },
       "redCards": {
-        "h": 0,
+        "h": 1,
         "a": 0
       },
       "isSavedPick": false,
@@ -510,8 +502,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "numerical",
+          "label": "Fora +1 homem",
+          "emoji": "🟥",
+          "level": "med",
+          "detail": "Casa com 1 vermelho(s) — Fora em vantagem numérica"
+        }
+      ],
+      "patternScore": 2
     }
   ]
 }
