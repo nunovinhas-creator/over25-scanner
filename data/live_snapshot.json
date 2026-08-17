@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-17T03:46:58Z",
+  "generated_at": "2026-08-17T03:52:08Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,21 +10,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 28,
+      "min": 33,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 19,
-      "xgH": 0.38,
-      "xgA": 0.12,
-      "xgTotal": 0.5,
-      "lastMom": 3,
+      "xgH": 0.45,
+      "xgA": 0.21,
+      "xgTotal": 0.66,
+      "lastMom": 15,
       "overOdds": 1.07,
       "probLive": 93,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 5,
-        "a": 2
+        "h": 6,
+        "a": 4
       },
       "sot": {
         "h": 0,
@@ -62,10 +62,10 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "7 remates",
+          "label": "10 remates",
           "emoji": "🎯",
           "level": "med",
-          "detail": "22 remates/90min"
+          "detail": "27 remates/90min"
         }
       ],
       "patternScore": 2
@@ -77,25 +77,25 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 46,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 18,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": 1.1,
-      "probLive": 91,
-      "oddsStatus": "VALID",
+      "xgH": 0.13,
+      "xgA": 0.33,
+      "xgTotal": 0.46,
+      "lastMom": 8,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
       "shots": {
-        "h": null,
-        "a": null
+        "h": 2,
+        "a": 8
       },
       "sot": {
-        "h": null,
-        "a": null
+        "h": 0,
+        "a": 1
       },
       "da": {
         "h": null,
@@ -116,14 +116,14 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
-          "sot": false,
+          "sot": true,
           "corners": false,
           "possession": false,
-          "lastMom": false
+          "lastMom": true
         },
-        "score": 0,
+        "score": 3,
         "total": 6
       },
       "patterns": [],
