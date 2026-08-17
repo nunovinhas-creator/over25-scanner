@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-17T21:28:42Z",
+  "generated_at": "2026-08-17T21:33:52Z",
   "status": "OK",
-  "count": 2,
+  "count": 1,
   "events": [
     {
       "id": 223567,
@@ -10,20 +10,20 @@
       "hScore": 1,
       "aScore": 2,
       "goals": 3,
-      "min": 68,
+      "min": 73,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 85,
-      "xgH": 1.17,
+      "xgH": 1.33,
       "xgA": 0.76,
-      "xgTotal": 1.93,
-      "lastMom": 12,
+      "xgTotal": 2.09,
+      "lastMom": 59,
       "overOdds": 2.68,
       "probLive": 37,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 16,
+        "h": 17,
         "a": 9
       },
       "sot": {
@@ -59,67 +59,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 214766,
-      "home": "Almería",
-      "away": "CD Eldense",
-      "hScore": 3,
-      "aScore": 0,
-      "goals": 3,
-      "min": 92,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "La Liga 2",
-      "league_id": 38,
-      "xgH": 1.9,
-      "xgA": 0.57,
-      "xgTotal": 2.4699999999999998,
-      "lastMom": 40,
-      "overOdds": 1.59,
-      "probLive": 63,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 14,
-        "a": 11
-      },
-      "sot": {
-        "h": 5,
-        "a": 3
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 59"
+        }
+      ],
+      "patternScore": 2
     }
   ]
 }
