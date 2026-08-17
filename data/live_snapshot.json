@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-17T17:20:42Z",
+  "generated_at": "2026-08-17T17:26:43Z",
   "status": "OK",
-  "count": 9,
+  "count": 8,
   "events": [
     {
       "id": 374741,
@@ -10,7 +10,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 12,
+      "min": 19,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -69,25 +69,25 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 17,
+      "min": 24,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 84,
-      "xgH": 0.35,
-      "xgA": 0.31,
-      "xgTotal": 0.6599999999999999,
-      "lastMom": 42,
+      "xgH": 0.36,
+      "xgA": 0.32,
+      "xgTotal": 0.6799999999999999,
+      "lastMom": 24,
       "overOdds": 1.54,
       "probLive": 65,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 1,
-        "a": 4
+        "h": 2,
+        "a": 5
       },
       "sot": {
         "h": 1,
-        "a": 1
+        "a": 2
       },
       "da": {
         "h": null,
@@ -120,14 +120,21 @@
       },
       "patterns": [
         {
+          "id": "xg_pace",
+          "label": "xG 2.5/90",
+          "emoji": "⚡",
+          "level": "med",
+          "detail": "xG a ritmo de 2.5 por 90min"
+        },
+        {
           "id": "shots",
-          "label": "5 remates",
+          "label": "7 remates",
           "emoji": "🎯",
           "level": "med",
           "detail": "26 remates/90min"
         }
       ],
-      "patternScore": 2
+      "patternScore": 4
     },
     {
       "id": 214776,
@@ -136,24 +143,24 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 17,
+      "min": 24,
       "status": "1st_half",
       "period": "1T",
       "league": "La Liga 2",
       "league_id": 38,
-      "xgH": null,
+      "xgH": 0.2,
       "xgA": 0.97,
-      "xgTotal": null,
-      "lastMom": 10,
+      "xgTotal": 1.17,
+      "lastMom": 17,
       "overOdds": 2.23,
       "probLive": 45,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
+        "h": 3,
         "a": 4
       },
       "sot": {
-        "h": 0,
+        "h": 2,
         "a": 0
       },
       "da": {
@@ -175,18 +182,33 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "xg_pace",
+          "label": "xG 4.4/90",
+          "emoji": "⚡",
+          "level": "critical",
+          "detail": "xG a ritmo de 4.4 por 90min"
+        },
+        {
+          "id": "shots",
+          "label": "7 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "26 remates/90min"
+        }
+      ],
+      "patternScore": 12
     },
     {
       "id": 46432,
@@ -195,24 +217,24 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 18,
+      "min": 25,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 26,
-      "xgH": 0.24,
+      "xgH": 0.36,
       "xgA": 0.22,
-      "xgTotal": 0.45999999999999996,
-      "lastMom": 46,
+      "xgTotal": 0.58,
+      "lastMom": -12,
       "overOdds": 1.38,
       "probLive": 72,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 2,
+        "h": 5,
         "a": 4
       },
       "sot": {
-        "h": 1,
+        "h": 2,
         "a": 2
       },
       "da": {
@@ -247,46 +269,39 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "6 remates",
+          "label": "9 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "30 remates/90min (muito alto)"
-        },
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 46"
+          "detail": "32 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 6
+      "patternScore": 4
     },
     {
       "id": 215481,
       "home": "Sassuolo",
       "away": "Cesena",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 0,
-      "goals": 1,
+      "goals": 2,
       "min": 45,
-      "status": "1st_half",
-      "period": "1T",
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 42,
-      "xgH": 0.83,
+      "xgH": 1.08,
       "xgA": 0.22,
-      "xgTotal": 1.05,
-      "lastMom": 21,
+      "xgTotal": 1.3,
+      "lastMom": 7,
       "overOdds": 1.53,
       "probLive": 65,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 9,
+        "h": 10,
         "a": 2
       },
       "sot": {
-        "h": 5,
+        "h": 6,
         "a": 1
       },
       "da": {
@@ -316,73 +331,6 @@
           "lastMom": true
         },
         "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "shots",
-          "label": "11 remates",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "22 remates/90min"
-        }
-      ],
-      "patternScore": 2
-    },
-    {
-      "id": 221046,
-      "home": "Juventus",
-      "away": "Juventus Next Gen U23",
-      "hScore": 2,
-      "aScore": 0,
-      "goals": 2,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
-      "league": "",
-      "league_id": 79,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "MISSING",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": null,
-        "a": null
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": false,
-          "sot": false,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 0,
         "total": 6
       },
       "patterns": [],
@@ -393,27 +341,27 @@
       "home": "Pisa",
       "away": "Empoli",
       "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 58,
+      "aScore": 1,
+      "goals": 2,
+      "min": 65,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 42,
       "xgH": 0.68,
-      "xgA": 0.7,
-      "xgTotal": 1.38,
-      "lastMom": 64,
+      "xgA": 0.73,
+      "xgTotal": 1.4100000000000001,
+      "lastMom": -10,
       "overOdds": 1.88,
       "probLive": 53,
       "oddsStatus": "VALID",
       "shots": {
         "h": 7,
-        "a": 7
+        "a": 8
       },
       "sot": {
         "h": 5,
-        "a": 2
+        "a": 3
       },
       "da": {
         "h": null,
@@ -444,32 +392,17 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "open",
-          "label": "JOGO ABERTO",
-          "emoji": "🎭",
-          "level": "low",
-          "detail": "32min, equipa a perder ataca"
-        },
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 64"
-        }
-      ],
-      "patternScore": 3
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 211682,
       "home": "FK Spartak Varna",
       "away": "FK Septemvri Sofia",
       "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 60,
+      "aScore": 1,
+      "goals": 1,
+      "min": 67,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -526,27 +459,27 @@
       "home": "FC Universitatea Cluj",
       "away": "UTA Arad",
       "hScore": 2,
-      "aScore": 0,
-      "goals": 2,
-      "min": 82,
+      "aScore": 1,
+      "goals": 3,
+      "min": 89,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 23,
       "xgH": 2.67,
-      "xgA": 1.53,
-      "xgTotal": 4.2,
-      "lastMom": 43,
+      "xgA": 1.77,
+      "xgTotal": 4.4399999999999995,
+      "lastMom": -23,
       "overOdds": 1.95,
       "probLive": 51,
       "oddsStatus": "VALID",
       "shots": {
         "h": 12,
-        "a": 16
+        "a": 19
       },
       "sot": {
         "h": 5,
-        "a": 4
+        "a": 5
       },
       "da": {
         "h": null,
@@ -577,44 +510,8 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "conv",
-          "label": "CONVERGÊNCIA",
-          "emoji": "🔮",
-          "level": "conv",
-          "detail": "4 padrões em simultâneo — sinal forte"
-        },
-        {
-          "id": "xg_delta",
-          "label": "xG +2.2 acima",
-          "emoji": "🎲",
-          "level": "high",
-          "detail": "xG 4.20 vs 2 golos"
-        },
-        {
-          "id": "xg_pace",
-          "label": "xG 3.9/90 (2ªP)",
-          "emoji": "⚡",
-          "level": "high",
-          "detail": "xG a ritmo de 3.9 por 90min (2ªP)"
-        },
-        {
-          "id": "shots",
-          "label": "11r 2ªP",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "27 remates/90min (2ªP)"
-        },
-        {
-          "id": "late",
-          "label": "1 gol em 8min",
-          "emoji": "⏰",
-          "level": "low",
-          "detail": "Falta 1 golo · mercado 51% · 8min"
-        }
-      ],
-      "patternScore": 11
+      "patterns": [],
+      "patternScore": 0
     }
   ]
 }
