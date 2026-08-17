@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-17T02:28:44Z",
+  "generated_at": "2026-08-17T02:33:57Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -10,70 +10,11 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 55,
+      "min": 60,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 19,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "MISSING",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": null,
-        "a": null
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": false,
-          "sot": false,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 0,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 216413,
-      "home": "Angel City FC",
-      "away": "Washington Spirit",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 56,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 72,
       "xgH": null,
       "xgA": null,
       "xgTotal": null,
@@ -122,13 +63,80 @@
       "patternScore": 0
     },
     {
+      "id": 216413,
+      "home": "Angel City FC",
+      "away": "Washington Spirit",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 61,
+      "status": "2nd_half",
+      "period": "2T",
+      "league": "",
+      "league_id": 72,
+      "xgH": 0.4,
+      "xgA": 1.09,
+      "xgTotal": 1.4900000000000002,
+      "lastMom": 21,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "SUSPENDED",
+      "shots": {
+        "h": 5,
+        "a": 8
+      },
+      "sot": {
+        "h": 1,
+        "a": 1
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "xg_delta",
+          "label": "xG sobrevaloriza",
+          "emoji": "🎲",
+          "level": "med",
+          "detail": "xG 1.49 vs 0 golos"
+        }
+      ],
+      "patternScore": 2
+    },
+    {
       "id": 5191,
       "home": "Austin FC",
       "away": "FC Dallas",
       "hScore": 1,
       "aScore": 2,
       "goals": 3,
-      "min": 84,
+      "min": 89,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
