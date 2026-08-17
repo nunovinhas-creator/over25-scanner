@@ -1,34 +1,34 @@
 {
-  "generated_at": "2026-08-17T20:34:47Z",
+  "generated_at": "2026-08-17T20:40:12Z",
   "status": "OK",
-  "count": 7,
+  "count": 6,
   "events": [
     {
       "id": 223567,
       "home": "CA Lanús",
       "away": "CA Independiente",
       "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 31,
+      "aScore": 1,
+      "goals": 1,
+      "min": 36,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 85,
-      "xgH": 0.48,
-      "xgA": 0.1,
-      "xgTotal": 0.58,
-      "lastMom": 5,
+      "xgH": 0.5,
+      "xgA": 0.46,
+      "xgTotal": 0.96,
+      "lastMom": -54,
       "overOdds": 2.68,
       "probLive": 37,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 6,
-        "a": 2
+        "h": 7,
+        "a": 5
       },
       "sot": {
         "h": 2,
-        "a": 0
+        "a": 2
       },
       "da": {
         "h": null,
@@ -62,13 +62,20 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "8 remates",
+          "label": "12 remates",
           "emoji": "🎯",
+          "level": "high",
+          "detail": "30 remates/90min (muito alto)"
+        },
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
           "level": "med",
-          "detail": "23 remates/90min"
+          "detail": "Momentum fora 54"
         }
       ],
-      "patternScore": 2
+      "patternScore": 6
     },
     {
       "id": 214766,
@@ -134,27 +141,27 @@
       "home": "Casa Pia",
       "away": "Benfica",
       "hScore": 0,
-      "aScore": 6,
-      "goals": 6,
-      "min": 59,
+      "aScore": 7,
+      "goals": 7,
+      "min": 64,
       "status": "2nd_half",
       "period": "2T",
       "league": "Primeira Liga",
       "league_id": 2,
       "xgH": 0.08,
-      "xgA": 2.76,
-      "xgTotal": 2.84,
-      "lastMom": -31,
+      "xgA": 2.9,
+      "xgTotal": 2.98,
+      "lastMom": -41,
       "overOdds": 1.49,
       "probLive": 67,
       "oddsStatus": "VALID",
       "shots": {
         "h": 1,
-        "a": 16
+        "a": 18
       },
       "sot": {
         "h": 0,
-        "a": 7
+        "a": 8
       },
       "da": {
         "h": null,
@@ -195,21 +202,21 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 46,
+      "min": 51,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 42,
       "xgH": 1.09,
-      "xgA": 0.93,
-      "xgTotal": 2.02,
-      "lastMom": -8,
+      "xgA": 1.14,
+      "xgTotal": 2.23,
+      "lastMom": 31,
       "overOdds": 1.97,
       "probLive": 51,
       "oddsStatus": "VALID",
       "shots": {
         "h": 9,
-        "a": 4
+        "a": 6
       },
       "sot": {
         "h": 4,
@@ -254,21 +261,21 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 74,
+      "min": 79,
       "status": "2nd_half",
       "period": "2T",
       "league": "Championship",
       "league_id": 12,
-      "xgH": 0.43,
-      "xgA": 1.09,
-      "xgTotal": 1.52,
-      "lastMom": 14,
+      "xgH": 0.47,
+      "xgA": 1.11,
+      "xgTotal": 1.58,
+      "lastMom": 17,
       "overOdds": 1.67,
       "probLive": 60,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 6,
-        "a": 13
+        "h": 7,
+        "a": 14
       },
       "sot": {
         "h": 2,
@@ -311,27 +318,27 @@
       "home": "Deportivo de A Coruña",
       "away": "Elche",
       "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 73,
+      "aScore": 1,
+      "goals": 2,
+      "min": 78,
       "status": "2nd_half",
       "period": "2T",
       "league": "La Liga",
       "league_id": 3,
       "xgH": 0.21,
-      "xgA": 1.32,
-      "xgTotal": 1.53,
-      "lastMom": -5,
+      "xgA": 1.42,
+      "xgTotal": 1.63,
+      "lastMom": -30,
       "overOdds": 2.27,
       "probLive": 44,
       "oddsStatus": "VALID",
       "shots": {
         "h": 6,
-        "a": 9
+        "a": 11
       },
       "sot": {
         "h": 3,
-        "a": 4
+        "a": 6
       },
       "da": {
         "h": null,
@@ -364,73 +371,14 @@
       },
       "patterns": [
         {
-          "id": "shots",
-          "label": "7r 2ªP",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "22 remates/90min (2ªP)"
+          "id": "late",
+          "label": "1 gol em 12min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 44% · 12min"
         }
       ],
-      "patternScore": 2
-    },
-    {
-      "id": 215482,
-      "home": "Cremonese",
-      "away": "Sampdoria",
-      "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 89,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 42,
-      "xgH": 0.58,
-      "xgA": 0.92,
-      "xgTotal": 1.5,
-      "lastMom": -7,
-      "overOdds": 2.05,
-      "probLive": 49,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 6,
-        "a": 5
-      },
-      "sot": {
-        "h": 2,
-        "a": 2
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
+      "patternScore": 1
     }
   ]
 }
