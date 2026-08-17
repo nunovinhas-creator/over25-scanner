@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-17T23:11:04Z",
+  "generated_at": "2026-08-17T23:16:39Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,21 +10,21 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 10,
+      "min": 16,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 9,
       "xgH": 0.2,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": -20,
+      "xgA": 0.03,
+      "xgTotal": 0.23,
+      "lastMom": -36,
       "overOdds": 1.83,
       "probLive": 55,
       "oddsStatus": "VALID",
       "shots": {
         "h": 1,
-        "a": 0
+        "a": 1
       },
       "sot": {
         "h": 1,
@@ -49,14 +49,14 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 3,
         "total": 6
       },
       "patterns": [],
@@ -78,9 +78,9 @@
       "xgA": 0.42,
       "xgTotal": 0.8,
       "lastMom": 43,
-      "overOdds": 2.22,
-      "probLive": 45,
-      "oddsStatus": "VALID",
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
       "shots": {
         "h": 6,
         "a": 8
