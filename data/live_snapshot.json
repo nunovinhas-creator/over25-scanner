@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-17T15:53:29Z",
+  "generated_at": "2026-08-17T15:58:51Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,21 +10,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 17,
+      "min": 22,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 23,
       "xgH": 0.43,
-      "xgA": 0.32,
-      "xgTotal": 0.75,
-      "lastMom": 6,
+      "xgA": 0.35,
+      "xgTotal": 0.78,
+      "lastMom": 11,
       "overOdds": 1.95,
       "probLive": 51,
       "oddsStatus": "VALID",
       "shots": {
         "h": 2,
-        "a": 3
+        "a": 4
       },
       "sot": {
         "h": 0,
@@ -61,14 +61,21 @@
       },
       "patterns": [
         {
+          "id": "xg_pace",
+          "label": "xG 3.2/90",
+          "emoji": "⚡",
+          "level": "high",
+          "detail": "xG a ritmo de 3.2 por 90min"
+        },
+        {
           "id": "shots",
-          "label": "5 remates",
+          "label": "6 remates",
           "emoji": "🎯",
           "level": "med",
-          "detail": "26 remates/90min"
+          "detail": "25 remates/90min"
         }
       ],
-      "patternScore": 2
+      "patternScore": 6
     },
     {
       "id": 207297,
