@@ -1,8 +1,126 @@
 {
-  "generated_at": "2026-08-17T18:28:13Z",
+  "generated_at": "2026-08-17T18:34:15Z",
   "status": "OK",
-  "count": 6,
+  "count": 8,
   "events": [
+    {
+      "id": 215960,
+      "home": "Samsunspor",
+      "away": "Göztepe",
+      "hScore": 0,
+      "aScore": 1,
+      "goals": 1,
+      "min": 3,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 11,
+      "xgH": null,
+      "xgA": 0.03,
+      "xgTotal": null,
+      "lastMom": -39,
+      "overOdds": 1.9,
+      "probLive": 53,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 2
+      },
+      "sot": {
+        "h": 0,
+        "a": 1
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 214563,
+      "home": "FCSB",
+      "away": "FC Botoșani",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 2,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 23,
+      "xgH": 0.04,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": 9,
+      "overOdds": 1.54,
+      "probLive": 65,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 1,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
     {
       "id": 211679,
       "home": "Arda Kardzhali",
@@ -10,7 +128,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 11,
+      "min": 17,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -69,25 +187,25 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 42,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 85,
-      "xgH": 0.12,
-      "xgA": 0.14,
-      "xgTotal": 0.26,
-      "lastMom": -15,
-      "overOdds": 2.87,
+      "xgH": 0.14,
+      "xgA": 0.2,
+      "xgTotal": 0.34,
+      "lastMom": 32,
+      "overOdds": 2.88,
       "probLive": 35,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 4,
-        "a": 4
+        "h": 6,
+        "a": 5
       },
       "sot": {
         "h": 1,
-        "a": 1
+        "a": 2
       },
       "da": {
         "h": null,
@@ -128,7 +246,7 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 61,
+      "min": 68,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -187,21 +305,21 @@
       "hScore": 3,
       "aScore": 2,
       "goals": 5,
-      "min": 68,
+      "min": 75,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 84,
-      "xgH": 1.17,
-      "xgA": 0.78,
-      "xgTotal": 1.95,
-      "lastMom": -26,
+      "xgH": 1.23,
+      "xgA": 0.82,
+      "xgTotal": 2.05,
+      "lastMom": -48,
       "overOdds": 1.54,
       "probLive": 65,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 15,
-        "a": 9
+        "h": 16,
+        "a": 10
       },
       "sot": {
         "h": 4,
@@ -236,8 +354,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 48"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 214776,
@@ -246,24 +372,24 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 70,
+      "min": 76,
       "status": "2nd_half",
       "period": "2T",
       "league": "La Liga 2",
       "league_id": 38,
-      "xgH": 0.49,
+      "xgH": 0.54,
       "xgA": 1.73,
-      "xgTotal": 2.2199999999999998,
-      "lastMom": 24,
+      "xgTotal": 2.27,
+      "lastMom": -32,
       "overOdds": 2.23,
       "probLive": 45,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 7,
+        "h": 8,
         "a": 12
       },
       "sot": {
-        "h": 4,
+        "h": 5,
         "a": 2
       },
       "da": {
@@ -298,10 +424,10 @@
       "patterns": [
         {
           "id": "xg_delta",
-          "label": "xG +2.2 acima",
+          "label": "xG +2.3 acima",
           "emoji": "🎲",
           "level": "high",
-          "detail": "xG 2.22 vs 0 golos"
+          "detail": "xG 2.27 vs 0 golos"
         }
       ],
       "patternScore": 4
@@ -313,24 +439,24 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 69,
+      "min": 75,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 26,
-      "xgH": 1.46,
-      "xgA": 0.56,
-      "xgTotal": 2.02,
-      "lastMom": 18,
+      "xgH": 1.69,
+      "xgA": 0.63,
+      "xgTotal": 2.32,
+      "lastMom": 49,
       "overOdds": 1.38,
       "probLive": 72,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 15,
-        "a": 8
+        "h": 18,
+        "a": 10
       },
       "sot": {
-        "h": 4,
+        "h": 5,
         "a": 3
       },
       "da": {
@@ -368,31 +494,45 @@
           "label": "CONVERGÊNCIA",
           "emoji": "🔮",
           "level": "conv",
-          "detail": "3 padrões em simultâneo — sinal forte"
+          "detail": "5 padrões em simultâneo — sinal forte"
+        },
+        {
+          "id": "xg_delta",
+          "label": "xG sobrevaloriza",
+          "emoji": "🎲",
+          "level": "med",
+          "detail": "xG 2.32 vs 1 golos"
         },
         {
           "id": "xg_pace",
-          "label": "xG 4.2/90 (2ªP)",
+          "label": "xG 4.3/90 (2ªP)",
           "emoji": "⚡",
           "level": "critical",
-          "detail": "xG a ritmo de 4.2 por 90min (2ªP)"
+          "detail": "xG a ritmo de 4.3 por 90min (2ªP)"
         },
         {
           "id": "shots",
-          "label": "9r 2ªP",
+          "label": "14r 2ªP",
           "emoji": "🎯",
           "level": "high",
-          "detail": "34 remates/90min (2ªP) (muito alto)"
+          "detail": "42 remates/90min (2ªP) (muito alto)"
         },
         {
           "id": "open",
           "label": "JOGO ABERTO",
           "emoji": "🎭",
           "level": "low",
-          "detail": "21min, equipa a perder ataca"
+          "detail": "15min, equipa a perder ataca"
+        },
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 49"
         }
       ],
-      "patternScore": 15
+      "patternScore": 19
     }
   ]
 }
