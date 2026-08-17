@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-17T04:33:34Z",
+  "generated_at": "2026-08-17T04:38:44Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 56,
+      "min": 61,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -19,9 +19,9 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "MISSING",
+      "overOdds": 1.07,
+      "probLive": 93,
+      "oddsStatus": "VALID",
       "shots": {
         "h": null,
         "a": null
@@ -69,21 +69,21 @@
       "hScore": 0,
       "aScore": 2,
       "goals": 2,
-      "min": 89,
+      "min": 94,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
-      "xgH": 0.55,
-      "xgA": 1.3,
-      "xgTotal": 1.85,
-      "lastMom": -13,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "MISSING",
+      "xgH": 0.57,
+      "xgA": 1.44,
+      "xgTotal": 2.01,
+      "lastMom": -34,
+      "overOdds": 1.1,
+      "probLive": 91,
+      "oddsStatus": "VALID",
       "shots": {
-        "h": 4,
-        "a": 16
+        "h": 5,
+        "a": 17
       },
       "sot": {
         "h": 0,
@@ -120,14 +120,14 @@
       },
       "patterns": [
         {
-          "id": "xg_pace",
-          "label": "xG 2.8/90 (2ªP)",
-          "emoji": "⚡",
-          "level": "med",
-          "detail": "xG a ritmo de 2.8 por 90min (2ªP)"
+          "id": "late",
+          "label": "1 gol em 0min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 91% · 0min"
         }
       ],
-      "patternScore": 2
+      "patternScore": 1
     }
   ]
 }
