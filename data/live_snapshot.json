@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-17T23:53:39Z",
+  "generated_at": "2026-08-17T23:58:51Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -24,7 +24,7 @@
       "oddsStatus": "VALID",
       "shots": {
         "h": 7,
-        "a": 6
+        "a": 5
       },
       "sot": {
         "h": 2,
@@ -67,27 +67,27 @@
       "home": "Vélez Sarsfield",
       "away": "Defensa y Justicia",
       "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 76,
+      "aScore": 1,
+      "goals": 2,
+      "min": 81,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 85,
-      "xgH": 0.44,
-      "xgA": 0.86,
-      "xgTotal": 1.3,
-      "lastMom": 4,
+      "xgH": 0.78,
+      "xgA": 1.09,
+      "xgTotal": 1.87,
+      "lastMom": 16,
       "overOdds": 2.22,
       "probLive": 45,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 7,
-        "a": 14
+        "h": 8,
+        "a": 16
       },
       "sot": {
         "h": 3,
-        "a": 5
+        "a": 6
       },
       "da": {
         "h": null,
@@ -118,8 +118,30 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "xg_pace",
+          "label": "xG 2.7/90 (2ªP)",
+          "emoji": "⚡",
+          "level": "med",
+          "detail": "xG a ritmo de 2.7 por 90min (2ªP)"
+        },
+        {
+          "id": "shots",
+          "label": "10r 2ªP",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "25 remates/90min (2ªP)"
+        },
+        {
+          "id": "late",
+          "label": "1 gol em 9min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 45% · 9min"
+        }
+      ],
+      "patternScore": 5
     }
   ]
 }
