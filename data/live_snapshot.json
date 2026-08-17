@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-17T19:42:26Z",
+  "generated_at": "2026-08-17T19:48:21Z",
   "status": "OK",
   "count": 9,
   "events": [
@@ -7,27 +7,27 @@
       "id": 214766,
       "home": "Almería",
       "away": "CD Eldense",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 0,
-      "goals": 0,
-      "min": 10,
+      "goals": 1,
+      "min": 15,
       "status": "1st_half",
       "period": "1T",
       "league": "La Liga 2",
       "league_id": 38,
-      "xgH": 0.07,
+      "xgH": 0.2,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 11,
+      "lastMom": 66,
       "overOdds": 1.59,
       "probLive": 63,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 2,
+        "h": 4,
         "a": 0
       },
       "sot": {
-        "h": 0,
+        "h": 2,
         "a": 0
       },
       "da": {
@@ -59,8 +59,23 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "4 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "24 remates/90min"
+        },
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 66"
+        }
+      ],
+      "patternScore": 4
     },
     {
       "id": 215502,
@@ -69,7 +84,7 @@
       "hScore": 0,
       "aScore": 2,
       "goals": 2,
-      "min": 25,
+      "min": 30,
       "status": "1st_half",
       "period": "1T",
       "league": "Primeira Liga",
@@ -77,7 +92,7 @@
       "xgH": 0.08,
       "xgA": 1.0,
       "xgTotal": 1.08,
-      "lastMom": -4,
+      "lastMom": 18,
       "overOdds": 1.5,
       "probLive": 67,
       "oddsStatus": "VALID",
@@ -121,20 +136,13 @@
       "patterns": [
         {
           "id": "xg_pace",
-          "label": "xG 3.9/90",
+          "label": "xG 3.2/90",
           "emoji": "⚡",
           "level": "high",
-          "detail": "xG a ritmo de 3.9 por 90min"
-        },
-        {
-          "id": "shots",
-          "label": "7 remates",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "25 remates/90min"
+          "detail": "xG a ritmo de 3.2 por 90min"
         }
       ],
-      "patternScore": 6
+      "patternScore": 4
     },
     {
       "id": 215483,
@@ -143,20 +151,20 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 21,
+      "min": 26,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 42,
-      "xgH": 0.85,
+      "xgH": 0.89,
       "xgA": 0.04,
-      "xgTotal": 0.89,
-      "lastMom": -11,
+      "xgTotal": 0.93,
+      "lastMom": -14,
       "overOdds": 1.97,
       "probLive": 51,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 5,
+        "h": 6,
         "a": 1
       },
       "sot": {
@@ -195,17 +203,17 @@
       "patterns": [
         {
           "id": "xg_pace",
-          "label": "xG 3.8/90",
+          "label": "xG 3.2/90",
           "emoji": "⚡",
           "level": "high",
-          "detail": "xG a ritmo de 3.8 por 90min"
+          "detail": "xG a ritmo de 3.2 por 90min"
         },
         {
           "id": "shots",
-          "label": "6 remates",
+          "label": "7 remates",
           "emoji": "🎯",
           "level": "med",
-          "detail": "26 remates/90min"
+          "detail": "24 remates/90min"
         }
       ],
       "patternScore": 6
@@ -217,25 +225,25 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 40,
+      "min": 45,
       "status": "1st_half",
       "period": "1T",
       "league": "Championship",
       "league_id": 12,
-      "xgH": 0.27,
-      "xgA": 0.64,
-      "xgTotal": 0.91,
-      "lastMom": -4,
+      "xgH": 0.29,
+      "xgA": 0.67,
+      "xgTotal": 0.96,
+      "lastMom": 25,
       "overOdds": 1.68,
       "probLive": 60,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 2,
-        "a": 7
+        "h": 3,
+        "a": 8
       },
       "sot": {
         "h": 1,
-        "a": 4
+        "a": 3
       },
       "da": {
         "h": null,
@@ -266,8 +274,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "11 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "22 remates/90min"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 213523,
@@ -276,21 +292,21 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 40,
+      "min": 45,
       "status": "1st_half",
       "period": "1T",
       "league": "La Liga",
       "league_id": 3,
       "xgH": 0.11,
-      "xgA": 0.64,
-      "xgTotal": 0.75,
-      "lastMom": 20,
+      "xgA": 0.71,
+      "xgTotal": 0.82,
+      "lastMom": 9,
       "overOdds": 2.27,
       "probLive": 44,
       "oddsStatus": "VALID",
       "shots": {
         "h": 3,
-        "a": 3
+        "a": 4
       },
       "sot": {
         "h": 2,
@@ -394,20 +410,20 @@
       "hScore": 2,
       "aScore": 2,
       "goals": 4,
-      "min": 48,
+      "min": 52,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 11,
-      "xgH": 1.49,
-      "xgA": 0.95,
-      "xgTotal": 2.44,
-      "lastMom": 12,
+      "xgH": 1.4,
+      "xgA": 0.96,
+      "xgTotal": 2.36,
+      "lastMom": 59,
       "overOdds": 1.9,
       "probLive": 53,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 8,
+        "h": 12,
         "a": 14
       },
       "sot": {
@@ -443,8 +459,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 59"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 214563,
@@ -453,20 +477,20 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 52,
+      "min": 58,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 23,
-      "xgH": 1.34,
+      "xgH": 1.6,
       "xgA": 0.42,
-      "xgTotal": 1.76,
-      "lastMom": 7,
+      "xgTotal": 2.02,
+      "lastMom": 40,
       "overOdds": 1.54,
       "probLive": 65,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 10,
+        "h": 11,
         "a": 7
       },
       "sot": {
@@ -512,7 +536,7 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 67,
+      "min": 71,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -561,8 +585,16 @@
         "score": 0,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "late",
+          "label": "1 gol em 19min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 52% · 19min"
+        }
+      ],
+      "patternScore": 1
     }
   ]
 }
