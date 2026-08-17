@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-17T04:28:24Z",
+  "generated_at": "2026-08-17T04:33:34Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -7,73 +7,14 @@
       "id": 211531,
       "home": "Club Tijuana",
       "away": "Cruz Azul",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 1,
-      "goals": 2,
-      "min": 51,
+      "goals": 3,
+      "min": 56,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 19,
-      "xgH": 0.75,
-      "xgA": 0.53,
-      "xgTotal": 1.28,
-      "lastMom": 17,
-      "overOdds": 1.07,
-      "probLive": 93,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 9,
-        "a": 8
-      },
-      "sot": {
-        "h": 2,
-        "a": 3
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 5198,
-      "home": "Seattle Sounders FC",
-      "away": "Vancouver Whitecaps",
-      "hScore": 0,
-      "aScore": 2,
-      "goals": 2,
-      "min": 84,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 18,
       "xgH": null,
       "xgA": null,
       "xgTotal": null,
@@ -120,6 +61,73 @@
       },
       "patterns": [],
       "patternScore": 0
+    },
+    {
+      "id": 5198,
+      "home": "Seattle Sounders FC",
+      "away": "Vancouver Whitecaps",
+      "hScore": 0,
+      "aScore": 2,
+      "goals": 2,
+      "min": 89,
+      "status": "2nd_half",
+      "period": "2T",
+      "league": "",
+      "league_id": 18,
+      "xgH": 0.55,
+      "xgA": 1.3,
+      "xgTotal": 1.85,
+      "lastMom": -13,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
+      "shots": {
+        "h": 4,
+        "a": 16
+      },
+      "sot": {
+        "h": 0,
+        "a": 5
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "xg_pace",
+          "label": "xG 2.8/90 (2ªP)",
+          "emoji": "⚡",
+          "level": "med",
+          "detail": "xG a ritmo de 2.8 por 90min (2ªP)"
+        }
+      ],
+      "patternScore": 2
     }
   ]
 }
