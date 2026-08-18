@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T13:02:39Z",
+  "generated_at": "2026-08-18T13:05:10Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -10,21 +10,21 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 68,
+      "min": 70,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 52,
       "xgH": 1.49,
-      "xgA": 1.66,
-      "xgTotal": 3.15,
-      "lastMom": -70,
+      "xgA": 1.69,
+      "xgTotal": 3.1799999999999997,
+      "lastMom": -32,
       "overOdds": 1.34,
       "probLive": 75,
       "oddsStatus": "VALID",
       "shots": {
         "h": 14,
-        "a": 11
+        "a": 12
       },
       "sot": {
         "h": 7,
@@ -61,42 +61,21 @@
       },
       "patterns": [
         {
-          "id": "conv",
-          "label": "CONVERGÊNCIA",
-          "emoji": "🔮",
-          "level": "conv",
-          "detail": "4 padrões em simultâneo — sinal forte"
-        },
-        {
           "id": "xg_delta",
-          "label": "xG +2.1 acima",
+          "label": "xG +2.2 acima",
           "emoji": "🎲",
           "level": "high",
-          "detail": "xG 3.15 vs 1 golos"
-        },
-        {
-          "id": "shots",
-          "label": "7r 2ªP",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "27 remates/90min (2ªP)"
+          "detail": "xG 3.18 vs 1 golos"
         },
         {
           "id": "open",
           "label": "JOGO ABERTO",
           "emoji": "🎭",
           "level": "low",
-          "detail": "22min, equipa a perder ataca"
-        },
-        {
-          "id": "mom",
-          "label": "Fora domina",
-          "emoji": "💥",
-          "level": "high",
-          "detail": "Momentum fora 70 — controlo total"
+          "detail": "20min, equipa a perder ataca"
         }
       ],
-      "patternScore": 11
+      "patternScore": 5
     }
   ]
 }
