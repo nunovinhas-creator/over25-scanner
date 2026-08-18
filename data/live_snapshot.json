@@ -1,8 +1,67 @@
 {
-  "generated_at": "2026-08-18T01:00:37Z",
+  "generated_at": "2026-08-18T01:05:44Z",
   "status": "OK",
-  "count": 1,
+  "count": 2,
   "events": [
+    {
+      "id": 211532,
+      "home": "Club Necaxa",
+      "away": "Club León",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 3,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 19,
+      "xgH": null,
+      "xgA": 0.08,
+      "xgTotal": null,
+      "lastMom": -43,
+      "overOdds": 1.84,
+      "probLive": 54,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 1
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
     {
       "id": 223573,
       "home": "Gimnasia y Esgrima Mendoza",
@@ -10,7 +69,7 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 29,
+      "min": 35,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -18,7 +77,7 @@
       "xgH": 1.1,
       "xgA": 0.31,
       "xgTotal": 1.4100000000000001,
-      "lastMom": -15,
+      "lastMom": -29,
       "overOdds": 2.6,
       "probLive": 38,
       "oddsStatus": "VALID",
@@ -62,13 +121,13 @@
       "patterns": [
         {
           "id": "xg_pace",
-          "label": "xG 4.4/90",
+          "label": "xG 3.6/90",
           "emoji": "⚡",
-          "level": "critical",
-          "detail": "xG a ritmo de 4.4 por 90min"
+          "level": "high",
+          "detail": "xG a ritmo de 3.6 por 90min"
         }
       ],
-      "patternScore": 10
+      "patternScore": 4
     }
   ]
 }
