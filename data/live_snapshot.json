@@ -1,8 +1,67 @@
 {
-  "generated_at": "2026-08-18T22:31:10Z",
+  "generated_at": "2026-08-18T22:36:23Z",
   "status": "OK",
-  "count": 2,
+  "count": 3,
   "events": [
+    {
+      "id": 10081,
+      "home": "Londrina",
+      "away": "Atlético Goianiense",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 4,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 34,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": -48,
+      "overOdds": 2.34,
+      "probLive": 43,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
     {
       "id": 223426,
       "home": "Recoleta FC",
@@ -10,15 +69,15 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 30,
+      "min": 35,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 33,
       "xgH": 0.29,
-      "xgA": 0.48,
-      "xgTotal": 0.77,
-      "lastMom": -71,
+      "xgA": 1.09,
+      "xgTotal": 1.3800000000000001,
+      "lastMom": -33,
       "overOdds": 1.83,
       "probLive": 55,
       "oddsStatus": "VALID",
@@ -61,18 +120,18 @@
       },
       "patterns": [
         {
+          "id": "xg_pace",
+          "label": "xG 3.5/90",
+          "emoji": "⚡",
+          "level": "high",
+          "detail": "xG a ritmo de 3.5 por 90min"
+        },
+        {
           "id": "shots",
           "label": "9 remates",
           "emoji": "🎯",
           "level": "med",
-          "detail": "27 remates/90min"
-        },
-        {
-          "id": "mom",
-          "label": "Fora domina",
-          "emoji": "💥",
-          "level": "high",
-          "detail": "Momentum fora 71 — controlo total"
+          "detail": "23 remates/90min"
         }
       ],
       "patternScore": 6
@@ -84,20 +143,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 30,
+      "min": 36,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 32,
-      "xgH": 0.06,
+      "xgH": 0.14,
       "xgA": 0.06,
-      "xgTotal": 0.12,
-      "lastMom": -9,
+      "xgTotal": 0.2,
+      "lastMom": 6,
       "overOdds": 2.6,
       "probLive": 38,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 2,
+        "h": 3,
         "a": 2
       },
       "sot": {
