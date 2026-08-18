@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T03:36:15Z",
+  "generated_at": "2026-08-18T03:41:26Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -8,27 +8,27 @@
       "home": "CF Pachuca",
       "away": "Club Puebla",
       "hScore": 0,
-      "aScore": 1,
-      "goals": 1,
-      "min": 28,
+      "aScore": 2,
+      "goals": 2,
+      "min": 33,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 19,
       "xgH": 0.35,
-      "xgA": 0.21,
-      "xgTotal": 0.5599999999999999,
-      "lastMom": 24,
+      "xgA": 1.0,
+      "xgTotal": 1.35,
+      "lastMom": -34,
       "overOdds": 1.63,
       "probLive": 61,
       "oddsStatus": "VALID",
       "shots": {
         "h": 7,
-        "a": 2
+        "a": 3
       },
       "sot": {
         "h": 0,
-        "a": 1
+        "a": 2
       },
       "da": {
         "h": null,
@@ -61,14 +61,21 @@
       },
       "patterns": [
         {
-          "id": "shots",
-          "label": "9 remates",
-          "emoji": "🎯",
+          "id": "xg_pace",
+          "label": "xG 3.7/90",
+          "emoji": "⚡",
           "level": "high",
-          "detail": "29 remates/90min (muito alto)"
+          "detail": "xG a ritmo de 3.7 por 90min"
+        },
+        {
+          "id": "shots",
+          "label": "10 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "27 remates/90min"
         }
       ],
-      "patternScore": 4
+      "patternScore": 6
     }
   ]
 }
