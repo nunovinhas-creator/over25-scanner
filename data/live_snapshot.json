@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-18T20:47:28Z",
+  "generated_at": "2026-08-18T20:52:40Z",
   "status": "OK",
-  "count": 3,
+  "count": 2,
   "events": [
     {
       "id": 587701,
@@ -10,21 +10,21 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 88,
+      "min": 93,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 7,
-      "xgH": 0.56,
-      "xgA": 0.85,
-      "xgTotal": 1.4100000000000001,
-      "lastMom": -24,
+      "xgH": 0.67,
+      "xgA": 0.89,
+      "xgTotal": 1.56,
+      "lastMom": 18,
       "overOdds": 1.82,
       "probLive": 55,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 11,
-        "a": 11
+        "h": 12,
+        "a": 12
       },
       "sot": {
         "h": 5,
@@ -62,10 +62,10 @@
       "patterns": [
         {
           "id": "late",
-          "label": "1 gol em 2min",
+          "label": "1 gol em 0min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 55% · 2min"
+          "detail": "Falta 1 golo · mercado 55% · 0min"
         }
       ],
       "patternScore": 1
@@ -77,20 +77,20 @@
       "hScore": 2,
       "aScore": 2,
       "goals": 4,
-      "min": 85,
+      "min": 90,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 7,
-      "xgH": 2.16,
+      "xgH": 2.19,
       "xgA": 0.82,
-      "xgTotal": 2.98,
-      "lastMom": -37,
+      "xgTotal": 3.01,
+      "lastMom": 38,
       "overOdds": 1.61,
       "probLive": 62,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 20,
+        "h": 21,
         "a": 6
       },
       "sot": {
@@ -128,73 +128,6 @@
       },
       "patterns": [],
       "patternScore": 0
-    },
-    {
-      "id": 587699,
-      "home": "Levski Sofia",
-      "away": "AEK Athens",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 90,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 7,
-      "xgH": 1.06,
-      "xgA": 1.19,
-      "xgTotal": 2.25,
-      "lastMom": 15,
-      "overOdds": 2.38,
-      "probLive": 42,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 15,
-        "a": 12
-      },
-      "sot": {
-        "h": 3,
-        "a": 1
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "xg_delta",
-          "label": "xG +2.2 acima",
-          "emoji": "🎲",
-          "level": "high",
-          "detail": "xG 2.25 vs 0 golos"
-        }
-      ],
-      "patternScore": 4
     }
   ]
 }
