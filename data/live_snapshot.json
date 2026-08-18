@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-18T23:49:57Z",
+  "generated_at": "2026-08-18T23:55:14Z",
   "status": "OK",
-  "count": 3,
+  "count": 2,
   "events": [
     {
       "id": 10081,
@@ -10,15 +10,15 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 59,
+      "min": 64,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 34,
       "xgH": 1.41,
-      "xgA": 0.96,
-      "xgTotal": 2.37,
-      "lastMom": -5,
+      "xgA": 1.27,
+      "xgTotal": 2.6799999999999997,
+      "lastMom": -35,
       "overOdds": 2.36,
       "probLive": 42,
       "oddsStatus": "VALID",
@@ -62,72 +62,20 @@
       "patterns": [
         {
           "id": "xg_delta",
-          "label": "xG +2.4 acima",
+          "label": "xG +2.7 acima",
           "emoji": "🎲",
-          "level": "high",
-          "detail": "xG 2.37 vs 0 golos"
+          "level": "critical",
+          "detail": "xG 2.68 vs 0 golos — golo(s) em dívida"
+        },
+        {
+          "id": "shots",
+          "label": "5r 2ªP",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "24 remates/90min (2ªP)"
         }
       ],
-      "patternScore": 4
-    },
-    {
-      "id": 223426,
-      "home": "Recoleta FC",
-      "away": "Boca Juniors",
-      "hScore": 0,
-      "aScore": 4,
-      "goals": 4,
-      "min": 91,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 33,
-      "xgH": 0.97,
-      "xgA": 2.88,
-      "xgTotal": 3.8499999999999996,
-      "lastMom": -4,
-      "overOdds": 1.82,
-      "probLive": 55,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 11,
-        "a": 17
-      },
-      "sot": {
-        "h": 4,
-        "a": 10
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
+      "patternScore": 12
     },
     {
       "id": 207966,
@@ -136,20 +84,20 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 90,
+      "min": 95,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 32,
-      "xgH": 0.73,
+      "xgH": 0.71,
       "xgA": 0.55,
-      "xgTotal": 1.28,
-      "lastMom": 45,
+      "xgTotal": 1.26,
+      "lastMom": 13,
       "overOdds": 2.6,
       "probLive": 38,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 10,
+        "h": 12,
         "a": 8
       },
       "sot": {
@@ -187,13 +135,6 @@
       },
       "patterns": [
         {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 45"
-        },
-        {
           "id": "numerical",
           "label": "Casa +1 homem",
           "emoji": "🟥",
@@ -201,7 +142,7 @@
           "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
         }
       ],
-      "patternScore": 4
+      "patternScore": 2
     }
   ]
 }
