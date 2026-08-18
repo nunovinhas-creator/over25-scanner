@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T01:31:33Z",
+  "generated_at": "2026-08-18T01:36:41Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,21 +10,95 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 29,
+      "min": 35,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 19,
-      "xgH": 0.21,
+      "xgH": 0.37,
       "xgA": 0.32,
-      "xgTotal": 0.53,
-      "lastMom": 15,
+      "xgTotal": 0.69,
+      "lastMom": 55,
       "overOdds": 1.84,
       "probLive": 54,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 6,
+        "h": 9,
         "a": 6
+      },
+      "sot": {
+        "h": 4,
+        "a": 3
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "15 remates",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "39 remates/90min (muito alto)"
+        },
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 55"
+        }
+      ],
+      "patternScore": 6
+    },
+    {
+      "id": 223573,
+      "home": "Gimnasia y Esgrima Mendoza",
+      "away": "CA Talleres",
+      "hScore": 2,
+      "aScore": 0,
+      "goals": 2,
+      "min": 48,
+      "status": "2nd_half",
+      "period": "2T",
+      "league": "",
+      "league_id": 85,
+      "xgH": 1.22,
+      "xgA": 0.6,
+      "xgTotal": 1.8199999999999998,
+      "lastMom": -73,
+      "overOdds": 2.6,
+      "probLive": 38,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 9,
+        "a": 5
       },
       "sot": {
         "h": 3,
@@ -61,73 +135,14 @@
       },
       "patterns": [
         {
-          "id": "shots",
-          "label": "12 remates",
-          "emoji": "🎯",
+          "id": "mom",
+          "label": "Fora domina",
+          "emoji": "💥",
           "level": "high",
-          "detail": "37 remates/90min (muito alto)"
+          "detail": "Momentum fora 73 — controlo total"
         }
       ],
       "patternScore": 4
-    },
-    {
-      "id": 223573,
-      "home": "Gimnasia y Esgrima Mendoza",
-      "away": "CA Talleres",
-      "hScore": 2,
-      "aScore": 0,
-      "goals": 2,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
-      "league": "",
-      "league_id": 85,
-      "xgH": 1.21,
-      "xgA": 0.31,
-      "xgTotal": 1.52,
-      "lastMom": 4,
-      "overOdds": 2.6,
-      "probLive": 38,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 9,
-        "a": 2
-      },
-      "sot": {
-        "h": 3,
-        "a": 1
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
     }
   ]
 }
