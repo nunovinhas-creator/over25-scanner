@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T01:21:16Z",
+  "generated_at": "2026-08-18T01:26:25Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 19,
+      "min": 24,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -18,12 +18,12 @@
       "xgH": 0.05,
       "xgA": 0.18,
       "xgTotal": 0.22999999999999998,
-      "lastMom": 8,
+      "lastMom": 59,
       "overOdds": 1.84,
       "probLive": 54,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 2,
+        "h": 3,
         "a": 4
       },
       "sot": {
@@ -62,10 +62,17 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "6 remates",
+          "label": "7 remates",
           "emoji": "🎯",
-          "level": "high",
-          "detail": "28 remates/90min (muito alto)"
+          "level": "med",
+          "detail": "26 remates/90min"
+        },
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 59"
         }
       ],
       "patternScore": 4
