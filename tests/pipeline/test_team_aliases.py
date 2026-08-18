@@ -92,13 +92,21 @@ def test_vitoria_fc_would_not_match_dc_ratings_even_unaliased():
 def test_every_alias_target_exists_in_real_dc_ratings():
     """Cada par (liga, alvo) da tabela tem de bater com uma chave REAL em
     data/dc_ratings.json — protege contra um erro de digitação na tabela
-    (o alvo nunca seria encontrado, o par ficaria morto em silêncio)."""
+    (o alvo nunca seria encontrado, o par ficaria morto em silêncio).
+
+    Compara chaves normalizadas dos dois lados, tal como resolve_dc_team_key()
+    faz em produção (normalize_team_names(alias_target)) — data/dc_ratings.json
+    grava as suas chaves já normalizadas desde o Bloco O (train_all()), por
+    isso comparar o alvo cru da tabela (Title Case) directamente contra o
+    dict falha assim que um retrain corre (visto em produção: PR #172 media
+    contra um ficheiro ainda por re-treinar; o retrain semanal seguinte
+    normalizou as chaves e partiu esta comparação literal)."""
     dc = json.loads(_DC_RATINGS_PATH.read_text(encoding="utf-8"))
     erros = []
     for liga, pairs in DC_TEAM_ALIASES.items():
-        dc_teams = dc.get(liga, {}).get("teams", {})
+        dc_teams_normalizadas = {normalize_team_names(t) for t in dc.get(liga, {}).get("teams", {})}
         for bsd_name, dc_name in pairs.items():
-            if dc_name not in dc_teams:
+            if normalize_team_names(dc_name) not in dc_teams_normalizadas:
                 erros.append((liga, bsd_name, dc_name))
     assert erros == [], f"alvos de alias sem correspondência em dc_ratings.json: {erros}"
 
@@ -146,16 +154,18 @@ def _real_calibrator_fn():
 
 
 def _post_retrain_dc_ratings() -> dict:
-    """data/dc_ratings.json real, com as chaves normalizadas — simula o
-    estado do ficheiro depois do PRÓXIMO retrain semanal (retrain_dc.yml).
+    """data/dc_ratings.json real, com as chaves normalizadas.
 
-    Nota importante: o Bloco O corrigiu models/train_dc.py para gravar
-    chaves normalizadas, mas só muda o ficheiro em disco quando o retrain
-    corre — o data/dc_ratings.json actual no repositório ainda tem as
-    chaves cruas do CSV (Title Case) porque ainda não houve retrain desde
-    o merge. Este helper aplica a MESMA normalização que train_all() já
-    aplica (ver models/train_dc.py), aos dados reais já treinados — não
-    inventa nem re-treina nada, só antecipa o resultado do próximo cron."""
+    Nota histórica: quando este teste foi escrito (Bloco P), o Bloco O
+    tinha corrigido models/train_dc.py para gravar chaves normalizadas,
+    mas o retrain semanal (retrain_dc.yml, segundas) ainda não tinha
+    corrido — o ficheiro em disco ainda tinha as chaves cruas do CSV
+    (Title Case) e este helper simulava o estado pós-retrain para o
+    teste poder correr sem esperar pelo cron. O retrain já correu desde
+    então (dc_ratings.json em produção já tem chaves normalizadas) — a
+    normalização aqui é agora um no-op idempotente, mantida para o
+    teste continuar correcto mesmo que o ficheiro volte a ter chaves
+    cruas nalgum cenário futuro (ex.: rollback)."""
     dc = json.loads(_DC_RATINGS_PATH.read_text(encoding="utf-8"))
     return {
         liga: {**info, "teams": {normalize_team_names(t): v for t, v in info["teams"].items()}}
