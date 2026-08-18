@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T18:32:01Z",
+  "generated_at": "2026-08-18T18:37:19Z",
   "status": "OK",
   "count": 4,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 30,
+      "min": 36,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -67,9 +67,9 @@
       "home": "Mutilvera",
       "away": "Peña Sport FC",
       "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 73,
+      "aScore": 1,
+      "goals": 2,
+      "min": 78,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -118,8 +118,16 @@
         "score": 0,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "late",
+          "label": "1 gol em 12min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 59% · 12min"
+        }
+      ],
+      "patternScore": 1
     },
     {
       "id": 588028,
@@ -128,7 +136,7 @@
       "hScore": 3,
       "aScore": 1,
       "goals": 4,
-      "min": 65,
+      "min": 70,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -187,7 +195,7 @@
       "hScore": 3,
       "aScore": 5,
       "goals": 8,
-      "min": 73,
+      "min": 78,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
