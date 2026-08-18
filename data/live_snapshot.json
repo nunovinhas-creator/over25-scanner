@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T17:33:41Z",
+  "generated_at": "2026-08-18T17:39:00Z",
   "status": "OK",
   "count": 4,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 32,
+      "min": 37,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -69,7 +69,7 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 29,
+      "min": 34,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -125,10 +125,10 @@
       "id": 588013,
       "home": "SC Spelle-Venhaus",
       "away": "VfL Osnabrück",
-      "hScore": 1,
-      "aScore": 2,
-      "goals": 3,
-      "min": 32,
+      "hScore": 2,
+      "aScore": 3,
+      "goals": 5,
+      "min": 37,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -185,27 +185,27 @@
       "home": "1. FC Heidenheim",
       "away": "FC Bayern München",
       "hScore": 2,
-      "aScore": 3,
-      "goals": 5,
-      "min": 78,
+      "aScore": 4,
+      "goals": 6,
+      "min": 83,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 79,
-      "xgH": 0.4,
-      "xgA": 1.21,
-      "xgTotal": 1.6099999999999999,
-      "lastMom": -31,
+      "xgH": 0.44,
+      "xgA": 2.14,
+      "xgTotal": 2.58,
+      "lastMom": -97,
       "overOdds": 1.19,
       "probLive": 84,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 7,
-        "a": 9
+        "h": 8,
+        "a": 12
       },
       "sot": {
         "h": 4,
-        "a": 4
+        "a": 6
       },
       "da": {
         "h": null,
@@ -236,8 +236,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Fora domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum fora 97 — controlo total"
+        }
+      ],
+      "patternScore": 4
     }
   ]
 }
