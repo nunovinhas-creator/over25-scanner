@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T23:33:53Z",
+  "generated_at": "2026-08-18T23:39:11Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -10,21 +10,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 48,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 34,
-      "xgH": 1.47,
-      "xgA": 0.81,
-      "xgTotal": 2.2800000000000002,
-      "lastMom": 64,
+      "xgH": 1.4,
+      "xgA": 0.8,
+      "xgTotal": 2.2,
+      "lastMom": -39,
       "overOdds": 2.36,
       "probLive": 42,
       "oddsStatus": "VALID",
       "shots": {
         "h": 12,
-        "a": 7
+        "a": 8
       },
       "sot": {
         "h": 2,
@@ -62,47 +62,40 @@
       "patterns": [
         {
           "id": "xg_delta",
-          "label": "xG +2.3 acima",
+          "label": "xG +2.2 acima",
           "emoji": "🎲",
           "level": "high",
-          "detail": "xG 2.28 vs 0 golos"
-        },
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 64"
+          "detail": "xG 2.20 vs 0 golos"
         }
       ],
-      "patternScore": 6
+      "patternScore": 4
     },
     {
       "id": 223426,
       "home": "Recoleta FC",
       "away": "Boca Juniors",
       "hScore": 0,
-      "aScore": 3,
-      "goals": 3,
-      "min": 75,
+      "aScore": 4,
+      "goals": 4,
+      "min": 80,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 33,
-      "xgH": 0.64,
-      "xgA": 2.76,
-      "xgTotal": 3.4,
-      "lastMom": 15,
+      "xgH": 1.24,
+      "xgA": 2.81,
+      "xgTotal": 4.05,
+      "lastMom": 17,
       "overOdds": 1.82,
       "probLive": 55,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 7,
-        "a": 15
+        "h": 9,
+        "a": 16
       },
       "sot": {
-        "h": 3,
-        "a": 9
+        "h": 4,
+        "a": 10
       },
       "da": {
         "h": null,
@@ -141,27 +134,27 @@
       "home": "Independiente Rivadavia",
       "away": "Fluminense",
       "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 74,
+      "aScore": 1,
+      "goals": 1,
+      "min": 79,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 32,
       "xgH": 0.4,
-      "xgA": 0.22,
-      "xgTotal": 0.62,
-      "lastMom": -21,
+      "xgA": 0.57,
+      "xgTotal": 0.97,
+      "lastMom": -45,
       "overOdds": 2.6,
       "probLive": 38,
       "oddsStatus": "VALID",
       "shots": {
         "h": 7,
-        "a": 6
+        "a": 8
       },
       "sot": {
         "h": 1,
-        "a": 1
+        "a": 3
       },
       "da": {
         "h": null,
@@ -194,6 +187,20 @@
       },
       "patterns": [
         {
+          "id": "open",
+          "label": "JOGO ABERTO",
+          "emoji": "🎭",
+          "level": "low",
+          "detail": "11min, equipa a perder ataca"
+        },
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 45"
+        },
+        {
           "id": "numerical",
           "label": "Casa +1 homem",
           "emoji": "🟥",
@@ -201,7 +208,7 @@
           "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
         }
       ],
-      "patternScore": 2
+      "patternScore": 5
     }
   ]
 }
