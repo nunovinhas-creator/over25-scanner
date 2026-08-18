@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T23:07:43Z",
+  "generated_at": "2026-08-18T23:12:55Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -10,21 +10,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 35,
+      "min": 40,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
       "xgH": 1.09,
-      "xgA": 0.82,
-      "xgTotal": 1.9100000000000001,
-      "lastMom": -12,
+      "xgA": 0.81,
+      "xgTotal": 1.9000000000000001,
+      "lastMom": -20,
       "overOdds": 2.36,
       "probLive": 42,
       "oddsStatus": "VALID",
       "shots": {
         "h": 10,
-        "a": 6
+        "a": 7
       },
       "sot": {
         "h": 1,
@@ -61,48 +61,62 @@
       },
       "patterns": [
         {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "3 padrões em simultâneo — sinal forte"
+        },
+        {
+          "id": "xg_delta",
+          "label": "xG +1.9 acima",
+          "emoji": "🎲",
+          "level": "high",
+          "detail": "xG 1.90 vs 0 golos"
+        },
+        {
           "id": "xg_pace",
-          "label": "xG 4.9/90",
+          "label": "xG 4.3/90",
           "emoji": "⚡",
           "level": "critical",
-          "detail": "xG a ritmo de 4.9 por 90min"
+          "detail": "xG a ritmo de 4.3 por 90min"
         },
         {
           "id": "shots",
-          "label": "16 remates",
+          "label": "17 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "41 remates/90min (muito alto)"
+          "detail": "38 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 14
+      "patternScore": 18
     },
     {
       "id": 223426,
       "home": "Recoleta FC",
       "away": "Boca Juniors",
       "hScore": 0,
-      "aScore": 2,
-      "goals": 2,
-      "min": 49,
+      "aScore": 3,
+      "goals": 3,
+      "min": 54,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 33,
-      "xgH": 0.48,
-      "xgA": 1.45,
-      "xgTotal": 1.93,
-      "lastMom": 28,
+      "xgH": 0.58,
+      "xgA": 2.06,
+      "xgTotal": 2.64,
+      "lastMom": -10,
       "overOdds": 1.83,
       "probLive": 55,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 5,
-        "a": 10
+        "h": 6,
+        "a": 11
       },
       "sot": {
-        "h": 2,
-        "a": 6
+        "h": 3,
+        "a": 7
       },
       "da": {
         "h": null,
@@ -143,21 +157,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 48,
+      "min": 53,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 32,
       "xgH": 0.25,
-      "xgA": 0.2,
-      "xgTotal": 0.45,
-      "lastMom": -8,
+      "xgA": 0.19,
+      "xgTotal": 0.44,
+      "lastMom": -15,
       "overOdds": 2.6,
       "probLive": 38,
       "oddsStatus": "VALID",
       "shots": {
         "h": 5,
-        "a": 3
+        "a": 4
       },
       "sot": {
         "h": 0,
