@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T13:10:18Z",
+  "generated_at": "2026-08-18T13:15:26Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -10,25 +10,25 @@
       "hScore": 0,
       "aScore": 2,
       "goals": 2,
-      "min": 76,
+      "min": 80,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 52,
-      "xgH": 1.59,
-      "xgA": 1.87,
-      "xgTotal": 3.46,
-      "lastMom": 17,
+      "xgH": 1.7,
+      "xgA": 2.25,
+      "xgTotal": 3.95,
+      "lastMom": 29,
       "overOdds": 1.34,
       "probLive": 75,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 16,
-        "a": 13
+        "h": 19,
+        "a": 15
       },
       "sot": {
-        "h": 7,
-        "a": 6
+        "h": 8,
+        "a": 7
       },
       "da": {
         "h": null,
@@ -62,20 +62,20 @@
       "patterns": [
         {
           "id": "xg_delta",
-          "label": "xG sobrevaloriza",
+          "label": "xG +2.0 acima",
           "emoji": "🎲",
-          "level": "med",
-          "detail": "xG 3.46 vs 2 golos"
+          "level": "high",
+          "detail": "xG 3.95 vs 2 golos"
         },
         {
           "id": "late",
-          "label": "1 gol em 14min",
+          "label": "1 gol em 10min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 75% · 14min"
+          "detail": "Falta 1 golo · mercado 75% · 10min"
         }
       ],
-      "patternScore": 3
+      "patternScore": 5
     }
   ]
 }
