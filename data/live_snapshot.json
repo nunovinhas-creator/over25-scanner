@@ -1,33 +1,33 @@
 {
-  "generated_at": "2026-08-18T02:24:19Z",
+  "generated_at": "2026-08-18T02:29:27Z",
   "status": "OK",
-  "count": 2,
+  "count": 1,
   "events": [
     {
       "id": 211532,
       "home": "Club Necaxa",
       "away": "Club León",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 1,
-      "goals": 1,
-      "min": 63,
+      "goals": 2,
+      "min": 68,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 19,
-      "xgH": 0.43,
+      "xgH": 0.9,
       "xgA": 0.76,
-      "xgTotal": 1.19,
-      "lastMom": 13,
-      "overOdds": 1.84,
+      "xgTotal": 1.6600000000000001,
+      "lastMom": 26,
+      "overOdds": 1.85,
       "probLive": 54,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 14,
+        "h": 15,
         "a": 12
       },
       "sot": {
-        "h": 7,
+        "h": 8,
         "a": 6
       },
       "da": {
@@ -62,10 +62,17 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "5r 2ªP",
+          "label": "6r 2ªP",
           "emoji": "🎯",
           "level": "med",
-          "detail": "25 remates/90min (2ªP)"
+          "detail": "23 remates/90min (2ªP)"
+        },
+        {
+          "id": "late",
+          "label": "1 gol em 22min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 54% · 22min"
         },
         {
           "id": "numerical",
@@ -75,66 +82,7 @@
           "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
         }
       ],
-      "patternScore": 4
-    },
-    {
-      "id": 223573,
-      "home": "Gimnasia y Esgrima Mendoza",
-      "away": "CA Talleres",
-      "hScore": 3,
-      "aScore": 1,
-      "goals": 4,
-      "min": 95,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 85,
-      "xgH": 2.84,
-      "xgA": 1.16,
-      "xgTotal": 4.0,
-      "lastMom": -11,
-      "overOdds": 2.6,
-      "probLive": 38,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 18,
-        "a": 12
-      },
-      "sot": {
-        "h": 7,
-        "a": 5
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 1,
-        "a": 1
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
+      "patternScore": 5
     }
   ]
 }
