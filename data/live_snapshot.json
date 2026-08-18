@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T12:21:36Z",
+  "generated_at": "2026-08-18T12:26:43Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -11,23 +11,23 @@
       "aScore": 1,
       "goals": 1,
       "min": 45,
-      "status": "1st_half",
-      "period": "1T",
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 52,
-      "xgH": 0.43,
+      "xgH": 1.24,
       "xgA": 1.5,
-      "xgTotal": 1.93,
-      "lastMom": -6,
+      "xgTotal": 2.74,
+      "lastMom": 91,
       "overOdds": 1.34,
       "probLive": 75,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 8,
+        "h": 10,
         "a": 7
       },
       "sot": {
-        "h": 4,
+        "h": 6,
         "a": 3
       },
       "da": {
@@ -61,21 +61,14 @@
       },
       "patterns": [
         {
-          "id": "xg_pace",
-          "label": "xG 3.9/90",
-          "emoji": "⚡",
+          "id": "mom",
+          "label": "Casa domina",
+          "emoji": "💥",
           "level": "high",
-          "detail": "xG a ritmo de 3.9 por 90min"
-        },
-        {
-          "id": "shots",
-          "label": "15 remates",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "30 remates/90min (muito alto)"
+          "detail": "Momentum casa 91 — controlo total"
         }
       ],
-      "patternScore": 8
+      "patternScore": 4
     }
   ]
 }
