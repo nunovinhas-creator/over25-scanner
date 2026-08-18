@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T20:02:30Z",
+  "generated_at": "2026-08-18T20:07:46Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -7,27 +7,27 @@
       "id": 587701,
       "home": "Fenerbahçe",
       "away": "Olympique Lyonnais",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 1,
-      "goals": 1,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "goals": 2,
+      "min": 49,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 7,
-      "xgH": 0.23,
+      "xgH": 0.32,
       "xgA": 0.54,
-      "xgTotal": 0.77,
-      "lastMom": 18,
+      "xgTotal": 0.8600000000000001,
+      "lastMom": 15,
       "overOdds": 1.82,
       "probLive": 55,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 5,
+        "h": 6,
         "a": 5
       },
       "sot": {
-        "h": 2,
+        "h": 3,
         "a": 2
       },
       "da": {
@@ -70,8 +70,8 @@
       "aScore": 2,
       "goals": 4,
       "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 7,
       "xgH": 1.9,
@@ -120,6 +120,27 @@
       },
       "patterns": [
         {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "3 padrões em simultâneo — sinal forte"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 4.4/90",
+          "emoji": "⚡",
+          "level": "critical",
+          "detail": "xG a ritmo de 4.4 por 90min"
+        },
+        {
+          "id": "shots",
+          "label": "17 remates",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "34 remates/90min (muito alto)"
+        },
+        {
           "id": "mom",
           "label": "Casa pressiona",
           "emoji": "💪",
@@ -127,7 +148,7 @@
           "detail": "Momentum casa 59"
         }
       ],
-      "patternScore": 2
+      "patternScore": 16
     },
     {
       "id": 587699,
@@ -136,20 +157,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 45,
+      "min": 50,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 7,
-      "xgH": 0.56,
+      "xgH": 0.68,
       "xgA": 0.87,
-      "xgTotal": 1.4300000000000002,
-      "lastMom": 9,
+      "xgTotal": 1.55,
+      "lastMom": 45,
       "overOdds": 2.38,
       "probLive": 42,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 7,
+        "h": 8,
         "a": 4
       },
       "sot": {
@@ -187,21 +208,14 @@
       },
       "patterns": [
         {
-          "id": "xg_pace",
-          "label": "xG 2.9/90",
-          "emoji": "⚡",
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
           "level": "med",
-          "detail": "xG a ritmo de 2.9 por 90min"
-        },
-        {
-          "id": "shots",
-          "label": "11 remates",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "22 remates/90min"
+          "detail": "Momentum casa 45"
         }
       ],
-      "patternScore": 4
+      "patternScore": 2
     }
   ]
 }
