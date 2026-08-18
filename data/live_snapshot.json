@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T12:57:32Z",
+  "generated_at": "2026-08-18T13:02:39Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -10,25 +10,25 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 63,
+      "min": 68,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 52,
-      "xgH": 1.37,
-      "xgA": 1.53,
-      "xgTotal": 2.9000000000000004,
-      "lastMom": 55,
+      "xgH": 1.49,
+      "xgA": 1.66,
+      "xgTotal": 3.15,
+      "lastMom": -70,
       "overOdds": 1.34,
       "probLive": 75,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 13,
-        "a": 8
+        "h": 14,
+        "a": 11
       },
       "sot": {
-        "h": 6,
-        "a": 3
+        "h": 7,
+        "a": 5
       },
       "da": {
         "h": null,
@@ -61,21 +61,42 @@
       },
       "patterns": [
         {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "4 padrões em simultâneo — sinal forte"
+        },
+        {
           "id": "xg_delta",
-          "label": "xG +1.9 acima",
+          "label": "xG +2.1 acima",
           "emoji": "🎲",
           "level": "high",
-          "detail": "xG 2.90 vs 1 golos"
+          "detail": "xG 3.15 vs 1 golos"
+        },
+        {
+          "id": "shots",
+          "label": "7r 2ªP",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "27 remates/90min (2ªP)"
+        },
+        {
+          "id": "open",
+          "label": "JOGO ABERTO",
+          "emoji": "🎭",
+          "level": "low",
+          "detail": "22min, equipa a perder ataca"
         },
         {
           "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 55"
+          "label": "Fora domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum fora 70 — controlo total"
         }
       ],
-      "patternScore": 6
+      "patternScore": 11
     }
   ]
 }
