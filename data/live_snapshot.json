@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T02:19:08Z",
+  "generated_at": "2026-08-18T02:24:19Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,20 +10,20 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 57,
+      "min": 63,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 19,
-      "xgH": 0.4,
+      "xgH": 0.43,
       "xgA": 0.76,
-      "xgTotal": 1.1600000000000001,
-      "lastMom": -14,
+      "xgTotal": 1.19,
+      "lastMom": 13,
       "overOdds": 1.84,
       "probLive": 54,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 13,
+        "h": 14,
         "a": 12
       },
       "sot": {
@@ -44,7 +44,7 @@
       },
       "redCards": {
         "h": 0,
-        "a": 0
+        "a": 1
       },
       "isSavedPick": false,
       "coverage": {
@@ -59,8 +59,23 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "5r 2ªP",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "25 remates/90min (2ªP)"
+        },
+        {
+          "id": "numerical",
+          "label": "Casa +1 homem",
+          "emoji": "🟥",
+          "level": "med",
+          "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
+        }
+      ],
+      "patternScore": 4
     },
     {
       "id": 223573,
@@ -69,21 +84,21 @@
       "hScore": 3,
       "aScore": 1,
       "goals": 4,
-      "min": 89,
+      "min": 95,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 85,
-      "xgH": 2.79,
-      "xgA": 1.11,
-      "xgTotal": 3.9000000000000004,
-      "lastMom": -4,
+      "xgH": 2.84,
+      "xgA": 1.16,
+      "xgTotal": 4.0,
+      "lastMom": -11,
       "overOdds": 2.6,
       "probLive": 38,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 17,
-        "a": 11
+        "h": 18,
+        "a": 12
       },
       "sot": {
         "h": 7,
