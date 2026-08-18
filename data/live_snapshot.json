@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T12:06:09Z",
+  "generated_at": "2026-08-18T12:11:21Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -10,24 +10,24 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 29,
+      "min": 35,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 52,
-      "xgH": 0.4,
+      "xgH": 0.43,
       "xgA": 0.64,
-      "xgTotal": 1.04,
-      "lastMom": -15,
+      "xgTotal": 1.07,
+      "lastMom": 48,
       "overOdds": 1.34,
       "probLive": 75,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 7,
+        "h": 8,
         "a": 5
       },
       "sot": {
-        "h": 3,
+        "h": 4,
         "a": 1
       },
       "da": {
@@ -62,17 +62,24 @@
       "patterns": [
         {
           "id": "xg_pace",
-          "label": "xG 3.2/90",
+          "label": "xG 2.8/90",
           "emoji": "⚡",
-          "level": "high",
-          "detail": "xG a ritmo de 3.2 por 90min"
+          "level": "med",
+          "detail": "xG a ritmo de 2.8 por 90min"
         },
         {
           "id": "shots",
-          "label": "12 remates",
+          "label": "13 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "37 remates/90min (muito alto)"
+          "detail": "33 remates/90min (muito alto)"
+        },
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 48"
         }
       ],
       "patternScore": 8
