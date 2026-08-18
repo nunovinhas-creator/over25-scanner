@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T04:12:16Z",
+  "generated_at": "2026-08-18T04:17:23Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -10,21 +10,21 @@
       "hScore": 1,
       "aScore": 2,
       "goals": 3,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 47,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 19,
-      "xgH": 0.69,
-      "xgA": 1.08,
-      "xgTotal": 1.77,
-      "lastMom": 27,
+      "xgH": 0.53,
+      "xgA": 1.1,
+      "xgTotal": 1.6300000000000001,
+      "lastMom": -49,
       "overOdds": 1.63,
       "probLive": 61,
       "oddsStatus": "VALID",
       "shots": {
         "h": 11,
-        "a": 5
+        "a": 6
       },
       "sot": {
         "h": 1,
@@ -59,8 +59,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 49"
+        }
+      ],
+      "patternScore": 2
     }
   ]
 }
