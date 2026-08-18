@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T01:05:44Z",
+  "generated_at": "2026-08-18T01:10:55Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,25 +10,25 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 3,
+      "min": 8,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 19,
       "xgH": null,
-      "xgA": 0.08,
+      "xgA": 0.17,
       "xgTotal": null,
-      "lastMom": -43,
+      "lastMom": -41,
       "overOdds": 1.84,
       "probLive": 54,
       "oddsStatus": "VALID",
       "shots": {
         "h": 0,
-        "a": 1
+        "a": 4
       },
       "sot": {
         "h": 0,
-        "a": 0
+        "a": 1
       },
       "da": {
         "h": null,
@@ -59,8 +59,16 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "4 remates",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "45 remates/90min (muito alto)"
+        }
+      ],
+      "patternScore": 4
     },
     {
       "id": 223573,
@@ -69,24 +77,24 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 35,
+      "min": 40,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 85,
-      "xgH": 1.1,
+      "xgH": 1.21,
       "xgA": 0.31,
-      "xgTotal": 1.4100000000000001,
-      "lastMom": -29,
+      "xgTotal": 1.52,
+      "lastMom": 41,
       "overOdds": 2.6,
       "probLive": 38,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 5,
+        "h": 7,
         "a": 2
       },
       "sot": {
-        "h": 2,
+        "h": 3,
         "a": 1
       },
       "da": {
@@ -121,10 +129,10 @@
       "patterns": [
         {
           "id": "xg_pace",
-          "label": "xG 3.6/90",
+          "label": "xG 3.4/90",
           "emoji": "⚡",
           "level": "high",
-          "detail": "xG a ritmo de 3.6 por 90min"
+          "detail": "xG a ritmo de 3.4 por 90min"
         }
       ],
       "patternScore": 4
