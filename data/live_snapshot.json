@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T23:44:31Z",
+  "generated_at": "2026-08-18T23:49:57Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -10,25 +10,25 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 54,
+      "min": 59,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 34,
-      "xgH": 1.45,
-      "xgA": 0.88,
-      "xgTotal": 2.33,
-      "lastMom": 75,
+      "xgH": 1.41,
+      "xgA": 0.96,
+      "xgTotal": 2.37,
+      "lastMom": -5,
       "overOdds": 2.36,
       "probLive": 42,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 14,
-        "a": 9
+        "h": 13,
+        "a": 11
       },
       "sot": {
         "h": 2,
-        "a": 2
+        "a": 3
       },
       "da": {
         "h": null,
@@ -62,20 +62,13 @@
       "patterns": [
         {
           "id": "xg_delta",
-          "label": "xG +2.3 acima",
+          "label": "xG +2.4 acima",
           "emoji": "🎲",
           "level": "high",
-          "detail": "xG 2.33 vs 0 golos"
-        },
-        {
-          "id": "mom",
-          "label": "Casa domina",
-          "emoji": "💥",
-          "level": "high",
-          "detail": "Momentum casa 75 — controlo total"
+          "detail": "xG 2.37 vs 0 golos"
         }
       ],
-      "patternScore": 8
+      "patternScore": 4
     },
     {
       "id": 223426,
@@ -84,15 +77,15 @@
       "hScore": 0,
       "aScore": 4,
       "goals": 4,
-      "min": 86,
+      "min": 91,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 33,
       "xgH": 0.97,
-      "xgA": 2.86,
-      "xgTotal": 3.83,
-      "lastMom": 23,
+      "xgA": 2.88,
+      "xgTotal": 3.8499999999999996,
+      "lastMom": -4,
       "overOdds": 1.82,
       "probLive": 55,
       "oddsStatus": "VALID",
@@ -143,24 +136,24 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 85,
+      "min": 90,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 32,
-      "xgH": 0.51,
+      "xgH": 0.73,
       "xgA": 0.55,
-      "xgTotal": 1.06,
-      "lastMom": 76,
+      "xgTotal": 1.28,
+      "lastMom": 45,
       "overOdds": 2.6,
       "probLive": 38,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 8,
+        "h": 10,
         "a": 8
       },
       "sot": {
-        "h": 1,
+        "h": 2,
         "a": 3
       },
       "da": {
@@ -195,10 +188,10 @@
       "patterns": [
         {
           "id": "mom",
-          "label": "Casa domina",
-          "emoji": "💥",
-          "level": "high",
-          "detail": "Momentum casa 76 — controlo total"
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 45"
         },
         {
           "id": "numerical",
@@ -208,7 +201,7 @@
           "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
         }
       ],
-      "patternScore": 6
+      "patternScore": 4
     }
   ]
 }
