@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T20:07:46Z",
+  "generated_at": "2026-08-18T20:13:02Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -10,21 +10,21 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 49,
+      "min": 54,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 7,
       "xgH": 0.32,
-      "xgA": 0.54,
-      "xgTotal": 0.8600000000000001,
-      "lastMom": 15,
+      "xgA": 0.68,
+      "xgTotal": 1.0,
+      "lastMom": -64,
       "overOdds": 1.82,
       "probLive": 55,
       "oddsStatus": "VALID",
       "shots": {
         "h": 6,
-        "a": 5
+        "a": 7
       },
       "sot": {
         "h": 3,
@@ -59,8 +59,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 64"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 587700,
@@ -69,7 +77,7 @@
       "hScore": 2,
       "aScore": 2,
       "goals": 4,
-      "min": 45,
+      "min": 50,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -77,12 +85,12 @@
       "xgH": 1.9,
       "xgA": 0.3,
       "xgTotal": 2.1999999999999997,
-      "lastMom": 59,
+      "lastMom": 46,
       "overOdds": 1.61,
       "probLive": 62,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 13,
+        "h": 14,
         "a": 4
       },
       "sot": {
@@ -120,35 +128,14 @@
       },
       "patterns": [
         {
-          "id": "conv",
-          "label": "CONVERGÊNCIA",
-          "emoji": "🔮",
-          "level": "conv",
-          "detail": "3 padrões em simultâneo — sinal forte"
-        },
-        {
-          "id": "xg_pace",
-          "label": "xG 4.4/90",
-          "emoji": "⚡",
-          "level": "critical",
-          "detail": "xG a ritmo de 4.4 por 90min"
-        },
-        {
-          "id": "shots",
-          "label": "17 remates",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "34 remates/90min (muito alto)"
-        },
-        {
           "id": "mom",
           "label": "Casa pressiona",
           "emoji": "💪",
           "level": "med",
-          "detail": "Momentum casa 59"
+          "detail": "Momentum casa 46"
         }
       ],
-      "patternScore": 16
+      "patternScore": 2
     },
     {
       "id": 587699,
@@ -157,24 +144,24 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 50,
+      "min": 55,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 7,
-      "xgH": 0.68,
-      "xgA": 0.87,
-      "xgTotal": 1.55,
-      "lastMom": 45,
+      "xgH": 0.76,
+      "xgA": 0.93,
+      "xgTotal": 1.69,
+      "lastMom": 56,
       "overOdds": 2.38,
       "probLive": 42,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 8,
-        "a": 4
+        "h": 11,
+        "a": 6
       },
       "sot": {
-        "h": 1,
+        "h": 2,
         "a": 0
       },
       "da": {
@@ -208,14 +195,21 @@
       },
       "patterns": [
         {
+          "id": "xg_delta",
+          "label": "xG sobrevaloriza",
+          "emoji": "🎲",
+          "level": "med",
+          "detail": "xG 1.69 vs 0 golos"
+        },
+        {
           "id": "mom",
           "label": "Casa pressiona",
           "emoji": "💪",
           "level": "med",
-          "detail": "Momentum casa 45"
+          "detail": "Momentum casa 56"
         }
       ],
-      "patternScore": 2
+      "patternScore": 4
     }
   ]
 }
