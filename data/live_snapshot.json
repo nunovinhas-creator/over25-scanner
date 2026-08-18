@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T19:09:07Z",
+  "generated_at": "2026-08-18T19:14:32Z",
   "status": "OK",
   "count": 4,
   "events": [
@@ -10,20 +10,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 7,
+      "min": 12,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 7,
-      "xgH": null,
+      "xgH": 0.07,
       "xgA": 0.05,
-      "xgTotal": null,
-      "lastMom": 62,
+      "xgTotal": 0.12000000000000001,
+      "lastMom": -23,
       "overOdds": 1.82,
       "probLive": 55,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
+        "h": 1,
         "a": 1
       },
       "sot": {
@@ -49,14 +49,14 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 3,
         "total": 6
       },
       "patterns": [],
@@ -66,27 +66,27 @@
       "id": 587700,
       "home": "GNK Dinamo Zagreb",
       "away": "Viking FK",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 0,
-      "goals": 1,
-      "min": 6,
+      "goals": 2,
+      "min": 12,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 7,
-      "xgH": null,
+      "xgH": 1.28,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 49,
+      "lastMom": -68,
       "overOdds": 1.61,
       "probLive": 62,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 2,
-        "a": 0
+        "h": 4,
+        "a": 1
       },
       "sot": {
-        "h": 1,
+        "h": 2,
         "a": 0
       },
       "da": {
@@ -118,8 +118,23 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "5 remates",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "38 remates/90min (muito alto)"
+        },
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 68"
+        }
+      ],
+      "patternScore": 6
     },
     {
       "id": 587699,
@@ -128,7 +143,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 7,
+      "min": 13,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -136,7 +151,7 @@
       "xgH": 0.03,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 18,
+      "lastMom": -17,
       "overOdds": 2.38,
       "probLive": 42,
       "oddsStatus": "VALID",
@@ -187,7 +202,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 51,
+      "min": 56,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
