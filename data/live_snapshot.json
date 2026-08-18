@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T20:34:20Z",
+  "generated_at": "2026-08-18T20:36:57Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 75,
+      "min": 77,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -18,7 +18,7 @@
       "xgH": 0.46,
       "xgA": 0.81,
       "xgTotal": 1.27,
-      "lastMom": 3,
+      "lastMom": -26,
       "overOdds": 1.82,
       "probLive": 55,
       "oddsStatus": "VALID",
@@ -61,21 +61,14 @@
       },
       "patterns": [
         {
-          "id": "shots",
-          "label": "10r 2ªP",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "30 remates/90min (2ªP) (muito alto)"
-        },
-        {
           "id": "late",
-          "label": "1 gol em 15min",
+          "label": "1 gol em 13min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 55% · 15min"
+          "detail": "Falta 1 golo · mercado 55% · 13min"
         }
       ],
-      "patternScore": 5
+      "patternScore": 1
     },
     {
       "id": 587700,
@@ -84,7 +77,7 @@
       "hScore": 2,
       "aScore": 2,
       "goals": 4,
-      "min": 72,
+      "min": 74,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -92,16 +85,16 @@
       "xgH": 2.12,
       "xgA": 0.39,
       "xgTotal": 2.5100000000000002,
-      "lastMom": 33,
+      "lastMom": 74,
       "overOdds": 1.61,
       "probLive": 62,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 18,
+        "h": 19,
         "a": 5
       },
       "sot": {
-        "h": 3,
+        "h": 4,
         "a": 3
       },
       "da": {
@@ -133,8 +126,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Casa domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum casa 74 — controlo total"
+        }
+      ],
+      "patternScore": 4
     },
     {
       "id": 587699,
@@ -143,7 +144,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 77,
+      "min": 79,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -199,16 +200,9 @@
           "emoji": "🎲",
           "level": "high",
           "detail": "xG 2.19 vs 0 golos"
-        },
-        {
-          "id": "shots",
-          "label": "14r 2ªP",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "39 remates/90min (2ªP) (muito alto)"
         }
       ],
-      "patternScore": 8
+      "patternScore": 4
     }
   ]
 }
