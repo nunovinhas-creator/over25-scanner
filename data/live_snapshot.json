@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T23:18:08Z",
+  "generated_at": "2026-08-18T23:23:20Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -11,23 +11,23 @@
       "aScore": 0,
       "goals": 0,
       "min": 45,
-      "status": "1st_half",
-      "period": "1T",
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 34,
-      "xgH": 1.13,
+      "xgH": 1.47,
       "xgA": 0.81,
-      "xgTotal": 1.94,
-      "lastMom": 22,
+      "xgTotal": 2.2800000000000002,
+      "lastMom": 64,
       "overOdds": 2.36,
       "probLive": 42,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 11,
+        "h": 12,
         "a": 7
       },
       "sot": {
-        "h": 1,
+        "h": 2,
         "a": 1
       },
       "da": {
@@ -61,35 +61,21 @@
       },
       "patterns": [
         {
-          "id": "conv",
-          "label": "CONVERGÊNCIA",
-          "emoji": "🔮",
-          "level": "conv",
-          "detail": "3 padrões em simultâneo — sinal forte"
-        },
-        {
           "id": "xg_delta",
-          "label": "xG +1.9 acima",
+          "label": "xG +2.3 acima",
           "emoji": "🎲",
           "level": "high",
-          "detail": "xG 1.94 vs 0 golos"
+          "detail": "xG 2.28 vs 0 golos"
         },
         {
-          "id": "xg_pace",
-          "label": "xG 3.9/90",
-          "emoji": "⚡",
-          "level": "high",
-          "detail": "xG a ritmo de 3.9 por 90min"
-        },
-        {
-          "id": "shots",
-          "label": "18 remates",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "36 remates/90min (muito alto)"
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 64"
         }
       ],
-      "patternScore": 12
+      "patternScore": 6
     },
     {
       "id": 223426,
@@ -98,25 +84,25 @@
       "hScore": 0,
       "aScore": 3,
       "goals": 3,
-      "min": 59,
+      "min": 64,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 33,
       "xgH": 0.58,
-      "xgA": 2.24,
-      "xgTotal": 2.8200000000000003,
-      "lastMom": -9,
+      "xgA": 2.77,
+      "xgTotal": 3.35,
+      "lastMom": -2,
       "overOdds": 1.83,
       "probLive": 55,
       "oddsStatus": "VALID",
       "shots": {
         "h": 6,
-        "a": 12
+        "a": 15
       },
       "sot": {
         "h": 3,
-        "a": 8
+        "a": 9
       },
       "da": {
         "h": null,
@@ -157,7 +143,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 58,
+      "min": 63,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -165,7 +151,7 @@
       "xgH": 0.38,
       "xgA": 0.19,
       "xgTotal": 0.5700000000000001,
-      "lastMom": 20,
+      "lastMom": 5,
       "overOdds": 2.6,
       "probLive": 38,
       "oddsStatus": "VALID",
@@ -191,7 +177,7 @@
       },
       "redCards": {
         "h": 0,
-        "a": 0
+        "a": 1
       },
       "isSavedPick": false,
       "coverage": {
@@ -206,8 +192,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "numerical",
+          "label": "Casa +1 homem",
+          "emoji": "🟥",
+          "level": "med",
+          "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
+        }
+      ],
+      "patternScore": 2
     }
   ]
 }
