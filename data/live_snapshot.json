@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T01:10:55Z",
+  "generated_at": "2026-08-18T01:16:05Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,20 +10,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 8,
+      "min": 14,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 19,
-      "xgH": null,
-      "xgA": 0.17,
-      "xgTotal": null,
-      "lastMom": -41,
+      "xgH": 0.02,
+      "xgA": 0.18,
+      "xgTotal": 0.19999999999999998,
+      "lastMom": 31,
       "overOdds": 1.84,
       "probLive": 54,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
+        "h": 1,
         "a": 4
       },
       "sot": {
@@ -49,23 +49,23 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 3,
         "total": 6
       },
       "patterns": [
         {
           "id": "shots",
-          "label": "4 remates",
+          "label": "5 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "45 remates/90min (muito alto)"
+          "detail": "32 remates/90min (muito alto)"
         }
       ],
       "patternScore": 4
@@ -77,20 +77,20 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 40,
+      "min": 46,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 85,
-      "xgH": 1.21,
+      "xgH": 1.2,
       "xgA": 0.31,
-      "xgTotal": 1.52,
-      "lastMom": 41,
+      "xgTotal": 1.51,
+      "lastMom": 4,
       "overOdds": 2.6,
       "probLive": 38,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 7,
+        "h": 8,
         "a": 2
       },
       "sot": {
@@ -126,16 +126,8 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "xg_pace",
-          "label": "xG 3.4/90",
-          "emoji": "⚡",
-          "level": "high",
-          "detail": "xG a ritmo de 3.4 por 90min"
-        }
-      ],
-      "patternScore": 4
+      "patterns": [],
+      "patternScore": 0
     }
   ]
 }
