@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T00:45:19Z",
+  "generated_at": "2026-08-18T00:50:26Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -7,28 +7,28 @@
       "id": 223573,
       "home": "Gimnasia y Esgrima Mendoza",
       "away": "CA Talleres",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 0,
-      "goals": 1,
-      "min": 14,
+      "goals": 2,
+      "min": 20,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 85,
-      "xgH": 0.82,
-      "xgA": 0.1,
-      "xgTotal": 0.9199999999999999,
-      "lastMom": -25,
+      "xgH": 0.83,
+      "xgA": 0.03,
+      "xgTotal": 0.86,
+      "lastMom": 15,
       "overOdds": 2.6,
       "probLive": 38,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 2,
-        "a": 2
+        "h": 3,
+        "a": 1
       },
       "sot": {
         "h": 1,
-        "a": 2
+        "a": 1
       },
       "da": {
         "h": null,
@@ -61,14 +61,14 @@
       },
       "patterns": [
         {
-          "id": "shots",
-          "label": "4 remates",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "26 remates/90min"
+          "id": "xg_pace",
+          "label": "xG 3.9/90",
+          "emoji": "⚡",
+          "level": "high",
+          "detail": "xG a ritmo de 3.9 por 90min"
         }
       ],
-      "patternScore": 2
+      "patternScore": 4
     }
   ]
 }
