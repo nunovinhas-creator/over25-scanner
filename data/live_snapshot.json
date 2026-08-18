@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T13:05:10Z",
+  "generated_at": "2026-08-18T13:10:18Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -8,27 +8,27 @@
       "home": "Shanghai Shenhua",
       "away": "Beijing Guoan",
       "hScore": 0,
-      "aScore": 1,
-      "goals": 1,
-      "min": 70,
+      "aScore": 2,
+      "goals": 2,
+      "min": 76,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 52,
-      "xgH": 1.49,
-      "xgA": 1.69,
-      "xgTotal": 3.1799999999999997,
-      "lastMom": -32,
+      "xgH": 1.59,
+      "xgA": 1.87,
+      "xgTotal": 3.46,
+      "lastMom": 17,
       "overOdds": 1.34,
       "probLive": 75,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 14,
-        "a": 12
+        "h": 16,
+        "a": 13
       },
       "sot": {
         "h": 7,
-        "a": 5
+        "a": 6
       },
       "da": {
         "h": null,
@@ -62,20 +62,20 @@
       "patterns": [
         {
           "id": "xg_delta",
-          "label": "xG +2.2 acima",
+          "label": "xG sobrevaloriza",
           "emoji": "🎲",
-          "level": "high",
-          "detail": "xG 3.18 vs 1 golos"
+          "level": "med",
+          "detail": "xG 3.46 vs 2 golos"
         },
         {
-          "id": "open",
-          "label": "JOGO ABERTO",
-          "emoji": "🎭",
+          "id": "late",
+          "label": "1 gol em 14min",
+          "emoji": "⏰",
           "level": "low",
-          "detail": "20min, equipa a perder ataca"
+          "detail": "Falta 1 golo · mercado 75% · 14min"
         }
       ],
-      "patternScore": 5
+      "patternScore": 3
     }
   ]
 }
