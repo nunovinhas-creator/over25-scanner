@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-19T19:56:54Z",
+  "generated_at": "2026-08-19T20:02:25Z",
   "status": "OK",
-  "count": 10,
+  "count": 9,
   "events": [
     {
       "id": 587704,
@@ -246,15 +246,15 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 47,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "La Liga",
       "league_id": 3,
       "xgH": 0.1,
       "xgA": 0.04,
       "xgTotal": 0.14,
-      "lastMom": 1,
+      "lastMom": 30,
       "overOdds": 1.65,
       "probLive": 61,
       "oddsStatus": "VALID",
@@ -302,10 +302,10 @@
       "id": 588020,
       "home": "Unión Deportiva Ourense",
       "away": "CD Barco",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 0,
-      "goals": 1,
-      "min": 65,
+      "goals": 2,
+      "min": 71,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -354,8 +354,16 @@
         "score": 0,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "late",
+          "label": "1 gol em 19min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 60% · 19min"
+        }
+      ],
+      "patternScore": 1
     },
     {
       "id": 588017,
@@ -364,7 +372,7 @@
       "hScore": 0,
       "aScore": 2,
       "goals": 2,
-      "min": 55,
+      "min": 60,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -417,72 +425,13 @@
       "patternScore": 0
     },
     {
-      "id": 588036,
-      "home": "SD Ponferradina",
-      "away": "Real Madrid Castilla U21",
-      "hScore": 2,
-      "aScore": 2,
-      "goals": 4,
-      "min": 89,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 79,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": 1.94,
-      "probLive": 52,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": null,
-        "a": null
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": false,
-          "sot": false,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 0,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
       "id": 588018,
       "home": "Torrent CF",
       "away": "UD Castellonense",
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 23,
+      "min": 28,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -541,7 +490,7 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 86,
+      "min": 92,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
