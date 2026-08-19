@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-19T22:40:58Z",
+  "generated_at": "2026-08-19T22:46:15Z",
   "status": "OK",
   "count": 7,
   "events": [
@@ -10,21 +10,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 1,
+      "min": 6,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 72,
       "xgH": null,
-      "xgA": null,
+      "xgA": 0.59,
       "xgTotal": null,
-      "lastMom": 16,
+      "lastMom": -46,
       "overOdds": 1.61,
       "probLive": 62,
       "oddsStatus": "VALID",
       "shots": {
         "h": 0,
-        "a": 0
+        "a": 3
       },
       "sot": {
         "h": 0,
@@ -69,24 +69,24 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 9,
+      "min": 14,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
-      "xgH": 0.16,
+      "xgH": 0.17,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 6,
+      "lastMom": 11,
       "overOdds": 2.13,
       "probLive": 47,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 2,
+        "h": 4,
         "a": 0
       },
       "sot": {
-        "h": 0,
+        "h": 1,
         "a": 0
       },
       "da": {
@@ -118,8 +118,16 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "4 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "26 remates/90min"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 10075,
@@ -128,20 +136,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 6,
+      "min": 11,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
-      "xgH": null,
+      "xgH": 0.02,
       "xgA": 0.15,
-      "xgTotal": null,
-      "lastMom": -43,
+      "xgTotal": 0.16999999999999998,
+      "lastMom": 39,
       "overOdds": 2.14,
       "probLive": 47,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
+        "h": 1,
         "a": 3
       },
       "sot": {
@@ -167,18 +175,26 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "4 remates",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "33 remates/90min (muito alto)"
+        }
+      ],
+      "patternScore": 4
     },
     {
       "id": 223327,
@@ -187,21 +203,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 39,
+      "min": 45,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 33,
-      "xgH": 0.44,
-      "xgA": 0.13,
-      "xgTotal": 0.5700000000000001,
-      "lastMom": -11,
+      "xgH": 0.48,
+      "xgA": 0.18,
+      "xgTotal": 0.6599999999999999,
+      "lastMom": 57,
       "overOdds": 2.21,
       "probLive": 45,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 4,
-        "a": 6
+        "h": 5,
+        "a": 7
       },
       "sot": {
         "h": 1,
@@ -239,13 +255,20 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "10 remates",
+          "label": "12 remates",
           "emoji": "🎯",
           "level": "med",
-          "detail": "23 remates/90min"
+          "detail": "24 remates/90min"
+        },
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 57"
         }
       ],
-      "patternScore": 2
+      "patternScore": 4
     },
     {
       "id": 207970,
@@ -254,21 +277,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 39,
+      "min": 45,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 32,
-      "xgH": 0.67,
-      "xgA": 0.07,
-      "xgTotal": 0.74,
-      "lastMom": 4,
+      "xgH": 0.66,
+      "xgA": 0.11,
+      "xgTotal": 0.77,
+      "lastMom": -44,
       "overOdds": 2.97,
       "probLive": 34,
       "oddsStatus": "VALID",
       "shots": {
         "h": 7,
-        "a": 2
+        "a": 3
       },
       "sot": {
         "h": 2,
@@ -311,81 +334,22 @@
       "home": "Cerro Porteño",
       "away": "Palmeiras",
       "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 39,
+      "aScore": 1,
+      "goals": 1,
+      "min": 45,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 32,
       "xgH": 0.43,
-      "xgA": 0.03,
-      "xgTotal": 0.45999999999999996,
-      "lastMom": -15,
+      "xgA": 0.31,
+      "xgTotal": 0.74,
+      "lastMom": -45,
       "overOdds": 2.43,
       "probLive": 41,
       "oddsStatus": "VALID",
       "shots": {
         "h": 6,
-        "a": 2
-      },
-      "sot": {
-        "h": 1,
-        "a": 0
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 587946,
-      "home": "Rionegro Águilas Doradas",
-      "away": "Llaneros FC",
-      "hScore": 0,
-      "aScore": 1,
-      "goals": 1,
-      "min": 76,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 80,
-      "xgH": 1.45,
-      "xgA": 0.41,
-      "xgTotal": 1.8599999999999999,
-      "lastMom": 3,
-      "overOdds": 2.37,
-      "probLive": 42,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 9,
         "a": 4
       },
       "sot": {
@@ -421,8 +385,104 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 45"
+        }
+      ],
+      "patternScore": 2
+    },
+    {
+      "id": 587946,
+      "home": "Rionegro Águilas Doradas",
+      "away": "Llaneros FC",
+      "hScore": 1,
+      "aScore": 1,
+      "goals": 2,
+      "min": 81,
+      "status": "2nd_half",
+      "period": "2T",
+      "league": "",
+      "league_id": 80,
+      "xgH": 2.29,
+      "xgA": 0.41,
+      "xgTotal": 2.7,
+      "lastMom": 98,
+      "overOdds": 2.37,
+      "probLive": 42,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 11,
+        "a": 4
+      },
+      "sot": {
+        "h": 2,
+        "a": 2
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "3 padrões em simultâneo — sinal forte"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 3.3/90 (2ªP)",
+          "emoji": "⚡",
+          "level": "high",
+          "detail": "xG a ritmo de 3.3 por 90min (2ªP)"
+        },
+        {
+          "id": "mom",
+          "label": "Casa domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum casa 98 — controlo total"
+        },
+        {
+          "id": "late",
+          "label": "1 gol em 9min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 42% · 9min"
+        }
+      ],
+      "patternScore": 9
     }
   ]
 }
