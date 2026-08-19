@@ -1,34 +1,34 @@
 {
-  "generated_at": "2026-08-19T02:21:58Z",
+  "generated_at": "2026-08-19T02:27:16Z",
   "status": "OK",
-  "count": 5,
+  "count": 4,
   "events": [
     {
       "id": 10079,
       "home": "Goiás",
       "away": "Juventude",
       "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 86,
+      "aScore": 1,
+      "goals": 1,
+      "min": 92,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 34,
       "xgH": 0.5,
-      "xgA": 0.27,
-      "xgTotal": 0.77,
-      "lastMom": -19,
+      "xgA": 0.86,
+      "xgTotal": 1.3599999999999999,
+      "lastMom": 6,
       "overOdds": 2.62,
       "probLive": 38,
       "oddsStatus": "VALID",
       "shots": {
         "h": 15,
-        "a": 5
+        "a": 7
       },
       "sot": {
         "h": 4,
-        "a": 1
+        "a": 2
       },
       "da": {
         "h": null,
@@ -69,24 +69,24 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 89,
+      "min": 94,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 32,
-      "xgH": 1.07,
+      "xgH": 1.06,
       "xgA": 0.88,
-      "xgTotal": 1.9500000000000002,
-      "lastMom": 68,
+      "xgTotal": 1.94,
+      "lastMom": 53,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 16,
+        "h": 18,
         "a": 10
       },
       "sot": {
-        "h": 4,
+        "h": 5,
         "a": 2
       },
       "da": {
@@ -124,7 +124,7 @@
           "label": "Casa pressiona",
           "emoji": "💪",
           "level": "med",
-          "detail": "Momentum casa 68"
+          "detail": "Momentum casa 53"
         }
       ],
       "patternScore": 2
@@ -136,84 +136,25 @@
       "hScore": 3,
       "aScore": 1,
       "goals": 4,
-      "min": 91,
+      "min": 96,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 33,
-      "xgH": 1.73,
+      "xgH": 1.77,
       "xgA": 0.13,
-      "xgTotal": 1.8599999999999999,
-      "lastMom": -10,
+      "xgTotal": 1.9,
+      "lastMom": 2,
       "overOdds": 1.76,
       "probLive": 57,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 11,
+        "h": 12,
         "a": 5
       },
       "sot": {
         "h": 4,
         "a": 2
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 207969,
-      "home": "Universidad Católica",
-      "away": "Estudiantes de La Plata",
-      "hScore": 0,
-      "aScore": 3,
-      "goals": 3,
-      "min": 92,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 32,
-      "xgH": 0.48,
-      "xgA": 1.26,
-      "xgTotal": 1.74,
-      "lastMom": 1,
-      "overOdds": 2.64,
-      "probLive": 38,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 11,
-        "a": 11
-      },
-      "sot": {
-        "h": 1,
-        "a": 7
       },
       "da": {
         "h": null,
@@ -254,20 +195,20 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 81,
+      "min": 87,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 34,
-      "xgH": 2.81,
+      "xgH": 2.79,
       "xgA": 1.45,
-      "xgTotal": 4.26,
-      "lastMom": 49,
+      "xgTotal": 4.24,
+      "lastMom": 18,
       "overOdds": 2.22,
       "probLive": 45,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 28,
+        "h": 29,
         "a": 12
       },
       "sot": {
@@ -306,41 +247,27 @@
       "patterns": [
         {
           "id": "xg_delta",
-          "label": "xG +3.3 acima",
+          "label": "xG +3.2 acima",
           "emoji": "🎲",
           "level": "critical",
-          "detail": "xG 4.26 vs 1 golos — golo(s) em dívida"
-        },
-        {
-          "id": "xg_pace",
-          "label": "xG 2.7/90 (2ªP)",
-          "emoji": "⚡",
-          "level": "med",
-          "detail": "xG a ritmo de 2.7 por 90min (2ªP)"
+          "detail": "xG 4.24 vs 1 golos — golo(s) em dívida"
         },
         {
           "id": "shots",
-          "label": "11r 2ªP",
+          "label": "12r 2ªP",
           "emoji": "🎯",
           "level": "med",
-          "detail": "28 remates/90min (2ªP)"
+          "detail": "26 remates/90min (2ªP)"
         },
         {
           "id": "open",
           "label": "JOGO ABERTO",
           "emoji": "🎭",
           "level": "low",
-          "detail": "9min, equipa a perder ataca"
-        },
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 49"
+          "detail": "3min, equipa a perder ataca"
         }
       ],
-      "patternScore": 17
+      "patternScore": 13
     }
   ]
 }
