@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-19T20:39:39Z",
+  "generated_at": "2026-08-19T20:42:09Z",
   "status": "OK",
   "count": 6,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 80,
+      "min": 84,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -18,7 +18,7 @@
       "xgH": 1.41,
       "xgA": 0.28,
       "xgTotal": 1.69,
-      "lastMom": 38,
+      "lastMom": -14,
       "overOdds": 1.77,
       "probLive": 56,
       "oddsStatus": "VALID",
@@ -62,10 +62,10 @@
       "patterns": [
         {
           "id": "late",
-          "label": "1 gol em 10min",
+          "label": "1 gol em 6min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 56% · 10min"
+          "detail": "Falta 1 golo · mercado 56% · 6min"
         }
       ],
       "patternScore": 1
@@ -77,20 +77,20 @@
       "hScore": 0,
       "aScore": 3,
       "goals": 3,
-      "min": 77,
+      "min": 81,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 7,
-      "xgH": 0.95,
+      "xgH": 1.07,
       "xgA": 1.61,
-      "xgTotal": 2.56,
-      "lastMom": 85,
+      "xgTotal": 2.68,
+      "lastMom": 52,
       "overOdds": 1.4,
       "probLive": 71,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 14,
+        "h": 16,
         "a": 8
       },
       "sot": {
@@ -129,13 +129,13 @@
       "patterns": [
         {
           "id": "mom",
-          "label": "Casa domina",
-          "emoji": "💥",
-          "level": "high",
-          "detail": "Momentum casa 85 — controlo total"
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 52"
         }
       ],
-      "patternScore": 4
+      "patternScore": 2
     },
     {
       "id": 587702,
@@ -144,7 +144,7 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 80,
+      "min": 83,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -152,7 +152,7 @@
       "xgH": 1.51,
       "xgA": 0.47,
       "xgTotal": 1.98,
-      "lastMom": 15,
+      "lastMom": 32,
       "overOdds": 1.81,
       "probLive": 55,
       "oddsStatus": "VALID",
@@ -203,21 +203,21 @@
       "hScore": 3,
       "aScore": 0,
       "goals": 3,
-      "min": 80,
+      "min": 83,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 7,
       "xgH": 0.91,
-      "xgA": 1.06,
-      "xgTotal": 1.9700000000000002,
-      "lastMom": -66,
+      "xgA": 1.13,
+      "xgTotal": 2.04,
+      "lastMom": -33,
       "overOdds": 1.63,
       "probLive": 61,
       "oddsStatus": "VALID",
       "shots": {
         "h": 14,
-        "a": 16
+        "a": 17
       },
       "sot": {
         "h": 6,
@@ -252,42 +252,34 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum fora 66"
-        }
-      ],
-      "patternScore": 2
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 213520,
       "home": "Atlético Madrid",
       "away": "Málaga CF",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 0,
-      "goals": 0,
-      "min": 68,
+      "goals": 1,
+      "min": 71,
       "status": "2nd_half",
       "period": "2T",
       "league": "La Liga",
       "league_id": 3,
-      "xgH": 0.31,
+      "xgH": 0.39,
       "xgA": 0.12,
-      "xgTotal": 0.43,
-      "lastMom": 13,
+      "xgTotal": 0.51,
+      "lastMom": 22,
       "overOdds": 1.65,
       "probLive": 61,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 10,
+        "h": 11,
         "a": 3
       },
       "sot": {
-        "h": 3,
+        "h": 4,
         "a": 0
       },
       "da": {
@@ -321,14 +313,14 @@
       },
       "patterns": [
         {
-          "id": "shots",
-          "label": "7r 2ªP",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "27 remates/90min (2ªP)"
+          "id": "open",
+          "label": "JOGO ABERTO",
+          "emoji": "🎭",
+          "level": "low",
+          "detail": "19min, equipa a perder ataca"
         }
       ],
-      "patternScore": 2
+      "patternScore": 1
     },
     {
       "id": 588018,
@@ -337,7 +329,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 51,
+      "min": 55,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
