@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-19T11:42:58Z",
+  "generated_at": "2026-08-19T11:48:50Z",
   "status": "OK",
   "count": 17,
   "events": [
@@ -10,21 +10,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 7,
+      "min": 13,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 52,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": 4,
+      "xgH": 0.05,
+      "xgA": 0.07,
+      "xgTotal": 0.12000000000000001,
+      "lastMom": -20,
       "overOdds": 1.39,
       "probLive": 72,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
-        "a": 0
+        "h": 1,
+        "a": 1
       },
       "sot": {
         "h": 0,
@@ -49,14 +49,14 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 3,
         "total": 6
       },
       "patterns": [],
@@ -69,7 +69,7 @@
       "hScore": 1,
       "aScore": 4,
       "goals": 5,
-      "min": 81,
+      "min": 87,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -125,10 +125,10 @@
       "id": 587649,
       "home": "Senshu University",
       "away": "Tsukuba University",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 1,
-      "goals": 1,
-      "min": 81,
+      "goals": 2,
+      "min": 87,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -185,9 +185,9 @@
       "home": "Tohoku Gakuin University",
       "away": "Thespa Gunma",
       "hScore": 1,
-      "aScore": 2,
-      "goals": 3,
-      "min": 82,
+      "aScore": 3,
+      "goals": 4,
+      "min": 87,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -205,7 +205,7 @@
       },
       "sot": {
         "h": 2,
-        "a": 5
+        "a": 6
       },
       "da": {
         "h": null,
@@ -246,7 +246,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 83,
+      "min": 88,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -263,7 +263,7 @@
         "a": null
       },
       "sot": {
-        "h": 3,
+        "h": 4,
         "a": 3
       },
       "da": {
@@ -305,7 +305,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 83,
+      "min": 89,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -357,10 +357,10 @@
       "patterns": [
         {
           "id": "late",
-          "label": "1 gol em 7min",
+          "label": "1 gol em 1min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 63% · 7min"
+          "detail": "Falta 1 golo · mercado 63% · 1min"
         }
       ],
       "patternScore": 1
@@ -369,10 +369,10 @@
       "id": 587645,
       "home": "AC Nagano Parceiro",
       "away": "Fukui United FC",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 1,
-      "goals": 2,
-      "min": 85,
+      "goals": 3,
+      "min": 91,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -389,7 +389,7 @@
         "a": null
       },
       "sot": {
-        "h": 6,
+        "h": 9,
         "a": 6
       },
       "da": {
@@ -421,16 +421,8 @@
         "score": 1,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "late",
-          "label": "1 gol em 5min",
-          "emoji": "⏰",
-          "level": "low",
-          "detail": "Falta 1 golo · mercado 62% · 5min"
-        }
-      ],
-      "patternScore": 1
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 587644,
@@ -439,7 +431,7 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 83,
+      "min": 89,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -491,10 +483,10 @@
       "patterns": [
         {
           "id": "late",
-          "label": "1 gol em 7min",
+          "label": "1 gol em 1min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 45% · 7min"
+          "detail": "Falta 1 golo · mercado 45% · 1min"
         }
       ],
       "patternScore": 1
@@ -506,7 +498,7 @@
       "hScore": 7,
       "aScore": 0,
       "goals": 7,
-      "min": 86,
+      "min": 92,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -565,7 +557,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 81,
+      "min": 88,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -582,8 +574,8 @@
         "a": null
       },
       "sot": {
-        "h": 1,
-        "a": 3
+        "h": 2,
+        "a": 4
       },
       "da": {
         "h": null,
@@ -617,10 +609,10 @@
       "patterns": [
         {
           "id": "late",
-          "label": "1 gol em 9min",
+          "label": "1 gol em 2min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 51% · 9min"
+          "detail": "Falta 1 golo · mercado 51% · 2min"
         },
         {
           "id": "numerical",
@@ -639,7 +631,7 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 82,
+      "min": 88,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -696,9 +688,9 @@
       "home": "Gainare Tottori",
       "away": "Roasso Kumamoto",
       "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 83,
+      "aScore": 1,
+      "goals": 2,
+      "min": 89,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -716,7 +708,7 @@
       },
       "sot": {
         "h": 1,
-        "a": 2
+        "a": 4
       },
       "da": {
         "h": null,
@@ -747,8 +739,16 @@
         "score": 1,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "late",
+          "label": "1 gol em 1min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 47% · 1min"
+        }
+      ],
+      "patternScore": 1
     },
     {
       "id": 587639,
@@ -757,7 +757,7 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 79,
+      "min": 85,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -809,10 +809,10 @@
       "patterns": [
         {
           "id": "late",
-          "label": "1 gol em 11min",
+          "label": "1 gol em 5min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 51% · 11min"
+          "detail": "Falta 1 golo · mercado 51% · 5min"
         }
       ],
       "patternScore": 1
@@ -824,7 +824,7 @@
       "hScore": 1,
       "aScore": 4,
       "goals": 5,
-      "min": 80,
+      "min": 86,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -883,7 +883,7 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 84,
+      "min": 90,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -935,10 +935,10 @@
       "patterns": [
         {
           "id": "late",
-          "label": "1 gol em 6min",
+          "label": "1 gol em 0min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 47% · 6min"
+          "detail": "Falta 1 golo · mercado 47% · 0min"
         }
       ],
       "patternScore": 1
@@ -950,7 +950,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 85,
+      "min": 90,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -1009,7 +1009,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 84,
+      "min": 90,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
