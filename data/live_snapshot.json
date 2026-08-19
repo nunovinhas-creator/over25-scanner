@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-19T13:27:12Z",
+  "generated_at": "2026-08-19T13:32:22Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -10,24 +10,24 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 90,
+      "min": 96,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 52,
-      "xgH": 2.83,
+      "xgH": 3.01,
       "xgA": 1.06,
-      "xgTotal": 3.89,
-      "lastMom": 51,
+      "xgTotal": 4.07,
+      "lastMom": 35,
       "overOdds": 1.39,
       "probLive": 72,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 14,
+        "h": 15,
         "a": 6
       },
       "sot": {
-        "h": 3,
+        "h": 4,
         "a": 2
       },
       "da": {
@@ -61,18 +61,25 @@
       },
       "patterns": [
         {
-          "id": "xg_delta",
-          "label": "xG +1.9 acima",
-          "emoji": "🎲",
-          "level": "high",
-          "detail": "xG 3.89 vs 2 golos"
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "4 padrões em simultâneo — sinal forte"
         },
         {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 51"
+          "id": "xg_delta",
+          "label": "xG +2.1 acima",
+          "emoji": "🎲",
+          "level": "high",
+          "detail": "xG 4.07 vs 2 golos"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 3.8/90",
+          "emoji": "⚡",
+          "level": "high",
+          "detail": "xG a ritmo de 3.8 por 90min"
         },
         {
           "id": "late",
@@ -89,7 +96,7 @@
           "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
         }
       ],
-      "patternScore": 9
+      "patternScore": 11
     }
   ]
 }
