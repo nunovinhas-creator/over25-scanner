@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-19T01:24:28Z",
+  "generated_at": "2026-08-19T01:29:46Z",
   "status": "OK",
   "count": 5,
   "events": [
@@ -10,9 +10,9 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 47,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 34,
       "xgH": 0.22,
@@ -204,7 +204,7 @@
       "xgA": 0.27,
       "xgTotal": 0.45,
       "lastMom": -9,
-      "overOdds": 2.63,
+      "overOdds": 2.64,
       "probLive": 38,
       "oddsStatus": "VALID",
       "shots": {
@@ -251,27 +251,27 @@
       "id": 10082,
       "home": "Náutico",
       "away": "Ceará",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 0,
-      "goals": 0,
-      "min": 52,
-      "status": "1st_half",
-      "period": "1T",
+      "goals": 1,
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 34,
-      "xgH": 2.48,
+      "xgH": 2.54,
       "xgA": 0.63,
-      "xgTotal": 3.11,
-      "lastMom": -2,
+      "xgTotal": 3.17,
+      "lastMom": 12,
       "overOdds": 2.22,
       "probLive": 45,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 22,
+        "h": 23,
         "a": 6
       },
       "sot": {
-        "h": 11,
+        "h": 12,
         "a": 2
       },
       "da": {
@@ -306,13 +306,13 @@
       "patterns": [
         {
           "id": "xg_delta",
-          "label": "xG +3.1 acima",
+          "label": "xG +2.2 acima",
           "emoji": "🎲",
-          "level": "critical",
-          "detail": "xG 3.11 vs 0 golos — golo(s) em dívida"
+          "level": "high",
+          "detail": "xG 3.17 vs 1 golos"
         }
       ],
-      "patternScore": 10
+      "patternScore": 4
     }
   ]
 }
