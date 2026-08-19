@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-19T02:11:16Z",
+  "generated_at": "2026-08-19T02:16:38Z",
   "status": "OK",
   "count": 5,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 76,
+      "min": 81,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -18,7 +18,7 @@
       "xgH": 0.47,
       "xgA": 0.27,
       "xgTotal": 0.74,
-      "lastMom": 8,
+      "lastMom": -20,
       "overOdds": 2.62,
       "probLive": 38,
       "oddsStatus": "VALID",
@@ -69,21 +69,21 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 78,
+      "min": 84,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 32,
-      "xgH": 0.96,
-      "xgA": 0.86,
-      "xgTotal": 1.8199999999999998,
-      "lastMom": 12,
+      "xgH": 0.98,
+      "xgA": 0.88,
+      "xgTotal": 1.8599999999999999,
+      "lastMom": -20,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
         "h": 14,
-        "a": 9
+        "a": 11
       },
       "sot": {
         "h": 3,
@@ -118,8 +118,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "open",
+          "label": "JOGO ABERTO",
+          "emoji": "🎭",
+          "level": "low",
+          "detail": "6min, equipa a perder ataca"
+        }
+      ],
+      "patternScore": 1
     },
     {
       "id": 223427,
@@ -128,7 +136,7 @@
       "hScore": 3,
       "aScore": 1,
       "goals": 4,
-      "min": 80,
+      "min": 86,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -136,7 +144,7 @@
       "xgH": 1.73,
       "xgA": 0.13,
       "xgTotal": 1.8599999999999999,
-      "lastMom": 13,
+      "lastMom": -4,
       "overOdds": 1.76,
       "probLive": 57,
       "oddsStatus": "VALID",
@@ -185,27 +193,27 @@
       "home": "Universidad Católica",
       "away": "Estudiantes de La Plata",
       "hScore": 0,
-      "aScore": 2,
-      "goals": 2,
-      "min": 81,
+      "aScore": 3,
+      "goals": 3,
+      "min": 87,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 32,
-      "xgH": 0.36,
-      "xgA": 0.67,
-      "xgTotal": 1.03,
-      "lastMom": -12,
+      "xgH": 0.39,
+      "xgA": 1.26,
+      "xgTotal": 1.65,
+      "lastMom": -60,
       "overOdds": 2.64,
       "probLive": 38,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 9,
-        "a": 9
+        "h": 10,
+        "a": 11
       },
       "sot": {
         "h": 1,
-        "a": 6
+        "a": 7
       },
       "da": {
         "h": null,
@@ -238,14 +246,14 @@
       },
       "patterns": [
         {
-          "id": "late",
-          "label": "1 gol em 9min",
-          "emoji": "⏰",
-          "level": "low",
-          "detail": "Falta 1 golo · mercado 38% · 9min"
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 60"
         }
       ],
-      "patternScore": 1
+      "patternScore": 2
     },
     {
       "id": 10082,
@@ -254,21 +262,21 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 70,
+      "min": 76,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 34,
-      "xgH": 2.72,
-      "xgA": 1.33,
-      "xgTotal": 4.050000000000001,
-      "lastMom": -21,
+      "xgH": 2.75,
+      "xgA": 1.37,
+      "xgTotal": 4.12,
+      "lastMom": -24,
       "overOdds": 2.22,
       "probLive": 45,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 26,
-        "a": 10
+        "h": 27,
+        "a": 11
       },
       "sot": {
         "h": 13,
@@ -305,35 +313,28 @@
       },
       "patterns": [
         {
-          "id": "conv",
-          "label": "CONVERGÊNCIA",
-          "emoji": "🔮",
-          "level": "conv",
-          "detail": "3 padrões em simultâneo — sinal forte"
-        },
-        {
           "id": "xg_delta",
           "label": "xG +3.1 acima",
           "emoji": "🎲",
           "level": "critical",
-          "detail": "xG 4.05 vs 1 golos — golo(s) em dívida"
+          "detail": "xG 4.12 vs 1 golos — golo(s) em dívida"
         },
         {
           "id": "xg_pace",
-          "label": "xG 3.1/90 (2ªP)",
+          "label": "xG 2.7/90 (2ªP)",
           "emoji": "⚡",
-          "level": "high",
-          "detail": "xG a ritmo de 3.1 por 90min (2ªP)"
+          "level": "med",
+          "detail": "xG a ritmo de 2.7 por 90min (2ªP)"
         },
         {
           "id": "shots",
-          "label": "7r 2ªP",
+          "label": "9r 2ªP",
           "emoji": "🎯",
           "level": "med",
-          "detail": "25 remates/90min (2ªP)"
+          "detail": "26 remates/90min (2ªP)"
         }
       ],
-      "patternScore": 16
+      "patternScore": 14
     }
   ]
 }
