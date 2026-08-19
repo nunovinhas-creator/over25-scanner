@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-19T22:46:15Z",
+  "generated_at": "2026-08-19T22:51:34Z",
   "status": "OK",
   "count": 7,
   "events": [
@@ -10,83 +10,24 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 6,
+      "min": 12,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 72,
       "xgH": null,
-      "xgA": 0.59,
+      "xgA": 0.67,
       "xgTotal": null,
-      "lastMom": -46,
+      "lastMom": -11,
       "overOdds": 1.61,
       "probLive": 62,
       "oddsStatus": "VALID",
       "shots": {
         "h": 0,
-        "a": 3
+        "a": 4
       },
       "sot": {
         "h": 0,
-        "a": 0
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 2,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 10078,
-      "home": "Fortaleza",
-      "away": "São Bernardo",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 14,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 34,
-      "xgH": 0.17,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": 11,
-      "overOdds": 2.13,
-      "probLive": 47,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 4,
-        "a": 0
-      },
-      "sot": {
-        "h": 1,
         "a": 0
       },
       "da": {
@@ -123,11 +64,78 @@
           "id": "shots",
           "label": "4 remates",
           "emoji": "🎯",
-          "level": "med",
-          "detail": "26 remates/90min"
+          "level": "high",
+          "detail": "30 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 2
+      "patternScore": 4
+    },
+    {
+      "id": 10078,
+      "home": "Fortaleza",
+      "away": "São Bernardo",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 20,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 34,
+      "xgH": 0.2,
+      "xgA": 0.02,
+      "xgTotal": 0.22,
+      "lastMom": -37,
+      "overOdds": 2.13,
+      "probLive": 47,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 5,
+        "a": 2
+      },
+      "sot": {
+        "h": 1,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "7 remates",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "31 remates/90min (muito alto)"
+        }
+      ],
+      "patternScore": 4
     },
     {
       "id": 10075,
@@ -136,20 +144,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 11,
+      "min": 17,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
-      "xgH": 0.02,
+      "xgH": 0.05,
       "xgA": 0.15,
-      "xgTotal": 0.16999999999999998,
-      "lastMom": 39,
+      "xgTotal": 0.2,
+      "lastMom": 56,
       "overOdds": 2.14,
       "probLive": 47,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 1,
+        "h": 2,
         "a": 3
       },
       "sot": {
@@ -188,10 +196,17 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "4 remates",
+          "label": "5 remates",
           "emoji": "🎯",
-          "level": "high",
-          "detail": "33 remates/90min (muito alto)"
+          "level": "med",
+          "detail": "26 remates/90min"
+        },
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 56"
         }
       ],
       "patternScore": 4
@@ -203,15 +218,15 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 45,
+      "min": 50,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 33,
-      "xgH": 0.48,
+      "xgH": 0.46,
       "xgA": 0.18,
-      "xgTotal": 0.6599999999999999,
-      "lastMom": 57,
+      "xgTotal": 0.64,
+      "lastMom": -8,
       "overOdds": 2.21,
       "probLive": 45,
       "oddsStatus": "VALID",
@@ -252,23 +267,8 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "shots",
-          "label": "12 remates",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "24 remates/90min"
-        },
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 57"
-        }
-      ],
-      "patternScore": 4
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 207970,
@@ -278,24 +278,24 @@
       "aScore": 0,
       "goals": 0,
       "min": 45,
-      "status": "1st_half",
-      "period": "1T",
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 32,
-      "xgH": 0.66,
-      "xgA": 0.11,
-      "xgTotal": 0.77,
-      "lastMom": -44,
+      "xgH": 0.69,
+      "xgA": 0.14,
+      "xgTotal": 0.83,
+      "lastMom": -33,
       "overOdds": 2.97,
       "probLive": 34,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 7,
-        "a": 3
+        "h": 8,
+        "a": 4
       },
       "sot": {
         "h": 2,
-        "a": 0
+        "a": 1
       },
       "da": {
         "h": null,
@@ -337,20 +337,20 @@
       "aScore": 1,
       "goals": 1,
       "min": 45,
-      "status": "1st_half",
-      "period": "1T",
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 32,
       "xgH": 0.43,
-      "xgA": 0.31,
-      "xgTotal": 0.74,
-      "lastMom": -45,
+      "xgA": 0.32,
+      "xgTotal": 0.75,
+      "lastMom": -48,
       "overOdds": 2.43,
       "probLive": 41,
       "oddsStatus": "VALID",
       "shots": {
         "h": 6,
-        "a": 4
+        "a": 5
       },
       "sot": {
         "h": 1,
@@ -391,7 +391,7 @@
           "label": "Fora pressiona",
           "emoji": "💪",
           "level": "med",
-          "detail": "Momentum fora 45"
+          "detail": "Momentum fora 48"
         }
       ],
       "patternScore": 2
@@ -403,20 +403,20 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 81,
+      "min": 87,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 80,
-      "xgH": 2.29,
+      "xgH": 2.4,
       "xgA": 0.41,
-      "xgTotal": 2.7,
-      "lastMom": 98,
+      "xgTotal": 2.81,
+      "lastMom": 18,
       "overOdds": 2.37,
       "probLive": 42,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 11,
+        "h": 12,
         "a": 4
       },
       "sot": {
@@ -454,35 +454,21 @@
       },
       "patterns": [
         {
-          "id": "conv",
-          "label": "CONVERGÊNCIA",
-          "emoji": "🔮",
-          "level": "conv",
-          "detail": "3 padrões em simultâneo — sinal forte"
-        },
-        {
           "id": "xg_pace",
-          "label": "xG 3.3/90 (2ªP)",
+          "label": "xG 3.1/90 (2ªP)",
           "emoji": "⚡",
           "level": "high",
-          "detail": "xG a ritmo de 3.3 por 90min (2ªP)"
-        },
-        {
-          "id": "mom",
-          "label": "Casa domina",
-          "emoji": "💥",
-          "level": "high",
-          "detail": "Momentum casa 98 — controlo total"
+          "detail": "xG a ritmo de 3.1 por 90min (2ªP)"
         },
         {
           "id": "late",
-          "label": "1 gol em 9min",
+          "label": "1 gol em 3min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 42% · 9min"
+          "detail": "Falta 1 golo · mercado 42% · 3min"
         }
       ],
-      "patternScore": 9
+      "patternScore": 5
     }
   ]
 }
