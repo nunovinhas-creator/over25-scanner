@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-19T02:16:38Z",
+  "generated_at": "2026-08-19T02:21:58Z",
   "status": "OK",
   "count": 5,
   "events": [
@@ -10,20 +10,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 81,
+      "min": 86,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 34,
-      "xgH": 0.47,
+      "xgH": 0.5,
       "xgA": 0.27,
-      "xgTotal": 0.74,
-      "lastMom": -20,
+      "xgTotal": 0.77,
+      "lastMom": -19,
       "overOdds": 2.62,
       "probLive": 38,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 14,
+        "h": 15,
         "a": 5
       },
       "sot": {
@@ -69,24 +69,24 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 84,
+      "min": 89,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 32,
-      "xgH": 0.98,
+      "xgH": 1.07,
       "xgA": 0.88,
-      "xgTotal": 1.8599999999999999,
-      "lastMom": -20,
+      "xgTotal": 1.9500000000000002,
+      "lastMom": 68,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 14,
-        "a": 11
+        "h": 16,
+        "a": 10
       },
       "sot": {
-        "h": 3,
+        "h": 4,
         "a": 2
       },
       "da": {
@@ -120,14 +120,14 @@
       },
       "patterns": [
         {
-          "id": "open",
-          "label": "JOGO ABERTO",
-          "emoji": "🎭",
-          "level": "low",
-          "detail": "6min, equipa a perder ataca"
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 68"
         }
       ],
-      "patternScore": 1
+      "patternScore": 2
     },
     {
       "id": 223427,
@@ -136,7 +136,7 @@
       "hScore": 3,
       "aScore": 1,
       "goals": 4,
-      "min": 86,
+      "min": 91,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -144,7 +144,7 @@
       "xgH": 1.73,
       "xgA": 0.13,
       "xgTotal": 1.8599999999999999,
-      "lastMom": -4,
+      "lastMom": -10,
       "overOdds": 1.76,
       "probLive": 57,
       "oddsStatus": "VALID",
@@ -195,20 +195,20 @@
       "hScore": 0,
       "aScore": 3,
       "goals": 3,
-      "min": 87,
+      "min": 92,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 32,
-      "xgH": 0.39,
+      "xgH": 0.48,
       "xgA": 1.26,
-      "xgTotal": 1.65,
-      "lastMom": -60,
+      "xgTotal": 1.74,
+      "lastMom": 1,
       "overOdds": 2.64,
       "probLive": 38,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 10,
+        "h": 11,
         "a": 11
       },
       "sot": {
@@ -244,16 +244,8 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum fora 60"
-        }
-      ],
-      "patternScore": 2
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 10082,
@@ -262,24 +254,24 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 76,
+      "min": 81,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 34,
-      "xgH": 2.75,
-      "xgA": 1.37,
-      "xgTotal": 4.12,
-      "lastMom": -24,
+      "xgH": 2.81,
+      "xgA": 1.45,
+      "xgTotal": 4.26,
+      "lastMom": 49,
       "overOdds": 2.22,
       "probLive": 45,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 27,
-        "a": 11
+        "h": 28,
+        "a": 12
       },
       "sot": {
-        "h": 13,
+        "h": 14,
         "a": 3
       },
       "da": {
@@ -314,10 +306,10 @@
       "patterns": [
         {
           "id": "xg_delta",
-          "label": "xG +3.1 acima",
+          "label": "xG +3.3 acima",
           "emoji": "🎲",
           "level": "critical",
-          "detail": "xG 4.12 vs 1 golos — golo(s) em dívida"
+          "detail": "xG 4.26 vs 1 golos — golo(s) em dívida"
         },
         {
           "id": "xg_pace",
@@ -328,13 +320,27 @@
         },
         {
           "id": "shots",
-          "label": "9r 2ªP",
+          "label": "11r 2ªP",
           "emoji": "🎯",
           "level": "med",
-          "detail": "26 remates/90min (2ªP)"
+          "detail": "28 remates/90min (2ªP)"
+        },
+        {
+          "id": "open",
+          "label": "JOGO ABERTO",
+          "emoji": "🎭",
+          "level": "low",
+          "detail": "9min, equipa a perder ataca"
+        },
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 49"
         }
       ],
-      "patternScore": 14
+      "patternScore": 17
     }
   ]
 }
