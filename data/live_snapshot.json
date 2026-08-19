@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-19T01:49:59Z",
+  "generated_at": "2026-08-19T01:55:13Z",
   "status": "OK",
   "count": 5,
   "events": [
@@ -10,21 +10,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 54,
+      "min": 60,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 34,
       "xgH": 0.3,
-      "xgA": 0.09,
-      "xgTotal": 0.39,
-      "lastMom": 40,
+      "xgA": 0.23,
+      "xgTotal": 0.53,
+      "lastMom": 2,
       "overOdds": 2.62,
       "probLive": 38,
       "oddsStatus": "VALID",
       "shots": {
         "h": 10,
-        "a": 2
+        "a": 3
       },
       "sot": {
         "h": 2,
@@ -69,24 +69,24 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 57,
+      "min": 62,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 32,
-      "xgH": 0.44,
-      "xgA": 0.46,
-      "xgTotal": 0.9,
-      "lastMom": 17,
+      "xgH": 0.41,
+      "xgA": 0.62,
+      "xgTotal": 1.03,
+      "lastMom": -11,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 11,
+        "h": 12,
         "a": 4
       },
       "sot": {
-        "h": 1,
+        "h": 2,
         "a": 1
       },
       "da": {
@@ -126,27 +126,27 @@
       "home": "São Paulo",
       "away": "Bolívar",
       "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 59,
+      "aScore": 1,
+      "goals": 2,
+      "min": 64,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 33,
-      "xgH": 0.47,
-      "xgA": 0.09,
-      "xgTotal": 0.5599999999999999,
-      "lastMom": -7,
+      "xgH": 0.52,
+      "xgA": 0.13,
+      "xgTotal": 0.65,
+      "lastMom": 15,
       "overOdds": 1.76,
       "probLive": 57,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 5,
-        "a": 4
+        "h": 6,
+        "a": 5
       },
       "sot": {
         "h": 2,
-        "a": 1
+        "a": 2
       },
       "da": {
         "h": null,
@@ -187,7 +187,7 @@
       "hScore": 0,
       "aScore": 2,
       "goals": 2,
-      "min": 60,
+      "min": 65,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -195,7 +195,7 @@
       "xgH": 0.14,
       "xgA": 0.63,
       "xgTotal": 0.77,
-      "lastMom": 2,
+      "lastMom": 11,
       "overOdds": 2.64,
       "probLive": 38,
       "oddsStatus": "VALID",
@@ -246,25 +246,25 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 49,
+      "min": 54,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 34,
-      "xgH": 2.56,
-      "xgA": 0.63,
-      "xgTotal": 3.19,
-      "lastMom": 3,
+      "xgH": 2.58,
+      "xgA": 1.23,
+      "xgTotal": 3.81,
+      "lastMom": -90,
       "overOdds": 2.22,
       "probLive": 45,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 23,
-        "a": 6
+        "h": 24,
+        "a": 8
       },
       "sot": {
-        "h": 12,
-        "a": 2
+        "h": 13,
+        "a": 3
       },
       "da": {
         "h": null,
@@ -298,13 +298,20 @@
       "patterns": [
         {
           "id": "xg_delta",
-          "label": "xG +2.2 acima",
+          "label": "xG +2.8 acima",
           "emoji": "🎲",
+          "level": "critical",
+          "detail": "xG 3.81 vs 1 golos — golo(s) em dívida"
+        },
+        {
+          "id": "mom",
+          "label": "Fora domina",
+          "emoji": "💥",
           "level": "high",
-          "detail": "xG 3.19 vs 1 golos"
+          "detail": "Momentum fora 90 — controlo total"
         }
       ],
-      "patternScore": 4
+      "patternScore": 14
     }
   ]
 }
