@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-19T12:16:00Z",
+  "generated_at": "2026-08-19T12:21:18Z",
   "status": "OK",
   "count": 5,
   "events": [
@@ -10,20 +10,20 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 40,
+      "min": 45,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 52,
-      "xgH": 0.12,
+      "xgH": 0.14,
       "xgA": 1.01,
-      "xgTotal": 1.13,
-      "lastMom": 22,
+      "xgTotal": 1.15,
+      "lastMom": 56,
       "overOdds": 1.39,
       "probLive": 72,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 2,
+        "h": 3,
         "a": 5
       },
       "sot": {
@@ -61,11 +61,11 @@
       },
       "patterns": [
         {
-          "id": "xg_pace",
-          "label": "xG 2.5/90",
-          "emoji": "⚡",
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
           "level": "med",
-          "detail": "xG a ritmo de 2.5 por 90min"
+          "detail": "Momentum casa 56"
         }
       ],
       "patternScore": 2
@@ -77,8 +77,8 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 107,
-      "status": "extratime",
+      "min": 2,
+      "status": "inprogress",
       "period": "ETHT",
       "league": "",
       "league_id": 51,
@@ -136,8 +136,8 @@
       "hScore": 1,
       "aScore": 2,
       "goals": 3,
-      "min": 102,
-      "status": "extratime",
+      "min": 1,
+      "status": "inprogress",
       "period": "ET1",
       "league": "",
       "league_id": 51,
@@ -185,27 +185,19 @@
         "score": 1,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "numerical",
-          "label": "Fora +1 homem",
-          "emoji": "🟥",
-          "level": "med",
-          "detail": "Casa com 1 vermelho(s) — Fora em vantagem numérica"
-        }
-      ],
-      "patternScore": 2
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 587640,
       "home": "Gainare Tottori",
       "away": "Roasso Kumamoto",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 2,
-      "goals": 3,
-      "min": 3,
-      "status": "inprogress",
-      "period": "ET1",
+      "goals": 4,
+      "min": 110,
+      "status": "extratime",
+      "period": "ETHT",
       "league": "",
       "league_id": 51,
       "xgH": null,
@@ -220,7 +212,7 @@
         "a": null
       },
       "sot": {
-        "h": 2,
+        "h": 4,
         "a": 5
       },
       "da": {
@@ -262,7 +254,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 96,
+      "min": 101,
       "status": "extratime",
       "period": "ET1",
       "league": "",
