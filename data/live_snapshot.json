@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-19T09:23:35Z",
+  "generated_at": "2026-08-19T09:28:55Z",
   "status": "OK",
   "count": 6,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 21,
+      "min": 27,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -69,7 +69,7 @@
       "hScore": 4,
       "aScore": 0,
       "goals": 4,
-      "min": 22,
+      "min": 28,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -128,7 +128,7 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 64,
+      "min": 69,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -177,8 +177,16 @@
         "score": 0,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "late",
+          "label": "1 gol em 21min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 54% · 21min"
+        }
+      ],
+      "patternScore": 1
     },
     {
       "id": 588014,
@@ -187,7 +195,7 @@
       "hScore": 1,
       "aScore": 4,
       "goals": 5,
-      "min": 71,
+      "min": 76,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -244,9 +252,9 @@
       "home": "Arterivo Wakayama",
       "away": "Azul Claro Numazu",
       "hScore": 0,
-      "aScore": 4,
-      "goals": 4,
-      "min": 64,
+      "aScore": 5,
+      "goals": 5,
+      "min": 69,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -264,7 +272,7 @@
       },
       "sot": {
         "h": 1,
-        "a": 7
+        "a": 8
       },
       "da": {
         "h": null,
@@ -303,9 +311,9 @@
       "home": "Leganés B",
       "away": "CD Toledo",
       "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 83,
+      "aScore": 1,
+      "goals": 2,
+      "min": 88,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
