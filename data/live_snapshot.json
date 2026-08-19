@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-19T12:57:59Z",
+  "generated_at": "2026-08-19T13:03:07Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -10,20 +10,20 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 60,
+      "min": 66,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 52,
-      "xgH": 0.99,
+      "xgH": 1.85,
       "xgA": 1.06,
-      "xgTotal": 2.05,
+      "xgTotal": 2.91,
       "lastMom": 39,
       "overOdds": 1.39,
       "probLive": 72,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 8,
+        "h": 9,
         "a": 6
       },
       "sot": {
@@ -61,14 +61,35 @@
       },
       "patterns": [
         {
-          "id": "shots",
-          "label": "5r 2ªP",
-          "emoji": "🎯",
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "3 padrões em simultâneo — sinal forte"
+        },
+        {
+          "id": "xg_delta",
+          "label": "xG +1.9 acima",
+          "emoji": "🎲",
           "level": "high",
-          "detail": "30 remates/90min (2ªP) (muito alto)"
+          "detail": "xG 2.91 vs 1 golos"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 7.3/90 (2ªP)",
+          "emoji": "⚡",
+          "level": "critical",
+          "detail": "xG a ritmo de 7.3 por 90min (2ªP)"
+        },
+        {
+          "id": "shots",
+          "label": "6r 2ªP",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "26 remates/90min (2ªP)"
         }
       ],
-      "patternScore": 4
+      "patternScore": 16
     }
   ]
 }
