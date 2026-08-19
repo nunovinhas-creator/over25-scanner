@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-19T20:07:53Z",
+  "generated_at": "2026-08-19T20:13:11Z",
   "status": "OK",
-  "count": 8,
+  "count": 7,
   "events": [
     {
       "id": 587704,
@@ -10,7 +10,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 50,
+      "min": 55,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -18,7 +18,7 @@
       "xgH": 1.06,
       "xgA": 0.1,
       "xgTotal": 1.1600000000000001,
-      "lastMom": -8,
+      "lastMom": -3,
       "overOdds": 1.77,
       "probLive": 56,
       "oddsStatus": "VALID",
@@ -67,27 +67,27 @@
       "home": "NEC Nijmegen",
       "away": "Bodø/Glimt",
       "hScore": 0,
-      "aScore": 2,
-      "goals": 2,
-      "min": 47,
+      "aScore": 3,
+      "goals": 3,
+      "min": 52,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 7,
       "xgH": 0.48,
-      "xgA": 1.27,
-      "xgTotal": 1.75,
-      "lastMom": -40,
+      "xgA": 1.42,
+      "xgTotal": 1.9,
+      "lastMom": 12,
       "overOdds": 1.4,
       "probLive": 71,
       "oddsStatus": "VALID",
       "shots": {
         "h": 9,
-        "a": 6
+        "a": 7
       },
       "sot": {
         "h": 2,
-        "a": 3
+        "a": 4
       },
       "da": {
         "h": null,
@@ -128,7 +128,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 49,
+      "min": 54,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -136,7 +136,7 @@
       "xgH": 0.75,
       "xgA": 0.34,
       "xgTotal": 1.09,
-      "lastMom": -24,
+      "lastMom": 11,
       "overOdds": 1.81,
       "probLive": 55,
       "oddsStatus": "VALID",
@@ -187,24 +187,24 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 49,
+      "min": 54,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 7,
-      "xgH": 0.54,
+      "xgH": 0.57,
       "xgA": 0.46,
-      "xgTotal": 1.0,
-      "lastMom": 22,
+      "xgTotal": 1.03,
+      "lastMom": 15,
       "overOdds": 1.63,
       "probLive": 61,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 8,
+        "h": 9,
         "a": 7
       },
       "sot": {
-        "h": 3,
+        "h": 4,
         "a": 4
       },
       "da": {
@@ -299,80 +299,13 @@
       "patternScore": 0
     },
     {
-      "id": 588020,
-      "home": "Unión Deportiva Ourense",
-      "away": "CD Barco",
-      "hScore": 2,
-      "aScore": 0,
-      "goals": 2,
-      "min": 80,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 79,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": 1.68,
-      "probLive": 60,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": null,
-        "a": null
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": false,
-          "sot": false,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 0,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "late",
-          "label": "1 gol em 10min",
-          "emoji": "⏰",
-          "level": "low",
-          "detail": "Falta 1 golo · mercado 60% · 10min"
-        }
-      ],
-      "patternScore": 1
-    },
-    {
       "id": 588017,
       "home": "Xerez CD",
       "away": "Real Jaén",
       "hScore": 0,
       "aScore": 2,
       "goals": 2,
-      "min": 66,
+      "min": 71,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -421,8 +354,16 @@
         "score": 0,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "late",
+          "label": "1 gol em 19min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 49% · 19min"
+        }
+      ],
+      "patternScore": 1
     },
     {
       "id": 588018,
@@ -431,7 +372,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 33,
+      "min": 39,
       "status": "1st_half",
       "period": "1T",
       "league": "",
