@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-19T02:05:54Z",
+  "generated_at": "2026-08-19T02:11:16Z",
   "status": "OK",
   "count": 5,
   "events": [
@@ -10,25 +10,25 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 70,
+      "min": 76,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 34,
-      "xgH": 0.39,
-      "xgA": 0.25,
-      "xgTotal": 0.64,
-      "lastMom": 36,
+      "xgH": 0.47,
+      "xgA": 0.27,
+      "xgTotal": 0.74,
+      "lastMom": 8,
       "overOdds": 2.62,
       "probLive": 38,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 12,
-        "a": 4
+        "h": 14,
+        "a": 5
       },
       "sot": {
-        "h": 3,
-        "a": 0
+        "h": 4,
+        "a": 1
       },
       "da": {
         "h": null,
@@ -69,25 +69,25 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 73,
+      "min": 78,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 32,
-      "xgH": 0.94,
-      "xgA": 0.7,
-      "xgTotal": 1.64,
-      "lastMom": 8,
+      "xgH": 0.96,
+      "xgA": 0.86,
+      "xgTotal": 1.8199999999999998,
+      "lastMom": 12,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 13,
-        "a": 7
+        "h": 14,
+        "a": 9
       },
       "sot": {
         "h": 3,
-        "a": 1
+        "a": 2
       },
       "da": {
         "h": null,
@@ -125,27 +125,27 @@
       "id": 223427,
       "home": "São Paulo",
       "away": "Bolívar",
-      "hScore": 2,
+      "hScore": 3,
       "aScore": 1,
-      "goals": 3,
-      "min": 75,
+      "goals": 4,
+      "min": 80,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 33,
-      "xgH": 1.87,
+      "xgH": 1.73,
       "xgA": 0.13,
-      "xgTotal": 2.0,
-      "lastMom": 62,
+      "xgTotal": 1.8599999999999999,
+      "lastMom": 13,
       "overOdds": 1.76,
       "probLive": 57,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 9,
+        "h": 11,
         "a": 5
       },
       "sot": {
-        "h": 3,
+        "h": 4,
         "a": 2
       },
       "da": {
@@ -177,16 +177,8 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 62"
-        }
-      ],
-      "patternScore": 2
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 207969,
@@ -195,7 +187,7 @@
       "hScore": 0,
       "aScore": 2,
       "goals": 2,
-      "min": 76,
+      "min": 81,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -203,7 +195,7 @@
       "xgH": 0.36,
       "xgA": 0.67,
       "xgTotal": 1.03,
-      "lastMom": 87,
+      "lastMom": -12,
       "overOdds": 2.64,
       "probLive": 38,
       "oddsStatus": "VALID",
@@ -246,21 +238,14 @@
       },
       "patterns": [
         {
-          "id": "mom",
-          "label": "Casa domina",
-          "emoji": "💥",
-          "level": "high",
-          "detail": "Momentum casa 87 — controlo total"
-        },
-        {
           "id": "late",
-          "label": "1 gol em 14min",
+          "label": "1 gol em 9min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 38% · 14min"
+          "detail": "Falta 1 golo · mercado 38% · 9min"
         }
       ],
-      "patternScore": 5
+      "patternScore": 1
     },
     {
       "id": 10082,
@@ -269,21 +254,21 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 65,
+      "min": 70,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 34,
       "xgH": 2.72,
-      "xgA": 1.26,
-      "xgTotal": 3.9800000000000004,
-      "lastMom": -8,
+      "xgA": 1.33,
+      "xgTotal": 4.050000000000001,
+      "lastMom": -21,
       "overOdds": 2.22,
       "probLive": 45,
       "oddsStatus": "VALID",
       "shots": {
         "h": 26,
-        "a": 9
+        "a": 10
       },
       "sot": {
         "h": 13,
@@ -328,24 +313,24 @@
         },
         {
           "id": "xg_delta",
-          "label": "xG +3.0 acima",
+          "label": "xG +3.1 acima",
           "emoji": "🎲",
           "level": "critical",
-          "detail": "xG 3.98 vs 1 golos — golo(s) em dívida"
+          "detail": "xG 4.05 vs 1 golos — golo(s) em dívida"
         },
         {
           "id": "xg_pace",
-          "label": "xG 3.6/90 (2ªP)",
+          "label": "xG 3.1/90 (2ªP)",
           "emoji": "⚡",
           "level": "high",
-          "detail": "xG a ritmo de 3.6 por 90min (2ªP)"
+          "detail": "xG a ritmo de 3.1 por 90min (2ªP)"
         },
         {
           "id": "shots",
-          "label": "6r 2ªP",
+          "label": "7r 2ªP",
           "emoji": "🎯",
           "level": "med",
-          "detail": "27 remates/90min (2ªP)"
+          "detail": "25 remates/90min (2ªP)"
         }
       ],
       "patternScore": 16
