@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-19T13:16:52Z",
+  "generated_at": "2026-08-19T13:22:02Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -10,24 +10,24 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 80,
+      "min": 85,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 52,
-      "xgH": 1.85,
+      "xgH": 1.98,
       "xgA": 1.06,
-      "xgTotal": 2.91,
-      "lastMom": 37,
+      "xgTotal": 3.04,
+      "lastMom": 36,
       "overOdds": 1.39,
       "probLive": 72,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 10,
+        "h": 12,
         "a": 6
       },
       "sot": {
-        "h": 1,
+        "h": 2,
         "a": 2
       },
       "da": {
@@ -44,7 +44,7 @@
       },
       "redCards": {
         "h": 0,
-        "a": 0
+        "a": 1
       },
       "isSavedPick": false,
       "coverage": {
@@ -62,13 +62,20 @@
       "patterns": [
         {
           "id": "xg_delta",
-          "label": "xG +1.9 acima",
+          "label": "xG +2.0 acima",
           "emoji": "🎲",
           "level": "high",
-          "detail": "xG 2.91 vs 1 golos"
+          "detail": "xG 3.04 vs 1 golos"
+        },
+        {
+          "id": "numerical",
+          "label": "Casa +1 homem",
+          "emoji": "🟥",
+          "level": "med",
+          "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
         }
       ],
-      "patternScore": 4
+      "patternScore": 6
     }
   ]
 }
