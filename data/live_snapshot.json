@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-19T19:06:27Z",
+  "generated_at": "2026-08-19T19:12:12Z",
   "status": "OK",
-  "count": 14,
+  "count": 15,
   "events": [
     {
       "id": 587704,
@@ -10,15 +10,15 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 4,
+      "min": 10,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 7,
-      "xgH": null,
+      "xgH": 0.1,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 52,
+      "lastMom": -9,
       "overOdds": 1.77,
       "probLive": 56,
       "oddsStatus": "VALID",
@@ -69,21 +69,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 3,
+      "min": 9,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 7,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": -14,
+      "xgH": 0.05,
+      "xgA": 0.02,
+      "xgTotal": 0.07,
+      "lastMom": -36,
       "overOdds": 1.4,
       "probLive": 71,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
-        "a": 0
+        "h": 1,
+        "a": 1
       },
       "sot": {
         "h": 0,
@@ -108,14 +108,14 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 3,
         "total": 6
       },
       "patterns": [],
@@ -126,27 +126,27 @@
       "home": "Hapoel Be'er Sheva",
       "away": "Sabah FK",
       "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 3,
+      "aScore": 1,
+      "goals": 1,
+      "min": 9,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 7,
       "xgH": null,
-      "xgA": null,
+      "xgA": 0.18,
       "xgTotal": null,
-      "lastMom": 17,
+      "lastMom": -22,
       "overOdds": 1.81,
       "probLive": 55,
       "oddsStatus": "VALID",
       "shots": {
         "h": 0,
-        "a": 0
+        "a": 1
       },
       "sot": {
         "h": 0,
-        "a": 0
+        "a": 1
       },
       "da": {
         "h": null,
@@ -187,21 +187,88 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 3,
+      "min": 10,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 7,
-      "xgH": null,
-      "xgA": 0.2,
-      "xgTotal": null,
-      "lastMom": -9,
+      "xgH": 0.23,
+      "xgA": 0.23,
+      "xgTotal": 0.46,
+      "lastMom": 13,
       "overOdds": 1.63,
       "probLive": 61,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
+        "h": 3,
+        "a": 2
+      },
+      "sot": {
+        "h": 1,
         "a": 1
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "5 remates",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "45 remates/90min (muito alto)"
+        }
+      ],
+      "patternScore": 4
+    },
+    {
+      "id": 213520,
+      "home": "Atlético Madrid",
+      "away": "Málaga CF",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 1,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "La Liga",
+      "league_id": 3,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": 11,
+      "overOdds": 1.65,
+      "probLive": 61,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 0
       },
       "sot": {
         "h": 0,
@@ -246,7 +313,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 30,
+      "min": 35,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -305,7 +372,7 @@
       "hScore": 0,
       "aScore": 2,
       "goals": 2,
-      "min": 21,
+      "min": 27,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -364,7 +431,7 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 47,
+      "min": 53,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -482,9 +549,9 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 50,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 79,
       "xgH": null,
@@ -541,7 +608,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 47,
+      "min": 53,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -597,10 +664,10 @@
       "id": 587952,
       "home": "Coruxo FC",
       "away": "Pontevedra CF",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 0,
-      "goals": 0,
-      "min": 50,
+      "goals": 1,
+      "min": 55,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -715,10 +782,10 @@
       "id": 588035,
       "home": "CD Izarra",
       "away": "SD Logroñés",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 1,
-      "goals": 1,
-      "min": 78,
+      "goals": 2,
+      "min": 84,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -767,17 +834,25 @@
         "score": 0,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "late",
+          "label": "1 gol em 6min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 57% · 6min"
+        }
+      ],
+      "patternScore": 1
     },
     {
       "id": 588015,
       "home": "SD Leioa",
       "away": "Club Portugalete",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 1,
-      "goals": 1,
-      "min": 77,
+      "goals": 2,
+      "min": 83,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -826,8 +901,16 @@
         "score": 0,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "late",
+          "label": "1 gol em 7min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 52% · 7min"
+        }
+      ],
+      "patternScore": 1
     }
   ]
 }
