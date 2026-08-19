@@ -1,33 +1,33 @@
 {
-  "generated_at": "2026-08-19T23:39:24Z",
+  "generated_at": "2026-08-19T23:44:55Z",
   "status": "OK",
-  "count": 9,
+  "count": 16,
   "events": [
     {
       "id": 10083,
       "home": "Vila Nova FC",
       "away": "Ponte Preta",
-      "hScore": 0,
+      "hScore": 2,
       "aScore": 0,
-      "goals": 0,
-      "min": 7,
+      "goals": 2,
+      "min": 13,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
-      "xgH": 0.04,
+      "xgH": 0.36,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": -18,
+      "lastMom": 55,
       "overOdds": 1.91,
       "probLive": 52,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 1,
+        "h": 3,
         "a": 0
       },
       "sot": {
-        "h": 0,
+        "h": 2,
         "a": 0
       },
       "da": {
@@ -59,8 +59,16 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 55"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 10077,
@@ -69,7 +77,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 8,
+      "min": 13,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -77,7 +85,7 @@
       "xgH": null,
       "xgA": 0.02,
       "xgTotal": null,
-      "lastMom": -40,
+      "lastMom": -9,
       "overOdds": 2.55,
       "probLive": 39,
       "oddsStatus": "VALID",
@@ -122,30 +130,443 @@
       "patternScore": 0
     },
     {
+      "id": 5205,
+      "home": "DC United",
+      "away": "New England Revolution",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 4,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 18,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": -4,
+      "overOdds": 1.72,
+      "probLive": 58,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 5204,
+      "home": "Toronto FC",
+      "away": "Charlotte FC",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 4,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 18,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": -1,
+      "overOdds": 1.63,
+      "probLive": 61,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 5203,
+      "home": "Orlando City SC",
+      "away": "Chicago Fire",
+      "hScore": 0,
+      "aScore": 1,
+      "goals": 1,
+      "min": 3,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 18,
+      "xgH": 0.03,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": -30,
+      "overOdds": 1.35,
+      "probLive": 74,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 1,
+        "a": 1
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 5202,
+      "home": "New York Red Bulls",
+      "away": "Nashville SC",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 3,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 18,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": 1.51,
+      "probLive": 66,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": false
+        },
+        "score": 1,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 5201,
+      "home": "Columbus Crew",
+      "away": "CF Montréal",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 3,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 18,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": -11,
+      "overOdds": 1.56,
+      "probLive": 64,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 5200,
+      "home": "FC Cincinnati",
+      "away": "New York City FC",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 3,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 18,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": 8,
+      "overOdds": 1.41,
+      "probLive": 71,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 5199,
+      "home": "Philadelphia Union",
+      "away": "Inter Miami CF",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 3,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 18,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": -7,
+      "overOdds": 1.33,
+      "probLive": 75,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
       "id": 219981,
       "home": "Cúcuta Deportivo",
       "away": "Internacional de Bogotá",
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 37,
+      "min": 43,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 80,
-      "xgH": 0.37,
+      "xgH": 0.4,
       "xgA": 0.5,
-      "xgTotal": 0.87,
-      "lastMom": -9,
+      "xgTotal": 0.9,
+      "lastMom": 52,
       "overOdds": 2.18,
       "probLive": 46,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 6,
+        "h": 7,
         "a": 7
       },
       "sot": {
-        "h": 3,
+        "h": 4,
         "a": 2
       },
       "da": {
@@ -180,13 +601,20 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "13 remates",
+          "label": "14 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "32 remates/90min (muito alto)"
+          "detail": "29 remates/90min (muito alto)"
+        },
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 52"
         }
       ],
-      "patternScore": 4
+      "patternScore": 6
     },
     {
       "id": 216414,
@@ -195,15 +623,15 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 46,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 72,
       "xgH": 1.48,
-      "xgA": 1.37,
-      "xgTotal": 2.85,
-      "lastMom": -28,
+      "xgA": 1.35,
+      "xgTotal": 2.83,
+      "lastMom": 0,
       "overOdds": 1.61,
       "probLive": 62,
       "oddsStatus": "VALID",
@@ -254,15 +682,15 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 49,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 34,
-      "xgH": 0.81,
-      "xgA": 0.61,
-      "xgTotal": 1.42,
-      "lastMom": 14,
+      "xgH": 0.78,
+      "xgA": 0.6,
+      "xgTotal": 1.38,
+      "lastMom": -6,
       "overOdds": 2.13,
       "probLive": 47,
       "oddsStatus": "VALID",
@@ -313,15 +741,15 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 47,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 34,
       "xgH": 0.36,
-      "xgA": 0.18,
-      "xgTotal": 0.54,
-      "lastMom": 9,
+      "xgA": 0.17,
+      "xgTotal": 0.53,
+      "lastMom": 19,
       "overOdds": 2.14,
       "probLive": 47,
       "oddsStatus": "VALID",
@@ -372,7 +800,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 73,
+      "min": 79,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -380,7 +808,7 @@
       "xgH": 0.56,
       "xgA": 0.79,
       "xgTotal": 1.35,
-      "lastMom": -33,
+      "lastMom": 23,
       "overOdds": 2.21,
       "probLive": 45,
       "oddsStatus": "VALID",
@@ -424,10 +852,10 @@
       "patterns": [
         {
           "id": "late",
-          "label": "1 gol em 17min",
+          "label": "1 gol em 11min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 45% · 17min"
+          "detail": "Falta 1 golo · mercado 45% · 11min"
         }
       ],
       "patternScore": 1
@@ -439,7 +867,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 79,
+      "min": 84,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -447,7 +875,7 @@
       "xgH": 0.62,
       "xgA": 0.42,
       "xgTotal": 1.04,
-      "lastMom": -21,
+      "lastMom": -13,
       "overOdds": 2.97,
       "probLive": 34,
       "oddsStatus": "VALID",
@@ -498,21 +926,21 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 78,
+      "min": 83,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 32,
       "xgH": 0.43,
-      "xgA": 0.67,
-      "xgTotal": 1.1,
+      "xgA": 0.89,
+      "xgTotal": 1.32,
       "lastMom": -22,
       "overOdds": 2.43,
       "probLive": 41,
       "oddsStatus": "VALID",
       "shots": {
         "h": 7,
-        "a": 10
+        "a": 13
       },
       "sot": {
         "h": 1,
@@ -553,7 +981,7 @@
           "label": "JOGO ABERTO",
           "emoji": "🎭",
           "level": "low",
-          "detail": "12min, equipa a perder ataca"
+          "detail": "7min, equipa a perder ataca"
         }
       ],
       "patternScore": 1
