@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-19T23:34:00Z",
+  "generated_at": "2026-08-19T23:39:24Z",
   "status": "OK",
   "count": 9,
   "events": [
@@ -10,20 +10,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 2,
+      "min": 7,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
-      "xgH": null,
+      "xgH": 0.04,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": -29,
+      "lastMom": -18,
       "overOdds": 1.91,
       "probLive": 52,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
+        "h": 1,
         "a": 0
       },
       "sot": {
@@ -69,21 +69,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 3,
+      "min": 8,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
       "xgH": null,
-      "xgA": null,
+      "xgA": 0.02,
       "xgTotal": null,
-      "lastMom": -6,
+      "lastMom": -40,
       "overOdds": 2.55,
       "probLive": 39,
       "oddsStatus": "VALID",
       "shots": {
         "h": 0,
-        "a": 0
+        "a": 1
       },
       "sot": {
         "h": 0,
@@ -128,21 +128,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 32,
+      "min": 37,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 80,
-      "xgH": 0.32,
-      "xgA": 0.45,
-      "xgTotal": 0.77,
-      "lastMom": 31,
+      "xgH": 0.37,
+      "xgA": 0.5,
+      "xgTotal": 0.87,
+      "lastMom": -9,
       "overOdds": 2.18,
       "probLive": 46,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 5,
-        "a": 6
+        "h": 6,
+        "a": 7
       },
       "sot": {
         "h": 3,
@@ -180,10 +180,10 @@
       "patterns": [
         {
           "id": "shots",
-          "label": "11 remates",
+          "label": "13 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "31 remates/90min (muito alto)"
+          "detail": "32 remates/90min (muito alto)"
         }
       ],
       "patternScore": 4
@@ -201,8 +201,8 @@
       "league": "",
       "league_id": 72,
       "xgH": 1.48,
-      "xgA": 0.94,
-      "xgTotal": 2.42,
+      "xgA": 1.37,
+      "xgTotal": 2.85,
       "lastMom": -28,
       "overOdds": 1.61,
       "probLive": 62,
@@ -372,7 +372,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 68,
+      "min": 73,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -380,7 +380,7 @@
       "xgH": 0.56,
       "xgA": 0.79,
       "xgTotal": 1.35,
-      "lastMom": -13,
+      "lastMom": -33,
       "overOdds": 2.21,
       "probLive": 45,
       "oddsStatus": "VALID",
@@ -424,10 +424,10 @@
       "patterns": [
         {
           "id": "late",
-          "label": "1 gol em 22min",
+          "label": "1 gol em 17min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 45% · 22min"
+          "detail": "Falta 1 golo · mercado 45% · 17min"
         }
       ],
       "patternScore": 1
@@ -439,21 +439,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 73,
+      "min": 79,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 32,
       "xgH": 0.62,
-      "xgA": 0.37,
-      "xgTotal": 0.99,
-      "lastMom": -11,
+      "xgA": 0.42,
+      "xgTotal": 1.04,
+      "lastMom": -21,
       "overOdds": 2.97,
       "probLive": 34,
       "oddsStatus": "VALID",
       "shots": {
         "h": 8,
-        "a": 7
+        "a": 10
       },
       "sot": {
         "h": 2,
@@ -498,21 +498,21 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 73,
+      "min": 78,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 32,
       "xgH": 0.43,
-      "xgA": 0.54,
-      "xgTotal": 0.97,
-      "lastMom": 1,
+      "xgA": 0.67,
+      "xgTotal": 1.1,
+      "lastMom": -22,
       "overOdds": 2.43,
       "probLive": 41,
       "oddsStatus": "VALID",
       "shots": {
         "h": 7,
-        "a": 9
+        "a": 10
       },
       "sot": {
         "h": 1,
@@ -547,8 +547,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "open",
+          "label": "JOGO ABERTO",
+          "emoji": "🎭",
+          "level": "low",
+          "detail": "12min, equipa a perder ataca"
+        }
+      ],
+      "patternScore": 1
     }
   ]
 }
