@@ -1,27 +1,27 @@
 {
-  "generated_at": "2026-08-19T00:31:36Z",
+  "generated_at": "2026-08-19T00:36:52Z",
   "status": "OK",
-  "count": 4,
+  "count": 5,
   "events": [
     {
-      "id": 587779,
-      "home": "Deportes Tolima",
-      "away": "Independiente del Valle",
+      "id": 10079,
+      "home": "Goiás",
+      "away": "Juventude",
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 1,
+      "min": 0,
       "status": "1st_half",
       "period": "1T",
       "league": "",
-      "league_id": 32,
+      "league_id": 34,
       "xgH": null,
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "MISSING",
+      "overOdds": 2.62,
+      "probLive": 38,
+      "oddsStatus": "VALID",
       "shots": {
         "h": 0,
         "a": 0
@@ -63,31 +63,31 @@
       "patternScore": 0
     },
     {
-      "id": 223427,
-      "home": "São Paulo",
-      "away": "Bolívar",
+      "id": 587779,
+      "home": "Deportes Tolima",
+      "away": "Independiente del Valle",
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 0,
+      "min": 6,
       "status": "1st_half",
       "period": "1T",
       "league": "",
-      "league_id": 33,
-      "xgH": null,
+      "league_id": 32,
+      "xgH": 0.12,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": null,
-      "overOdds": 1.77,
-      "probLive": 56,
-      "oddsStatus": "VALID",
+      "lastMom": 18,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
       "shots": {
-        "h": null,
-        "a": null
+        "h": 1,
+        "a": 0
       },
       "sot": {
-        "h": null,
-        "a": null
+        "h": 0,
+        "a": 0
       },
       "da": {
         "h": null,
@@ -110,35 +110,35 @@
         "fields": {
           "xgTotal": false,
           "da": false,
-          "sot": false,
+          "sot": true,
           "corners": false,
           "possession": false,
-          "lastMom": false
+          "lastMom": true
         },
-        "score": 0,
+        "score": 2,
         "total": 6
       },
       "patterns": [],
       "patternScore": 0
     },
     {
-      "id": 207969,
-      "home": "Universidad Católica",
-      "away": "Estudiantes de La Plata",
+      "id": 223427,
+      "home": "São Paulo",
+      "away": "Bolívar",
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 1,
+      "min": 5,
       "status": "1st_half",
       "period": "1T",
       "league": "",
-      "league_id": 32,
-      "xgH": null,
+      "league_id": 33,
+      "xgH": 0.04,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": -5,
-      "overOdds": 2.61,
-      "probLive": 38,
+      "lastMom": -27,
+      "overOdds": 1.76,
+      "probLive": 57,
       "oddsStatus": "VALID",
       "shots": {
         "h": 0,
@@ -181,31 +181,90 @@
       "patternScore": 0
     },
     {
+      "id": 207969,
+      "home": "Universidad Católica",
+      "away": "Estudiantes de La Plata",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 6,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 32,
+      "xgH": 0.01,
+      "xgA": 0.05,
+      "xgTotal": 0.060000000000000005,
+      "lastMom": 27,
+      "overOdds": 2.63,
+      "probLive": 38,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 1,
+        "a": 2
+      },
+      "sot": {
+        "h": 0,
+        "a": 1
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
       "id": 10082,
       "home": "Náutico",
       "away": "Ceará",
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 0,
+      "min": 5,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
-      "xgH": null,
+      "xgH": 0.05,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": null,
+      "lastMom": 15,
       "overOdds": 2.22,
       "probLive": 45,
       "oddsStatus": "VALID",
       "shots": {
-        "h": null,
-        "a": null
+        "h": 2,
+        "a": 0
       },
       "sot": {
-        "h": null,
-        "a": null
+        "h": 1,
+        "a": 0
       },
       "da": {
         "h": null,
@@ -228,12 +287,12 @@
         "fields": {
           "xgTotal": false,
           "da": false,
-          "sot": false,
+          "sot": true,
           "corners": false,
           "possession": false,
-          "lastMom": false
+          "lastMom": true
         },
-        "score": 0,
+        "score": 2,
         "total": 6
       },
       "patterns": [],
