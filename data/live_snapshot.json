@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-20T01:19:20Z",
+  "generated_at": "2026-08-20T01:24:36Z",
   "status": "OK",
   "count": 7,
   "events": [
@@ -66,27 +66,27 @@
       "id": 223243,
       "home": "Montevideo City Torque",
       "away": "Tigre",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 1,
-      "goals": 2,
-      "min": 47,
+      "goals": 3,
+      "min": 52,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 33,
-      "xgH": 0.35,
+      "xgH": 1.14,
       "xgA": 0.46,
-      "xgTotal": 0.81,
-      "lastMom": 9,
+      "xgTotal": 1.5999999999999999,
+      "lastMom": 23,
       "overOdds": 2.46,
       "probLive": 41,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 2,
+        "h": 3,
         "a": 9
       },
       "sot": {
-        "h": 1,
+        "h": 2,
         "a": 2
       },
       "da": {
@@ -103,7 +103,7 @@
       },
       "redCards": {
         "h": 0,
-        "a": 0
+        "a": 1
       },
       "isSavedPick": false,
       "coverage": {
@@ -118,8 +118,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "numerical",
+          "label": "Casa +1 homem",
+          "emoji": "🟥",
+          "level": "med",
+          "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 207963,
@@ -134,8 +142,8 @@
       "league": "",
       "league_id": 32,
       "xgH": 0.94,
-      "xgA": 0.09,
-      "xgTotal": 1.03,
+      "xgA": 0.08,
+      "xgTotal": 1.02,
       "lastMom": -27,
       "overOdds": 2.01,
       "probLive": 50,
@@ -246,25 +254,25 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 37,
+      "min": 43,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 18,
       "xgH": 0.24,
-      "xgA": 0.18,
-      "xgTotal": 0.42,
-      "lastMom": -46,
+      "xgA": 0.19,
+      "xgTotal": 0.43,
+      "lastMom": -25,
       "overOdds": 1.6,
       "probLive": 62,
       "oddsStatus": "VALID",
       "shots": {
         "h": 4,
-        "a": 5
+        "a": 7
       },
       "sot": {
         "h": 1,
-        "a": 0
+        "a": 1
       },
       "da": {
         "h": null,
@@ -297,11 +305,11 @@
       },
       "patterns": [
         {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
+          "id": "shots",
+          "label": "11 remates",
+          "emoji": "🎯",
           "level": "med",
-          "detail": "Momentum fora 46"
+          "detail": "23 remates/90min"
         }
       ],
       "patternScore": 2
@@ -313,21 +321,21 @@
       "hScore": 3,
       "aScore": 0,
       "goals": 3,
-      "min": 52,
+      "min": 57,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 72,
       "xgH": 1.1,
-      "xgA": 0.28,
-      "xgTotal": 1.3800000000000001,
-      "lastMom": -16,
+      "xgA": 0.37,
+      "xgTotal": 1.4700000000000002,
+      "lastMom": -39,
       "overOdds": 1.59,
       "probLive": 63,
       "oddsStatus": "VALID",
       "shots": {
         "h": 7,
-        "a": 5
+        "a": 6
       },
       "sot": {
         "h": 3,
