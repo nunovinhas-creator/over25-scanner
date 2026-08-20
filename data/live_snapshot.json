@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-20T16:49:06Z",
+  "generated_at": "2026-08-20T16:54:29Z",
   "status": "OK",
-  "count": 5,
+  "count": 4,
   "events": [
     {
       "id": 587864,
@@ -10,9 +10,9 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 48,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 83,
       "xgH": null,
@@ -31,7 +31,7 @@
         "a": 1
       },
       "da": {
-        "h": 37,
+        "h": 39,
         "a": 31
       },
       "corners": {
@@ -213,7 +213,7 @@
       },
       "sot": {
         "h": 0,
-        "a": 7
+        "a": 6
       },
       "da": {
         "h": 13,
@@ -246,73 +246,6 @@
       },
       "patterns": [],
       "patternScore": 0
-    },
-    {
-      "id": 587847,
-      "home": "Kairat Almaty",
-      "away": "RSC Anderlecht",
-      "hScore": 0,
-      "aScore": 3,
-      "goals": 3,
-      "min": 88,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 8,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": 2.27,
-      "probLive": 44,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": 2,
-        "a": 4
-      },
-      "da": {
-        "h": 18,
-        "a": 57
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 1,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 2,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "numerical",
-          "label": "Fora +1 homem",
-          "emoji": "🟥",
-          "level": "med",
-          "detail": "Casa com 1 vermelho(s) — Fora em vantagem numérica"
-        }
-      ],
-      "patternScore": 2
     }
   ]
 }
