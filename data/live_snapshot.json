@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-20T17:52:19Z",
+  "generated_at": "2026-08-20T17:57:57Z",
   "status": "OK",
-  "count": 12,
+  "count": 10,
   "events": [
     {
       "id": 587876,
@@ -10,29 +10,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 6,
+      "min": 12,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 83,
-      "xgH": 0.11,
+      "xgH": 0.18,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 46,
+      "lastMom": -51,
       "overOdds": 1.86,
       "probLive": 54,
       "oddsStatus": "VALID",
       "shots": {
         "h": 5,
-        "a": 0
+        "a": 1
       },
       "sot": {
         "h": 0,
         "a": 0
       },
       "da": {
-        "h": 6,
-        "a": 2
+        "h": 9,
+        "a": 9
       },
       "corners": {
         "h": null,
@@ -59,8 +59,37 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "3 padrões em simultâneo — sinal forte"
+        },
+        {
+          "id": "pressure",
+          "label": "Pressão 100",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "18 atq. perigosos · 0 ao alvo"
+        },
+        {
+          "id": "shots",
+          "label": "6 remates",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "45 remates/90min (muito alto)"
+        },
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 51"
+        }
+      ],
+      "patternScore": 16
     },
     {
       "id": 587866,
@@ -69,7 +98,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 20,
+      "min": 26,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -90,8 +119,8 @@
         "a": 0
       },
       "da": {
-        "h": 19,
-        "a": 12
+        "h": 23,
+        "a": 14
       },
       "corners": {
         "h": null,
@@ -124,7 +153,7 @@
           "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "31 atq. perigosos · 1 ao alvo"
+          "detail": "37 atq. perigosos · 1 ao alvo"
         }
       ],
       "patternScore": 10
@@ -142,8 +171,8 @@
       "league": "",
       "league_id": 83,
       "xgH": 0.47,
-      "xgA": 0.65,
-      "xgTotal": 1.12,
+      "xgA": 0.95,
+      "xgTotal": 1.42,
       "lastMom": -5,
       "overOdds": 1.32,
       "probLive": 76,
@@ -580,132 +609,6 @@
       "da": {
         "h": 31,
         "a": 23
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 2,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 587864,
-      "home": "Lincoln Red Imps",
-      "away": "Larne FC",
-      "hScore": 0,
-      "aScore": 1,
-      "goals": 1,
-      "min": 92,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 83,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": 2.07,
-      "probLive": 48,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": 3,
-        "a": 6
-      },
-      "da": {
-        "h": 73,
-        "a": 66
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 1,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 2,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "numerical",
-          "label": "Fora +1 homem",
-          "emoji": "🟥",
-          "level": "med",
-          "detail": "Casa com 1 vermelho(s) — Fora em vantagem numérica"
-        }
-      ],
-      "patternScore": 2
-    },
-    {
-      "id": 587850,
-      "home": "Jagiellonia Białystok",
-      "away": "FC Iberia 1999",
-      "hScore": 4,
-      "aScore": 0,
-      "goals": 4,
-      "min": 91,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 8,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": 1.68,
-      "probLive": 60,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": 7,
-        "a": 7
-      },
-      "da": {
-        "h": 50,
-        "a": 39
       },
       "corners": {
         "h": null,
