@@ -1,67 +1,8 @@
 {
-  "generated_at": "2026-08-20T04:31:48Z",
+  "generated_at": "2026-08-20T04:36:55Z",
   "status": "OK",
-  "count": 3,
+  "count": 1,
   "events": [
-    {
-      "id": 5213,
-      "home": "Portland Timbers",
-      "away": "San Diego FC",
-      "hScore": 3,
-      "aScore": 1,
-      "goals": 4,
-      "min": 90,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 18,
-      "xgH": 1.6,
-      "xgA": 1.35,
-      "xgTotal": 2.95,
-      "lastMom": 11,
-      "overOdds": 1.36,
-      "probLive": 74,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 11,
-        "a": 20
-      },
-      "sot": {
-        "h": 5,
-        "a": 6
-      },
-      "da": {
-        "h": 34,
-        "a": 61
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
     {
       "id": 5212,
       "home": "Vancouver Whitecaps",
@@ -69,20 +10,20 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 91,
+      "min": 96,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
-      "xgH": 1.15,
+      "xgH": 1.25,
       "xgA": 0.41,
-      "xgTotal": 1.5599999999999998,
-      "lastMom": 30,
+      "xgTotal": 1.66,
+      "lastMom": 98,
       "overOdds": 1.66,
       "probLive": 60,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 15,
+        "h": 17,
         "a": 8
       },
       "sot": {
@@ -90,8 +31,8 @@
         "a": 4
       },
       "da": {
-        "h": 106,
-        "a": 22
+        "h": 114,
+        "a": 23
       },
       "corners": {
         "h": null,
@@ -103,65 +44,6 @@
       },
       "redCards": {
         "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 5211,
-      "home": "LA Galaxy",
-      "away": "San Jose Earthquakes",
-      "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 92,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 18,
-      "xgH": 1.37,
-      "xgA": 2.35,
-      "xgTotal": 3.72,
-      "lastMom": 3,
-      "overOdds": 1.4,
-      "probLive": 71,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 10,
-        "a": 21
-      },
-      "sot": {
-        "h": 7,
-        "a": 5
-      },
-      "da": {
-        "h": 28,
-        "a": 60
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 1,
         "a": 0
       },
       "isSavedPick": false,
@@ -179,21 +61,35 @@
       },
       "patterns": [
         {
-          "id": "xg_delta",
-          "label": "xG +2.7 acima",
-          "emoji": "🎲",
-          "level": "critical",
-          "detail": "xG 3.72 vs 1 golos — golo(s) em dívida"
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "3 padrões em simultâneo — sinal forte"
         },
         {
-          "id": "numerical",
-          "label": "Fora +1 homem",
-          "emoji": "🟥",
+          "id": "pressure",
+          "label": "Pressão 100",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "137 atq. perigosos · 5 ao alvo"
+        },
+        {
+          "id": "shots",
+          "label": "25 remates",
+          "emoji": "🎯",
           "level": "med",
-          "detail": "Casa com 1 vermelho(s) — Fora em vantagem numérica"
+          "detail": "23 remates/90min"
+        },
+        {
+          "id": "mom",
+          "label": "Casa domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum casa 98 — controlo total"
         }
       ],
-      "patternScore": 12
+      "patternScore": 16
     }
   ]
 }
