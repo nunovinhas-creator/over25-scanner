@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-20T04:00:42Z",
+  "generated_at": "2026-08-20T04:05:54Z",
   "status": "OK",
   "count": 4,
   "events": [
@@ -10,29 +10,29 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 60,
+      "min": 65,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
       "xgH": 1.5,
-      "xgA": 0.62,
-      "xgTotal": 2.12,
-      "lastMom": 20,
+      "xgA": 0.81,
+      "xgTotal": 2.31,
+      "lastMom": -100,
       "overOdds": 1.36,
       "probLive": 74,
       "oddsStatus": "VALID",
       "shots": {
         "h": 9,
-        "a": 11
+        "a": 14
       },
       "sot": {
         "h": 4,
-        "a": 4
+        "a": 5
       },
       "da": {
-        "h": 22,
-        "a": 43
+        "h": 24,
+        "a": 45
       },
       "corners": {
         "h": null,
@@ -59,39 +59,47 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Fora domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum fora 100 — controlo total"
+        }
+      ],
+      "patternScore": 4
     },
     {
       "id": 5212,
       "home": "Vancouver Whitecaps",
       "away": "Houston Dynamo",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 1,
-      "goals": 1,
-      "min": 60,
+      "goals": 2,
+      "min": 65,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
-      "xgH": 0.79,
-      "xgA": 0.38,
-      "xgTotal": 1.17,
-      "lastMom": 51,
+      "xgH": 1.73,
+      "xgA": 0.41,
+      "xgTotal": 2.14,
+      "lastMom": 22,
       "overOdds": 1.66,
       "probLive": 60,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 8,
-        "a": 7
+        "h": 11,
+        "a": 8
       },
       "sot": {
-        "h": 1,
+        "h": 2,
         "a": 4
       },
       "da": {
-        "h": 66,
-        "a": 19
+        "h": 72,
+        "a": 20
       },
       "corners": {
         "h": null,
@@ -131,24 +139,24 @@
           "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "28 atq. perigosos · 2 ao alvo (2ªP)"
+          "detail": "35 atq. perigosos · 3 ao alvo (2ªP)"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 6.2/90 (2ªP)",
+          "emoji": "⚡",
+          "level": "critical",
+          "detail": "xG a ritmo de 6.2 por 90min (2ªP)"
         },
         {
           "id": "shots",
-          "label": "5r 2ªP",
+          "label": "9r 2ªP",
           "emoji": "🎯",
           "level": "high",
-          "detail": "30 remates/90min (2ªP) (muito alto)"
-        },
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 51"
+          "detail": "40 remates/90min (2ªP) (muito alto)"
         }
       ],
-      "patternScore": 16
+      "patternScore": 24
     },
     {
       "id": 5211,
@@ -157,29 +165,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 61,
+      "min": 66,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
-      "xgH": 0.3,
-      "xgA": 1.24,
-      "xgTotal": 1.54,
-      "lastMom": 30,
+      "xgH": 0.31,
+      "xgA": 1.39,
+      "xgTotal": 1.7,
+      "lastMom": -55,
       "overOdds": 1.4,
       "probLive": 71,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 5,
-        "a": 10
+        "h": 6,
+        "a": 13
       },
       "sot": {
         "h": 3,
         "a": 3
       },
       "da": {
-        "h": 16,
-        "a": 39
+        "h": 18,
+        "a": 41
       },
       "corners": {
         "h": null,
@@ -212,21 +220,35 @@
           "label": "CONVERGÊNCIA",
           "emoji": "🔮",
           "level": "conv",
-          "detail": "3 padrões em simultâneo — sinal forte"
+          "detail": "5 padrões em simultâneo — sinal forte"
         },
         {
           "id": "pressure",
-          "label": "Pressão 68 (2ªP)",
+          "label": "Pressão 69 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "12 atq. perigosos · 0 ao alvo (2ªP)"
+          "detail": "16 atq. perigosos · 0 ao alvo (2ªP)"
         },
         {
           "id": "xg_delta",
           "label": "xG sobrevaloriza",
           "emoji": "🎲",
           "level": "med",
-          "detail": "xG 1.54 vs 0 golos"
+          "detail": "xG 1.70 vs 0 golos"
+        },
+        {
+          "id": "shots",
+          "label": "6r 2ªP",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "26 remates/90min (2ªP)"
+        },
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 55"
         },
         {
           "id": "numerical",
@@ -236,38 +258,38 @@
           "detail": "Casa com 1 vermelho(s) — Fora em vantagem numérica"
         }
       ],
-      "patternScore": 14
+      "patternScore": 18
     },
     {
       "id": 207761,
       "home": "Phoenix Rising FC",
       "away": "Colorado Springs Switchbacks FC",
-      "hScore": 2,
+      "hScore": 3,
       "aScore": 1,
-      "goals": 3,
-      "min": 87,
+      "goals": 4,
+      "min": 92,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 57,
-      "xgH": 1.26,
-      "xgA": 1.6,
-      "xgTotal": 2.8600000000000003,
-      "lastMom": -15,
+      "xgH": 1.56,
+      "xgA": 1.64,
+      "xgTotal": 3.2,
+      "lastMom": 12,
       "overOdds": 1.79,
       "probLive": 56,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 8,
-        "a": 12
+        "h": 10,
+        "a": 13
       },
       "sot": {
-        "h": 4,
+        "h": 5,
         "a": 2
       },
       "da": {
-        "h": 29,
-        "a": 25
+        "h": 32,
+        "a": 26
       },
       "corners": {
         "h": null,
