@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-20T03:50:19Z",
+  "generated_at": "2026-08-20T03:55:30Z",
   "status": "OK",
   "count": 4,
   "events": [
@@ -7,32 +7,32 @@
       "id": 5213,
       "home": "Portland Timbers",
       "away": "San Diego FC",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 1,
-      "goals": 2,
-      "min": 49,
+      "goals": 3,
+      "min": 55,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
-      "xgH": 0.36,
-      "xgA": 0.67,
-      "xgTotal": 1.03,
-      "lastMom": -21,
+      "xgH": 1.05,
+      "xgA": 0.62,
+      "xgTotal": 1.67,
+      "lastMom": 25,
       "overOdds": 1.36,
       "probLive": 74,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 5,
-        "a": 10
+        "h": 6,
+        "a": 11
       },
       "sot": {
-        "h": 2,
-        "a": 3
+        "h": 3,
+        "a": 4
       },
       "da": {
-        "h": 17,
-        "a": 38
+        "h": 21,
+        "a": 40
       },
       "corners": {
         "h": null,
@@ -69,29 +69,29 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 49,
+      "min": 55,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
-      "xgH": 0.59,
-      "xgA": 0.3,
-      "xgTotal": 0.8899999999999999,
-      "lastMom": 53,
+      "xgH": 0.71,
+      "xgA": 0.34,
+      "xgTotal": 1.05,
+      "lastMom": 11,
       "overOdds": 1.66,
       "probLive": 60,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 5,
-        "a": 5
+        "h": 6,
+        "a": 6
       },
       "sot": {
         "h": 0,
         "a": 3
       },
       "da": {
-        "h": 50,
-        "a": 13
+        "h": 58,
+        "a": 16
       },
       "corners": {
         "h": null,
@@ -118,16 +118,8 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 53"
-        }
-      ],
-      "patternScore": 2
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 5211,
@@ -136,21 +128,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 51,
+      "min": 56,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
       "xgH": 0.3,
-      "xgA": 1.22,
-      "xgTotal": 1.52,
-      "lastMom": -44,
+      "xgA": 1.24,
+      "xgTotal": 1.54,
+      "lastMom": -42,
       "overOdds": 1.4,
       "probLive": 71,
       "oddsStatus": "VALID",
       "shots": {
         "h": 5,
-        "a": 9
+        "a": 10
       },
       "sot": {
         "h": 3,
@@ -158,7 +150,7 @@
       },
       "da": {
         "h": 14,
-        "a": 32
+        "a": 37
       },
       "corners": {
         "h": null,
@@ -187,6 +179,13 @@
       },
       "patterns": [
         {
+          "id": "xg_delta",
+          "label": "xG sobrevaloriza",
+          "emoji": "🎲",
+          "level": "med",
+          "detail": "xG 1.54 vs 0 golos"
+        },
+        {
           "id": "numerical",
           "label": "Fora +1 homem",
           "emoji": "🟥",
@@ -194,7 +193,7 @@
           "detail": "Casa com 1 vermelho(s) — Fora em vantagem numérica"
         }
       ],
-      "patternScore": 2
+      "patternScore": 4
     },
     {
       "id": 207761,
@@ -203,7 +202,7 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 76,
+      "min": 82,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -211,7 +210,7 @@
       "xgH": 1.23,
       "xgA": 1.57,
       "xgTotal": 2.8,
-      "lastMom": -11,
+      "lastMom": -3,
       "overOdds": 1.79,
       "probLive": 56,
       "oddsStatus": "VALID",
@@ -224,7 +223,7 @@
         "a": 2
       },
       "da": {
-        "h": 25,
+        "h": 28,
         "a": 24
       },
       "corners": {
