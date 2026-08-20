@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-20T17:05:38Z",
+  "generated_at": "2026-08-20T17:11:44Z",
   "status": "OK",
   "count": 12,
   "events": [
@@ -10,29 +10,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 4,
+      "min": 11,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 83,
-      "xgH": null,
-      "xgA": 0.09,
-      "xgTotal": null,
-      "lastMom": -1,
+      "xgH": 0.12,
+      "xgA": 0.34,
+      "xgTotal": 0.46,
+      "lastMom": 39,
       "overOdds": 1.33,
       "probLive": 75,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
-        "a": 1
+        "h": 2,
+        "a": 4
       },
       "sot": {
         "h": 0,
-        "a": 0
+        "a": 1
       },
       "da": {
-        "h": 3,
-        "a": 3
+        "h": 9,
+        "a": 5
       },
       "corners": {
         "h": null,
@@ -49,18 +49,33 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": true,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 3,
+        "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 100",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "14 atq. perigosos · 1 ao alvo"
+        },
+        {
+          "id": "shots",
+          "label": "6 remates",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "49 remates/90min (muito alto)"
+        }
+      ],
+      "patternScore": 14
     },
     {
       "id": 587877,
@@ -69,20 +84,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 4,
+      "min": 10,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 83,
-      "xgH": null,
+      "xgH": 0.08,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 12,
+      "lastMom": 21,
       "overOdds": 1.93,
       "probLive": 52,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
+        "h": 1,
         "a": 0
       },
       "sot": {
@@ -90,8 +105,8 @@
         "a": 0
       },
       "da": {
-        "h": 4,
-        "a": 2
+        "h": 14,
+        "a": 6
       },
       "corners": {
         "h": null,
@@ -118,8 +133,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 100",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "20 atq. perigosos · 0 ao alvo"
+        }
+      ],
+      "patternScore": 10
     },
     {
       "id": 587865,
@@ -128,21 +151,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 4,
+      "min": 10,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 83,
       "xgH": null,
-      "xgA": 0.12,
+      "xgA": 0.16,
       "xgTotal": null,
-      "lastMom": -19,
+      "lastMom": -57,
       "overOdds": 1.61,
       "probLive": 62,
       "oddsStatus": "VALID",
       "shots": {
         "h": 0,
-        "a": 2
+        "a": 3
       },
       "sot": {
         "h": 0,
@@ -150,7 +173,7 @@
       },
       "da": {
         "h": 3,
-        "a": 3
+        "a": 12
       },
       "corners": {
         "h": null,
@@ -177,8 +200,30 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 100",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "15 atq. perigosos · 0 ao alvo"
+        },
+        {
+          "id": "shots",
+          "label": "3 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "27 remates/90min"
+        },
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 57"
+        }
+      ],
+      "patternScore": 14
     },
     {
       "id": 587851,
@@ -187,7 +232,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 4,
+      "min": 11,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -208,8 +253,8 @@
         "a": 0
       },
       "da": {
-        "h": 2,
-        "a": 2
+        "h": 8,
+        "a": 4
       },
       "corners": {
         "h": null,
@@ -236,8 +281,16 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 98",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "12 atq. perigosos · 0 ao alvo"
+        }
+      ],
+      "patternScore": 10
     },
     {
       "id": 587846,
@@ -246,7 +299,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 4,
+      "min": 11,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -263,12 +316,12 @@
         "a": null
       },
       "sot": {
-        "h": 0,
+        "h": 1,
         "a": 0
       },
       "da": {
-        "h": 1,
-        "a": 0
+        "h": 5,
+        "a": 3
       },
       "corners": {
         "h": null,
@@ -295,17 +348,25 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 70",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "8 atq. perigosos · 1 ao alvo"
+        }
+      ],
+      "patternScore": 10
     },
     {
       "id": 587845,
       "home": "Beşiktaş JK",
       "away": "FK Kauno Žalgiris",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 0,
-      "goals": 0,
-      "min": 4,
+      "goals": 1,
+      "min": 11,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -322,12 +383,12 @@
         "a": null
       },
       "sot": {
-        "h": 0,
+        "h": 1,
         "a": 0
       },
       "da": {
-        "h": 6,
-        "a": 0
+        "h": 7,
+        "a": 1
       },
       "corners": {
         "h": null,
@@ -354,17 +415,25 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 70",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "8 atq. perigosos · 1 ao alvo"
+        }
+      ],
+      "patternScore": 10
     },
     {
       "id": 587843,
       "home": "KF Egnatia",
       "away": "Lillestrøm SK",
       "hScore": 0,
-      "aScore": 1,
-      "goals": 1,
-      "min": 5,
+      "aScore": 0,
+      "goals": 0,
+      "min": 12,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -420,10 +489,10 @@
       "id": 587842,
       "home": "Lech Poznań",
       "away": "FC Thun",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 0,
-      "goals": 0,
-      "min": 3,
+      "goals": 1,
+      "min": 10,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -440,11 +509,11 @@
         "a": null
       },
       "sot": {
-        "h": 0,
+        "h": 1,
         "a": 0
       },
       "da": {
-        "h": 1,
+        "h": 6,
         "a": 4
       },
       "corners": {
@@ -472,8 +541,16 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 95",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "10 atq. perigosos · 1 ao alvo"
+        }
+      ],
+      "patternScore": 10
     },
     {
       "id": 587864,
@@ -482,7 +559,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 45,
+      "min": 50,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -500,11 +577,11 @@
       },
       "sot": {
         "h": 3,
-        "a": 1
+        "a": 2
       },
       "da": {
-        "h": 39,
-        "a": 31
+        "h": 40,
+        "a": 38
       },
       "corners": {
         "h": null,
@@ -533,13 +610,6 @@
       },
       "patterns": [
         {
-          "id": "pressure",
-          "label": "Pressão 100",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "70 atq. perigosos · 4 ao alvo"
-        },
-        {
           "id": "numerical",
           "label": "Fora +1 homem",
           "emoji": "🟥",
@@ -547,7 +617,7 @@
           "detail": "Casa com 1 vermelho(s) — Fora em vantagem numérica"
         }
       ],
-      "patternScore": 12
+      "patternScore": 2
     },
     {
       "id": 587863,
@@ -556,7 +626,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 47,
+      "min": 52,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -564,7 +634,7 @@
       "xgH": 0.87,
       "xgA": 0.47,
       "xgTotal": 1.3399999999999999,
-      "lastMom": 12,
+      "lastMom": 25,
       "overOdds": 1.67,
       "probLive": 60,
       "oddsStatus": "VALID",
@@ -577,7 +647,7 @@
         "a": 2
       },
       "da": {
-        "h": 15,
+        "h": 16,
         "a": 16
       },
       "corners": {
@@ -615,9 +685,9 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 50,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 8,
       "xgH": null,
@@ -636,8 +706,8 @@
         "a": 3
       },
       "da": {
-        "h": 25,
-        "a": 19
+        "h": 27,
+        "a": 25
       },
       "corners": {
         "h": null,
@@ -674,7 +744,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 48,
+      "min": 55,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -695,8 +765,8 @@
         "a": 6
       },
       "da": {
-        "h": 16,
-        "a": 31
+        "h": 19,
+        "a": 34
       },
       "corners": {
         "h": null,
