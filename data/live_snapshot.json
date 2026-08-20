@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-20T00:16:24Z",
+  "generated_at": "2026-08-20T00:21:30Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -10,20 +10,20 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 8,
+      "min": 14,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 72,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": -10,
+      "xgH": 0.33,
+      "xgA": 0.1,
+      "xgTotal": 0.43000000000000005,
+      "lastMom": 10,
       "overOdds": 1.59,
       "probLive": 63,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 2,
+        "h": 3,
         "a": 2
       },
       "sot": {
@@ -49,23 +49,23 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 3,
         "total": 6
       },
       "patterns": [
         {
           "id": "shots",
-          "label": "4 remates",
+          "label": "5 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "45 remates/90min (muito alto)"
+          "detail": "32 remates/90min (muito alto)"
         }
       ],
       "patternScore": 4
