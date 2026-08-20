@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-20T04:16:16Z",
+  "generated_at": "2026-08-20T04:21:26Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -10,29 +10,29 @@
       "hScore": 3,
       "aScore": 1,
       "goals": 4,
-      "min": 75,
+      "min": 81,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
-      "xgH": 1.61,
-      "xgA": 1.15,
-      "xgTotal": 2.76,
-      "lastMom": 2,
+      "xgH": 1.6,
+      "xgA": 1.11,
+      "xgTotal": 2.71,
+      "lastMom": -26,
       "overOdds": 1.36,
       "probLive": 74,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 10,
-        "a": 15
+        "h": 11,
+        "a": 17
       },
       "sot": {
         "h": 5,
-        "a": 5
+        "a": 6
       },
       "da": {
-        "h": 29,
-        "a": 52
+        "h": 31,
+        "a": 57
       },
       "corners": {
         "h": null,
@@ -69,7 +69,7 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 75,
+      "min": 81,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -77,7 +77,7 @@
       "xgH": 0.81,
       "xgA": 0.41,
       "xgTotal": 1.22,
-      "lastMom": 3,
+      "lastMom": 10,
       "overOdds": 1.66,
       "probLive": 60,
       "oddsStatus": "VALID",
@@ -90,7 +90,7 @@
         "a": 4
       },
       "da": {
-        "h": 82,
+        "h": 92,
         "a": 22
       },
       "corners": {
@@ -124,48 +124,41 @@
           "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "47 atq. perigosos · 2 ao alvo (2ªP)"
-        },
-        {
-          "id": "shots",
-          "label": "8r 2ªP",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "24 remates/90min (2ªP)"
+          "detail": "57 atq. perigosos · 2 ao alvo (2ªP)"
         }
       ],
-      "patternScore": 12
+      "patternScore": 10
     },
     {
       "id": 5211,
       "home": "LA Galaxy",
       "away": "San Jose Earthquakes",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 0,
-      "goals": 0,
-      "min": 77,
+      "goals": 1,
+      "min": 82,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
-      "xgH": 0.4,
-      "xgA": 2.12,
-      "xgTotal": 2.52,
-      "lastMom": -37,
+      "xgH": 1.27,
+      "xgA": 2.28,
+      "xgTotal": 3.55,
+      "lastMom": 4,
       "overOdds": 1.4,
       "probLive": 71,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 7,
-        "a": 18
+        "h": 9,
+        "a": 20
       },
       "sot": {
-        "h": 4,
+        "h": 6,
         "a": 4
       },
       "da": {
-        "h": 22,
-        "a": 51
+        "h": 23,
+        "a": 56
       },
       "corners": {
         "h": null,
@@ -202,31 +195,31 @@
         },
         {
           "id": "pressure",
-          "label": "Pressão 94 (2ªP)",
+          "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "30 atq. perigosos · 2 ao alvo (2ªP)"
+          "detail": "36 atq. perigosos · 4 ao alvo (2ªP)"
         },
         {
           "id": "xg_delta",
           "label": "xG +2.5 acima",
           "emoji": "🎲",
           "level": "critical",
-          "detail": "xG 2.52 vs 0 golos — golo(s) em dívida"
+          "detail": "xG 3.55 vs 1 golos — golo(s) em dívida"
         },
         {
           "id": "xg_pace",
-          "label": "xG 3.1/90 (2ªP)",
+          "label": "xG 5.2/90 (2ªP)",
           "emoji": "⚡",
-          "level": "high",
-          "detail": "xG a ritmo de 3.1 por 90min (2ªP)"
+          "level": "critical",
+          "detail": "xG a ritmo de 5.2 por 90min (2ªP)"
         },
         {
           "id": "shots",
-          "label": "12r 2ªP",
+          "label": "16r 2ªP",
           "emoji": "🎯",
           "level": "high",
-          "detail": "34 remates/90min (2ªP) (muito alto)"
+          "detail": "39 remates/90min (2ªP) (muito alto)"
         },
         {
           "id": "numerical",
@@ -236,7 +229,7 @@
           "detail": "Casa com 1 vermelho(s) — Fora em vantagem numérica"
         }
       ],
-      "patternScore": 30
+      "patternScore": 36
     }
   ]
 }
