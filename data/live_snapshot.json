@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-20T23:08:59Z",
+  "generated_at": "2026-08-20T23:14:15Z",
   "status": "OK",
   "count": 4,
   "events": [
@@ -10,29 +10,29 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 37,
+      "min": 42,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
-      "xgH": 0.25,
-      "xgA": 0.97,
-      "xgTotal": 1.22,
-      "lastMom": 58,
+      "xgH": 0.32,
+      "xgA": 0.99,
+      "xgTotal": 1.31,
+      "lastMom": -30,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
         "h": 4,
-        "a": 12
+        "a": 13
       },
       "sot": {
         "h": 1,
         "a": 2
       },
       "da": {
-        "h": 16,
-        "a": 27
+        "h": 19,
+        "a": 33
       },
       "corners": {
         "h": null,
@@ -65,38 +65,31 @@
           "label": "CONVERGÊNCIA",
           "emoji": "🔮",
           "level": "conv",
-          "detail": "4 padrões em simultâneo — sinal forte"
+          "detail": "3 padrões em simultâneo — sinal forte"
         },
         {
           "id": "pressure",
           "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "43 atq. perigosos · 3 ao alvo"
+          "detail": "52 atq. perigosos · 3 ao alvo"
         },
         {
           "id": "xg_pace",
-          "label": "xG 3.0/90",
+          "label": "xG 2.8/90",
           "emoji": "⚡",
           "level": "med",
-          "detail": "xG a ritmo de 3.0 por 90min"
+          "detail": "xG a ritmo de 2.8 por 90min"
         },
         {
           "id": "shots",
-          "label": "16 remates",
+          "label": "17 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "39 remates/90min (muito alto)"
-        },
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 58"
+          "detail": "36 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 18
+      "patternScore": 16
     },
     {
       "id": 223328,
@@ -105,28 +98,95 @@
       "hScore": 1,
       "aScore": 2,
       "goals": 3,
-      "min": 46,
+      "min": 51,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 33,
       "xgH": 0.59,
-      "xgA": 1.42,
-      "xgTotal": 2.01,
-      "lastMom": -12,
+      "xgA": 1.74,
+      "xgTotal": 2.33,
+      "lastMom": -46,
       "overOdds": 2.34,
       "probLive": 43,
       "oddsStatus": "VALID",
       "shots": {
         "h": 10,
-        "a": 6
+        "a": 8
       },
       "sot": {
         "h": 5,
-        "a": 4
+        "a": 5
       },
       "da": {
-        "h": 36,
+        "h": 37,
+        "a": 24
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 4,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 46"
+        }
+      ],
+      "patternScore": 2
+    },
+    {
+      "id": 223242,
+      "home": "Macará",
+      "away": "Santos",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 52,
+      "status": "2nd_half",
+      "period": "2T",
+      "league": "",
+      "league_id": 33,
+      "xgH": 0.34,
+      "xgA": 0.04,
+      "xgTotal": 0.38,
+      "lastMom": 15,
+      "overOdds": 2.09,
+      "probLive": 48,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 8,
+        "a": 2
+      },
+      "sot": {
+        "h": 2,
+        "a": 0
+      },
+      "da": {
+        "h": 29,
         "a": 23
       },
       "corners": {
@@ -158,80 +218,13 @@
       "patternScore": 0
     },
     {
-      "id": 223242,
-      "home": "Macará",
-      "away": "Santos",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 47,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 33,
-      "xgH": 0.31,
-      "xgA": 0.04,
-      "xgTotal": 0.35,
-      "lastMom": 71,
-      "overOdds": 2.09,
-      "probLive": 48,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 7,
-        "a": 2
-      },
-      "sot": {
-        "h": 2,
-        "a": 0
-      },
-      "da": {
-        "h": 27,
-        "a": 22
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Casa domina",
-          "emoji": "💥",
-          "level": "high",
-          "detail": "Momentum casa 71 — controlo total"
-        }
-      ],
-      "patternScore": 4
-    },
-    {
       "id": 207967,
       "home": "LDU",
       "away": "Mirassol",
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 47,
+      "min": 52,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -239,7 +232,7 @@
       "xgH": 0.68,
       "xgA": 0.2,
       "xgTotal": 0.8800000000000001,
-      "lastMom": -27,
+      "lastMom": -21,
       "overOdds": 2.18,
       "probLive": 46,
       "oddsStatus": "VALID",
