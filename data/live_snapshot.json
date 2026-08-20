@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-20T16:08:33Z",
+  "generated_at": "2026-08-20T16:13:54Z",
   "status": "OK",
   "count": 5,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 7,
+      "min": 12,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -27,130 +27,12 @@
         "a": null
       },
       "sot": {
-        "h": 0,
+        "h": 1,
         "a": 0
       },
       "da": {
         "h": 8,
-        "a": 7
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 2,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 587863,
-      "home": "Inter Turku",
-      "away": "FC København",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 7,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 83,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": 32,
-      "overOdds": 1.65,
-      "probLive": 61,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 0,
-        "a": 0
-      },
-      "sot": {
-        "h": 0,
-        "a": 0
-      },
-      "da": {
-        "h": 4,
-        "a": 3
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 587850,
-      "home": "Jagiellonia Białystok",
-      "away": "FC Iberia 1999",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 8,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 8,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": 1.7,
-      "probLive": 59,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": 0,
-        "a": 1
-      },
-      "da": {
-        "h": 1,
-        "a": 5
+        "a": 11
       },
       "corners": {
         "h": null,
@@ -180,22 +62,89 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 72",
+          "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "6 atq. perigosos · 1 ao alvo"
+          "detail": "19 atq. perigosos · 1 ao alvo"
         }
       ],
       "patternScore": 10
     },
     {
-      "id": 587841,
-      "home": "Mjällby AIF",
-      "away": "Red Bull Salzburg",
+      "id": 587863,
+      "home": "Inter Turku",
+      "away": "FC København",
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 7,
+      "min": 11,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 83,
+      "xgH": null,
+      "xgA": 0.03,
+      "xgTotal": null,
+      "lastMom": 22,
+      "overOdds": 1.65,
+      "probLive": 61,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 1
+      },
+      "sot": {
+        "h": 0,
+        "a": 1
+      },
+      "da": {
+        "h": 6,
+        "a": 4
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 87",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "10 atq. perigosos · 1 ao alvo"
+        }
+      ],
+      "patternScore": 10
+    },
+    {
+      "id": 587850,
+      "home": "Jagiellonia Białystok",
+      "away": "FC Iberia 1999",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 12,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -204,8 +153,8 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": 1.63,
-      "probLive": 61,
+      "overOdds": 1.7,
+      "probLive": 59,
       "oddsStatus": "VALID",
       "shots": {
         "h": null,
@@ -213,11 +162,11 @@
       },
       "sot": {
         "h": 0,
-        "a": 1
+        "a": 2
       },
       "da": {
-        "h": 0,
-        "a": 5
+        "h": 2,
+        "a": 9
       },
       "corners": {
         "h": null,
@@ -244,8 +193,83 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 92",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "11 atq. perigosos · 2 ao alvo"
+        }
+      ],
+      "patternScore": 10
+    },
+    {
+      "id": 587841,
+      "home": "Mjällby AIF",
+      "away": "Red Bull Salzburg",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 11,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 8,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": 1.63,
+      "probLive": 61,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": null,
+        "a": null
+      },
+      "sot": {
+        "h": 0,
+        "a": 2
+      },
+      "da": {
+        "h": 0,
+        "a": 9
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": false
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 84",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "9 atq. perigosos · 2 ao alvo"
+        }
+      ],
+      "patternScore": 10
     },
     {
       "id": 587847,
@@ -254,7 +278,7 @@
       "hScore": 0,
       "aScore": 3,
       "goals": 3,
-      "min": 47,
+      "min": 52,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -276,7 +300,7 @@
       },
       "da": {
         "h": 12,
-        "a": 25
+        "a": 28
       },
       "corners": {
         "h": null,
