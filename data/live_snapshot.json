@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-20T16:45:44Z",
+  "generated_at": "2026-08-20T16:49:06Z",
   "status": "OK",
   "count": 5,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 44,
+      "min": 48,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -28,11 +28,11 @@
       },
       "sot": {
         "h": 3,
-        "a": 0
+        "a": 1
       },
       "da": {
-        "h": 34,
-        "a": 29
+        "h": 37,
+        "a": 31
       },
       "corners": {
         "h": null,
@@ -61,13 +61,6 @@
       },
       "patterns": [
         {
-          "id": "pressure",
-          "label": "Pressão 100",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "63 atq. perigosos · 3 ao alvo"
-        },
-        {
           "id": "numerical",
           "label": "Fora +1 homem",
           "emoji": "🟥",
@@ -75,7 +68,7 @@
           "detail": "Casa com 1 vermelho(s) — Fora em vantagem numérica"
         }
       ],
-      "patternScore": 12
+      "patternScore": 2
     },
     {
       "id": 587863,
@@ -84,28 +77,28 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 43,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 83,
       "xgH": 0.83,
-      "xgA": 0.45,
-      "xgTotal": 1.28,
-      "lastMom": 18,
+      "xgA": 0.47,
+      "xgTotal": 1.2999999999999998,
+      "lastMom": 1,
       "overOdds": 1.67,
       "probLive": 60,
       "oddsStatus": "VALID",
       "shots": {
         "h": 6,
-        "a": 4
+        "a": 5
       },
       "sot": {
         "h": 2,
         "a": 2
       },
       "da": {
-        "h": 14,
+        "h": 15,
         "a": 14
       },
       "corners": {
@@ -133,34 +126,19 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "pressure",
-          "label": "Pressão 79",
-          "emoji": "🔥",
-          "level": "high",
-          "detail": "28 atq. perigosos · 4 ao alvo"
-        },
-        {
-          "id": "xg_pace",
-          "label": "xG 2.7/90",
-          "emoji": "⚡",
-          "level": "med",
-          "detail": "xG a ritmo de 2.7 por 90min"
-        }
-      ],
-      "patternScore": 6
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 587850,
       "home": "Jagiellonia Białystok",
       "away": "FC Iberia 1999",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 0,
-      "goals": 1,
-      "min": 44,
-      "status": "1st_half",
-      "period": "1T",
+      "goals": 2,
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 8,
       "xgH": null,
@@ -179,7 +157,7 @@
         "a": 3
       },
       "da": {
-        "h": 22,
+        "h": 25,
         "a": 19
       },
       "corners": {
@@ -207,16 +185,8 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "pressure",
-          "label": "Pressão 100",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "41 atq. perigosos · 9 ao alvo"
-        }
-      ],
-      "patternScore": 10
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 587841,
@@ -225,9 +195,9 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 43,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 8,
       "xgH": null,
@@ -246,8 +216,8 @@
         "a": 7
       },
       "da": {
-        "h": 12,
-        "a": 28
+        "h": 13,
+        "a": 29
       },
       "corners": {
         "h": null,
@@ -274,16 +244,8 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "pressure",
-          "label": "Pressão 100",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "40 atq. perigosos · 7 ao alvo"
-        }
-      ],
-      "patternScore": 10
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 587847,
@@ -292,7 +254,7 @@
       "hScore": 0,
       "aScore": 3,
       "goals": 3,
-      "min": 84,
+      "min": 88,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -310,11 +272,11 @@
       },
       "sot": {
         "h": 2,
-        "a": 3
+        "a": 4
       },
       "da": {
-        "h": 16,
-        "a": 54
+        "h": 18,
+        "a": 57
       },
       "corners": {
         "h": null,
