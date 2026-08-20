@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-20T20:42:32Z",
+  "generated_at": "2026-08-20T20:48:00Z",
   "status": "OK",
   "count": 8,
   "events": [
@@ -8,9 +8,9 @@
       "home": "Shamrock Rovers",
       "away": "Kuopion Palloseura",
       "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 84,
+      "aScore": 1,
+      "goals": 2,
+      "min": 91,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -28,11 +28,11 @@
       },
       "sot": {
         "h": 6,
-        "a": 0
+        "a": 2
       },
       "da": {
-        "h": 45,
-        "a": 27
+        "h": 46,
+        "a": 29
       },
       "corners": {
         "h": null,
@@ -59,17 +59,25 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "late",
+          "label": "1 gol em 0min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 47% · 0min"
+        }
+      ],
+      "patternScore": 1
     },
     {
       "id": 587880,
       "home": "Dinamo City",
       "away": "Pafos FC",
       "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 80,
+      "aScore": 1,
+      "goals": 2,
+      "min": 87,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -87,11 +95,11 @@
       },
       "sot": {
         "h": 4,
-        "a": 2
+        "a": 3
       },
       "da": {
         "h": 34,
-        "a": 39
+        "a": 41
       },
       "corners": {
         "h": null,
@@ -118,8 +126,16 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "late",
+          "label": "1 gol em 3min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 47% · 3min"
+        }
+      ],
+      "patternScore": 1
     },
     {
       "id": 587878,
@@ -128,7 +144,7 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 81,
+      "min": 88,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -149,8 +165,8 @@
         "a": 4
       },
       "da": {
-        "h": 44,
-        "a": 42
+        "h": 46,
+        "a": 49
       },
       "corners": {
         "h": null,
@@ -192,32 +208,32 @@
       "id": 587874,
       "home": "Getafe",
       "away": "FK Partizan",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 1,
-      "goals": 2,
-      "min": 81,
+      "goals": 3,
+      "min": 88,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 83,
-      "xgH": 0.91,
-      "xgA": 0.82,
-      "xgTotal": 1.73,
-      "lastMom": -14,
+      "xgH": 1.15,
+      "xgA": 0.84,
+      "xgTotal": 1.9899999999999998,
+      "lastMom": 3,
       "overOdds": 2.08,
       "probLive": 48,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 10,
-        "a": 6
+        "h": 11,
+        "a": 7
       },
       "sot": {
-        "h": 3,
+        "h": 4,
         "a": 1
       },
       "da": {
-        "h": 66,
-        "a": 27
+        "h": 67,
+        "a": 29
       },
       "corners": {
         "h": null,
@@ -246,13 +262,6 @@
       },
       "patterns": [
         {
-          "id": "late",
-          "label": "1 gol em 9min",
-          "emoji": "⏰",
-          "level": "low",
-          "detail": "Falta 1 golo · mercado 48% · 9min"
-        },
-        {
           "id": "numerical",
           "label": "Fora +1 homem",
           "emoji": "🟥",
@@ -260,38 +269,38 @@
           "detail": "Casa com 1 vermelho(s) — Fora em vantagem numérica"
         }
       ],
-      "patternScore": 3
+      "patternScore": 2
     },
     {
       "id": 587873,
       "home": "Sporting Braga",
       "away": "FK Austria Wien",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 0,
-      "goals": 1,
-      "min": 82,
+      "goals": 2,
+      "min": 89,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 83,
-      "xgH": 2.11,
+      "xgH": 3.23,
       "xgA": 0.79,
-      "xgTotal": 2.9,
-      "lastMom": 27,
+      "xgTotal": 4.02,
+      "lastMom": 17,
       "overOdds": 1.97,
       "probLive": 51,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 11,
+        "h": 14,
         "a": 4
       },
       "sot": {
-        "h": 3,
+        "h": 5,
         "a": 1
       },
       "da": {
-        "h": 49,
-        "a": 19
+        "h": 52,
+        "a": 20
       },
       "corners": {
         "h": null,
@@ -321,17 +330,17 @@
       "patterns": [
         {
           "id": "xg_delta",
-          "label": "xG +1.9 acima",
+          "label": "xG +2.0 acima",
           "emoji": "🎲",
           "level": "high",
-          "detail": "xG 2.90 vs 1 golos"
+          "detail": "xG 4.02 vs 2 golos"
         },
         {
-          "id": "open",
-          "label": "JOGO ABERTO",
-          "emoji": "🎭",
+          "id": "late",
+          "label": "1 gol em 1min",
+          "emoji": "⏰",
           "level": "low",
-          "detail": "8min, equipa a perder ataca"
+          "detail": "Falta 1 golo · mercado 51% · 1min"
         }
       ],
       "patternScore": 5
@@ -343,7 +352,7 @@
       "hScore": 3,
       "aScore": 1,
       "goals": 4,
-      "min": 79,
+      "min": 85,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -402,7 +411,7 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 83,
+      "min": 89,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -410,7 +419,7 @@
       "xgH": 0.9,
       "xgA": 0.58,
       "xgTotal": 1.48,
-      "lastMom": 12,
+      "lastMom": -1,
       "overOdds": 1.87,
       "probLive": 53,
       "oddsStatus": "VALID",
@@ -459,31 +468,31 @@
       "home": "Rayo Vallecano",
       "away": "Deportivo Alavés",
       "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 78,
+      "aScore": 1,
+      "goals": 2,
+      "min": 85,
       "status": "2nd_half",
       "period": "2T",
       "league": "La Liga",
       "league_id": 3,
-      "xgH": 0.39,
-      "xgA": 1.02,
-      "xgTotal": 1.4100000000000001,
-      "lastMom": -4,
+      "xgH": 0.4,
+      "xgA": 1.22,
+      "xgTotal": 1.62,
+      "lastMom": -8,
       "overOdds": 2.31,
       "probLive": 43,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 7,
-        "a": 10
+        "h": 8,
+        "a": 11
       },
       "sot": {
         "h": 3,
-        "a": 1
+        "a": 2
       },
       "da": {
-        "h": 31,
-        "a": 35
+        "h": 34,
+        "a": 38
       },
       "corners": {
         "h": null,
@@ -510,8 +519,16 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "late",
+          "label": "1 gol em 5min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 43% · 5min"
+        }
+      ],
+      "patternScore": 1
     }
   ]
 }
