@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-20T03:39:58Z",
+  "generated_at": "2026-08-20T03:45:09Z",
   "status": "OK",
-  "count": 5,
+  "count": 4,
   "events": [
     {
       "id": 5213,
@@ -137,14 +137,14 @@
       "aScore": 0,
       "goals": 0,
       "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 18,
-      "xgH": 0.31,
-      "xgA": 1.11,
-      "xgTotal": 1.4200000000000002,
-      "lastMom": -15,
+      "xgH": 0.3,
+      "xgA": 1.19,
+      "xgTotal": 1.49,
+      "lastMom": 0,
       "overOdds": 1.4,
       "probLive": 71,
       "oddsStatus": "VALID",
@@ -187,6 +187,27 @@
       },
       "patterns": [
         {
+          "id": "pressure",
+          "label": "Pressão 100",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "43 atq. perigosos · 6 ao alvo"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 3.0/90",
+          "emoji": "⚡",
+          "level": "med",
+          "detail": "xG a ritmo de 3.0 por 90min"
+        },
+        {
+          "id": "shots",
+          "label": "13 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "26 remates/90min"
+        },
+        {
           "id": "numerical",
           "label": "Fora +1 homem",
           "emoji": "🟥",
@@ -194,7 +215,7 @@
           "detail": "Casa com 1 vermelho(s) — Fora em vantagem numérica"
         }
       ],
-      "patternScore": 2
+      "patternScore": 16
     },
     {
       "id": 207761,
@@ -203,7 +224,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 66,
+      "min": 71,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -211,7 +232,7 @@
       "xgH": 0.65,
       "xgA": 1.49,
       "xgTotal": 2.14,
-      "lastMom": 45,
+      "lastMom": 1,
       "overOdds": 1.79,
       "probLive": 56,
       "oddsStatus": "VALID",
@@ -224,7 +245,7 @@
         "a": 2
       },
       "da": {
-        "h": 23,
+        "h": 24,
         "a": 20
       },
       "corners": {
@@ -255,94 +276,20 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 74 (2ªP)",
+          "label": "Pressão 65 (2ªP)",
           "emoji": "🔥",
-          "level": "critical",
-          "detail": "15 atq. perigosos · 2 ao alvo (2ªP)"
+          "level": "high",
+          "detail": "16 atq. perigosos · 2 ao alvo (2ªP)"
         },
         {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 45"
+          "id": "late",
+          "label": "1 gol em 19min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 56% · 19min"
         }
       ],
-      "patternScore": 12
-    },
-    {
-      "id": 5208,
-      "home": "Colorado Rapids",
-      "away": "Los Angeles FC",
-      "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 96,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 18,
-      "xgH": 2.25,
-      "xgA": 0.42,
-      "xgTotal": 2.67,
-      "lastMom": 14,
-      "overOdds": 1.68,
-      "probLive": 60,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 12,
-        "a": 9
-      },
-      "sot": {
-        "h": 3,
-        "a": 1
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "xg_delta",
-          "label": "xG sobrevaloriza",
-          "emoji": "🎲",
-          "level": "med",
-          "detail": "xG 2.67 vs 1 golos"
-        },
-        {
-          "id": "xg_pace",
-          "label": "xG 2.5/90",
-          "emoji": "⚡",
-          "level": "med",
-          "detail": "xG a ritmo de 2.5 por 90min"
-        }
-      ],
-      "patternScore": 4
+      "patternScore": 5
     }
   ]
 }
