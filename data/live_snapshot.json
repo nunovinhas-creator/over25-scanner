@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-20T22:00:39Z",
+  "generated_at": "2026-08-20T22:05:52Z",
   "status": "OK",
-  "count": 2,
+  "count": 3,
   "events": [
     {
       "id": 223328,
@@ -10,7 +10,66 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 0,
+      "min": 5,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 33,
+      "xgH": 0.02,
+      "xgA": 0.01,
+      "xgTotal": 0.03,
+      "lastMom": 3,
+      "overOdds": 2.33,
+      "probLive": 43,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 1,
+        "a": 1
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": 1,
+        "a": 4
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 4,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 223242,
+      "home": "Macará",
+      "away": "Santos",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 5,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -18,9 +77,9 @@
       "xgH": null,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": null,
-      "overOdds": 2.32,
-      "probLive": 43,
+      "lastMom": -3,
+      "overOdds": 2.09,
+      "probLive": 48,
       "oddsStatus": "VALID",
       "shots": {
         "h": 0,
@@ -28,6 +87,65 @@
       },
       "sot": {
         "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": 1,
+        "a": 2
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 207967,
+      "home": "LDU",
+      "away": "Mirassol",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 4,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 32,
+      "xgH": 0.03,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": 25,
+      "overOdds": 2.17,
+      "probLive": 46,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 1,
+        "a": 0
+      },
+      "sot": {
+        "h": 1,
         "a": 0
       },
       "da": {
@@ -54,68 +172,9 @@
           "sot": true,
           "corners": false,
           "possession": false,
-          "lastMom": false
+          "lastMom": true
         },
-        "score": 1,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 223242,
-      "home": "Macará",
-      "away": "Santos",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 0,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 33,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": 2.08,
-      "probLive": 48,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": null,
-        "a": null
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": false,
-          "sot": false,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 0,
+        "score": 2,
         "total": 6
       },
       "patterns": [],
