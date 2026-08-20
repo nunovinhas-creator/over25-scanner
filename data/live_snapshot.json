@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-20T00:21:30Z",
+  "generated_at": "2026-08-20T00:26:38Z",
   "status": "OK",
-  "count": 1,
+  "count": 2,
   "events": [
     {
       "id": 216415,
@@ -10,7 +10,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 14,
+      "min": 19,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -18,7 +18,7 @@
       "xgH": 0.33,
       "xgA": 0.1,
       "xgTotal": 0.43000000000000005,
-      "lastMom": 10,
+      "lastMom": 37,
       "overOdds": 1.59,
       "probLive": 63,
       "oddsStatus": "VALID",
@@ -64,11 +64,70 @@
           "id": "shots",
           "label": "5 remates",
           "emoji": "🎯",
-          "level": "high",
-          "detail": "32 remates/90min (muito alto)"
+          "level": "med",
+          "detail": "24 remates/90min"
         }
       ],
-      "patternScore": 4
+      "patternScore": 2
+    },
+    {
+      "id": 5206,
+      "home": "Sporting Kansas City",
+      "away": "St.Louis City",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 0,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 18,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": 1.53,
+      "probLive": 65,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": null,
+        "a": null
+      },
+      "sot": {
+        "h": null,
+        "a": null
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": false,
+          "corners": false,
+          "possession": false,
+          "lastMom": false
+        },
+        "score": 0,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
     }
   ]
 }
