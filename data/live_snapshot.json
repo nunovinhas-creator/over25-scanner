@@ -1,38 +1,38 @@
 {
-  "generated_at": "2026-08-20T04:05:54Z",
+  "generated_at": "2026-08-20T04:11:05Z",
   "status": "OK",
-  "count": 4,
+  "count": 3,
   "events": [
     {
       "id": 5213,
       "home": "Portland Timbers",
       "away": "San Diego FC",
-      "hScore": 2,
+      "hScore": 3,
       "aScore": 1,
-      "goals": 3,
-      "min": 65,
+      "goals": 4,
+      "min": 70,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
-      "xgH": 1.5,
+      "xgH": 1.53,
       "xgA": 0.81,
-      "xgTotal": 2.31,
-      "lastMom": -100,
+      "xgTotal": 2.34,
+      "lastMom": -12,
       "overOdds": 1.36,
       "probLive": 74,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 9,
+        "h": 10,
         "a": 14
       },
       "sot": {
-        "h": 4,
+        "h": 5,
         "a": 5
       },
       "da": {
-        "h": 24,
-        "a": 45
+        "h": 28,
+        "a": 48
       },
       "corners": {
         "h": null,
@@ -59,46 +59,38 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Fora domina",
-          "emoji": "💥",
-          "level": "high",
-          "detail": "Momentum fora 100 — controlo total"
-        }
-      ],
-      "patternScore": 4
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 5212,
       "home": "Vancouver Whitecaps",
       "away": "Houston Dynamo",
-      "hScore": 1,
+      "hScore": 0,
       "aScore": 1,
-      "goals": 2,
-      "min": 65,
+      "goals": 1,
+      "min": 70,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
-      "xgH": 1.73,
+      "xgH": 0.81,
       "xgA": 0.41,
-      "xgTotal": 2.14,
-      "lastMom": 22,
+      "xgTotal": 1.22,
+      "lastMom": -6,
       "overOdds": 1.66,
       "probLive": 60,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 11,
+        "h": 10,
         "a": 8
       },
       "sot": {
-        "h": 2,
+        "h": 1,
         "a": 4
       },
       "da": {
-        "h": 72,
+        "h": 76,
         "a": 20
       },
       "corners": {
@@ -128,35 +120,21 @@
       },
       "patterns": [
         {
-          "id": "conv",
-          "label": "CONVERGÊNCIA",
-          "emoji": "🔮",
-          "level": "conv",
-          "detail": "3 padrões em simultâneo — sinal forte"
-        },
-        {
           "id": "pressure",
           "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "35 atq. perigosos · 3 ao alvo (2ªP)"
-        },
-        {
-          "id": "xg_pace",
-          "label": "xG 6.2/90 (2ªP)",
-          "emoji": "⚡",
-          "level": "critical",
-          "detail": "xG a ritmo de 6.2 por 90min (2ªP)"
+          "detail": "39 atq. perigosos · 2 ao alvo (2ªP)"
         },
         {
           "id": "shots",
-          "label": "9r 2ªP",
+          "label": "8r 2ªP",
           "emoji": "🎯",
           "level": "high",
-          "detail": "40 remates/90min (2ªP) (muito alto)"
+          "detail": "29 remates/90min (2ªP) (muito alto)"
         }
       ],
-      "patternScore": 24
+      "patternScore": 14
     },
     {
       "id": 5211,
@@ -165,29 +143,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 66,
+      "min": 71,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
-      "xgH": 0.31,
-      "xgA": 1.39,
-      "xgTotal": 1.7,
-      "lastMom": -55,
+      "xgH": 0.34,
+      "xgA": 1.85,
+      "xgTotal": 2.19,
+      "lastMom": -36,
       "overOdds": 1.4,
       "probLive": 71,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 6,
-        "a": 13
+        "h": 7,
+        "a": 15
       },
       "sot": {
-        "h": 3,
+        "h": 4,
         "a": 3
       },
       "da": {
-        "h": 18,
-        "a": 41
+        "h": 19,
+        "a": 46
       },
       "corners": {
         "h": null,
@@ -224,31 +202,31 @@
         },
         {
           "id": "pressure",
-          "label": "Pressão 69 (2ªP)",
+          "label": "Pressão 81 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "16 atq. perigosos · 0 ao alvo (2ªP)"
+          "detail": "22 atq. perigosos · 1 ao alvo (2ªP)"
         },
         {
           "id": "xg_delta",
-          "label": "xG sobrevaloriza",
+          "label": "xG +2.2 acima",
           "emoji": "🎲",
+          "level": "high",
+          "detail": "xG 2.19 vs 0 golos"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 2.7/90 (2ªP)",
+          "emoji": "⚡",
           "level": "med",
-          "detail": "xG 1.70 vs 0 golos"
+          "detail": "xG a ritmo de 2.7 por 90min (2ªP)"
         },
         {
           "id": "shots",
-          "label": "6r 2ªP",
+          "label": "9r 2ªP",
           "emoji": "🎯",
-          "level": "med",
-          "detail": "26 remates/90min (2ªP)"
-        },
-        {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum fora 55"
+          "level": "high",
+          "detail": "31 remates/90min (2ªP) (muito alto)"
         },
         {
           "id": "numerical",
@@ -258,66 +236,7 @@
           "detail": "Casa com 1 vermelho(s) — Fora em vantagem numérica"
         }
       ],
-      "patternScore": 18
-    },
-    {
-      "id": 207761,
-      "home": "Phoenix Rising FC",
-      "away": "Colorado Springs Switchbacks FC",
-      "hScore": 3,
-      "aScore": 1,
-      "goals": 4,
-      "min": 92,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 57,
-      "xgH": 1.56,
-      "xgA": 1.64,
-      "xgTotal": 3.2,
-      "lastMom": 12,
-      "overOdds": 1.79,
-      "probLive": 56,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 10,
-        "a": 13
-      },
-      "sot": {
-        "h": 5,
-        "a": 2
-      },
-      "da": {
-        "h": 32,
-        "a": 26
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
+      "patternScore": 22
     }
   ]
 }
