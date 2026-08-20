@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-20T15:47:38Z",
+  "generated_at": "2026-08-20T15:52:47Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -11,8 +11,8 @@
       "aScore": 3,
       "goals": 3,
       "min": 45,
-      "status": "1st_half",
-      "period": "1T",
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 8,
       "xgH": null,
@@ -28,11 +28,11 @@
       },
       "sot": {
         "h": 1,
-        "a": 2
+        "a": 3
       },
       "da": {
-        "h": 11,
-        "a": 23
+        "h": 12,
+        "a": 24
       },
       "corners": {
         "h": null,
@@ -61,13 +61,6 @@
       },
       "patterns": [
         {
-          "id": "pressure",
-          "label": "Pressão 83",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "34 atq. perigosos · 3 ao alvo"
-        },
-        {
           "id": "numerical",
           "label": "Fora +1 homem",
           "emoji": "🟥",
@@ -75,7 +68,7 @@
           "detail": "Casa com 1 vermelho(s) — Fora em vantagem numérica"
         }
       ],
-      "patternScore": 12
+      "patternScore": 2
     }
   ]
 }
