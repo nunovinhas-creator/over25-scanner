@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-22T17:39:53Z",
+  "generated_at": "2026-08-22T17:45:18Z",
   "status": "OK",
   "count": 11,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 4,
+      "min": 9,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -32,66 +32,7 @@
       },
       "da": {
         "h": 1,
-        "a": 1
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": true,
-          "sot": false,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 1,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 588059,
-      "home": "CDA Águilas FC",
-      "away": "Orihuela",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 8,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 79,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "MISSING",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": null,
-        "a": null
-      },
-      "da": {
-        "h": 3,
-        "a": 1
+        "a": 7
       },
       "corners": {
         "h": null,
@@ -121,10 +62,77 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 45",
+          "label": "Pressão 80",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "8 atq. perigosos · 0 ao alvo"
+        }
+      ],
+      "patternScore": 10
+    },
+    {
+      "id": 588059,
+      "home": "CDA Águilas FC",
+      "away": "Orihuela",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 12,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 79,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
+      "shots": {
+        "h": null,
+        "a": null
+      },
+      "sot": {
+        "h": null,
+        "a": null
+      },
+      "da": {
+        "h": 5,
+        "a": 2
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": true,
+          "sot": false,
+          "corners": false,
+          "possession": false,
+          "lastMom": false
+        },
+        "score": 1,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 52",
           "emoji": "🔥",
           "level": "high",
-          "detail": "4 atq. perigosos · 0 ao alvo"
+          "detail": "7 atq. perigosos · 0 ao alvo"
         }
       ],
       "patternScore": 4
@@ -136,20 +144,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 6,
+      "min": 10,
       "status": "1st_half",
       "period": "1T",
       "league": "La Liga",
       "league_id": 3,
-      "xgH": null,
+      "xgH": 0.05,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 18,
+      "lastMom": -11,
       "overOdds": 2.23,
       "probLive": 45,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
+        "h": 2,
         "a": 0
       },
       "sot": {
@@ -157,8 +165,8 @@
         "a": 0
       },
       "da": {
-        "h": 4,
-        "a": 1
+        "h": 7,
+        "a": 3
       },
       "corners": {
         "h": null,
@@ -185,8 +193,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 90",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "10 atq. perigosos · 0 ao alvo"
+        }
+      ],
+      "patternScore": 10
     },
     {
       "id": 600945,
@@ -195,7 +211,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 35,
+      "min": 40,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -216,8 +232,8 @@
         "a": null
       },
       "da": {
-        "h": 12,
-        "a": 23
+        "h": 14,
+        "a": 25
       },
       "corners": {
         "h": null,
@@ -247,10 +263,10 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 90",
+          "label": "Pressão 88",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "35 atq. perigosos · 0 ao alvo"
+          "detail": "39 atq. perigosos · 0 ao alvo"
         }
       ],
       "patternScore": 10
@@ -259,10 +275,10 @@
       "id": 600944,
       "home": "CE Manresa",
       "away": "Atlètic Lleida",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 0,
-      "goals": 0,
-      "min": 9,
+      "goals": 1,
+      "min": 14,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -321,7 +337,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 34,
+      "min": 38,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -342,8 +358,8 @@
         "a": null
       },
       "da": {
-        "h": 19,
-        "a": 29
+        "h": 21,
+        "a": 34
       },
       "corners": {
         "h": null,
@@ -376,7 +392,7 @@
           "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "48 atq. perigosos · 0 ao alvo"
+          "detail": "55 atq. perigosos · 0 ao alvo"
         }
       ],
       "patternScore": 10
@@ -388,7 +404,7 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 37,
+      "min": 41,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -409,8 +425,8 @@
         "a": null
       },
       "da": {
-        "h": 13,
-        "a": 20
+        "h": 17,
+        "a": 21
       },
       "corners": {
         "h": null,
@@ -440,10 +456,10 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 80",
+          "label": "Pressão 83",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "33 atq. perigosos · 0 ao alvo"
+          "detail": "38 atq. perigosos · 0 ao alvo"
         }
       ],
       "patternScore": 10
@@ -455,7 +471,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 37,
+      "min": 41,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -476,8 +492,8 @@
         "a": null
       },
       "da": {
-        "h": 11,
-        "a": 15
+        "h": 12,
+        "a": 16
       },
       "corners": {
         "h": null,
@@ -507,10 +523,10 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 63",
+          "label": "Pressão 61",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "26 atq. perigosos · 0 ao alvo"
+          "detail": "28 atq. perigosos · 0 ao alvo"
         }
       ],
       "patternScore": 10
@@ -522,7 +538,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 39,
+      "min": 43,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -539,12 +555,12 @@
         "a": null
       },
       "sot": {
-        "h": 1,
+        "h": 3,
         "a": 0
       },
       "da": {
-        "h": 12,
-        "a": 7
+        "h": 14,
+        "a": 9
       },
       "corners": {
         "h": null,
@@ -574,10 +590,10 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 49",
+          "label": "Pressão 63",
           "emoji": "🔥",
           "level": "high",
-          "detail": "19 atq. perigosos · 1 ao alvo"
+          "detail": "23 atq. perigosos · 3 ao alvo"
         }
       ],
       "patternScore": 4
@@ -586,32 +602,32 @@
       "id": 219744,
       "home": "PS Kalamata",
       "away": "Aris Thessaloniki",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 0,
-      "goals": 0,
-      "min": 37,
+      "goals": 1,
+      "min": 41,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 24,
-      "xgH": 0.12,
+      "xgH": 0.52,
       "xgA": 0.35,
-      "xgTotal": 0.47,
-      "lastMom": 22,
+      "xgTotal": 0.87,
+      "lastMom": 26,
       "overOdds": 2.3,
       "probLive": 43,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 2,
+        "h": 4,
         "a": 5
       },
       "sot": {
-        "h": 0,
+        "h": 2,
         "a": 1
       },
       "da": {
-        "h": 13,
-        "a": 33
+        "h": 15,
+        "a": 35
       },
       "corners": {
         "h": null,
@@ -644,7 +660,7 @@
           "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "46 atq. perigosos · 1 ao alvo"
+          "detail": "50 atq. perigosos · 3 ao alvo"
         }
       ],
       "patternScore": 10
@@ -656,29 +672,29 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 38,
+      "min": 42,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 24,
-      "xgH": 0.79,
-      "xgA": 0.14,
-      "xgTotal": 0.93,
-      "lastMom": 28,
+      "xgH": 0.93,
+      "xgA": 0.2,
+      "xgTotal": 1.1300000000000001,
+      "lastMom": 20,
       "overOdds": 1.48,
       "probLive": 68,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 7,
-        "a": 3
+        "h": 10,
+        "a": 4
       },
       "sot": {
-        "h": 2,
+        "h": 4,
         "a": 1
       },
       "da": {
-        "h": 24,
-        "a": 12
+        "h": 29,
+        "a": 19
       },
       "corners": {
         "h": null,
@@ -711,17 +727,17 @@
           "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "36 atq. perigosos · 3 ao alvo"
+          "detail": "48 atq. perigosos · 5 ao alvo"
         },
         {
           "id": "shots",
-          "label": "10 remates",
+          "label": "14 remates",
           "emoji": "🎯",
-          "level": "med",
-          "detail": "24 remates/90min"
+          "level": "high",
+          "detail": "30 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 12
+      "patternScore": 14
     }
   ]
 }
