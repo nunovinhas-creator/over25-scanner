@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-22T17:07:45Z",
+  "generated_at": "2026-08-22T17:13:06Z",
   "status": "OK",
   "count": 7,
   "events": [
@@ -10,125 +10,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 3,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 79,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "MISSING",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": null,
-        "a": null
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": false,
-          "sot": false,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 0,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 600943,
-      "home": "Marbella FC",
-      "away": "Real Jaén",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 1,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 79,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "MISSING",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": null,
-        "a": null
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": false,
-          "sot": false,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 0,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 588040,
-      "home": "Real Ávila CF",
-      "away": "CF Pozuelo De Alarcón",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 5,
+      "min": 8,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -150,7 +32,74 @@
       },
       "da": {
         "h": 2,
-        "a": 2
+        "a": 8
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": true,
+          "sot": false,
+          "corners": false,
+          "possession": false,
+          "lastMom": false
+        },
+        "score": 1,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 100",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "10 atq. perigosos · 0 ao alvo"
+        }
+      ],
+      "patternScore": 10
+    },
+    {
+      "id": 600943,
+      "home": "Marbella FC",
+      "away": "Real Jaén",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 6,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 79,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
+      "shots": {
+        "h": null,
+        "a": null
+      },
+      "sot": {
+        "h": null,
+        "a": null
+      },
+      "da": {
+        "h": 2,
+        "a": 9
       },
       "corners": {
         "h": null,
@@ -181,13 +130,80 @@
       "patternScore": 0
     },
     {
+      "id": 588040,
+      "home": "Real Ávila CF",
+      "away": "CF Pozuelo De Alarcón",
+      "hScore": 1,
+      "aScore": 0,
+      "goals": 1,
+      "min": 10,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 79,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
+      "shots": {
+        "h": null,
+        "a": null
+      },
+      "sot": {
+        "h": null,
+        "a": null
+      },
+      "da": {
+        "h": 6,
+        "a": 5
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": true,
+          "sot": false,
+          "corners": false,
+          "possession": false,
+          "lastMom": false
+        },
+        "score": 1,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 99",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "11 atq. perigosos · 0 ao alvo"
+        }
+      ],
+      "patternScore": 10
+    },
+    {
       "id": 374954,
       "home": "Lusitânia Lourosa",
       "away": "Torreense",
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 5,
+      "min": 10,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -208,8 +224,8 @@
         "a": null
       },
       "da": {
-        "h": 2,
-        "a": 2
+        "h": 5,
+        "a": 4
       },
       "corners": {
         "h": null,
@@ -236,8 +252,16 @@
         "score": 1,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 81",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "9 atq. perigosos · 0 ao alvo"
+        }
+      ],
+      "patternScore": 10
     },
     {
       "id": 220845,
@@ -246,7 +270,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 7,
+      "min": 12,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -305,20 +329,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 5,
+      "min": 10,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 24,
-      "xgH": null,
+      "xgH": 0.04,
       "xgA": 0.1,
-      "xgTotal": null,
-      "lastMom": 9,
+      "xgTotal": 0.14,
+      "lastMom": -37,
       "overOdds": 2.3,
       "probLive": 43,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
+        "h": 1,
         "a": 1
       },
       "sot": {
@@ -326,8 +350,8 @@
         "a": 1
       },
       "da": {
-        "h": 2,
-        "a": 4
+        "h": 4,
+        "a": 13
       },
       "corners": {
         "h": null,
@@ -344,49 +368,57 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": true,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 3,
+        "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 100",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "17 atq. perigosos · 1 ao alvo"
+        }
+      ],
+      "patternScore": 10
     },
     {
       "id": 219739,
       "home": "AEK Athens",
       "away": "POT Iraklis",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 0,
-      "goals": 0,
-      "min": 6,
+      "goals": 1,
+      "min": 11,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 24,
-      "xgH": null,
+      "xgH": 0.58,
       "xgA": 0.09,
-      "xgTotal": null,
-      "lastMom": -15,
+      "xgTotal": 0.6699999999999999,
+      "lastMom": 78,
       "overOdds": 1.48,
       "probLive": 68,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
-        "a": 1
-      },
-      "sot": {
-        "h": 0,
-        "a": 0
-      },
-      "da": {
         "h": 3,
         "a": 2
+      },
+      "sot": {
+        "h": 1,
+        "a": 1
+      },
+      "da": {
+        "h": 10,
+        "a": 5
       },
       "corners": {
         "h": null,
@@ -403,18 +435,47 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": true,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 3,
+        "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "3 padrões em simultâneo — sinal forte"
+        },
+        {
+          "id": "pressure",
+          "label": "Pressão 100",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "15 atq. perigosos · 2 ao alvo"
+        },
+        {
+          "id": "shots",
+          "label": "5 remates",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "41 remates/90min (muito alto)"
+        },
+        {
+          "id": "mom",
+          "label": "Casa domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum casa 78 — controlo total"
+        }
+      ],
+      "patternScore": 18
     }
   ]
 }
