@@ -1,8 +1,67 @@
 {
-  "generated_at": "2026-08-22T22:30:28Z",
+  "generated_at": "2026-08-22T22:35:47Z",
   "status": "OK",
-  "count": 5,
+  "count": 6,
   "events": [
+    {
+      "id": 216417,
+      "home": "Kansas City Current",
+      "away": "Seattle Reign FC",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 1,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 72,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": -41,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": 1,
+        "a": 0
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
     {
       "id": 223599,
       "home": "CA Independiente",
@@ -11,14 +70,14 @@
       "aScore": 0,
       "goals": 0,
       "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 85,
       "xgH": 0.33,
-      "xgA": 0.64,
-      "xgTotal": 0.97,
-      "lastMom": 4,
+      "xgA": 0.6,
+      "xgTotal": 0.9299999999999999,
+      "lastMom": 0,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
@@ -59,8 +118,23 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 100",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "46 atq. perigosos · 5 ao alvo"
+        },
+        {
+          "id": "shots",
+          "label": "13 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "26 remates/90min"
+        }
+      ],
+      "patternScore": 12
     },
     {
       "id": 10088,
@@ -129,14 +203,14 @@
       "aScore": 0,
       "goals": 0,
       "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 9,
-      "xgH": 0.34,
-      "xgA": 0.45,
-      "xgTotal": 0.79,
-      "lastMom": -9,
+      "xgH": 0.46,
+      "xgA": 0.64,
+      "xgTotal": 1.1,
+      "lastMom": 0,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
@@ -177,8 +251,23 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 98",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "39 atq. perigosos · 4 ao alvo"
+        },
+        {
+          "id": "shots",
+          "label": "13 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "26 remates/90min"
+        }
+      ],
+      "patternScore": 12
     },
     {
       "id": 220057,
@@ -187,20 +276,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 65,
+      "min": 70,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 80,
-      "xgH": 0.5,
+      "xgH": 0.56,
       "xgA": 0.23,
-      "xgTotal": 0.73,
-      "lastMom": -16,
+      "xgTotal": 0.79,
+      "lastMom": 78,
       "overOdds": 2.4,
       "probLive": 42,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 8,
+        "h": 9,
         "a": 7
       },
       "sot": {
@@ -208,7 +297,7 @@
         "a": 1
       },
       "da": {
-        "h": 29,
+        "h": 34,
         "a": 29
       },
       "corners": {
@@ -239,13 +328,20 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 68 (2ªP)",
+          "label": "Pressão 72 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "15 atq. perigosos · 0 ao alvo (2ªP)"
+          "detail": "20 atq. perigosos · 0 ao alvo (2ªP)"
+        },
+        {
+          "id": "mom",
+          "label": "Casa domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum casa 78 — controlo total"
         }
       ],
-      "patternScore": 10
+      "patternScore": 14
     },
     {
       "id": 10086,
@@ -254,15 +350,15 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 68,
+      "min": 73,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 34,
       "xgH": 0.63,
-      "xgA": 0.9,
-      "xgTotal": 1.53,
-      "lastMom": 13,
+      "xgA": 0.93,
+      "xgTotal": 1.56,
+      "lastMom": -15,
       "overOdds": 2.02,
       "probLive": 50,
       "oddsStatus": "VALID",
@@ -275,8 +371,8 @@
         "a": 1
       },
       "da": {
-        "h": 42,
-        "a": 16
+        "h": 44,
+        "a": 17
       },
       "corners": {
         "h": null,
