@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-22T21:25:46Z",
+  "generated_at": "2026-08-22T21:31:04Z",
   "status": "OK",
-  "count": 8,
+  "count": 4,
   "events": [
     {
       "id": 220057,
@@ -10,7 +10,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 18,
+      "min": 23,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -18,7 +18,7 @@
       "xgH": 0.17,
       "xgA": 0.07,
       "xgTotal": 0.24000000000000002,
-      "lastMom": -24,
+      "lastMom": -29,
       "overOdds": 2.4,
       "probLive": 42,
       "oddsStatus": "VALID",
@@ -28,10 +28,77 @@
       },
       "sot": {
         "h": 1,
-        "a": 0
+        "a": 1
       },
       "da": {
         "h": 8,
+        "a": 13
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 4,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 92",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "21 atq. perigosos · 2 ao alvo"
+        }
+      ],
+      "patternScore": 10
+    },
+    {
+      "id": 10086,
+      "home": "Ceará",
+      "away": "Londrina",
+      "hScore": 0,
+      "aScore": 1,
+      "goals": 1,
+      "min": 28,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 34,
+      "xgH": 0.03,
+      "xgA": 0.79,
+      "xgTotal": 0.8200000000000001,
+      "lastMom": 35,
+      "overOdds": 2.02,
+      "probLive": 50,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 2,
+        "a": 1
+      },
+      "sot": {
+        "h": 0,
+        "a": 1
+      },
+      "da": {
+        "h": 18,
         "a": 8
       },
       "corners": {
@@ -62,94 +129,20 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 85",
+          "label": "Pressão 89",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "16 atq. perigosos · 1 ao alvo"
-        },
-        {
-          "id": "shots",
-          "label": "5 remates",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "25 remates/90min"
-        }
-      ],
-      "patternScore": 12
-    },
-    {
-      "id": 10086,
-      "home": "Ceará",
-      "away": "Londrina",
-      "hScore": 0,
-      "aScore": 1,
-      "goals": 1,
-      "min": 24,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 34,
-      "xgH": 0.04,
-      "xgA": 0.79,
-      "xgTotal": 0.8300000000000001,
-      "lastMom": 12,
-      "overOdds": 2.02,
-      "probLive": 50,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 2,
-        "a": 1
-      },
-      "sot": {
-        "h": 0,
-        "a": 1
-      },
-      "da": {
-        "h": 13,
-        "a": 7
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "pressure",
-          "label": "Pressão 80",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "20 atq. perigosos · 1 ao alvo"
+          "detail": "26 atq. perigosos · 1 ao alvo"
         },
         {
           "id": "xg_pace",
-          "label": "xG 3.1/90",
+          "label": "xG 2.6/90",
           "emoji": "⚡",
-          "level": "high",
-          "detail": "xG a ritmo de 3.1 por 90min"
+          "level": "med",
+          "detail": "xG a ritmo de 2.6 por 90min"
         }
       ],
-      "patternScore": 14
+      "patternScore": 12
     },
     {
       "id": 220056,
@@ -163,15 +156,15 @@
       "period": "HT",
       "league": "",
       "league_id": 80,
-      "xgH": 0.07,
+      "xgH": 0.26,
       "xgA": 0.58,
-      "xgTotal": 0.6499999999999999,
+      "xgTotal": 0.84,
       "lastMom": -16,
       "overOdds": 2.09,
       "probLive": 48,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 2,
+        "h": 4,
         "a": 6
       },
       "sot": {
@@ -217,7 +210,7 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 61,
+      "min": 67,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -238,8 +231,8 @@
         "a": null
       },
       "da": {
-        "h": 41,
-        "a": 23
+        "h": 44,
+        "a": 26
       },
       "corners": {
         "h": null,
@@ -269,249 +262,13 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 79 (2ªP)",
+          "label": "Pressão 82 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "14 atq. perigosos · 0 ao alvo (2ªP)"
+          "detail": "20 atq. perigosos · 0 ao alvo (2ªP)"
         }
       ],
       "patternScore": 10
-    },
-    {
-      "id": 220840,
-      "home": "Paços de Ferreira",
-      "away": "Varzim SC",
-      "hScore": 1,
-      "aScore": 4,
-      "goals": 5,
-      "min": 90,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 82,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": 2.24,
-      "probLive": 45,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": 7,
-        "a": 7
-      },
-      "da": {
-        "h": 46,
-        "a": 69
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 2,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 215516,
-      "home": "Sporting CP",
-      "away": "FC Alverca",
-      "hScore": 3,
-      "aScore": 1,
-      "goals": 4,
-      "min": 90,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "Primeira Liga",
-      "league_id": 2,
-      "xgH": 2.08,
-      "xgA": 0.4,
-      "xgTotal": 2.48,
-      "lastMom": -13,
-      "overOdds": 1.47,
-      "probLive": 68,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 12,
-        "a": 9
-      },
-      "sot": {
-        "h": 6,
-        "a": 3
-      },
-      "da": {
-        "h": 26,
-        "a": 23
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 214780,
-      "home": "CD Eldense",
-      "away": "Cádiz",
-      "hScore": 2,
-      "aScore": 2,
-      "goals": 4,
-      "min": 94,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "La Liga 2",
-      "league_id": 38,
-      "xgH": 0.77,
-      "xgA": 0.88,
-      "xgTotal": 1.65,
-      "lastMom": 17,
-      "overOdds": 2.11,
-      "probLive": 47,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 10,
-        "a": 8
-      },
-      "sot": {
-        "h": 6,
-        "a": 6
-      },
-      "da": {
-        "h": 59,
-        "a": 49
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 213533,
-      "home": "Espanyol",
-      "away": "Real Madrid",
-      "hScore": 1,
-      "aScore": 2,
-      "goals": 3,
-      "min": 92,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "La Liga",
-      "league_id": 3,
-      "xgH": 1.12,
-      "xgA": 2.8,
-      "xgTotal": 3.92,
-      "lastMom": -6,
-      "overOdds": 1.65,
-      "probLive": 61,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 8,
-        "a": 21
-      },
-      "sot": {
-        "h": 3,
-        "a": 8
-      },
-      "da": {
-        "h": 20,
-        "a": 44
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
     }
   ]
 }
