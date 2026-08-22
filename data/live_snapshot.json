@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-22T21:52:49Z",
+  "generated_at": "2026-08-22T21:58:15Z",
   "status": "OK",
   "count": 7,
   "events": [
@@ -10,29 +10,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 22,
+      "min": 26,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 85,
       "xgH": 0.12,
-      "xgA": 0.37,
-      "xgTotal": 0.49,
-      "lastMom": -38,
+      "xgA": 0.61,
+      "xgTotal": 0.73,
+      "lastMom": -41,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
         "h": 3,
-        "a": 1
+        "a": 6
       },
       "sot": {
         "h": 1,
-        "a": 0
+        "a": 3
       },
       "da": {
-        "h": 14,
-        "a": 9
+        "h": 18,
+        "a": 11
       },
       "corners": {
         "h": null,
@@ -61,14 +61,35 @@
       },
       "patterns": [
         {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "3 padrões em simultâneo — sinal forte"
+        },
+        {
           "id": "pressure",
-          "label": "Pressão 99",
+          "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "23 atq. perigosos · 1 ao alvo"
+          "detail": "29 atq. perigosos · 4 ao alvo"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 2.5/90",
+          "emoji": "⚡",
+          "level": "med",
+          "detail": "xG a ritmo de 2.5 por 90min"
+        },
+        {
+          "id": "shots",
+          "label": "9 remates",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "31 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 10
+      "patternScore": 16
     },
     {
       "id": 10088,
@@ -77,28 +98,28 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 20,
+      "min": 26,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
-      "xgH": 0.58,
+      "xgH": 0.77,
       "xgA": 0.23,
-      "xgTotal": 0.8099999999999999,
-      "lastMom": 68,
+      "xgTotal": 1.0,
+      "lastMom": 34,
       "overOdds": 3.16,
       "probLive": 32,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 7,
+        "h": 8,
         "a": 3
       },
       "sot": {
-        "h": 1,
+        "h": 3,
         "a": 1
       },
       "da": {
-        "h": 13,
+        "h": 15,
         "a": 7
       },
       "corners": {
@@ -132,38 +153,31 @@
           "label": "CONVERGÊNCIA",
           "emoji": "🔮",
           "level": "conv",
-          "detail": "4 padrões em simultâneo — sinal forte"
+          "detail": "3 padrões em simultâneo — sinal forte"
         },
         {
           "id": "pressure",
-          "label": "Pressão 100",
+          "label": "Pressão 96",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "20 atq. perigosos · 2 ao alvo"
+          "detail": "22 atq. perigosos · 4 ao alvo"
         },
         {
           "id": "xg_pace",
-          "label": "xG 3.6/90",
+          "label": "xG 3.5/90",
           "emoji": "⚡",
           "level": "high",
-          "detail": "xG a ritmo de 3.6 por 90min"
+          "detail": "xG a ritmo de 3.5 por 90min"
         },
         {
           "id": "shots",
-          "label": "10 remates",
+          "label": "11 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "45 remates/90min (muito alto)"
-        },
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 68"
+          "detail": "38 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 20
+      "patternScore": 18
     },
     {
       "id": 7229,
@@ -172,96 +186,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 21,
+      "min": 26,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 9,
-      "xgH": 0.21,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": 30,
+      "xgH": 0.24,
+      "xgA": 0.05,
+      "xgTotal": 0.29,
+      "lastMom": -2,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 5,
-        "a": 0
-      },
-      "sot": {
-        "h": 0,
-        "a": 0
-      },
-      "da": {
-        "h": 13,
+        "h": 6,
         "a": 2
       },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "pressure",
-          "label": "Pressão 64",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "15 atq. perigosos · 0 ao alvo"
-        }
-      ],
-      "patternScore": 10
-    },
-    {
-      "id": 220057,
-      "home": "Deportes Tolima",
-      "away": "Atlético Bucaramanga",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 45,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 80,
-      "xgH": 0.34,
-      "xgA": 0.17,
-      "xgTotal": 0.51,
-      "lastMom": 10,
-      "overOdds": 2.4,
-      "probLive": 42,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 6,
-        "a": 5
-      },
       "sot": {
-        "h": 1,
-        "a": 1
+        "h": 0,
+        "a": 2
       },
       "da": {
-        "h": 19,
-        "a": 23
+        "h": 14,
+        "a": 3
       },
       "corners": {
         "h": null,
@@ -291,20 +238,79 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 94",
+          "label": "Pressão 69",
           "emoji": "🔥",
-          "level": "critical",
-          "detail": "42 atq. perigosos · 2 ao alvo"
+          "level": "high",
+          "detail": "17 atq. perigosos · 2 ao alvo"
         },
         {
           "id": "shots",
-          "label": "11 remates",
+          "label": "8 remates",
           "emoji": "🎯",
           "level": "med",
-          "detail": "22 remates/90min"
+          "detail": "28 remates/90min"
         }
       ],
-      "patternScore": 12
+      "patternScore": 6
+    },
+    {
+      "id": 220057,
+      "home": "Deportes Tolima",
+      "away": "Atlético Bucaramanga",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
+      "league": "",
+      "league_id": 80,
+      "xgH": 0.41,
+      "xgA": 0.17,
+      "xgTotal": 0.58,
+      "lastMom": 44,
+      "overOdds": 2.4,
+      "probLive": 42,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 7,
+        "a": 5
+      },
+      "sot": {
+        "h": 2,
+        "a": 1
+      },
+      "da": {
+        "h": 20,
+        "a": 23
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 4,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 10086,
@@ -372,20 +378,20 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 61,
+      "min": 66,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 80,
-      "xgH": 0.33,
+      "xgH": 0.32,
       "xgA": 1.46,
-      "xgTotal": 1.79,
-      "lastMom": 27,
+      "xgTotal": 1.78,
+      "lastMom": -3,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 4,
+        "h": 5,
         "a": 8
       },
       "sot": {
@@ -393,8 +399,8 @@
         "a": 4
       },
       "da": {
-        "h": 38,
-        "a": 51
+        "h": 42,
+        "a": 52
       },
       "corners": {
         "h": null,
@@ -424,13 +430,20 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 94 (2ªP)",
+          "label": "Pressão 96 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "15 atq. perigosos · 2 ao alvo (2ªP)"
+          "detail": "20 atq. perigosos · 2 ao alvo (2ªP)"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 4.0/90 (2ªP)",
+          "emoji": "⚡",
+          "level": "critical",
+          "detail": "xG a ritmo de 4.0 por 90min (2ªP)"
         }
       ],
-      "patternScore": 10
+      "patternScore": 20
     },
     {
       "id": 600953,
@@ -439,7 +452,7 @@
       "hScore": 3,
       "aScore": 0,
       "goals": 3,
-      "min": 88,
+      "min": 90,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -460,8 +473,8 @@
         "a": null
       },
       "da": {
-        "h": 51,
-        "a": 37
+        "h": 53,
+        "a": 40
       },
       "corners": {
         "h": null,
