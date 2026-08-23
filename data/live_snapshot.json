@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-23T03:36:00Z",
+  "generated_at": "2026-08-23T03:41:24Z",
   "status": "OK",
   "count": 8,
   "events": [
@@ -10,29 +10,29 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 33,
+      "min": 39,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 19,
-      "xgH": 0.06,
-      "xgA": 0.15,
-      "xgTotal": 0.21,
-      "lastMom": 8,
+      "xgH": 0.08,
+      "xgA": 0.22,
+      "xgTotal": 0.3,
+      "lastMom": 58,
       "overOdds": 1.76,
       "probLive": 57,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 2,
-        "a": 1
+        "h": 3,
+        "a": 2
       },
       "sot": {
         "h": 0,
         "a": 1
       },
       "da": {
-        "h": 16,
-        "a": 15
+        "h": 23,
+        "a": 17
       },
       "corners": {
         "h": null,
@@ -62,44 +62,51 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 90",
+          "label": "Pressão 97",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "31 atq. perigosos · 1 ao alvo"
+          "detail": "40 atq. perigosos · 1 ao alvo"
+        },
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 58"
         }
       ],
-      "patternScore": 10
+      "patternScore": 12
     },
     {
       "id": 207773,
       "home": "Sacramento Republic FC",
       "away": "Phoenix Rising FC",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 0,
-      "goals": 1,
-      "min": 22,
+      "goals": 2,
+      "min": 28,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 57,
-      "xgH": 0.17,
+      "xgH": 0.21,
       "xgA": 0.05,
-      "xgTotal": 0.22000000000000003,
-      "lastMom": 31,
+      "xgTotal": 0.26,
+      "lastMom": 3,
       "overOdds": 1.88,
       "probLive": 53,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 2,
+        "h": 3,
         "a": 1
       },
       "sot": {
-        "h": 2,
+        "h": 3,
         "a": 0
       },
       "da": {
-        "h": 12,
-        "a": 6
+        "h": 15,
+        "a": 7
       },
       "corners": {
         "h": null,
@@ -129,10 +136,10 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 84",
+          "label": "Pressão 86",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "18 atq. perigosos · 2 ao alvo"
+          "detail": "22 atq. perigosos · 3 ao alvo"
         }
       ],
       "patternScore": 10
@@ -327,31 +334,31 @@
       "home": "Orange County SC",
       "away": "FC Tulsa",
       "hScore": 1,
-      "aScore": 3,
-      "goals": 4,
-      "min": 64,
+      "aScore": 4,
+      "goals": 5,
+      "min": 69,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 57,
-      "xgH": 0.45,
-      "xgA": 1.62,
-      "xgTotal": 2.0700000000000003,
-      "lastMom": 1,
+      "xgH": 0.52,
+      "xgA": 1.84,
+      "xgTotal": 2.3600000000000003,
+      "lastMom": -28,
       "overOdds": 1.96,
       "probLive": 51,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 8,
-        "a": 10
+        "h": 9,
+        "a": 12
       },
       "sot": {
         "h": 1,
-        "a": 7
+        "a": 8
       },
       "da": {
-        "h": 34,
-        "a": 36
+        "h": 38,
+        "a": 38
       },
       "corners": {
         "h": null,
@@ -388,29 +395,29 @@
       "hScore": 5,
       "aScore": 0,
       "goals": 5,
-      "min": 90,
+      "min": 95,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
       "xgH": 1.11,
-      "xgA": 0.59,
-      "xgTotal": 1.7000000000000002,
-      "lastMom": -10,
+      "xgA": 0.62,
+      "xgTotal": 1.73,
+      "lastMom": -54,
       "overOdds": 1.47,
       "probLive": 68,
       "oddsStatus": "VALID",
       "shots": {
         "h": 17,
-        "a": 4
+        "a": 5
       },
       "sot": {
         "h": 10,
-        "a": 0
+        "a": 1
       },
       "da": {
         "h": 65,
-        "a": 44
+        "a": 46
       },
       "corners": {
         "h": null,
@@ -437,8 +444,16 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 54"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 207770,
@@ -447,29 +462,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 17,
+      "min": 22,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 57,
-      "xgH": 0.06,
-      "xgA": 0.04,
-      "xgTotal": 0.1,
-      "lastMom": -34,
-      "overOdds": 1.72,
-      "probLive": 58,
-      "oddsStatus": "VALID",
+      "xgH": 0.11,
+      "xgA": 0.15,
+      "xgTotal": 0.26,
+      "lastMom": -26,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
       "shots": {
-        "h": 2,
-        "a": 1
+        "h": 3,
+        "a": 3
       },
       "sot": {
         "h": 0,
-        "a": 1
+        "a": 2
       },
       "da": {
-        "h": 8,
-        "a": 6
+        "h": 9,
+        "a": 10
       },
       "corners": {
         "h": null,
@@ -499,13 +514,20 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 79",
+          "label": "Pressão 88",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "14 atq. perigosos · 1 ao alvo"
+          "detail": "19 atq. perigosos · 2 ao alvo"
+        },
+        {
+          "id": "shots",
+          "label": "6 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "25 remates/90min"
         }
       ],
-      "patternScore": 10
+      "patternScore": 12
     }
   ]
 }
