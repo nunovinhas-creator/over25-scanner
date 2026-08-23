@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-23T11:06:53Z",
+  "generated_at": "2026-08-23T11:12:28Z",
   "status": "OK",
   "count": 11,
   "events": [
@@ -8,17 +8,17 @@
       "home": "West Bromwich Albion",
       "away": "Burnley",
       "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 6,
+      "aScore": 1,
+      "goals": 1,
+      "min": 11,
       "status": "1st_half",
       "period": "1T",
       "league": "Championship",
       "league_id": 12,
-      "xgH": 0.08,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": 42,
+      "xgH": 0.12,
+      "xgA": 0.76,
+      "xgTotal": 0.88,
+      "lastMom": -3,
       "overOdds": 2.02,
       "probLive": 50,
       "oddsStatus": "VALID",
@@ -49,14 +49,14 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 3,
         "total": 6
       },
       "patterns": [],
@@ -69,21 +69,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 6,
+      "min": 11,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 43,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": 5,
+      "xgH": 0.03,
+      "xgA": 0.04,
+      "xgTotal": 0.07,
+      "lastMom": -24,
       "overOdds": 1.68,
       "probLive": 60,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
-        "a": 0
+        "h": 1,
+        "a": 1
       },
       "sot": {
         "h": 0,
@@ -108,14 +108,14 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 3,
         "total": 6
       },
       "patterns": [],
@@ -128,20 +128,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 5,
+      "min": 10,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 43,
-      "xgH": null,
+      "xgH": 0.17,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": -21,
+      "lastMom": 6,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 0,
+        "h": 2,
         "a": 0
       },
       "sot": {
@@ -187,7 +187,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 6,
+      "min": 11,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -195,7 +195,7 @@
       "xgH": null,
       "xgA": 0.06,
       "xgTotal": null,
-      "lastMom": -5,
+      "lastMom": 41,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
@@ -208,8 +208,8 @@
         "a": 0
       },
       "da": {
-        "h": null,
-        "a": null
+        "h": 2,
+        "a": 1
       },
       "corners": {
         "h": null,
@@ -227,17 +227,25 @@
       "coverage": {
         "fields": {
           "xgTotal": false,
-          "da": false,
+          "da": true,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 25",
+          "emoji": "🔥",
+          "level": "med",
+          "detail": "3 atq. perigosos · 0 ao alvo"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 212213,
@@ -246,7 +254,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 30,
+      "min": 35,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -254,7 +262,7 @@
       "xgH": 0.36,
       "xgA": 0.39,
       "xgTotal": 0.75,
-      "lastMom": -10,
+      "lastMom": -29,
       "overOdds": 2.14,
       "probLive": 47,
       "oddsStatus": "VALID",
@@ -301,7 +309,7 @@
           "label": "11 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "33 remates/90min (muito alto)"
+          "detail": "28 remates/90min (muito alto)"
         }
       ],
       "patternScore": 4
@@ -313,7 +321,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 35,
+      "min": 41,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -372,7 +380,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 35,
+      "min": 40,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -488,11 +496,11 @@
       "home": "Chaves",
       "away": "AVS - Futebol SAD",
       "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "aScore": 1,
+      "goals": 2,
+      "min": 51,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 88,
       "xgH": null,
@@ -549,25 +557,25 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 46,
+      "min": 51,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 84,
       "xgH": 0.9,
-      "xgA": 0.97,
-      "xgTotal": 1.87,
-      "lastMom": 2,
+      "xgA": 1.05,
+      "xgTotal": 1.9500000000000002,
+      "lastMom": -16,
       "overOdds": 1.44,
       "probLive": 69,
       "oddsStatus": "VALID",
       "shots": {
         "h": 5,
-        "a": 11
+        "a": 13
       },
       "sot": {
         "h": 3,
-        "a": 4
+        "a": 5
       },
       "da": {
         "h": 10,
@@ -608,9 +616,9 @@
       "hScore": 1,
       "aScore": 2,
       "goals": 3,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 49,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 82,
       "xgH": null,
@@ -629,8 +637,8 @@
         "a": 4
       },
       "da": {
-        "h": 32,
-        "a": 23
+        "h": 34,
+        "a": 25
       },
       "corners": {
         "h": null,
