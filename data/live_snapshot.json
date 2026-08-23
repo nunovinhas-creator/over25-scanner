@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-23T04:45:00Z",
+  "generated_at": "2026-08-23T04:49:29Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -10,29 +10,29 @@
       "hScore": 0,
       "aScore": 2,
       "goals": 2,
-      "min": 77,
+      "min": 82,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 19,
-      "xgH": 1.09,
-      "xgA": 1.55,
-      "xgTotal": 2.64,
-      "lastMom": -24,
+      "xgH": 1.19,
+      "xgA": 1.57,
+      "xgTotal": 2.76,
+      "lastMom": 25,
       "overOdds": 1.76,
       "probLive": 57,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 19,
-        "a": 8
+        "h": 21,
+        "a": 10
       },
       "sot": {
         "h": 3,
         "a": 5
       },
       "da": {
-        "h": 60,
-        "a": 41
+        "h": 63,
+        "a": 44
       },
       "corners": {
         "h": null,
@@ -61,42 +61,14 @@
       },
       "patterns": [
         {
-          "id": "conv",
-          "label": "CONVERGÊNCIA",
-          "emoji": "🔮",
-          "level": "conv",
-          "detail": "4 padrões em simultâneo — sinal forte"
-        },
-        {
-          "id": "pressure",
-          "label": "Pressão 100 (2ªP)",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "44 atq. perigosos · 5 ao alvo (2ªP)"
-        },
-        {
-          "id": "xg_pace",
-          "label": "xG 3.3/90 (2ªP)",
-          "emoji": "⚡",
-          "level": "high",
-          "detail": "xG a ritmo de 3.3 por 90min (2ªP)"
-        },
-        {
-          "id": "shots",
-          "label": "16r 2ªP",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "45 remates/90min (2ªP) (muito alto)"
-        },
-        {
           "id": "late",
-          "label": "1 gol em 13min",
+          "label": "1 gol em 8min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 57% · 13min"
+          "detail": "Falta 1 golo · mercado 57% · 8min"
         }
       ],
-      "patternScore": 19
+      "patternScore": 1
     },
     {
       "id": 207773,
@@ -105,28 +77,28 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 73,
+      "min": 78,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 57,
       "xgH": 0.73,
-      "xgA": 0.28,
-      "xgTotal": 1.01,
-      "lastMom": -15,
+      "xgA": 0.3,
+      "xgTotal": 1.03,
+      "lastMom": 13,
       "overOdds": 1.88,
       "probLive": 53,
       "oddsStatus": "VALID",
       "shots": {
         "h": 5,
-        "a": 5
+        "a": 6
       },
       "sot": {
         "h": 3,
         "a": 1
       },
       "da": {
-        "h": 31,
+        "h": 33,
         "a": 25
       },
       "corners": {
@@ -164,15 +136,15 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 66,
+      "min": 71,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 57,
-      "xgH": 0.4,
+      "xgH": 0.51,
       "xgA": 0.71,
-      "xgTotal": 1.1099999999999999,
-      "lastMom": 64,
+      "xgTotal": 1.22,
+      "lastMom": -4,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
@@ -185,8 +157,8 @@
         "a": 3
       },
       "da": {
-        "h": 33,
-        "a": 30
+        "h": 34,
+        "a": 31
       },
       "corners": {
         "h": null,
@@ -215,21 +187,14 @@
       },
       "patterns": [
         {
-          "id": "pressure",
-          "label": "Pressão 95 (2ªP)",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "21 atq. perigosos · 1 ao alvo (2ªP)"
-        },
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
+          "id": "xg_delta",
+          "label": "xG sobrevaloriza",
+          "emoji": "🎲",
           "level": "med",
-          "detail": "Momentum casa 64"
+          "detail": "xG 1.22 vs 0 golos"
         }
       ],
-      "patternScore": 12
+      "patternScore": 2
     }
   ]
 }
