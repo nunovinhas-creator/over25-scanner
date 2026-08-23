@@ -517,10 +517,29 @@ def scan() -> None:
     ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     seen_ids: set[str] = set()
 
-    for raw in _fetch_all_events():
+    # Bloco Q (diagnose-rejection-discrepancy) — funil de contagem. Antes desta
+    # sessão, três "continue" no loop abaixo consumiam um evento sem gravar
+    # reject_reason nenhum: evento desaparece sem rasto, scan reporta sucesso —
+    # viola a invariante "nenhum estado de erro pode parecer sucesso" (CLAUDE.md).
+    # Cada bucket é incrementado no ponto exacto do continue/branch correspondente;
+    # no fim, a soma tem de fechar com o total de eventos fetched (ver print FUNIL).
+    eventos_fetched = _fetch_all_events()
+    n_gate0_liga = 0
+    n_gate1_timing = 0
+    n_gate1_ko_passou = 0
+    n_gate1_ko_ilegivel = 0
+    n_gate2_sem_odds = 0
+    n_gate2_banda = 0
+    n_gate3_drifting = 0
+    n_gate4_avaliados = 0
+    n_picks_gate = 0
+    n_dup_ou_sem_id = 0
+
+    for raw in eventos_fetched:
         ev = _event_fields(raw)
         ev_id = ev["id"]
         if not ev_id or ev_id in seen_ids:
+            n_dup_ou_sem_id += 1
             continue
         seen_ids.add(ev_id)
 
@@ -528,6 +547,7 @@ def scan() -> None:
         if ev["liga"] not in WHITELIST:
             reason = "liga_desconhecida" if ev["liga"] == UNKNOWN_LEAGUE else "liga_fora_whitelist"
             new_rejected.append({**ev, "reject_reason": reason, "scanned_at": ts})
+            n_gate0_liga += 1
             continue
 
         # Gate 1 — timing
@@ -535,19 +555,28 @@ def scan() -> None:
             ko = datetime.fromisoformat(ev["data"].replace("Z", "+00:00"))
             timing_h = (ko - datetime.now(timezone.utc)).total_seconds() / 3600.0
         except Exception:
+            new_rejected.append({**ev, "reject_reason": "ko_ilegivel", "scanned_at": ts})
+            n_gate1_ko_ilegivel += 1
             continue
         if timing_h < 0 or timing_h > MAX_TIMING_H:
             if timing_h > MAX_TIMING_H:
                 new_rejected.append({**ev, "timing_h": round(timing_h, 2), "reject_reason": "timing_apos_6h", "scanned_at": ts})
+                n_gate1_timing += 1
+            else:
+                new_rejected.append({**ev, "timing_h": round(timing_h, 2), "reject_reason": "ko_ja_passou", "scanned_at": ts})
+                n_gate1_ko_passou += 1
             continue
         ev["timing_h"] = round(timing_h, 2)
 
         # Gate 2 — odds band
         if not ev.get("odds_over"):
+            new_rejected.append({**ev, "reject_reason": "sem_odds_over", "scanned_at": ts})
+            n_gate2_sem_odds += 1
             continue
         ov = float(ev["odds_over"])
         if ov < MIN_ODDS or ov > MAX_ODDS:
             new_rejected.append({**ev, "reject_reason": "odds_fora_banda", "scanned_at": ts})
+            n_gate2_banda += 1
             continue
 
         # Gate 3 — DRIFTING (BSD fornece movement diretamente)
@@ -555,12 +584,14 @@ def scan() -> None:
         scan_state[ev_id] = {"odds_over": ov, "movimento": movimento, "updated_at": ts}
         if movimento == "DRIFTING":
             new_rejected.append({**ev, "reject_reason": "odds_drifting", "scanned_at": ts})
+            n_gate3_drifting += 1
             continue
 
         # Gate 4 — EV (pipeline DC+calibrador)
         prob = compute_prob(ev, dc_ratings, calibrator_fn)
         if prob is None:
             new_rejected.append({**ev, "reject_reason": "pipeline_error", "scanned_at": ts})
+            n_gate4_avaliados += 1
             continue
         sem_modelo = prob.get("p_model_source") == "market_only"
         if sem_modelo:
@@ -568,9 +599,11 @@ def scan() -> None:
         if prob["ev_final"] < MIN_EV:
             reason = REJECT_REASON_SEM_MODELO if sem_modelo else "ev_baixo"
             new_rejected.append({**ev, **prob, "reject_reason": reason, "scanned_at": ts})
+            n_gate4_avaliados += 1
             continue
 
         # ── Passou todos os gates ─────────────────────────────────────────────
+        n_picks_gate += 1
         if ev_id in existing_picks:
             prev_odds = float(existing_picks[ev_id].get("odds_over") or 0)
             if prev_odds and abs(ov - prev_odds) / prev_odds > ODDS_UPDATE_THRESHOLD:
@@ -653,6 +686,28 @@ def scan() -> None:
         f"{len(new_rejected)} rejeitados ({n_sem_modelo} sem modelo DC) | {alerts_sent} TG enviados | "
         f"{len(new_btts_picks)} BTTS+O2.5 novos"
     )
+
+    n_events_total = len(eventos_fetched)
+    n_funil_contabilizado = (
+        n_gate0_liga + n_gate1_timing + n_gate1_ko_passou + n_gate1_ko_ilegivel
+        + n_gate2_sem_odds + n_gate2_banda + n_gate3_drifting
+        + n_gate4_avaliados + n_picks_gate + n_dup_ou_sem_id
+    )
+    print(
+        f"FUNIL events={n_events_total} gate0_liga={n_gate0_liga} "
+        f"gate1_timing={n_gate1_timing} gate1_ko_passou={n_gate1_ko_passou} "
+        f"gate1_ko_ilegivel={n_gate1_ko_ilegivel} gate2_sem_odds={n_gate2_sem_odds} "
+        f"gate2_banda={n_gate2_banda} gate3_drifting={n_gate3_drifting} "
+        f"gate4_avaliados={n_gate4_avaliados} picks={n_picks_gate}"
+    )
+    if n_funil_contabilizado != n_events_total:
+        print(
+            f"ERRO FUNIL: {n_events_total} eventos fetched mas só "
+            f"{n_funil_contabilizado} contabilizados nos buckets conhecidos "
+            f"(diff={n_events_total - n_funil_contabilizado}, dup_ou_sem_id={n_dup_ou_sem_id}) "
+            "— há um caminho não contabilizado em scan()",
+            file=sys.stderr,
+        )
 
     git_commit_push(
         [str(PICKS_FILE), str(REJECTED_FILE), str(SCAN_STATE_FILE), str(BTTS_O25_FILE)],
