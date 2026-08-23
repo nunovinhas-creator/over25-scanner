@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-23T00:13:20Z",
+  "generated_at": "2026-08-23T00:18:35Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -10,82 +10,15 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 12,
+      "min": 17,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 85,
-      "xgH": 0.13,
+      "xgH": 0.21,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 12,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "MISSING",
-      "shots": {
-        "h": 1,
-        "a": 0
-      },
-      "sot": {
-        "h": 1,
-        "a": 0
-      },
-      "da": {
-        "h": 6,
-        "a": 5
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "pressure",
-          "label": "Pressão 88",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "11 atq. perigosos · 1 ao alvo"
-        }
-      ],
-      "patternScore": 10
-    },
-    {
-      "id": 223605,
-      "home": "Huracán",
-      "away": "Deportivo Riestra",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 10,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 85,
-      "xgH": 0.09,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": 6,
+      "lastMom": 69,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
@@ -94,12 +27,12 @@
         "a": 0
       },
       "sot": {
-        "h": 0,
+        "h": 1,
         "a": 0
       },
       "da": {
-        "h": 8,
-        "a": 2
+        "h": 11,
+        "a": 9
       },
       "corners": {
         "h": null,
@@ -129,10 +62,84 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 90",
+          "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "10 atq. perigosos · 0 ao alvo"
+          "detail": "20 atq. perigosos · 1 ao alvo"
+        },
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 69"
+        }
+      ],
+      "patternScore": 12
+    },
+    {
+      "id": 223605,
+      "home": "Huracán",
+      "away": "Deportivo Riestra",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 16,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 85,
+      "xgH": 0.09,
+      "xgA": 0.22,
+      "xgTotal": 0.31,
+      "lastMom": -29,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
+      "shots": {
+        "h": 2,
+        "a": 1
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": 9,
+        "a": 4
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 4,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 73",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "13 atq. perigosos · 0 ao alvo"
         }
       ],
       "patternScore": 10
@@ -144,24 +151,24 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 4,
+      "min": 10,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 57,
-      "xgH": 0.03,
+      "xgH": 0.14,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 56,
+      "lastMom": 57,
       "overOdds": 1.43,
       "probLive": 70,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 2,
+        "h": 4,
         "a": 0
       },
       "sot": {
-        "h": 0,
+        "h": 2,
         "a": 0
       },
       "da": {
@@ -193,8 +200,23 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "4 remates",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "36 remates/90min (muito alto)"
+        },
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 57"
+        }
+      ],
+      "patternScore": 6
     }
   ]
 }
