@@ -1,26 +1,26 @@
 {
-  "generated_at": "2026-08-23T10:02:45Z",
+  "generated_at": "2026-08-23T10:07:59Z",
   "status": "OK",
-  "count": 1,
+  "count": 3,
   "events": [
     {
-      "id": 220841,
-      "home": "USC Paredes",
-      "away": "Leça FC",
+      "id": 374955,
+      "home": "Chaves",
+      "away": "AVS - Futebol SAD",
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 0,
+      "min": 4,
       "status": "1st_half",
       "period": "1T",
       "league": "",
-      "league_id": 82,
+      "league_id": 88,
       "xgH": null,
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": 2.19,
-      "probLive": 46,
+      "overOdds": 1.93,
+      "probLive": 52,
       "oddsStatus": "VALID",
       "shots": {
         "h": null,
@@ -31,8 +31,8 @@
         "a": null
       },
       "da": {
-        "h": null,
-        "a": null
+        "h": 1,
+        "a": 1
       },
       "corners": {
         "h": null,
@@ -50,13 +50,131 @@
       "coverage": {
         "fields": {
           "xgTotal": false,
-          "da": false,
+          "da": true,
           "sot": false,
           "corners": false,
           "possession": false,
           "lastMom": false
         },
-        "score": 0,
+        "score": 1,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 221499,
+      "home": "Sønderjyske Fodbold",
+      "away": "FC Nordsjælland",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 4,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 84,
+      "xgH": 0.02,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": 28,
+      "overOdds": 1.44,
+      "probLive": 69,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 1,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": 3,
+        "a": 0
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 220841,
+      "home": "USC Paredes",
+      "away": "Leça FC",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 5,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 82,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": 2.19,
+      "probLive": 46,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": null,
+        "a": null
+      },
+      "sot": {
+        "h": 1,
+        "a": 0
+      },
+      "da": {
+        "h": 3,
+        "a": 1
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": false
+        },
+        "score": 2,
         "total": 6
       },
       "patterns": [],
