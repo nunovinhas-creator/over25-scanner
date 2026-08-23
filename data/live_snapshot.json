@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-23T00:23:48Z",
+  "generated_at": "2026-08-23T00:29:04Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -10,29 +10,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 23,
+      "min": 28,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 85,
       "xgH": 0.24,
-      "xgA": 0.21,
-      "xgTotal": 0.44999999999999996,
-      "lastMom": 30,
+      "xgA": 0.23,
+      "xgTotal": 0.47,
+      "lastMom": 20,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 2,
-        "a": 2
+        "h": 3,
+        "a": 3
       },
       "sot": {
         "h": 1,
         "a": 1
       },
       "da": {
-        "h": 14,
-        "a": 12
+        "h": 19,
+        "a": 14
       },
       "corners": {
         "h": null,
@@ -65,7 +65,7 @@
           "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "26 atq. perigosos · 2 ao alvo"
+          "detail": "33 atq. perigosos · 2 ao alvo"
         }
       ],
       "patternScore": 10
@@ -77,29 +77,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 21,
+      "min": 26,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 85,
-      "xgH": 0.14,
-      "xgA": 0.24,
-      "xgTotal": 0.38,
-      "lastMom": -35,
+      "xgH": 0.15,
+      "xgA": 0.33,
+      "xgTotal": 0.48,
+      "lastMom": 18,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 3,
-        "a": 2
+        "h": 4,
+        "a": 3
       },
       "sot": {
-        "h": 0,
-        "a": 0
+        "h": 1,
+        "a": 1
       },
       "da": {
-        "h": 12,
-        "a": 6
+        "h": 16,
+        "a": 11
       },
       "corners": {
         "h": null,
@@ -129,13 +129,20 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 77",
+          "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "18 atq. perigosos · 0 ao alvo"
+          "detail": "27 atq. perigosos · 2 ao alvo"
+        },
+        {
+          "id": "shots",
+          "label": "7 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "24 remates/90min"
         }
       ],
-      "patternScore": 10
+      "patternScore": 12
     },
     {
       "id": 207769,
@@ -144,25 +151,25 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 15,
+      "min": 20,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 57,
-      "xgH": 0.14,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": -12,
+      "xgH": 0.34,
+      "xgA": 0.27,
+      "xgTotal": 0.6100000000000001,
+      "lastMom": -38,
       "overOdds": 1.43,
       "probLive": 70,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 4,
-        "a": 0
+        "h": 5,
+        "a": 2
       },
       "sot": {
         "h": 2,
-        "a": 0
+        "a": 1
       },
       "da": {
         "h": null,
@@ -183,26 +190,33 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 3,
         "total": 6
       },
       "patterns": [
         {
-          "id": "shots",
-          "label": "4 remates",
-          "emoji": "🎯",
+          "id": "xg_pace",
+          "label": "xG 2.7/90",
+          "emoji": "⚡",
           "level": "med",
-          "detail": "24 remates/90min"
+          "detail": "xG a ritmo de 2.7 por 90min"
+        },
+        {
+          "id": "shots",
+          "label": "7 remates",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "31 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 2
+      "patternScore": 6
     }
   ]
 }
