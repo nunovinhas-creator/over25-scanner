@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-23T00:07:58Z",
+  "generated_at": "2026-08-23T00:13:20Z",
   "status": "OK",
-  "count": 2,
+  "count": 3,
   "events": [
     {
       "id": 223606,
@@ -10,29 +10,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 7,
+      "min": 12,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 85,
-      "xgH": null,
+      "xgH": 0.13,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 6,
+      "lastMom": 12,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 0,
+        "h": 1,
         "a": 0
       },
       "sot": {
-        "h": 0,
+        "h": 1,
         "a": 0
       },
       "da": {
-        "h": 3,
-        "a": 1
+        "h": 6,
+        "a": 5
       },
       "corners": {
         "h": null,
@@ -59,8 +59,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 88",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "11 atq. perigosos · 1 ao alvo"
+        }
+      ],
+      "patternScore": 10
     },
     {
       "id": 223605,
@@ -69,20 +77,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 5,
+      "min": 10,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 85,
-      "xgH": null,
+      "xgH": 0.09,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 38,
+      "lastMom": 6,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 0,
+        "h": 2,
         "a": 0
       },
       "sot": {
@@ -90,8 +98,8 @@
         "a": 0
       },
       "da": {
-        "h": 2,
-        "a": 1
+        "h": 8,
+        "a": 2
       },
       "corners": {
         "h": null,
@@ -116,6 +124,73 @@
           "lastMom": true
         },
         "score": 3,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 90",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "10 atq. perigosos · 0 ao alvo"
+        }
+      ],
+      "patternScore": 10
+    },
+    {
+      "id": 207769,
+      "home": "Birmingham Legion FC",
+      "away": "SC Jacksonville",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 4,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 57,
+      "xgH": 0.03,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": 56,
+      "overOdds": 1.43,
+      "probLive": 70,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 2,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
         "total": 6
       },
       "patterns": [],
