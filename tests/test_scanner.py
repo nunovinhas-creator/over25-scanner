@@ -148,6 +148,82 @@ class TestScanOver25(unittest.TestCase):
         drift_rej = [r for r in rejected if r.get("reject_reason") == "odds_drifting"]
         self.assertEqual(len(drift_rej), 1)
 
+    # ── Bloco Q (diagnose-rejection-discrepancy) — os "continue" silenciosos ──
+    # de scan() não gravavam reject_reason nenhum: o evento desaparecia sem
+    # rasto e o scan reportava sucesso na mesma. Cada um passa a gravar um
+    # reject_reason explícito, no mesmo formato dos restantes.
+
+    def test_sem_odds_over_rejected(self):
+        """Evento sem odds_over (Gate 2) grava reject_reason='sem_odds_over'
+        com timing_h e liga — antes desaparecia sem rasto."""
+        events = [_bsd_event("ev_sem_odds", "Sevilla", "Betis", league="La Liga",
+                              hours_to_ko=3.0, odds_over=None)]
+        picks, rejected, tg = self._run_scan(events)
+
+        self.assertEqual(len(picks), 0)
+        self.assertEqual(len(tg), 0)
+        self.assertEqual(len(rejected), 1)
+        self.assertEqual(rejected[0]["reject_reason"], "sem_odds_over")
+        self.assertEqual(rejected[0]["liga"], "La Liga")
+        self.assertEqual(rejected[0]["timing_h"], 3.0)
+
+    def test_ko_ja_passou_rejected(self):
+        """KO já passou (timing_h<0, Gate 1) grava reject_reason='ko_ja_passou'
+        — antes desaparecia sem rasto."""
+        events = [_bsd_event("ev_ko_passou", "Ajax", "PSV", league="Eredivisie",
+                              hours_to_ko=-1.0)]
+        picks, rejected, tg = self._run_scan(events)
+
+        self.assertEqual(len(picks), 0)
+        self.assertEqual(len(tg), 0)
+        self.assertEqual(len(rejected), 1)
+        self.assertEqual(rejected[0]["reject_reason"], "ko_ja_passou")
+        self.assertLess(rejected[0]["timing_h"], 0)
+
+    def test_ko_ilegivel_rejected(self):
+        """Data do evento ilegível (excepção no parse, Gate 1) grava
+        reject_reason='ko_ilegivel' — antes desaparecia sem rasto."""
+        ev = _bsd_event("ev_ko_bad", "Milan", "Inter", league="Serie A", hours_to_ko=3.0)
+        ev["date"] = "not-a-real-date"
+        picks, rejected, tg = self._run_scan([ev])
+
+        self.assertEqual(len(picks), 0)
+        self.assertEqual(len(tg), 0)
+        self.assertEqual(len(rejected), 1)
+        self.assertEqual(rejected[0]["reject_reason"], "ko_ilegivel")
+
+    def test_funil_soma_fecha_com_total_eventos(self):
+        """A linha FUNIL impressa no fim do scan tem de somar ao total de
+        eventos fetched — se não fechar, há um caminho não contabilizado."""
+        import io
+        import contextlib
+
+        events = [
+            _bsd_event("f_pick", "Arsenal", "Chelsea", hours_to_ko=3.0),
+            _bsd_event("f_liga", "LA Galaxy", "Seattle", league="MLS", hours_to_ko=3.0),
+            _bsd_event("f_timing", "Bayern", "Dortmund", league="Bundesliga", hours_to_ko=10.0),
+            _bsd_event("f_ko_passou", "Ajax", "PSV", league="Eredivisie", hours_to_ko=-1.0),
+            _bsd_event("f_sem_odds", "Sevilla", "Betis", league="La Liga", hours_to_ko=3.0, odds_over=None),
+            _bsd_event("f_banda", "Real Madrid", "Barca", league="La Liga", hours_to_ko=2.0, odds_over=4.50),
+            _bsd_event("f_drift", "Man City", "Liverpool", hours_to_ko=3.0, movement="DRIFTING"),
+        ]
+        ev_bad_date = _bsd_event("f_ko_bad", "Milan", "Inter", league="Serie A", hours_to_ko=3.0)
+        ev_bad_date["date"] = "not-a-real-date"
+        events.append(ev_bad_date)
+
+        buf_out, buf_err = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(buf_out), contextlib.redirect_stderr(buf_err):
+            self._run_scan(events)
+
+        funil_lines = [l for l in buf_out.getvalue().splitlines() if l.startswith("FUNIL ")]
+        self.assertEqual(len(funil_lines), 1)
+        counts = dict(part.split("=") for part in funil_lines[0].split()[1:])
+        total = int(counts["events"])
+        self.assertEqual(total, len(events))
+        soma = sum(int(v) for k, v in counts.items() if k != "events")
+        self.assertEqual(soma, total, "funil tem de fechar com o total de eventos")
+        self.assertNotIn("ERRO FUNIL", buf_err.getvalue())
+
     # ── Bloco P — reject_reason distinto + visibilidade do fallback ──────────
     # market_only (modelo nunca correu, ver Bloco O) tem de gerar
     # reject_reason="sem_modelo_dc", nunca "ev_baixo" — as duas populações
