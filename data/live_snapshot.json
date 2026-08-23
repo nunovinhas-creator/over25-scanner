@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-23T02:46:51Z",
+  "generated_at": "2026-08-23T02:52:48Z",
   "status": "OK",
   "count": 9,
   "events": [
@@ -8,31 +8,31 @@
       "home": "San Jose Earthquakes",
       "away": "Minnesota United",
       "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 5,
+      "aScore": 1,
+      "goals": 2,
+      "min": 11,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 18,
       "xgH": 0.83,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": 6,
+      "xgA": 0.08,
+      "xgTotal": 0.9099999999999999,
+      "lastMom": -25,
       "overOdds": 1.47,
       "probLive": 68,
       "oddsStatus": "VALID",
       "shots": {
         "h": 2,
-        "a": 0
+        "a": 1
       },
       "sot": {
         "h": 1,
-        "a": 0
+        "a": 1
       },
       "da": {
         "h": 1,
-        "a": 2
+        "a": 4
       },
       "corners": {
         "h": null,
@@ -49,18 +49,33 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": true,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 3,
+        "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 51",
+          "emoji": "🔥",
+          "level": "high",
+          "detail": "5 atq. perigosos · 2 ao alvo"
+        },
+        {
+          "id": "shots",
+          "label": "3 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "25 remates/90min"
+        }
+      ],
+      "patternScore": 6
     },
     {
       "id": 5225,
@@ -69,21 +84,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 5,
+      "min": 11,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 18,
       "xgH": null,
-      "xgA": null,
+      "xgA": 0.06,
       "xgTotal": null,
-      "lastMom": -5,
+      "lastMom": -6,
       "overOdds": 1.53,
       "probLive": 65,
       "oddsStatus": "VALID",
       "shots": {
         "h": 0,
-        "a": 0
+        "a": 1
       },
       "sot": {
         "h": 0,
@@ -91,7 +106,7 @@
       },
       "da": {
         "h": 1,
-        "a": 3
+        "a": 5
       },
       "corners": {
         "h": null,
@@ -118,8 +133,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 49",
+          "emoji": "🔥",
+          "level": "high",
+          "detail": "6 atq. perigosos · 0 ao alvo"
+        }
+      ],
+      "patternScore": 4
     },
     {
       "id": 5224,
@@ -128,24 +151,24 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 5,
+      "min": 11,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 18,
-      "xgH": null,
-      "xgA": 0.63,
-      "xgTotal": null,
-      "lastMom": -12,
+      "xgH": 0.2,
+      "xgA": 0.54,
+      "xgTotal": 0.74,
+      "lastMom": 55,
       "overOdds": 1.39,
       "probLive": 72,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
+        "h": 3,
         "a": 1
       },
       "sot": {
-        "h": 0,
+        "h": 2,
         "a": 1
       },
       "da": {
@@ -167,18 +190,33 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "shots",
+          "label": "4 remates",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "33 remates/90min (muito alto)"
+        },
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 55"
+        }
+      ],
+      "patternScore": 6
     },
     {
       "id": 207772,
@@ -187,15 +225,15 @@
       "hScore": 0,
       "aScore": 2,
       "goals": 2,
-      "min": 33,
+      "min": 38,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 57,
-      "xgH": 0.26,
+      "xgH": 0.28,
       "xgA": 1.45,
-      "xgTotal": 1.71,
-      "lastMom": 28,
+      "xgTotal": 1.73,
+      "lastMom": 11,
       "overOdds": 1.96,
       "probLive": 51,
       "oddsStatus": "VALID",
@@ -208,8 +246,8 @@
         "a": 4
       },
       "da": {
-        "h": 18,
-        "a": 19
+        "h": 19,
+        "a": 20
       },
       "corners": {
         "h": null,
@@ -249,21 +287,21 @@
           "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "37 atq. perigosos · 4 ao alvo"
+          "detail": "39 atq. perigosos · 4 ao alvo"
         },
         {
           "id": "xg_pace",
-          "label": "xG 4.7/90",
+          "label": "xG 4.1/90",
           "emoji": "⚡",
           "level": "critical",
-          "detail": "xG a ritmo de 4.7 por 90min"
+          "detail": "xG a ritmo de 4.1 por 90min"
         },
         {
           "id": "shots",
           "label": "13 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "35 remates/90min (muito alto)"
+          "detail": "31 remates/90min (muito alto)"
         }
       ],
       "patternScore": 24
@@ -275,15 +313,15 @@
       "hScore": 4,
       "aScore": 0,
       "goals": 4,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 46,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 18,
       "xgH": 0.8,
       "xgA": 0.47,
       "xgTotal": 1.27,
-      "lastMom": 16,
+      "lastMom": 0,
       "overOdds": 1.47,
       "probLive": 68,
       "oddsStatus": "VALID",
@@ -297,7 +335,7 @@
       },
       "da": {
         "h": 38,
-        "a": 21
+        "a": 22
       },
       "corners": {
         "h": null,
@@ -334,29 +372,29 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 70,
+      "min": 75,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 80,
-      "xgH": 0.73,
+      "xgH": 0.74,
       "xgA": 0.19,
-      "xgTotal": 0.9199999999999999,
-      "lastMom": 7,
+      "xgTotal": 0.9299999999999999,
+      "lastMom": 8,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 15,
+        "h": 16,
         "a": 5
       },
       "sot": {
-        "h": 6,
+        "h": 7,
         "a": 2
       },
       "da": {
-        "h": 50,
-        "a": 24
+        "h": 55,
+        "a": 26
       },
       "corners": {
         "h": null,
@@ -389,17 +427,17 @@
           "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "30 atq. perigosos · 4 ao alvo (2ªP)"
+          "detail": "37 atq. perigosos · 5 ao alvo (2ªP)"
         },
         {
           "id": "shots",
-          "label": "8r 2ªP",
+          "label": "9r 2ªP",
           "emoji": "🎯",
-          "level": "high",
-          "detail": "29 remates/90min (2ªP) (muito alto)"
+          "level": "med",
+          "detail": "27 remates/90min (2ªP)"
         }
       ],
-      "patternScore": 14
+      "patternScore": 12
     },
     {
       "id": 211534,
@@ -408,29 +446,29 @@
       "hScore": 3,
       "aScore": 2,
       "goals": 5,
-      "min": 86,
+      "min": 92,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 19,
       "xgH": 1.03,
-      "xgA": 0.33,
-      "xgTotal": 1.36,
-      "lastMom": -58,
+      "xgA": 0.32,
+      "xgTotal": 1.35,
+      "lastMom": -16,
       "overOdds": 1.65,
       "probLive": 61,
       "oddsStatus": "VALID",
       "shots": {
         "h": 16,
-        "a": 4
+        "a": 6
       },
       "sot": {
         "h": 7,
         "a": 2
       },
       "da": {
-        "h": 35,
-        "a": 49
+        "h": 38,
+        "a": 50
       },
       "corners": {
         "h": null,
@@ -457,16 +495,8 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum fora 58"
-        }
-      ],
-      "patternScore": 2
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 207771,
@@ -475,7 +505,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 78,
+      "min": 84,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -483,7 +513,7 @@
       "xgH": 0.54,
       "xgA": 0.61,
       "xgTotal": 1.15,
-      "lastMom": -44,
+      "lastMom": -52,
       "overOdds": 1.78,
       "probLive": 56,
       "oddsStatus": "VALID",
@@ -496,8 +526,8 @@
         "a": 1
       },
       "da": {
-        "h": 34,
-        "a": 52
+        "h": 37,
+        "a": 56
       },
       "corners": {
         "h": null,
@@ -530,10 +560,17 @@
           "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "42 atq. perigosos · 1 ao alvo (2ªP)"
+          "detail": "49 atq. perigosos · 1 ao alvo (2ªP)"
+        },
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 52"
         }
       ],
-      "patternScore": 10
+      "patternScore": 12
     },
     {
       "id": 5221,
@@ -542,29 +579,29 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 74,
+      "min": 80,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 18,
       "xgH": 1.08,
-      "xgA": 0.74,
-      "xgTotal": 1.82,
-      "lastMom": 83,
+      "xgA": 0.87,
+      "xgTotal": 1.9500000000000002,
+      "lastMom": -13,
       "overOdds": 1.59,
       "probLive": 63,
       "oddsStatus": "VALID",
       "shots": {
         "h": 10,
-        "a": 6
+        "a": 8
       },
       "sot": {
         "h": 4,
-        "a": 2
+        "a": 3
       },
       "da": {
-        "h": 35,
-        "a": 36
+        "h": 36,
+        "a": 38
       },
       "corners": {
         "h": null,
@@ -593,35 +630,28 @@
       },
       "patterns": [
         {
-          "id": "conv",
-          "label": "CONVERGÊNCIA",
-          "emoji": "🔮",
-          "level": "conv",
-          "detail": "3 padrões em simultâneo — sinal forte"
-        },
-        {
           "id": "pressure",
-          "label": "Pressão 100 (2ªP)",
+          "label": "Pressão 97 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "29 atq. perigosos · 2 ao alvo (2ªP)"
+          "detail": "32 atq. perigosos · 3 ao alvo (2ªP)"
         },
         {
-          "id": "mom",
-          "label": "Casa domina",
-          "emoji": "💥",
-          "level": "high",
-          "detail": "Momentum casa 83 — controlo total"
+          "id": "shots",
+          "label": "9r 2ªP",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "23 remates/90min (2ªP)"
         },
         {
           "id": "late",
-          "label": "1 gol em 16min",
+          "label": "1 gol em 10min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 63% · 16min"
+          "detail": "Falta 1 golo · mercado 63% · 10min"
         }
       ],
-      "patternScore": 15
+      "patternScore": 13
     }
   ]
 }
