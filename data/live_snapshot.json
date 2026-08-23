@@ -1,67 +1,8 @@
 {
-  "generated_at": "2026-08-23T05:05:07Z",
+  "generated_at": "2026-08-23T05:10:26Z",
   "status": "OK",
-  "count": 2,
+  "count": 1,
   "events": [
-    {
-      "id": 207773,
-      "home": "Sacramento Republic FC",
-      "away": "Phoenix Rising FC",
-      "hScore": 2,
-      "aScore": 2,
-      "goals": 4,
-      "min": 93,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 57,
-      "xgH": 0.81,
-      "xgA": 0.89,
-      "xgTotal": 1.7000000000000002,
-      "lastMom": 18,
-      "overOdds": 1.88,
-      "probLive": 53,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 6,
-        "a": 9
-      },
-      "sot": {
-        "h": 3,
-        "a": 2
-      },
-      "da": {
-        "h": 39,
-        "a": 31
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
     {
       "id": 207770,
       "home": "Colorado Springs Switchbacks FC",
@@ -69,7 +10,7 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 86,
+      "min": 92,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -77,7 +18,7 @@
       "xgH": 0.57,
       "xgA": 1.69,
       "xgTotal": 2.26,
-      "lastMom": 21,
+      "lastMom": 54,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
@@ -90,8 +31,8 @@
         "a": 3
       },
       "da": {
-        "h": 41,
-        "a": 43
+        "h": 46,
+        "a": 44
       },
       "corners": {
         "h": null,
@@ -125,9 +66,16 @@
           "emoji": "🎲",
           "level": "med",
           "detail": "xG 2.26 vs 1 golos"
+        },
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 54"
         }
       ],
-      "patternScore": 2
+      "patternScore": 4
     }
   ]
 }
