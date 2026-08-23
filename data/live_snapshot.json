@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-08-23T12:02:21Z",
+  "generated_at": "2026-08-23T12:08:04Z",
   "status": "OK",
-  "count": 16,
+  "count": 17,
   "events": [
     {
-      "id": 221498,
-      "home": "AGF",
-      "away": "Odense Boldklub",
+      "id": 221500,
+      "home": "FC Midtjylland",
+      "away": "Randers FC",
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
@@ -19,8 +19,8 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": 1.61,
-      "probLive": 62,
+      "overOdds": 1.58,
+      "probLive": 63,
       "oddsStatus": "VALID",
       "shots": {
         "h": 0,
@@ -57,6 +57,65 @@
           "lastMom": false
         },
         "score": 1,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 221498,
+      "home": "AGF",
+      "away": "Odense Boldklub",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 6,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 84,
+      "xgH": 0.01,
+      "xgA": 0.12,
+      "xgTotal": 0.13,
+      "lastMom": 49,
+      "overOdds": 1.61,
+      "probLive": 62,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 1,
+        "a": 1
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
         "total": 6
       },
       "patterns": [],
@@ -66,32 +125,32 @@
       "id": 211387,
       "home": "BSC Young Boys",
       "away": "FC Vaduz",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 0,
-      "goals": 0,
-      "min": 1,
+      "goals": 1,
+      "min": 7,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 15,
-      "xgH": null,
+      "xgH": 0.27,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": null,
+      "lastMom": 47,
       "overOdds": 1.28,
       "probLive": 78,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
+        "h": 3,
         "a": 0
       },
       "sot": {
-        "h": 0,
+        "h": 3,
         "a": 0
       },
       "da": {
-        "h": null,
-        "a": null
+        "h": 3,
+        "a": 1
       },
       "corners": {
         "h": null,
@@ -109,26 +168,26 @@
       "coverage": {
         "fields": {
           "xgTotal": false,
-          "da": false,
+          "da": true,
           "sot": true,
           "corners": false,
           "possession": false,
-          "lastMom": false
+          "lastMom": true
         },
-        "score": 1,
+        "score": 3,
         "total": 6
       },
       "patterns": [],
       "patternScore": 0
     },
     {
-      "id": 207300,
-      "home": "Kuopion Palloseura",
-      "away": "IFK Mariehamn",
+      "id": 207303,
+      "home": "HJK",
+      "away": "IF Gnistan",
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 1,
+      "min": 5,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -137,8 +196,8 @@
       "xgA": null,
       "xgTotal": null,
       "lastMom": null,
-      "overOdds": 1.39,
-      "probLive": 72,
+      "overOdds": 1.47,
+      "probLive": 68,
       "oddsStatus": "VALID",
       "shots": {
         "h": null,
@@ -181,27 +240,86 @@
       "patternScore": 0
     },
     {
+      "id": 207300,
+      "home": "Kuopion Palloseura",
+      "away": "IFK Mariehamn",
+      "hScore": 0,
+      "aScore": 1,
+      "goals": 1,
+      "min": 7,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 55,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": 1.39,
+      "probLive": 72,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": null,
+        "a": null
+      },
+      "sot": {
+        "h": null,
+        "a": null
+      },
+      "da": {
+        "h": 0,
+        "a": 5
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": true,
+          "sot": false,
+          "corners": false,
+          "possession": false,
+          "lastMom": false
+        },
+        "score": 1,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
       "id": 205876,
       "home": "Chongqing Tonglianglong FC",
       "away": "Dalian Yingbo FC",
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 1,
+      "min": 7,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 52,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": -13,
+      "xgH": 0.16,
+      "xgA": 0.05,
+      "xgTotal": 0.21000000000000002,
+      "lastMom": 2,
       "overOdds": 1.92,
       "probLive": 52,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
-        "a": 1
+        "h": 2,
+        "a": 2
       },
       "sot": {
         "h": 0,
@@ -226,14 +344,14 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": false,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 3,
         "total": 6
       },
       "patterns": [],
@@ -246,29 +364,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 0,
+      "min": 6,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 26,
       "xgH": null,
-      "xgA": null,
+      "xgA": 0.04,
       "xgTotal": null,
-      "lastMom": null,
+      "lastMom": -24,
       "overOdds": 1.76,
       "probLive": 57,
       "oddsStatus": "VALID",
       "shots": {
         "h": 0,
-        "a": 0
+        "a": 1
       },
       "sot": {
         "h": 0,
-        "a": 0
+        "a": 1
       },
       "da": {
-        "h": null,
-        "a": null
+        "h": 2,
+        "a": 2
       },
       "corners": {
         "h": null,
@@ -286,13 +404,13 @@
       "coverage": {
         "fields": {
           "xgTotal": false,
-          "da": false,
+          "da": true,
           "sot": true,
           "corners": false,
           "possession": false,
-          "lastMom": false
+          "lastMom": true
         },
-        "score": 1,
+        "score": 3,
         "total": 6
       },
       "patterns": [],
@@ -305,29 +423,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 0,
+      "min": 6,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 26,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": 0,
+      "xgH": 0.09,
+      "xgA": 0.15,
+      "xgTotal": 0.24,
+      "lastMom": -26,
       "overOdds": 1.75,
       "probLive": 57,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
-        "a": 0
+        "h": 1,
+        "a": 1
       },
       "sot": {
         "h": 0,
-        "a": 0
+        "a": 1
       },
       "da": {
-        "h": null,
-        "a": null
+        "h": 1,
+        "a": 6
       },
       "corners": {
         "h": null,
@@ -344,14 +462,14 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
-          "da": false,
+          "xgTotal": true,
+          "da": true,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 2,
+        "score": 4,
         "total": 6
       },
       "patterns": [],
@@ -364,7 +482,7 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 26,
+      "min": 31,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -372,7 +490,7 @@
       "xgH": 0.07,
       "xgA": 0.23,
       "xgTotal": 0.30000000000000004,
-      "lastMom": 21,
+      "lastMom": 38,
       "overOdds": 1.38,
       "probLive": 72,
       "oddsStatus": "VALID",
@@ -385,8 +503,8 @@
         "a": 1
       },
       "da": {
-        "h": 19,
-        "a": 6
+        "h": 25,
+        "a": 7
       },
       "corners": {
         "h": null,
@@ -416,10 +534,10 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 92",
+          "label": "Pressão 98",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "25 atq. perigosos · 1 ao alvo"
+          "detail": "32 atq. perigosos · 1 ao alvo"
         }
       ],
       "patternScore": 10
@@ -428,27 +546,27 @@
       "id": 213997,
       "home": "West Bromwich Albion",
       "away": "Burnley",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 1,
-      "goals": 2,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "goals": 3,
+      "min": 48,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "Championship",
       "league_id": 12,
-      "xgH": 0.34,
-      "xgA": 1.19,
-      "xgTotal": 1.53,
-      "lastMom": -12,
+      "xgH": 0.47,
+      "xgA": 1.14,
+      "xgTotal": 1.6099999999999999,
+      "lastMom": 17,
       "overOdds": 2.02,
       "probLive": 50,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 4,
+        "h": 5,
         "a": 4
       },
       "sot": {
-        "h": 3,
+        "h": 4,
         "a": 1
       },
       "da": {
@@ -490,15 +608,15 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 46,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 43,
       "xgH": 0.43,
       "xgA": 0.43,
       "xgTotal": 0.86,
-      "lastMom": 26,
+      "lastMom": 43,
       "overOdds": 1.68,
       "probLive": 60,
       "oddsStatus": "VALID",
@@ -549,15 +667,15 @@
       "hScore": 3,
       "aScore": 1,
       "goals": 4,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 47,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 43,
       "xgH": 1.23,
-      "xgA": 1.27,
-      "xgTotal": 2.5,
-      "lastMom": -39,
+      "xgA": 1.25,
+      "xgTotal": 2.48,
+      "lastMom": -7,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
@@ -614,8 +732,8 @@
       "league": "",
       "league_id": 52,
       "xgH": 0.21,
-      "xgA": 1.63,
-      "xgTotal": 1.8399999999999999,
+      "xgA": 1.67,
+      "xgTotal": 1.88,
       "lastMom": -6,
       "overOdds": null,
       "probLive": null,
@@ -667,25 +785,25 @@
       "hScore": 3,
       "aScore": 1,
       "goals": 4,
-      "min": 66,
+      "min": 72,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 49,
       "xgH": 0.72,
-      "xgA": 1.68,
-      "xgTotal": 2.4,
-      "lastMom": 29,
+      "xgA": 1.76,
+      "xgTotal": 2.48,
+      "lastMom": 37,
       "overOdds": 2.14,
       "probLive": 47,
       "oddsStatus": "VALID",
       "shots": {
         "h": 9,
-        "a": 15
+        "a": 18
       },
       "sot": {
         "h": 5,
-        "a": 2
+        "a": 3
       },
       "da": {
         "h": null,
@@ -726,7 +844,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 72,
+      "min": 78,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -785,7 +903,7 @@
       "hScore": 3,
       "aScore": 0,
       "goals": 3,
-      "min": 66,
+      "min": 72,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -841,27 +959,27 @@
       "id": 210821,
       "home": "Go Ahead Eagles",
       "away": "ADO Den Haag",
-      "hScore": 2,
+      "hScore": 3,
       "aScore": 1,
-      "goals": 3,
-      "min": 87,
+      "goals": 4,
+      "min": 93,
       "status": "2nd_half",
       "period": "2T",
       "league": "Eredivisie",
       "league_id": 10,
-      "xgH": 0.81,
-      "xgA": 0.8,
-      "xgTotal": 1.61,
-      "lastMom": 14,
+      "xgH": 1.01,
+      "xgA": 0.86,
+      "xgTotal": 1.87,
+      "lastMom": 33,
       "overOdds": 1.52,
       "probLive": 66,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 10,
-        "a": 12
+        "h": 11,
+        "a": 14
       },
       "sot": {
-        "h": 4,
+        "h": 5,
         "a": 3
       },
       "da": {
@@ -891,65 +1009,6 @@
           "lastMom": true
         },
         "score": 4,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 374955,
-      "home": "Chaves",
-      "away": "AVS - Futebol SAD",
-      "hScore": 2,
-      "aScore": 2,
-      "goals": 4,
-      "min": 99,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 88,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": 1.93,
-      "probLive": 52,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": null,
-        "a": null
-      },
-      "da": {
-        "h": 13,
-        "a": 12
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": true,
-          "sot": false,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 1,
         "total": 6
       },
       "patterns": [],
