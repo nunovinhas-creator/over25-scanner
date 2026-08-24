@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-24T20:45:11Z",
+  "generated_at": "2026-08-24T20:50:26Z",
   "status": "OK",
   "count": 6,
   "events": [
@@ -10,20 +10,20 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 54,
+      "min": 59,
       "status": "2nd_half",
       "period": "2T",
       "league": "La Liga 2",
       "league_id": 38,
-      "xgH": 0.84,
-      "xgA": 0.48,
-      "xgTotal": 1.3199999999999998,
-      "lastMom": -65,
+      "xgH": 0.9,
+      "xgA": 0.54,
+      "xgTotal": 1.44,
+      "lastMom": -12,
       "overOdds": 2.37,
       "probLive": 42,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 11,
+        "h": 12,
         "a": 12
       },
       "sot": {
@@ -31,8 +31,8 @@
         "a": 2
       },
       "da": {
-        "h": 18,
-        "a": 21
+        "h": 20,
+        "a": 23
       },
       "corners": {
         "h": null,
@@ -59,16 +59,8 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum fora 65"
-        }
-      ],
-      "patternScore": 2
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 213535,
@@ -77,7 +69,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 54,
+      "min": 59,
       "status": "2nd_half",
       "period": "2T",
       "league": "La Liga",
@@ -85,7 +77,7 @@
       "xgH": 0.93,
       "xgA": 1.05,
       "xgTotal": 1.98,
-      "lastMom": -12,
+      "lastMom": 31,
       "overOdds": 2.25,
       "probLive": 44,
       "oddsStatus": "VALID",
@@ -136,7 +128,7 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 69,
+      "min": 74,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -157,7 +149,7 @@
         "a": null
       },
       "da": {
-        "h": 30,
+        "h": 32,
         "a": 35
       },
       "corners": {
@@ -195,7 +187,7 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 65,
+      "min": 69,
       "status": "2nd_half",
       "period": "2T",
       "league": "Primeira Liga",
@@ -203,7 +195,7 @@
       "xgH": 1.61,
       "xgA": 0.64,
       "xgTotal": 2.25,
-      "lastMom": 16,
+      "lastMom": 15,
       "overOdds": 2.32,
       "probLive": 43,
       "oddsStatus": "VALID",
@@ -244,8 +236,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "late",
+          "label": "1 gol em 21min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 43% · 21min"
+        }
+      ],
+      "patternScore": 1
     },
     {
       "id": 209544,
@@ -254,15 +254,15 @@
       "hScore": 2,
       "aScore": 3,
       "goals": 5,
-      "min": 84,
+      "min": 89,
       "status": "2nd_half",
       "period": "2T",
       "league": "Premier League",
       "league_id": 1,
-      "xgH": 1.41,
+      "xgH": 1.38,
       "xgA": 1.67,
-      "xgTotal": 3.08,
-      "lastMom": 50,
+      "xgTotal": 3.05,
+      "lastMom": -15,
       "overOdds": 1.86,
       "probLive": 54,
       "oddsStatus": "VALID",
@@ -275,8 +275,67 @@
         "a": 6
       },
       "da": {
-        "h": 60,
-        "a": 56
+        "h": 63,
+        "a": 57
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 4,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 212156,
+      "home": "Hallescher FC",
+      "away": "FC Schalke 04",
+      "hScore": 2,
+      "aScore": 3,
+      "goals": 5,
+      "min": 97,
+      "status": "extratime",
+      "period": "ET1",
+      "league": "",
+      "league_id": 43,
+      "xgH": 0.46,
+      "xgA": 2.75,
+      "xgTotal": 3.21,
+      "lastMom": -46,
+      "overOdds": 1.39,
+      "probLive": 72,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 6,
+        "a": 23
+      },
+      "sot": {
+        "h": 3,
+        "a": 9
+      },
+      "da": {
+        "h": 17,
+        "a": 59
       },
       "corners": {
         "h": null,
@@ -305,73 +364,35 @@
       },
       "patterns": [
         {
+          "id": "pressure",
+          "label": "Pressão 100",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "76 atq. perigosos · 12 ao alvo"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 3.0/90",
+          "emoji": "⚡",
+          "level": "med",
+          "detail": "xG a ritmo de 3.0 por 90min"
+        },
+        {
+          "id": "shots",
+          "label": "29 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "27 remates/90min"
+        },
+        {
           "id": "mom",
-          "label": "Casa pressiona",
+          "label": "Fora pressiona",
           "emoji": "💪",
           "level": "med",
-          "detail": "Momentum casa 50"
+          "detail": "Momentum fora 46"
         }
       ],
-      "patternScore": 2
-    },
-    {
-      "id": 212156,
-      "home": "Hallescher FC",
-      "away": "FC Schalke 04",
-      "hScore": 2,
-      "aScore": 2,
-      "goals": 4,
-      "min": 92,
-      "status": "extratime",
-      "period": "ET1",
-      "league": "",
-      "league_id": 43,
-      "xgH": 0.46,
-      "xgA": 2.42,
-      "xgTotal": 2.88,
-      "lastMom": -18,
-      "overOdds": 1.39,
-      "probLive": 72,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 6,
-        "a": 20
-      },
-      "sot": {
-        "h": 3,
-        "a": 7
-      },
-      "da": {
-        "h": 17,
-        "a": 55
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
+      "patternScore": 16
     }
   ]
 }
