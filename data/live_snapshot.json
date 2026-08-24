@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-24T21:00:53Z",
+  "generated_at": "2026-08-24T21:06:06Z",
   "status": "OK",
   "count": 5,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 70,
+      "min": 75,
       "status": "2nd_half",
       "period": "2T",
       "league": "La Liga 2",
@@ -18,7 +18,7 @@
       "xgH": 0.92,
       "xgA": 0.63,
       "xgTotal": 1.55,
-      "lastMom": -31,
+      "lastMom": -9,
       "overOdds": 2.37,
       "probLive": 42,
       "oddsStatus": "VALID",
@@ -32,7 +32,7 @@
       },
       "da": {
         "h": 22,
-        "a": 31
+        "a": 32
       },
       "corners": {
         "h": null,
@@ -69,25 +69,25 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 70,
+      "min": 75,
       "status": "2nd_half",
       "period": "2T",
       "league": "La Liga",
       "league_id": 3,
       "xgH": 1.02,
-      "xgA": 1.17,
-      "xgTotal": 2.19,
-      "lastMom": -30,
+      "xgA": 1.11,
+      "xgTotal": 2.13,
+      "lastMom": -17,
       "overOdds": 2.25,
       "probLive": 44,
       "oddsStatus": "VALID",
       "shots": {
         "h": 7,
-        "a": 4
+        "a": 6
       },
       "sot": {
         "h": 2,
-        "a": 2
+        "a": 4
       },
       "da": {
         "h": null,
@@ -121,10 +121,10 @@
       "patterns": [
         {
           "id": "late",
-          "label": "1 gol em 20min",
+          "label": "1 gol em 15min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 44% · 20min"
+          "detail": "Falta 1 golo · mercado 44% · 15min"
         }
       ],
       "patternScore": 1
@@ -136,7 +136,7 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 86,
+      "min": 91,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -157,7 +157,7 @@
         "a": null
       },
       "da": {
-        "h": 39,
+        "h": 40,
         "a": 38
       },
       "corners": {
@@ -195,25 +195,25 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 81,
+      "min": 86,
       "status": "2nd_half",
       "period": "2T",
       "league": "Primeira Liga",
       "league_id": 2,
       "xgH": 1.61,
-      "xgA": 0.69,
-      "xgTotal": 2.3,
-      "lastMom": -8,
+      "xgA": 0.74,
+      "xgTotal": 2.35,
+      "lastMom": -100,
       "overOdds": 2.32,
       "probLive": 43,
       "oddsStatus": "VALID",
       "shots": {
         "h": 8,
-        "a": 10
+        "a": 12
       },
       "sot": {
         "h": 4,
-        "a": 1
+        "a": 2
       },
       "da": {
         "h": null,
@@ -246,14 +246,21 @@
       },
       "patterns": [
         {
+          "id": "mom",
+          "label": "Fora domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum fora 100 — controlo total"
+        },
+        {
           "id": "late",
-          "label": "1 gol em 9min",
+          "label": "1 gol em 4min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 43% · 9min"
+          "detail": "Falta 1 golo · mercado 43% · 4min"
         }
       ],
-      "patternScore": 1
+      "patternScore": 5
     },
     {
       "id": 212156,
@@ -262,20 +269,20 @@
       "hScore": 2,
       "aScore": 4,
       "goals": 6,
-      "min": 18,
-      "status": "inprogress",
-      "period": "ET1",
+      "min": 111,
+      "status": "extratime",
+      "period": "ETHT",
       "league": "",
       "league_id": 43,
-      "xgH": 0.57,
+      "xgH": 0.64,
       "xgA": 2.97,
-      "xgTotal": 3.54,
-      "lastMom": -13,
+      "xgTotal": 3.6100000000000003,
+      "lastMom": 31,
       "overOdds": 1.39,
       "probLive": 72,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 7,
+        "h": 8,
         "a": 24
       },
       "sot": {
@@ -283,7 +290,7 @@
         "a": 10
       },
       "da": {
-        "h": 22,
+        "h": 25,
         "a": 61
       },
       "corners": {
@@ -317,14 +324,21 @@
           "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "83 atq. perigosos · 14 ao alvo"
+          "detail": "86 atq. perigosos · 14 ao alvo"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 2.9/90",
+          "emoji": "⚡",
+          "level": "med",
+          "detail": "xG a ritmo de 2.9 por 90min"
         },
         {
           "id": "shots",
-          "label": "31 remates",
+          "label": "32 remates",
           "emoji": "🎯",
-          "level": "high",
-          "detail": "155 remates/90min (muito alto)"
+          "level": "med",
+          "detail": "26 remates/90min"
         }
       ],
       "patternScore": 14
