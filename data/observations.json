@@ -16056,5 +16056,89 @@
       "possession": false,
       "lastMom": false
     }
+  },
+  {
+    "id": "214785_obs_1787600387059",
+    "event_id": "214785",
+    "kind": "observation",
+    "casa": "Granada",
+    "fora": "Mallorca",
+    "liga": "La Liga 2",
+    "data": "2026-08-24",
+    "detected_at": "2026-08-24T19:39:47.059Z",
+    "min": 8,
+    "score": "0-0",
+    "goals": 0,
+    "xg": "0.33",
+    "odds_live": "2.37",
+    "prob_live": 42,
+    "pattern_score": 8,
+    "patterns": [
+      "pressure",
+      "shots",
+      "mom"
+    ],
+    "pattern_labels": [
+      "🔥 Pressão 56",
+      "🎯 2 remates",
+      "💪 Casa pressiona"
+    ],
+    "has_scan_pick": "",
+    "scan_score": "",
+    "has_sharp": "",
+    "coverage_score": 4,
+    "coverage_total": 6,
+    "coverage_fields": {
+      "xgTotal": true,
+      "da": true,
+      "sot": true,
+      "corners": false,
+      "possession": false,
+      "lastMom": true
+    },
+    "result_over25": "",
+    "final_score": "",
+    "result_at_min": ""
+  },
+  {
+    "id": "215513_obs_1787600387059",
+    "event_id": "215513",
+    "kind": "observation",
+    "casa": "Gil Vicente",
+    "fora": "Casa Pia",
+    "liga": "Primeira Liga",
+    "data": "2026-08-24",
+    "detected_at": "2026-08-24T19:39:47.059Z",
+    "min": 22,
+    "score": "1-0",
+    "goals": 1,
+    "xg": "0.77",
+    "odds_live": "2.32",
+    "prob_live": 43,
+    "pattern_score": 6,
+    "patterns": [
+      "xg_pace",
+      "shots"
+    ],
+    "pattern_labels": [
+      "⚡ xG 3.2/90",
+      "🎯 6 remates"
+    ],
+    "has_scan_pick": "",
+    "scan_score": "",
+    "has_sharp": "",
+    "coverage_score": 3,
+    "coverage_total": 6,
+    "coverage_fields": {
+      "xgTotal": true,
+      "da": false,
+      "sot": true,
+      "corners": false,
+      "possession": false,
+      "lastMom": true
+    },
+    "result_over25": "",
+    "final_score": "",
+    "result_at_min": ""
   }
 ]
