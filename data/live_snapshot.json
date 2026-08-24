@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-24T22:23:08Z",
+  "generated_at": "2026-08-24T22:28:15Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -7,10 +7,10 @@
       "id": 223610,
       "home": "Tigre",
       "away": "Central Córdoba",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 0,
-      "goals": 1,
-      "min": 21,
+      "goals": 2,
+      "min": 26,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -18,21 +18,21 @@
       "xgH": 0.95,
       "xgA": 0.03,
       "xgTotal": 0.98,
-      "lastMom": -33,
+      "lastMom": 34,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 4,
+        "h": 5,
         "a": 1
       },
       "sot": {
-        "h": 1,
+        "h": 2,
         "a": 0
       },
       "da": {
-        "h": 10,
-        "a": 11
+        "h": 12,
+        "a": 15
       },
       "corners": {
         "h": null,
@@ -62,20 +62,20 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 95",
+          "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "21 atq. perigosos · 1 ao alvo"
+          "detail": "27 atq. perigosos · 2 ao alvo"
         },
         {
           "id": "xg_pace",
-          "label": "xG 4.2/90",
+          "label": "xG 3.4/90",
           "emoji": "⚡",
-          "level": "critical",
-          "detail": "xG a ritmo de 4.2 por 90min"
+          "level": "high",
+          "detail": "xG a ritmo de 3.4 por 90min"
         }
       ],
-      "patternScore": 20
+      "patternScore": 14
     }
   ]
 }
