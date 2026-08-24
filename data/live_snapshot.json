@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-24T02:15:55Z",
+  "generated_at": "2026-08-24T02:21:07Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -69,29 +69,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 55,
+      "min": 60,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 19,
-      "xgH": 0.42,
-      "xgA": 0.32,
-      "xgTotal": 0.74,
-      "lastMom": -31,
+      "xgH": 0.44,
+      "xgA": 0.63,
+      "xgTotal": 1.07,
+      "lastMom": 18,
       "overOdds": 1.72,
       "probLive": 58,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 11,
-        "a": 9
+        "h": 12,
+        "a": 10
       },
       "sot": {
         "h": 1,
         "a": 2
       },
       "da": {
-        "h": 23,
-        "a": 42
+        "h": 26,
+        "a": 46
       },
       "corners": {
         "h": null,
@@ -118,8 +118,23 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 100 (2ªP)",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "22 atq. perigosos · 2 ao alvo (2ªP)"
+        },
+        {
+          "id": "shots",
+          "label": "8r 2ªP",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "48 remates/90min (2ªP) (muito alto)"
+        }
+      ],
+      "patternScore": 14
     },
     {
       "id": 223607,
@@ -128,15 +143,15 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 82,
+      "min": 87,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 85,
       "xgH": 1.13,
-      "xgA": 0.98,
-      "xgTotal": 2.11,
-      "lastMom": -38,
+      "xgA": 0.92,
+      "xgTotal": 2.05,
+      "lastMom": -6,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
@@ -149,8 +164,8 @@
         "a": 2
       },
       "da": {
-        "h": 60,
-        "a": 37
+        "h": 62,
+        "a": 41
       },
       "corners": {
         "h": null,
