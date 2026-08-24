@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-24T02:57:27Z",
+  "generated_at": "2026-08-24T03:02:33Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -10,29 +10,29 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 80,
+      "min": 85,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 80,
       "xgH": 0.65,
-      "xgA": 0.29,
-      "xgTotal": 0.94,
-      "lastMom": -23,
+      "xgA": 0.43,
+      "xgTotal": 1.08,
+      "lastMom": -61,
       "overOdds": 1.87,
       "probLive": 53,
       "oddsStatus": "VALID",
       "shots": {
         "h": 12,
-        "a": 7
+        "a": 9
       },
       "sot": {
         "h": 2,
-        "a": 1
+        "a": 2
       },
       "da": {
-        "h": 57,
-        "a": 47
+        "h": 60,
+        "a": 50
       },
       "corners": {
         "h": null,
@@ -65,24 +65,31 @@
           "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "41 atq. perigosos · 1 ao alvo (2ªP)"
+          "detail": "47 atq. perigosos · 2 ao alvo (2ªP)"
         },
         {
           "id": "shots",
-          "label": "10r 2ªP",
+          "label": "12r 2ªP",
           "emoji": "🎯",
           "level": "med",
-          "detail": "26 remates/90min (2ªP)"
+          "detail": "27 remates/90min (2ªP)"
         },
         {
           "id": "open",
           "label": "JOGO ABERTO",
           "emoji": "🎭",
           "level": "low",
-          "detail": "10min, equipa a perder ataca"
+          "detail": "5min, equipa a perder ataca"
+        },
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 61"
         }
       ],
-      "patternScore": 13
+      "patternScore": 15
     }
   ]
 }
