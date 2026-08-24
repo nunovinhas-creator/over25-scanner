@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-24T22:48:53Z",
+  "generated_at": "2026-08-24T22:54:03Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 17,
+      "min": 22,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -18,7 +18,7 @@
       "xgH": 0.34,
       "xgA": 0.06,
       "xgTotal": 0.4,
-      "lastMom": -23,
+      "lastMom": -29,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
@@ -31,8 +31,8 @@
         "a": 1
       },
       "da": {
-        "h": 4,
-        "a": 5
+        "h": 6,
+        "a": 6
       },
       "corners": {
         "h": null,
@@ -62,10 +62,10 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 58",
+          "label": "Pressão 59",
           "emoji": "🔥",
           "level": "high",
-          "detail": "9 atq. perigosos · 2 ao alvo"
+          "detail": "12 atq. perigosos · 2 ao alvo"
         }
       ],
       "patternScore": 4
@@ -75,31 +75,31 @@
       "home": "Athletic Club",
       "away": "Grêmio Novorizontino",
       "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 17,
+      "aScore": 1,
+      "goals": 1,
+      "min": 22,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
-      "xgH": 0.08,
-      "xgA": 0.55,
-      "xgTotal": 0.63,
-      "lastMom": -22,
+      "xgH": 0.15,
+      "xgA": 0.57,
+      "xgTotal": 0.72,
+      "lastMom": 15,
       "overOdds": 2.43,
       "probLive": 41,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 1,
-        "a": 4
+        "h": 3,
+        "a": 5
       },
       "sot": {
         "h": 0,
-        "a": 1
+        "a": 2
       },
       "da": {
-        "h": 6,
-        "a": 14
+        "h": 9,
+        "a": 15
       },
       "corners": {
         "h": null,
@@ -128,21 +128,35 @@
       },
       "patterns": [
         {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "3 padrões em simultâneo — sinal forte"
+        },
+        {
           "id": "pressure",
           "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "20 atq. perigosos · 1 ao alvo"
+          "detail": "24 atq. perigosos · 2 ao alvo"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 2.9/90",
+          "emoji": "⚡",
+          "level": "med",
+          "detail": "xG a ritmo de 2.9 por 90min"
         },
         {
           "id": "shots",
-          "label": "5 remates",
+          "label": "8 remates",
           "emoji": "🎯",
-          "level": "med",
-          "detail": "26 remates/90min"
+          "level": "high",
+          "detail": "33 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 12
+      "patternScore": 16
     },
     {
       "id": 223610,
@@ -151,15 +165,15 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 47,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 85,
-      "xgH": 1.74,
+      "xgH": 1.83,
       "xgA": 0.29,
-      "xgTotal": 2.03,
-      "lastMom": 36,
+      "xgTotal": 2.12,
+      "lastMom": 58,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
@@ -172,7 +186,7 @@
         "a": 1
       },
       "da": {
-        "h": 25,
+        "h": 26,
         "a": 25
       },
       "corners": {
@@ -200,8 +214,16 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 58"
+        }
+      ],
+      "patternScore": 2
     }
   ]
 }
