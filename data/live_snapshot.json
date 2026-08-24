@@ -1,8 +1,67 @@
 {
-  "generated_at": "2026-08-24T00:30:17Z",
+  "generated_at": "2026-08-24T00:35:26Z",
   "status": "OK",
-  "count": 1,
+  "count": 2,
   "events": [
+    {
+      "id": 223607,
+      "home": "Racing Club",
+      "away": "Boca Juniors",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 2,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 85,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": -15,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": 0,
+        "a": 2
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
     {
       "id": 216423,
       "home": "Angel City FC",
@@ -10,15 +69,15 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 23,
+      "min": 29,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 72,
-      "xgH": 0.31,
+      "xgH": 0.34,
       "xgA": 0.13,
-      "xgTotal": 0.44,
-      "lastMom": 32,
+      "xgTotal": 0.47000000000000003,
+      "lastMom": 13,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
@@ -31,8 +90,8 @@
         "a": 1
       },
       "da": {
-        "h": 1,
-        "a": 0
+        "h": 4,
+        "a": 2
       },
       "corners": {
         "h": null,
@@ -59,16 +118,8 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "shots",
-          "label": "7 remates",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "27 remates/90min"
-        }
-      ],
-      "patternScore": 2
+      "patterns": [],
+      "patternScore": 0
     }
   ]
 }
