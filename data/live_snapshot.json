@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-24T02:31:33Z",
+  "generated_at": "2026-08-24T02:36:44Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,20 +10,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 54,
+      "min": 60,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 80,
-      "xgH": 0.55,
+      "xgH": 0.58,
       "xgA": 0.22,
-      "xgTotal": 0.77,
-      "lastMom": 18,
+      "xgTotal": 0.7999999999999999,
+      "lastMom": 4,
       "overOdds": 1.87,
       "probLive": 53,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 8,
+        "h": 9,
         "a": 5
       },
       "sot": {
@@ -31,8 +31,8 @@
         "a": 0
       },
       "da": {
-        "h": 40,
-        "a": 37
+        "h": 44,
+        "a": 40
       },
       "corners": {
         "h": null,
@@ -59,39 +59,54 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 100 (2ªP)",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "21 atq. perigosos · 0 ao alvo (2ªP)"
+        },
+        {
+          "id": "shots",
+          "label": "5r 2ªP",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "30 remates/90min (2ªP) (muito alto)"
+        }
+      ],
+      "patternScore": 14
     },
     {
       "id": 211542,
       "home": "Pumas UNAM",
       "away": "Club Necaxa",
       "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 70,
+      "aScore": 1,
+      "goals": 1,
+      "min": 76,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 19,
       "xgH": 0.51,
-      "xgA": 0.83,
-      "xgTotal": 1.3399999999999999,
-      "lastMom": -62,
+      "xgA": 1.45,
+      "xgTotal": 1.96,
+      "lastMom": -40,
       "overOdds": 1.72,
       "probLive": 58,
       "oddsStatus": "VALID",
       "shots": {
         "h": 14,
-        "a": 12
+        "a": 15
       },
       "sot": {
         "h": 3,
-        "a": 2
+        "a": 4
       },
       "da": {
-        "h": 31,
-        "a": 50
+        "h": 32,
+        "a": 55
       },
       "corners": {
         "h": null,
@@ -124,45 +139,38 @@
           "label": "CONVERGÊNCIA",
           "emoji": "🔮",
           "level": "conv",
-          "detail": "5 padrões em simultâneo — sinal forte"
+          "detail": "4 padrões em simultâneo — sinal forte"
         },
         {
           "id": "pressure",
           "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "31 atq. perigosos · 4 ao alvo (2ªP)"
-        },
-        {
-          "id": "xg_delta",
-          "label": "xG sobrevaloriza",
-          "emoji": "🎲",
-          "level": "med",
-          "detail": "xG 1.34 vs 0 golos"
+          "detail": "37 atq. perigosos · 6 ao alvo (2ªP)"
         },
         {
           "id": "xg_pace",
-          "label": "xG 3.1/90 (2ªP)",
+          "label": "xG 4.3/90 (2ªP)",
           "emoji": "⚡",
-          "level": "high",
-          "detail": "xG a ritmo de 3.1 por 90min (2ªP)"
+          "level": "critical",
+          "detail": "xG a ritmo de 4.3 por 90min (2ªP)"
         },
         {
           "id": "shots",
-          "label": "12r 2ªP",
+          "label": "15r 2ªP",
           "emoji": "🎯",
           "level": "high",
-          "detail": "43 remates/90min (2ªP) (muito alto)"
+          "detail": "44 remates/90min (2ªP) (muito alto)"
         },
         {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum fora 62"
+          "id": "open",
+          "label": "JOGO ABERTO",
+          "emoji": "🎭",
+          "level": "low",
+          "detail": "14min, equipa a perder ataca"
         }
       ],
-      "patternScore": 22
+      "patternScore": 25
     }
   ]
 }
