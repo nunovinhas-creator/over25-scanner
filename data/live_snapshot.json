@@ -1,8 +1,67 @@
 {
-  "generated_at": "2026-08-24T01:01:24Z",
+  "generated_at": "2026-08-24T01:06:35Z",
   "status": "OK",
-  "count": 2,
+  "count": 3,
   "events": [
+    {
+      "id": 211542,
+      "home": "Pumas UNAM",
+      "away": "Club Necaxa",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 4,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 19,
+      "xgH": null,
+      "xgA": 0.1,
+      "xgTotal": null,
+      "lastMom": -48,
+      "overOdds": 1.72,
+      "probLive": 58,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 2
+      },
+      "sot": {
+        "h": 0,
+        "a": 1
+      },
+      "da": {
+        "h": 0,
+        "a": 4
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
     {
       "id": 223607,
       "home": "Racing Club",
@@ -10,29 +69,29 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 28,
+      "min": 33,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 85,
-      "xgH": 0.8,
-      "xgA": 0.07,
-      "xgTotal": 0.8700000000000001,
-      "lastMom": -4,
+      "xgH": 0.85,
+      "xgA": 0.28,
+      "xgTotal": 1.13,
+      "lastMom": 12,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 2,
-        "a": 3
+        "h": 3,
+        "a": 4
       },
       "sot": {
         "h": 1,
-        "a": 0
+        "a": 1
       },
       "da": {
-        "h": 11,
-        "a": 12
+        "h": 17,
+        "a": 15
       },
       "corners": {
         "h": null,
@@ -62,20 +121,20 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 79",
+          "label": "Pressão 97",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "23 atq. perigosos · 1 ao alvo"
+          "detail": "32 atq. perigosos · 2 ao alvo"
         },
         {
           "id": "xg_pace",
-          "label": "xG 2.8/90",
+          "label": "xG 3.1/90",
           "emoji": "⚡",
-          "level": "med",
-          "detail": "xG a ritmo de 2.8 por 90min"
+          "level": "high",
+          "detail": "xG a ritmo de 3.1 por 90min"
         }
       ],
-      "patternScore": 12
+      "patternScore": 14
     },
     {
       "id": 216423,
