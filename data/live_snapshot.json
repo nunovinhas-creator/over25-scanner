@@ -1,8 +1,67 @@
 {
-  "generated_at": "2026-08-24T23:04:22Z",
+  "generated_at": "2026-08-24T23:09:33Z",
   "status": "OK",
-  "count": 4,
+  "count": 5,
   "events": [
+    {
+      "id": 207767,
+      "home": "Charleston Battery",
+      "away": "Miami FC",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 0,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 57,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": 1.5,
+      "probLive": 67,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": null,
+        "a": null
+      },
+      "sot": {
+        "h": null,
+        "a": null
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": false,
+          "corners": false,
+          "possession": false,
+          "lastMom": false
+        },
+        "score": 0,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
     {
       "id": 7224,
       "home": "Botafogo",
@@ -10,20 +69,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 2,
+      "min": 7,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 9,
-      "xgH": null,
+      "xgH": 0.08,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": null,
+      "lastMom": 30,
       "overOdds": 2.01,
       "probLive": 50,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 0,
+        "h": 2,
         "a": 0
       },
       "sot": {
@@ -54,9 +113,9 @@
           "sot": true,
           "corners": false,
           "possession": false,
-          "lastMom": false
+          "lastMom": true
         },
-        "score": 1,
+        "score": 2,
         "total": 6
       },
       "patterns": [],
@@ -69,20 +128,20 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 32,
+      "min": 37,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
-      "xgH": 0.38,
+      "xgH": 0.45,
       "xgA": 0.08,
-      "xgTotal": 0.46,
-      "lastMom": -51,
+      "xgTotal": 0.53,
+      "lastMom": 9,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 3,
+        "h": 4,
         "a": 4
       },
       "sot": {
@@ -90,8 +149,8 @@
         "a": 2
       },
       "da": {
-        "h": 8,
-        "a": 12
+        "h": 10,
+        "a": 13
       },
       "corners": {
         "h": null,
@@ -124,17 +183,10 @@
           "label": "Pressão 76",
           "emoji": "🔥",
           "level": "high",
-          "detail": "20 atq. perigosos · 4 ao alvo"
-        },
-        {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum fora 51"
+          "detail": "23 atq. perigosos · 4 ao alvo"
         }
       ],
-      "patternScore": 6
+      "patternScore": 4
     },
     {
       "id": 10084,
@@ -143,28 +195,28 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 32,
+      "min": 38,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
       "xgH": 0.18,
-      "xgA": 0.62,
-      "xgTotal": 0.8,
-      "lastMom": -27,
+      "xgA": 0.97,
+      "xgTotal": 1.15,
+      "lastMom": 11,
       "overOdds": 2.43,
       "probLive": 41,
       "oddsStatus": "VALID",
       "shots": {
         "h": 4,
-        "a": 6
+        "a": 9
       },
       "sot": {
         "h": 0,
-        "a": 2
+        "a": 4
       },
       "da": {
-        "h": 16,
+        "h": 22,
         "a": 20
       },
       "corners": {
@@ -194,21 +246,35 @@
       },
       "patterns": [
         {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "3 padrões em simultâneo — sinal forte"
+        },
+        {
           "id": "pressure",
           "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "36 atq. perigosos · 2 ao alvo"
+          "detail": "42 atq. perigosos · 4 ao alvo"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 2.7/90",
+          "emoji": "⚡",
+          "level": "med",
+          "detail": "xG a ritmo de 2.7 por 90min"
         },
         {
           "id": "shots",
-          "label": "10 remates",
+          "label": "13 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "28 remates/90min (muito alto)"
+          "detail": "31 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 14
+      "patternScore": 16
     },
     {
       "id": 223610,
@@ -217,15 +283,15 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 47,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 85,
       "xgH": 1.83,
-      "xgA": 0.29,
-      "xgTotal": 2.12,
-      "lastMom": 58,
+      "xgA": 0.3,
+      "xgTotal": 2.13,
+      "lastMom": -15,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
@@ -239,7 +305,7 @@
       },
       "da": {
         "h": 26,
-        "a": 25
+        "a": 26
       },
       "corners": {
         "h": null,
@@ -266,16 +332,8 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 58"
-        }
-      ],
-      "patternScore": 2
+      "patterns": [],
+      "patternScore": 0
     }
   ]
 }
