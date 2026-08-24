@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-24T01:27:34Z",
+  "generated_at": "2026-08-24T01:32:49Z",
   "status": "OK",
   "count": 4,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 10,
+      "min": 15,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -18,7 +18,7 @@
       "xgH": null,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 26,
+      "lastMom": -1,
       "overOdds": 1.87,
       "probLive": 53,
       "oddsStatus": "VALID",
@@ -31,8 +31,8 @@
         "a": 0
       },
       "da": {
-        "h": 4,
-        "a": 11
+        "h": 7,
+        "a": 14
       },
       "corners": {
         "h": null,
@@ -65,7 +65,7 @@
           "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "15 atq. perigosos · 0 ao alvo"
+          "detail": "21 atq. perigosos · 0 ao alvo"
         }
       ],
       "patternScore": 10
@@ -77,20 +77,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 24,
+      "min": 29,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 19,
-      "xgH": 0.09,
+      "xgH": 0.15,
       "xgA": 0.16,
-      "xgTotal": 0.25,
-      "lastMom": 58,
+      "xgTotal": 0.31,
+      "lastMom": -35,
       "overOdds": 1.72,
       "probLive": 58,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 5,
+        "h": 6,
         "a": 5
       },
       "sot": {
@@ -98,8 +98,8 @@
         "a": 1
       },
       "da": {
-        "h": 10,
-        "a": 15
+        "h": 11,
+        "a": 22
       },
       "corners": {
         "h": null,
@@ -128,35 +128,21 @@
       },
       "patterns": [
         {
-          "id": "conv",
-          "label": "CONVERGÊNCIA",
-          "emoji": "🔮",
-          "level": "conv",
-          "detail": "3 padrões em simultâneo — sinal forte"
-        },
-        {
           "id": "pressure",
-          "label": "Pressão 99",
+          "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "25 atq. perigosos · 1 ao alvo"
+          "detail": "33 atq. perigosos · 1 ao alvo"
         },
         {
           "id": "shots",
-          "label": "10 remates",
+          "label": "11 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "38 remates/90min (muito alto)"
-        },
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 58"
+          "detail": "34 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 16
+      "patternScore": 14
     },
     {
       "id": 223607,
@@ -224,29 +210,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 56,
+      "min": 61,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 72,
-      "xgH": 0.85,
+      "xgH": 0.92,
       "xgA": 0.31,
-      "xgTotal": 1.16,
-      "lastMom": 64,
+      "xgTotal": 1.23,
+      "lastMom": 25,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 10,
+        "h": 12,
         "a": 6
       },
       "sot": {
-        "h": 2,
+        "h": 3,
         "a": 2
       },
       "da": {
-        "h": 22,
-        "a": 14
+        "h": 27,
+        "a": 16
       },
       "corners": {
         "h": null,
@@ -275,14 +261,21 @@
       },
       "patterns": [
         {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
+          "id": "pressure",
+          "label": "Pressão 100 (2ªP)",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "19 atq. perigosos · 2 ao alvo (2ªP)"
+        },
+        {
+          "id": "xg_delta",
+          "label": "xG sobrevaloriza",
+          "emoji": "🎲",
           "level": "med",
-          "detail": "Momentum casa 64"
+          "detail": "xG 1.23 vs 0 golos"
         }
       ],
-      "patternScore": 2
+      "patternScore": 12
     }
   ]
 }
