@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-24T01:55:02Z",
+  "generated_at": "2026-08-24T02:00:17Z",
   "status": "OK",
   "count": 4,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 38,
+      "min": 43,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -18,7 +18,7 @@
       "xgH": 0.48,
       "xgA": 0.15,
       "xgTotal": 0.63,
-      "lastMom": 23,
+      "lastMom": 14,
       "overOdds": 1.87,
       "probLive": 53,
       "oddsStatus": "VALID",
@@ -31,8 +31,8 @@
         "a": 0
       },
       "da": {
-        "h": 23,
-        "a": 28
+        "h": 24,
+        "a": 29
       },
       "corners": {
         "h": null,
@@ -65,7 +65,7 @@
           "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "51 atq. perigosos · 2 ao alvo"
+          "detail": "53 atq. perigosos · 2 ao alvo"
         }
       ],
       "patternScore": 10
@@ -136,29 +136,29 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 61,
+      "min": 66,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 85,
       "xgH": 1.11,
-      "xgA": 0.7,
-      "xgTotal": 1.81,
-      "lastMom": -13,
+      "xgA": 0.78,
+      "xgTotal": 1.8900000000000001,
+      "lastMom": 7,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
         "h": 11,
-        "a": 11
+        "a": 12
       },
       "sot": {
         "h": 2,
         "a": 2
       },
       "da": {
-        "h": 45,
-        "a": 29
+        "h": 50,
+        "a": 31
       },
       "corners": {
         "h": null,
@@ -195,29 +195,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 84,
+      "min": 90,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 72,
       "xgH": 1.25,
-      "xgA": 0.46,
-      "xgTotal": 1.71,
-      "lastMom": -5,
+      "xgA": 1.25,
+      "xgTotal": 2.5,
+      "lastMom": -61,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
         "h": 16,
-        "a": 8
+        "a": 9
       },
       "sot": {
         "h": 3,
-        "a": 3
+        "a": 4
       },
       "da": {
         "h": 33,
-        "a": 26
+        "a": 29
       },
       "corners": {
         "h": null,
@@ -247,13 +247,20 @@
       "patterns": [
         {
           "id": "xg_delta",
-          "label": "xG sobrevaloriza",
+          "label": "xG +2.5 acima",
           "emoji": "🎲",
+          "level": "critical",
+          "detail": "xG 2.50 vs 0 golos — golo(s) em dívida"
+        },
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
           "level": "med",
-          "detail": "xG 1.71 vs 0 golos"
+          "detail": "Momentum fora 61"
         }
       ],
-      "patternScore": 2
+      "patternScore": 12
     }
   ]
 }
