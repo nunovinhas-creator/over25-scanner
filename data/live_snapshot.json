@@ -1,8 +1,126 @@
 {
-  "generated_at": "2026-08-24T22:28:15Z",
+  "generated_at": "2026-08-24T22:33:23Z",
   "status": "OK",
-  "count": 1,
+  "count": 3,
   "events": [
+    {
+      "id": 10092,
+      "home": "Sport Recife",
+      "away": "América Mineiro",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 2,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 34,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": 11,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 10084,
+      "home": "Athletic Club",
+      "away": "Grêmio Novorizontino",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 2,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 34,
+      "xgH": null,
+      "xgA": 0.02,
+      "xgTotal": null,
+      "lastMom": -25,
+      "overOdds": 2.43,
+      "probLive": 41,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 1
+      },
+      "sot": {
+        "h": 0,
+        "a": 1
+      },
+      "da": {
+        "h": 1,
+        "a": 1
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
     {
       "id": 223610,
       "home": "Tigre",
@@ -10,29 +128,29 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 26,
+      "min": 31,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 85,
-      "xgH": 0.95,
-      "xgA": 0.03,
-      "xgTotal": 0.98,
-      "lastMom": 34,
+      "xgH": 1.62,
+      "xgA": 0.07,
+      "xgTotal": 1.6900000000000002,
+      "lastMom": -23,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 5,
-        "a": 1
+        "h": 6,
+        "a": 3
       },
       "sot": {
         "h": 2,
         "a": 0
       },
       "da": {
-        "h": 12,
-        "a": 15
+        "h": 15,
+        "a": 17
       },
       "corners": {
         "h": null,
@@ -61,21 +179,35 @@
       },
       "patterns": [
         {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "3 padrões em simultâneo — sinal forte"
+        },
+        {
           "id": "pressure",
           "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "27 atq. perigosos · 2 ao alvo"
+          "detail": "32 atq. perigosos · 2 ao alvo"
         },
         {
           "id": "xg_pace",
-          "label": "xG 3.4/90",
+          "label": "xG 4.9/90",
           "emoji": "⚡",
-          "level": "high",
-          "detail": "xG a ritmo de 3.4 por 90min"
+          "level": "critical",
+          "detail": "xG a ritmo de 4.9 por 90min"
+        },
+        {
+          "id": "shots",
+          "label": "9 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "26 remates/90min"
         }
       ],
-      "patternScore": 14
+      "patternScore": 22
     }
   ]
 }
