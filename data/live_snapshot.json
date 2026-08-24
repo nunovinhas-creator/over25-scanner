@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-24T23:46:11Z",
+  "generated_at": "2026-08-24T23:51:23Z",
   "status": "OK",
   "count": 5,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 37,
+      "min": 43,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -18,7 +18,7 @@
       "xgH": 0.43,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 37,
+      "lastMom": 10,
       "overOdds": 1.5,
       "probLive": 67,
       "oddsStatus": "VALID",
@@ -31,8 +31,8 @@
         "a": 0
       },
       "da": {
-        "h": 16,
-        "a": 8
+        "h": 19,
+        "a": 9
       },
       "corners": {
         "h": null,
@@ -62,10 +62,10 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 68",
+          "label": "Pressão 69",
           "emoji": "🔥",
           "level": "high",
-          "detail": "24 atq. perigosos · 2 ao alvo"
+          "detail": "28 atq. perigosos · 2 ao alvo"
         },
         {
           "id": "numerical",
@@ -84,20 +84,20 @@
       "hScore": 0,
       "aScore": 2,
       "goals": 2,
-      "min": 43,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 9,
-      "xgH": 0.94,
+      "xgH": 1.03,
       "xgA": 0.75,
-      "xgTotal": 1.69,
-      "lastMom": 33,
+      "xgTotal": 1.78,
+      "lastMom": 28,
       "overOdds": 2.01,
       "probLive": 50,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 10,
+        "h": 13,
         "a": 5
       },
       "sot": {
@@ -133,202 +133,39 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "xg_pace",
-          "label": "xG 3.5/90",
-          "emoji": "⚡",
-          "level": "high",
-          "detail": "xG a ritmo de 3.5 por 90min"
-        },
-        {
-          "id": "shots",
-          "label": "15 remates",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "31 remates/90min (muito alto)"
-        }
-      ],
-      "patternScore": 8
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 10092,
       "home": "Sport Recife",
       "away": "América Mineiro",
       "hScore": 2,
-      "aScore": 1,
-      "goals": 3,
-      "min": 55,
+      "aScore": 0,
+      "goals": 2,
+      "min": 60,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 34,
       "xgH": 0.86,
-      "xgA": 0.39,
-      "xgTotal": 1.25,
-      "lastMom": -94,
+      "xgA": 0.38,
+      "xgTotal": 1.24,
+      "lastMom": 2,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
         "h": 8,
-        "a": 12
-      },
-      "sot": {
-        "h": 4,
-        "a": 4
-      },
-      "da": {
-        "h": 22,
-        "a": 20
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Fora domina",
-          "emoji": "💥",
-          "level": "high",
-          "detail": "Momentum fora 94 — controlo total"
-        }
-      ],
-      "patternScore": 4
-    },
-    {
-      "id": 10084,
-      "home": "Athletic Club",
-      "away": "Grêmio Novorizontino",
-      "hScore": 0,
-      "aScore": 1,
-      "goals": 1,
-      "min": 55,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 34,
-      "xgH": 1.01,
-      "xgA": 0.95,
-      "xgTotal": 1.96,
-      "lastMom": -45,
-      "overOdds": 2.43,
-      "probLive": 41,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 7,
-        "a": 9
-      },
-      "sot": {
-        "h": 0,
-        "a": 4
-      },
-      "da": {
-        "h": 30,
-        "a": 34
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 1,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "open",
-          "label": "JOGO ABERTO",
-          "emoji": "🎭",
-          "level": "low",
-          "detail": "35min, equipa a perder ataca"
-        },
-        {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum fora 45"
-        },
-        {
-          "id": "numerical",
-          "label": "Fora +1 homem",
-          "emoji": "🟥",
-          "level": "med",
-          "detail": "Casa com 1 vermelho(s) — Fora em vantagem numérica"
-        }
-      ],
-      "patternScore": 5
-    },
-    {
-      "id": 223610,
-      "home": "Tigre",
-      "away": "Central Córdoba",
-      "hScore": 2,
-      "aScore": 1,
-      "goals": 3,
-      "min": 84,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 85,
-      "xgH": 2.41,
-      "xgA": 1.19,
-      "xgTotal": 3.6,
-      "lastMom": -2,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "MISSING",
-      "shots": {
-        "h": 15,
         "a": 11
       },
       "sot": {
-        "h": 2,
-        "a": 2
+        "h": 4,
+        "a": 3
       },
       "da": {
-        "h": 42,
-        "a": 44
+        "h": 23,
+        "a": 22
       },
       "corners": {
         "h": null,
@@ -357,6 +194,161 @@
       },
       "patterns": [],
       "patternScore": 0
+    },
+    {
+      "id": 10084,
+      "home": "Athletic Club",
+      "away": "Grêmio Novorizontino",
+      "hScore": 0,
+      "aScore": 2,
+      "goals": 2,
+      "min": 60,
+      "status": "2nd_half",
+      "period": "2T",
+      "league": "",
+      "league_id": 34,
+      "xgH": 1.01,
+      "xgA": 2.02,
+      "xgTotal": 3.0300000000000002,
+      "lastMom": -57,
+      "overOdds": 2.43,
+      "probLive": 41,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 7,
+        "a": 12
+      },
+      "sot": {
+        "h": 0,
+        "a": 6
+      },
+      "da": {
+        "h": 30,
+        "a": 40
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 1,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 4,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 100 (2ªP)",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "16 atq. perigosos · 2 ao alvo (2ªP)"
+        },
+        {
+          "id": "shots",
+          "label": "4r 2ªP",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "24 remates/90min (2ªP)"
+        },
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 57"
+        },
+        {
+          "id": "numerical",
+          "label": "Fora +1 homem",
+          "emoji": "🟥",
+          "level": "med",
+          "detail": "Casa com 1 vermelho(s) — Fora em vantagem numérica"
+        }
+      ],
+      "patternScore": 16
+    },
+    {
+      "id": 223610,
+      "home": "Tigre",
+      "away": "Central Córdoba",
+      "hScore": 2,
+      "aScore": 1,
+      "goals": 3,
+      "min": 89,
+      "status": "2nd_half",
+      "period": "2T",
+      "league": "",
+      "league_id": 85,
+      "xgH": 2.41,
+      "xgA": 1.45,
+      "xgTotal": 3.8600000000000003,
+      "lastMom": -64,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
+      "shots": {
+        "h": 15,
+        "a": 12
+      },
+      "sot": {
+        "h": 2,
+        "a": 2
+      },
+      "da": {
+        "h": 45,
+        "a": 48
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 4,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 64"
+        }
+      ],
+      "patternScore": 2
     }
   ]
 }
