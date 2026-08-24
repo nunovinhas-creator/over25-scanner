@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-24T00:50:57Z",
+  "generated_at": "2026-08-24T00:56:11Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,95 +10,28 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 17,
+      "min": 22,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 85,
       "xgH": 0.8,
-      "xgA": 0.03,
-      "xgTotal": 0.8300000000000001,
-      "lastMom": 7,
+      "xgA": 0.07,
+      "xgTotal": 0.8700000000000001,
+      "lastMom": -9,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
         "h": 2,
-        "a": 2
+        "a": 3
       },
       "sot": {
         "h": 1,
         "a": 0
       },
       "da": {
-        "h": 6,
-        "a": 9
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "pressure",
-          "label": "Pressão 84",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "15 atq. perigosos · 1 ao alvo"
-        }
-      ],
-      "patternScore": 10
-    },
-    {
-      "id": 216423,
-      "home": "Angel City FC",
-      "away": "NJ/NY Gotham FC",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 45,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 72,
-      "xgH": 0.65,
-      "xgA": 0.13,
-      "xgTotal": 0.78,
-      "lastMom": 25,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "MISSING",
-      "shots": {
-        "h": 6,
-        "a": 4
-      },
-      "sot": {
-        "h": 1,
-        "a": 1
-      },
-      "da": {
-        "h": 10,
+        "h": 7,
         "a": 10
       },
       "corners": {
@@ -129,13 +62,79 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 50",
+          "label": "Pressão 75",
           "emoji": "🔥",
+          "level": "critical",
+          "detail": "17 atq. perigosos · 1 ao alvo"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 3.6/90",
+          "emoji": "⚡",
           "level": "high",
-          "detail": "20 atq. perigosos · 2 ao alvo"
+          "detail": "xG a ritmo de 3.6 por 90min"
         }
       ],
-      "patternScore": 4
+      "patternScore": 14
+    },
+    {
+      "id": 216423,
+      "home": "Angel City FC",
+      "away": "NJ/NY Gotham FC",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 50,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 72,
+      "xgH": 0.82,
+      "xgA": 0.18,
+      "xgTotal": 1.0,
+      "lastMom": 33,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
+      "shots": {
+        "h": 8,
+        "a": 4
+      },
+      "sot": {
+        "h": 2,
+        "a": 1
+      },
+      "da": {
+        "h": 12,
+        "a": 10
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 4,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
     }
   ]
 }
