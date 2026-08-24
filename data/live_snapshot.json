@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-24T02:05:31Z",
+  "generated_at": "2026-08-24T02:10:43Z",
   "status": "OK",
-  "count": 4,
+  "count": 3,
   "events": [
     {
       "id": 220059,
@@ -69,29 +69,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 50,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 19,
-      "xgH": 0.32,
-      "xgA": 0.16,
-      "xgTotal": 0.48,
-      "lastMom": -6,
+      "xgH": 0.65,
+      "xgA": 0.27,
+      "xgTotal": 0.92,
+      "lastMom": 14,
       "overOdds": 1.72,
       "probLive": 58,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 9,
-        "a": 5
+        "h": 11,
+        "a": 6
       },
       "sot": {
-        "h": 0,
-        "a": 1
+        "h": 1,
+        "a": 2
       },
       "da": {
-        "h": 20,
-        "a": 30
+        "h": 23,
+        "a": 34
       },
       "corners": {
         "h": null,
@@ -128,29 +128,29 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 71,
+      "min": 77,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 85,
-      "xgH": 1.11,
-      "xgA": 0.79,
-      "xgTotal": 1.9000000000000001,
-      "lastMom": 15,
+      "xgH": 1.13,
+      "xgA": 0.86,
+      "xgTotal": 1.9899999999999998,
+      "lastMom": 8,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 11,
-        "a": 12
+        "h": 12,
+        "a": 13
       },
       "sot": {
-        "h": 2,
+        "h": 3,
         "a": 2
       },
       "da": {
-        "h": 54,
-        "a": 34
+        "h": 56,
+        "a": 36
       },
       "corners": {
         "h": null,
@@ -179,73 +179,6 @@
       },
       "patterns": [],
       "patternScore": 0
-    },
-    {
-      "id": 216423,
-      "home": "Angel City FC",
-      "away": "NJ/NY Gotham FC",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 95,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 72,
-      "xgH": 1.25,
-      "xgA": 1.41,
-      "xgTotal": 2.66,
-      "lastMom": -16,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "MISSING",
-      "shots": {
-        "h": 16,
-        "a": 12
-      },
-      "sot": {
-        "h": 3,
-        "a": 4
-      },
-      "da": {
-        "h": 35,
-        "a": 31
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "xg_delta",
-          "label": "xG +2.7 acima",
-          "emoji": "🎲",
-          "level": "critical",
-          "detail": "xG 2.66 vs 0 golos — golo(s) em dívida"
-        }
-      ],
-      "patternScore": 10
     }
   ]
 }
