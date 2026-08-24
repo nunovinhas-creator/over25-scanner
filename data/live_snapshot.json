@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-24T20:55:40Z",
+  "generated_at": "2026-08-24T21:00:53Z",
   "status": "OK",
-  "count": 6,
+  "count": 5,
   "events": [
     {
       "id": 214785,
@@ -10,21 +10,21 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 64,
+      "min": 70,
       "status": "2nd_half",
       "period": "2T",
       "league": "La Liga 2",
       "league_id": 38,
       "xgH": 0.92,
-      "xgA": 0.57,
-      "xgTotal": 1.49,
-      "lastMom": 41,
+      "xgA": 0.63,
+      "xgTotal": 1.55,
+      "lastMom": -31,
       "overOdds": 2.37,
       "probLive": 42,
       "oddsStatus": "VALID",
       "shots": {
         "h": 13,
-        "a": 13
+        "a": 14
       },
       "sot": {
         "h": 5,
@@ -32,7 +32,7 @@
       },
       "da": {
         "h": 22,
-        "a": 23
+        "a": 31
       },
       "corners": {
         "h": null,
@@ -59,16 +59,8 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "open",
-          "label": "JOGO ABERTO",
-          "emoji": "🎭",
-          "level": "low",
-          "detail": "26min, equipa a perder ataca"
-        }
-      ],
-      "patternScore": 1
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 213535,
@@ -77,21 +69,21 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 64,
+      "min": 70,
       "status": "2nd_half",
       "period": "2T",
       "league": "La Liga",
       "league_id": 3,
       "xgH": 1.02,
-      "xgA": 1.05,
-      "xgTotal": 2.0700000000000003,
-      "lastMom": 20,
+      "xgA": 1.17,
+      "xgTotal": 2.19,
+      "lastMom": -30,
       "overOdds": 2.25,
       "probLive": 44,
       "oddsStatus": "VALID",
       "shots": {
         "h": 7,
-        "a": 3
+        "a": 4
       },
       "sot": {
         "h": 2,
@@ -126,8 +118,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "late",
+          "label": "1 gol em 20min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 44% · 20min"
+        }
+      ],
+      "patternScore": 1
     },
     {
       "id": 374941,
@@ -136,7 +136,7 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 80,
+      "min": 86,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -157,7 +157,7 @@
         "a": null
       },
       "da": {
-        "h": 36,
+        "h": 39,
         "a": 38
       },
       "corners": {
@@ -195,21 +195,21 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 75,
+      "min": 81,
       "status": "2nd_half",
       "period": "2T",
       "league": "Primeira Liga",
       "league_id": 2,
       "xgH": 1.61,
-      "xgA": 0.64,
-      "xgTotal": 2.25,
-      "lastMom": -19,
+      "xgA": 0.69,
+      "xgTotal": 2.3,
+      "lastMom": -8,
       "overOdds": 2.32,
       "probLive": 43,
       "oddsStatus": "VALID",
       "shots": {
         "h": 8,
-        "a": 9
+        "a": 10
       },
       "sot": {
         "h": 4,
@@ -247,103 +247,44 @@
       "patterns": [
         {
           "id": "late",
-          "label": "1 gol em 15min",
+          "label": "1 gol em 9min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 43% · 15min"
+          "detail": "Falta 1 golo · mercado 43% · 9min"
         }
       ],
       "patternScore": 1
-    },
-    {
-      "id": 209544,
-      "home": "Fulham",
-      "away": "Chelsea",
-      "hScore": 2,
-      "aScore": 3,
-      "goals": 5,
-      "min": 94,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "Premier League",
-      "league_id": 1,
-      "xgH": 1.45,
-      "xgA": 1.7,
-      "xgTotal": 3.15,
-      "lastMom": -25,
-      "overOdds": 1.86,
-      "probLive": 54,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 14,
-        "a": 18
-      },
-      "sot": {
-        "h": 6,
-        "a": 6
-      },
-      "da": {
-        "h": 66,
-        "a": 62
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
     },
     {
       "id": 212156,
       "home": "Hallescher FC",
       "away": "FC Schalke 04",
       "hScore": 2,
-      "aScore": 3,
-      "goals": 5,
-      "min": 102,
-      "status": "extratime",
+      "aScore": 4,
+      "goals": 6,
+      "min": 18,
+      "status": "inprogress",
       "period": "ET1",
       "league": "",
       "league_id": 43,
       "xgH": 0.57,
-      "xgA": 2.75,
-      "xgTotal": 3.32,
-      "lastMom": 36,
+      "xgA": 2.97,
+      "xgTotal": 3.54,
+      "lastMom": -13,
       "overOdds": 1.39,
       "probLive": 72,
       "oddsStatus": "VALID",
       "shots": {
         "h": 7,
-        "a": 23
+        "a": 24
       },
       "sot": {
         "h": 4,
-        "a": 9
+        "a": 10
       },
       "da": {
-        "h": 20,
-        "a": 60
+        "h": 22,
+        "a": 61
       },
       "corners": {
         "h": null,
@@ -376,21 +317,14 @@
           "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "80 atq. perigosos · 13 ao alvo"
-        },
-        {
-          "id": "xg_pace",
-          "label": "xG 2.9/90",
-          "emoji": "⚡",
-          "level": "med",
-          "detail": "xG a ritmo de 2.9 por 90min"
+          "detail": "83 atq. perigosos · 14 ao alvo"
         },
         {
           "id": "shots",
-          "label": "30 remates",
+          "label": "31 remates",
           "emoji": "🎯",
-          "level": "med",
-          "detail": "26 remates/90min"
+          "level": "high",
+          "detail": "155 remates/90min (muito alto)"
         }
       ],
       "patternScore": 14
