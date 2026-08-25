@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-25T01:29:01Z",
+  "generated_at": "2026-08-25T01:34:11Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -8,17 +8,17 @@
       "home": "CA Talleres",
       "away": "Rosario Central",
       "hScore": 2,
-      "aScore": 0,
-      "goals": 2,
-      "min": 51,
+      "aScore": 1,
+      "goals": 3,
+      "min": 56,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 85,
       "xgH": 1.62,
-      "xgA": 0.63,
-      "xgTotal": 2.25,
-      "lastMom": -35,
+      "xgA": 1.4,
+      "xgTotal": 3.02,
+      "lastMom": -26,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
@@ -28,7 +28,7 @@
       },
       "sot": {
         "h": 3,
-        "a": 3
+        "a": 4
       },
       "da": {
         "h": 26,
@@ -69,21 +69,21 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 52,
+      "min": 57,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 85,
-      "xgH": 1.48,
-      "xgA": 0.12,
-      "xgTotal": 1.6,
-      "lastMom": -22,
+      "xgH": 1.53,
+      "xgA": 0.17,
+      "xgTotal": 1.7,
+      "lastMom": -15,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
         "h": 12,
-        "a": 3
+        "a": 4
       },
       "sot": {
         "h": 6,
@@ -91,7 +91,7 @@
       },
       "da": {
         "h": 26,
-        "a": 25
+        "a": 27
       },
       "corners": {
         "h": null,
@@ -118,8 +118,16 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "xg_delta",
+          "label": "xG sobrevaloriza",
+          "emoji": "🎲",
+          "level": "med",
+          "detail": "xG 1.70 vs 0 golos"
+        }
+      ],
+      "patternScore": 2
     }
   ]
 }
