@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-25T17:18:25Z",
+  "generated_at": "2026-08-25T17:23:37Z",
   "status": "OK",
   "count": 4,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 14,
+      "min": 19,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -66,31 +66,31 @@
       "id": 587707,
       "home": "Sabah FK",
       "away": "Hapoel Be'er Sheva",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 1,
-      "goals": 1,
-      "min": 31,
+      "goals": 2,
+      "min": 37,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 7,
-      "xgH": 1.09,
-      "xgA": 0.17,
-      "xgTotal": 1.26,
-      "lastMom": -51,
+      "xgH": 1.23,
+      "xgA": 0.38,
+      "xgTotal": 1.6099999999999999,
+      "lastMom": 99,
       "overOdds": 1.76,
       "probLive": 57,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 6,
-        "a": 3
+        "h": 9,
+        "a": 4
       },
       "sot": {
-        "h": 1,
+        "h": 2,
         "a": 2
       },
       "da": {
-        "h": 14,
+        "h": 18,
         "a": 13
       },
       "corners": {
@@ -128,34 +128,34 @@
         },
         {
           "id": "pressure",
-          "label": "Pressão 93",
+          "label": "Pressão 95",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "27 atq. perigosos · 3 ao alvo"
+          "detail": "31 atq. perigosos · 4 ao alvo"
         },
         {
           "id": "xg_pace",
-          "label": "xG 3.7/90",
+          "label": "xG 3.9/90",
           "emoji": "⚡",
           "level": "high",
-          "detail": "xG a ritmo de 3.7 por 90min"
+          "detail": "xG a ritmo de 3.9 por 90min"
         },
         {
           "id": "shots",
-          "label": "9 remates",
+          "label": "13 remates",
           "emoji": "🎯",
-          "level": "med",
-          "detail": "26 remates/90min"
+          "level": "high",
+          "detail": "32 remates/90min (muito alto)"
         },
         {
           "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum fora 51"
+          "label": "Casa domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum casa 99 — controlo total"
         }
       ],
-      "patternScore": 18
+      "patternScore": 22
     },
     {
       "id": 222629,
@@ -164,29 +164,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 49,
+      "min": 55,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 17,
-      "xgH": 0.67,
+      "xgH": 0.95,
       "xgA": 0.75,
-      "xgTotal": 1.42,
-      "lastMom": -24,
+      "xgTotal": 1.7,
+      "lastMom": 38,
       "overOdds": 1.85,
       "probLive": 54,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 7,
+        "h": 11,
         "a": 10
       },
       "sot": {
-        "h": 1,
+        "h": 3,
         "a": 4
       },
       "da": {
-        "h": 32,
-        "a": 16
+        "h": 37,
+        "a": 17
       },
       "corners": {
         "h": null,
@@ -213,8 +213,16 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "xg_delta",
+          "label": "xG sobrevaloriza",
+          "emoji": "🎲",
+          "level": "med",
+          "detail": "xG 1.70 vs 0 golos"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 222628,
@@ -223,20 +231,20 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 52,
+      "min": 57,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 17,
-      "xgH": 0.19,
+      "xgH": 0.21,
       "xgA": 0.4,
-      "xgTotal": 0.5900000000000001,
-      "lastMom": 20,
+      "xgTotal": 0.61,
+      "lastMom": 7,
       "overOdds": 1.85,
       "probLive": 54,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 4,
+        "h": 5,
         "a": 5
       },
       "sot": {
@@ -244,8 +252,8 @@
         "a": 1
       },
       "da": {
-        "h": 29,
-        "a": 25
+        "h": 32,
+        "a": 27
       },
       "corners": {
         "h": null,
