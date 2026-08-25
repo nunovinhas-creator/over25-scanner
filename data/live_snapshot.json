@@ -1,142 +1,8 @@
 {
-  "generated_at": "2026-08-25T20:53:26Z",
+  "generated_at": "2026-08-25T20:58:41Z",
   "status": "OK",
-  "count": 6,
+  "count": 2,
   "events": [
-    {
-      "id": 587809,
-      "home": "Nottingham Forest",
-      "away": "Leeds United",
-      "hScore": 0,
-      "aScore": 2,
-      "goals": 2,
-      "min": 94,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 40,
-      "xgH": 0.65,
-      "xgA": 2.55,
-      "xgTotal": 3.1999999999999997,
-      "lastMom": -11,
-      "overOdds": 1.92,
-      "probLive": 52,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 9,
-        "a": 13
-      },
-      "sot": {
-        "h": 3,
-        "a": 5
-      },
-      "da": {
-        "h": 34,
-        "a": 29
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "late",
-          "label": "1 gol em 0min",
-          "emoji": "⏰",
-          "level": "low",
-          "detail": "Falta 1 golo · mercado 52% · 0min"
-        }
-      ],
-      "patternScore": 1
-    },
-    {
-      "id": 587708,
-      "home": "Bodø/Glimt",
-      "away": "NEC Nijmegen",
-      "hScore": 3,
-      "aScore": 0,
-      "goals": 3,
-      "min": 90,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 7,
-      "xgH": 2.54,
-      "xgA": 0.15,
-      "xgTotal": 2.69,
-      "lastMom": 23,
-      "overOdds": 1.28,
-      "probLive": 78,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 21,
-        "a": 3
-      },
-      "sot": {
-        "h": 9,
-        "a": 2
-      },
-      "da": {
-        "h": 70,
-        "a": 21
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 1
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "numerical",
-          "label": "Casa +1 homem",
-          "emoji": "🟥",
-          "level": "med",
-          "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
-        }
-      ],
-      "patternScore": 2
-    },
     {
       "id": 224835,
       "home": "LASK",
@@ -144,21 +10,21 @@
       "hScore": 4,
       "aScore": 1,
       "goals": 5,
-      "min": 93,
-      "status": "2nd_half",
+      "min": 4,
+      "status": "inprogress",
       "period": "2T",
       "league": "",
       "league_id": 7,
-      "xgH": 3.59,
-      "xgA": 0.38,
-      "xgTotal": 3.9699999999999998,
-      "lastMom": -12,
+      "xgH": 3.65,
+      "xgA": 0.43,
+      "xgTotal": 4.08,
+      "lastMom": -54,
       "overOdds": 1.47,
       "probLive": 68,
       "oddsStatus": "VALID",
       "shots": {
         "h": 33,
-        "a": 5
+        "a": 6
       },
       "sot": {
         "h": 6,
@@ -203,20 +69,20 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 89,
+      "min": 94,
       "status": "2nd_half",
       "period": "2T",
       "league": "La Liga",
       "league_id": 3,
-      "xgH": 1.03,
+      "xgH": 1.19,
       "xgA": 0.7,
-      "xgTotal": 1.73,
-      "lastMom": -21,
+      "xgTotal": 1.89,
+      "lastMom": 89,
       "overOdds": 2.16,
       "probLive": 46,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 12,
+        "h": 16,
         "a": 15
       },
       "sot": {
@@ -224,8 +90,8 @@
         "a": 3
       },
       "da": {
-        "h": 39,
-        "a": 52
+        "h": 45,
+        "a": 55
       },
       "corners": {
         "h": null,
@@ -253,148 +119,15 @@
         "total": 6
       },
       "patterns": [
-        {
-          "id": "open",
-          "label": "JOGO ABERTO",
-          "emoji": "🎭",
-          "level": "low",
-          "detail": "1min, equipa a perder ataca"
-        }
-      ],
-      "patternScore": 1
-    },
-    {
-      "id": 587806,
-      "home": "Walsall",
-      "away": "Leyton Orient",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 62,
-      "status": "inprogress",
-      "period": "2T",
-      "league": "",
-      "league_id": 40,
-      "xgH": 1.39,
-      "xgA": 1.29,
-      "xgTotal": 2.6799999999999997,
-      "lastMom": -73,
-      "overOdds": 1.87,
-      "probLive": 53,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 13,
-        "a": 20
-      },
-      "sot": {
-        "h": 4,
-        "a": 5
-      },
-      "da": {
-        "h": 40,
-        "a": 52
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "xg_delta",
-          "label": "xG +2.7 acima",
-          "emoji": "🎲",
-          "level": "critical",
-          "detail": "xG 2.68 vs 0 golos — golo(s) em dívida"
-        },
         {
           "id": "mom",
-          "label": "Fora domina",
+          "label": "Casa domina",
           "emoji": "💥",
           "level": "high",
-          "detail": "Momentum fora 73 — controlo total"
+          "detail": "Momentum casa 89 — controlo total"
         }
       ],
-      "patternScore": 14
-    },
-    {
-      "id": 587803,
-      "home": "Stoke City",
-      "away": "Hull City",
-      "hScore": 1,
-      "aScore": 1,
-      "goals": 2,
-      "min": 61,
-      "status": "inprogress",
-      "period": "2T",
-      "league": "",
-      "league_id": 40,
-      "xgH": 0.96,
-      "xgA": 1.78,
-      "xgTotal": 2.74,
-      "lastMom": -11,
-      "overOdds": 2.08,
-      "probLive": 48,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 10,
-        "a": 18
-      },
-      "sot": {
-        "h": 4,
-        "a": 6
-      },
-      "da": {
-        "h": 34,
-        "a": 45
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
+      "patternScore": 4
     }
   ]
 }
