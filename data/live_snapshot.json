@@ -1,27 +1,27 @@
 {
-  "generated_at": "2026-08-25T22:31:10Z",
+  "generated_at": "2026-08-25T22:36:18Z",
   "status": "OK",
-  "count": 1,
+  "count": 2,
   "events": [
     {
-      "id": 10085,
-      "home": "Atlético Goianiense",
-      "away": "Botafogo-SP",
+      "id": 10089,
+      "home": "Juventude",
+      "away": "Clube De Regatas Brasil",
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 0,
+      "min": 1,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
       "xgH": null,
-      "xgA": null,
+      "xgA": 0.05,
       "xgTotal": null,
-      "lastMom": null,
-      "overOdds": 2.4,
-      "probLive": 42,
-      "oddsStatus": "VALID",
+      "lastMom": -2,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
       "shots": {
         "h": 0,
         "a": 0
@@ -54,9 +54,68 @@
           "sot": true,
           "corners": false,
           "possession": false,
-          "lastMom": false
+          "lastMom": true
         },
-        "score": 1,
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 10085,
+      "home": "Atlético Goianiense",
+      "away": "Botafogo-SP",
+      "hScore": 1,
+      "aScore": 0,
+      "goals": 1,
+      "min": 4,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 34,
+      "xgH": 0.73,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": 12,
+      "overOdds": 2.4,
+      "probLive": 42,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 2,
+        "a": 0
+      },
+      "sot": {
+        "h": 1,
+        "a": 0
+      },
+      "da": {
+        "h": 3,
+        "a": 1
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
         "total": 6
       },
       "patterns": [],
