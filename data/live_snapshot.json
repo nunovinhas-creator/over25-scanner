@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-25T23:38:25Z",
+  "generated_at": "2026-08-25T23:43:35Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,29 +10,29 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 49,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 34,
-      "xgH": 0.47,
+      "xgH": 0.52,
       "xgA": 1.15,
-      "xgTotal": 1.6199999999999999,
-      "lastMom": -26,
+      "xgTotal": 1.67,
+      "lastMom": 88,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 4,
+        "h": 5,
         "a": 11
       },
       "sot": {
-        "h": 4,
+        "h": 5,
         "a": 4
       },
       "da": {
-        "h": 20,
-        "a": 23
+        "h": 21,
+        "a": 24
       },
       "corners": {
         "h": null,
@@ -59,8 +59,16 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Casa domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum casa 88 — controlo total"
+        }
+      ],
+      "patternScore": 4
     },
     {
       "id": 10085,
@@ -69,20 +77,20 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 46,
+      "min": 51,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 34,
-      "xgH": 1.41,
+      "xgH": 1.54,
       "xgA": 0.11,
-      "xgTotal": 1.52,
-      "lastMom": 35,
+      "xgTotal": 1.6500000000000001,
+      "lastMom": 71,
       "overOdds": 2.4,
       "probLive": 42,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 12,
+        "h": 14,
         "a": 3
       },
       "sot": {
@@ -90,8 +98,8 @@
         "a": 1
       },
       "da": {
-        "h": 27,
-        "a": 26
+        "h": 33,
+        "a": 27
       },
       "corners": {
         "h": null,
@@ -118,8 +126,16 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Casa domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum casa 71 — controlo total"
+        }
+      ],
+      "patternScore": 4
     }
   ]
 }
