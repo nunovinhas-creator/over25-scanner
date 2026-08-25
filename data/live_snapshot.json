@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-25T17:34:04Z",
+  "generated_at": "2026-08-25T17:39:19Z",
   "status": "OK",
   "count": 4,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 29,
+      "min": 34,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -69,15 +69,15 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 47,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 7,
       "xgH": 1.47,
       "xgA": 0.59,
       "xgTotal": 2.06,
-      "lastMom": 16,
+      "lastMom": 10,
       "overOdds": 1.76,
       "probLive": 57,
       "oddsStatus": "VALID",
@@ -128,29 +128,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 65,
+      "min": 70,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 17,
-      "xgH": 1.62,
+      "xgH": 1.74,
       "xgA": 0.75,
-      "xgTotal": 2.37,
-      "lastMom": 17,
+      "xgTotal": 2.49,
+      "lastMom": 23,
       "overOdds": 1.85,
       "probLive": 54,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 15,
+        "h": 16,
         "a": 10
       },
       "sot": {
-        "h": 3,
+        "h": 4,
         "a": 4
       },
       "da": {
-        "h": 48,
-        "a": 19
+        "h": 51,
+        "a": 22
       },
       "corners": {
         "h": null,
@@ -190,28 +190,28 @@
           "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "22 atq. perigosos · 2 ao alvo (2ªP)"
+          "detail": "28 atq. perigosos · 3 ao alvo (2ªP)"
         },
         {
           "id": "xg_delta",
-          "label": "xG +2.4 acima",
+          "label": "xG +2.5 acima",
           "emoji": "🎲",
           "level": "high",
-          "detail": "xG 2.37 vs 0 golos"
+          "detail": "xG 2.49 vs 0 golos"
         },
         {
           "id": "xg_pace",
-          "label": "xG 4.9/90 (2ªP)",
+          "label": "xG 4.4/90 (2ªP)",
           "emoji": "⚡",
           "level": "critical",
-          "detail": "xG a ritmo de 4.9 por 90min (2ªP)"
+          "detail": "xG a ritmo de 4.4 por 90min (2ªP)"
         },
         {
           "id": "shots",
-          "label": "9r 2ªP",
+          "label": "10r 2ªP",
           "emoji": "🎯",
           "level": "high",
-          "detail": "40 remates/90min (2ªP) (muito alto)"
+          "detail": "36 remates/90min (2ªP) (muito alto)"
         }
       ],
       "patternScore": 28
@@ -223,7 +223,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 68,
+      "min": 73,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -231,7 +231,7 @@
       "xgH": 0.28,
       "xgA": 0.45,
       "xgTotal": 0.73,
-      "lastMom": -24,
+      "lastMom": 9,
       "overOdds": 1.85,
       "probLive": 54,
       "oddsStatus": "VALID",
@@ -244,8 +244,8 @@
         "a": 1
       },
       "da": {
-        "h": 38,
-        "a": 31
+        "h": 41,
+        "a": 36
       },
       "corners": {
         "h": null,
@@ -275,27 +275,20 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 83 (2ªP)",
+          "label": "Pressão 95 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "20 atq. perigosos · 1 ao alvo (2ªP)"
-        },
-        {
-          "id": "shots",
-          "label": "6r 2ªP",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "23 remates/90min (2ªP)"
+          "detail": "28 atq. perigosos · 1 ao alvo (2ªP)"
         },
         {
           "id": "late",
-          "label": "1 gol em 22min",
+          "label": "1 gol em 17min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 54% · 22min"
+          "detail": "Falta 1 golo · mercado 54% · 17min"
         }
       ],
-      "patternScore": 13
+      "patternScore": 11
     }
   ]
 }
