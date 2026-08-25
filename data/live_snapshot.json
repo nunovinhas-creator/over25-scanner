@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-25T00:37:39Z",
+  "generated_at": "2026-08-25T00:42:47Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,29 +10,103 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 22,
+      "min": 26,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 85,
-      "xgH": 0.07,
-      "xgA": 0.03,
-      "xgTotal": 0.1,
-      "lastMom": 38,
+      "xgH": 0.86,
+      "xgA": 0.05,
+      "xgTotal": 0.91,
+      "lastMom": -8,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
         "h": 3,
-        "a": 2
+        "a": 3
       },
       "sot": {
         "h": 1,
         "a": 1
       },
       "da": {
-        "h": 10,
-        "a": 15
+        "h": 16,
+        "a": 19
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 4,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 100",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "35 atq. perigosos · 2 ao alvo"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 3.2/90",
+          "emoji": "⚡",
+          "level": "high",
+          "detail": "xG a ritmo de 3.2 por 90min"
+        }
+      ],
+      "patternScore": 14
+    },
+    {
+      "id": 223600,
+      "home": "CA Lanús",
+      "away": "Argentinos Juniors",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 24,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 85,
+      "xgH": 0.14,
+      "xgA": 0.01,
+      "xgTotal": 0.15000000000000002,
+      "lastMom": 14,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
+      "shots": {
+        "h": 5,
+        "a": 1
+      },
+      "sot": {
+        "h": 2,
+        "a": 0
+      },
+      "da": {
+        "h": 16,
+        "a": 9
       },
       "corners": {
         "h": null,
@@ -66,80 +140,13 @@
           "emoji": "🔥",
           "level": "critical",
           "detail": "25 atq. perigosos · 2 ao alvo"
-        }
-      ],
-      "patternScore": 10
-    },
-    {
-      "id": 223600,
-      "home": "CA Lanús",
-      "away": "Argentinos Juniors",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 20,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 85,
-      "xgH": 0.14,
-      "xgA": 0.01,
-      "xgTotal": 0.15000000000000002,
-      "lastMom": 23,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "MISSING",
-      "shots": {
-        "h": 5,
-        "a": 1
-      },
-      "sot": {
-        "h": 2,
-        "a": 0
-      },
-      "da": {
-        "h": 13,
-        "a": 7
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "pressure",
-          "label": "Pressão 100",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "20 atq. perigosos · 2 ao alvo"
         },
         {
           "id": "shots",
           "label": "6 remates",
           "emoji": "🎯",
           "level": "med",
-          "detail": "27 remates/90min"
+          "detail": "22 remates/90min"
         }
       ],
       "patternScore": 12
