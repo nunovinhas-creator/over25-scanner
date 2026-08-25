@@ -1,16 +1,75 @@
 {
-  "generated_at": "2026-08-25T17:39:19Z",
+  "generated_at": "2026-08-25T17:44:35Z",
   "status": "OK",
-  "count": 4,
+  "count": 5,
   "events": [
+    {
+      "id": 600993,
+      "home": "CD Alcoyano",
+      "away": "Lorca Deportiva",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 14,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 79,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
+      "shots": {
+        "h": null,
+        "a": null
+      },
+      "sot": {
+        "h": null,
+        "a": null
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": false,
+          "corners": false,
+          "possession": false,
+          "lastMom": false
+        },
+        "score": 0,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
     {
       "id": 600992,
       "home": "UCAM Murcia",
       "away": "Atletico Santa Cruz",
       "hScore": 2,
-      "aScore": 0,
-      "goals": 2,
-      "min": 34,
+      "aScore": 1,
+      "goals": 3,
+      "min": 39,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -128,28 +187,28 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 70,
+      "min": 75,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 17,
-      "xgH": 1.74,
+      "xgH": 1.86,
       "xgA": 0.75,
-      "xgTotal": 2.49,
-      "lastMom": 23,
+      "xgTotal": 2.6100000000000003,
+      "lastMom": 29,
       "overOdds": 1.85,
       "probLive": 54,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 16,
+        "h": 17,
         "a": 10
       },
       "sot": {
-        "h": 4,
+        "h": 5,
         "a": 4
       },
       "da": {
-        "h": 51,
+        "h": 53,
         "a": 22
       },
       "corners": {
@@ -190,28 +249,28 @@
           "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "28 atq. perigosos · 3 ao alvo (2ªP)"
+          "detail": "30 atq. perigosos · 4 ao alvo (2ªP)"
         },
         {
           "id": "xg_delta",
-          "label": "xG +2.5 acima",
+          "label": "xG +2.6 acima",
           "emoji": "🎲",
-          "level": "high",
-          "detail": "xG 2.49 vs 0 golos"
+          "level": "critical",
+          "detail": "xG 2.61 vs 0 golos — golo(s) em dívida"
         },
         {
           "id": "xg_pace",
-          "label": "xG 4.4/90 (2ªP)",
+          "label": "xG 4.0/90 (2ªP)",
           "emoji": "⚡",
-          "level": "critical",
-          "detail": "xG a ritmo de 4.4 por 90min (2ªP)"
+          "level": "high",
+          "detail": "xG a ritmo de 4.0 por 90min (2ªP)"
         },
         {
           "id": "shots",
-          "label": "10r 2ªP",
+          "label": "11r 2ªP",
           "emoji": "🎯",
           "level": "high",
-          "detail": "36 remates/90min (2ªP) (muito alto)"
+          "detail": "33 remates/90min (2ªP) (muito alto)"
         }
       ],
       "patternScore": 28
@@ -223,20 +282,20 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 73,
+      "min": 78,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 17,
-      "xgH": 0.28,
+      "xgH": 0.6,
       "xgA": 0.45,
-      "xgTotal": 0.73,
-      "lastMom": 9,
+      "xgTotal": 1.05,
+      "lastMom": 59,
       "overOdds": 1.85,
       "probLive": 54,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 7,
+        "h": 10,
         "a": 6
       },
       "sot": {
@@ -244,8 +303,8 @@
         "a": 1
       },
       "da": {
-        "h": 41,
-        "a": 36
+        "h": 46,
+        "a": 38
       },
       "corners": {
         "h": null,
@@ -275,20 +334,34 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 95 (2ªP)",
+          "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "28 atq. perigosos · 1 ao alvo (2ªP)"
+          "detail": "35 atq. perigosos · 1 ao alvo (2ªP)"
+        },
+        {
+          "id": "shots",
+          "label": "9r 2ªP",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "25 remates/90min (2ªP)"
+        },
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 59"
         },
         {
           "id": "late",
-          "label": "1 gol em 17min",
+          "label": "1 gol em 12min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 54% · 17min"
+          "detail": "Falta 1 golo · mercado 54% · 12min"
         }
       ],
-      "patternScore": 11
+      "patternScore": 15
     }
   ]
 }
