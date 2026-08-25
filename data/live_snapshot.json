@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-25T23:07:27Z",
+  "generated_at": "2026-08-25T23:12:38Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,102 +10,28 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 32,
+      "min": 38,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
-      "xgH": 0.04,
-      "xgA": 0.75,
-      "xgTotal": 0.79,
-      "lastMom": -9,
+      "xgH": 0.46,
+      "xgA": 0.91,
+      "xgTotal": 1.37,
+      "lastMom": 14,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 2,
-        "a": 8
+        "h": 4,
+        "a": 10
       },
       "sot": {
-        "h": 2,
+        "h": 4,
         "a": 3
       },
       "da": {
-        "h": 14,
-        "a": 19
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "pressure",
-          "label": "Pressão 100",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "33 atq. perigosos · 5 ao alvo"
-        },
-        {
-          "id": "shots",
-          "label": "10 remates",
-          "emoji": "🎯",
-          "level": "high",
-          "detail": "28 remates/90min (muito alto)"
-        }
-      ],
-      "patternScore": 14
-    },
-    {
-      "id": 10085,
-      "home": "Atlético Goianiense",
-      "away": "Botafogo-SP",
-      "hScore": 2,
-      "aScore": 0,
-      "goals": 2,
-      "min": 36,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 34,
-      "xgH": 1.32,
-      "xgA": 0.08,
-      "xgTotal": 1.4000000000000001,
-      "lastMom": -19,
-      "overOdds": 2.4,
-      "probLive": 42,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 9,
-        "a": 2
-      },
-      "sot": {
-        "h": 3,
-        "a": 1
-      },
-      "da": {
-        "h": 20,
+        "h": 15,
         "a": 20
       },
       "corners": {
@@ -146,24 +72,112 @@
           "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "40 atq. perigosos · 4 ao alvo"
+          "detail": "35 atq. perigosos · 7 ao alvo"
         },
         {
           "id": "xg_pace",
-          "label": "xG 3.5/90",
+          "label": "xG 3.2/90",
           "emoji": "⚡",
           "level": "high",
-          "detail": "xG a ritmo de 3.5 por 90min"
+          "detail": "xG a ritmo de 3.2 por 90min"
         },
         {
           "id": "shots",
-          "label": "11 remates",
+          "label": "14 remates",
           "emoji": "🎯",
-          "level": "med",
-          "detail": "28 remates/90min"
+          "level": "high",
+          "detail": "33 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 16
+      "patternScore": 18
+    },
+    {
+      "id": 10085,
+      "home": "Atlético Goianiense",
+      "away": "Botafogo-SP",
+      "hScore": 2,
+      "aScore": 0,
+      "goals": 2,
+      "min": 41,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 34,
+      "xgH": 1.4,
+      "xgA": 0.08,
+      "xgTotal": 1.48,
+      "lastMom": 8,
+      "overOdds": 2.4,
+      "probLive": 42,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 11,
+        "a": 2
+      },
+      "sot": {
+        "h": 3,
+        "a": 1
+      },
+      "da": {
+        "h": 23,
+        "a": 23
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 4,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "3 padrões em simultâneo — sinal forte"
+        },
+        {
+          "id": "pressure",
+          "label": "Pressão 100",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "46 atq. perigosos · 4 ao alvo"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 3.2/90",
+          "emoji": "⚡",
+          "level": "high",
+          "detail": "xG a ritmo de 3.2 por 90min"
+        },
+        {
+          "id": "shots",
+          "label": "13 remates",
+          "emoji": "🎯",
+          "level": "high",
+          "detail": "29 remates/90min (muito alto)"
+        }
+      ],
+      "patternScore": 18
     }
   ]
 }
