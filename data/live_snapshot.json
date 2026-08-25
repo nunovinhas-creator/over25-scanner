@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-25T22:46:42Z",
+  "generated_at": "2026-08-25T22:51:53Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,29 +10,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 12,
+      "min": 17,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
       "xgH": 0.04,
-      "xgA": 0.39,
-      "xgTotal": 0.43,
-      "lastMom": -12,
+      "xgA": 0.36,
+      "xgTotal": 0.39999999999999997,
+      "lastMom": -4,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
         "h": 2,
-        "a": 5
+        "a": 6
       },
       "sot": {
         "h": 2,
         "a": 2
       },
       "da": {
-        "h": 8,
-        "a": 10
+        "h": 10,
+        "a": 11
       },
       "corners": {
         "h": null,
@@ -65,14 +65,14 @@
           "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "18 atq. perigosos · 4 ao alvo"
+          "detail": "21 atq. perigosos · 4 ao alvo"
         },
         {
           "id": "shots",
-          "label": "7 remates",
+          "label": "8 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "52 remates/90min (muito alto)"
+          "detail": "42 remates/90min (muito alto)"
         }
       ],
       "patternScore": 14
@@ -84,20 +84,20 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 15,
+      "min": 20,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 34,
-      "xgH": 1.02,
+      "xgH": 1.1,
       "xgA": 0.08,
-      "xgTotal": 1.1,
-      "lastMom": -9,
+      "xgTotal": 1.1800000000000002,
+      "lastMom": 39,
       "overOdds": 2.4,
       "probLive": 42,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 4,
+        "h": 6,
         "a": 2
       },
       "sot": {
@@ -105,8 +105,8 @@
         "a": 1
       },
       "da": {
-        "h": 11,
-        "a": 6
+        "h": 16,
+        "a": 8
       },
       "corners": {
         "h": null,
@@ -135,21 +135,35 @@
       },
       "patterns": [
         {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "3 padrões em simultâneo — sinal forte"
+        },
+        {
           "id": "pressure",
           "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "17 atq. perigosos · 3 ao alvo"
+          "detail": "24 atq. perigosos · 3 ao alvo"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 5.3/90",
+          "emoji": "⚡",
+          "level": "critical",
+          "detail": "xG a ritmo de 5.3 por 90min"
         },
         {
           "id": "shots",
-          "label": "6 remates",
+          "label": "8 remates",
           "emoji": "🎯",
           "level": "high",
           "detail": "36 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 14
+      "patternScore": 24
     }
   ]
 }
