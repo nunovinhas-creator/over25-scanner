@@ -1,5 +1,7 @@
 # Over 2.5 Scout — Sistema de Apostas em Futebol
 
+> ⏸️ **Scanner ao vivo parado desde 20 de agosto de 2026.** O feed de odds da BSD Sports API deixou de responder (cobertura caiu de 96% a 17 ago para 0% entre 21–24 ago). Não há substituição de fonte nem feed pago em curso — os workflows dependentes da BSD estão desactivados. O repositório está agora em **modo de investigação offline** sobre `data/historical/matches.csv` (23.766 jogos, 2021–2026, 13 divisões, odds Pinnacle de abertura e fecho). Detalhe da decisão e critério de reversão: [`.claude/rules/decisions.md`](.claude/rules/decisions.md).
+
 📋 Documentação interna e índice de portfólio mantidos em repositório privado.
 
 [![Scanner](https://github.com/nunovinhas-creator/over25-scanner/actions/workflows/scanner.yml/badge.svg)](https://github.com/nunovinhas-creator/over25-scanner/actions/workflows/scanner.yml)

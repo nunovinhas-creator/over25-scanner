@@ -14,6 +14,7 @@
 | Bundesliga 2 / Serie B | FORA da whitelist | BSD não disponibiliza estas ligas. Mantidas no histórico football-data.co.uk para backtesting. |
 | `pin_drop` como sinal 1X2 | SUBSTITUÍDO | Desde 12 jun 2026: sinal é `div_b365_pin > 3%`. `pin_drop` gravado por pick mas não é gate. |
 | `previous_decimal_odds` | NÃO é closing line | É a odd do scan anterior. CLV exacto requer fetch Pinnacle pós-KO (+10min). Ver testing.md. |
+| Feed de odds BSD (scanner ao vivo) | CONGELADO — 25 ago 2026 | Cobertura de odds BSD ≥ 90% sustentada 7 dias seguidos (ou fonte alternativa validada). Ver detalhe abaixo. |
 
 ---
 
@@ -46,3 +47,29 @@ Apenas as 10 ligas listadas em `data.md` podem gerar picks em produção. Adicio
 2. Confirmar histórico football-data.co.uk disponível (mínimo 1 época completa)
 3. Re-treinar Dixon-Coles com a nova liga incluída
 4. Validar out-of-sample antes de activar em produção
+
+### Feed de odds BSD — CONGELADO (25 ago 2026)
+
+**Data da decisão:** 25 de agosto de 2026.
+
+**Causa:** o feed de odds da BSD Sports API deixou de devolver dados válidos. Série de cobertura diária (jogos das 10 ligas whitelisted com odds válidas / jogos candidatos), evidência dos runs de `scanner.yml` / `sharp1x2_analysis.yml` na Actions tab desse período:
+
+| Data | Cobertura de odds BSD |
+|---|---|
+| 17 ago 2026 | 96% |
+| 21 ago 2026 | 0% |
+| 22 ago 2026 | 0% |
+| 23 ago 2026 | 0% |
+| 24 ago 2026 | 0% |
+
+**Decisão:** não substituir a fonte de odds nem contratar feed pago alternativo. Todos os workflows dependentes da BSD ficam desactivados (Actions → Disable — ficheiros mantidos no repositório, não apagados):
+
+`scanner.yml`, `sharp1x2_analysis.yml`, `live_scanner.yml`, `live_coverage_summary.yml`, `live_shadow_summary.yml`, `fetch_bsd_leagues.yml`, `probe_bsd_closing_odds.yml`, `probe_bsd_markets.yml`, `probe_bsd_odds_states.yml`, `probe_bsd_odds_transitions.yml`.
+
+`historical_data.yml` e `retrain_dc.yml` mantêm-se activos — usam football-data.co.uk (gratuito), não dependem da BSD.
+
+O repositório passa a **modo de investigação offline** sobre `data/historical/matches.csv` (23.766 jogos, 2021–2026, 13 divisões, odds de abertura e fecho Pinnacle).
+
+**Tag git:** `v-freeze-2026-08` marca o estado de `main` no momento da decisão (commit `8e6a751`).
+
+**O que é preciso para reverter:** cobertura de odds BSD (ou de uma fonte alternativa validada) ≥ 90% sustentada durante 7 dias seguidos. Reactivar os workflows um a um pela Actions tab (Enable workflow), começando por `scanner.yml`; só reactivar `sharp1x2_analysis.yml` e `live_scanner.yml` depois de confirmar picks reais consistentes no scanner principal.
