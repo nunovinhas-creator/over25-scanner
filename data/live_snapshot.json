@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-25T23:48:44Z",
+  "generated_at": "2026-08-25T23:53:54Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,29 +10,29 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 54,
+      "min": 59,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 34,
       "xgH": 0.51,
-      "xgA": 1.15,
-      "xgTotal": 1.66,
-      "lastMom": -42,
+      "xgA": 1.2,
+      "xgTotal": 1.71,
+      "lastMom": 14,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
         "h": 5,
-        "a": 11
+        "a": 12
       },
       "sot": {
         "h": 5,
         "a": 4
       },
       "da": {
-        "h": 22,
-        "a": 26
+        "h": 24,
+        "a": 29
       },
       "corners": {
         "h": null,
@@ -69,15 +69,15 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 56,
+      "min": 61,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 34,
-      "xgH": 1.54,
+      "xgH": 1.57,
       "xgA": 0.11,
-      "xgTotal": 1.6500000000000001,
-      "lastMom": -23,
+      "xgTotal": 1.6800000000000002,
+      "lastMom": -30,
       "overOdds": 2.4,
       "probLive": 42,
       "oddsStatus": "VALID",
@@ -90,8 +90,8 @@
         "a": 1
       },
       "da": {
-        "h": 35,
-        "a": 30
+        "h": 36,
+        "a": 31
       },
       "corners": {
         "h": null,
@@ -118,8 +118,16 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 79 (2ªP)",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "14 atq. perigosos · 0 ao alvo (2ªP)"
+        }
+      ],
+      "patternScore": 10
     }
   ]
 }
