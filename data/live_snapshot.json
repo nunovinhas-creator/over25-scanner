@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-25T01:18:46Z",
+  "generated_at": "2026-08-25T01:23:53Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -7,91 +7,32 @@
       "id": 223601,
       "home": "CA Talleres",
       "away": "Rosario Central",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 0,
-      "goals": 1,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "goals": 2,
+      "min": 46,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 85,
-      "xgH": 0.86,
-      "xgA": 0.37,
-      "xgTotal": 1.23,
-      "lastMom": -35,
+      "xgH": 0.89,
+      "xgA": 0.77,
+      "xgTotal": 1.6600000000000001,
+      "lastMom": 48,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 3,
+        "h": 4,
         "a": 10
       },
       "sot": {
-        "h": 1,
+        "h": 2,
         "a": 2
       },
       "da": {
-        "h": 24,
+        "h": 25,
         "a": 42
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 223600,
-      "home": "CA Lanús",
-      "away": "Argentinos Juniors",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
-      "league": "",
-      "league_id": 85,
-      "xgH": 1.47,
-      "xgA": 0.05,
-      "xgTotal": 1.52,
-      "lastMom": 91,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "MISSING",
-      "shots": {
-        "h": 12,
-        "a": 2
-      },
-      "sot": {
-        "h": 6,
-        "a": 0
-      },
-      "da": {
-        "h": 24,
-        "a": 19
       },
       "corners": {
         "h": null,
@@ -121,13 +62,72 @@
       "patterns": [
         {
           "id": "mom",
-          "label": "Casa domina",
-          "emoji": "💥",
-          "level": "high",
-          "detail": "Momentum casa 91 — controlo total"
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 48"
         }
       ],
-      "patternScore": 4
+      "patternScore": 2
+    },
+    {
+      "id": 223600,
+      "home": "CA Lanús",
+      "away": "Argentinos Juniors",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 47,
+      "status": "2nd_half",
+      "period": "2T",
+      "league": "",
+      "league_id": 85,
+      "xgH": 1.48,
+      "xgA": 0.06,
+      "xgTotal": 1.54,
+      "lastMom": -33,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
+      "shots": {
+        "h": 12,
+        "a": 2
+      },
+      "sot": {
+        "h": 6,
+        "a": 0
+      },
+      "da": {
+        "h": 24,
+        "a": 21
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 4,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
     }
   ]
 }
