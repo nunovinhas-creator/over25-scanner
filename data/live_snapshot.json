@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-25T16:18:10Z",
+  "generated_at": "2026-08-25T16:23:23Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,79 +10,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 5,
+      "min": 11,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 17,
       "xgH": 0.12,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": 21,
+      "xgA": 0.13,
+      "xgTotal": 0.25,
+      "lastMom": 27,
       "overOdds": 1.85,
       "probLive": 54,
       "oddsStatus": "VALID",
       "shots": {
         "h": 2,
-        "a": 0
-      },
-      "sot": {
-        "h": 0,
-        "a": 0
-      },
-      "da": {
-        "h": 6,
-        "a": 0
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 222628,
-      "home": "Abha",
-      "away": "Al-Khaleej",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 10,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 17,
-      "xgH": null,
-      "xgA": 0.06,
-      "xgTotal": null,
-      "lastMom": 11,
-      "overOdds": 1.85,
-      "probLive": 54,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 0,
         "a": 1
       },
       "sot": {
@@ -90,7 +31,7 @@
         "a": 0
       },
       "da": {
-        "h": 0,
+        "h": 7,
         "a": 2
       },
       "corners": {
@@ -108,6 +49,80 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
+          "xgTotal": true,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 4,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 74",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "9 atq. perigosos · 0 ao alvo"
+        },
+        {
+          "id": "shots",
+          "label": "3 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "25 remates/90min"
+        }
+      ],
+      "patternScore": 12
+    },
+    {
+      "id": 222628,
+      "home": "Abha",
+      "away": "Al-Khaleej",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 15,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 17,
+      "xgH": null,
+      "xgA": 0.05,
+      "xgTotal": null,
+      "lastMom": -31,
+      "overOdds": 1.85,
+      "probLive": 54,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 1
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": 4,
+        "a": 11
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
           "xgTotal": false,
           "da": true,
           "sot": true,
@@ -118,8 +133,16 @@
         "score": 3,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 90",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "15 atq. perigosos · 0 ao alvo"
+        }
+      ],
+      "patternScore": 10
     }
   ]
 }
