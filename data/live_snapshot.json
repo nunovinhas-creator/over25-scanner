@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-25T01:03:23Z",
+  "generated_at": "2026-08-25T01:08:30Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,29 +10,29 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 48,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 85,
       "xgH": 0.86,
-      "xgA": 0.35,
-      "xgTotal": 1.21,
-      "lastMom": -21,
+      "xgA": 0.37,
+      "xgTotal": 1.23,
+      "lastMom": -35,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
         "h": 3,
-        "a": 9
+        "a": 10
       },
       "sot": {
         "h": 1,
         "a": 2
       },
       "da": {
-        "h": 23,
-        "a": 39
+        "h": 24,
+        "a": 42
       },
       "corners": {
         "h": null,
@@ -69,28 +69,28 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 46,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 85,
-      "xgH": 0.42,
+      "xgH": 1.47,
       "xgA": 0.05,
-      "xgTotal": 0.47,
-      "lastMom": -15,
+      "xgTotal": 1.52,
+      "lastMom": 91,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 8,
+        "h": 12,
         "a": 2
       },
       "sot": {
-        "h": 4,
+        "h": 6,
         "a": 0
       },
       "da": {
-        "h": 22,
+        "h": 24,
         "a": 19
       },
       "corners": {
@@ -118,8 +118,16 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Casa domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum casa 91 — controlo total"
+        }
+      ],
+      "patternScore": 4
     }
   ]
 }
