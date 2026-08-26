@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-26T16:39:36Z",
+  "generated_at": "2026-08-26T16:44:44Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -10,29 +10,29 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 36,
+      "min": 40,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 17,
-      "xgH": 0.42,
-      "xgA": 0.12,
-      "xgTotal": 0.54,
-      "lastMom": 22,
+      "xgH": 0.5,
+      "xgA": 0.47,
+      "xgTotal": 0.97,
+      "lastMom": 59,
       "overOdds": 1.8,
       "probLive": 56,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 5,
-        "a": 2
+        "h": 6,
+        "a": 3
       },
       "sot": {
-        "h": 2,
-        "a": 1
+        "h": 3,
+        "a": 2
       },
       "da": {
-        "h": 15,
-        "a": 8
+        "h": 17,
+        "a": 12
       },
       "corners": {
         "h": null,
@@ -62,13 +62,20 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 72",
+          "label": "Pressão 90",
           "emoji": "🔥",
-          "level": "high",
-          "detail": "23 atq. perigosos · 3 ao alvo"
+          "level": "critical",
+          "detail": "29 atq. perigosos · 5 ao alvo"
+        },
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 59"
         }
       ],
-      "patternScore": 4
+      "patternScore": 12
     }
   ]
 }
