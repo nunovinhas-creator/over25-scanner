@@ -1,16 +1,16 @@
 {
-  "generated_at": "2026-08-26T12:34:49Z",
+  "generated_at": "2026-08-26T12:40:06Z",
   "status": "OK",
-  "count": 6,
+  "count": 4,
   "events": [
     {
       "id": 588086,
       "home": "JEF United Chiba",
       "away": "Azul Claro Numazu",
       "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 115,
+      "aScore": 1,
+      "goals": 1,
+      "min": 120,
       "status": "extratime",
       "period": "ETHT",
       "league": "",
@@ -69,7 +69,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 72,
+      "min": 77,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -90,7 +90,7 @@
         "a": 0
       },
       "da": {
-        "h": 37,
+        "h": 40,
         "a": 14
       },
       "corners": {
@@ -121,72 +121,13 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 57 (2ªP)",
+          "label": "Pressão 56 (2ªP)",
           "emoji": "🔥",
           "level": "high",
-          "detail": "17 atq. perigosos · 0 ao alvo (2ªP)"
+          "detail": "20 atq. perigosos · 0 ao alvo (2ªP)"
         }
       ],
       "patternScore": 4
-    },
-    {
-      "id": 588078,
-      "home": "Shimizu S-Pulse",
-      "away": "FC Osaka",
-      "hScore": 2,
-      "aScore": 1,
-      "goals": 3,
-      "min": 117,
-      "status": "extratime",
-      "period": "ETHT",
-      "league": "",
-      "league_id": 51,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "MISSING",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": 0,
-        "a": 0
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 1,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
     },
     {
       "id": 212579,
@@ -195,7 +136,7 @@
       "hScore": 3,
       "aScore": 4,
       "goals": 7,
-      "min": 118,
+      "min": 123,
       "status": "extratime",
       "period": "ETHT",
       "league": "",
@@ -213,7 +154,7 @@
       },
       "sot": {
         "h": 5,
-        "a": 10
+        "a": 11
       },
       "da": {
         "h": null,
@@ -254,7 +195,7 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 113,
+      "min": 118,
       "status": "extratime",
       "period": "ETHT",
       "league": "",
@@ -305,73 +246,6 @@
       },
       "patterns": [],
       "patternScore": 0
-    },
-    {
-      "id": 212574,
-      "home": "Jubilo Iwata",
-      "away": "Tegevajaro Miyazaki",
-      "hScore": 0,
-      "aScore": 1,
-      "goals": 1,
-      "min": 121,
-      "status": "extratime",
-      "period": "ETHT",
-      "league": "",
-      "league_id": 51,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "MISSING",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": 8,
-        "a": 11
-      },
-      "da": {
-        "h": 46,
-        "a": 37
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 2,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "pressure",
-          "label": "Pressão 100",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "83 atq. perigosos · 19 ao alvo"
-        }
-      ],
-      "patternScore": 10
     }
   ]
 }
