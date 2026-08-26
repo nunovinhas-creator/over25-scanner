@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-26T02:00:44Z",
+  "generated_at": "2026-08-26T02:05:55Z",
   "status": "OK",
-  "count": 3,
+  "count": 2,
   "events": [
     {
       "id": 220085,
@@ -11,14 +11,14 @@
       "aScore": 0,
       "goals": 0,
       "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 80,
       "xgH": 0.92,
       "xgA": 1.06,
       "xgTotal": 1.98,
-      "lastMom": -65,
+      "lastMom": 4,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
@@ -61,6 +61,20 @@
       },
       "patterns": [
         {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "4 padrões em simultâneo — sinal forte"
+        },
+        {
+          "id": "pressure",
+          "label": "Pressão 100",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "61 atq. perigosos · 3 ao alvo"
+        },
+        {
           "id": "xg_delta",
           "label": "xG +2.0 acima",
           "emoji": "🎲",
@@ -68,14 +82,21 @@
           "detail": "xG 1.98 vs 0 golos"
         },
         {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
+          "id": "xg_pace",
+          "label": "xG 4.0/90",
+          "emoji": "⚡",
+          "level": "high",
+          "detail": "xG a ritmo de 4.0 por 90min"
+        },
+        {
+          "id": "shots",
+          "label": "11 remates",
+          "emoji": "🎯",
           "level": "med",
-          "detail": "Momentum fora 65"
+          "detail": "22 remates/90min"
         }
       ],
-      "patternScore": 6
+      "patternScore": 20
     },
     {
       "id": 587780,
@@ -84,96 +105,29 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 71,
+      "min": 76,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 32,
-      "xgH": 1.78,
-      "xgA": 0.17,
-      "xgTotal": 1.95,
-      "lastMom": 17,
+      "xgH": 1.81,
+      "xgA": 0.55,
+      "xgTotal": 2.3600000000000003,
+      "lastMom": -47,
       "overOdds": 2.1,
       "probLive": 48,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 16,
-        "a": 2
-      },
-      "sot": {
-        "h": 4,
-        "a": 0
-      },
-      "da": {
-        "h": 24,
-        "a": 25
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "late",
-          "label": "1 gol em 19min",
-          "emoji": "⏰",
-          "level": "low",
-          "detail": "Falta 1 golo · mercado 48% · 19min"
-        }
-      ],
-      "patternScore": 1
-    },
-    {
-      "id": 587783,
-      "home": "Cruzeiro",
-      "away": "Atlético Mineiro",
-      "hScore": 1,
-      "aScore": 1,
-      "goals": 2,
-      "min": 98,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 35,
-      "xgH": 0.4,
-      "xgA": 0.28,
-      "xgTotal": 0.68,
-      "lastMom": 47,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "MISSING",
-      "shots": {
-        "h": 12,
-        "a": 9
-      },
-      "sot": {
-        "h": 1,
+        "h": 17,
         "a": 3
       },
+      "sot": {
+        "h": 5,
+        "a": 1
+      },
       "da": {
-        "h": 67,
-        "a": 40
+        "h": 25,
+        "a": 29
       },
       "corners": {
         "h": null,
@@ -202,21 +156,21 @@
       },
       "patterns": [
         {
-          "id": "pressure",
-          "label": "Pressão 100",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "107 atq. perigosos · 4 ao alvo"
-        },
-        {
           "id": "mom",
-          "label": "Casa pressiona",
+          "label": "Fora pressiona",
           "emoji": "💪",
           "level": "med",
-          "detail": "Momentum casa 47"
+          "detail": "Momentum fora 47"
+        },
+        {
+          "id": "late",
+          "label": "1 gol em 14min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 48% · 14min"
         }
       ],
-      "patternScore": 12
+      "patternScore": 3
     }
   ]
 }
