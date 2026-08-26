@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-26T02:26:45Z",
+  "generated_at": "2026-08-26T02:31:52Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -10,29 +10,29 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 66,
+      "min": 70,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 80,
-      "xgH": 1.15,
-      "xgA": 1.07,
-      "xgTotal": 2.2199999999999998,
-      "lastMom": 52,
+      "xgH": 1.17,
+      "xgA": 1.23,
+      "xgTotal": 2.4,
+      "lastMom": -8,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 7,
-        "a": 8
+        "h": 8,
+        "a": 10
       },
       "sot": {
-        "h": 3,
-        "a": 2
+        "h": 4,
+        "a": 3
       },
       "da": {
-        "h": 48,
-        "a": 42
+        "h": 52,
+        "a": 47
       },
       "corners": {
         "h": null,
@@ -65,38 +65,31 @@
           "label": "CONVERGÊNCIA",
           "emoji": "🔮",
           "level": "conv",
-          "detail": "4 padrões em simultâneo — sinal forte"
+          "detail": "3 padrões em simultâneo — sinal forte"
         },
         {
           "id": "pressure",
           "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "29 atq. perigosos · 2 ao alvo (2ªP)"
+          "detail": "38 atq. perigosos · 4 ao alvo (2ªP)"
         },
         {
           "id": "xg_delta",
           "label": "xG sobrevaloriza",
           "emoji": "🎲",
           "level": "med",
-          "detail": "xG 2.22 vs 1 golos"
+          "detail": "xG 2.40 vs 1 golos"
         },
         {
-          "id": "open",
-          "label": "JOGO ABERTO",
-          "emoji": "🎭",
-          "level": "low",
-          "detail": "24min, equipa a perder ataca"
-        },
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
+          "id": "shots",
+          "label": "7r 2ªP",
+          "emoji": "🎯",
           "level": "med",
-          "detail": "Momentum casa 52"
+          "detail": "25 remates/90min (2ªP)"
         }
       ],
-      "patternScore": 15
+      "patternScore": 14
     }
   ]
 }
