@@ -1,37 +1,37 @@
 {
-  "generated_at": "2026-08-26T02:21:29Z",
+  "generated_at": "2026-08-26T02:26:45Z",
   "status": "OK",
-  "count": 2,
+  "count": 1,
   "events": [
     {
       "id": 220085,
       "home": "Cúcuta Deportivo",
       "away": "Alianza Valledupar FC",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 0,
-      "goals": 0,
-      "min": 61,
+      "goals": 1,
+      "min": 66,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 80,
-      "xgH": 1.0,
+      "xgH": 1.15,
       "xgA": 1.07,
-      "xgTotal": 2.0700000000000003,
-      "lastMom": 43,
+      "xgTotal": 2.2199999999999998,
+      "lastMom": 52,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 6,
+        "h": 7,
         "a": 8
       },
       "sot": {
-        "h": 2,
+        "h": 3,
         "a": 2
       },
       "da": {
-        "h": 44,
+        "h": 48,
         "a": 42
       },
       "corners": {
@@ -61,80 +61,42 @@
       },
       "patterns": [
         {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "4 padrões em simultâneo — sinal forte"
+        },
+        {
           "id": "pressure",
           "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "25 atq. perigosos · 1 ao alvo (2ªP)"
+          "detail": "29 atq. perigosos · 2 ao alvo (2ªP)"
         },
         {
           "id": "xg_delta",
-          "label": "xG +2.1 acima",
+          "label": "xG sobrevaloriza",
           "emoji": "🎲",
-          "level": "high",
-          "detail": "xG 2.07 vs 0 golos"
+          "level": "med",
+          "detail": "xG 2.22 vs 1 golos"
+        },
+        {
+          "id": "open",
+          "label": "JOGO ABERTO",
+          "emoji": "🎭",
+          "level": "low",
+          "detail": "24min, equipa a perder ataca"
+        },
+        {
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 52"
         }
       ],
-      "patternScore": 14
-    },
-    {
-      "id": 587780,
-      "home": "Independiente del Valle",
-      "away": "Deportes Tolima",
-      "hScore": 2,
-      "aScore": 1,
-      "goals": 3,
-      "min": 92,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 32,
-      "xgH": 2.02,
-      "xgA": 0.48,
-      "xgTotal": 2.5,
-      "lastMom": 32,
-      "overOdds": 2.1,
-      "probLive": 48,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 19,
-        "a": 9
-      },
-      "sot": {
-        "h": 6,
-        "a": 3
-      },
-      "da": {
-        "h": 33,
-        "a": 39
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
+      "patternScore": 15
     }
   ]
 }
