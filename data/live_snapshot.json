@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-26T12:55:35Z",
+  "generated_at": "2026-08-26T13:00:45Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 31,
+      "min": 36,
       "status": "inprogress",
       "period": "ETHT",
       "league": "",
@@ -69,7 +69,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 93,
+      "min": 98,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -86,12 +86,12 @@
         "a": null
       },
       "sot": {
-        "h": 3,
+        "h": 4,
         "a": 0
       },
       "da": {
-        "h": 48,
-        "a": 17
+        "h": 50,
+        "a": 18
       },
       "corners": {
         "h": null,
@@ -118,8 +118,16 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 82",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "68 atq. perigosos · 4 ao alvo"
+        }
+      ],
+      "patternScore": 10
     }
   ]
 }
