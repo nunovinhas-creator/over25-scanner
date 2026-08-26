@@ -1,16 +1,193 @@
 {
-  "generated_at": "2026-08-26T18:45:20Z",
+  "generated_at": "2026-08-26T18:50:56Z",
   "status": "OK",
-  "count": 7,
+  "count": 10,
   "events": [
+    {
+      "id": 587812,
+      "home": "Bradford City",
+      "away": "Burnley",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 5,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 40,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": -23,
+      "overOdds": 1.94,
+      "probLive": 52,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": 4,
+        "a": 5
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 587811,
+      "home": "Tottenham Hotspur",
+      "away": "Charlton Athletic",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 4,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 40,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": 14,
+      "overOdds": 1.4,
+      "probLive": 71,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": 3,
+        "a": 0
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
+    {
+      "id": 587792,
+      "home": "Newcastle United",
+      "away": "West Bromwich Albion",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 5,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 40,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": 40,
+      "overOdds": 1.46,
+      "probLive": 68,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": 4,
+        "a": 1
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 3,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
     {
       "id": 600955,
       "home": "Villanovense",
       "away": "Club Deportivo Azuaga",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 0,
-      "goals": 0,
-      "min": 8,
+      "goals": 1,
+      "min": 16,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -31,8 +208,8 @@
         "a": null
       },
       "da": {
-        "h": 3,
-        "a": 3
+        "h": 4,
+        "a": 5
       },
       "corners": {
         "h": null,
@@ -62,13 +239,13 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 68",
+          "label": "Pressão 51",
           "emoji": "🔥",
-          "level": "critical",
-          "detail": "6 atq. perigosos · 0 ao alvo"
+          "level": "high",
+          "detail": "9 atq. perigosos · 0 ao alvo"
         }
       ],
-      "patternScore": 10
+      "patternScore": 4
     },
     {
       "id": 222633,
@@ -77,15 +254,15 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 42,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 17,
       "xgH": 0.26,
-      "xgA": 0.59,
-      "xgTotal": 0.85,
-      "lastMom": -57,
+      "xgA": 0.88,
+      "xgTotal": 1.1400000000000001,
+      "lastMom": -20,
       "overOdds": 1.79,
       "probLive": 56,
       "oddsStatus": "VALID",
@@ -98,8 +275,8 @@
         "a": 2
       },
       "da": {
-        "h": 21,
-        "a": 22
+        "h": 26,
+        "a": 24
       },
       "corners": {
         "h": null,
@@ -126,23 +303,8 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "pressure",
-          "label": "Pressão 100",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "43 atq. perigosos · 2 ao alvo"
-        },
-        {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum fora 57"
-        }
-      ],
-      "patternScore": 12
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 600962,
@@ -151,7 +313,7 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 57,
+      "min": 63,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -172,8 +334,8 @@
         "a": null
       },
       "da": {
-        "h": 28,
-        "a": 29
+        "h": 30,
+        "a": 34
       },
       "corners": {
         "h": null,
@@ -210,7 +372,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 84,
+      "min": 94,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -269,7 +431,7 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 83,
+      "min": 89,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -290,7 +452,7 @@
         "a": null
       },
       "da": {
-        "h": 59,
+        "h": 65,
         "a": 20
       },
       "corners": {
@@ -328,7 +490,7 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 82,
+      "min": 89,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -349,8 +511,8 @@
         "a": null
       },
       "da": {
-        "h": 49,
-        "a": 31
+        "h": 53,
+        "a": 35
       },
       "corners": {
         "h": null,
@@ -387,20 +549,20 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 52,
-      "status": "inprogress",
-      "period": "2T",
+      "min": 94,
+      "status": "extratime",
+      "period": "ET1",
       "league": "",
       "league_id": 83,
-      "xgH": 1.73,
+      "xgH": 1.76,
       "xgA": 1.49,
-      "xgTotal": 3.2199999999999998,
-      "lastMom": 28,
+      "xgTotal": 3.25,
+      "lastMom": 6,
       "overOdds": 1.59,
       "probLive": 63,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 19,
+        "h": 20,
         "a": 9
       },
       "sot": {
@@ -408,8 +570,8 @@
         "a": 4
       },
       "da": {
-        "h": 44,
-        "a": 47
+        "h": 47,
+        "a": 50
       },
       "corners": {
         "h": null,
@@ -438,6 +600,20 @@
       },
       "patterns": [
         {
+          "id": "xg_delta",
+          "label": "xG sobrevaloriza",
+          "emoji": "🎲",
+          "level": "med",
+          "detail": "xG 3.25 vs 2 golos"
+        },
+        {
+          "id": "late",
+          "label": "1 gol em 0min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 63% · 0min"
+        },
+        {
           "id": "numerical",
           "label": "Casa +1 homem",
           "emoji": "🟥",
@@ -445,7 +621,7 @@
           "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
         }
       ],
-      "patternScore": 2
+      "patternScore": 5
     }
   ]
 }
