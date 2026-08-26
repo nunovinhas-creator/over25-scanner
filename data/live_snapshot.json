@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-26T00:45:59Z",
+  "generated_at": "2026-08-26T00:51:21Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,96 +10,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 15,
+      "min": 21,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 32,
-      "xgH": 0.07,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": 9,
+      "xgH": 0.09,
+      "xgA": 0.02,
+      "xgTotal": 0.11,
+      "lastMom": -26,
       "overOdds": 2.1,
       "probLive": 48,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 2,
-        "a": 0
-      },
-      "sot": {
-        "h": 0,
-        "a": 0
-      },
-      "da": {
-        "h": 5,
-        "a": 4
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "pressure",
-          "label": "Pressão 54",
-          "emoji": "🔥",
-          "level": "high",
-          "detail": "9 atq. perigosos · 0 ao alvo"
-        }
-      ],
-      "patternScore": 4
-    },
-    {
-      "id": 587783,
-      "home": "Cruzeiro",
-      "away": "Atlético Mineiro",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 44,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 35,
-      "xgH": 0.05,
-      "xgA": 0.15,
-      "xgTotal": 0.2,
-      "lastMom": -69,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "MISSING",
-      "shots": {
-        "h": 3,
-        "a": 6
-      },
-      "sot": {
-        "h": 0,
+        "h": 4,
         "a": 1
       },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
       "da": {
-        "h": 19,
-        "a": 19
+        "h": 8,
+        "a": 10
       },
       "corners": {
         "h": null,
@@ -129,20 +62,80 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 83",
+          "label": "Pressão 77",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "38 atq. perigosos · 1 ao alvo"
-        },
-        {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum fora 69"
+          "detail": "18 atq. perigosos · 0 ao alvo"
         }
       ],
-      "patternScore": 12
+      "patternScore": 10
+    },
+    {
+      "id": 587783,
+      "home": "Cruzeiro",
+      "away": "Atlético Mineiro",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
+      "league": "",
+      "league_id": 35,
+      "xgH": 0.22,
+      "xgA": 0.15,
+      "xgTotal": 0.37,
+      "lastMom": 76,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
+      "shots": {
+        "h": 5,
+        "a": 6
+      },
+      "sot": {
+        "h": 1,
+        "a": 1
+      },
+      "da": {
+        "h": 25,
+        "a": 19
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 4,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "mom",
+          "label": "Casa domina",
+          "emoji": "💥",
+          "level": "high",
+          "detail": "Momentum casa 76 — controlo total"
+        }
+      ],
+      "patternScore": 4
     }
   ]
 }
