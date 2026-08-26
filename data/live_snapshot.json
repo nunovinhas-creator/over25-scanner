@@ -1,8 +1,67 @@
 {
-  "generated_at": "2026-08-26T00:25:00Z",
+  "generated_at": "2026-08-26T00:30:22Z",
   "status": "OK",
-  "count": 1,
+  "count": 2,
   "events": [
+    {
+      "id": 587780,
+      "home": "Independiente del Valle",
+      "away": "Deportes Tolima",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 0,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 32,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": 0,
+      "overOdds": 2.1,
+      "probLive": 48,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 0,
+        "a": 0
+      },
+      "sot": {
+        "h": 0,
+        "a": 0
+      },
+      "da": {
+        "h": null,
+        "a": null
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": false,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
+    },
     {
       "id": 587783,
       "home": "Cruzeiro",
@@ -10,15 +69,15 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 23,
+      "min": 28,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 35,
-      "xgH": 0.04,
-      "xgA": 0.06,
-      "xgTotal": 0.1,
-      "lastMom": 21,
+      "xgH": 0.03,
+      "xgA": 0.14,
+      "xgTotal": 0.17,
+      "lastMom": -8,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
@@ -31,8 +90,8 @@
         "a": 0
       },
       "da": {
-        "h": 5,
-        "a": 9
+        "h": 7,
+        "a": 11
       },
       "corners": {
         "h": null,
@@ -62,10 +121,10 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 55",
+          "label": "Pressão 58",
           "emoji": "🔥",
           "level": "high",
-          "detail": "14 atq. perigosos · 0 ao alvo"
+          "detail": "18 atq. perigosos · 0 ao alvo"
         }
       ],
       "patternScore": 4
