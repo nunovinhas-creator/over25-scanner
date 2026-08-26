@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-26T12:18:29Z",
+  "generated_at": "2026-08-26T12:23:54Z",
   "status": "OK",
   "count": 9,
   "events": [
@@ -7,10 +7,10 @@
       "id": 205141,
       "home": "Gangwon FC",
       "away": "Gwangju FC",
-      "hScore": 0,
+      "hScore": 2,
       "aScore": 2,
-      "goals": 2,
-      "min": 85,
+      "goals": 4,
+      "min": 91,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -31,8 +31,8 @@
         "a": null
       },
       "da": {
-        "h": 59,
-        "a": 16
+        "h": 62,
+        "a": 18
       },
       "corners": {
         "h": null,
@@ -59,23 +59,8 @@
         "score": 1,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "pressure",
-          "label": "Pressão 79 (2ªP)",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "35 atq. perigosos · 0 ao alvo (2ªP)"
-        },
-        {
-          "id": "late",
-          "label": "1 gol em 5min",
-          "emoji": "⏰",
-          "level": "low",
-          "detail": "Falta 1 golo · mercado 47% · 5min"
-        }
-      ],
-      "patternScore": 11
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 205140,
@@ -84,7 +69,7 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 85,
+      "min": 90,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -105,7 +90,7 @@
         "a": null
       },
       "da": {
-        "h": 19,
+        "h": 21,
         "a": 52
       },
       "corners": {
@@ -143,7 +128,7 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 85,
+      "min": 90,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -164,8 +149,8 @@
         "a": null
       },
       "da": {
-        "h": 60,
-        "a": 27
+        "h": 65,
+        "a": 28
       },
       "corners": {
         "h": null,
@@ -192,16 +177,8 @@
         "score": 1,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "pressure",
-          "label": "Pressão 90 (2ªP)",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "40 atq. perigosos · 0 ao alvo (2ªP)"
-        }
-      ],
-      "patternScore": 10
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 588086,
@@ -210,9 +187,9 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 105,
-      "status": "extratime",
-      "period": "ET1",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 51,
       "xgH": null,
@@ -269,7 +246,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 55,
+      "min": 60,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -290,8 +267,8 @@
         "a": 0
       },
       "da": {
-        "h": 28,
-        "a": 13
+        "h": 31,
+        "a": 14
       },
       "corners": {
         "h": null,
@@ -318,8 +295,16 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 66 (2ªP)",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "11 atq. perigosos · 0 ao alvo (2ªP)"
+        }
+      ],
+      "patternScore": 10
     },
     {
       "id": 588078,
@@ -330,7 +315,7 @@
       "goals": 3,
       "min": 105,
       "status": "extratime",
-      "period": "ET1",
+      "period": "ETHT",
       "league": "",
       "league_id": 51,
       "xgH": null,
@@ -387,9 +372,9 @@
       "hScore": 3,
       "aScore": 3,
       "goals": 6,
-      "min": 105,
+      "min": 107,
       "status": "extratime",
-      "period": "ET1",
+      "period": "ETHT",
       "league": "",
       "league_id": 51,
       "xgH": null,
@@ -405,7 +390,7 @@
       },
       "sot": {
         "h": 5,
-        "a": 9
+        "a": 10
       },
       "da": {
         "h": null,
@@ -443,12 +428,12 @@
       "id": 212577,
       "home": "Iwaki FC",
       "away": "Oita Trinita",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 0,
-      "goals": 1,
-      "min": 105,
+      "goals": 2,
+      "min": 106,
       "status": "extratime",
-      "period": "ET1",
+      "period": "ETHT",
       "league": "",
       "league_id": 51,
       "xgH": null,
@@ -503,11 +488,11 @@
       "home": "Jubilo Iwata",
       "away": "Tegevajaro Miyazaki",
       "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 1,
-      "status": "inprogress",
-      "period": "ET1",
+      "aScore": 1,
+      "goals": 1,
+      "min": 110,
+      "status": "extratime",
+      "period": "ETHT",
       "league": "",
       "league_id": 51,
       "xgH": null,
@@ -523,11 +508,11 @@
       },
       "sot": {
         "h": 7,
-        "a": 8
+        "a": 10
       },
       "da": {
-        "h": 39,
-        "a": 33
+        "h": 40,
+        "a": 35
       },
       "corners": {
         "h": null,
@@ -554,8 +539,16 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 100",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "75 atq. perigosos · 17 ao alvo"
+        }
+      ],
+      "patternScore": 10
     }
   ]
 }
