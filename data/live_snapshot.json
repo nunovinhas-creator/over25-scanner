@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-26T11:26:10Z",
+  "generated_at": "2026-08-26T11:31:15Z",
   "status": "OK",
-  "count": 32,
+  "count": 30,
   "events": [
     {
       "id": 205141,
@@ -187,7 +187,7 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 64,
+      "min": 69,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -246,7 +246,7 @@
       "hScore": 0,
       "aScore": 2,
       "goals": 2,
-      "min": 63,
+      "min": 69,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -305,7 +305,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 60,
+      "min": 66,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -364,7 +364,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 61,
+      "min": 66,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -423,7 +423,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 19,
+      "min": 24,
       "status": "1st_half",
       "period": "1T",
       "league": "",
@@ -444,8 +444,8 @@
         "a": 0
       },
       "da": {
-        "h": 10,
-        "a": 1
+        "h": 13,
+        "a": 3
       },
       "corners": {
         "h": null,
@@ -475,13 +475,13 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 62",
+          "label": "Pressão 70",
           "emoji": "🔥",
-          "level": "high",
-          "detail": "11 atq. perigosos · 2 ao alvo"
+          "level": "critical",
+          "detail": "16 atq. perigosos · 2 ao alvo"
         }
       ],
-      "patternScore": 4
+      "patternScore": 10
     },
     {
       "id": 588083,
@@ -490,74 +490,7 @@
       "hScore": 0,
       "aScore": 2,
       "goals": 2,
-      "min": 62,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 51,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "MISSING",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": 4,
-        "a": 4
-      },
-      "da": {
-        "h": 24,
-        "a": 27
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 2,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "pressure",
-          "label": "Pressão 42 (2ªP)",
-          "emoji": "🔥",
-          "level": "med",
-          "detail": "7 atq. perigosos · 1 ao alvo (2ªP)"
-        }
-      ],
-      "patternScore": 2
-    },
-    {
-      "id": 588082,
-      "home": "V-Varen Nagasaki",
-      "away": "Ehime FC",
-      "hScore": 2,
-      "aScore": 1,
-      "goals": 3,
-      "min": 62,
+      "min": 67,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -575,7 +508,74 @@
       },
       "sot": {
         "h": 5,
-        "a": 2
+        "a": 4
+      },
+      "da": {
+        "h": 26,
+        "a": 28
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": false,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": false
+        },
+        "score": 2,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 51 (2ªP)",
+          "emoji": "🔥",
+          "level": "high",
+          "detail": "10 atq. perigosos · 2 ao alvo (2ªP)"
+        }
+      ],
+      "patternScore": 4
+    },
+    {
+      "id": 588082,
+      "home": "V-Varen Nagasaki",
+      "away": "Ehime FC",
+      "hScore": 2,
+      "aScore": 2,
+      "goals": 4,
+      "min": 67,
+      "status": "2nd_half",
+      "period": "2T",
+      "league": "",
+      "league_id": 51,
+      "xgH": null,
+      "xgA": null,
+      "xgTotal": null,
+      "lastMom": null,
+      "overOdds": null,
+      "probLive": null,
+      "oddsStatus": "MISSING",
+      "shots": {
+        "h": null,
+        "a": null
+      },
+      "sot": {
+        "h": 5,
+        "a": 3
       },
       "da": {
         "h": null,
@@ -613,12 +613,12 @@
       "id": 588079,
       "home": "Kyoto Sanga FC",
       "away": "FC Maruyasu Okazaki",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 0,
-      "goals": 0,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "goals": 1,
+      "min": 69,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 51,
       "xgH": null,
@@ -633,7 +633,7 @@
         "a": null
       },
       "sot": {
-        "h": 2,
+        "h": 3,
         "a": 4
       },
       "da": {
@@ -675,7 +675,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 65,
+      "min": 70,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -734,7 +734,7 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 63,
+      "min": 69,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -790,10 +790,10 @@
       "id": 588076,
       "home": "FC Tokyo",
       "away": "AC Nagano Parceiro",
-      "hScore": 4,
+      "hScore": 5,
       "aScore": 0,
-      "goals": 4,
-      "min": 64,
+      "goals": 5,
+      "min": 70,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -810,8 +810,8 @@
         "a": null
       },
       "sot": {
-        "h": 5,
-        "a": 1
+        "h": 6,
+        "a": 2
       },
       "da": {
         "h": null,
@@ -852,7 +852,7 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 62,
+      "min": 68,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -873,8 +873,8 @@
         "a": 2
       },
       "da": {
-        "h": 50,
-        "a": 32
+        "h": 57,
+        "a": 34
       },
       "corners": {
         "h": null,
@@ -904,13 +904,13 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 63 (2ªP)",
+          "label": "Pressão 83 (2ªP)",
           "emoji": "🔥",
-          "level": "high",
-          "detail": "11 atq. perigosos · 1 ao alvo (2ªP)"
+          "level": "critical",
+          "detail": "20 atq. perigosos · 1 ao alvo (2ªP)"
         }
       ],
-      "patternScore": 4
+      "patternScore": 10
     },
     {
       "id": 588074,
@@ -919,7 +919,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 66,
+      "min": 71,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -940,8 +940,8 @@
         "a": 0
       },
       "da": {
-        "h": 60,
-        "a": 14
+        "h": 61,
+        "a": 16
       },
       "corners": {
         "h": null,
@@ -971,10 +971,10 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 78 (2ªP)",
+          "label": "Pressão 74 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "17 atq. perigosos · 1 ao alvo (2ªP)"
+          "detail": "20 atq. perigosos · 1 ao alvo (2ªP)"
         }
       ],
       "patternScore": 10
@@ -986,7 +986,7 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 61,
+      "min": 67,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -1007,8 +1007,8 @@
         "a": 2
       },
       "da": {
-        "h": 44,
-        "a": 30
+        "h": 46,
+        "a": 34
       },
       "corners": {
         "h": null,
@@ -1038,10 +1038,10 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 84 (2ªP)",
+          "label": "Pressão 87 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "14 atq. perigosos · 1 ao alvo (2ªP)"
+          "detail": "20 atq. perigosos · 1 ao alvo (2ªP)"
         }
       ],
       "patternScore": 10
@@ -1053,7 +1053,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 59,
+      "min": 64,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -1112,7 +1112,7 @@
       "hScore": 3,
       "aScore": 1,
       "goals": 4,
-      "min": 60,
+      "min": 65,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -1133,8 +1133,8 @@
         "a": 1
       },
       "da": {
-        "h": 22,
-        "a": 21
+        "h": 23,
+        "a": 25
       },
       "corners": {
         "h": null,
@@ -1171,7 +1171,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 62,
+      "min": 67,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -1192,8 +1192,8 @@
         "a": 3
       },
       "da": {
-        "h": 42,
-        "a": 32
+        "h": 47,
+        "a": 33
       },
       "corners": {
         "h": null,
@@ -1223,10 +1223,10 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 89 (2ªP)",
+          "label": "Pressão 97 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "14 atq. perigosos · 3 ao alvo (2ªP)"
+          "detail": "20 atq. perigosos · 3 ao alvo (2ªP)"
         }
       ],
       "patternScore": 10
@@ -1238,7 +1238,7 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 64,
+      "min": 69,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -1297,7 +1297,7 @@
       "hScore": 3,
       "aScore": 3,
       "goals": 6,
-      "min": 63,
+      "min": 68,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -1315,7 +1315,7 @@
       },
       "sot": {
         "h": 3,
-        "a": 7
+        "a": 8
       },
       "da": {
         "h": null,
@@ -1356,7 +1356,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 64,
+      "min": 69,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -1373,12 +1373,12 @@
         "a": null
       },
       "sot": {
-        "h": 2,
-        "a": 4
+        "h": 3,
+        "a": 5
       },
       "da": {
-        "h": 28,
-        "a": 54
+        "h": 29,
+        "a": 57
       },
       "corners": {
         "h": null,
@@ -1408,10 +1408,10 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 86 (2ªP)",
+          "label": "Pressão 95 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "16 atq. perigosos · 2 ao alvo (2ªP)"
+          "detail": "20 atq. perigosos · 4 ao alvo (2ªP)"
         }
       ],
       "patternScore": 10
@@ -1423,7 +1423,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 59,
+      "min": 64,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -1482,7 +1482,7 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 60,
+      "min": 65,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -1503,8 +1503,8 @@
         "a": 0
       },
       "da": {
-        "h": 39,
-        "a": 19
+        "h": 40,
+        "a": 21
       },
       "corners": {
         "h": null,
@@ -1534,10 +1534,10 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 77 (2ªP)",
+          "label": "Pressão 72 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "12 atq. perigosos · 1 ao alvo (2ªP)"
+          "detail": "15 atq. perigosos · 1 ao alvo (2ªP)"
         }
       ],
       "patternScore": 10
@@ -1546,10 +1546,10 @@
       "id": 212575,
       "home": "Sagan Tosu",
       "away": "Kataller Toyama",
-      "hScore": 2,
+      "hScore": 3,
       "aScore": 0,
-      "goals": 2,
-      "min": 62,
+      "goals": 3,
+      "min": 68,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -1566,11 +1566,11 @@
         "a": null
       },
       "sot": {
-        "h": 5,
+        "h": 6,
         "a": 2
       },
       "da": {
-        "h": 25,
+        "h": 26,
         "a": 29
       },
       "corners": {
@@ -1598,16 +1598,8 @@
         "score": 2,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "pressure",
-          "label": "Pressão 63 (2ªP)",
-          "emoji": "🔥",
-          "level": "high",
-          "detail": "10 atq. perigosos · 2 ao alvo (2ªP)"
-        }
-      ],
-      "patternScore": 4
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 212574,
@@ -1616,7 +1608,7 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 62,
+      "min": 68,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -1637,8 +1629,8 @@
         "a": 5
       },
       "da": {
-        "h": 23,
-        "a": 14
+        "h": 26,
+        "a": 16
       },
       "corners": {
         "h": null,
@@ -1668,10 +1660,10 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 52 (2ªP)",
+          "label": "Pressão 61 (2ªP)",
           "emoji": "🔥",
           "level": "high",
-          "detail": "8 atq. perigosos · 2 ao alvo (2ªP)"
+          "detail": "13 atq. perigosos · 2 ao alvo (2ªP)"
         }
       ],
       "patternScore": 4
@@ -1681,9 +1673,9 @@
       "home": "Hokkaido Consadole Sapporo",
       "away": "Ventforet Kofu",
       "hScore": 1,
-      "aScore": 1,
-      "goals": 2,
-      "min": 66,
+      "aScore": 2,
+      "goals": 3,
+      "min": 72,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -1701,7 +1693,7 @@
       },
       "sot": {
         "h": 2,
-        "a": 2
+        "a": 4
       },
       "da": {
         "h": null,
@@ -1736,80 +1728,13 @@
       "patternScore": 0
     },
     {
-      "id": 588080,
-      "home": "Nagoya Grampus",
-      "away": "Gainare Tottori",
-      "hScore": 1,
-      "aScore": 3,
-      "goals": 4,
-      "min": 93,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 51,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "MISSING",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": 2,
-        "a": 4
-      },
-      "da": {
-        "h": null,
-        "a": null
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 1
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": false,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 1,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "numerical",
-          "label": "Casa +1 homem",
-          "emoji": "🟥",
-          "level": "med",
-          "detail": "Fora com 1 vermelho(s) — Casa em vantagem numérica"
-        }
-      ],
-      "patternScore": 2
-    },
-    {
       "id": 588068,
       "home": "Yokohama FC",
       "away": "Criacao Shinjuku",
       "hScore": 3,
       "aScore": 1,
       "goals": 4,
-      "min": 92,
+      "min": 96,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -1868,7 +1793,7 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 91,
+      "min": 95,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -1885,71 +1810,12 @@
         "a": null
       },
       "sot": {
-        "h": 4,
+        "h": 5,
         "a": 6
       },
       "da": {
-        "h": 36,
-        "a": 39
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": false
-        },
-        "score": 2,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 588066,
-      "home": "Sanfrecce Hiroshima",
-      "away": "Okinawa SV",
-      "hScore": 4,
-      "aScore": 1,
-      "goals": 5,
-      "min": 93,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 51,
-      "xgH": null,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": null,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "MISSING",
-      "shots": {
-        "h": null,
-        "a": null
-      },
-      "sot": {
-        "h": 6,
-        "a": 5
-      },
-      "da": {
-        "h": 43,
-        "a": 48
+        "h": 37,
+        "a": 42
       },
       "corners": {
         "h": null,
