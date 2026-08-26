@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-26T01:17:44Z",
+  "generated_at": "2026-08-26T01:22:57Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -10,29 +10,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 16,
+      "min": 21,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 80,
-      "xgH": 0.04,
-      "xgA": 0.07,
-      "xgTotal": 0.11000000000000001,
-      "lastMom": 21,
+      "xgH": 0.14,
+      "xgA": 0.16,
+      "xgTotal": 0.30000000000000004,
+      "lastMom": 17,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 2,
-        "a": 4
+        "h": 3,
+        "a": 5
       },
       "sot": {
         "h": 1,
-        "a": 0
+        "a": 1
       },
       "da": {
-        "h": 7,
-        "a": 19
+        "h": 14,
+        "a": 21
       },
       "corners": {
         "h": null,
@@ -65,11 +65,11 @@
           "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "26 atq. perigosos · 1 ao alvo"
+          "detail": "35 atq. perigosos · 2 ao alvo"
         },
         {
           "id": "shots",
-          "label": "6 remates",
+          "label": "8 remates",
           "emoji": "🎯",
           "level": "high",
           "detail": "34 remates/90min (muito alto)"
@@ -84,28 +84,28 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 47,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 32,
       "xgH": 0.41,
       "xgA": 0.02,
       "xgTotal": 0.43,
-      "lastMom": -14,
+      "lastMom": -23,
       "overOdds": 2.1,
       "probLive": 48,
       "oddsStatus": "VALID",
       "shots": {
         "h": 10,
-        "a": 2
+        "a": 1
       },
       "sot": {
         "h": 1,
         "a": 0
       },
       "da": {
-        "h": 13,
+        "h": 16,
         "a": 20
       },
       "corners": {
@@ -140,23 +140,23 @@
       "id": 587783,
       "home": "Cruzeiro",
       "away": "Atlético Mineiro",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 0,
-      "goals": 0,
-      "min": 55,
+      "goals": 1,
+      "min": 60,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 35,
-      "xgH": 0.29,
+      "xgH": 0.36,
       "xgA": 0.15,
-      "xgTotal": 0.43999999999999995,
-      "lastMom": 19,
+      "xgTotal": 0.51,
+      "lastMom": 18,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 7,
+        "h": 9,
         "a": 6
       },
       "sot": {
@@ -164,8 +164,8 @@
         "a": 1
       },
       "da": {
-        "h": 32,
-        "a": 22
+        "h": 35,
+        "a": 26
       },
       "corners": {
         "h": null,
@@ -192,8 +192,30 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 100 (2ªP)",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "17 atq. perigosos · 0 ao alvo (2ªP)"
+        },
+        {
+          "id": "shots",
+          "label": "4r 2ªP",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "24 remates/90min (2ªP)"
+        },
+        {
+          "id": "open",
+          "label": "JOGO ABERTO",
+          "emoji": "🎭",
+          "level": "low",
+          "detail": "30min, equipa a perder ataca"
+        }
+      ],
+      "patternScore": 13
     }
   ]
 }
