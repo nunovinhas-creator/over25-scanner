@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-26T02:47:22Z",
+  "generated_at": "2026-08-26T02:52:30Z",
   "status": "OK",
   "count": 1,
   "events": [
@@ -10,29 +10,29 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 87,
+      "min": 92,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 80,
-      "xgH": 1.28,
-      "xgA": 1.52,
-      "xgTotal": 2.8,
-      "lastMom": -20,
+      "xgH": 1.3,
+      "xgA": 1.56,
+      "xgTotal": 2.8600000000000003,
+      "lastMom": -10,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 9,
-        "a": 11
+        "h": 10,
+        "a": 12
       },
       "sot": {
         "h": 3,
         "a": 3
       },
       "da": {
-        "h": 64,
-        "a": 60
+        "h": 65,
+        "a": 65
       },
       "corners": {
         "h": null,
@@ -61,21 +61,14 @@
       },
       "patterns": [
         {
-          "id": "pressure",
-          "label": "Pressão 100 (2ªP)",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "63 atq. perigosos · 3 ao alvo (2ªP)"
-        },
-        {
           "id": "xg_delta",
-          "label": "xG sobrevaloriza",
+          "label": "xG +1.9 acima",
           "emoji": "🎲",
-          "level": "med",
-          "detail": "xG 2.80 vs 1 golos"
+          "level": "high",
+          "detail": "xG 2.86 vs 1 golos"
         }
       ],
-      "patternScore": 12
+      "patternScore": 4
     }
   ]
 }
