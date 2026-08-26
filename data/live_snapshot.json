@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-26T20:50:59Z",
+  "generated_at": "2026-08-26T20:56:31Z",
   "status": "OK",
-  "count": 5,
+  "count": 2,
   "events": [
     {
       "id": 587710,
@@ -10,15 +10,15 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 48,
-      "status": "inprogress",
-      "period": "2T",
+      "min": 91,
+      "status": "extratime",
+      "period": "ET1",
       "league": "",
       "league_id": 7,
-      "xgH": 3.06,
-      "xgA": 0.77,
-      "xgTotal": 3.83,
-      "lastMom": 18,
+      "xgH": 2.98,
+      "xgA": 0.8,
+      "xgTotal": 3.7800000000000002,
+      "lastMom": 3,
       "overOdds": 2.06,
       "probLive": 49,
       "oddsStatus": "VALID",
@@ -28,11 +28,11 @@
       },
       "sot": {
         "h": 6,
-        "a": 5
+        "a": 6
       },
       "da": {
-        "h": 46,
-        "a": 33
+        "h": 47,
+        "a": 34
       },
       "corners": {
         "h": null,
@@ -62,190 +62,20 @@
       "patterns": [
         {
           "id": "xg_delta",
-          "label": "xG +1.8 acima",
+          "label": "xG sobrevaloriza",
           "emoji": "🎲",
-          "level": "high",
-          "detail": "xG 3.83 vs 2 golos"
+          "level": "med",
+          "detail": "xG 3.78 vs 2 golos"
+        },
+        {
+          "id": "late",
+          "label": "1 gol em 0min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 49% · 0min"
         }
       ],
-      "patternScore": 4
-    },
-    {
-      "id": 587709,
-      "home": "AEK Athens",
-      "away": "Levski Sofia",
-      "hScore": 4,
-      "aScore": 0,
-      "goals": 4,
-      "min": 92,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 7,
-      "xgH": 2.16,
-      "xgA": 0.63,
-      "xgTotal": 2.79,
-      "lastMom": -6,
-      "overOdds": 2.05,
-      "probLive": 49,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 16,
-        "a": 11
-      },
-      "sot": {
-        "h": 7,
-        "a": 3
-      },
-      "da": {
-        "h": 37,
-        "a": 26
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 587706,
-      "home": "Olympique Lyonnais",
-      "away": "Fenerbahçe",
-      "hScore": 1,
-      "aScore": 2,
-      "goals": 3,
-      "min": 93,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 7,
-      "xgH": 1.39,
-      "xgA": 1.71,
-      "xgTotal": 3.0999999999999996,
-      "lastMom": 36,
-      "overOdds": 1.77,
-      "probLive": 56,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 17,
-        "a": 15
-      },
-      "sot": {
-        "h": 6,
-        "a": 7
-      },
-      "da": {
-        "h": 46,
-        "a": 43
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
-    },
-    {
-      "id": 587705,
-      "home": "Viking FK",
-      "away": "GNK Dinamo Zagreb",
-      "hScore": 3,
-      "aScore": 1,
-      "goals": 4,
-      "min": 91,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 7,
-      "xgH": 1.71,
-      "xgA": 1.66,
-      "xgTotal": 3.37,
-      "lastMom": 9,
-      "overOdds": 1.54,
-      "probLive": 65,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 13,
-        "a": 19
-      },
-      "sot": {
-        "h": 8,
-        "a": 4
-      },
-      "da": {
-        "h": 42,
-        "a": 56
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
+      "patternScore": 3
     },
     {
       "id": 213526,
@@ -254,7 +84,7 @@
       "hScore": 4,
       "aScore": 1,
       "goals": 5,
-      "min": 86,
+      "min": 92,
       "status": "2nd_half",
       "period": "2T",
       "league": "La Liga",
@@ -262,7 +92,7 @@
       "xgH": 3.14,
       "xgA": 0.57,
       "xgTotal": 3.71,
-      "lastMom": 18,
+      "lastMom": -18,
       "overOdds": 1.41,
       "probLive": 71,
       "oddsStatus": "VALID",
@@ -275,7 +105,7 @@
         "a": 3
       },
       "da": {
-        "h": 43,
+        "h": 47,
         "a": 28
       },
       "corners": {
