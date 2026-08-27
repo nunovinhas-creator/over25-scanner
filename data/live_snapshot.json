@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-27T02:11:59Z",
+  "generated_at": "2026-08-27T02:17:20Z",
   "status": "OK",
-  "count": 7,
+  "count": 6,
   "events": [
     {
       "id": 220081,
@@ -10,20 +10,20 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 38,
+      "min": 44,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 80,
-      "xgH": 0.69,
+      "xgH": 0.71,
       "xgA": 0.08,
-      "xgTotal": 0.7699999999999999,
-      "lastMom": 37,
+      "xgTotal": 0.7899999999999999,
+      "lastMom": -4,
       "overOdds": 1.99,
       "probLive": 50,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 8,
+        "h": 9,
         "a": 3
       },
       "sot": {
@@ -31,81 +31,7 @@
         "a": 1
       },
       "da": {
-        "h": 21,
-        "a": 12
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "pressure",
-          "label": "Pressão 100",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "33 atq. perigosos · 7 ao alvo"
-        },
-        {
-          "id": "shots",
-          "label": "11 remates",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "26 remates/90min"
-        }
-      ],
-      "patternScore": 12
-    },
-    {
-      "id": 207775,
-      "home": "New Mexico United",
-      "away": "Lexington SC",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 32,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 57,
-      "xgH": 0.56,
-      "xgA": 0.28,
-      "xgTotal": 0.8400000000000001,
-      "lastMom": 72,
-      "overOdds": 1.72,
-      "probLive": 58,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 6,
-        "a": 5
-      },
-      "sot": {
-        "h": 1,
-        "a": 1
-      },
-      "da": {
-        "h": 22,
+        "h": 26,
         "a": 14
       },
       "corners": {
@@ -135,35 +61,95 @@
       },
       "patterns": [
         {
-          "id": "conv",
-          "label": "CONVERGÊNCIA",
-          "emoji": "🔮",
-          "level": "conv",
-          "detail": "3 padrões em simultâneo — sinal forte"
+          "id": "pressure",
+          "label": "Pressão 100",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "40 atq. perigosos · 7 ao alvo"
         },
+        {
+          "id": "shots",
+          "label": "12 remates",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "25 remates/90min"
+        }
+      ],
+      "patternScore": 12
+    },
+    {
+      "id": 207775,
+      "home": "New Mexico United",
+      "away": "Lexington SC",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 38,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 57,
+      "xgH": 0.7,
+      "xgA": 0.28,
+      "xgTotal": 0.98,
+      "lastMom": 32,
+      "overOdds": 1.72,
+      "probLive": 58,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 9,
+        "a": 5
+      },
+      "sot": {
+        "h": 2,
+        "a": 1
+      },
+      "da": {
+        "h": 28,
+        "a": 15
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 4,
+        "total": 6
+      },
+      "patterns": [
         {
           "id": "pressure",
           "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "36 atq. perigosos · 2 ao alvo"
+          "detail": "43 atq. perigosos · 3 ao alvo"
         },
         {
           "id": "shots",
-          "label": "11 remates",
+          "label": "14 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "31 remates/90min (muito alto)"
-        },
-        {
-          "id": "mom",
-          "label": "Casa domina",
-          "emoji": "💥",
-          "level": "high",
-          "detail": "Momentum casa 72 — controlo total"
+          "detail": "33 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 18
+      "patternScore": 14
     },
     {
       "id": 207774,
@@ -172,20 +158,20 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 49,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 57,
-      "xgH": 1.21,
+      "xgH": 1.42,
       "xgA": null,
       "xgTotal": null,
-      "lastMom": 0,
+      "lastMom": 17,
       "overOdds": 2.22,
       "probLive": 45,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 6,
+        "h": 8,
         "a": 1
       },
       "sot": {
@@ -193,8 +179,8 @@
         "a": 0
       },
       "da": {
-        "h": 20,
-        "a": 23
+        "h": 24,
+        "a": 24
       },
       "corners": {
         "h": null,
@@ -231,7 +217,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 76,
+      "min": 82,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -239,7 +225,7 @@
       "xgH": 1.47,
       "xgA": 0.62,
       "xgTotal": 2.09,
-      "lastMom": -36,
+      "lastMom": 6,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
@@ -252,8 +238,8 @@
         "a": 3
       },
       "da": {
-        "h": 32,
-        "a": 36
+        "h": 34,
+        "a": 41
       },
       "corners": {
         "h": null,
@@ -293,21 +279,21 @@
           "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "35 atq. perigosos · 5 ao alvo (2ªP)"
+          "detail": "42 atq. perigosos · 5 ao alvo (2ªP)"
         },
         {
           "id": "xg_pace",
-          "label": "xG 4.3/90 (2ªP)",
+          "label": "xG 3.6/90 (2ªP)",
           "emoji": "⚡",
-          "level": "critical",
-          "detail": "xG a ritmo de 4.3 por 90min (2ªP)"
+          "level": "high",
+          "detail": "xG a ritmo de 3.6 por 90min (2ªP)"
         },
         {
           "id": "shots",
           "label": "14r 2ªP",
           "emoji": "🎯",
           "level": "high",
-          "detail": "41 remates/90min (2ªP) (muito alto)"
+          "detail": "34 remates/90min (2ªP) (muito alto)"
         },
         {
           "id": "numerical",
@@ -317,7 +303,7 @@
           "detail": "Casa com 1 vermelho(s) — Fora em vantagem numérica"
         }
       ],
-      "patternScore": 26
+      "patternScore": 20
     },
     {
       "id": 587784,
@@ -326,29 +312,29 @@
       "hScore": 3,
       "aScore": 0,
       "goals": 3,
-      "min": 79,
+      "min": 85,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 35,
       "xgH": 3.34,
-      "xgA": 0.28,
-      "xgTotal": 3.62,
-      "lastMom": -13,
+      "xgA": 0.31,
+      "xgTotal": 3.65,
+      "lastMom": -37,
       "overOdds": 2.01,
       "probLive": 50,
       "oddsStatus": "VALID",
       "shots": {
         "h": 20,
-        "a": 5
+        "a": 6
       },
       "sot": {
         "h": 8,
         "a": 0
       },
       "da": {
-        "h": 44,
-        "a": 34
+        "h": 46,
+        "a": 39
       },
       "corners": {
         "h": null,
@@ -383,30 +369,30 @@
       "home": "River Plate",
       "away": "Independiente Santa Fe",
       "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 77,
+      "aScore": 1,
+      "goals": 2,
+      "min": 83,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 33,
-      "xgH": 2.71,
-      "xgA": 0.35,
-      "xgTotal": 3.06,
-      "lastMom": -69,
+      "xgH": 2.72,
+      "xgA": 1.13,
+      "xgTotal": 3.85,
+      "lastMom": 12,
       "overOdds": 2.17,
       "probLive": 46,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 28,
-        "a": 8
+        "h": 29,
+        "a": 10
       },
       "sot": {
         "h": 10,
-        "a": 3
+        "a": 4
       },
       "da": {
-        "h": 51,
+        "h": 52,
         "a": 13
       },
       "corners": {
@@ -444,108 +430,41 @@
         },
         {
           "id": "pressure",
-          "label": "Pressão 88 (2ªP)",
+          "label": "Pressão 87 (2ªP)",
           "emoji": "🔥",
           "level": "high",
-          "detail": "19 atq. perigosos · 7 ao alvo (2ªP)"
+          "detail": "20 atq. perigosos · 8 ao alvo (2ªP)"
         },
         {
           "id": "xg_delta",
-          "label": "xG +2.1 acima",
+          "label": "xG +1.9 acima",
           "emoji": "🎲",
           "level": "high",
-          "detail": "xG 3.06 vs 1 golos"
+          "detail": "xG 3.85 vs 2 golos"
         },
         {
           "id": "xg_pace",
-          "label": "xG 3.3/90 (2ªP)",
+          "label": "xG 4.6/90 (2ªP)",
           "emoji": "⚡",
-          "level": "high",
-          "detail": "xG a ritmo de 3.3 por 90min (2ªP)"
+          "level": "critical",
+          "detail": "xG a ritmo de 4.6 por 90min (2ªP)"
         },
         {
           "id": "shots",
-          "label": "16r 2ªP",
+          "label": "19r 2ªP",
           "emoji": "🎯",
           "level": "high",
           "detail": "45 remates/90min (2ªP) (muito alto)"
         },
         {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum fora 69"
+          "id": "late",
+          "label": "1 gol em 7min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 46% · 7min"
         }
       ],
-      "patternScore": 18
-    },
-    {
-      "id": 216424,
-      "home": "North Carolina Courage",
-      "away": "Angel City FC",
-      "hScore": 2,
-      "aScore": 0,
-      "goals": 2,
-      "min": 95,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 72,
-      "xgH": 1.09,
-      "xgA": 1.37,
-      "xgTotal": 2.46,
-      "lastMom": -62,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "MISSING",
-      "shots": {
-        "h": 12,
-        "a": 16
-      },
-      "sot": {
-        "h": 5,
-        "a": 3
-      },
-      "da": {
-        "h": 24,
-        "a": 38
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum fora 62"
-        }
-      ],
-      "patternScore": 2
+      "patternScore": 23
     }
   ]
 }
