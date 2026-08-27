@@ -1,38 +1,38 @@
 {
-  "generated_at": "2026-08-27T02:49:37Z",
+  "generated_at": "2026-08-27T02:54:55Z",
   "status": "OK",
-  "count": 4,
+  "count": 3,
   "events": [
     {
       "id": 220081,
       "home": "Atlético Nacional",
       "away": "Deportivo Cali",
-      "hScore": 1,
+      "hScore": 2,
       "aScore": 0,
-      "goals": 1,
-      "min": 60,
+      "goals": 2,
+      "min": 65,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 80,
-      "xgH": 0.71,
+      "xgH": 0.76,
       "xgA": 0.13,
-      "xgTotal": 0.84,
-      "lastMom": -24,
+      "xgTotal": 0.89,
+      "lastMom": 13,
       "overOdds": 1.99,
       "probLive": 50,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 9,
+        "h": 10,
         "a": 3
       },
       "sot": {
-        "h": 6,
+        "h": 7,
         "a": 1
       },
       "da": {
-        "h": 28,
-        "a": 29
+        "h": 30,
+        "a": 31
       },
       "corners": {
         "h": null,
@@ -65,7 +65,7 @@
           "label": "Pressão 90 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "15 atq. perigosos · 0 ao alvo (2ªP)"
+          "detail": "19 atq. perigosos · 1 ao alvo (2ªP)"
         },
         {
           "id": "numerical",
@@ -84,20 +84,20 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 54,
+      "min": 59,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 57,
-      "xgH": 1.65,
+      "xgH": 1.69,
       "xgA": 0.74,
-      "xgTotal": 2.3899999999999997,
-      "lastMom": -28,
+      "xgTotal": 2.4299999999999997,
+      "lastMom": 22,
       "overOdds": 1.72,
       "probLive": 58,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 11,
+        "h": 12,
         "a": 7
       },
       "sot": {
@@ -105,8 +105,8 @@
         "a": 2
       },
       "da": {
-        "h": 37,
-        "a": 23
+        "h": 42,
+        "a": 26
       },
       "corners": {
         "h": null,
@@ -133,8 +133,16 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "xg_delta",
+          "label": "xG sobrevaloriza",
+          "emoji": "🎲",
+          "level": "med",
+          "detail": "xG 2.43 vs 1 golos"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 207774,
@@ -143,20 +151,20 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 83,
+      "min": 88,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 57,
-      "xgH": 1.86,
-      "xgA": 0.17,
-      "xgTotal": 2.0300000000000002,
-      "lastMom": -40,
+      "xgH": 1.88,
+      "xgA": 0.23,
+      "xgTotal": 2.11,
+      "lastMom": 27,
       "overOdds": 2.22,
       "probLive": 45,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 13,
+        "h": 14,
         "a": 3
       },
       "sot": {
@@ -164,8 +172,8 @@
         "a": 2
       },
       "da": {
-        "h": 44,
-        "a": 40
+        "h": 46,
+        "a": 41
       },
       "corners": {
         "h": null,
@@ -205,105 +213,24 @@
           "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "41 atq. perigosos · 3 ao alvo (2ªP)"
+          "detail": "44 atq. perigosos · 3 ao alvo (2ªP)"
         },
         {
           "id": "xg_pace",
-          "label": "xG 4.8/90 (2ªP)",
+          "label": "xG 4.4/90 (2ªP)",
           "emoji": "⚡",
           "level": "critical",
-          "detail": "xG a ritmo de 4.8 por 90min (2ªP)"
+          "detail": "xG a ritmo de 4.4 por 90min (2ªP)"
         },
         {
           "id": "late",
-          "label": "1 gol em 7min",
+          "label": "1 gol em 2min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 45% · 7min"
+          "detail": "Falta 1 golo · mercado 45% · 2min"
         }
       ],
       "patternScore": 21
-    },
-    {
-      "id": 587782,
-      "home": "River Plate",
-      "away": "Independiente Santa Fe",
-      "hScore": 1,
-      "aScore": 1,
-      "goals": 2,
-      "min": 71,
-      "status": "inprogress",
-      "period": "2T",
-      "league": "",
-      "league_id": 33,
-      "xgH": 2.8,
-      "xgA": 1.29,
-      "xgTotal": 4.09,
-      "lastMom": 62,
-      "overOdds": 2.17,
-      "probLive": 46,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 31,
-        "a": 12
-      },
-      "sot": {
-        "h": 11,
-        "a": 4
-      },
-      "da": {
-        "h": 60,
-        "a": 14
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "xg_delta",
-          "label": "xG +2.1 acima",
-          "emoji": "🎲",
-          "level": "high",
-          "detail": "xG 4.09 vs 2 golos"
-        },
-        {
-          "id": "mom",
-          "label": "Casa pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum casa 62"
-        },
-        {
-          "id": "late",
-          "label": "1 gol em 19min",
-          "emoji": "⏰",
-          "level": "low",
-          "detail": "Falta 1 golo · mercado 46% · 19min"
-        }
-      ],
-      "patternScore": 7
     }
   ]
 }
