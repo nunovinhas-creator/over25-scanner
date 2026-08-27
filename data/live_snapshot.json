@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-27T03:05:31Z",
+  "generated_at": "2026-08-27T03:10:45Z",
   "status": "OK",
   "count": 2,
   "events": [
@@ -10,29 +10,29 @@
       "hScore": 2,
       "aScore": 1,
       "goals": 3,
-      "min": 76,
+      "min": 81,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 80,
-      "xgH": 0.78,
-      "xgA": 0.39,
-      "xgTotal": 1.17,
-      "lastMom": -18,
+      "xgH": 0.87,
+      "xgA": 0.26,
+      "xgTotal": 1.13,
+      "lastMom": 16,
       "overOdds": 1.99,
       "probLive": 50,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 12,
-        "a": 5
+        "h": 14,
+        "a": 6
       },
       "sot": {
         "h": 8,
         "a": 2
       },
       "da": {
-        "h": 33,
-        "a": 44
+        "h": 37,
+        "a": 48
       },
       "corners": {
         "h": null,
@@ -74,32 +74,32 @@
       "id": 207775,
       "home": "New Mexico United",
       "away": "Lexington SC",
-      "hScore": 0,
+      "hScore": 1,
       "aScore": 1,
-      "goals": 1,
-      "min": 70,
+      "goals": 2,
+      "min": 75,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 57,
-      "xgH": 1.76,
-      "xgA": 0.84,
-      "xgTotal": 2.6,
-      "lastMom": 12,
+      "xgH": 2.27,
+      "xgA": 1.05,
+      "xgTotal": 3.3200000000000003,
+      "lastMom": 23,
       "overOdds": 1.72,
       "probLive": 58,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 13,
-        "a": 9
+        "h": 14,
+        "a": 11
       },
       "sot": {
-        "h": 2,
+        "h": 3,
         "a": 3
       },
       "da": {
-        "h": 46,
-        "a": 30
+        "h": 51,
+        "a": 31
       },
       "corners": {
         "h": null,
@@ -128,21 +128,49 @@
       },
       "patterns": [
         {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "5 padrões em simultâneo — sinal forte"
+        },
+        {
           "id": "pressure",
           "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "25 atq. perigosos · 2 ao alvo (2ªP)"
+          "detail": "31 atq. perigosos · 3 ao alvo (2ªP)"
         },
         {
           "id": "xg_delta",
           "label": "xG sobrevaloriza",
           "emoji": "🎲",
           "level": "med",
-          "detail": "xG 2.60 vs 1 golos"
+          "detail": "xG 3.32 vs 2 golos"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 4.0/90 (2ªP)",
+          "emoji": "⚡",
+          "level": "critical",
+          "detail": "xG a ritmo de 4.0 por 90min (2ªP)"
+        },
+        {
+          "id": "shots",
+          "label": "8r 2ªP",
+          "emoji": "🎯",
+          "level": "med",
+          "detail": "24 remates/90min (2ªP)"
+        },
+        {
+          "id": "late",
+          "label": "1 gol em 15min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 58% · 15min"
         }
       ],
-      "patternScore": 12
+      "patternScore": 25
     }
   ]
 }
