@@ -1,38 +1,38 @@
 {
-  "generated_at": "2026-08-27T03:00:20Z",
+  "generated_at": "2026-08-27T03:05:31Z",
   "status": "OK",
-  "count": 3,
+  "count": 2,
   "events": [
     {
       "id": 220081,
       "home": "Atlético Nacional",
       "away": "Deportivo Cali",
       "hScore": 2,
-      "aScore": 0,
-      "goals": 2,
-      "min": 70,
+      "aScore": 1,
+      "goals": 3,
+      "min": 76,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 80,
-      "xgH": 0.76,
-      "xgA": 0.13,
-      "xgTotal": 0.89,
-      "lastMom": -23,
+      "xgH": 0.78,
+      "xgA": 0.39,
+      "xgTotal": 1.17,
+      "lastMom": -18,
       "overOdds": 1.99,
       "probLive": 50,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 11,
-        "a": 3
+        "h": 12,
+        "a": 5
       },
       "sot": {
         "h": 8,
-        "a": 1
+        "a": 2
       },
       "da": {
-        "h": 30,
-        "a": 37
+        "h": 33,
+        "a": 44
       },
       "corners": {
         "h": null,
@@ -61,20 +61,6 @@
       },
       "patterns": [
         {
-          "id": "pressure",
-          "label": "Pressão 100 (2ªP)",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "25 atq. perigosos · 2 ao alvo (2ªP)"
-        },
-        {
-          "id": "late",
-          "label": "1 gol em 20min",
-          "emoji": "⏰",
-          "level": "low",
-          "detail": "Falta 1 golo · mercado 50% · 20min"
-        },
-        {
           "id": "numerical",
           "label": "Fora +1 homem",
           "emoji": "🟥",
@@ -82,7 +68,7 @@
           "detail": "Casa com 1 vermelho(s) — Fora em vantagem numérica"
         }
       ],
-      "patternScore": 13
+      "patternScore": 2
     },
     {
       "id": 207775,
@@ -91,20 +77,20 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 64,
+      "min": 70,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 57,
-      "xgH": 1.69,
-      "xgA": 0.77,
-      "xgTotal": 2.46,
-      "lastMom": -57,
+      "xgH": 1.76,
+      "xgA": 0.84,
+      "xgTotal": 2.6,
+      "lastMom": 12,
       "overOdds": 1.72,
       "probLive": 58,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 12,
+        "h": 13,
         "a": 9
       },
       "sot": {
@@ -112,8 +98,8 @@
         "a": 3
       },
       "da": {
-        "h": 43,
-        "a": 28
+        "h": 46,
+        "a": 30
       },
       "corners": {
         "h": null,
@@ -142,101 +128,21 @@
       },
       "patterns": [
         {
-          "id": "conv",
-          "label": "CONVERGÊNCIA",
-          "emoji": "🔮",
-          "level": "conv",
-          "detail": "4 padrões em simultâneo — sinal forte"
-        },
-        {
           "id": "pressure",
           "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "20 atq. perigosos · 2 ao alvo (2ªP)"
+          "detail": "25 atq. perigosos · 2 ao alvo (2ªP)"
         },
         {
           "id": "xg_delta",
           "label": "xG sobrevaloriza",
           "emoji": "🎲",
           "level": "med",
-          "detail": "xG 2.46 vs 1 golos"
-        },
-        {
-          "id": "open",
-          "label": "JOGO ABERTO",
-          "emoji": "🎭",
-          "level": "low",
-          "detail": "26min, equipa a perder ataca"
-        },
-        {
-          "id": "mom",
-          "label": "Fora pressiona",
-          "emoji": "💪",
-          "level": "med",
-          "detail": "Momentum fora 57"
+          "detail": "xG 2.60 vs 1 golos"
         }
       ],
-      "patternScore": 15
-    },
-    {
-      "id": 207774,
-      "home": "El Paso Locomotive FC",
-      "away": "Pittsburgh Riverhounds",
-      "hScore": 2,
-      "aScore": 1,
-      "goals": 3,
-      "min": 93,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 57,
-      "xgH": 1.95,
-      "xgA": 0.36,
-      "xgTotal": 2.31,
-      "lastMom": 12,
-      "overOdds": 2.22,
-      "probLive": 45,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 15,
-        "a": 4
-      },
-      "sot": {
-        "h": 4,
-        "a": 3
-      },
-      "da": {
-        "h": 50,
-        "a": 46
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [],
-      "patternScore": 0
+      "patternScore": 12
     }
   ]
 }
