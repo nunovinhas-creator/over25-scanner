@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-27T02:38:55Z",
+  "generated_at": "2026-08-27T02:44:21Z",
   "status": "OK",
   "count": 4,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 49,
+      "min": 54,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -18,7 +18,7 @@
       "xgH": 0.71,
       "xgA": 0.13,
       "xgTotal": 0.84,
-      "lastMom": -3,
+      "lastMom": -44,
       "overOdds": 1.99,
       "probLive": 50,
       "oddsStatus": "VALID",
@@ -32,7 +32,7 @@
       },
       "da": {
         "h": 27,
-        "a": 19
+        "a": 20
       },
       "corners": {
         "h": null,
@@ -43,7 +43,7 @@
         "a": null
       },
       "redCards": {
-        "h": 0,
+        "h": 1,
         "a": 0
       },
       "isSavedPick": false,
@@ -59,8 +59,16 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [],
-      "patternScore": 0
+      "patterns": [
+        {
+          "id": "numerical",
+          "label": "Fora +1 homem",
+          "emoji": "🟥",
+          "level": "med",
+          "detail": "Casa com 1 vermelho(s) — Fora em vantagem numérica"
+        }
+      ],
+      "patternScore": 2
     },
     {
       "id": 207775,
@@ -69,15 +77,15 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 49,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 57,
       "xgH": 1.65,
       "xgA": 0.33,
       "xgTotal": 1.98,
-      "lastMom": -6,
+      "lastMom": 8,
       "overOdds": 1.72,
       "probLive": 58,
       "oddsStatus": "VALID",
@@ -90,8 +98,8 @@
         "a": 1
       },
       "da": {
-        "h": 31,
-        "a": 20
+        "h": 32,
+        "a": 22
       },
       "corners": {
         "h": null,
@@ -136,7 +144,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 72,
+      "min": 77,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -144,12 +152,12 @@
       "xgH": 1.83,
       "xgA": 0.17,
       "xgTotal": 2.0,
-      "lastMom": 4,
+      "lastMom": 38,
       "overOdds": 2.22,
       "probLive": 45,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 12,
+        "h": 13,
         "a": 2
       },
       "sot": {
@@ -157,8 +165,8 @@
         "a": 1
       },
       "da": {
-        "h": 38,
-        "a": 35
+        "h": 41,
+        "a": 37
       },
       "corners": {
         "h": null,
@@ -198,28 +206,28 @@
           "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "30 atq. perigosos · 2 ao alvo (2ªP)"
+          "detail": "35 atq. perigosos · 2 ao alvo (2ªP)"
         },
         {
           "id": "xg_pace",
-          "label": "xG 6.7/90 (2ªP)",
+          "label": "xG 5.6/90 (2ªP)",
           "emoji": "⚡",
           "level": "critical",
-          "detail": "xG a ritmo de 6.7 por 90min (2ªP)"
+          "detail": "xG a ritmo de 5.6 por 90min (2ªP)"
         },
         {
           "id": "shots",
-          "label": "7r 2ªP",
+          "label": "8r 2ªP",
           "emoji": "🎯",
           "level": "med",
-          "detail": "23 remates/90min (2ªP)"
+          "detail": "22 remates/90min (2ªP)"
         },
         {
           "id": "late",
-          "label": "1 gol em 18min",
+          "label": "1 gol em 13min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 45% · 18min"
+          "detail": "Falta 1 golo · mercado 45% · 13min"
         }
       ],
       "patternScore": 23
@@ -231,7 +239,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 60,
+      "min": 66,
       "status": "inprogress",
       "period": "2T",
       "league": "",
