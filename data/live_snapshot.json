@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-27T02:28:11Z",
+  "generated_at": "2026-08-27T02:33:38Z",
   "status": "OK",
-  "count": 5,
+  "count": 4,
   "events": [
     {
       "id": 220081,
@@ -15,9 +15,9 @@
       "period": "HT",
       "league": "",
       "league_id": 80,
-      "xgH": 0.71,
+      "xgH": 0.74,
       "xgA": 0.08,
-      "xgTotal": 0.7899999999999999,
+      "xgTotal": 0.82,
       "lastMom": 7,
       "overOdds": 1.99,
       "probLive": 50,
@@ -136,7 +136,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 60,
+      "min": 67,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -157,8 +157,8 @@
         "a": 1
       },
       "da": {
-        "h": 32,
-        "a": 30
+        "h": 33,
+        "a": 35
       },
       "corners": {
         "h": null,
@@ -187,95 +187,35 @@
       },
       "patterns": [
         {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "3 padrões em simultâneo — sinal forte"
+        },
+        {
           "id": "pressure",
           "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "19 atq. perigosos · 2 ao alvo (2ªP)"
+          "detail": "25 atq. perigosos · 2 ao alvo (2ªP)"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 8.2/90 (2ªP)",
+          "emoji": "⚡",
+          "level": "critical",
+          "detail": "xG a ritmo de 8.2 por 90min (2ªP)"
         },
         {
           "id": "shots",
           "label": "7r 2ªP",
           "emoji": "🎯",
           "level": "high",
-          "detail": "42 remates/90min (2ªP) (muito alto)"
+          "detail": "29 remates/90min (2ªP) (muito alto)"
         }
       ],
-      "patternScore": 14
-    },
-    {
-      "id": 587785,
-      "home": "Vasco da Gama",
-      "away": "Vitória",
-      "hScore": 1,
-      "aScore": 0,
-      "goals": 1,
-      "min": 93,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 35,
-      "xgH": 1.47,
-      "xgA": 1.0,
-      "xgTotal": 2.4699999999999998,
-      "lastMom": -43,
-      "overOdds": null,
-      "probLive": null,
-      "oddsStatus": "MISSING",
-      "shots": {
-        "h": 15,
-        "a": 14
-      },
-      "sot": {
-        "h": 5,
-        "a": 5
-      },
-      "da": {
-        "h": 39,
-        "a": 50
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 1,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "xg_delta",
-          "label": "xG sobrevaloriza",
-          "emoji": "🎲",
-          "level": "med",
-          "detail": "xG 2.47 vs 1 golos"
-        },
-        {
-          "id": "numerical",
-          "label": "Fora +1 homem",
-          "emoji": "🟥",
-          "level": "med",
-          "detail": "Casa com 1 vermelho(s) — Fora em vantagem numérica"
-        }
-      ],
-      "patternScore": 4
+      "patternScore": 24
     },
     {
       "id": 587782,
@@ -284,21 +224,21 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 94,
-      "status": "2nd_half",
+      "min": 56,
+      "status": "inprogress",
       "period": "2T",
       "league": "",
       "league_id": 33,
       "xgH": 2.8,
-      "xgA": 1.54,
-      "xgTotal": 4.34,
-      "lastMom": 44,
+      "xgA": 1.29,
+      "xgTotal": 4.09,
+      "lastMom": 62,
       "overOdds": 2.17,
       "probLive": 46,
       "oddsStatus": "VALID",
       "shots": {
         "h": 31,
-        "a": 13
+        "a": 12
       },
       "sot": {
         "h": 11,
@@ -336,20 +276,20 @@
       "patterns": [
         {
           "id": "xg_delta",
-          "label": "xG +2.3 acima",
+          "label": "xG +2.1 acima",
           "emoji": "🎲",
           "level": "high",
-          "detail": "xG 4.34 vs 2 golos"
+          "detail": "xG 4.09 vs 2 golos"
         },
         {
-          "id": "late",
-          "label": "1 gol em 0min",
-          "emoji": "⏰",
-          "level": "low",
-          "detail": "Falta 1 golo · mercado 46% · 0min"
+          "id": "mom",
+          "label": "Casa pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum casa 62"
         }
       ],
-      "patternScore": 5
+      "patternScore": 6
     }
   ]
 }
