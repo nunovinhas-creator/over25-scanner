@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-27T02:17:20Z",
+  "generated_at": "2026-08-27T02:22:46Z",
   "status": "OK",
   "count": 6,
   "events": [
@@ -10,15 +10,15 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 44,
-      "status": "1st_half",
-      "period": "1T",
+      "min": 45,
+      "status": "halftime",
+      "period": "HT",
       "league": "",
       "league_id": 80,
       "xgH": 0.71,
       "xgA": 0.08,
       "xgTotal": 0.7899999999999999,
-      "lastMom": -4,
+      "lastMom": 7,
       "overOdds": 1.99,
       "probLive": 50,
       "oddsStatus": "VALID",
@@ -32,7 +32,7 @@
       },
       "da": {
         "h": 26,
-        "a": 14
+        "a": 16
       },
       "corners": {
         "h": null,
@@ -59,23 +59,8 @@
         "score": 4,
         "total": 6
       },
-      "patterns": [
-        {
-          "id": "pressure",
-          "label": "Pressão 100",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "40 atq. perigosos · 7 ao alvo"
-        },
-        {
-          "id": "shots",
-          "label": "12 remates",
-          "emoji": "🎯",
-          "level": "med",
-          "detail": "25 remates/90min"
-        }
-      ],
-      "patternScore": 12
+      "patterns": [],
+      "patternScore": 0
     },
     {
       "id": 207775,
@@ -84,29 +69,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 38,
+      "min": 44,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 57,
-      "xgH": 0.7,
+      "xgH": 1.62,
       "xgA": 0.28,
-      "xgTotal": 0.98,
-      "lastMom": 32,
+      "xgTotal": 1.9000000000000001,
+      "lastMom": 4,
       "overOdds": 1.72,
       "probLive": 58,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 9,
-        "a": 5
+        "h": 11,
+        "a": 6
       },
       "sot": {
         "h": 2,
         "a": 1
       },
       "da": {
-        "h": 28,
-        "a": 15
+        "h": 31,
+        "a": 19
       },
       "corners": {
         "h": null,
@@ -135,52 +120,73 @@
       },
       "patterns": [
         {
+          "id": "conv",
+          "label": "CONVERGÊNCIA",
+          "emoji": "🔮",
+          "level": "conv",
+          "detail": "4 padrões em simultâneo — sinal forte"
+        },
+        {
           "id": "pressure",
           "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "43 atq. perigosos · 3 ao alvo"
+          "detail": "50 atq. perigosos · 3 ao alvo"
+        },
+        {
+          "id": "xg_delta",
+          "label": "xG +1.9 acima",
+          "emoji": "🎲",
+          "level": "high",
+          "detail": "xG 1.90 vs 0 golos"
+        },
+        {
+          "id": "xg_pace",
+          "label": "xG 3.9/90",
+          "emoji": "⚡",
+          "level": "high",
+          "detail": "xG a ritmo de 3.9 por 90min"
         },
         {
           "id": "shots",
-          "label": "14 remates",
+          "label": "17 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "33 remates/90min (muito alto)"
+          "detail": "35 remates/90min (muito alto)"
         }
       ],
-      "patternScore": 14
+      "patternScore": 22
     },
     {
       "id": 207774,
       "home": "El Paso Locomotive FC",
       "away": "Pittsburgh Riverhounds",
       "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 49,
+      "aScore": 1,
+      "goals": 1,
+      "min": 55,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 57,
-      "xgH": 1.42,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": 17,
+      "xgH": 1.5,
+      "xgA": 0.12,
+      "xgTotal": 1.62,
+      "lastMom": -12,
       "overOdds": 2.22,
       "probLive": 45,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 8,
+        "h": 9,
         "a": 1
       },
       "sot": {
         "h": 2,
-        "a": 0
+        "a": 1
       },
       "da": {
-        "h": 24,
-        "a": 24
+        "h": 31,
+        "a": 27
       },
       "corners": {
         "h": null,
@@ -197,14 +203,14 @@
       "isSavedPick": false,
       "coverage": {
         "fields": {
-          "xgTotal": false,
+          "xgTotal": true,
           "da": true,
           "sot": true,
           "corners": false,
           "possession": false,
           "lastMom": true
         },
-        "score": 3,
+        "score": 4,
         "total": 6
       },
       "patterns": [],
@@ -217,29 +223,29 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 82,
+      "min": 87,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 35,
       "xgH": 1.47,
-      "xgA": 0.62,
-      "xgTotal": 2.09,
-      "lastMom": 6,
+      "xgA": 0.68,
+      "xgTotal": 2.15,
+      "lastMom": -38,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
         "h": 15,
-        "a": 11
+        "a": 13
       },
       "sot": {
         "h": 5,
-        "a": 3
+        "a": 4
       },
       "da": {
-        "h": 34,
-        "a": 41
+        "h": 36,
+        "a": 45
       },
       "corners": {
         "h": null,
@@ -279,18 +285,18 @@
           "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "42 atq. perigosos · 5 ao alvo (2ªP)"
+          "detail": "48 atq. perigosos · 6 ao alvo (2ªP)"
         },
         {
           "id": "xg_pace",
-          "label": "xG 3.6/90 (2ªP)",
+          "label": "xG 3.3/90 (2ªP)",
           "emoji": "⚡",
           "level": "high",
-          "detail": "xG a ritmo de 3.6 por 90min (2ªP)"
+          "detail": "xG a ritmo de 3.3 por 90min (2ªP)"
         },
         {
           "id": "shots",
-          "label": "14r 2ªP",
+          "label": "16r 2ªP",
           "emoji": "🎯",
           "level": "high",
           "detail": "34 remates/90min (2ªP) (muito alto)"
@@ -312,15 +318,15 @@
       "hScore": 3,
       "aScore": 0,
       "goals": 3,
-      "min": 85,
+      "min": 90,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 35,
       "xgH": 3.34,
-      "xgA": 0.31,
-      "xgTotal": 3.65,
-      "lastMom": -37,
+      "xgA": 0.3,
+      "xgTotal": 3.6399999999999997,
+      "lastMom": -20,
       "overOdds": 2.01,
       "probLive": 50,
       "oddsStatus": "VALID",
@@ -334,7 +340,7 @@
       },
       "da": {
         "h": 46,
-        "a": 39
+        "a": 43
       },
       "corners": {
         "h": null,
@@ -371,29 +377,29 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 83,
+      "min": 89,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 33,
       "xgH": 2.72,
-      "xgA": 1.13,
-      "xgTotal": 3.85,
-      "lastMom": 12,
+      "xgA": 1.52,
+      "xgTotal": 4.24,
+      "lastMom": -12,
       "overOdds": 2.17,
       "probLive": 46,
       "oddsStatus": "VALID",
       "shots": {
         "h": 29,
-        "a": 10
+        "a": 12
       },
       "sot": {
         "h": 10,
         "a": 4
       },
       "da": {
-        "h": 52,
-        "a": 13
+        "h": 54,
+        "a": 14
       },
       "corners": {
         "h": null,
@@ -433,35 +439,35 @@
           "label": "Pressão 87 (2ªP)",
           "emoji": "🔥",
           "level": "high",
-          "detail": "20 atq. perigosos · 8 ao alvo (2ªP)"
+          "detail": "23 atq. perigosos · 8 ao alvo (2ªP)"
         },
         {
           "id": "xg_delta",
-          "label": "xG +1.9 acima",
+          "label": "xG +2.2 acima",
           "emoji": "🎲",
           "level": "high",
-          "detail": "xG 3.85 vs 2 golos"
+          "detail": "xG 4.24 vs 2 golos"
         },
         {
           "id": "xg_pace",
-          "label": "xG 4.6/90 (2ªP)",
+          "label": "xG 4.8/90 (2ªP)",
           "emoji": "⚡",
           "level": "critical",
-          "detail": "xG a ritmo de 4.6 por 90min (2ªP)"
+          "detail": "xG a ritmo de 4.8 por 90min (2ªP)"
         },
         {
           "id": "shots",
-          "label": "19r 2ªP",
+          "label": "21r 2ªP",
           "emoji": "🎯",
           "level": "high",
-          "detail": "45 remates/90min (2ªP) (muito alto)"
+          "detail": "43 remates/90min (2ªP) (muito alto)"
         },
         {
           "id": "late",
-          "label": "1 gol em 7min",
+          "label": "1 gol em 1min",
           "emoji": "⏰",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 46% · 7min"
+          "detail": "Falta 1 golo · mercado 46% · 1min"
         }
       ],
       "patternScore": 23
