@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-27T02:33:38Z",
+  "generated_at": "2026-08-27T02:38:55Z",
   "status": "OK",
   "count": 4,
   "events": [
@@ -10,15 +10,15 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 45,
-      "status": "halftime",
-      "period": "HT",
+      "min": 49,
+      "status": "2nd_half",
+      "period": "2T",
       "league": "",
       "league_id": 80,
-      "xgH": 0.74,
-      "xgA": 0.08,
-      "xgTotal": 0.82,
-      "lastMom": 7,
+      "xgH": 0.71,
+      "xgA": 0.13,
+      "xgTotal": 0.84,
+      "lastMom": -3,
       "overOdds": 1.99,
       "probLive": 50,
       "oddsStatus": "VALID",
@@ -31,8 +31,8 @@
         "a": 1
       },
       "da": {
-        "h": 26,
-        "a": 16
+        "h": 27,
+        "a": 19
       },
       "corners": {
         "h": null,
@@ -136,7 +136,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 67,
+      "min": 72,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -157,7 +157,7 @@
         "a": 1
       },
       "da": {
-        "h": 33,
+        "h": 38,
         "a": 35
       },
       "corners": {
@@ -191,31 +191,38 @@
           "label": "CONVERGÊNCIA",
           "emoji": "🔮",
           "level": "conv",
-          "detail": "3 padrões em simultâneo — sinal forte"
+          "detail": "4 padrões em simultâneo — sinal forte"
         },
         {
           "id": "pressure",
           "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "25 atq. perigosos · 2 ao alvo (2ªP)"
+          "detail": "30 atq. perigosos · 2 ao alvo (2ªP)"
         },
         {
           "id": "xg_pace",
-          "label": "xG 8.2/90 (2ªP)",
+          "label": "xG 6.7/90 (2ªP)",
           "emoji": "⚡",
           "level": "critical",
-          "detail": "xG a ritmo de 8.2 por 90min (2ªP)"
+          "detail": "xG a ritmo de 6.7 por 90min (2ªP)"
         },
         {
           "id": "shots",
           "label": "7r 2ªP",
           "emoji": "🎯",
-          "level": "high",
-          "detail": "29 remates/90min (2ªP) (muito alto)"
+          "level": "med",
+          "detail": "23 remates/90min (2ªP)"
+        },
+        {
+          "id": "late",
+          "label": "1 gol em 18min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 45% · 18min"
         }
       ],
-      "patternScore": 24
+      "patternScore": 23
     },
     {
       "id": 587782,
@@ -224,7 +231,7 @@
       "hScore": 1,
       "aScore": 1,
       "goals": 2,
-      "min": 56,
+      "min": 60,
       "status": "inprogress",
       "period": "2T",
       "league": "",
