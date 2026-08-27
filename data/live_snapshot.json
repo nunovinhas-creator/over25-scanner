@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-27T00:56:01Z",
+  "generated_at": "2026-08-27T01:01:19Z",
   "status": "OK",
   "count": 4,
   "events": [
@@ -10,29 +10,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 24,
+      "min": 29,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 35,
       "xgH": 0.2,
-      "xgA": 0.17,
-      "xgTotal": 0.37,
-      "lastMom": -6,
+      "xgA": 0.24,
+      "xgTotal": 0.44,
+      "lastMom": -60,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
         "h": 5,
-        "a": 2
+        "a": 3
       },
       "sot": {
         "h": 0,
         "a": 1
       },
       "da": {
-        "h": 12,
-        "a": 4
+        "h": 13,
+        "a": 7
       },
       "corners": {
         "h": null,
@@ -62,20 +62,27 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 65",
+          "label": "Pressão 67",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "16 atq. perigosos · 1 ao alvo"
+          "detail": "20 atq. perigosos · 1 ao alvo"
         },
         {
           "id": "shots",
-          "label": "7 remates",
+          "label": "8 remates",
           "emoji": "🎯",
           "level": "med",
-          "detail": "26 remates/90min"
+          "detail": "25 remates/90min"
+        },
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 60"
         }
       ],
-      "patternScore": 12
+      "patternScore": 14
     },
     {
       "id": 587784,
@@ -84,103 +91,29 @@
       "hScore": 0,
       "aScore": 0,
       "goals": 0,
-      "min": 24,
+      "min": 29,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 35,
       "xgH": 0.19,
-      "xgA": null,
-      "xgTotal": null,
-      "lastMom": 91,
+      "xgA": 0.06,
+      "xgTotal": 0.25,
+      "lastMom": -32,
       "overOdds": 2.01,
       "probLive": 50,
       "oddsStatus": "VALID",
       "shots": {
         "h": 5,
-        "a": 0
+        "a": 1
       },
       "sot": {
         "h": 3,
         "a": 0
       },
       "da": {
-        "h": 20,
-        "a": 9
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": false,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 3,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "pressure",
-          "label": "Pressão 100",
-          "emoji": "🔥",
-          "level": "critical",
-          "detail": "29 atq. perigosos · 3 ao alvo"
-        },
-        {
-          "id": "mom",
-          "label": "Casa domina",
-          "emoji": "💥",
-          "level": "high",
-          "detail": "Momentum casa 91 — controlo total"
-        }
-      ],
-      "patternScore": 14
-    },
-    {
-      "id": 587782,
-      "home": "River Plate",
-      "away": "Independiente Santa Fe",
-      "hScore": 0,
-      "aScore": 0,
-      "goals": 0,
-      "min": 24,
-      "status": "1st_half",
-      "period": "1T",
-      "league": "",
-      "league_id": 33,
-      "xgH": 0.58,
-      "xgA": 0.03,
-      "xgTotal": 0.61,
-      "lastMom": 11,
-      "overOdds": 2.17,
-      "probLive": 46,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 10,
-        "a": 1
-      },
-      "sot": {
-        "h": 1,
-        "a": 0
-      },
-      "da": {
-        "h": 15,
-        "a": 3
+        "h": 22,
+        "a": 13
       },
       "corners": {
         "h": null,
@@ -210,17 +143,84 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 72",
+          "label": "Pressão 100",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "18 atq. perigosos · 1 ao alvo"
+          "detail": "35 atq. perigosos · 3 ao alvo"
+        }
+      ],
+      "patternScore": 10
+    },
+    {
+      "id": 587782,
+      "home": "River Plate",
+      "away": "Independiente Santa Fe",
+      "hScore": 0,
+      "aScore": 0,
+      "goals": 0,
+      "min": 30,
+      "status": "1st_half",
+      "period": "1T",
+      "league": "",
+      "league_id": 33,
+      "xgH": 0.58,
+      "xgA": 0.09,
+      "xgTotal": 0.6699999999999999,
+      "lastMom": -10,
+      "overOdds": 2.17,
+      "probLive": 46,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 10,
+        "a": 2
+      },
+      "sot": {
+        "h": 1,
+        "a": 0
+      },
+      "da": {
+        "h": 17,
+        "a": 5
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 4,
+        "total": 6
+      },
+      "patterns": [
+        {
+          "id": "pressure",
+          "label": "Pressão 71",
+          "emoji": "🔥",
+          "level": "critical",
+          "detail": "22 atq. perigosos · 1 ao alvo"
         },
         {
           "id": "shots",
-          "label": "11 remates",
+          "label": "12 remates",
           "emoji": "🎯",
           "level": "high",
-          "detail": "41 remates/90min (muito alto)"
+          "detail": "36 remates/90min (muito alto)"
         }
       ],
       "patternScore": 14
@@ -232,28 +232,28 @@
       "hScore": 1,
       "aScore": 0,
       "goals": 1,
-      "min": 40,
+      "min": 45,
       "status": "1st_half",
       "period": "1T",
       "league": "",
       "league_id": 72,
-      "xgH": 0.07,
+      "xgH": 0.51,
       "xgA": 0.08,
-      "xgTotal": 0.15000000000000002,
-      "lastMom": -1,
+      "xgTotal": 0.59,
+      "lastMom": 0,
       "overOdds": null,
       "probLive": null,
       "oddsStatus": "MISSING",
       "shots": {
-        "h": 2,
+        "h": 6,
         "a": 1
       },
       "sot": {
-        "h": 1,
+        "h": 2,
         "a": 1
       },
       "da": {
-        "h": 11,
+        "h": 15,
         "a": 11
       },
       "corners": {
@@ -284,10 +284,10 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 60",
+          "label": "Pressão 67",
           "emoji": "🔥",
           "level": "high",
-          "detail": "22 atq. perigosos · 2 ao alvo"
+          "detail": "26 atq. perigosos · 3 ao alvo"
         }
       ],
       "patternScore": 4
