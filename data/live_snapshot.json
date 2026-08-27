@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-27T02:54:55Z",
+  "generated_at": "2026-08-27T03:00:20Z",
   "status": "OK",
   "count": 3,
   "events": [
@@ -10,7 +10,7 @@
       "hScore": 2,
       "aScore": 0,
       "goals": 2,
-      "min": 65,
+      "min": 70,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
@@ -18,21 +18,21 @@
       "xgH": 0.76,
       "xgA": 0.13,
       "xgTotal": 0.89,
-      "lastMom": 13,
+      "lastMom": -23,
       "overOdds": 1.99,
       "probLive": 50,
       "oddsStatus": "VALID",
       "shots": {
-        "h": 10,
+        "h": 11,
         "a": 3
       },
       "sot": {
-        "h": 7,
+        "h": 8,
         "a": 1
       },
       "da": {
         "h": 30,
-        "a": 31
+        "a": 37
       },
       "corners": {
         "h": null,
@@ -62,10 +62,17 @@
       "patterns": [
         {
           "id": "pressure",
-          "label": "Pressão 90 (2ªP)",
+          "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "19 atq. perigosos · 1 ao alvo (2ªP)"
+          "detail": "25 atq. perigosos · 2 ao alvo (2ªP)"
+        },
+        {
+          "id": "late",
+          "label": "1 gol em 20min",
+          "emoji": "⏰",
+          "level": "low",
+          "detail": "Falta 1 golo · mercado 50% · 20min"
         },
         {
           "id": "numerical",
@@ -75,7 +82,7 @@
           "detail": "Casa com 1 vermelho(s) — Fora em vantagem numérica"
         }
       ],
-      "patternScore": 12
+      "patternScore": 13
     },
     {
       "id": 207775,
@@ -84,96 +91,29 @@
       "hScore": 0,
       "aScore": 1,
       "goals": 1,
-      "min": 59,
+      "min": 64,
       "status": "2nd_half",
       "period": "2T",
       "league": "",
       "league_id": 57,
       "xgH": 1.69,
-      "xgA": 0.74,
-      "xgTotal": 2.4299999999999997,
-      "lastMom": 22,
+      "xgA": 0.77,
+      "xgTotal": 2.46,
+      "lastMom": -57,
       "overOdds": 1.72,
       "probLive": 58,
       "oddsStatus": "VALID",
       "shots": {
         "h": 12,
-        "a": 7
+        "a": 9
       },
       "sot": {
         "h": 2,
-        "a": 2
-      },
-      "da": {
-        "h": 42,
-        "a": 26
-      },
-      "corners": {
-        "h": null,
-        "a": null
-      },
-      "possession": {
-        "h": null,
-        "a": null
-      },
-      "redCards": {
-        "h": 0,
-        "a": 0
-      },
-      "isSavedPick": false,
-      "coverage": {
-        "fields": {
-          "xgTotal": true,
-          "da": true,
-          "sot": true,
-          "corners": false,
-          "possession": false,
-          "lastMom": true
-        },
-        "score": 4,
-        "total": 6
-      },
-      "patterns": [
-        {
-          "id": "xg_delta",
-          "label": "xG sobrevaloriza",
-          "emoji": "🎲",
-          "level": "med",
-          "detail": "xG 2.43 vs 1 golos"
-        }
-      ],
-      "patternScore": 2
-    },
-    {
-      "id": 207774,
-      "home": "El Paso Locomotive FC",
-      "away": "Pittsburgh Riverhounds",
-      "hScore": 1,
-      "aScore": 1,
-      "goals": 2,
-      "min": 88,
-      "status": "2nd_half",
-      "period": "2T",
-      "league": "",
-      "league_id": 57,
-      "xgH": 1.88,
-      "xgA": 0.23,
-      "xgTotal": 2.11,
-      "lastMom": 27,
-      "overOdds": 2.22,
-      "probLive": 45,
-      "oddsStatus": "VALID",
-      "shots": {
-        "h": 14,
         "a": 3
       },
-      "sot": {
-        "h": 3,
-        "a": 2
-      },
       "da": {
-        "h": 46,
-        "a": 41
+        "h": 43,
+        "a": 28
       },
       "corners": {
         "h": null,
@@ -206,31 +146,97 @@
           "label": "CONVERGÊNCIA",
           "emoji": "🔮",
           "level": "conv",
-          "detail": "3 padrões em simultâneo — sinal forte"
+          "detail": "4 padrões em simultâneo — sinal forte"
         },
         {
           "id": "pressure",
           "label": "Pressão 100 (2ªP)",
           "emoji": "🔥",
           "level": "critical",
-          "detail": "44 atq. perigosos · 3 ao alvo (2ªP)"
+          "detail": "20 atq. perigosos · 2 ao alvo (2ªP)"
         },
         {
-          "id": "xg_pace",
-          "label": "xG 4.4/90 (2ªP)",
-          "emoji": "⚡",
-          "level": "critical",
-          "detail": "xG a ritmo de 4.4 por 90min (2ªP)"
+          "id": "xg_delta",
+          "label": "xG sobrevaloriza",
+          "emoji": "🎲",
+          "level": "med",
+          "detail": "xG 2.46 vs 1 golos"
         },
         {
-          "id": "late",
-          "label": "1 gol em 2min",
-          "emoji": "⏰",
+          "id": "open",
+          "label": "JOGO ABERTO",
+          "emoji": "🎭",
           "level": "low",
-          "detail": "Falta 1 golo · mercado 45% · 2min"
+          "detail": "26min, equipa a perder ataca"
+        },
+        {
+          "id": "mom",
+          "label": "Fora pressiona",
+          "emoji": "💪",
+          "level": "med",
+          "detail": "Momentum fora 57"
         }
       ],
-      "patternScore": 21
+      "patternScore": 15
+    },
+    {
+      "id": 207774,
+      "home": "El Paso Locomotive FC",
+      "away": "Pittsburgh Riverhounds",
+      "hScore": 2,
+      "aScore": 1,
+      "goals": 3,
+      "min": 93,
+      "status": "2nd_half",
+      "period": "2T",
+      "league": "",
+      "league_id": 57,
+      "xgH": 1.95,
+      "xgA": 0.36,
+      "xgTotal": 2.31,
+      "lastMom": 12,
+      "overOdds": 2.22,
+      "probLive": 45,
+      "oddsStatus": "VALID",
+      "shots": {
+        "h": 15,
+        "a": 4
+      },
+      "sot": {
+        "h": 4,
+        "a": 3
+      },
+      "da": {
+        "h": 50,
+        "a": 46
+      },
+      "corners": {
+        "h": null,
+        "a": null
+      },
+      "possession": {
+        "h": null,
+        "a": null
+      },
+      "redCards": {
+        "h": 0,
+        "a": 0
+      },
+      "isSavedPick": false,
+      "coverage": {
+        "fields": {
+          "xgTotal": true,
+          "da": true,
+          "sot": true,
+          "corners": false,
+          "possession": false,
+          "lastMom": true
+        },
+        "score": 4,
+        "total": 6
+      },
+      "patterns": [],
+      "patternScore": 0
     }
   ]
 }
