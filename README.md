@@ -4,13 +4,16 @@
 
 📋 Documentação interna e índice de portfólio mantidos em repositório privado.
 
-[![Scanner](https://github.com/nunovinhas-creator/over25-scanner/actions/workflows/scanner.yml/badge.svg)](https://github.com/nunovinhas-creator/over25-scanner/actions/workflows/scanner.yml)
-[![Sharp 1X2](https://github.com/nunovinhas-creator/over25-scanner/actions/workflows/sharp1x2_analysis.yml/badge.svg)](https://github.com/nunovinhas-creator/over25-scanner/actions/workflows/sharp1x2_analysis.yml)
 [![Data Quality](https://github.com/nunovinhas-creator/over25-scanner/actions/workflows/data_quality.yml/badge.svg)](https://github.com/nunovinhas-creator/over25-scanner/actions/workflows/data_quality.yml)
 [![Python](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/)
 [![Licença](https://img.shields.io/badge/licen%C3%A7a-privado-lightgrey.svg)]()
 
-Sistema automatizado de identificação de valor em mercados de apostas de futebol. Três módulos em produção, todos em **modo observação** — sem apostas reais até os gates de CLV serem atingidos.
+> Os badges "Scanner" e "Sharp 1X2" foram removidos daqui — os workflows `scanner.yml`
+> e `sharp1x2_analysis.yml` estão desactivados desde o congelamento de 25 ago 2026 (ver
+> aviso acima), pelo que um badge de CI nesses workflows deixou de reflectir estado
+> real. `data_quality.yml` continua activo (não depende da BSD) e mantém o seu badge.
+
+Sistema automatizado de identificação de valor em mercados de apostas de futebol. Três módulos construídos e validados historicamente, todos em **modo observação/investigação offline** — sem apostas reais até os gates de CLV serem atingidos, e sem scan ao vivo desde o congelamento do feed BSD (25 ago 2026).
 
 ---
 
