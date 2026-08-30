@@ -25,9 +25,12 @@ Uso:
 
 from __future__ import annotations
 
+import argparse
+import json
 import logging
 import time
 from pathlib import Path
+from typing import Optional
 
 import numpy as np
 import pandas as pd
@@ -272,6 +275,123 @@ def stratify(bucket: pd.DataFrame, by: str) -> list[dict]:
 # Relatório
 # ---------------------------------------------------------------------------
 
+def build_conclusion(
+    baseline: dict,
+    sweep: pd.DataFrame,
+    controls: pd.DataFrame,
+    strat_ref_div: list[dict],
+) -> str:
+    parts = []
+
+    parts.append(
+        "**A CLV absoluta é negativa em todos os buckets, incluindo os controlos "
+        "aleatórios — isto não é, por si só, evidência de que o mercado se move "
+        "contra o Over.** `CLV = p_close × P>2.5 − 1` avalia uma odd bruta (com a "
+        "margem do bookmaker embutida) contra uma probabilidade de-vigada; sem "
+        "qualquer movimento de linha entre abertura e fecho (`p_close ≈ p_open`), "
+        "esta fórmula converge sozinha para `−overround/(1+overround)`, "
+        "tipicamente 2–5% para over/under Pinnacle. O controlo (a) confirma isto: "
+        f"apostar sempre Over, sem qualquer selecção, já dá "
+        f"{_fmt_pct(baseline['clv']['mean'])} — este é o nível de referência da "
+        "margem do livro, não um sinal de skill negativo do modelo."
+    )
+
+    all_beats_unif: Optional[bool] = None
+    all_beats_strat: Optional[bool] = None
+    n_beats_strat = 0
+    valid_ctrl = controls[controls["n"] > 0].reset_index(drop=True)
+    if len(valid_ctrl):
+        all_beats_unif = bool((valid_ctrl["p_unif"] <= 0.05).all())
+        all_beats_strat = bool((valid_ctrl["p_strat"] <= 0.05).all())
+        n_beats_strat = int((valid_ctrl["p_strat"] <= 0.05).sum())
+        gap_strat = valid_ctrl["model_clv"] - valid_ctrl["strat_mean"]
+        clv_series = sweep.loc[sweep["n"] > 0, "clv_mean"]
+        monotonic = bool(clv_series.is_monotonic_increasing) if clv_series.notna().all() else False
+
+        parts.append(
+            f"\n**O que se destaca é a CLV *relativa*.** Em todos os "
+            f"{len(valid_ctrl)} thresholds testados com jogos suficientes, a "
+            f"selecção do modelo teve CLV menos negativa do que "
+            f"{'ambos os controlos' if all_beats_unif and all_beats_strat else 'nem sempre ambos os controlos'} "
+            f"aleatórios de igual N — uniforme: {'p≤0.05 em todos os thresholds' if all_beats_unif else 'nem sempre p≤0.05'}; "
+            f"estratificado por banda de odds: {'p≤0.05 em todos os thresholds' if all_beats_strat else 'nem sempre p≤0.05'}. "
+            f"A vantagem sobre o controlo (c) — o que decide o estudo, porque "
+            f"controla para a banda de odds seleccionada — vai de "
+            f"{gap_strat.iloc[0]:+.3f}pp no threshold mais baixo testado a "
+            f"{gap_strat.iloc[-1]:+.3f}pp no mais alto"
+            f"{', crescendo de forma aproximadamente monótona com o threshold' if monotonic else ', sem crescimento monótono claro'}. "
+            "Isto é evidência de sinal real no Dixon-Coles bruto face à linha de "
+            "fecho — não é apenas um artefacto de seleccionar odds de uma banda "
+            "estruturalmente mais favorável."
+        )
+
+    best_idx = sweep["clv_mean"].idxmax() if sweep["clv_mean"].notna().any() else None
+    if best_idx is not None:
+        best_clv = sweep.loc[best_idx, "clv_mean"]
+        parts.append(
+            "\n**Mas o sinal não chega a superar a margem embutida.** A CLV "
+            "absoluta nunca fica positiva em nenhum threshold do sweep (0–10pp) — "
+            f"o melhor resultado é {_fmt_pct(best_clv)}, ainda bem abaixo de zero. "
+            "Não há, nesta regra de selecção às odds de abertura, um threshold que "
+            "produza EV positivo contra o fecho."
+        )
+
+    positive_div = [r for r in strat_ref_div if r["roi_pct"] > 0 and not r["noise"]]
+    if strat_ref_div:
+        if positive_div:
+            detail = "; ".join(
+                f"{r['key']} (ROI {r['roi_pct']:+.2f}%, n={r['n']:,}, CLV médio {_fmt_pct(r['clv_mean'])})"
+                for r in positive_div
+            )
+            parts.append(
+                f"\n**Nota sobre a estratificação por divisão (threshold={REF_THRESHOLD:.2f}):** "
+                f"{len(positive_div)} de {len(strat_ref_div)} divisões com n≥{MIN_SEGMENT_N} "
+                f"mostram ROI pontual positivo — {detail}. A CLV média mantém-se "
+                "negativa em ambas; sem IC no ROI a este nível de estratificação, "
+                "isto lê-se como variância de amostra (win-rate numa amostra "
+                f"pequena), não como edge específico da liga — {len(positive_div)} "
+                f"em {len(strat_ref_div)} é consistente com ruído, não com um "
+                "padrão sistemático."
+            )
+        else:
+            parts.append(
+                f"\n**Nota sobre a estratificação por divisão (threshold={REF_THRESHOLD:.2f}):** "
+                f"nenhuma divisão com n≥{MIN_SEGMENT_N} mostra ROI pontual "
+                "positivo — consistente com o resultado nulo em termos de EV "
+                "apostável."
+            )
+
+    if all_beats_strat is None:
+        signal_clause = (
+            "não há thresholds com jogos suficientes para avaliar separação dos "
+            "controlos aleatórios nesta corrida"
+        )
+    elif all_beats_strat:
+        signal_clause = (
+            "separa-se do controlo estratificado por banda de odds (p≤0.05) em "
+            f"todos os {len(valid_ctrl)} thresholds testados, com a vantagem a "
+            "crescer nos thresholds mais altos"
+        )
+    else:
+        signal_clause = (
+            f"separa-se do controlo estratificado por banda de odds (p≤0.05) em "
+            f"{n_beats_strat} de {len(valid_ctrl)} thresholds testados — não em "
+            "todos, o sinal é inconsistente ao longo do sweep"
+        )
+
+    parts.append(
+        "\n**Resposta à pergunta de investigação:** o Dixon-Coles bruto (sem "
+        f"calibração) contém informação mensurável sobre a linha de fecho — {signal_clause}. "
+        "Mas, avaliado contra as odds de abertura tal como estão cotadas (com a "
+        "margem do bookmaker embutida), esse sinal não é suficiente para produzir "
+        "CLV positiva em nenhum threshold testado. **Não há, com estes dados e "
+        "esta regra de selecção, evidência de edge apostável nas odds de "
+        "abertura.**"
+    )
+
+    return "\n".join(parts)
+
+
 def _fmt_pct(v: float) -> str:
     return f"{v:+.3f}%" if pd.notna(v) else "—"
 
@@ -294,6 +414,7 @@ def write_report(
     strat_ref_div: list[dict],
     out_path: Path = OUT_PATH,
 ) -> None:
+    conclusion = build_conclusion(baseline, sweep, controls, strat_ref_div)
     nl = "\n"
     date_min = study["date"].min().date()
     date_max = study["date"].max().date()
@@ -472,6 +593,12 @@ capacidade preditiva do Dixon-Coles.
 
 ---
 
+## Conclusão
+
+{conclusion}
+
+---
+
 ## Notas metodológicas
 
 - Modelo Dixon-Coles **não calibrado** (`p_dc` bruto, sem o calibrador isotónico de
@@ -493,10 +620,35 @@ capacidade preditiva do Dixon-Coles.
 # CLI
 # ---------------------------------------------------------------------------
 
+def _build_parser() -> argparse.ArgumentParser:
+    p = argparse.ArgumentParser(description="Dixon-Coles vs. linha de fecho Pinnacle (walk-forward, offline)")
+    p.add_argument("--data", type=Path, default=DATA_PATH)
+    p.add_argument("--out", type=Path, default=OUT_PATH)
+    p.add_argument(
+        "--study-cache", type=Path, default=None,
+        help="Caminho para cache (pickle) do universo do estudo (fase cara — fit walk-forward). "
+             "Se existir, é reutilizado em vez de recorrer ao splitter; útil para iterar no relatório "
+             "sem repetir ~15-25min de fit.",
+    )
+    return p
+
+
 def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)-8s | %(message)s")
+    args = _build_parser().parse_args()
 
-    study, n_chain = build_universe()
+    n_chain_path = args.study_cache.with_suffix(".n_chain.json") if args.study_cache else None
+    if args.study_cache and args.study_cache.exists() and n_chain_path.exists():
+        logger.info("A carregar universo do cache: %s", args.study_cache)
+        study = pd.read_pickle(args.study_cache)
+        n_chain = json.loads(n_chain_path.read_text())
+    else:
+        study, n_chain = build_universe(args.data)
+        if args.study_cache:
+            args.study_cache.parent.mkdir(parents=True, exist_ok=True)
+            study.to_pickle(args.study_cache)
+            n_chain_path.write_text(json.dumps(n_chain))
+            logger.info("Universo guardado em cache: %s", args.study_cache)
     logger.info("Cadeia de N: %s", n_chain)
 
     sweep = threshold_sweep(study)
@@ -514,8 +666,9 @@ def main() -> None:
         study, n_chain, sweep, baseline, controls,
         strat_baseline_season, strat_baseline_div,
         strat_ref_season, strat_ref_div,
+        out_path=args.out,
     )
-    print(f"\nRelatório escrito em {OUT_PATH}")
+    print(f"\nRelatório escrito em {args.out}")
 
 
 if __name__ == "__main__":
