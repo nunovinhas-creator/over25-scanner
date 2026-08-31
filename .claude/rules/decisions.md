@@ -15,6 +15,7 @@
 | `pin_drop` como sinal 1X2 | SUBSTITUÍDO | Desde 12 jun 2026: sinal é `div_b365_pin > 3%`. `pin_drop` gravado por pick mas não é gate. |
 | `previous_decimal_odds` | NÃO é closing line | É a odd do scan anterior. CLV exacto requer fetch Pinnacle pós-KO (+10min). Ver testing.md. |
 | Feed de odds BSD (scanner ao vivo) | CONGELADO — 25 ago 2026 | Cobertura de odds BSD ≥ 90% sustentada 7 dias seguidos (ou fonte alternativa validada). Ver detalhe abaixo. |
+| Critério de aceitação — DC vs. linha de fecho (investigação offline) | PRÉ-REGISTADO — 31 ago 2026, antes da 2ª tentativa (Max>2.5) | CLV rolling/médio > +1,0% E n ≥ 1000 E positivo em ≥4 das 5 épocas (2122–2526). Uma só variante nova por tentativa; sem 3ª tentativa se esta falhar. Ver detalhe abaixo. |
 
 ---
 
@@ -73,3 +74,16 @@ O repositório passa a **modo de investigação offline** sobre `data/historical
 **Tag git:** `v-freeze-2026-08` marca o estado de `main` no momento da decisão (commit `8e6a751`).
 
 **O que é preciso para reverter:** cobertura de odds BSD (ou de uma fonte alternativa validada) ≥ 90% sustentada durante 7 dias seguidos. Reactivar os workflows um a um pela Actions tab (Enable workflow), começando por `scanner.yml`; só reactivar `sharp1x2_analysis.yml` e `live_scanner.yml` depois de confirmar picks reais consistentes no scanner principal.
+
+### Critério de decisão — DC vs. linha de fecho (investigação offline)
+
+**Pré-registado:** 31 ago 2026, antes de correr a 2ª tentativa (variante `Max>2.5`) e antes de ver os resultados dessa corrida.
+
+**Contexto:** PR #176 (mergeado) respondeu à pergunta "o Dixon-Coles bate o fecho da Pinnacle?" usando `P>2.5` (odd de abertura Pinnacle) como odd tomada — ver `backtesting/reports/dc_vs_closing.md`. Resultado: o modelo separa-se de controlos aleatórios (p≤0.05 em todos os thresholds do sweep), mas a CLV absoluta nunca fica positiva — o sinal não supera a margem embutida na odd de abertura Pinnacle.
+
+**Critério (usa o mesmo padrão já aplicado para ler o estudo anterior):**
+- CLV rolling/médio > **+1,0%**
+- n ≥ **1000** apostas
+- positivo em **≥4 das 5 épocas** (2122–2526)
+
+**Regra de tentativa única:** a 2ª tentativa troca apenas a odd tomada para `Max>2.5` (melhor preço de mercado, ~2–4% acima de `P>2.5` em média nos dados — ver `backtesting/reports/dc_vs_closing_bestprice.md`), mantendo tudo o resto do estudo original (splitter, controlos, sweep, estratificação). Se esta variante não atingir o critério acima, **não há 3ª tentativa** — fica registado como resultado nulo e a linha de investigação "DC vs. fecho" fecha-se nesta forma. Isto evita procurar variantes sucessivas até uma "passar" por acaso (p-hacking).
