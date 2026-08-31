@@ -1,6 +1,8 @@
 # Over 2.5 Scout — Sistema de Apostas em Futebol
 
 > ⏸️ **Scanner ao vivo parado desde 20 de agosto de 2026.** O feed de odds da BSD Sports API deixou de responder (cobertura caiu de 96% a 17 ago para 0% entre 21–24 ago). Não há substituição de fonte nem feed pago em curso — os workflows dependentes da BSD estão desactivados. O repositório está agora em **modo de investigação offline** sobre `data/historical/matches.csv` (23.766 jogos, 2021–2026, 13 divisões, odds Pinnacle de abertura e fecho). Detalhe da decisão e critério de reversão: [`.claude/rules/decisions.md`](.claude/rules/decisions.md).
+>
+> O congelamento não foi desistência: foi seguido de duas investigações offline com critério pré-registado — "o Dixon-Coles bate a linha de fecho da Pinnacle?", testado à odd de abertura Pinnacle e à melhor odd de mercado. Resultado nulo em ambas (critério falhou nas duas), linha de investigação encerrada — ver [`backtesting/reports/dc_vs_closing.md`](backtesting/reports/dc_vs_closing.md), [`backtesting/reports/dc_vs_closing_bestprice.md`](backtesting/reports/dc_vs_closing_bestprice.md) e o registo final em [`.claude/rules/decisions.md`](.claude/rules/decisions.md).
 
 📋 Documentação interna e índice de portfólio mantidos em repositório privado.
 

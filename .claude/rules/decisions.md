@@ -15,7 +15,7 @@
 | `pin_drop` como sinal 1X2 | SUBSTITUÍDO | Desde 12 jun 2026: sinal é `div_b365_pin > 3%`. `pin_drop` gravado por pick mas não é gate. |
 | `previous_decimal_odds` | NÃO é closing line | É a odd do scan anterior. CLV exacto requer fetch Pinnacle pós-KO (+10min). Ver testing.md. |
 | Feed de odds BSD (scanner ao vivo) | CONGELADO — 25 ago 2026 | Cobertura de odds BSD ≥ 90% sustentada 7 dias seguidos (ou fonte alternativa validada). Ver detalhe abaixo. |
-| Critério de aceitação — DC vs. linha de fecho (investigação offline) | PRÉ-REGISTADO — 31 ago 2026, antes da 2ª tentativa (Max>2.5) | CLV rolling/médio > +1,0% E n ≥ 1000 E positivo em ≥4 das 5 épocas (2122–2526). Uma só variante nova por tentativa; sem 3ª tentativa se esta falhar. Ver detalhe abaixo. |
+| Dixon-Coles vs. linha de fecho — fonte de edge Over 2.5 (investigação offline) | ENCERRADO — 31 ago 2026, resultado nulo (2/2 tentativas) | Critério pré-registado (CLV>+1,0%, n≥1000, ≥4/5 épocas) falhou em `P>2.5` (PR #176) e em `Max>2.5` (PR #177). Não reabrir com mais variantes de odd tomada — só com pergunta genuinamente nova, pré-registada à parte. Ver detalhe abaixo. |
 
 ---
 
@@ -75,15 +75,53 @@ O repositório passa a **modo de investigação offline** sobre `data/historical
 
 **O que é preciso para reverter:** cobertura de odds BSD (ou de uma fonte alternativa validada) ≥ 90% sustentada durante 7 dias seguidos. Reactivar os workflows um a um pela Actions tab (Enable workflow), começando por `scanner.yml`; só reactivar `sharp1x2_analysis.yml` e `live_scanner.yml` depois de confirmar picks reais consistentes no scanner principal.
 
-### Critério de decisão — DC vs. linha de fecho (investigação offline)
+### Dixon-Coles vs. linha de fecho Pinnacle — ENCERRADO (31 ago 2026)
 
-**Pré-registado:** 31 ago 2026, antes de correr a 2ª tentativa (variante `Max>2.5`) e antes de ver os resultados dessa corrida.
+**Pergunta:** o Dixon-Coles bruto (sem calibração), usado como sinal de selecção contra
+a Pinnacle de abertura, bate a linha de fecho da Pinnacle — produz edge apostável
+sobre Over 2.5?
 
-**Contexto:** PR #176 (mergeado) respondeu à pergunta "o Dixon-Coles bate o fecho da Pinnacle?" usando `P>2.5` (odd de abertura Pinnacle) como odd tomada — ver `backtesting/reports/dc_vs_closing.md`. Resultado: o modelo separa-se de controlos aleatórios (p≤0.05 em todos os thresholds do sweep), mas a CLV absoluta nunca fica positiva — o sinal não supera a margem embutida na odd de abertura Pinnacle.
-
-**Critério (usa o mesmo padrão já aplicado para ler o estudo anterior):**
+**Critério pré-registado** (fixado a 31 ago 2026, antes da 2ª tentativa e antes de ver
+os seus resultados; aplicado sem alteração às duas tentativas):
 - CLV rolling/médio > **+1,0%**
 - n ≥ **1000** apostas
 - positivo em **≥4 das 5 épocas** (2122–2526)
 
-**Regra de tentativa única:** a 2ª tentativa troca apenas a odd tomada para `Max>2.5` (melhor preço de mercado, ~2–4% acima de `P>2.5` em média nos dados — ver `backtesting/reports/dc_vs_closing_bestprice.md`), mantendo tudo o resto do estudo original (splitter, controlos, sweep, estratificação). Se esta variante não atingir o critério acima, **não há 3ª tentativa** — fica registado como resultado nulo e a linha de investigação "DC vs. fecho" fecha-se nesta forma. Isto evita procurar variantes sucessivas até uma "passar" por acaso (p-hacking).
+**Tentativa 1 — odd tomada `P>2.5` (abertura Pinnacle).** PR #176,
+[`backtesting/reports/dc_vs_closing.md`](../../backtesting/reports/dc_vs_closing.md).
+O modelo separa-se de controlos aleatórios (uniforme e estratificado por banda de
+odds, p≤0.05 em todos os thresholds do sweep 0–10pp) — sinal relativo real face à
+linha de fecho. Mas a CLV absoluta nunca fica positiva em nenhum threshold; ao
+threshold de referência (0.03): CLV −3,70%, n=5.935, 0/5 épocas com CLV positiva.
+**Critério falha.**
+
+**Tentativa 2 — odd tomada `Max>2.5` (melhor preço de mercado).** PR #177,
+[`backtesting/reports/dc_vs_closing_bestprice.md`](../../backtesting/reports/dc_vs_closing_bestprice.md).
+Mesmo splitter, mesmos três controlos, mesmo sweep, mesma estratificação — a única
+variável trocada foi a odd tomada. Cobertura de `Max>2.5` face ao universo da
+tentativa 1: 100% (19.684/19.684 jogos — os dois estudos são directamente
+comparáveis). Ao threshold de referência (0.03): CLV −2,33%, n=5.935 (passa),
+0/5 épocas com CLV positiva. Trocar para o melhor preço de mercado fechou cerca de
+metade do fosso original (~+1,4pp) mas não superou a margem embutida do bookmaker.
+**Critério falha.**
+
+**Regra de tentativa única, cumprida:** conforme pré-registado, não houve procura de
+uma 3ª variante (ex. `Avg>2.5`, `B365>2.5`) até uma "passar" por acaso — isso seria a
+mesma forma de p-hacking que a regra existia para evitar.
+
+**Conclusão:** o Dixon-Coles bruto não produz edge apostável sobre Over 2.5 — nem à
+odd de abertura Pinnacle, nem à melhor odd de mercado disponível. Isto **não**
+invalida o uso do Dixon-Coles no pipeline de produção (blend 30/70 com mercado,
+calibração isotónica, gate de EV≥3% — ver `.claude/rules/backend.md`), que responde a
+uma pergunta diferente (o modelo tem informação incremental face ao mercado, não que
+bata a linha de fecho sozinho, sem calibração, à cabeça). É uma pergunta respondida,
+não um resultado em aberto.
+
+**Como reabrir:** não reabrir esta investigação com mais variantes de odd tomada. Só
+reabre com uma pergunta genuinamente nova (ex.: sinal adicional, calibração aplicada
+ao `p_dc` antes da comparação, janela temporal diferente) pré-registada à parte, com o
+mesmo padrão de rigor (controlos, sweep, estratificação, critério fixado antes de
+correr).
+
+**Tag git:** `v-research-closed-2026-08` marca o estado de `main` no momento do
+encerramento desta linha de investigação.
